@@ -1,0 +1,20 @@
+{
+    "name": "esprima",
+    "description": "ECMAScript parsing infrastructure for multipurpose analysis tool",
+    "homepage": "http://esprima.org",
+    "main": "esprima.js",
+    "version": "0.0.0",
+    "maintainers": [{
+        "name": "Ariya Hidayat",
+        "email": "ariya.hidayat@gmail.com",
+        "web": "http://ariya.ofilabs.com"
+    }],
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/ariya/esprima.git"
+    },
+    "licenses": [{
+        "type": "BSD",
+        "url": "http://github.com/ariya/esprima/raw/master/LICENSE.BSD"
+    }]
+}
