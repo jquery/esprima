@@ -1,0 +1,43 @@
+body {
+    background-color: #ffffff;
+    min-width: 960px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 18px;
+    color: #444;
+    margin: 0;
+}
+
+p {
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 18px;
+    margin-bottom: 9px;
+}
+
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+    line-height: 36px;
+    font-weight: bold;
+    color: #444;
+}
+
+h1 small {
+    font-size: 18px;
+    color: #ccc;
+}
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 960px;
+}
+
+.footer {
+    margin-top: 25px;
+    color: #555;
+    text-align: center;
+}
+
