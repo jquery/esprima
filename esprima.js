@@ -33,7 +33,8 @@ parseStatement: true */
     var Token,
         Syntax,
         source,
-        index;
+        index,
+        buffer;
 
     Token = {
         BooleanLiteral: 'BooleanLiteral',
@@ -538,6 +539,7 @@ parseStatement: true */
     function scanRegExp() {
         var str = '', ch, classMarker = false;
 
+        buffer = null;
         skipComment();
 
         ch = peekChar();
@@ -585,6 +587,7 @@ parseStatement: true */
     function lex() {
         var ch, token;
 
+        buffer = null;
         skipComment();
 
         if (index >= source.length) {
@@ -619,14 +622,18 @@ parseStatement: true */
     }
 
     function lookahead() {
-        var token,
-            pos = index;
+        var pos, token;
+
+        if (buffer !== null) {
+            return buffer;
+        }
 
         pos = index;
         token = lex();
         index = pos;
 
-        return token;
+        buffer = token;
+        return buffer;
     }
 
     // Throw an exception because of the token.
@@ -1955,6 +1962,7 @@ parseStatement: true */
     exports.parse = function (code) {
         source = code;
         index = 0;
+        buffer = null;
         return parseProgram();
     };
 
