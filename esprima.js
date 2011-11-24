@@ -67,6 +67,7 @@ parseStatement: true */
         Identifier: 'Identifier',
         IfStatement: 'IfStatement',
         Literal: 'Literal',
+        LabeledStatement: 'LabeledStatement',
         MemberExpression: 'MemberExpression',
         NewExpression: 'NewExpression',
         Program: 'Program',
@@ -1771,7 +1772,8 @@ parseStatement: true */
     // 12 Statements
 
     function parseStatement() {
-        var token = lookahead();
+        var token = lookahead(),
+            stat;
 
         if (token.type === Token.EOF) {
             return;
@@ -1821,7 +1823,19 @@ parseStatement: true */
             }
         }
 
-        return parseExpressionStatement();
+        stat = parseExpressionStatement();
+
+        // 12.12 Labelled Statements
+        if ((stat.expression.type === Syntax.Identifier) && match(':')) {
+            lex();
+            return {
+                type: Syntax.LabeledStatement,
+                label: stat.expression.name,
+                body: parseStatement()
+            };
+        }
+
+        return stat;
     }
 
     // 13 Function Definition

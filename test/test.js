@@ -2375,6 +2375,41 @@ data = {
 
     },
 
+    'Labelled Statements': {
+
+        'start: for (;;) break start': {
+            type: 'LabeledStatement',
+            label: 'start',
+            body: {
+                type: 'ForStatement',
+                init: null,
+                test: null,
+                update: null,
+                body: {
+                    type: 'BreakStatement',
+                    label: 'start'
+                }
+            }
+        },
+
+        'start: while (true) break start': {
+            type: 'LabeledStatement',
+            label: 'start',
+            body: {
+                type: 'WhileStatement',
+                test: {
+                    type: 'Literal',
+                    value: true
+                },
+                body: {
+                    type: 'BreakStatement',
+                    label: 'start'
+                }
+            }
+        }
+
+    },
+
     'throw statement': {
 
         'throw': {
