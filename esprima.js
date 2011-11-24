@@ -188,14 +188,6 @@ parseStatement: true */
         return false;
     }
 
-    // Default for advance is '1', which means the next character right after.
-
-    function peekChar(advance) {
-        var idx;
-        idx = (arguments.length > 0) ? (index + advance - 1) : index;
-        return ((idx < source.length) ? source.charAt(idx) : '\x00');
-    }
-
     // Return the next character and move forward.
 
     function nextChar() {
@@ -217,7 +209,7 @@ parseStatement: true */
         lineComment = false;
 
         while (index < source.length) {
-            ch = peekChar();
+            ch = source.charAt(index);
 
             if (lineComment) {
                 nextChar();
@@ -227,14 +219,14 @@ parseStatement: true */
             } else if (blockComment) {
                 nextChar();
                 if (ch === '*') {
-                    ch = peekChar();
+                    ch = source.charAt(index);
                     if (ch === '/') {
                         nextChar();
                         blockComment = false;
                     }
                 }
             } else if (ch === '/') {
-                ch = peekChar(2);
+                ch = source.charAt(index + 1);
                 if (ch === '/') {
                     nextChar();
                     nextChar();
@@ -259,19 +251,18 @@ parseStatement: true */
     function scanIdentifier() {
         var ch, id;
 
-        ch = peekChar();
+        ch = source.charAt(index);
         if (!isIdentifierStart(ch)) {
             return;
         }
 
         id = nextChar();
-        while (true) {
-            ch = peekChar();
-            if (isIdentifierPart(ch)) {
-                id += nextChar();
-            } else {
+        while (index < source.length) {
+            ch = source.charAt(index);
+            if (!isIdentifierPart(ch)) {
                 break;
             }
+            id += nextChar();
         }
 
         if (isKeyword(id)) {
@@ -314,16 +305,15 @@ parseStatement: true */
     // 7.7 Punctuators
 
     function scanPunctuator() {
-        var ch1, ch2, ch3;
-
-        ch1 = peekChar(1);
-        ch2 = peekChar(2);
-        ch3 = peekChar(3);
+        var ch1 = source.charAt(index),
+            ch2 = source.charAt(index + 1),
+            ch3 = source.charAt(index + 2),
+            ch4 = source.charAt(index + 3);
 
         // 4-character punctuator: >>>=
 
         if (ch1 === '>' && ch2 === '>' && ch3 === '>') {
-            if (peekChar(4) === '=') {
+            if (ch4 === '=') {
                 nextChar();
                 nextChar();
                 nextChar();
@@ -436,7 +426,7 @@ parseStatement: true */
     function scanNumericLiteral() {
         var number, ch;
 
-        ch = peekChar();
+        ch = source.charAt(index);
         if (!isDecimalDigit(ch) && (ch !== '.')) {
             return;
         }
@@ -444,8 +434,8 @@ parseStatement: true */
         number = '';
         if (ch !== '.') {
             number = nextChar();
-            while (true) {
-                ch = peekChar();
+            while (index < source.length) {
+                ch = source.charAt(index);
                 if (!isDecimalDigit(ch)) {
                     break;
                 }
@@ -455,8 +445,8 @@ parseStatement: true */
 
         if (ch === '.') {
             number += nextChar();
-            while (true) {
-                ch = peekChar();
+            while (index < source.length) {
+                ch = source.charAt(index);
                 if (!isDecimalDigit(ch)) {
                     break;
                 }
@@ -466,11 +456,11 @@ parseStatement: true */
 
         if (ch === 'e' || ch === 'E') {
             number += nextChar();
-            ch = peekChar();
+            ch = source.charAt(index);
             if (ch === '+' || ch === '-' || isDecimalDigit(ch)) {
                 number += nextChar();
-                while (true) {
-                    ch = peekChar();
+                while (index < source.length) {
+                    ch = source.charAt(index);
                     if (!isDecimalDigit(ch)) {
                         break;
                     }
@@ -505,7 +495,7 @@ parseStatement: true */
     function scanStringLiteral() {
         var str = '', quote, ch;
 
-        quote = peekChar();
+        quote = source.charAt(index);
         if (quote !== '\'' && quote !== '"') {
             return;
         }
@@ -542,7 +532,7 @@ parseStatement: true */
         buffer = null;
         skipComment();
 
-        ch = peekChar();
+        ch = source.charAt(index);
         if (ch !== '/') {
             return;
         }
@@ -573,8 +563,8 @@ parseStatement: true */
             }
         }
 
-        while (true) {
-            ch = peekChar();
+        while (index < source.length) {
+            ch = source.charAt(index);
             if (!isIdentifierPart(ch)) {
                 break;
             }
@@ -601,7 +591,7 @@ parseStatement: true */
             return token;
         }
 
-        ch = peekChar();
+        ch = source.charAt(index);
 
         if (ch === '\'' || ch === '"') {
             return scanStringLiteral();
