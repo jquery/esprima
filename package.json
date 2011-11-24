@@ -3,6 +3,9 @@
     "description": "ECMAScript parsing infrastructure for multipurpose analysis tool",
     "homepage": "http://esprima.org",
     "main": "esprima.js",
+    "bin": {
+        "esparse": "./bin/esparse.js"
+    },
     "version": "0.0.0",
     "maintainers": [{
         "name": "Ariya Hidayat",
