@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Esprima: Parsing Demo</title>
+<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+<script src="../esprima.js"></script>
+<script>
+/*jslint sloppy:true browser:true */
+/*global esprima:true */
+var parseId;
+function parse() {
+    if (parseId) {
+        window.clearTimeout(parseId);
+    }
+
+    parseId = window.setTimeout(function () {
+        var code, result, el, str;
+
+        code = document.getElementById('code').value;
+
+        try {
+            result = esprima.parse(code);
+            document.getElementById('syntax').textContent = JSON.stringify(result, undefined, 4);
+        } catch (e) {
+            document.getElementById('syntax').textContent = JSON.stringify(e, undefined, 2);
+        }
+
+        parseId = undefined;
+    }, 211);
+}
+</script>
+</head>
+<body>
+<div class="container">
+<h1>Parser <small>produces syntax tree</small></h1>
+<p>Type ECMAScript code:</p>
+    <p><textarea id="code" autofocus="autofocus" cols="70" rows="15" spellcheck="false"
+        onchange='parse()' onkeydown='parse()'>
+var answer = 6 * 7;</textarea></p>
+<p>Syntax tree:</p>
+<pre id="syntax"></pre>
+<script>parse();</script>
+</div>
+<script>
+window.onload = parse;
+</script>
+</body>
+</html>
