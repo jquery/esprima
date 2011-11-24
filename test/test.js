@@ -2847,6 +2847,8 @@ if (typeof window !== 'undefined') {
             }
         }
 
+        document.getElementById('version').textContent = esprima.version;
+
         tick = new Date();
         for (category in data) {
             if (data.hasOwnProperty(category)) {

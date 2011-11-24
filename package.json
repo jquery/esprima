@@ -6,7 +6,10 @@
     "bin": {
         "esparse": "./bin/esparse.js"
     },
-    "version": "0.0.0",
+    "version": "0.7.0",
+    "engines": {
+        "node": ">=0.4.0"
+    },
     "maintainers": [{
         "name": "Ariya Hidayat",
         "email": "ariya.hidayat@gmail.com",

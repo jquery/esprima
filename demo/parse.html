@@ -34,16 +34,21 @@ function parse() {
 <body>
 <div class="container">
 <h1>Parser <small>produces syntax tree</small></h1>
+
+<p>Esprima version <span id="version"></span>.</p>
+
 <p>Type ECMAScript code:</p>
     <p><textarea id="code" autofocus="autofocus" cols="70" rows="15" spellcheck="false"
         onchange='parse()' onkeydown='parse()'>
 var answer = 6 * 7;</textarea></p>
 <p>Syntax tree:</p>
 <pre id="syntax"></pre>
-<script>parse();</script>
 </div>
 <script>
-window.onload = parse;
+window.onload = function() {
+    document.getElementById('version').textContent = esprima.version;
+    parse();
+};
 </script>
 </body>
 </html>

@@ -29,6 +29,8 @@ function runBenchmarks() {
     function showVersion() {
         var el = document.getElementById('benchmarkjs-version');
         el.textContent = ' version ' + window.Benchmark.version;
+        el = document.getElementById('version');
+        el.textContent = window.esprima.version;
     }
 
     function showStatus(parser, name) {
