@@ -49,3 +49,27 @@ textarea {
     padding: 7px;
 }
 
+table {
+    width: 80%;
+    border: 1px solid #ccc;
+    border-spacing: 0;
+}
+
+thead {
+    font-weight: bold;
+}
+
+table th, table td {
+    border-left: 1px solid #ccc;
+    padding: 3px 3px 10px 3px;
+    text-align: center;
+}
+
+table td {
+    border-top: 1px solid #ccc;
+}
+
+tbody tr:nth-child(odd) td {
+    background-color: #eee;
+}
+
