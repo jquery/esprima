@@ -3,9 +3,10 @@ Esprima ([esprima.org](http://esprima.org)) is an experimental ECMAScript
 analysis. It is also written in ECMAScript.
 
 Esprima is still in the development, for now please check
-[the wiki documentation](http://code.google.com/p/esprima/wiki/Esprima).
+[the wiki documentation](http://wiki.esprima.org).
+
 Since it is not comprehensive nor complete, refer to the
-[issue tracker](http://code.google.com/p/esprima/issues/list) for
+[issue tracker](http://issues.esprima.org) for
 [known problems](http://code.google.com/p/esprima/issues/list?q=Defect)
 and [future plans](http://code.google.com/p/esprima/issues/list?q=Enhancement).
 
