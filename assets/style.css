@@ -16,6 +16,17 @@ p {
     margin-bottom: 9px;
 }
 
+ul {
+    padding-left: 20px;
+}
+
+li {
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 18px;
+    margin-bottom: 4px;
+}
+
 h1 {
     margin-bottom: 18px;
     font-size: 30px;
@@ -29,10 +40,32 @@ h1 small {
     color: #ccc;
 }
 
+h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #444;
+}
+
 .container {
     margin-left: auto;
     margin-right: auto;
     width: 960px;
+}
+
+.container .main {
+    width: 540px;
+    display: inline;
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.container .sidebar {
+    width: 350px;
+    display: inline;
+    float: left;
+    margin-left: 30px;
+    margin-right: 10px;
 }
 
 .footer {
