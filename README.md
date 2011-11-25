@@ -5,8 +5,9 @@ analysis. It is also written in ECMAScript.
 Esprima is still in the development, for now please check
 [the wiki documentation](http://code.google.com/p/esprima/wiki/Esprima).
 Since it is not comprehensive nor complete, refer to the
-[issue tracker](http://code.google.com/p/esprima/issues/list) for known
-problems and future plans.
+[issue tracker](http://code.google.com/p/esprima/issues/list) for
+[known problems](http://code.google.com/p/esprima/issues/list?q=Defect)
+and [future plans](http://code.google.com/p/esprima/issues/list?q=Enhancement).
 
 Feedback and contribution are welcomed! Please read the
 [contribution guide](http://code.google.com/p/esprima/wiki/ContributionGuide)
