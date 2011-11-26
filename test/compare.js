@@ -44,13 +44,13 @@ function runBenchmarks() {
         el = document.getElementById('total-size');
         el.textContent = (totalSize / 1024).toFixed(1);
         el = document.getElementById('esprima-time');
-        el.textContent = (1000 * totalTime.esprima).toFixed(1);
+        el.textContent = (1000 * totalTime.esprima).toFixed(1) + ' ms';
         el = document.getElementById('narcissus-time');
-        el.textContent = (1000 * totalTime.narcissus).toFixed(1);
+        el.textContent = (1000 * totalTime.narcissus).toFixed(1) + ' ms';
         el = document.getElementById('parsejs-time');
-        el.textContent = (1000 * totalTime.parsejs).toFixed(1);
+        el.textContent = (1000 * totalTime.parsejs).toFixed(1) + ' ms';
         el = document.getElementById('zeparser-time');
-        el.textContent = (1000 * totalTime.zeparser).toFixed(1);
+        el.textContent = (1000 * totalTime.zeparser).toFixed(1) + ' ms';
     }
 
     function showResult(parser, name, size, stats) {
@@ -58,7 +58,7 @@ function runBenchmarks() {
         el = document.getElementById(name + '-size');
         el.textContent = (size / 1024).toFixed(1);
         el = document.getElementById(parser + '-' + name);
-        el.textContent = (1000 * stats.mean).toFixed(1);
+        el.textContent = (1000 * stats.mean).toFixed(1) + ' ms';
     }
 
     function runBenchmark() {
