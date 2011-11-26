@@ -2794,6 +2794,23 @@ if (typeof window !== 'undefined') {
             source,
             tick;
 
+        function startCategory(category) {
+            var report, e;
+            report = document.getElementById('report');
+            e = document.createElement('h4');
+            e.textContent = category;
+            report.appendChild(e);
+        }
+
+        function reportSuccess(code) {
+            var report, e;
+            report = document.getElementById('report');
+            e = document.createElement('pre');
+            e.setAttribute('class', 'code');
+            e.textContent = code;
+            report.appendChild(e);
+        }
+
         function reportFailure(code, expected, actual) {
             var report, e;
 
@@ -2839,7 +2856,9 @@ if (typeof window !== 'undefined') {
                 actual = JSON.stringify(tree, null, 4);
 
                 total += 1;
-                if (expected !== actual) {
+                if (expected === actual) {
+                    reportSuccess(code);
+                } else {
                     reportFailure(code, expected, actual);
                 }
             } catch (e) {
@@ -2852,6 +2871,7 @@ if (typeof window !== 'undefined') {
         tick = new Date();
         for (category in data) {
             if (data.hasOwnProperty(category)) {
+                startCategory(category);
                 fixture = data[category];
                 for (source in fixture) {
                     if (fixture.hasOwnProperty(source)) {
