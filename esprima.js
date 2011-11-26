@@ -705,10 +705,6 @@ parseStatement: true */
         }
     }
 
-    function isEOF() {
-        return index >= source.length;
-    }
-
     // 11.1.4 Array Initialiser
 
     function parseArrayInitialiser() {
@@ -716,7 +712,7 @@ parseStatement: true */
 
         expect(Token.Punctuator, '[');
 
-        while (!isEOF()) {
+        while (index < source.length) {
             if (match(']')) {
                 lex();
                 break;
@@ -752,7 +748,7 @@ parseStatement: true */
         expect(Token.Punctuator, '{');
 
         // TODO handle 'get' and 'set'
-        while (!isEOF()) {
+        while (index < source.length) {
             token = lex();
             if (token.type === Token.Punctuator && token.value === '}') {
                 break;
@@ -875,7 +871,7 @@ parseStatement: true */
         expect(Token.Punctuator, '(');
 
         if (!match(')')) {
-            while (!isEOF()) {
+            while (index < source.length) {
                 args.push(parseAssignmentExpression());
                 if (match(')')) {
                     break;
@@ -894,7 +890,7 @@ parseStatement: true */
 
         expr = parsePrimaryExpression();
 
-        while (!isEOF()) {
+        while (index < source.length) {
             if (match('.')) {
                 lex();
                 token = lex();
@@ -1273,7 +1269,7 @@ parseStatement: true */
                 expressions: [ expr ]
             };
 
-            while (!isEOF()) {
+            while (index < source.length) {
                 if (!match(',')) {
                     break;
                 }
@@ -1293,7 +1289,7 @@ parseStatement: true */
     function parseStatementList() {
         var list = [];
 
-        while (!isEOF()) {
+        while (index < source.length) {
             if (match('}')) {
                 break;
             }
@@ -1353,7 +1349,7 @@ parseStatement: true */
     function parseVariableDeclarationList() {
         var list = [];
 
-        while (!isEOF()) {
+        while (index < source.length) {
             list.push(parseVariableDeclaration());
             if (!match(',')) {
                 break;
@@ -1660,7 +1656,7 @@ parseStatement: true */
 
         cases = [];
 
-        while (!isEOF()) {
+        while (index < source.length) {
             if (match('}')) {
                 break;
             }
@@ -1679,7 +1675,7 @@ parseStatement: true */
                 body: []
             };
 
-            while (!isEOF()) {
+            while (index < source.length) {
                 if (match('}') || matchKeyword('default') || matchKeyword('case')) {
                     break;
                 }
@@ -1854,7 +1850,7 @@ parseStatement: true */
         expect(Token.Punctuator, '(');
 
         if (!match(')')) {
-            while (!isEOF()) {
+            while (index < source.length) {
                 token = lex();
                 if (token.type !== 'Identifier') {
                     throwUnexpected(token);
@@ -1898,7 +1894,7 @@ parseStatement: true */
         expect(Token.Punctuator, '(');
 
         if (!match(')')) {
-            while (!isEOF()) {
+            while (index < source.length) {
                 token = lex();
                 if (token.type !== 'Identifier') {
                     throwUnexpected(token);
@@ -1946,7 +1942,7 @@ parseStatement: true */
     function parseSourceElements() {
         var sourceElement, sourceElements = [];
 
-        while (!isEOF()) {
+        while (index < source.length) {
             sourceElement = parseSourceElement();
             if (typeof sourceElement === 'undefined') {
                 break;
