@@ -86,6 +86,10 @@ parseStatement: true */
         WithStatement: 'WithStatement'
     };
 
+    if (typeof Object.freeze === 'function') {
+        Object.freeze(Token);
+        Object.freeze(Syntax);
+    }
 
     function isDecimalDigit(ch) {
         return '0123456789'.indexOf(ch) >= 0;
