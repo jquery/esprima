@@ -88,25 +88,25 @@ function runBenchmarks() {
         case 'esprima':
             fn = function () {
                 var syntax = window.esprima.parse(source);
-                window.tree.push(syntax);
+                window.tree.push(syntax.body.length);
             };
             break;
         case 'narcissus':
             fn = function () {
                 var syntax = window.Narcissus.parser.parse(source);
-                window.tree.push(syntax);
+                window.tree.push(syntax.children.length);
             };
             break;
         case 'parsejs':
             fn = function () {
                 var syntax = window.parseJS.parse(source);
-                window.tree.push(syntax);
+                window.tree.push(syntax.length);
             };
             break;
         case 'zeparser':
             fn = function () {
                 var syntax = window.ZeParser.parse(source, false);
-                window.tree.push(syntax);
+                window.tree.push(syntax.length);
             };
             break;
         default:

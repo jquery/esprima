@@ -65,7 +65,7 @@ function runBenchmarks() {
 
         benchmark = new window.Benchmark(test, function (o) {
             var syntax = window.esprima.parse(source);
-            window.tree.push(syntax);
+            window.tree.push(syntax.body.length);
         }, {
             'onComplete': function () {
                 showResult(this.name, source.length, this.stats);
