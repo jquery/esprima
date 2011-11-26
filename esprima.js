@@ -312,9 +312,43 @@ parseStatement: true */
 
     function scanPunctuator() {
         var ch1 = source.charAt(index),
-            ch2 = source.charAt(index + 1),
-            ch3 = source.charAt(index + 2),
-            ch4 = source.charAt(index + 3);
+            ch2,
+            ch3,
+            ch4;
+
+        // Check for most common single-character punctuators.
+
+        if (ch1 === ';' || ch1 === '{' || ch1 === '}') {
+            nextChar();
+            return {
+                type: Token.Punctuator,
+                value: ch1
+            };
+        }
+
+        if (ch1 === ',' || ch1 === '(' || ch1 === ')') {
+            nextChar();
+            return {
+                type: Token.Punctuator,
+                value: ch1
+            };
+        }
+
+        // Dot (.) can also start a floating-point number, hence the need
+        // to check the next character.
+
+        ch2 = source.charAt(index + 1);
+        if (ch1 === '.' && !isDecimalDigit(ch2)) {
+            return {
+                type: Token.Punctuator,
+                value: nextChar()
+            };
+        }
+
+        // Peek more characters.
+
+        ch3 = source.charAt(index + 2);
+        ch4 = source.charAt(index + 3);
 
         // 4-character punctuator: >>>=
 
@@ -408,16 +442,9 @@ parseStatement: true */
             }
         }
 
-        // 1-character punctuators: { } ( ) [ ] . ; , < > + - * % & | ^ ! ~ ? : = /
+        // The remaining 1-character punctuators.
 
-        if (ch1 === '.' && !isDecimalDigit(ch2)) {
-            return {
-                type: Token.Punctuator,
-                value: nextChar()
-            };
-        }
-
-        if ('{}()[];,<>+-*%&|^!~?:=/'.indexOf(ch1) >= 0) {
+        if ('[]<>+-*%&|^!~?:=/'.indexOf(ch1) >= 0) {
             return {
                 type: Token.Punctuator,
                 value: nextChar()
