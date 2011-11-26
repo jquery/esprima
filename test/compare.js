@@ -62,7 +62,7 @@ function runBenchmarks() {
     }
 
     function runBenchmark() {
-        var test, source, parser, fn, benchmark, tree;
+        var test, source, parser, fn, benchmark;
 
         if (index >= fixture.length) {
             finish();
@@ -80,25 +80,33 @@ function runBenchmarks() {
         source = document.getElementById(test).textContent;
         showStatus(parser, test);
 
+        // Force the result to be held in this array, thus defeating any
+        // possible "dead core elimination" optimization.
+        window.tree = [];
+
         switch (parser) {
         case 'esprima':
             fn = function () {
-                tree = window.esprima.parse(source);
+                var syntax = window.esprima.parse(source);
+                window.tree.push(syntax);
             };
             break;
         case 'narcissus':
             fn = function () {
-                tree = window.Narcissus.parser.parse(source);
+                var syntax = window.Narcissus.parser.parse(source);
+                window.tree.push(syntax);
             };
             break;
         case 'parsejs':
             fn = function () {
-                tree = window.parseJS.parse(source);
+                var syntax = window.parseJS.parse(source);
+                window.tree.push(syntax);
             };
             break;
         case 'zeparser':
             fn = function () {
-                tree = window.ZeParser.parse(source, false);
+                var syntax = window.ZeParser.parse(source, false);
+                window.tree.push(syntax);
             };
             break;
         default:
@@ -110,7 +118,6 @@ function runBenchmarks() {
                 showResult(parser, this.name, source.length, this.stats);
                 totalSize += source.length;
                 totalTime[parser] += this.stats.mean;
-                window.tree = tree;
             }
         });
 

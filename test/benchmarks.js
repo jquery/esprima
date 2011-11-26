@@ -5,7 +5,7 @@ function runBenchmarks() {
     var index = 0,
         totalSize = 0,
         totalTime = 0,
-        fixture,
+        fixture;
 
     fixture = [
         'jquery-1.7.1',
@@ -59,8 +59,13 @@ function runBenchmarks() {
         source = document.getElementById(test).textContent;
         showStatus(test);
 
-        benchmark = new window.Benchmark(test, function () {
-            window.esprima.parse(source);
+        // Force the result to be held in this array, thus defeating any
+        // possible "dead core elimination" optimization.
+        window.tree = [];
+
+        benchmark = new window.Benchmark(test, function (o) {
+            var syntax = window.esprima.parse(source);
+            window.tree.push(syntax);
         }, {
             'onComplete': function () {
                 showResult(this.name, source.length, this.stats);
