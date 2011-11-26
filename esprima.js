@@ -34,6 +34,7 @@ parseStatement: true */
         Syntax,
         source,
         index,
+        length,
         buffer;
 
     Token = {
@@ -194,7 +195,7 @@ parseStatement: true */
     function nextChar() {
         var ch = '\x00',
             idx = index;
-        if (idx < source.length) {
+        if (idx < length) {
             ch = source.charAt(idx);
             index += 1;
         }
@@ -209,7 +210,7 @@ parseStatement: true */
         blockComment = false;
         lineComment = false;
 
-        while (index < source.length) {
+        while (index < length) {
             ch = source.charAt(index);
 
             if (lineComment) {
@@ -258,7 +259,7 @@ parseStatement: true */
         }
 
         id = nextChar();
-        while (index < source.length) {
+        while (index < length) {
             ch = source.charAt(index);
             if (!isIdentifierPart(ch)) {
                 break;
@@ -435,7 +436,7 @@ parseStatement: true */
         number = '';
         if (ch !== '.') {
             number = nextChar();
-            while (index < source.length) {
+            while (index < length) {
                 ch = source.charAt(index);
                 if (!isDecimalDigit(ch)) {
                     break;
@@ -446,7 +447,7 @@ parseStatement: true */
 
         if (ch === '.') {
             number += nextChar();
-            while (index < source.length) {
+            while (index < length) {
                 ch = source.charAt(index);
                 if (!isDecimalDigit(ch)) {
                     break;
@@ -460,7 +461,7 @@ parseStatement: true */
             ch = source.charAt(index);
             if (ch === '+' || ch === '-' || isDecimalDigit(ch)) {
                 number += nextChar();
-                while (index < source.length) {
+                while (index < length) {
                     ch = source.charAt(index);
                     if (!isDecimalDigit(ch)) {
                         break;
@@ -469,7 +470,7 @@ parseStatement: true */
                 }
             } else {
                 ch = 'character ' + ch;
-                if (index >= source.length) {
+                if (index >= length) {
                     ch = '<end>';
                 }
                 throw {
@@ -502,7 +503,7 @@ parseStatement: true */
         }
         nextChar();
 
-        while (index < source.length) {
+        while (index < length) {
             ch = nextChar();
 
             if (typeof ch === 'undefined') {
@@ -539,7 +540,7 @@ parseStatement: true */
         }
         str = nextChar();
 
-        while (index < source.length) {
+        while (index < length) {
             ch = nextChar();
             str += ch;
             if (classMarker) {
@@ -564,7 +565,7 @@ parseStatement: true */
             }
         }
 
-        while (index < source.length) {
+        while (index < length) {
             ch = source.charAt(index);
             if (!isIdentifierPart(ch)) {
                 break;
@@ -581,7 +582,7 @@ parseStatement: true */
         buffer = null;
         skipComment();
 
-        if (index >= source.length) {
+        if (index >= length) {
             return {
                 type: Token.EOF
             };
@@ -712,7 +713,7 @@ parseStatement: true */
 
         expect(Token.Punctuator, '[');
 
-        while (index < source.length) {
+        while (index < length) {
             if (match(']')) {
                 lex();
                 break;
@@ -748,7 +749,7 @@ parseStatement: true */
         expect(Token.Punctuator, '{');
 
         // TODO handle 'get' and 'set'
-        while (index < source.length) {
+        while (index < length) {
             token = lex();
             if (token.type === Token.Punctuator && token.value === '}') {
                 break;
@@ -871,7 +872,7 @@ parseStatement: true */
         expect(Token.Punctuator, '(');
 
         if (!match(')')) {
-            while (index < source.length) {
+            while (index < length) {
                 args.push(parseAssignmentExpression());
                 if (match(')')) {
                     break;
@@ -890,7 +891,7 @@ parseStatement: true */
 
         expr = parsePrimaryExpression();
 
-        while (index < source.length) {
+        while (index < length) {
             if (match('.')) {
                 lex();
                 token = lex();
@@ -1269,7 +1270,7 @@ parseStatement: true */
                 expressions: [ expr ]
             };
 
-            while (index < source.length) {
+            while (index < length) {
                 if (!match(',')) {
                     break;
                 }
@@ -1289,7 +1290,7 @@ parseStatement: true */
     function parseStatementList() {
         var list = [];
 
-        while (index < source.length) {
+        while (index < length) {
             if (match('}')) {
                 break;
             }
@@ -1349,7 +1350,7 @@ parseStatement: true */
     function parseVariableDeclarationList() {
         var list = [];
 
-        while (index < source.length) {
+        while (index < length) {
             list.push(parseVariableDeclaration());
             if (!match(',')) {
                 break;
@@ -1656,7 +1657,7 @@ parseStatement: true */
 
         cases = [];
 
-        while (index < source.length) {
+        while (index < length) {
             if (match('}')) {
                 break;
             }
@@ -1675,7 +1676,7 @@ parseStatement: true */
                 body: []
             };
 
-            while (index < source.length) {
+            while (index < length) {
                 if (match('}') || matchKeyword('default') || matchKeyword('case')) {
                     break;
                 }
@@ -1850,7 +1851,7 @@ parseStatement: true */
         expect(Token.Punctuator, '(');
 
         if (!match(')')) {
-            while (index < source.length) {
+            while (index < length) {
                 token = lex();
                 if (token.type !== 'Identifier') {
                     throwUnexpected(token);
@@ -1894,7 +1895,7 @@ parseStatement: true */
         expect(Token.Punctuator, '(');
 
         if (!match(')')) {
-            while (index < source.length) {
+            while (index < length) {
                 token = lex();
                 if (token.type !== 'Identifier') {
                     throwUnexpected(token);
@@ -1942,7 +1943,7 @@ parseStatement: true */
     function parseSourceElements() {
         var sourceElement, sourceElements = [];
 
-        while (index < source.length) {
+        while (index < length) {
             sourceElement = parseSourceElement();
             if (typeof sourceElement === 'undefined') {
                 break;
@@ -1962,6 +1963,7 @@ parseStatement: true */
     exports.parse = function (code) {
         source = code;
         index = 0;
+        length = source.length;
         buffer = null;
         return parseProgram();
     };
