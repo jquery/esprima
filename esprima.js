@@ -200,7 +200,7 @@ parseStatement: true */
         var ch = '\x00',
             idx = index;
         if (idx < length) {
-            ch = source.charAt(idx);
+            ch = source[idx];
             index += 1;
         }
         return ch;
@@ -215,7 +215,7 @@ parseStatement: true */
         lineComment = false;
 
         while (index < length) {
-            ch = source.charAt(index);
+            ch = source[index];
 
             if (lineComment) {
                 nextChar();
@@ -225,14 +225,14 @@ parseStatement: true */
             } else if (blockComment) {
                 nextChar();
                 if (ch === '*') {
-                    ch = source.charAt(index);
+                    ch = source[index];
                     if (ch === '/') {
                         nextChar();
                         blockComment = false;
                     }
                 }
             } else if (ch === '/') {
-                ch = source.charAt(index + 1);
+                ch = source[index + 1];
                 if (ch === '/') {
                     nextChar();
                     nextChar();
@@ -257,14 +257,14 @@ parseStatement: true */
     function scanIdentifier() {
         var ch, id;
 
-        ch = source.charAt(index);
+        ch = source[index];
         if (!isIdentifierStart(ch)) {
             return;
         }
 
         id = nextChar();
         while (index < length) {
-            ch = source.charAt(index);
+            ch = source[index];
             if (!isIdentifierPart(ch)) {
                 break;
             }
@@ -311,7 +311,7 @@ parseStatement: true */
     // 7.7 Punctuators
 
     function scanPunctuator() {
-        var ch1 = source.charAt(index),
+        var ch1 = source[index],
             ch2,
             ch3,
             ch4;
@@ -337,7 +337,7 @@ parseStatement: true */
         // Dot (.) can also start a floating-point number, hence the need
         // to check the next character.
 
-        ch2 = source.charAt(index + 1);
+        ch2 = source[index + 1];
         if (ch1 === '.' && !isDecimalDigit(ch2)) {
             return {
                 type: Token.Punctuator,
@@ -347,8 +347,8 @@ parseStatement: true */
 
         // Peek more characters.
 
-        ch3 = source.charAt(index + 2);
-        ch4 = source.charAt(index + 3);
+        ch3 = source[index + 2];
+        ch4 = source[index + 3];
 
         // 4-character punctuator: >>>=
 
@@ -459,7 +459,7 @@ parseStatement: true */
     function scanNumericLiteral() {
         var number, ch;
 
-        ch = source.charAt(index);
+        ch = source[index];
         if (!isDecimalDigit(ch) && (ch !== '.')) {
             return;
         }
@@ -468,7 +468,7 @@ parseStatement: true */
         if (ch !== '.') {
             number = nextChar();
             while (index < length) {
-                ch = source.charAt(index);
+                ch = source[index];
                 if (!isDecimalDigit(ch)) {
                     break;
                 }
@@ -479,7 +479,7 @@ parseStatement: true */
         if (ch === '.') {
             number += nextChar();
             while (index < length) {
-                ch = source.charAt(index);
+                ch = source[index];
                 if (!isDecimalDigit(ch)) {
                     break;
                 }
@@ -489,11 +489,11 @@ parseStatement: true */
 
         if (ch === 'e' || ch === 'E') {
             number += nextChar();
-            ch = source.charAt(index);
+            ch = source[index];
             if (ch === '+' || ch === '-' || isDecimalDigit(ch)) {
                 number += nextChar();
                 while (index < length) {
-                    ch = source.charAt(index);
+                    ch = source[index];
                     if (!isDecimalDigit(ch)) {
                         break;
                     }
@@ -528,7 +528,7 @@ parseStatement: true */
     function scanStringLiteral() {
         var str = '', quote, ch;
 
-        quote = source.charAt(index);
+        quote = source[index];
         if (quote !== '\'' && quote !== '"') {
             return;
         }
@@ -565,7 +565,7 @@ parseStatement: true */
         buffer = null;
         skipComment();
 
-        ch = source.charAt(index);
+        ch = source[index];
         if (ch !== '/') {
             return;
         }
@@ -597,7 +597,7 @@ parseStatement: true */
         }
 
         while (index < length) {
-            ch = source.charAt(index);
+            ch = source[index];
             if (!isIdentifierPart(ch)) {
                 break;
             }
@@ -624,7 +624,7 @@ parseStatement: true */
             return token;
         }
 
-        ch = source.charAt(index);
+        ch = source[index];
 
         if (ch === '\'' || ch === '"') {
             return scanStringLiteral();
