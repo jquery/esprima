@@ -13,7 +13,9 @@ function runBenchmarks() {
         'prototype-1.7.0.0',
         'prototype-1.6.1',
         'ext-core-3.1.0',
-        'ext-core-3.0.0'
+        'ext-core-3.0.0',
+        'mootools-1.4.1',
+        'mootools-1.3.2'
     ];
 
     function showVersion() {

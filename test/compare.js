@@ -16,7 +16,12 @@ function runBenchmarks() {
         'esprima prototype-1.7.0.0',
         'narcissus prototype-1.7.0.0',
         'parsejs prototype-1.7.0.0',
-        'zeparser prototype-1.7.0.0'
+        'zeparser prototype-1.7.0.0',
+
+        'esprima mootools-1.4.1',
+        'narcissus mootools-1.4.1',
+        'parsejs mootools-1.4.1',
+        'zeparser mootools-1.4.1'
     ];
 
     totalTime = {
