@@ -304,6 +304,62 @@ data = {
                 type: 'Literal',
                 value: 1.492417830e-10
             }
+        },
+
+        '0x0': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0x0
+            }
+        },
+
+        '0xabc': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0xabc
+            }
+        },
+
+        '0xdef': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0xdef
+            }
+        },
+
+        '0X1A': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0X1A
+            }
+        },
+
+        '0x10': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0x10
+            }
+        },
+
+        '0x100': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0x100
+            }
+        },
+
+        '0X04': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0X04
+            }
         }
     },
 

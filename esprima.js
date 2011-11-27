@@ -95,6 +95,10 @@ parseStatement: true */
         return '0123456789'.indexOf(ch) >= 0;
     }
 
+    function isHexDigit(ch) {
+        return '0123456789abcdefABCDEF'.indexOf(ch) >= 0;
+    }
+
     // TODO: really handle Unicode category Lu, LI, Lt, Lm, Lo, NI
     function isUnicodeLetter(ch) {
         return (ch >= 'a' && ch <= 'z') ||
@@ -454,8 +458,6 @@ parseStatement: true */
 
     // 7.8.3 Numeric Literals
 
-    // TODO: hex integer, etc
-
     function scanNumericLiteral() {
         var number, ch;
 
@@ -467,6 +469,24 @@ parseStatement: true */
         number = '';
         if (ch !== '.') {
             number = nextChar();
+            ch = source[index];
+
+            // Hex number starts with '0x'.
+            if (ch === 'x' || ch === 'X') {
+                number += nextChar();
+                while (index < length) {
+                    ch = source[index];
+                    if (!isHexDigit(ch)) {
+                        break;
+                    }
+                    number += nextChar();
+                }
+                return {
+                    type: Token.NumericLiteral,
+                    value: parseInt(number, 16)
+                };
+            }
+
             while (index < length) {
                 ch = source[index];
                 if (!isDecimalDigit(ch)) {
