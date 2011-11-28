@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Esprima: Compatibility Tests</title>
+<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+<script src="../esprima.js"></script>
+<script id="reflect" src="reflect.js"></script>
+<script src="compat.js"></script>
+</head>
+<body>
+<div class="container">
+<h1>Compatibility <small>keeps everyone happy</small></h1>
+<p>Esprima version <span id="version"></span>.</p>
+<p>The following tests are to ensure that the syntax tree is compatible to
+that produced by Mozilla SpiderMonkey
+<a href="https://developer.mozilla.org/en/SpiderMonkey/Parser_API">Parser reflection</a>.</p>
+<p id="status">Please wait...</p>
+<div id="report"></div>
+</div>
+<script>
+window.onload = runTests;
+</script>
+</body>
+</html>
