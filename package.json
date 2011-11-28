@@ -1,6 +1,6 @@
 {
     "name": "esprima",
-    "description": "ECMAScript parsing infrastructure for multipurpose analysis tool",
+    "description": "ECMAScript parsing infrastructure for multipurpose analysis",
     "homepage": "http://esprima.org",
     "main": "esprima.js",
     "bin": {
