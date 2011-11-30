@@ -2697,7 +2697,10 @@ data = {
 
         'function hello() { sayHi(); }': {
             type: 'FunctionDeclaration',
-            id: 'hello',
+            id: {
+                type: 'Identifier',
+                name: 'hello'
+            },
             params: [],
             body: {
                 type: 'BlockStatement',
@@ -2717,7 +2720,10 @@ data = {
 
         'function hello(a) { sayHi(); }': {
             type: 'FunctionDeclaration',
-            id: 'hello',
+            id: {
+                type: 'Identifier',
+                name: 'hello'
+            },
             params: [{
                 type: 'Identifier',
                 name: 'a'
@@ -2740,7 +2746,10 @@ data = {
 
         'function hello(a, b) { sayHi(); }': {
             type: 'FunctionDeclaration',
-            id: 'hello',
+            id: {
+                type: 'Identifier',
+                name: 'hello'
+            },
             params: [{
                 type: 'Identifier',
                 name: 'a'
@@ -2803,7 +2812,10 @@ data = {
                 },
                 init: {
                     type: 'FunctionExpression',
-                    id: 'hi',
+                    id: {
+                        type: 'Identifier',
+                        name: 'hi'
+                    },
                     params: [],
                     body: {
                         type: 'BlockStatement',

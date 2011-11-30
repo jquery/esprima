@@ -1831,6 +1831,8 @@ parseStatement: true */
                 return parseEmptyStatement();
             case '{':
                 return parseBlock();
+            case '(':
+                return parseExpressionStatement();
             default:
                 break;
             }
@@ -1871,6 +1873,17 @@ parseStatement: true */
 
         stat = parseExpressionStatement();
 
+        if (stat.expression.type === Syntax.FunctionExpression) {
+            if (stat.expression.id !== null) {
+                return {
+                    type: Syntax.FunctionDeclaration,
+                    id: stat.expression.id,
+                    params: stat.expression.params,
+                    body: stat.expression.body
+                };
+            }
+        }
+
         // 12.12 Labelled Statements
         if ((stat.expression.type === Syntax.Identifier) && match(':')) {
             lex();
@@ -1895,7 +1908,10 @@ parseStatement: true */
         if (token.type !== 'Identifier') {
             throwUnexpected(token);
         }
-        id = token.value;
+        id = {
+            type: Syntax.Identifier,
+            name: token.value
+        };
 
         expect(Token.Punctuator, '(');
 
@@ -1938,7 +1954,10 @@ parseStatement: true */
             if (token.type !== 'Identifier') {
                 throwUnexpected(token);
             }
-            id = token.value;
+            id = {
+                type: Syntax.Identifier,
+                name: token.value
+            };
         }
 
         expect(Token.Punctuator, '(');
