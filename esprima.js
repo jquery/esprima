@@ -1369,7 +1369,7 @@ parseStatement: true */
     // 12.2 Variable Statement
 
     function parseVariableDeclaration() {
-        var token, name;
+        var token, id, init;
 
         token = lex();
         if (token.type !== Token.Identifier) {
@@ -1377,24 +1377,21 @@ parseStatement: true */
                 message: 'Expected an identifier'
             };
         }
-        name = token.value;
 
+        id = {
+            type: Syntax.Identifier,
+            name: token.value
+        };
+
+        init = null;
         if (match('=')) {
             lex();
-            return {
-                type: Syntax.AssignmentExpression,
-                operator: '=',
-                left: {
-                    type: Syntax.Identifier,
-                    name: name
-                },
-                right: parseAssignmentExpression()
-            };
+            init = parseAssignmentExpression();
         }
 
         return {
-            type: Syntax.Identifier,
-            name: name
+            id: id,
+            init: init
         };
     }
 
@@ -1423,7 +1420,8 @@ parseStatement: true */
 
         return {
             type: Syntax.VariableDeclaration,
-            declarations: declarations
+            declarations: declarations,
+            kind: 'var'
         };
     }
 

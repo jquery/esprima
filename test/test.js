@@ -368,65 +368,61 @@ data = {
         'var x = /[a-z]/i': {
             type: 'VariableDeclaration',
             declarations: [{
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
+                id: {
                     type: 'Identifier',
                     name: 'x'
                 },
-                right: {
+                init: {
                     type: 'Literal',
                     value: '/[a-z]/i'
                 }
-            }]
+            }],
+            kind: 'var'
         },
 
         'var x = /[P QR]/i': {
             type: 'VariableDeclaration',
             declarations: [{
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
+                id: {
                     type: 'Identifier',
                     name: 'x'
                 },
-                right: {
+                init: {
                     type: 'Literal',
                     value: '/[P QR]/i'
                 }
-            }]
+            }],
+            kind: 'var'
         },
 
         'var x = /foo\\/bar/': {
             type: 'VariableDeclaration',
             declarations: [{
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
+                id: {
                     type: 'Identifier',
                     name: 'x'
                 },
-                right: {
+                init: {
                     type: 'Literal',
                     value: '/foo\\/bar/'
                 }
-            }]
+            }],
+            kind: 'var'
         },
 
         'var x = /=([^=\\s]+/g': {
             type: 'VariableDeclaration',
             declarations: [{
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
+                id: {
                     type: 'Identifier',
                     name: 'x'
                 },
-                right: {
+                init: {
                     type: 'Literal',
                     value: '/=([^=\\s]+/g'
                 }
-            }]
+            }],
+            kind: 'var'
         }
     },
 
@@ -1624,83 +1620,79 @@ data = {
         'var x': {
             type: 'VariableDeclaration',
             declarations: [{
-                type: 'Identifier',
-                name: 'x'
-            }]
+                id: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                init: null
+            }],
+            kind: 'var'
         },
 
         'var x, y;': {
             type: 'VariableDeclaration',
-            declarations: [
-                {
+            declarations: [{
+                id: {
                     type: 'Identifier',
                     name: 'x'
                 },
-                {
+                init: null
+            }, {
+                id: {
                     type: 'Identifier',
                     name: 'y'
-                }
-            ]
+                },
+                init: null
+            }],
+            kind: 'var'
         },
 
         'var x = 42': {
             type: 'VariableDeclaration',
-            declarations: [
-                {
-                    type: 'AssignmentExpression',
-                    operator: '=',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 42
-                    }
+            declarations: [{
+                id: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                init: {
+                    type: 'Literal',
+                    value: 42
                 }
-            ]
+            }],
+            kind: 'var'
         },
 
         'var x = 14, y = 3, z = 1977': {
             type: 'VariableDeclaration',
-            declarations: [
-                {
-                    type: 'AssignmentExpression',
-                    operator: '=',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 14
-                    }
+            declarations: [{
+                id: {
+                    type: 'Identifier',
+                    name: 'x'
                 },
-                {
-                    type: 'AssignmentExpression',
-                    operator: '=',
-                    left: {
-                        type: 'Identifier',
-                        name: 'y'
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 3
-                    }
-                },
-                {
-                    type: 'AssignmentExpression',
-                    operator: '=',
-                    left: {
-                        type: 'Identifier',
-                        name: 'z'
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 1977
-                    }
+                init: {
+                    type: 'Literal',
+                    value: 14
                 }
-            ]
+            }, {
+                id: {
+                    type: 'Identifier',
+                    name: 'y'
+                },
+                init: {
+                    type: 'Literal',
+                    value: 3
+                }
+            }, {
+                id: {
+                    type: 'Identifier',
+                    name: 'z'
+                },
+                init: {
+                    type: 'Literal',
+                    value: 1977
+                }
+            }],
+            kind: 'var'
         }
     },
 
@@ -1963,13 +1955,11 @@ data = {
         'for(var x = 0;;);': {
             type: 'ForStatement',
             init: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
+                id: {
                     type: 'Identifier',
                     name: 'x'
                 },
-                right: {
+                init: {
                     type: 'Literal',
                     value: 0
                 }
@@ -1986,24 +1976,20 @@ data = {
             init: {
                 type: 'SequenceExpression',
                 expressions: [{
-                    type: 'AssignmentExpression',
-                    operator: '=',
-                    left: {
+                    id: {
                         type: 'Identifier',
                         name: 'x'
                     },
-                    right: {
+                    init: {
                         type: 'Literal',
                         value: 0
                     }
                 }, {
-                    type: 'AssignmentExpression',
-                    operator: '=',
-                    left: {
+                    id: {
                         type: 'Identifier',
                         name: 'y'
                     },
-                    right: {
+                    init: {
                         type: 'Literal',
                         value: 1
                     }
@@ -2168,8 +2154,11 @@ data = {
         'for (var x in list) process(x);': {
             type: 'ForInStatement',
             left: {
-                type: 'Identifier',
-                name: 'x'
+                id: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                init: null
             },
             right: {
                 type: 'Identifier',
@@ -2778,13 +2767,11 @@ data = {
         'var hi = function() { sayHi() };': {
             type: 'VariableDeclaration',
             declarations: [{
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
+                id: {
                     type: 'Identifier',
                     name: 'hi'
                 },
-                right: {
+                init: {
                     type: 'FunctionExpression',
                     id: null,
                     params: [],
@@ -2803,19 +2790,18 @@ data = {
                         }]
                     }
                 }
-            }]
+            }],
+            kind: 'var'
         },
 
         'var hello = function hi() { sayHi() };': {
             type: 'VariableDeclaration',
             declarations: [{
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
+                id: {
                     type: 'Identifier',
                     name: 'hello'
                 },
-                right: {
+                init: {
                     type: 'FunctionExpression',
                     id: 'hi',
                     params: [],
@@ -2834,7 +2820,8 @@ data = {
                         }]
                     }
                 }
-            }]
+            }],
+            kind: 'var'
         }
     }
 };
