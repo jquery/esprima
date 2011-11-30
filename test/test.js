@@ -214,10 +214,9 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
-                        type: 'Property',
                         key: {
                             type: 'Identifier',
-                            value: 'answer'
+                            name: 'answer'
                         },
                         value: {
                             type: 'Literal',
@@ -2496,10 +2495,9 @@ data = {
             argument: {
                 type: 'ObjectExpression',
                 properties: [{
-                    type: 'Property',
                     key: {
                         type: 'Identifier',
-                        value: 'message'
+                        name: 'message'
                     },
                     value: {
                         type: 'Literal',

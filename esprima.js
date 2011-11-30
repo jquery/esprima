@@ -812,10 +812,9 @@ parseStatement: true */
                 value = parseAssignmentExpression();
 
                 properties.push({
-                    type: 'Property',
                     key: {
                         type: 'Identifier',
-                        value: name
+                        name: name
                     },
                     value: value
                 });
