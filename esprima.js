@@ -2067,6 +2067,6 @@ parseStatement: true */
     };
 
     // Sync with package.json.
-    exports.version = '0.8.1';
+    exports.version = '0.8.2';
 
 }(typeof exports === 'undefined' ? (esprima = {}) : exports));
