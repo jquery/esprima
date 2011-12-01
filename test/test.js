@@ -1133,7 +1133,7 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'BinaryExpression',
-                operator: 'instance of',
+                operator: 'instanceof',
                 left: {
                     type: 'Identifier',
                     name: 'x'

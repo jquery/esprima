@@ -1165,7 +1165,7 @@ parseStatement: true */
             lex();
             expr = {
                 type: Syntax.BinaryExpression,
-                operator: 'instance of',
+                operator: 'instanceof',
                 left: expr,
                 right: parseRelationalExpression()
             };
