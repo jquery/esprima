@@ -1861,7 +1861,8 @@ data = {
                     },
                     'arguments': []
                 }
-            }
+            },
+            alternate: null
         },
 
         'if (morning) goodMorning(); else goodDay()': {

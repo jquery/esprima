@@ -1478,6 +1478,8 @@ parseStatement: true */
         if (matchKeyword('else')) {
             lex();
             alternate = parseStatement();
+        } else {
+            alternate = null;
         }
 
         return {
