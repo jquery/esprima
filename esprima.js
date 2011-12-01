@@ -69,6 +69,7 @@ parseStatement: true */
         IfStatement: 'IfStatement',
         Literal: 'Literal',
         LabeledStatement: 'LabeledStatement',
+        LogicalExpression: 'LogicalExpression',
         MemberExpression: 'MemberExpression',
         NewExpression: 'NewExpression',
         Program: 'Program',
@@ -1240,7 +1241,7 @@ parseStatement: true */
         if (match('&&')) {
             lex();
             expr = {
-                type: Syntax.BinaryExpression,
+                type: Syntax.LogicalExpression,
                 operator: '&&',
                 left: expr,
                 right: parseLogicalANDExpression()
@@ -1256,7 +1257,7 @@ parseStatement: true */
         if (match('||')) {
             lex();
             expr = {
-                type: Syntax.BinaryExpression,
+                type: Syntax.LogicalExpression,
                 operator: '||',
                 left: expr,
                 right: parseLogicalORExpression()

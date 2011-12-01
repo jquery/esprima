@@ -1251,7 +1251,7 @@ data = {
         'x || y': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'BinaryExpression',
+                type: 'LogicalExpression',
                 operator: '||',
                 left: {
                     type: 'Identifier',
@@ -1267,7 +1267,7 @@ data = {
         'x && y': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'BinaryExpression',
+                type: 'LogicalExpression',
                 operator: '&&',
                 left: {
                     type: 'Identifier',
@@ -1283,14 +1283,14 @@ data = {
         'x || y && z': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'BinaryExpression',
+                type: 'LogicalExpression',
                 operator: '||',
                 left: {
                     type: 'Identifier',
                     name: 'x'
                 },
                 right: {
-                    type: 'BinaryExpression',
+                    type: 'LogicalExpression',
                     operator: '&&',
                     left: {
                         type: 'Identifier',
@@ -1307,7 +1307,7 @@ data = {
         'x || y ^ z': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'BinaryExpression',
+                type: 'LogicalExpression',
                 operator: '||',
                 left: {
                     type: 'Identifier',
@@ -1355,7 +1355,7 @@ data = {
             expression: {
                 type: 'ConditionalExpression',
                 test: {
-                    type: 'BinaryExpression',
+                    type: 'LogicalExpression',
                     operator: '&&',
                     left: {
                         type: 'Identifier',
