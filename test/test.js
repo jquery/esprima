@@ -142,6 +142,49 @@ data = {
             }
         },
 
+        'x = [ , 42 ]': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [
+                        null, {
+                            type: 'Literal',
+                            value: 42
+                        }
+                    ]
+                }
+            }
+        },
+
+        'x = [ ,, 42 ]': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [
+                        null,
+                        null, {
+                            type: 'Literal',
+                            value: 42
+                        }
+                    ]
+                }
+            }
+        },
+
         'x = [ 1, 2, 3, ]': {
             type: 'ExpressionStatement',
             expression: {
@@ -165,7 +208,33 @@ data = {
                     }]
                 }
             }
+        },
+
+        'x = [ 1, 2,, 3, ]': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [{
+                        type: 'Literal',
+                        value: 1
+                    }, {
+                        type: 'Literal',
+                        value: 2
+                    }, null, {
+                        type: 'Literal',
+                        value: 3
+                    }]
+                }
+            }
         }
+
     },
 
     'Object Initializer': {

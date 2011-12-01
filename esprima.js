@@ -762,7 +762,8 @@ parseStatement: true */
     // 11.1.4 Array Initialiser
 
     function parseArrayInitialiser() {
-        var elements = [];
+        var elements = [],
+            undef;
 
         expect(Token.Punctuator, '[');
 
@@ -772,14 +773,19 @@ parseStatement: true */
                 break;
             }
 
-            elements.push(parseAssignmentExpression());
-
-            if (match(']')) {
+            if (match(',')) {
                 lex();
-                break;
-            }
+                elements.push(undef);
+            } else {
+                elements.push(parseAssignmentExpression());
 
-            expect(Token.Punctuator, ',');
+                if (match(']')) {
+                    lex();
+                    break;
+                }
+
+                expect(Token.Punctuator, ',');
+            }
         }
 
         return {
