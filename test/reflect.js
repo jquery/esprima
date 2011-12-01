@@ -275,9 +275,9 @@ assertExpr("[,1,2,3]", arrExpr([,lit(1),lit(2),lit(3)]));
 assertExpr("[,,1,2,3]", arrExpr([,,lit(1),lit(2),lit(3)]));
 assertExpr("[,,,1,2,3]", arrExpr([,,,lit(1),lit(2),lit(3)]));
 assertExpr("[,,,1,2,3,]", arrExpr([,,,lit(1),lit(2),lit(3)]));
-assertExpr("[,,,1,2,3,,]", arrExpr([,,,lit(1),lit(2),lit(3),]));
-assertExpr("[,,,1,2,3,,,]", arrExpr([,,,lit(1),lit(2),lit(3),,]));
-assertExpr("[,,,,,]", arrExpr([,,,,]));
+assertExpr("[,,,1,2,3,,]", arrExpr([,,,lit(1),lit(2),lit(3),undefined]));
+assertExpr("[,,,1,2,3,,,]", arrExpr([,,,lit(1),lit(2),lit(3),undefined,undefined]));
+assertExpr("[,,,,,]", arrExpr([undefined,undefined,undefined,undefined,undefined]));
 assertExpr("({})", objExpr([]));
 assertExpr("({x:1})", objExpr([{ key: ident("x"), value: lit(1) }]));
 assertExpr("({x:1, y:2})", objExpr([{ key: ident("x"), value: lit(1) },
