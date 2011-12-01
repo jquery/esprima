@@ -963,6 +963,7 @@ parseStatement: true */
                 };
                 expr = {
                     type: Syntax.MemberExpression,
+                    computed: false,
                     object: expr,
                     property: property
                 };
@@ -974,6 +975,7 @@ parseStatement: true */
                 }
                 expr = {
                     type: Syntax.MemberExpression,
+                    computed: true,
                     object: expr,
                     property: property
                 };

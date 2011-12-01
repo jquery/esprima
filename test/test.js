@@ -531,6 +531,7 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'MemberExpression',
+                computed: false,
                 object: {
                     type: 'Identifier',
                     name: 'universe'
@@ -546,8 +547,10 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'MemberExpression',
+                computed: false,
                 object: {
                     type: 'MemberExpression',
+                    computed: false,
                     object: {
                         type: 'Identifier',
                         name: 'universe'
@@ -568,10 +571,13 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'MemberExpression',
+                computed: false,
                 object: {
                     type: 'MemberExpression',
+                    computed: false,
                     object: {
                         type: 'MemberExpression',
+                        computed: false,
                         object: {
                             type: 'Identifier',
                             name: 'universe'
@@ -597,6 +603,7 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'MemberExpression',
+                computed: true,
                 object: {
                     type: 'Identifier',
                     name: 'universe'
@@ -618,6 +625,7 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'MemberExpression',
+                computed: true,
                 object: {
                     type: 'Identifier',
                     name: 'universe'
@@ -633,8 +641,10 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'MemberExpression',
+                computed: false,
                 object: {
                     type: 'MemberExpression',
+                    computed: true,
                     object: {
                         type: 'Identifier',
                         name: 'universe'
@@ -655,6 +665,7 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'MemberExpression',
+                computed: false,
                 object: {
                     type: 'CallExpression',
                     callee: {
@@ -677,10 +688,12 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'MemberExpression',
+                computed: false,
                 object: {
                     type: 'CallExpression',
                     callee: {
                         type: 'MemberExpression',
+                        computed: false,
                         object: {
                             type: 'CallExpression',
                             callee: {
@@ -721,10 +734,13 @@ data = {
                 type: 'CallExpression',
                 callee: {
                     type: 'MemberExpression',
+                    computed: false,
                     object: {
                         type: 'MemberExpression',
+                        computed: false,
                         object: {
                             type: 'MemberExpression',
+                            computed: false,
                             object: {
                                 type: 'Identifier',
                                 name: 'earth'
