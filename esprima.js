@@ -1614,7 +1614,11 @@ parseStatement: true */
 
         token = lookahead();
         if (token.type === Token.Identifier) {
-            label = token.value;
+            lex();
+            label = {
+                type: Syntax.Identifier,
+                name: token.value
+            };
         }
 
         consumeSemicolon();
@@ -1634,7 +1638,11 @@ parseStatement: true */
 
         token = lookahead();
         if (token.type === Token.Identifier) {
-            label = token.value;
+            lex();
+            label = {
+                type: Syntax.Identifier,
+                name: token.value
+            };
         }
 
         consumeSemicolon();
@@ -1897,7 +1905,7 @@ parseStatement: true */
             lex();
             return {
                 type: Syntax.LabeledStatement,
-                label: stat.expression.name,
+                label: stat.expression,
                 body: parseStatement()
             };
         }

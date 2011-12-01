@@ -2232,12 +2232,18 @@ data = {
 
         'continue done': {
             type: 'ContinueStatement',
-            label: 'done'
+            label: {
+                type: 'Identifier',
+                name: 'done'
+            }
         },
 
         'continue done;': {
             type: 'ContinueStatement',
-            label: 'done'
+            label: {
+                type: 'Identifier',
+                name: 'done'
+            }
         }
 
     },
@@ -2251,12 +2257,18 @@ data = {
 
         'break done': {
             type: 'BreakStatement',
-            label: 'done'
+            label: {
+                type: 'Identifier',
+                name: 'done'
+            }
         },
 
         'break done;': {
             type: 'BreakStatement',
-            label: 'done'
+            label: {
+                type: 'Identifier',
+                name: 'done'
+            }
         }
 
     },
@@ -2465,7 +2477,10 @@ data = {
 
         'start: for (;;) break start': {
             type: 'LabeledStatement',
-            label: 'start',
+            label: {
+                type: 'Identifier',
+                name: 'start'
+            },
             body: {
                 type: 'ForStatement',
                 init: null,
@@ -2473,14 +2488,20 @@ data = {
                 update: null,
                 body: {
                     type: 'BreakStatement',
-                    label: 'start'
+                    label: {
+                        type: 'Identifier',
+                        name: 'start'
+                    }
                 }
             }
         },
 
         'start: while (true) break start': {
             type: 'LabeledStatement',
-            label: 'start',
+            label: {
+                type: 'Identifier',
+                name: 'start'
+            },
             body: {
                 type: 'WhileStatement',
                 test: {
@@ -2489,7 +2510,10 @@ data = {
                 },
                 body: {
                     type: 'BreakStatement',
-                    label: 'start'
+                    label: {
+                        type: 'Identifier',
+                        name: 'start'
+                    }
                 }
             }
         }
