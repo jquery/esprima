@@ -2583,14 +2583,18 @@ data = {
                 type: 'BlockStatement',
                 body: []
             },
-            handler: {
-                type: 'BlockStatement',
-                body: [],
-                guard: {
+            handlers: [{
+                type: 'CatchClause',
+                param: {
                     type: 'Identifier',
                     name: 'e'
+                },
+                guard: null,
+                body: {
+                    type: 'BlockStatement',
+                    body: []
                 }
-            },
+            }],
             finalizer: null
         },
 
@@ -2600,27 +2604,31 @@ data = {
                 type: 'BlockStatement',
                 body: []
             },
-            handler: {
-                type: 'BlockStatement',
-                body: [{
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'say'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'e'
-                        }]
-                    }
-                }],
-                guard: {
+            handlers: [{
+                type: 'CatchClause',
+                param: {
                     type: 'Identifier',
                     name: 'e'
+                },
+                guard: null,
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'say'
+                            },
+                            'arguments': [{
+                                type: 'Identifier',
+                                name: 'e'
+                            }]
+                        }
+                    }]
                 }
-            },
+            }],
             finalizer: null
         },
 
@@ -2630,7 +2638,7 @@ data = {
                 type: 'BlockStatement',
                 body: []
             },
-            handler: null,
+            handlers: [],
             finalizer: {
                 type: 'BlockStatement',
                 body: [{
@@ -2666,27 +2674,31 @@ data = {
                     }
                 }]
             },
-            handler: {
-                type: 'BlockStatement',
-                body: [{
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'say'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'e'
-                        }]
-                    }
-                }],
-                guard: {
+            handlers: [{
+                type: 'CatchClause',
+                param: {
                     type: 'Identifier',
                     name: 'e'
+                },
+                guard: null,
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'say'
+                            },
+                            'arguments': [{
+                                type: 'Identifier',
+                                name: 'e'
+                            }]
+                        }
+                    }]
                 }
-            },
+            }],
             finalizer: null
         },
 
@@ -2706,27 +2718,31 @@ data = {
                     }
                 }]
             },
-            handler: {
-                type: 'BlockStatement',
-                body: [{
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'say'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'e'
-                        }]
-                    }
-                }],
-                guard: {
+            handlers: [{
+                type: 'CatchClause',
+                param: {
                     type: 'Identifier',
                     name: 'e'
+                },
+                guard: null,
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'say'
+                            },
+                            'arguments': [{
+                                type: 'Identifier',
+                                name: 'e'
+                            }]
+                        }
+                    }]
                 }
-            },
+            }],
             finalizer: {
                 type: 'BlockStatement',
                 body: [{

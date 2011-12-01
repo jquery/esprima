@@ -55,6 +55,7 @@ parseStatement: true */
         BinaryExpression: 'BinaryExpression',
         BreakStatement: 'BreakStatement',
         CallExpression: 'CallExpression',
+        CatchClause: 'CatchClause',
         ConditionalExpression: 'ConditionalExpression',
         ContinueStatement: 'ContinueStatement',
         DoWhileStatement: 'DoWhileStatement',
@@ -1789,7 +1790,7 @@ parseStatement: true */
     // 12.14 The try statement
 
     function parseTryStatement() {
-        var block, handler = null, guard, finalizer = null;
+        var block, handlers = [], param, finalizer = null;
 
         expect(Token.Keyword, 'try');
 
@@ -1799,11 +1800,16 @@ parseStatement: true */
             lex();
             expect(Token.Punctuator, '(');
             if (!match(')')) {
-                guard = parseExpression().expression;
+                param = parseExpression().expression;
             }
             expect(Token.Punctuator, ')');
-            handler = parseBlock();
-            handler.guard = guard;
+
+            handlers.push({
+                type: Syntax.CatchClause,
+                param: param,
+                guard: null,
+                body: parseBlock()
+            });
         }
 
         if (matchKeyword('finally')) {
@@ -1814,7 +1820,7 @@ parseStatement: true */
         return {
             type: Syntax.TryStatement,
             block: block,
-            handler: handler,
+            handlers: handlers,
             finalizer: finalizer
         };
     }
