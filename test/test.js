@@ -1486,7 +1486,10 @@ data = {
                     value: 2
                 }
             }
-        },
+        }
+    },
+
+    'Assignment Operators': {
 
         'x = 42': {
             type: 'ExpressionStatement',
