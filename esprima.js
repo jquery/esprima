@@ -790,7 +790,7 @@ parseStatement: true */
     // 11.1.5 Object Initialiser
 
     function parseObjectInitialiser() {
-        var token, expr, properties = [], name, value;
+        var token, expr, properties = [], property;
 
         function isPropertyName(t) {
             return t === Token.Identifier ||
@@ -808,17 +808,23 @@ parseStatement: true */
             }
 
             if (isPropertyName(token.type)) {
-                name = token.value;
-                expect(Token.Punctuator, ':');
-                value = parseAssignmentExpression();
-
-                properties.push({
-                    key: {
+                property = {};
+                if (token.type === Token.Identifier) {
+                    property.key = {
                         type: 'Identifier',
-                        name: name
-                    },
-                    value: value
-                });
+                        name: token.value
+                    };
+                } else {
+                    property.key = {
+                        type: 'Literal',
+                        value: token.value
+                    };
+                }
+
+                expect(Token.Punctuator, ':');
+                property.value = parseAssignmentExpression();
+
+                properties.push(property);
             } else {
                 throwUnexpected(token);
             }

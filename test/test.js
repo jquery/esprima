@@ -225,7 +225,33 @@ data = {
                     }]
                 }
             }
+        },
+
+        'x = { "answer": 42 }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Literal',
+                            value: 'answer'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42
+                        }
+                    }]
+                }
+            }
         }
+
     },
 
     'Comments': {
