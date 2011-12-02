@@ -2,6 +2,22 @@ Esprima ([esprima.org](http://esprima.org)) is an experimental ECMAScript
 (also popularly known as JavaScript) parsing infrastructure for multipurpose
 analysis. It is also written in ECMAScript.
 
+Esprima can be used in a web browser:
+
+    <script src="esprima.js"></script>
+
+or in a Node.js application via the package manager:
+
+    npm install esprima
+
+A very simple example:
+
+    esprima.parse('var answer=42').body[0].declarations[0].init
+
+produces the following object:
+
+    { type: 'Literal', value: 42 }
+
 Esprima is still in the development, for now please check
 [the wiki documentation](http://wiki.esprima.org).
 

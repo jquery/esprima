@@ -14,6 +14,22 @@
 (also popularly known as JavaScript) parsing infrastructure for multipurpose
 analysis. It is also written in ECMAScript.</p>
 
+<p>Esprima can be used in a web browser:</p>
+
+<pre>&lt;script src="esprima.js"&gt;&lt;script&gt;</pre>
+
+<p>or in a Node.js application via the package manager:</p>
+
+<pre>npm install esprima</pre>
+
+<p>A very simple example:</p>
+
+<pre>esprima.parse('var answer=42').body[0].declarations[0].init</pre>
+
+<p>produces the following object:</p>
+
+<pre>{ type: 'Literal', value: 42 }</pre>
+
 <p>Esprima is still in the development, for now please check
 <a href="http://wiki.esprima.org">the wiki documentation</a>.</p>
 

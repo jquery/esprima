@@ -27,6 +27,11 @@ li {
     margin-bottom: 4px;
 }
 
+pre {
+    margin-left: 15px;
+    font-family: Inconsolata, Menlo, 'Courier New', monospace;
+}
+
 h1 {
     margin-bottom: 18px;
     font-size: 30px;
