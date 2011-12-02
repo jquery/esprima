@@ -1102,12 +1102,12 @@ parseStatement: true */
     function parseMultiplicativeExpression() {
         var expr = parseUnaryExpression();
 
-        if (match('*') || match('/') || match('%')) {
+        while (match('*') || match('/') || match('%')) {
             expr = {
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
                 left: expr,
-                right: parseMultiplicativeExpression()
+                right: parseUnaryExpression()
             };
         }
 
@@ -1119,12 +1119,12 @@ parseStatement: true */
     function parseAdditiveExpression() {
         var expr = parseMultiplicativeExpression();
 
-        if (match('+') || match('-')) {
+        while (match('+') || match('-')) {
             expr = {
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
                 left: expr,
-                right: parseAdditiveExpression()
+                right: parseMultiplicativeExpression()
             };
         }
 
@@ -1136,12 +1136,12 @@ parseStatement: true */
     function parseShiftExpression() {
         var expr = parseAdditiveExpression();
 
-        if (match('<<') || match('>>') || match('>>>')) {
-            return {
+        while (match('<<') || match('>>') || match('>>>')) {
+            expr =  {
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
                 left: expr,
-                right: parseShiftExpression()
+                right: parseAdditiveExpression()
             };
         }
 
@@ -1186,12 +1186,12 @@ parseStatement: true */
     function parseEqualityExpression() {
         var expr = parseRelationalExpression();
 
-        if (match('==') || match('!=') || match('===') || match('!==')) {
+        while (match('==') || match('!=') || match('===') || match('!==')) {
             expr = {
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
                 left: expr,
-                right: parseEqualityExpression()
+                right: parseRelationalExpression()
             };
         }
 
@@ -1203,13 +1203,13 @@ parseStatement: true */
     function parseBitwiseANDExpression() {
         var expr = parseEqualityExpression();
 
-        if (match('&')) {
+        while (match('&')) {
             lex();
             expr = {
                 type: Syntax.BinaryExpression,
                 operator: '&',
                 left: expr,
-                right: parseBitwiseANDExpression()
+                right: parseEqualityExpression()
             };
         }
 
@@ -1219,13 +1219,13 @@ parseStatement: true */
     function parseBitwiseORExpression() {
         var expr = parseBitwiseANDExpression();
 
-        if (match('|')) {
+        while (match('|')) {
             lex();
             expr = {
                 type: Syntax.BinaryExpression,
                 operator: '|',
                 left: expr,
-                right: parseBitwiseORExpression()
+                right: parseBitwiseANDExpression()
             };
         }
 
@@ -1235,13 +1235,13 @@ parseStatement: true */
     function parseBitwiseXORExpression() {
         var expr = parseBitwiseORExpression();
 
-        if (match('^')) {
+        while (match('^')) {
             lex();
             expr = {
                 type: Syntax.BinaryExpression,
                 operator: '^',
                 left: expr,
-                right: parseBitwiseXORExpression()
+                right: parseBitwiseORExpression()
             };
         }
 
@@ -1253,13 +1253,13 @@ parseStatement: true */
     function parseLogicalANDExpression() {
         var expr = parseBitwiseXORExpression();
 
-        if (match('&&')) {
+        while (match('&&')) {
             lex();
             expr = {
                 type: Syntax.LogicalExpression,
                 operator: '&&',
                 left: expr,
-                right: parseLogicalANDExpression()
+                right: parseBitwiseXORExpression()
             };
         }
 
@@ -1269,13 +1269,13 @@ parseStatement: true */
     function parseLogicalORExpression() {
         var expr = parseLogicalANDExpression();
 
-        if (match('||')) {
+        while (match('||')) {
             lex();
             expr = {
                 type: Syntax.LogicalExpression,
                 operator: '||',
                 left: expr,
-                right: parseLogicalORExpression()
+                right: parseLogicalANDExpression()
             };
         }
 

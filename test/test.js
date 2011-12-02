@@ -1330,6 +1330,417 @@ data = {
                     name: 'y'
                 }
             }
+        }
+    },
+
+    'Binary Expressions': {
+
+        'x + y + z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '+',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '+',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x - y + z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '+',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '-',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x + y - z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '-',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '+',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x - y - z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '-',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '-',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x + y * z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '+',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'BinaryExpression',
+                    operator: '*',
+                    left: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'z'
+                    }
+                }
+            }
+        },
+
+        'x + y / z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '+',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'BinaryExpression',
+                    operator: '/',
+                    left: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'z'
+                    }
+                }
+            }
+        },
+
+        'x - y % z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '-',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'BinaryExpression',
+                    operator: '%',
+                    left: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'z'
+                    }
+                }
+            }
+        },
+
+        'x * y * z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '*',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '*',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x * y / z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '/',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '*',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x * y % z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '%',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '*',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x % y * z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '*',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '%',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x << y << z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '<<',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '<<',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x | y | z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '|',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '|',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x & y & z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '&',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '&',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x ^ y ^ z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '^',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '^',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x & y | z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '|',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '&',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x | y ^ z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '^',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '|',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
         },
 
         'x | y & z': {
@@ -1387,6 +1798,54 @@ data = {
                 right: {
                     type: 'Identifier',
                     name: 'y'
+                }
+            }
+        },
+
+        'x || y || z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'LogicalExpression',
+                operator: '||',
+                left: {
+                    type: 'LogicalExpression',
+                    operator: '||',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x && y && z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'LogicalExpression',
+                operator: '&&',
+                left: {
+                    type: 'LogicalExpression',
+                    operator: '&&',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
                 }
             }
         },
