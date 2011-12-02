@@ -6,7 +6,7 @@
     "bin": {
         "esparse": "./bin/esparse.js"
     },
-    "version": "0.8.2",
+    "version": "0.9.0",
     "engines": {
         "node": ">=0.4.0"
     },
