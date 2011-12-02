@@ -1743,22 +1743,19 @@ parseStatement: true */
             }
             expect(Token.Punctuator, ':');
 
-            consequent = {
-                type: Syntax.BlockStatement,
-                body: []
-            };
+            consequent = [];
 
             while (index < length) {
                 if (match('}') || matchKeyword('default') || matchKeyword('case')) {
                     break;
                 }
-                consequent.body.push(parseStatement());
+                consequent.push(parseStatement());
             }
 
             cases.push({
                 type: Syntax.SwitchCase,
                 test: test,
-                consequent: [ consequent ]
+                consequent: consequent
             });
         }
 

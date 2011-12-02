@@ -2494,21 +2494,18 @@ data = {
                     value: 42
                 },
                 consequent: [{
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'hi'
-                            },
-                            'arguments': []
-                        }
-                    }, {
-                        type: 'BreakStatement',
-                        label: null
-                    }]
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'hi'
+                        },
+                        'arguments': []
+                    }
+                }, {
+                    type: 'BreakStatement',
+                    label: null
                 }]
             }]
         },
@@ -2526,31 +2523,25 @@ data = {
                     value: 42
                 },
                 consequent: [{
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'hi'
-                            },
-                            'arguments': []
-                        }
-                    }, {
-                        type: 'BreakStatement',
-                        label: null
-                    }]
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'hi'
+                        },
+                        'arguments': []
+                    }
+                }, {
+                    type: 'BreakStatement',
+                    label: null
                 }]
             }, {
                 type: 'SwitchCase',
                 test: null,
                 consequent: [{
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'BreakStatement',
-                        label: null
-                    }]
+                    type: 'BreakStatement',
+                    label: null
                 }]
             }]
         }
