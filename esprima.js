@@ -1550,15 +1550,12 @@ parseStatement: true */
         } else {
             if (matchKeyword('var')) {
                 lex();
-                init = parseVariableDeclarationList();
-                if (init.length === 1) {
-                    init = init[0];
-                } else {
-                    init = {
-                        type: Syntax.SequenceExpression,
-                        expressions: init
-                    };
-                }
+                init = {
+                    type: Syntax.VariableDeclaration,
+                    declarations: parseVariableDeclarationList(),
+                    kind: 'var'
+                };
+
                 if (matchKeyword('in')) {
                     lex();
                     left = init;
@@ -1610,7 +1607,8 @@ parseStatement: true */
             type: Syntax.ForInStatement,
             left: left,
             right: right,
-            body: body
+            body: body,
+            each: false
         };
     }
 

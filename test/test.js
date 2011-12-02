@@ -2069,14 +2069,18 @@ data = {
         'for(var x = 0;;);': {
             type: 'ForStatement',
             init: {
-                id: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                init: {
-                    type: 'Literal',
-                    value: 0
-                }
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 0
+                    }
+                }],
+                kind: 'var'
             },
             test: null,
             update: null,
@@ -2088,8 +2092,8 @@ data = {
         'for(var x = 0, y = 1;;);': {
             type: 'ForStatement',
             init: {
-                type: 'SequenceExpression',
-                expressions: [{
+                type: 'VariableDeclaration',
+                declarations: [{
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -2107,7 +2111,8 @@ data = {
                         type: 'Literal',
                         value: 1
                     }
-                }]
+                }],
+                kind: 'var'
             },
             test: null,
             update: null,
@@ -2262,17 +2267,22 @@ data = {
                         name: 'x'
                     }]
                 }
-            }
+            },
+            each: false
         },
 
         'for (var x in list) process(x);': {
             type: 'ForInStatement',
             left: {
-                id: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                init: null
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: null
+                }],
+                kind: 'var'
             },
             right: {
                 type: 'Identifier',
@@ -2291,7 +2301,8 @@ data = {
                         name: 'x'
                     }]
                 }
-            }
+            },
+            each: false
         }
 
     },
