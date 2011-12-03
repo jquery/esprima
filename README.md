@@ -26,7 +26,8 @@ Since it is not comprehensive nor complete, refer to the
 [known problems](http://code.google.com/p/esprima/issues/list?q=Defect)
 and [future plans](http://code.google.com/p/esprima/issues/list?q=Enhancement).
 
-Feedback and contribution are welcomed! Please read the
+Feedback and contribution are welcomed! Please join the
+[mailing list](http://groups.google.com/group/esprima) and read the
 [contribution guide](http://code.google.com/p/esprima/wiki/ContributionGuide)
 for further info.
 
