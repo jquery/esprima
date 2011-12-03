@@ -701,18 +701,24 @@ parseStatement: true */
         };
     }
 
-    // Expect the next token to match the specified one.
+    // Expect the next token to match the specified punctuator.
     // If not, an exception will be thrown.
 
-    function expect(type, value) {
-        var token;
-
-        token = lex();
-        if (token.type !== type || token.value !== value) {
+    function expect(value) {
+        var token = lex();
+        if (token.type !== Token.Punctuator || token.value !== value) {
             throwUnexpected(token);
         }
+    }
 
-        return token;
+    // Expect the next token to match the specified keyword.
+    // If not, an exception will be thrown.
+
+    function expectKeyword(keyword) {
+        var token = lex();
+        if (token.type !== Token.Keyword || token.value !== keyword) {
+            throwUnexpected(token);
+        }
     }
 
     // Return true if the next token matches the specified punctuator.
@@ -765,7 +771,7 @@ parseStatement: true */
         var elements = [],
             undef;
 
-        expect(Token.Punctuator, '[');
+        expect('[');
 
         while (index < length) {
             if (match(']')) {
@@ -784,7 +790,7 @@ parseStatement: true */
                     break;
                 }
 
-                expect(Token.Punctuator, ',');
+                expect(',');
             }
         }
 
@@ -805,7 +811,7 @@ parseStatement: true */
                 t === Token.NumericLiteral;
         }
 
-        expect(Token.Punctuator, '{');
+        expect('{');
 
         // TODO handle 'get' and 'set'
         while (index < length) {
@@ -828,7 +834,7 @@ parseStatement: true */
                     };
                 }
 
-                expect(Token.Punctuator, ':');
+                expect(':');
                 property.value = parseAssignmentExpression();
 
                 properties.push(property);
@@ -841,7 +847,7 @@ parseStatement: true */
                 lex();
                 break;
             }
-            expect(Token.Punctuator, ',');
+            expect(',');
         }
 
         return {
@@ -866,7 +872,7 @@ parseStatement: true */
         if (match('(')) {
             lex();
             expr = parseExpression();
-            expect(Token.Punctuator, ')');
+            expect(')');
             return expr.expression;
         }
 
@@ -933,7 +939,7 @@ parseStatement: true */
     function parseArguments() {
         var args = [];
 
-        expect(Token.Punctuator, '(');
+        expect('(');
 
         if (!match(')')) {
             while (index < length) {
@@ -941,11 +947,11 @@ parseStatement: true */
                 if (match(')')) {
                     break;
                 }
-                expect(Token.Punctuator, ',');
+                expect(',');
             }
         }
 
-        expect(Token.Punctuator, ')');
+        expect(')');
 
         return args;
     }
@@ -986,7 +992,7 @@ parseStatement: true */
                     object: expr,
                     property: property
                 };
-                expect(Token.Punctuator, ']');
+                expect(']');
             } else if (match('(')) {
                 expr = {
                     type: Syntax.CallExpression,
@@ -1300,7 +1306,7 @@ parseStatement: true */
                 test: expr
             };
             expr.consequent = parseAssignmentExpression();
-            expect(Token.Punctuator, ':');
+            expect(':');
             expr.alternate = parseAssignmentExpression();
         }
 
@@ -1369,11 +1375,11 @@ parseStatement: true */
     function parseBlock() {
         var block;
 
-        expect(Token.Punctuator, '{');
+        expect('{');
 
         block = parseStatementList();
 
-        expect(Token.Punctuator, '}');
+        expect('}');
 
         return {
             type: Syntax.BlockStatement,
@@ -1427,7 +1433,7 @@ parseStatement: true */
     function parseVariableStatement() {
         var declarations;
 
-        expect(Token.Keyword, 'var');
+        expectKeyword('var');
 
         declarations = parseVariableDeclarationList();
 
@@ -1443,7 +1449,7 @@ parseStatement: true */
     // 12.3 Empty Statement
 
     function parseEmptyStatement() {
-        expect(Token.Punctuator, ';');
+        expect(';');
 
         return {
             type: Syntax.EmptyStatement
@@ -1465,13 +1471,13 @@ parseStatement: true */
     function parseIfStatement() {
         var test, consequent, alternate;
 
-        expect(Token.Keyword, 'if');
+        expectKeyword('if');
 
-        expect(Token.Punctuator, '(');
+        expect('(');
 
         test = parseExpression().expression;
 
-        expect(Token.Punctuator, ')');
+        expect(')');
 
         consequent = parseStatement();
 
@@ -1495,17 +1501,17 @@ parseStatement: true */
     function parseDoWhileStatement() {
         var body, test;
 
-        expect(Token.Keyword, 'do');
+        expectKeyword('do');
 
         body = parseStatement();
 
-        expect(Token.Keyword, 'while');
+        expectKeyword('while');
 
-        expect(Token.Punctuator, '(');
+        expect('(');
 
         test = parseExpression().expression;
 
-        expect(Token.Punctuator, ')');
+        expect(')');
 
         consumeSemicolon();
 
@@ -1519,13 +1525,13 @@ parseStatement: true */
     function parseWhileStatement() {
         var test, body;
 
-        expect(Token.Keyword, 'while');
+        expectKeyword('while');
 
-        expect(Token.Punctuator, '(');
+        expect('(');
 
         test = parseExpression().expression;
 
-        expect(Token.Punctuator, ')');
+        expect(')');
 
         body = parseStatement();
 
@@ -1541,9 +1547,9 @@ parseStatement: true */
 
         init = test = update = null;
 
-        expect(Token.Keyword, 'for');
+        expectKeyword('for');
 
-        expect(Token.Punctuator, '(');
+        expect('(');
 
         if (match(';')) {
             lex();
@@ -1572,7 +1578,7 @@ parseStatement: true */
                     right = init.right;
                     init = null;
                 } else {
-                    expect(Token.Punctuator, ';');
+                    expect(';');
                 }
             }
         }
@@ -1582,14 +1588,14 @@ parseStatement: true */
             if (!match(';')) {
                 test = parseExpression().expression;
             }
-            expect(Token.Punctuator, ';');
+            expect(';');
 
             if (!match(')')) {
                 update = parseExpression().expression;
             }
         }
 
-        expect(Token.Punctuator, ')');
+        expect(')');
 
         body = parseStatement();
 
@@ -1617,7 +1623,7 @@ parseStatement: true */
     function parseContinueStatement() {
         var token, label = null;
 
-        expect(Token.Keyword, 'continue');
+        expectKeyword('continue');
 
         token = lookahead();
         if (token.type === Token.Identifier) {
@@ -1641,7 +1647,7 @@ parseStatement: true */
     function parseBreakStatement() {
         var token, label = null;
 
-        expect(Token.Keyword, 'break');
+        expectKeyword('break');
 
         token = lookahead();
         if (token.type === Token.Identifier) {
@@ -1665,7 +1671,7 @@ parseStatement: true */
     function parseReturnStatement() {
         var token, argument = null;
 
-        expect(Token.Keyword, 'return');
+        expectKeyword('return');
 
         if (!match(';')) {
             token = lookahead();
@@ -1687,13 +1693,13 @@ parseStatement: true */
     function parseWithStatement() {
         var object, body;
 
-        expect(Token.Keyword, 'with');
+        expectKeyword('with');
 
-        expect(Token.Punctuator, '(');
+        expect('(');
 
         object = parseExpression().expression;
 
-        expect(Token.Punctuator, ')');
+        expect(')');
 
         body = parseStatement();
 
@@ -1709,15 +1715,15 @@ parseStatement: true */
     function parseSwitchStatement() {
         var discriminant, cases, test, consequent;
 
-        expect(Token.Keyword, 'switch');
+        expectKeyword('switch');
 
-        expect(Token.Punctuator, '(');
+        expect('(');
 
         discriminant = parseExpression().expression;
 
-        expect(Token.Punctuator, ')');
+        expect(')');
 
-        expect(Token.Punctuator, '{');
+        expect('{');
 
         if (match('}')) {
             lex();
@@ -1738,10 +1744,10 @@ parseStatement: true */
                 lex();
                 test = null;
             } else {
-                expect(Token.Keyword, 'case');
+                expectKeyword('case');
                 test = parseExpression().expression;
             }
-            expect(Token.Punctuator, ':');
+            expect(':');
 
             consequent = [];
 
@@ -1759,7 +1765,7 @@ parseStatement: true */
             });
         }
 
-        expect(Token.Punctuator, '}');
+        expect('}');
 
         return {
             type: Syntax.SwitchStatement,
@@ -1773,7 +1779,7 @@ parseStatement: true */
     function parseThrowStatement() {
         var token, argument = null;
 
-        expect(Token.Keyword, 'throw');
+        expectKeyword('throw');
 
         if (!match(';')) {
             token = lookahead();
@@ -1795,17 +1801,17 @@ parseStatement: true */
     function parseTryStatement() {
         var block, handlers = [], param, finalizer = null;
 
-        expect(Token.Keyword, 'try');
+        expectKeyword('try');
 
         block = parseBlock();
 
         if (matchKeyword('catch')) {
             lex();
-            expect(Token.Punctuator, '(');
+            expect('(');
             if (!match(')')) {
                 param = parseExpression().expression;
             }
-            expect(Token.Punctuator, ')');
+            expect(')');
 
             handlers.push({
                 type: Syntax.CatchClause,
@@ -1831,7 +1837,7 @@ parseStatement: true */
     // 12.15 The debugger statement
 
     function parseDebuggerStatement() {
-        expect(Token.Keyword, 'debugger');
+        expectKeyword('debugger');
 
         consumeSemicolon();
 
@@ -1927,7 +1933,7 @@ parseStatement: true */
     function parseFunctionDeclaration() {
         var token, id = null, params = [], body;
 
-        expect(Token.Keyword, 'function');
+        expectKeyword('function');
 
         token = lex();
         if (token.type !== Token.Identifier) {
@@ -1938,7 +1944,7 @@ parseStatement: true */
             name: token.value
         };
 
-        expect(Token.Punctuator, '(');
+        expect('(');
 
         if (!match(')')) {
             while (index < length) {
@@ -1953,11 +1959,11 @@ parseStatement: true */
                 if (match(')')) {
                     break;
                 }
-                expect(Token.Punctuator, ',');
+                expect(',');
             }
         }
 
-        expect(Token.Punctuator, ')');
+        expect(')');
 
         body = parseBlock();
 
@@ -1972,7 +1978,7 @@ parseStatement: true */
     function parseFunctionExpression() {
         var token, id = null, params = [], body;
 
-        expect(Token.Keyword, 'function');
+        expectKeyword('function');
 
         if (!match('(')) {
             token = lex();
@@ -1985,7 +1991,7 @@ parseStatement: true */
             };
         }
 
-        expect(Token.Punctuator, '(');
+        expect('(');
 
         if (!match(')')) {
             while (index < length) {
@@ -2000,11 +2006,11 @@ parseStatement: true */
                 if (match(')')) {
                     break;
                 }
-                expect(Token.Punctuator, ',');
+                expect(',');
             }
         }
 
-        expect(Token.Punctuator, ')');
+        expect(')');
 
         body = parseBlock();
 
