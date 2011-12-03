@@ -818,12 +818,12 @@ parseStatement: true */
                 property = {};
                 if (token.type === Token.Identifier) {
                     property.key = {
-                        type: 'Identifier',
+                        type: Syntax.Identifier,
                         name: token.value
                     };
                 } else {
                     property.key = {
-                        type: 'Literal',
+                        type: Syntax.Literal,
                         value: token.value
                     };
                 }
@@ -977,7 +977,7 @@ parseStatement: true */
             } else if (match('[')) {
                 lex();
                 property = parseExpression();
-                if (property.type === 'ExpressionStatement') {
+                if (property.type === Syntax.ExpressionStatement) {
                     property = property.expression;
                 }
                 expr = {
@@ -1930,7 +1930,7 @@ parseStatement: true */
         expect(Token.Keyword, 'function');
 
         token = lex();
-        if (token.type !== 'Identifier') {
+        if (token.type !== Token.Identifier) {
             throwUnexpected(token);
         }
         id = {
@@ -1943,11 +1943,11 @@ parseStatement: true */
         if (!match(')')) {
             while (index < length) {
                 token = lex();
-                if (token.type !== 'Identifier') {
+                if (token.type !== Token.Identifier) {
                     throwUnexpected(token);
                 }
                 params.push({
-                    type: 'Identifier',
+                    type: Syntax.Identifier,
                     name: token.value
                 });
                 if (match(')')) {
@@ -1976,7 +1976,7 @@ parseStatement: true */
 
         if (!match('(')) {
             token = lex();
-            if (token.type !== 'Identifier') {
+            if (token.type !== Token.Identifier) {
                 throwUnexpected(token);
             }
             id = {
@@ -1990,11 +1990,11 @@ parseStatement: true */
         if (!match(')')) {
             while (index < length) {
                 token = lex();
-                if (token.type !== 'Identifier') {
+                if (token.type !== Token.Identifier) {
                     throwUnexpected(token);
                 }
                 params.push({
-                    type: 'Identifier',
+                    type: Syntax.Identifier,
                     name: token.value
                 });
                 if (match(')')) {
