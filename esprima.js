@@ -38,15 +38,15 @@ parseStatement: true */
         buffer;
 
     Token = {
-        BooleanLiteral: 'BooleanLiteral',
-        EOF: 'EOF',
-        FutureReservedWord: 'FutureReservedWord',
-        Identifier: 'Identifier',
-        Keyword: 'Keyword',
-        NullLiteral: 'NullLiteral',
-        NumericLiteral: 'NumericLiteral',
-        Punctuator: 'Punctuator',
-        StringLiteral: 'StringLiteral'
+        BooleanLiteral: 1,
+        EOF: 2,
+        FutureReservedWord: 3,
+        Identifier: 4,
+        Keyword: 5,
+        NullLiteral: 6,
+        NumericLiteral: 7,
+        Punctuator: 8,
+        StringLiteral: 9
     };
 
     Syntax = {
