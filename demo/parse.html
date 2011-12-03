@@ -5,6 +5,9 @@
 <title>Esprima: Parsing Demo</title>
 <link rel="stylesheet" type="text/css" href="../assets/style.css"/>
 <script src="../esprima.js"></script>
+<script src="../assets/codemirror/codemirror.js"></script>
+<script src="../assets/codemirror/javascript.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/codemirror/codemirror.css"/>
 <script>
 /*jslint sloppy:true browser:true */
 /*global esprima:true */
@@ -17,7 +20,7 @@ function parse() {
     parseId = window.setTimeout(function () {
         var code, result, el, str;
 
-        code = document.getElementById('code').value;
+        code = window.editor.getValue();
 
         try {
             result = esprima.parse(code);
@@ -41,6 +44,7 @@ function parse() {
     <p><textarea id="code" autofocus="autofocus" cols="70" rows="15" spellcheck="false"
         onchange='parse()' onkeydown='parse()'>
 var answer = 6 * 7;</textarea></p>
+<p align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
 <p>Syntax tree:</p>
 <pre id="syntax"></pre>
 </div>
@@ -49,6 +53,13 @@ window.onload = function() {
     document.getElementById('version').textContent = esprima.version;
     parse();
 };
+</script>
+<script>
+window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    onChange: parse
+});
 </script>
 </body>
 </html>
