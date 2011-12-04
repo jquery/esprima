@@ -55,6 +55,12 @@ h4 {
     font-size: 16px;
 }
 
+.code {
+    border-left: 3px solid #ddd;
+    margin: 5px 3px 8px 15px;
+    padding: 0 0 0 8px;
+}
+
 .CodeMirror {
     padding: 0;
     border: 1px solid #ccc;
