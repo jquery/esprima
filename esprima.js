@@ -40,13 +40,12 @@ parseStatement: true */
     Token = {
         BooleanLiteral: 1,
         EOF: 2,
-        FutureReservedWord: 3,
-        Identifier: 4,
-        Keyword: 5,
-        NullLiteral: 6,
-        NumericLiteral: 7,
-        Punctuator: 8,
-        StringLiteral: 9
+        Identifier: 3,
+        Keyword: 4,
+        NullLiteral: 5,
+        NumericLiteral: 6,
+        Punctuator: 7,
+        StringLiteral: 8
     };
 
     Syntax = {
@@ -139,9 +138,12 @@ parseStatement: true */
     }
 
     // 7.6.1.1 Keywords
+    // 7.6.1.2 Future Reserved Words
 
     function isKeyword(id) {
         switch (id) {
+
+        // Keywords.
         case 'break':
         case 'case':
         case 'catch':
@@ -168,15 +170,8 @@ parseStatement: true */
         case 'void':
         case 'while':
         case 'with':
-            return true;
-        }
-        return false;
-    }
 
-   // 7.6.1.2 Future Reserved Words
-
-    function isFutureReservedWord(id) {
-        switch (id) {
+        // Future reserved words.
         case 'class':
         case 'const':
         case 'enum':
@@ -197,6 +192,7 @@ parseStatement: true */
         case 'yield':
             return true;
         }
+
         return false;
     }
 
@@ -289,13 +285,6 @@ parseStatement: true */
         if (isKeyword(id)) {
             return {
                 type: Token.Keyword,
-                value: id
-            };
-        }
-
-        if (isFutureReservedWord(id)) {
-            return {
-                type: Token.FutureReservedKeyword,
                 value: id
             };
         }
