@@ -3531,7 +3531,7 @@ if (typeof window !== 'undefined') {
                     reportFailure(code, expected, actual);
                 }
             } catch (e) {
-                reportFailure(code, expected, JSON.stringify(e));
+                reportFailure(code, expected, e.toString());
             }
         }
 

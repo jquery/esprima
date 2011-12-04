@@ -26,7 +26,7 @@ function parse() {
             result = esprima.parse(code);
             document.getElementById('syntax').textContent = JSON.stringify(result, undefined, 4);
         } catch (e) {
-            document.getElementById('syntax').textContent = JSON.stringify(e, undefined, 2);
+            document.getElementById('syntax').textContent = e.toString();
         }
 
         parseId = undefined;
