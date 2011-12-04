@@ -35,7 +35,8 @@ parseStatement: true */
         source,
         index,
         length,
-        buffer;
+        buffer,
+        lineno = 1;
 
     Token = {
         BooleanLiteral: 1,
@@ -201,9 +202,14 @@ parseStatement: true */
     function nextChar() {
         var ch = '\x00',
             idx = index;
+
         if (idx < length) {
             ch = source[idx];
             index += 1;
+        }
+
+        if (isLineTerminator(ch)) {
+            ++lineno;
         }
         return ch;
     }
