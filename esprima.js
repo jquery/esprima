@@ -277,6 +277,15 @@ parseStatement: true */
             id += nextChar();
         }
 
+        // There is no keyword or literal with only one character.
+        // Thus, it must be an identifier.
+        if (id.length === 1) {
+            return {
+                type: Token.Identifier,
+                value: id
+            };
+        }
+
         if (isKeyword(id)) {
             return {
                 type: Token.Keyword,
