@@ -284,14 +284,16 @@ parseStatement: true */
         if (id.length === 1) {
             return {
                 type: Token.Identifier,
-                value: id
+                value: id,
+                line: lineno
             };
         }
 
         if (isKeyword(id)) {
             return {
                 type: Token.Keyword,
-                value: id
+                value: id,
+                line: lineno
             };
         }
 
@@ -299,7 +301,8 @@ parseStatement: true */
 
         if (id === 'null') {
             return {
-                type: Token.NullLiteral
+                type: Token.NullLiteral,
+                line: lineno
             };
         }
 
@@ -308,13 +311,15 @@ parseStatement: true */
         if (id === 'true' || id === 'false') {
             return {
                 type: Token.BooleanLiteral,
-                value: id
+                value: id,
+                line: lineno
             };
         }
 
         return {
             type: Token.Identifier,
-            value: id
+            value: id,
+            line: lineno
         };
     }
 
@@ -332,7 +337,8 @@ parseStatement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: ch1
+                value: ch1,
+                line: lineno
             };
         }
 
@@ -340,7 +346,8 @@ parseStatement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: ch1
+                value: ch1,
+                line: lineno
             };
         }
 
@@ -351,7 +358,8 @@ parseStatement: true */
         if (ch1 === '.' && !isDecimalDigit(ch2)) {
             return {
                 type: Token.Punctuator,
-                value: nextChar()
+                value: nextChar(),
+                line: lineno
             };
         }
 
@@ -370,7 +378,8 @@ parseStatement: true */
                 nextChar();
                 return {
                     type: Token.Punctuator,
-                    value: '>>>='
+                    value: '>>>=',
+                    line: lineno
                 };
             }
         }
@@ -383,7 +392,8 @@ parseStatement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: '==='
+                value: '===',
+                line: lineno
             };
         }
 
@@ -393,7 +403,8 @@ parseStatement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: '!=='
+                value: '!==',
+                line: lineno
             };
         }
 
@@ -403,7 +414,8 @@ parseStatement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: '>>>'
+                value: '>>>',
+                line: lineno
             };
         }
 
@@ -413,7 +425,8 @@ parseStatement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: '<<='
+                value: '<<=',
+                line: lineno
             };
         }
 
@@ -423,7 +436,8 @@ parseStatement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: '>>='
+                value: '>>=',
+                line: lineno
             };
         }
 
@@ -436,7 +450,8 @@ parseStatement: true */
                 nextChar();
                 return {
                     type: Token.Punctuator,
-                    value: ch1 + ch2
+                    value: ch1 + ch2,
+                    line: lineno
                 };
             }
         }
@@ -447,7 +462,8 @@ parseStatement: true */
                 nextChar();
                 return {
                     type: Token.Punctuator,
-                    value: ch1 + ch2
+                    value: ch1 + ch2,
+                    line: lineno
                 };
             }
         }
@@ -457,7 +473,8 @@ parseStatement: true */
         if ('[]<>+-*%&|^!~?:=/'.indexOf(ch1) >= 0) {
             return {
                 type: Token.Punctuator,
-                value: nextChar()
+                value: nextChar(),
+                line: lineno
             };
         }
     }
@@ -489,7 +506,8 @@ parseStatement: true */
                 }
                 return {
                     type: Token.NumericLiteral,
-                    value: parseInt(number, 16)
+                    value: parseInt(number, 16),
+                    line: lineno
                 };
             }
 
@@ -540,7 +558,8 @@ parseStatement: true */
 
         return {
             type: Token.NumericLiteral,
-            value: parseFloat(number)
+            value: parseFloat(number),
+            line: lineno
         };
     }
 
@@ -575,7 +594,8 @@ parseStatement: true */
 
         return {
             type: Token.StringLiteral,
-            value: str
+            value: str,
+            line: lineno
         };
     }
 
@@ -633,7 +653,8 @@ parseStatement: true */
 
         if (index >= length) {
             return {
-                type: Token.EOF
+                type: Token.EOF,
+                line: lineno
             };
         }
 
@@ -786,7 +807,8 @@ parseStatement: true */
 
         return {
             type: 'ArrayExpression',
-            elements: elements
+            elements: elements,
+            line: lineno
         };
     }
 
@@ -815,12 +837,14 @@ parseStatement: true */
                 if (token.type === Token.Identifier) {
                     property.key = {
                         type: Syntax.Identifier,
-                        name: token.value
+                        name: token.value,
+                        line: lineno
                     };
                 } else {
                     property.key = {
                         type: Syntax.Literal,
-                        value: token.value
+                        value: token.value,
+                        line: lineno
                     };
                 }
 
@@ -842,7 +866,8 @@ parseStatement: true */
 
         return {
             type: 'ObjectExpression',
-            properties: properties
+            properties: properties,
+            line: lineno
         };
     }
 
@@ -873,14 +898,16 @@ parseStatement: true */
         if (matchKeyword('this')) {
             lex();
             return {
-                type: Syntax.ThisExpression
+                type: Syntax.ThisExpression,
+                line: lineno
             };
         }
 
         if (match('/') || match('/=')) {
             return {
                 type: Syntax.Literal,
-                value: scanRegExp()
+                value: scanRegExp(),
+                line: lineno
             };
         }
 
@@ -889,35 +916,40 @@ parseStatement: true */
         if (token.type === Token.Identifier) {
             return {
                 type: Syntax.Identifier,
-                name: token.value
+                name: token.value,
+                line: lineno
             };
         }
 
         if (token.type === Token.BooleanLiteral) {
             return {
                 type: Syntax.Literal,
-                value: (token.value === 'true')
+                value: (token.value === 'true'),
+                line: lineno
             };
         }
 
         if (token.type === Token.NullLiteral) {
             return {
                 type: Syntax.Literal,
-                value: null
+                value: null,
+                line: lineno
             };
         }
 
         if (token.type === Token.NumericLiteral) {
             return {
                 type: Syntax.Literal,
-                value: token.value
+                value: token.value,
+                line: lineno
             };
         }
 
         if (token.type === Token.StringLiteral) {
             return {
                 type: Syntax.Literal,
-                value: token.value
+                value: token.value,
+                line: lineno
             };
         }
 
@@ -960,13 +992,15 @@ parseStatement: true */
                 }
                 property = {
                     type: Syntax.Identifier,
-                    name: token.value
+                    name: token.value,
+                    line: lineno
                 };
                 expr = {
                     type: Syntax.MemberExpression,
                     computed: false,
                     object: expr,
-                    property: property
+                    property: property,
+                    line: lineno
                 };
             } else if (match('[')) {
                 lex();
@@ -978,14 +1012,16 @@ parseStatement: true */
                     type: Syntax.MemberExpression,
                     computed: true,
                     object: expr,
-                    property: property
+                    property: property,
+                    line: lineno
                 };
                 expect(']');
             } else if (match('(')) {
                 expr = {
                     type: Syntax.CallExpression,
                     callee: expr,
-                    'arguments': parseArguments()
+                    'arguments': parseArguments(),
+                    line: lineno
                 };
             } else {
                 break;
@@ -1027,7 +1063,8 @@ parseStatement: true */
             return {
                 type: Syntax.NewExpression,
                 callee: expr,
-                'arguments': args
+                'arguments': args,
+                line: lineno
             };
         }
 
@@ -1035,7 +1072,8 @@ parseStatement: true */
             return {
                 type: Syntax.CallExpression,
                 callee: expr,
-                'arguments': args
+                'arguments': args,
+                line: lineno
             };
         }
 
@@ -1052,7 +1090,8 @@ parseStatement: true */
                 type: Syntax.UpdateExpression,
                 operator: lex().value,
                 argument: expr,
-                prefix: false
+                prefix: false,
+                line: lineno
             };
         }
 
@@ -1068,7 +1107,8 @@ parseStatement: true */
                 type: Syntax.UpdateExpression,
                 operator: lex().value,
                 argument: parseUnaryExpression(),
-                prefix: true
+                prefix: true,
+                line: lineno
             };
         }
 
@@ -1076,7 +1116,8 @@ parseStatement: true */
             return {
                 type: Syntax.UnaryExpression,
                 operator: lex().value,
-                argument: parseUnaryExpression()
+                argument: parseUnaryExpression(),
+                line: lineno
             };
         }
 
@@ -1084,7 +1125,8 @@ parseStatement: true */
             return {
                 type: Syntax.UnaryExpression,
                 operator: lex().value,
-                argument: parseUnaryExpression()
+                argument: parseUnaryExpression(),
+                line: lineno
             };
         }
 
@@ -1101,7 +1143,8 @@ parseStatement: true */
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
                 left: expr,
-                right: parseUnaryExpression()
+                right: parseUnaryExpression(),
+                line: lineno
             };
         }
 
@@ -1118,7 +1161,8 @@ parseStatement: true */
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
                 left: expr,
-                right: parseMultiplicativeExpression()
+                right: parseMultiplicativeExpression(),
+                line: lineno
             };
         }
 
@@ -1135,7 +1179,8 @@ parseStatement: true */
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
                 left: expr,
-                right: parseAdditiveExpression()
+                right: parseAdditiveExpression(),
+                line: lineno
             };
         }
 
@@ -1152,7 +1197,8 @@ parseStatement: true */
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
                 left: expr,
-                right: parseRelationalExpression()
+                right: parseRelationalExpression(),
+                line: lineno
             };
         } else if (matchKeyword('in')) {
             lex();
@@ -1160,7 +1206,8 @@ parseStatement: true */
                 type: Syntax.BinaryExpression,
                 operator: 'in',
                 left: expr,
-                right: parseRelationalExpression()
+                right: parseRelationalExpression(),
+                line: lineno
             };
         } else if (matchKeyword('instanceof')) {
             lex();
@@ -1168,7 +1215,8 @@ parseStatement: true */
                 type: Syntax.BinaryExpression,
                 operator: 'instanceof',
                 left: expr,
-                right: parseRelationalExpression()
+                right: parseRelationalExpression(),
+                line: lineno
             };
         }
 
@@ -1185,7 +1233,8 @@ parseStatement: true */
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
                 left: expr,
-                right: parseRelationalExpression()
+                right: parseRelationalExpression(),
+                line: lineno
             };
         }
 
@@ -1203,7 +1252,8 @@ parseStatement: true */
                 type: Syntax.BinaryExpression,
                 operator: '&',
                 left: expr,
-                right: parseEqualityExpression()
+                right: parseEqualityExpression(),
+                line: lineno
             };
         }
 
@@ -1219,7 +1269,8 @@ parseStatement: true */
                 type: Syntax.BinaryExpression,
                 operator: '|',
                 left: expr,
-                right: parseBitwiseANDExpression()
+                right: parseBitwiseANDExpression(),
+                line: lineno
             };
         }
 
@@ -1235,7 +1286,8 @@ parseStatement: true */
                 type: Syntax.BinaryExpression,
                 operator: '^',
                 left: expr,
-                right: parseBitwiseORExpression()
+                right: parseBitwiseORExpression(),
+                line: lineno
             };
         }
 
@@ -1253,7 +1305,8 @@ parseStatement: true */
                 type: Syntax.LogicalExpression,
                 operator: '&&',
                 left: expr,
-                right: parseBitwiseXORExpression()
+                right: parseBitwiseXORExpression(),
+                line: lineno
             };
         }
 
@@ -1269,7 +1322,8 @@ parseStatement: true */
                 type: Syntax.LogicalExpression,
                 operator: '||',
                 left: expr,
-                right: parseLogicalANDExpression()
+                right: parseLogicalANDExpression(),
+                line: lineno
             };
         }
 
@@ -1291,7 +1345,8 @@ parseStatement: true */
             lex();
             expr = {
                 type: Syntax.ConditionalExpression,
-                test: expr
+                test: expr,
+                line: lineno
             };
             expr.consequent = parseAssignmentExpression();
             expect(':');
@@ -1312,7 +1367,8 @@ parseStatement: true */
                 type: Syntax.AssignmentExpression,
                 operator: lex().value,
                 left: expr,
-                right: parseAssignmentExpression()
+                right: parseAssignmentExpression(),
+                line: lineno
             };
         }
 
@@ -1327,7 +1383,8 @@ parseStatement: true */
         if (match(',')) {
             expr = {
                 type: Syntax.SequenceExpression,
-                expressions: [ expr ]
+                expressions: [ expr ],
+                line: lineno
             };
 
             while (index < length) {
@@ -1341,7 +1398,8 @@ parseStatement: true */
 
         return {
             type: Syntax.ExpressionStatement,
-            expression: expr
+            expression: expr,
+            line: lineno
         };
     }
 
@@ -1371,7 +1429,8 @@ parseStatement: true */
 
         return {
             type: Syntax.BlockStatement,
-            body: block
+            body: block,
+            line: lineno
         };
     }
 
@@ -1387,7 +1446,8 @@ parseStatement: true */
 
         id = {
             type: Syntax.Identifier,
-            name: token.value
+            name: token.value,
+            line: lineno
         };
 
         init = null;
@@ -1428,7 +1488,8 @@ parseStatement: true */
         return {
             type: Syntax.VariableDeclaration,
             declarations: declarations,
-            kind: 'var'
+            kind: 'var',
+            line: lineno
         };
     }
 
@@ -1438,7 +1499,8 @@ parseStatement: true */
         expect(';');
 
         return {
-            type: Syntax.EmptyStatement
+            type: Syntax.EmptyStatement,
+            line: lineno
         };
     }
 
@@ -1478,7 +1540,8 @@ parseStatement: true */
             type: Syntax.IfStatement,
             test: test,
             consequent: consequent,
-            alternate: alternate
+            alternate: alternate,
+            line: lineno
         };
     }
 
@@ -1504,7 +1567,8 @@ parseStatement: true */
         return {
             type: Syntax.DoWhileStatement,
             body: body,
-            test: test
+            test: test,
+            line: lineno
         };
     }
 
@@ -1524,7 +1588,8 @@ parseStatement: true */
         return {
             type: Syntax.WhileStatement,
             test: test,
-            body: body
+            body: body,
+            line: lineno
         };
     }
 
@@ -1545,7 +1610,8 @@ parseStatement: true */
                 init = {
                     type: Syntax.VariableDeclaration,
                     declarations: parseVariableDeclarationList(),
-                    kind: 'var'
+                    kind: 'var',
+                    line: lineno
                 };
 
                 if (matchKeyword('in')) {
@@ -1591,7 +1657,8 @@ parseStatement: true */
                 init: init,
                 test: test,
                 update: update,
-                body: body
+                body: body,
+                line: lineno
             };
         }
 
@@ -1600,6 +1667,7 @@ parseStatement: true */
             left: left,
             right: right,
             body: body,
+            line: lineno,
             each: false
         };
     }
@@ -1616,7 +1684,8 @@ parseStatement: true */
             lex();
             label = {
                 type: Syntax.Identifier,
-                name: token.value
+                name: token.value,
+                line: lineno
             };
         }
 
@@ -1624,7 +1693,8 @@ parseStatement: true */
 
         return {
             type: Syntax.ContinueStatement,
-            label: label
+            label: label,
+            line: lineno
         };
     }
 
@@ -1640,7 +1710,8 @@ parseStatement: true */
             lex();
             label = {
                 type: Syntax.Identifier,
-                name: token.value
+                name: token.value,
+                line: lineno
             };
         }
 
@@ -1648,7 +1719,8 @@ parseStatement: true */
 
         return {
             type: Syntax.BreakStatement,
-            label: label
+            label: label,
+            line: lineno
         };
     }
 
@@ -1670,7 +1742,8 @@ parseStatement: true */
 
         return {
             type: Syntax.ReturnStatement,
-            argument: argument
+            argument: argument,
+            line: lineno
         };
     }
 
@@ -1692,7 +1765,8 @@ parseStatement: true */
         return {
             type: Syntax.WithStatement,
             object: object,
-            body: body
+            body: body,
+            line: lineno
         };
     }
 
@@ -1715,7 +1789,8 @@ parseStatement: true */
             lex();
             return {
                 type: Syntax.SwitchStatement,
-                discriminant: discriminant
+                discriminant: discriminant,
+                line: lineno
             };
         }
 
@@ -1747,7 +1822,8 @@ parseStatement: true */
             cases.push({
                 type: Syntax.SwitchCase,
                 test: test,
-                consequent: consequent
+                consequent: consequent,
+                line: lineno
             });
         }
 
@@ -1756,7 +1832,8 @@ parseStatement: true */
         return {
             type: Syntax.SwitchStatement,
             discriminant: discriminant,
-            cases: cases
+            cases: cases,
+            line: lineno
         };
     }
 
@@ -1778,7 +1855,8 @@ parseStatement: true */
 
         return {
             type: Syntax.ThrowStatement,
-            argument: argument
+            argument: argument,
+            line: lineno
         };
     }
 
@@ -1803,7 +1881,8 @@ parseStatement: true */
                 type: Syntax.CatchClause,
                 param: param,
                 guard: null,
-                body: parseBlock()
+                body: parseBlock(),
+                line: lineno
             });
         }
 
@@ -1816,7 +1895,8 @@ parseStatement: true */
             type: Syntax.TryStatement,
             block: block,
             handlers: handlers,
-            finalizer: finalizer
+            finalizer: finalizer,
+            line: lineno
         };
     }
 
@@ -1828,7 +1908,8 @@ parseStatement: true */
         consumeSemicolon();
 
         return {
-            type: Syntax.DebuggerStatement
+            type: Syntax.DebuggerStatement,
+            line: lineno
         };
     }
 
@@ -1896,7 +1977,8 @@ parseStatement: true */
                     type: Syntax.FunctionDeclaration,
                     id: stat.expression.id,
                     params: stat.expression.params,
-                    body: stat.expression.body
+                    body: stat.expression.body,
+                    line: lineno
                 };
             }
         }
@@ -1907,7 +1989,8 @@ parseStatement: true */
             return {
                 type: Syntax.LabeledStatement,
                 label: stat.expression,
-                body: parseStatement()
+                body: parseStatement(),
+                line: lineno
             };
         }
 
@@ -1927,7 +2010,8 @@ parseStatement: true */
         }
         id = {
             type: Syntax.Identifier,
-            name: token.value
+            name: token.value,
+            line: lineno
         };
 
         expect('(');
@@ -1940,7 +2024,8 @@ parseStatement: true */
                 }
                 params.push({
                     type: Syntax.Identifier,
-                    name: token.value
+                    name: token.value,
+                    line: lineno
                 });
                 if (match(')')) {
                     break;
@@ -1957,7 +2042,8 @@ parseStatement: true */
             type: Syntax.FunctionDeclaration,
             id: id,
             params: params,
-            body: body
+            body: body,
+            line: lineno
         };
     }
 
@@ -1973,7 +2059,8 @@ parseStatement: true */
             }
             id = {
                 type: Syntax.Identifier,
-                name: token.value
+                name: token.value,
+                line: lineno
             };
         }
 
@@ -1987,7 +2074,8 @@ parseStatement: true */
                 }
                 params.push({
                     type: Syntax.Identifier,
-                    name: token.value
+                    name: token.value,
+                    line: lineno
                 });
                 if (match(')')) {
                     break;
@@ -2004,7 +2092,8 @@ parseStatement: true */
             type: Syntax.FunctionExpression,
             id: id,
             params: params,
-            body: body
+            body: body,
+            line: lineno
         };
     }
 
@@ -2041,7 +2130,8 @@ parseStatement: true */
     function parseProgram() {
         return {
             type: Syntax.Program,
-            body: parseSourceElements()
+            body: parseSourceElements(),
+            line: lineno
         };
     }
 
