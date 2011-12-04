@@ -66,6 +66,10 @@ h4 {
     border: 1px solid #ccc;
 }
 
+.CodeMirror-scroll {
+    height: 200px;
+}
+
 .container {
     margin-left: auto;
     margin-right: auto;
