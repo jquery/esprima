@@ -524,16 +524,12 @@ parseStatement: true */
                 if (index >= length) {
                     ch = '<end>';
                 }
-                throw {
-                    message: 'Unexpected ' + ch + ' after the exponent sign'
-                };
+                throw new Error('Unexpected ' + ch + ' after the exponent sign');
             }
         }
 
         if (number === '.') {
-            throw {
-                message: 'Expecting decimal digits after the dot sign'
-            };
+            throw new Error('Expecting decimal digits after the dot sign');
         }
 
         return {
@@ -558,9 +554,7 @@ parseStatement: true */
             ch = nextChar();
 
             if (typeof ch === 'undefined') {
-                throw {
-                    message: 'Unterminated string'
-                };
+                throw new Error('Unterminated string');
             }
 
             if (ch === quote) {
@@ -609,9 +603,7 @@ parseStatement: true */
                     classMarker = true;
                 }
                 if (isLineTerminator(ch)) {
-                    throw {
-                        message: 'Unexpected line terminator in a regular expression'
-                    };
+                    throw new Error('Unexpected line terminator in a regular expression');
                 }
             }
         }
@@ -659,9 +651,7 @@ parseStatement: true */
             return token;
         }
 
-        throw {
-            message: 'Unknown token from character ' + nextChar()
-        };
+        throw new Error('Unknown token from character ' + nextChar());
     }
 
     function lookahead() {
@@ -685,18 +675,14 @@ parseStatement: true */
         var s;
 
         if (token.type === Token.EOF) {
-            throw {
-                message: 'Unexpected <EOF>'
-            };
+            throw new Error('Unexpected <EOF>');
         }
 
         s = token.value;
         if (s.length > 10) {
             s = s.substr(0, 10) + '...';
         }
-        throw {
-            message: 'Unexpected token ' + s
-        };
+        throw new Error('Unexpected token ' + s);
     }
 
     // Expect the next token to match the specified punctuator.
@@ -964,9 +950,7 @@ parseStatement: true */
                 lex();
                 token = lex();
                 if (token.type !== Token.Identifier) {
-                    throw {
-                        message: 'Expecting an identifier after dot (.)'
-                    };
+                    throw new Error('Expecting an identifier after dot (.)');
                 }
                 property = {
                     type: Syntax.Identifier,
@@ -1392,9 +1376,7 @@ parseStatement: true */
 
         token = lex();
         if (token.type !== Token.Identifier) {
-            throw {
-                message: 'Expected an identifier'
-            };
+            throw new Error('Expected an identifier');
         }
 
         id = {
