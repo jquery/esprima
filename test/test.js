@@ -2268,6 +2268,78 @@ data = {
         }
     },
 
+    'Let Statement': {
+
+        '{ let x }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: null
+                }],
+                kind: 'let'
+            }]
+        },
+
+        '{ let x = 42 }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42
+                    }
+                }],
+                kind: 'let'
+            }]
+        },
+
+        '{ let x = 14, y = 3, z = 1977 }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 14
+                    }
+                }, {
+                    id: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 3
+                    }
+                }, {
+                    id: {
+                        type: 'Identifier',
+                        name: 'z'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 1977
+                    }
+                }],
+                kind: 'let'
+            }]
+        }
+    },
+
     'Empty Statement': {
 
         ';': {

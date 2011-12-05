@@ -1428,6 +1428,25 @@ parseStatement: true */
         };
     }
 
+    // http://wiki.ecmascript.org/doku.php?id=harmony:let.
+    // Warning: This is experimental and not in the specification yet.
+
+    function parseLetStatement() {
+        var declarations;
+
+        expectKeyword('let');
+
+        declarations = parseVariableDeclarationList();
+
+        consumeSemicolon();
+
+        return {
+            type: Syntax.VariableDeclaration,
+            declarations: declarations,
+            kind: 'let'
+        };
+    }
+
     // 12.3 Empty Statement
 
     function parseEmptyStatement() {
@@ -1525,7 +1544,7 @@ parseStatement: true */
     }
 
     function parseForStatement() {
-        var init, test, update, left, right, body;
+        var kind, init, test, update, left, right, body;
 
         init = test = update = null;
 
@@ -1536,12 +1555,12 @@ parseStatement: true */
         if (match(';')) {
             lex();
         } else {
-            if (matchKeyword('var')) {
-                lex();
+            if (matchKeyword('var') || matchKeyword('let')) {
+                kind = lex().value;
                 init = {
                     type: Syntax.VariableDeclaration,
                     declarations: parseVariableDeclarationList(),
-                    kind: 'var'
+                    kind: kind
                 };
 
                 if (matchKeyword('in')) {
@@ -1865,6 +1884,8 @@ parseStatement: true */
                 return parseForStatement();
             case 'if':
                 return parseIfStatement();
+            case 'let':
+                return parseLetStatement();
             case 'return':
                 return parseReturnStatement();
             case 'switch':
