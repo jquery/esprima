@@ -1344,13 +1344,18 @@ parseStatement: true */
     // 12.1 Block
 
     function parseStatementList() {
-        var list = [];
+        var list = [],
+            statement;
 
         while (index < length) {
             if (match('}')) {
                 break;
             }
-            list.push(parseStatement());
+            statement = parseStatement();
+            if (typeof statement === 'undefined') {
+                break;
+            }
+            list.push(statement);
         }
 
         return list;
@@ -1714,7 +1719,7 @@ parseStatement: true */
     // 12.10 The swith statement
 
     function parseSwitchStatement() {
-        var discriminant, cases, test, consequent;
+        var discriminant, cases, test, consequent, statement;
 
         expectKeyword('switch');
 
@@ -1756,7 +1761,11 @@ parseStatement: true */
                 if (match('}') || matchKeyword('default') || matchKeyword('case')) {
                     break;
                 }
-                consequent.push(parseStatement());
+                statement = parseStatement();
+                if (typeof statement === 'undefined') {
+                    break;
+                }
+                consequent.push(statement);
             }
 
             cases.push({
