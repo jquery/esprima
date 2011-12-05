@@ -50,6 +50,7 @@ parseStatement: true */
 
     Syntax = {
         AssignmentExpression: 'AssignmentExpression',
+        ArrayExpression: 'ArrayExpression',
         BlockStatement: 'BlockStatement',
         BinaryExpression: 'BinaryExpression',
         BreakStatement: 'BreakStatement',
@@ -72,6 +73,7 @@ parseStatement: true */
         LogicalExpression: 'LogicalExpression',
         MemberExpression: 'MemberExpression',
         NewExpression: 'NewExpression',
+        ObjectExpression: 'ObjectExpression',
         Program: 'Program',
         ReturnStatement: 'ReturnStatement',
         SequenceExpression: 'SequenceExpression',
@@ -779,7 +781,7 @@ parseStatement: true */
         }
 
         return {
-            type: 'ArrayExpression',
+            type: Syntax.ArrayExpression,
             elements: elements
         };
     }
@@ -835,7 +837,7 @@ parseStatement: true */
         }
 
         return {
-            type: 'ObjectExpression',
+            type: Syntax.ObjectExpression,
             properties: properties
         };
     }
