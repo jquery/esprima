@@ -56,7 +56,9 @@ function runBenchmarks() {
         el = document.getElementById('esprima-time');
         el.textContent = (1000 * totalTime.esprima).toFixed(1) + ' ms';
         el = document.getElementById('narcissus-time');
-        el.textContent = (1000 * totalTime.narcissus).toFixed(1) + ' ms';
+        if (totalTime.narcissus > 0) {
+            el.textContent = (1000 * totalTime.narcissus).toFixed(1) + ' ms';
+        }
         el = document.getElementById('parsejs-time');
         el.textContent = (1000 * totalTime.parsejs).toFixed(1) + ' ms';
         el = document.getElementById('zeparser-time');
@@ -68,7 +70,11 @@ function runBenchmarks() {
         el = document.getElementById(name + '-size');
         el.textContent = (size / 1024).toFixed(1);
         el = document.getElementById(parser + '-' + name);
-        el.textContent = (1000 * stats.mean).toFixed(1) + ' ms';
+        if (stats.size === 0) {
+            el.textContent = 'N/A';
+        } else {
+            el.textContent = (1000 * stats.mean).toFixed(1) + ' ms';
+        }
     }
 
     function runBenchmark() {
