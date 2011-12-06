@@ -1,4 +1,4 @@
-Esprima ([esprima.org](http://esprima.org)) is an experimental ECMAScript
+Esprima ([esprima.org](http://esprima.org)) is an educational ECMAScript
 (also popularly known as JavaScript) parsing infrastructure for multipurpose
 analysis. It is also written in ECMAScript.
 
