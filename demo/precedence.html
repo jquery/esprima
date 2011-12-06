@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Esprima: Operator Precedence Demo</title>
+<script src="../esprima.js"></script>
+<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+<style>
+#a, #b {
+    font-size: 16px;
+    padding: 3px;
+    margin: 10px;
+    border: 1px solid #ccc;
+}
+#answer {
+    color: white;
+    padding: 5px;
+    margin: 20px;
+}
+.green {
+    background-color: green;
+}
+.red {
+    background-color: red;
+}
+</style>
+<script>
+/*jslint sloppy:true browser:true */
+/*global esprima:true */
+var compareId;
+function compare() {
+    if (compareId) {
+        window.clearTimeout(compareId);
+    }
+
+    compareId = window.setTimeout(function () {
+        var a, b, p, q, answer, hint;
+
+        a = document.getElementById('a').textContent;
+        b = document.getElementById('b').textContent;
+        answer = document.getElementById('answer');
+        hint = document.getElementById('hint');
+
+        hint.textContent = '';
+        try {
+            p = esprima.parse(a);
+            q = esprima.parse(b);
+            if (JSON.stringify(p) === JSON.stringify(q)) {
+                answer.textContent = 'Yes';
+                answer.setAttribute('class', 'green');
+            } else {
+                answer.textContent = 'No';
+                answer.setAttribute('class', 'red');
+            }
+        } catch (e) {
+            answer.setAttribute('class', '');
+            hint.textContent = e.toString();
+        }
+
+        compareId = undefined;
+    }, 57);
+}
+</script>
+</head>
+<body>
+<div class="container">
+<h1>Operator precedence <small>is not always easy</small></h1>
+<p>Is <code id="a" contenteditable="true">1 + 2 * 3</code> semantically equivalent to
+<code id="b" contenteditable="true">(1 + 2) * 3</code>?  <span id="answer"></span></p>
+<p id="hint"></p>
+<p style="margin-top: 100px;">This demo is inspired by <a href="http://mothereff.in/operator-precedence">mothereff.in/operator-precedence</a>.</p>
+</div>
+<script>
+// See http://mathiasbynens.be/notes/oninput for details.
+document.getElementById('a').onkeyup = compare;
+document.getElementById('a').oninput = function () {
+    this.onkeyup = null;
+    compare();
+};
+document.getElementById('b').onkeyup = compare;
+document.getElementById('b').oninput = function () {
+    this.onkeyup = null;
+    compare();
+};
+compare();
+</script>
+</body>
+</html>
