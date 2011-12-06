@@ -76,7 +76,12 @@ function compare() {
             break;
 
         case 'UnaryExpression':
-            result = '(' + node.operator + stringify(node.argument) + ')';
+            result = '(' + node.operator;
+            if (node.operator.length > 2) {
+                // delete void typeof
+                result += ' ';
+            }
+            result += stringify(node.argument) + ')';
             break;
 
         case 'UpdateExpression':
