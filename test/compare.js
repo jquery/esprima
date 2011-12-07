@@ -9,24 +9,24 @@ function runBenchmarks() {
 
     fixture = [
         'esprima jquery-1.7.1',
-        'narcissus jquery-1.7.1',
         'parsejs jquery-1.7.1',
         'zeparser jquery-1.7.1',
+        'narcissus jquery-1.7.1',
 
         'esprima prototype-1.7.0.0',
-        'narcissus prototype-1.7.0.0',
         'parsejs prototype-1.7.0.0',
         'zeparser prototype-1.7.0.0',
+        'narcissus prototype-1.7.0.0',
 
         'esprima mootools-1.4.1',
-        'narcissus mootools-1.4.1',
         'parsejs mootools-1.4.1',
         'zeparser mootools-1.4.1',
+        'narcissus mootools-1.4.1',
 
         'esprima ext-core-3.1.0',
-        'narcissus ext-core-3.1.0',
         'parsejs ext-core-3.1.0',
-        'zeparser ext-core-3.1.0'
+        'zeparser ext-core-3.1.0',
+        'narcissus ext-core-3.1.0'
     ];
 
     totalTime = {
