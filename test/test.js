@@ -3521,6 +3521,17 @@ data = {
             }],
             kind: 'var'
         }
+    },
+
+    'Invalid syntax': {
+
+        '{': 'Unexpected <EOF>',
+
+        '}': 'Unexpected token }',
+
+        '3ea': 'Unexpected character a after the exponent sign',
+
+        '1 + (': 'Unexpected <EOF>'
     }
 };
 
@@ -3587,7 +3598,7 @@ if (typeof window !== 'undefined') {
             report.appendChild(e);
         }
 
-        function runTest(code, syntax) {
+        function testParse(code, syntax) {
             var expected, tree, actual;
 
             expected = JSON.stringify(syntax, null, 4);
@@ -3604,6 +3615,31 @@ if (typeof window !== 'undefined') {
                 }
             } catch (e) {
                 reportFailure(code, expected, e.toString());
+            }
+        }
+
+        function testError(code, exception) {
+            var expected, actual;
+
+            expected = 'Error: ' + exception;
+            try {
+                esprima.parse(code);
+            } catch (e) {
+                actual = e.toString();
+            }
+
+            if (expected === actual) {
+                reportSuccess(code);
+            } else {
+                reportFailure(code, expected, actual);
+            }
+        }
+
+        function runTest(code, result) {
+            if (typeof result === 'string') {
+                testError(code, result);
+            } else {
+                testParse(code, result);
             }
         }
 
