@@ -3525,13 +3525,17 @@ data = {
 
     'Invalid syntax': {
 
-        '{': 'Unexpected <EOF>',
+        '{': 'Line 1: Unexpected <EOF>',
 
-        '}': 'Unexpected token }',
+        '}': 'Line 1: Unexpected token }',
 
-        '3ea': 'Unexpected character a after the exponent sign',
+        '3ea': 'Line 1: Unexpected character a after the exponent sign',
 
-        '1 + (': 'Unexpected <EOF>'
+        '1 + (': 'Line 1: Unexpected <EOF>',
+
+        '\n\n\n{': 'Line 4: Unexpected <EOF>',
+
+        '\n/* Some multiline\ncomment */\n)': 'Line 4: Unexpected token )'
     }
 };
 

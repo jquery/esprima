@@ -34,6 +34,7 @@ parseStatement: true */
         Syntax,
         source,
         index,
+        lineNumber,
         length,
         buffer;
 
@@ -225,6 +226,7 @@ parseStatement: true */
                 nextChar();
                 if (isLineTerminator(ch)) {
                     lineComment = false;
+                    lineNumber += 1;
                 }
             } else if (blockComment) {
                 nextChar();
@@ -234,6 +236,8 @@ parseStatement: true */
                         nextChar();
                         blockComment = false;
                     }
+                } else if (isLineTerminator(ch)) {
+                    lineNumber += 1;
                 }
             } else if (ch === '/') {
                 ch = source[index + 1];
@@ -252,6 +256,7 @@ parseStatement: true */
                 nextChar();
             } else if (isLineTerminator(ch)) {
                 nextChar();
+                lineNumber += 1;
             } else {
                 break;
             }
@@ -526,12 +531,14 @@ parseStatement: true */
                 if (index >= length) {
                     ch = '<end>';
                 }
-                throw new Error('Unexpected ' + ch + ' after the exponent sign');
+                throw new Error('Line ' + lineNumber + ': Unexpected ' + ch +
+                    ' after the exponent sign');
             }
         }
 
         if (number === '.') {
-            throw new Error('Expecting decimal digits after the dot sign');
+            throw new Error('Line ' + lineNumber +
+                ': Expecting decimal digits after the dot sign');
         }
 
         return {
@@ -556,7 +563,7 @@ parseStatement: true */
             ch = nextChar();
 
             if (typeof ch === 'undefined') {
-                throw new Error('Unterminated string');
+                throw new Error('Line ' + lineNumber + ': Unterminated string');
             }
 
             if (ch === quote) {
@@ -605,7 +612,8 @@ parseStatement: true */
                     classMarker = true;
                 }
                 if (isLineTerminator(ch)) {
-                    throw new Error('Unexpected line terminator in a regular expression');
+                    throw new Error('Line ' + lineNumber +
+                        ': Unexpected line terminator in a regular expression');
                 }
             }
         }
@@ -653,19 +661,22 @@ parseStatement: true */
             return token;
         }
 
-        throw new Error('Unknown token from character ' + nextChar());
+        throw new Error('Line ' + lineNumber +
+            ': Unknown token from character ' + nextChar());
     }
 
     function lookahead() {
-        var pos, token;
+        var pos, line, token;
 
         if (buffer !== null) {
             return buffer;
         }
 
         pos = index;
+        line = lineNumber;
         token = lex();
         index = pos;
+        lineNumber = line;
 
         buffer = token;
         return buffer;
@@ -677,14 +688,14 @@ parseStatement: true */
         var s;
 
         if (token.type === Token.EOF) {
-            throw new Error('Unexpected <EOF>');
+            throw new Error('Line ' + lineNumber + ': Unexpected <EOF>');
         }
 
         s = token.value;
         if (s.length > 10) {
             s = s.substr(0, 10) + '...';
         }
-        throw new Error('Unexpected token ' + s);
+        throw new Error('Line ' + lineNumber + ': Unexpected token ' + s);
     }
 
     // Expect the next token to match the specified punctuator.
@@ -952,7 +963,8 @@ parseStatement: true */
                 lex();
                 token = lex();
                 if (token.type !== Token.Identifier) {
-                    throw new Error('Expecting an identifier after dot (.)');
+                    throw new Error('Line ' + lineNumber +
+                        ': Expecting an identifier after dot (.)');
                 }
                 property = {
                     type: Syntax.Identifier,
@@ -1383,7 +1395,7 @@ parseStatement: true */
 
         token = lex();
         if (token.type !== Token.Identifier) {
-            throw new Error('Expected an identifier');
+            throw new Error('Line ' + lineNumber + ': Expected an identifier');
         }
 
         id = {
@@ -2074,6 +2086,7 @@ parseStatement: true */
     exports.parse = function (code) {
         source = code;
         index = 0;
+        lineNumber = (source.length > 0) ? 1 : 0;
         length = source.length;
         buffer = null;
         return parseProgram();
