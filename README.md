@@ -25,6 +25,8 @@ Since it is not comprehensive nor complete, refer to the
 [issue tracker](http://issues.esprima.org) for
 [known problems](http://code.google.com/p/esprima/issues/list?q=Defect)
 and [future plans](http://code.google.com/p/esprima/issues/list?q=Enhancement).
+Esprima is supported on [many browsers](http://code.google.com/p/esprima/wiki/BrowserCompatibility):
+IE 8+, Firefox 3.5+, Safari 4+, Chrome 7+, and Opera 10.5+.
 
 Feedback and contribution are welcomed! Please join the
 [mailing list](http://groups.google.com/group/esprima) and read the
