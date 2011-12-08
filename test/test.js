@@ -3780,6 +3780,10 @@ data = {
 
         '3ea': 'Line 1: Unexpected character a after the exponent sign',
 
+        'var x = /\n/': 'Line 1: Unexpected line terminator in a regular expression',
+
+        'var x = "\n': 'Line 1: Unterminated string constant',
+
         '1 + (': 'Line 1: Unexpected <EOF>',
 
         '\n\n\n{': 'Line 4: Unexpected <EOF>',

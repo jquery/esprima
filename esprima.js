@@ -562,11 +562,8 @@ parseStatement: true */
         while (index < length) {
             ch = nextChar();
 
-            if (typeof ch === 'undefined') {
-                throw new Error('Line ' + lineNumber + ': Unterminated string');
-            }
-
             if (ch === quote) {
+                quote = '';
                 break;
             } else if (ch === '\\') {
                 str += ch;
@@ -574,6 +571,10 @@ parseStatement: true */
             } else {
                 str += ch;
             }
+        }
+
+        if (quote !== '') {
+            throw new Error('Line ' + lineNumber + ': Unterminated string constant');
         }
 
         return {
