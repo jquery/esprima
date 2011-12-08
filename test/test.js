@@ -457,6 +457,35 @@ data = {
         }
     },
 
+    'String Literals': {
+
+        '"Hello"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'Hello'
+            }
+        },
+
+        '"Hello\nworld"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'Hello\nworld'
+            }
+        },
+
+
+        '"Hello\\\n world"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'Hello world'
+            }
+        }
+
+    },
+
     'Regular Expression Literals': {
 
         'var x = /[a-z]/i': {

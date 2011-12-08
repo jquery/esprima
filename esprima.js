@@ -549,7 +549,7 @@ parseStatement: true */
 
     // 7.8.4 String Literals
 
-    // TODO Unicode, line continuiation
+    // TODO Unicode
     function scanStringLiteral() {
         var str = '', quote, ch;
 
@@ -566,8 +566,11 @@ parseStatement: true */
                 quote = '';
                 break;
             } else if (ch === '\\') {
-                str += ch;
-                str += nextChar();
+                ch = nextChar();
+                if (!isLineTerminator(ch)) {
+                    str += '\\';
+                    str += ch;
+                }
             } else {
                 str += ch;
             }
