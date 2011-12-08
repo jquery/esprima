@@ -802,12 +802,6 @@ parseStatement: true */
     function parseObjectInitialiser() {
         var token, expr, properties = [], property;
 
-        function isPropertyName(t) {
-            return t === Token.Identifier ||
-                t === Token.StringLiteral ||
-                t === Token.NumericLiteral;
-        }
-
         expect('{');
 
         // TODO handle 'get' and 'set'
@@ -817,27 +811,31 @@ parseStatement: true */
                 break;
             }
 
-            if (isPropertyName(token.type)) {
-                property = {};
-                if (token.type === Token.Identifier) {
-                    property.key = {
-                        type: Syntax.Identifier,
-                        name: token.value
-                    };
-                } else {
-                    property.key = {
-                        type: Syntax.Literal,
-                        value: token.value
-                    };
-                }
-
+            property = {};
+            switch (token.type) {
+            case Token.Identifier:
+                property.key = {
+                    type: Syntax.Identifier,
+                    name: token.value
+                };
                 expect(':');
                 property.value = parseAssignmentExpression();
+                break;
 
-                properties.push(property);
-            } else {
+            case Token.StringLiteral:
+            case Token.NumericLiteral:
+                property.key = {
+                    type: Syntax.Literal,
+                    value: token.value
+                };
+                expect(':');
+                property.value = parseAssignmentExpression();
+                break;
+
+            default:
                 throwUnexpected(token);
             }
+            properties.push(property);
 
             token = lookahead();
             if (token.type === Token.Punctuator && token.value === '}') {
