@@ -773,6 +773,12 @@ parseStatement: true */
     function consumeSemicolon() {
         var token, line;
 
+        // Catch the very common case first.
+        if (source[index] === ';') {
+            lex();
+            return;
+        }
+
         line = lineNumber;
         skipComment();
         if (lineNumber !== line) {
