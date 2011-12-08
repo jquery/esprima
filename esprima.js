@@ -1738,6 +1738,18 @@ parseStatement: true */
 
         expectKeyword('return');
 
+        // 'return' followed by a space and an identifier is very common.
+        if (source[index] === ' ') {
+            if (isIdentifierStart(source[index + 1])) {
+                argument = parseExpression().expression;
+                consumeSemicolon();
+                return {
+                    type: Syntax.ReturnStatement,
+                    argument: argument
+                };
+            }
+        }
+
         if (peekLineTerminator()) {
             return {
                 type: Syntax.ReturnStatement,
