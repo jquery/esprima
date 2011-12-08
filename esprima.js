@@ -536,11 +536,6 @@ parseStatement: true */
             }
         }
 
-        if (number === '.') {
-            throw new Error('Line ' + lineNumber +
-                ': Expecting decimal digits after the dot sign');
-        }
-
         return {
             type: Token.NumericLiteral,
             value: parseFloat(number)
