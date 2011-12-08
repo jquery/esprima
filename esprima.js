@@ -1666,13 +1666,11 @@ parseStatement: true */
     // 12.7 The continue statement
 
     function parseContinueStatement() {
-        var line, token, label = null;
+        var token, label = null;
 
         expectKeyword('continue');
 
-        line = lineNumber;
-        skipComment();
-        if (lineNumber !== line) {
+        if (peekLineTerminator()) {
             return {
                 type: Syntax.ContinueStatement,
                 label: null
@@ -1699,13 +1697,11 @@ parseStatement: true */
     // 12.8 The break statement
 
     function parseBreakStatement() {
-        var line, token, label = null;
+        var token, label = null;
 
         expectKeyword('break');
 
-        line = lineNumber;
-        skipComment();
-        if (lineNumber !== line) {
+        if (peekLineTerminator()) {
             return {
                 type: Syntax.BreakStatement,
                 label: null
@@ -1732,13 +1728,11 @@ parseStatement: true */
     // 12.9 The return statement
 
     function parseReturnStatement() {
-        var line, token, argument = null;
+        var token, argument = null;
 
         expectKeyword('return');
 
-        line = lineNumber;
-        skipComment();
-        if (lineNumber !== line) {
+        if (peekLineTerminator()) {
             return {
                 type: Syntax.ReturnStatement,
                 argument: null
