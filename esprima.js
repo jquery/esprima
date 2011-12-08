@@ -1676,6 +1676,15 @@ parseStatement: true */
 
         expectKeyword('continue');
 
+        // Optimize the most common form: 'continue;'.
+        if (source[index] === ';') {
+            lex();
+            return {
+                type: Syntax.ContinueStatement,
+                label: null
+            };
+        }
+
         if (peekLineTerminator()) {
             return {
                 type: Syntax.ContinueStatement,
@@ -1706,6 +1715,15 @@ parseStatement: true */
         var token, label = null;
 
         expectKeyword('break');
+
+        // Optimize the most common form: 'break;'.
+        if (source[index] === ';') {
+            lex();
+            return {
+                type: Syntax.BreakStatement,
+                label: null
+            };
+        }
 
         if (peekLineTerminator()) {
             return {
