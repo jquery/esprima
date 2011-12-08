@@ -1854,25 +1854,16 @@ parseStatement: true */
     // 12.13 The throw statement
 
     function parseThrowStatement() {
-        var line, token, argument = null;
+        var argument;
 
         expectKeyword('throw');
 
-        line = lineNumber;
-        skipComment();
-        if (lineNumber !== line) {
-            return {
-                type: Syntax.ThrowStatement,
-                argument: null
-            };
+        if (peekLineTerminator()) {
+            throw new Error('Line ' + lineNumber +
+                ': Unexpected line terminator after throw');
         }
 
-        if (!match(';')) {
-            token = lookahead();
-            if (token.type !== Token.EOF) {
-                argument = parseExpression().expression;
-            }
-        }
+        argument = parseExpression().expression;
 
         consumeSemicolon();
 

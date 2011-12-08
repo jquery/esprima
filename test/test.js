@@ -3129,16 +3129,6 @@ data = {
 
     'throw statement': {
 
-        'throw': {
-            type: 'ThrowStatement',
-            argument: null
-        },
-
-        'throw;': {
-            type: 'ThrowStatement',
-            argument: null
-        },
-
         'throw x;': {
             type: 'ThrowStatement',
             argument: {
@@ -3729,11 +3719,14 @@ data = {
             }]
         },
 
-        '{ throw\nerror; }': {
+        '{ throw error\nerror; }': {
             type: 'BlockStatement',
             body: [{
                 type: 'ThrowStatement',
-                argument: null
+                argument: {
+                    type: 'Identifier',
+                    name: 'error'
+                }
             }, {
                 type: 'ExpressionStatement',
                 expression: {
@@ -3743,11 +3736,14 @@ data = {
             }]
         },
 
-        '{ throw // Comment\nerror; }': {
+        '{ throw error// Comment\nerror; }': {
             type: 'BlockStatement',
             body: [{
                 type: 'ThrowStatement',
-                argument: null
+                argument: {
+                    type: 'Identifier',
+                    name: 'error'
+                }
             }, {
                 type: 'ExpressionStatement',
                 expression: {
@@ -3757,11 +3753,14 @@ data = {
             }]
         },
 
-        '{ throw /* Multiline\nComment */error; }': {
+        '{ throw error/* Multiline\nComment */error; }': {
             type: 'BlockStatement',
             body: [{
                 type: 'ThrowStatement',
-                argument: null
+                argument: {
+                    type: 'Identifier',
+                    name: 'error'
+                }
             }, {
                 type: 'ExpressionStatement',
                 expression: {
@@ -3791,7 +3790,13 @@ data = {
 
         'break 1;': 'Line 1: Unexpected token 1',
 
-        'continue 2;': 'Line 1: Unexpected token 2'
+        'continue 2;': 'Line 1: Unexpected token 2',
+
+        'throw': 'Line 1: Unexpected <EOF>',
+
+        'throw;': 'Line 1: Unexpected token ;',
+
+        'throw\n': 'Line 1: Unexpected line terminator after throw'
     }
 };
 
