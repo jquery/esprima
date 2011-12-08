@@ -3626,6 +3626,7 @@ if (typeof window !== 'undefined') {
             var expected, actual;
 
             expected = 'Error: ' + exception;
+            total += 1;
             try {
                 esprima.parse(code);
             } catch (e) {
