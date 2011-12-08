@@ -682,6 +682,21 @@ parseStatement: true */
         return buffer;
     }
 
+    // Return true if there is a line terminator before the next token.
+
+    function peekLineTerminator() {
+        var pos, line, found;
+
+        pos = index;
+        line = lineNumber;
+        skipComment();
+        found = lineNumber !== line;
+        index = pos;
+        lineNumber = line;
+
+        return found;
+    }
+
     // Throw an exception because of the token.
 
     function throwUnexpected(token) {
@@ -757,9 +772,24 @@ parseStatement: true */
 
 
     function consumeSemicolon() {
+        var token, line;
+
+        line = lineNumber;
+        skipComment();
+        if (lineNumber !== line) {
+            return;
+        }
+
         if (match(';')) {
             lex();
+            return;
         }
+
+        token = lookahead();
+        if (token.type !== Token.EOF && !match('}')) {
+            throwUnexpected(token);
+        }
+        return;
     }
 
     // 11.1.4 Array Initialiser
@@ -1053,7 +1083,7 @@ parseStatement: true */
     function parsePostfixExpression() {
         var expr = parseLeftHandSideExpression();
 
-        if (match('++') || match('--')) {
+        if ((match('++') || match('--')) && !peekLineTerminator()) {
             expr = {
                 type: Syntax.UpdateExpression,
                 operator: lex().value,
@@ -1637,9 +1667,18 @@ parseStatement: true */
     // 12.7 The continue statement
 
     function parseContinueStatement() {
-        var token, label = null;
+        var line, token, label = null;
 
         expectKeyword('continue');
+
+        line = lineNumber;
+        skipComment();
+        if (lineNumber !== line) {
+            return {
+                type: Syntax.ContinueStatement,
+                label: null
+            };
+        }
 
         token = lookahead();
         if (token.type === Token.Identifier) {
@@ -1661,9 +1700,18 @@ parseStatement: true */
     // 12.8 The break statement
 
     function parseBreakStatement() {
-        var token, label = null;
+        var line, token, label = null;
 
         expectKeyword('break');
+
+        line = lineNumber;
+        skipComment();
+        if (lineNumber !== line) {
+            return {
+                type: Syntax.BreakStatement,
+                label: null
+            };
+        }
 
         token = lookahead();
         if (token.type === Token.Identifier) {
@@ -1685,9 +1733,18 @@ parseStatement: true */
     // 12.9 The return statement
 
     function parseReturnStatement() {
-        var token, argument = null;
+        var line, token, argument = null;
 
         expectKeyword('return');
+
+        line = lineNumber;
+        skipComment();
+        if (lineNumber !== line) {
+            return {
+                type: Syntax.ReturnStatement,
+                argument: null
+            };
+        }
 
         if (!match(';')) {
             token = lookahead();
@@ -1797,9 +1854,18 @@ parseStatement: true */
     // 12.13 The throw statement
 
     function parseThrowStatement() {
-        var token, argument = null;
+        var line, token, argument = null;
 
         expectKeyword('throw');
+
+        line = lineNumber;
+        skipComment();
+        if (lineNumber !== line) {
+            return {
+                type: Syntax.ThrowStatement,
+                argument: null
+            };
+        }
 
         if (!match(';')) {
             token = lookahead();
@@ -1924,7 +1990,7 @@ parseStatement: true */
             }
         }
 
-        stat = parseExpressionStatement();
+        stat = parseExpression();
 
         if (stat.expression.type === Syntax.FunctionExpression) {
             if (stat.expression.id !== null) {
@@ -1946,6 +2012,8 @@ parseStatement: true */
                 body: parseStatement()
             };
         }
+
+        consumeSemicolon();
 
         return stat;
     }

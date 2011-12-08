@@ -2266,6 +2266,7 @@ data = {
             }],
             kind: 'var'
         }
+
     },
 
     'Let Statement': {
@@ -2433,7 +2434,7 @@ data = {
 
     'Iteration Statements': {
 
-        'do keep() while (true)': {
+        'do keep(); while (true)': {
             type: 'DoWhileStatement',
             body: {
                 type: 'ExpressionStatement',
@@ -3523,6 +3524,255 @@ data = {
         }
     },
 
+    'Automatic semicolon insertion': {
+
+        '{ x\n++y }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UpdateExpression',
+                    operator: '++',
+                    argument: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    prefix: true
+                }
+            }]
+        },
+
+        '{ x\n--y }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UpdateExpression',
+                    operator: '--',
+                    argument: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    prefix: true
+                }
+            }]
+        },
+
+        '{ var x = 14, y = 3\nz; }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 14
+                    }
+                }, {
+                    id: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 3
+                    }
+                }],
+                kind: 'var'
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }]
+        },
+
+        '{ continue\nthere; }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'ContinueStatement',
+                label: null
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'there'
+                }
+            }]
+        },
+
+        '{ continue // Comment\nthere; }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'ContinueStatement',
+                label: null
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'there'
+                }
+            }]
+        },
+
+        '{ continue /* Multiline\nComment */there; }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'ContinueStatement',
+                label: null
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'there'
+                }
+            }]
+        },
+
+        '{ break\nthere; }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'BreakStatement',
+                label: null
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'there'
+                }
+            }]
+        },
+
+        '{ break // Comment\nthere; }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'BreakStatement',
+                label: null
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'there'
+                }
+            }]
+        },
+
+        '{ break /* Multiline\nComment */there; }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'BreakStatement',
+                label: null
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'there'
+                }
+            }]
+        },
+
+        '{ return\nx; }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'ReturnStatement',
+                argument: null
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }]
+        },
+
+        '{ return // Comment\nx; }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'ReturnStatement',
+                argument: null
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }]
+        },
+
+        '{ return/* Multiline\nComment */x; }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'ReturnStatement',
+                argument: null
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }]
+        },
+
+        '{ throw\nerror; }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'ThrowStatement',
+                argument: null
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'error'
+                }
+            }]
+        },
+
+        '{ throw // Comment\nerror; }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'ThrowStatement',
+                argument: null
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'error'
+                }
+            }]
+        },
+
+        '{ throw /* Multiline\nComment */error; }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'ThrowStatement',
+                argument: null
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'error'
+                }
+            }]
+        }
+
+    },
+
     'Invalid syntax': {
 
         '{': 'Line 1: Unexpected <EOF>',
@@ -3535,7 +3785,9 @@ data = {
 
         '\n\n\n{': 'Line 4: Unexpected <EOF>',
 
-        '\n/* Some multiline\ncomment */\n)': 'Line 4: Unexpected token )'
+        '\n/* Some multiline\ncomment */\n)': 'Line 4: Unexpected token )',
+
+        'a b;': 'Line 1: Unexpected token b'
     }
 };
 
