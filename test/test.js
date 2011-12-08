@@ -3787,7 +3787,11 @@ data = {
 
         '\n/* Some multiline\ncomment */\n)': 'Line 4: Unexpected token )',
 
-        'a b;': 'Line 1: Unexpected token b'
+        'a b;': 'Line 1: Unexpected token b',
+
+        'break 1;': 'Line 1: Unexpected token 1',
+
+        'continue 2;': 'Line 1: Unexpected token 2'
     }
 };
 
