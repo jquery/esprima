@@ -254,9 +254,9 @@ function parse_js_number(num) {
 
 function JS_Parse_Error(message, line, col, pos) {
         this.message = message;
-        this.line = line;
-        this.col = col;
-        this.pos = pos;
+        this.line = line + 1;
+        this.col = col + 1;
+        this.pos = pos + 1;
         this.stack = new Error().stack;
 };
 
@@ -326,12 +326,13 @@ function tokenizer($TEXT) {
                                    (type == "keyword" && HOP(KEYWORDS_BEFORE_EXPRESSION, value)) ||
                                    (type == "punc" && HOP(PUNC_BEFORE_EXPRESSION, value)));
                 var ret = {
-                        type  : type,
-                        value : value,
-                        line  : S.tokline,
-                        col   : S.tokcol,
-                        pos   : S.tokpos,
-                        nlb   : S.newline_before
+                        type   : type,
+                        value  : value,
+                        line   : S.tokline,
+                        col    : S.tokcol,
+                        pos    : S.tokpos,
+                        endpos : S.pos,
+                        nlb    : S.newline_before
                 };
                 if (!is_comment) {
                         ret.comments_before = S.comments_before;
@@ -468,8 +469,7 @@ function tokenizer($TEXT) {
                 next();
                 return with_eof_error("Unterminated multiline comment", function(){
                         var i = find("*/", true),
-                            text = S.text.substring(S.pos, i),
-                            tok = token("comment2", text, true);
+                            text = S.text.substring(S.pos, i);
                         S.pos = i + 2;
                         S.line += text.split("\n").length - 1;
                         S.newline_before = text.indexOf("\n") >= 0;
@@ -481,7 +481,7 @@ function tokenizer($TEXT) {
                                 warn("*** UglifyJS DISCARDS ALL COMMENTS.  This means your code might no longer work properly in Internet Explorer.");
                         }
 
-                        return tok;
+                        return token("comment2", text, true);
                 });
         };
 
@@ -932,7 +932,7 @@ function parse($TEXT, exigent_mode, embed_tokens) {
                 return as("for-in", init, lhs, obj, in_loop(statement));
         };
 
-        var function_ = maybe_embed_tokens(function(in_statement) {
+        var function_ = function(in_statement) {
                 var name = is("name") ? prog1(S.token.value, next) : null;
                 if (in_statement && !name)
                         unexpected();
@@ -960,7 +960,7 @@ function parse($TEXT, exigent_mode, embed_tokens) {
                                   S.in_loop = loop;
                                   return a;
                           })());
-        });
+        };
 
         function if_() {
                 var cond = parenthesised(), body = statement(), belse;
