@@ -319,7 +319,178 @@ data = {
                     }]
                 }
             }
+        },
+
+        'x = { get width() { return m_width } }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'width'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ReturnStatement',
+                                    argument: {
+                                        type: 'Identifier',
+                                        name: 'm_width'
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = { get undef() {} }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'undef'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = { set width(w) { m_width = w } }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'width'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_width'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
+        // This should not be treated as getter.
+
+        'x = { get: 42 }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'get'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42
+                        }
+                    }]
+                }
+            }
+        },
+
+        // This should not be treated as setter.
+
+        'x = { set: 43 }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'set'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 43
+                        }
+                    }]
+                }
+            }
         }
+
 
     },
 
@@ -3818,6 +3989,10 @@ data = {
         '\n\n\n{': 'Line 4: Unexpected <EOF>',
 
         '\n/* Some multiline\ncomment */\n)': 'Line 4: Unexpected token )',
+
+        '{ set 1 }': 'Line 1: Unexpected token 1',
+
+        '{ get 2 }': 'Line 1: Unexpected token 2',
 
         'a b;': 'Line 1: Unexpected token b',
 

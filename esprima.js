@@ -23,7 +23,7 @@
 */
 
 /*global esprima:true, exports:true,
-parseAssignmentExpression: true, parseExpression: true,
+parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
 parseStatement: true */
 
@@ -853,6 +853,60 @@ parseStatement: true */
                     type: Syntax.Identifier,
                     name: token.value
                 };
+
+                // Property Assignment: Getter and Setter.
+
+                if (token.value === 'get' && !match(':')) {
+                    token = lex();
+                    if (token.type !== Token.Identifier) {
+                        throwUnexpected(token);
+                    }
+                    expect('(');
+                    expect(')');
+                    property = {
+                        key: {
+                            type: Syntax.Identifier,
+                            name: token.value
+                        },
+                        value: {
+                            type: Syntax.FunctionExpression,
+                            id: null,
+                            params: [],
+                            body: parseBlock()
+                        },
+                        kind: 'get'
+                    };
+                    break;
+                }
+
+                if (token.value === 'set' && !match(':')) {
+                    token = lex();
+                    if (token.type !== Token.Identifier) {
+                        throwUnexpected(token);
+                    }
+                    property.key = {
+                        type: Syntax.Identifier,
+                        name: token.value
+                    };
+                    expect('(');
+                    token = lex();
+                    if (token.type !== Token.Identifier) {
+                        throwUnexpected(token);
+                    }
+                    expect(')');
+                    property.value = {
+                        type: Syntax.FunctionExpression,
+                        id: null,
+                        params: [{
+                            type: Syntax.Identifier,
+                            name: token.value
+                        }],
+                        body: parseBlock()
+                    };
+                    property.kind = 'set';
+                    break;
+                }
+
                 expect(':');
                 property.value = parseAssignmentExpression();
                 break;

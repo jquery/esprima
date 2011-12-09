@@ -381,4 +381,15 @@ assertStmt("function f() { var x = 42; var x = 43; }",
            funDecl(ident("f"), [], blockStmt([varDecl([{ id: ident("x"), init: lit(42) }]),
                                               varDecl([{ id: ident("x"), init: lit(43) }])])));
 
+// getters and setters
+
+ assertExpr("({ get x() { return 42 } })",
+            objExpr([ { key: ident("x"),
+                        value: funExpr(null, [], blockStmt([returnStmt(lit(42))])),
+                        kind: "get" } ]));
+ assertExpr("({ set x(v) { return 42 } })",
+            objExpr([ { key: ident("x"),
+                        value: funExpr(null, [ident("v")], blockStmt([returnStmt(lit(42))])),
+                        kind: "set" } ]));
+
 }
