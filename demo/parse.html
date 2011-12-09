@@ -12,7 +12,7 @@
 /*jslint sloppy:true browser:true */
 /*global esprima:true */
 var parseId;
-function parse() {
+function parse(delay) {
     if (parseId) {
         window.clearTimeout(parseId);
     }
@@ -30,7 +30,7 @@ function parse() {
         }
 
         parseId = undefined;
-    }, 811);
+    }, delay || 811);
 }
 </script>
 </head>
@@ -51,7 +51,7 @@ var answer = 6 * 7;</textarea></p>
 <script>
 window.onload = function() {
     document.getElementById('version').textContent = esprima.version;
-    parse();
+    parse(1);
 };
 </script>
 <script>
