@@ -118,8 +118,8 @@ parseStatement: true */
 
     function isWhiteSpace(ch) {
         // TODO Unicode "space separator"
-        return (ch === '\u0009') || (ch === '\u000B') || (ch === '\u000C') ||
-            (ch === ' ') || (ch === '\u00A0') || (ch === '\uFEFF');
+        return (ch === ' ') || (ch === '\u0009') || (ch === '\u000B') ||
+            (ch === '\u000C') || (ch === '\u00A0') || (ch === '\uFEFF');
     }
 
     // 7.3 Line Terminators
