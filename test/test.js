@@ -518,7 +518,114 @@ data = {
                 type: 'Literal',
                 value: 42
             }
+        },
+
+        '// Hello, world!\n42': {
+            options: {
+                comment: true
+            },
+            body: [{
+                type: 'Comment',
+                body: [
+                    '// Hello, world!'
+                ]
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }]
+        },
+
+        '// Hello, world!\n\n//   Another hello\n42': {
+            options: {
+                comment: true
+            },
+            body: [{
+                type: 'Comment',
+                body: [
+                    '// Hello, world!',
+                    '//   Another hello'
+                ]
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }]
+        },
+
+        'if (x) { // Some comment\ndoThat(); }': {
+            options: {
+                comment: true
+            },
+            body: [{
+                type: 'IfStatement',
+                test: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                consequent: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'Comment',
+                        body: [
+                            '// Some comment'
+                        ]
+                    }, {
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'doThat'
+                            },
+                            'arguments': []
+                        }
+                    }]
+                },
+                alternate: null
+            }]
+        },
+
+        'switch (answer) { case 42: /* perfect */ bingo() }': {
+            options: {
+                comment: true
+            },
+            body: [{
+                type: 'SwitchStatement',
+                discriminant: {
+                    type: 'Identifier',
+                    name: 'answer'
+                },
+                cases: [{
+                    type: 'SwitchCase',
+                    test: {
+                        type: 'Literal',
+                        value: 42
+                    },
+                    consequent: [{
+                        type: 'Comment',
+                        body: [
+                            '/* perfect */'
+                        ]
+                    }, {
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'bingo'
+                            },
+                            'arguments': []
+                        }
+                    }]
+                }]
+            }]
         }
+
     },
 
     'Numeric Literals': {
@@ -4072,12 +4179,21 @@ if (typeof window !== 'undefined') {
         }
 
         function testParse(code, syntax) {
-            var expected, tree, actual;
+            var expected, tree, actual, options;
 
-            expected = JSON.stringify(syntax, null, 4);
+            options = {
+                comment: false
+            };
+
+            if (syntax.options) {
+                options = syntax.options;
+                syntax.options = undefined;
+            }
+
+            expected = JSON.stringify(options.comment ? syntax.body : syntax, null, 4);
             try {
-                tree = esprima.parse(code);
-                tree = tree.body[0];
+                tree = esprima.parse(code, options);
+                tree = (options.comment) ? tree.body : tree.body[0];
                 actual = JSON.stringify(tree, null, 4);
 
                 total += 1;

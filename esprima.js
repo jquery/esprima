@@ -57,6 +57,7 @@ parseStatement: true */
         BreakStatement: 'BreakStatement',
         CallExpression: 'CallExpression',
         CatchClause: 'CatchClause',
+        Comment: 'Comment',
         ConditionalExpression: 'ConditionalExpression',
         ContinueStatement: 'ContinueStatement',
         DoWhileStatement: 'DoWhileStatement',
@@ -1868,6 +1869,24 @@ parseStatement: true */
 
     // 12.10 The swith statement
 
+    function parseSwitchConsequent() {
+        var consequent = [],
+            statement;
+
+        while (index < length) {
+            if (match('}') || matchKeyword('default') || matchKeyword('case')) {
+                break;
+            }
+            statement = parseStatement();
+            if (typeof statement === 'undefined') {
+                break;
+            }
+            consequent.push(statement);
+        }
+
+        return consequent;
+    }
+
     function parseSwitchStatement() {
         var discriminant, cases, test, consequent, statement;
 
@@ -1905,23 +1924,10 @@ parseStatement: true */
             }
             expect(':');
 
-            consequent = [];
-
-            while (index < length) {
-                if (match('}') || matchKeyword('default') || matchKeyword('case')) {
-                    break;
-                }
-                statement = parseStatement();
-                if (typeof statement === 'undefined') {
-                    break;
-                }
-                consequent.push(statement);
-            }
-
             cases.push({
                 type: Syntax.SwitchCase,
                 test: test,
-                consequent: consequent
+                consequent: parseSwitchConsequent()
             });
         }
 
@@ -2223,13 +2229,192 @@ parseStatement: true */
         };
     }
 
-    exports.parse = function (code) {
+    // The following functions are needed only when the option to preserve
+    // the comments is active.
+
+    function scanComment() {
+        var comment = [], str, ch, blockComment, lineComment;
+
+        str = '';
+        blockComment = false;
+        lineComment = false;
+
+        while (index < length) {
+            ch = source[index];
+
+            if (lineComment) {
+                ch = nextChar();
+                if (isLineTerminator(ch)) {
+                    lineComment = false;
+                    lineNumber += 1;
+                    comment.push(str);
+                    str = '';
+                } else {
+                    str += ch;
+                }
+            } else if (blockComment) {
+                ch = nextChar();
+                str += ch;
+                if (ch === '*') {
+                    ch = source[index];
+                    if (ch === '/') {
+                        blockComment = false;
+                        str += nextChar();
+                        comment.push(str);
+                        str = '';
+                    }
+                } else if (isLineTerminator(ch)) {
+                    lineNumber += 1;
+                }
+            } else if (ch === '/') {
+                ch = source[index + 1];
+                if (ch === '/') {
+                    str += nextChar();
+                    str += nextChar();
+                    lineComment = true;
+                } else if (ch === '*') {
+                    str += nextChar();
+                    str += nextChar();
+                    blockComment = true;
+                } else {
+                    break;
+                }
+            } else if (isWhiteSpace(ch)) {
+                nextChar();
+            } else if (isLineTerminator(ch)) {
+                nextChar();
+                lineNumber += 1;
+            } else {
+                break;
+            }
+        }
+
+        if (str.length > 0) {
+            comment.push(str);
+        }
+
+        if (comment.length > 0) {
+            return comment;
+        }
+    }
+
+    function parseStatementListComment() {
+        var list = [],
+            statement,
+            comment;
+
+        while (index < length) {
+
+            comment = scanComment();
+            if (typeof comment !== 'undefined') {
+                list.push({
+                    type: Syntax.Comment,
+                    body: comment
+                });
+            }
+
+            if (match('}')) {
+                break;
+            }
+            statement = parseStatement();
+            if (typeof statement === 'undefined') {
+                break;
+            }
+            list.push(statement);
+        }
+
+        return list;
+    }
+
+    function parseSwitchConsequentComment() {
+        var consequent = [],
+            statement,
+            comment;
+
+        while (index < length) {
+
+            comment = scanComment();
+            if (typeof comment !== 'undefined') {
+                consequent.push({
+                    type: Syntax.Comment,
+                    body: comment
+                });
+            }
+
+            if (match('}') || matchKeyword('default') || matchKeyword('case')) {
+                break;
+            }
+            statement = parseStatement();
+            if (typeof statement === 'undefined') {
+                break;
+            }
+            consequent.push(statement);
+        }
+
+        return consequent;
+    }
+
+    function parseSourceElementsComment() {
+        var comment, sourceElement, sourceElements = [];
+
+        while (index < length) {
+
+            comment = scanComment();
+            if (typeof comment !== 'undefined') {
+                sourceElements.push({
+                    type: Syntax.Comment,
+                    body: comment
+                });
+            }
+
+            sourceElement = parseSourceElement();
+            if (typeof sourceElement === 'undefined') {
+                break;
+            }
+            sourceElements.push(sourceElement);
+        }
+        return sourceElements;
+    }
+
+    function parseProgramComment() {
+        var program,
+            original = {};
+
+        // Run-time patching of some parsing functions.
+        original.parseStatementList = parseStatementList;
+        original.parseSwitchConsequent = parseSwitchConsequent;
+        original.parseSourceElements = parseSourceElements;
+        parseStatementList = parseStatementListComment;
+        parseSourceElements = parseSourceElementsComment;
+        parseSwitchConsequent = parseSwitchConsequentComment;
+
+        program = parseProgram();
+
+        // Make the world normal again.
+        parseStatementList = original.parseStatementList;
+        parseSourceElements = original.parseSourceElements;
+        parseSwitchConsequent = original.parseSwitchConsequent;
+
+        return program;
+    }
+
+    exports.parse = function (code, options) {
+
+        var comment = false;
+
+        if (typeof options !== 'undefined') {
+            if (typeof options.comment === 'boolean') {
+                comment = options.comment;
+            }
+        }
+
         source = code;
         index = 0;
         lineNumber = (source.length > 0) ? 1 : 0;
         length = source.length;
         buffer = null;
-        return parseProgram();
+
+        return comment ? parseProgramComment() : parseProgram();
     };
 
     // Sync with package.json.
