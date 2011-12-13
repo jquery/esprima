@@ -629,8 +629,11 @@ parseStatement: true */
         return str;
     }
 
-    function advance() {
+    function lex() {
         var ch, token;
+
+        buffer = null;
+        skipComment();
 
         if (index >= length) {
             return {
@@ -660,28 +663,6 @@ parseStatement: true */
 
         throw new Error('Line ' + lineNumber +
             ': Unknown token from character ' + nextChar());
-    }
-
-    function lex() {
-        var pos, token;
-
-        if (buffer) {
-            index = buffer.range[1];
-            lineNumber = buffer.lineNumber;
-            token = buffer;
-            buffer = null;
-            return token;
-        }
-
-        buffer = null;
-        skipComment();
-
-        pos = index;
-        token = advance();
-        token.range = [pos, index];
-        token.lineNumber = lineNumber;
-
-        return token;
     }
 
     function lookahead() {
