@@ -504,7 +504,7 @@ data = {
             }
         },
 
-        '/* multiline\ncomment\nshould\nbe\nignore */ 42': {
+        '/* multiline\ncomment\nshould\nbe\nignored */ 42': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
@@ -521,46 +521,43 @@ data = {
         },
 
         '// Hello, world!\n42': {
-            options: {
-                comment: true
-            },
+            type: 'Program',
             body: [{
-                type: 'Comment',
-                body: [
-                    '// Hello, world!'
-                ]
-            }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Literal',
                     value: 42
                 }
+            }],
+            comments: [{
+                range: [0, 16],
+                type: 'Line',
+                value: ' Hello, world!'
             }]
         },
 
         '// Hello, world!\n\n//   Another hello\n42': {
-            options: {
-                comment: true
-            },
+            type: 'Program',
             body: [{
-                type: 'Comment',
-                body: [
-                    '// Hello, world!',
-                    '//   Another hello'
-                ]
-            }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Literal',
                     value: 42
                 }
+            }],
+            comments: [{
+                range: [0, 16],
+                type: 'Line',
+                value: ' Hello, world!'
+            }, {
+                range: [18, 36],
+                type: 'Line',
+                value: '   Another hello'
             }]
         },
 
         'if (x) { // Some comment\ndoThat(); }': {
-            options: {
-                comment: true
-            },
+            type: 'Program',
             body: [{
                 type: 'IfStatement',
                 test: {
@@ -570,11 +567,6 @@ data = {
                 consequent: {
                     type: 'BlockStatement',
                     body: [{
-                        type: 'Comment',
-                        body: [
-                            '// Some comment'
-                        ]
-                    }, {
                         type: 'ExpressionStatement',
                         expression: {
                             type: 'CallExpression',
@@ -587,13 +579,16 @@ data = {
                     }]
                 },
                 alternate: null
+            }],
+            comments: [{
+                range: [9, 24],
+                type: 'Line',
+                value: ' Some comment'
             }]
         },
 
         'switch (answer) { case 42: /* perfect */ bingo() }': {
-            options: {
-                comment: true
-            },
+            type: 'Program',
             body: [{
                 type: 'SwitchStatement',
                 discriminant: {
@@ -607,11 +602,6 @@ data = {
                         value: 42
                     },
                     consequent: [{
-                        type: 'Comment',
-                        body: [
-                            '/* perfect */'
-                        ]
-                    }, {
                         type: 'ExpressionStatement',
                         expression: {
                             type: 'CallExpression',
@@ -623,6 +613,11 @@ data = {
                         }
                     }]
                 }]
+            }],
+            comments: [{
+                range: [27, 39],
+                type: 'Block',
+                value: ' perfect '
             }]
         }
 
@@ -4185,15 +4180,14 @@ if (typeof window !== 'undefined') {
                 comment: false
             };
 
-            if (syntax.options) {
-                options = syntax.options;
-                syntax.options = undefined;
+            if (typeof syntax.comments !== 'undefined') {
+                options.comment = true;
             }
 
-            expected = JSON.stringify(options.comment ? syntax.body : syntax, null, 4);
+            expected = JSON.stringify(syntax, null, 4);
             try {
                 tree = esprima.parse(code, options);
-                tree = (options.comment) ? tree.body : tree.body[0];
+                tree = (options.comment) ? tree : tree.body[0];
                 actual = JSON.stringify(tree, null, 4);
 
                 total += 1;

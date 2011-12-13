@@ -36,7 +36,8 @@ parseStatement: true */
         index,
         lineNumber,
         length,
-        buffer;
+        buffer,
+        comments;
 
     Token = {
         BooleanLiteral: 1,
@@ -2252,9 +2253,9 @@ parseStatement: true */
     // the comments is active.
 
     function scanComment() {
-        var comment = [], str, ch, blockComment, lineComment;
+        var comment, ch, start, blockComment, lineComment;
 
-        str = '';
+        comment = '';
         blockComment = false;
         lineComment = false;
 
@@ -2266,21 +2267,30 @@ parseStatement: true */
                 if (isLineTerminator(ch)) {
                     lineComment = false;
                     lineNumber += 1;
-                    comment.push(str);
-                    str = '';
+                    comments.push({
+                        range: [start, index - 1],
+                        type: 'Line',
+                        value: comment
+                    });
+                    comment = '';
                 } else {
-                    str += ch;
+                    comment += ch;
                 }
             } else if (blockComment) {
                 ch = nextChar();
-                str += ch;
+                comment += ch;
                 if (ch === '*') {
                     ch = source[index];
                     if (ch === '/') {
+                        comment = comment.substr(0, comment.length - 1);
                         blockComment = false;
-                        str += nextChar();
-                        comment.push(str);
-                        str = '';
+                        nextChar();
+                        comments.push({
+                            range: [start, index - 1],
+                            type: 'Block',
+                            value: comment
+                        });
+                        comment = '';
                     }
                 } else if (isLineTerminator(ch)) {
                     lineNumber += 1;
@@ -2288,12 +2298,14 @@ parseStatement: true */
             } else if (ch === '/') {
                 ch = source[index + 1];
                 if (ch === '/') {
-                    str += nextChar();
-                    str += nextChar();
+                    start = index;
+                    nextChar();
+                    nextChar();
                     lineComment = true;
                 } else if (ch === '*') {
-                    str += nextChar();
-                    str += nextChar();
+                    start = index;
+                    nextChar();
+                    nextChar();
                     blockComment = true;
                 } else {
                     break;
@@ -2308,118 +2320,20 @@ parseStatement: true */
             }
         }
 
-        if (str.length > 0) {
-            comment.push(str);
-        }
-
         if (comment.length > 0) {
-            return comment;
+            comments.push({
+                range: [start, index],
+                type: (blockComment) ? 'Block' : 'Line',
+                value: comment
+            });
         }
-    }
-
-    function parseStatementListComment() {
-        var list = [],
-            statement,
-            comment;
-
-        while (index < length) {
-
-            comment = scanComment();
-            if (typeof comment !== 'undefined') {
-                list.push({
-                    type: Syntax.Comment,
-                    body: comment
-                });
-            }
-
-            if (match('}')) {
-                break;
-            }
-            statement = parseStatement();
-            if (typeof statement === 'undefined') {
-                break;
-            }
-            list.push(statement);
-        }
-
-        return list;
-    }
-
-    function parseSwitchConsequentComment() {
-        var consequent = [],
-            statement,
-            comment;
-
-        while (index < length) {
-
-            comment = scanComment();
-            if (typeof comment !== 'undefined') {
-                consequent.push({
-                    type: Syntax.Comment,
-                    body: comment
-                });
-            }
-
-            if (match('}') || matchKeyword('default') || matchKeyword('case')) {
-                break;
-            }
-            statement = parseStatement();
-            if (typeof statement === 'undefined') {
-                break;
-            }
-            consequent.push(statement);
-        }
-
-        return consequent;
-    }
-
-    function parseSourceElementsComment() {
-        var comment, sourceElement, sourceElements = [];
-
-        while (index < length) {
-
-            comment = scanComment();
-            if (typeof comment !== 'undefined') {
-                sourceElements.push({
-                    type: Syntax.Comment,
-                    body: comment
-                });
-            }
-
-            sourceElement = parseSourceElement();
-            if (typeof sourceElement === 'undefined') {
-                break;
-            }
-            sourceElements.push(sourceElement);
-        }
-        return sourceElements;
-    }
-
-    function parseProgramComment() {
-        var program,
-            original = {};
-
-        // Run-time patching of some parsing functions.
-        original.parseStatementList = parseStatementList;
-        original.parseSwitchConsequent = parseSwitchConsequent;
-        original.parseSourceElements = parseSourceElements;
-        parseStatementList = parseStatementListComment;
-        parseSourceElements = parseSourceElementsComment;
-        parseSwitchConsequent = parseSwitchConsequentComment;
-
-        program = parseProgram();
-
-        // Make the world normal again.
-        parseStatementList = original.parseStatementList;
-        parseSourceElements = original.parseSourceElements;
-        parseSwitchConsequent = original.parseSwitchConsequent;
-
-        return program;
     }
 
     exports.parse = function (code, options) {
 
-        var comment = false;
+        var program,
+            comment = false,
+            original = {};
 
         if (typeof options !== 'undefined') {
             if (typeof options.comment === 'boolean') {
@@ -2433,7 +2347,22 @@ parseStatement: true */
         length = source.length;
         buffer = null;
 
-        return comment ? parseProgramComment() : parseProgram();
+        if (comment) {
+            // Run-time patching.
+            comments = [];
+            original.skipComment = skipComment;
+            skipComment = scanComment;
+        }
+
+        program = parseProgram();
+
+        if (comment) {
+            program.comments = comments;
+            skipComment = original.skipComment;
+            comments = [];
+        }
+
+        return program;
     };
 
     // Sync with package.json.
