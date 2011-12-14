@@ -58,7 +58,6 @@ parseStatement: true */
         BreakStatement: 'BreakStatement',
         CallExpression: 'CallExpression',
         CatchClause: 'CatchClause',
-        Comment: 'Comment',
         ConditionalExpression: 'ConditionalExpression',
         ContinueStatement: 'ContinueStatement',
         DoWhileStatement: 'DoWhileStatement',
