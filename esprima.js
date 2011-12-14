@@ -37,7 +37,7 @@ parseStatement: true */
         lineNumber,
         length,
         buffer,
-        comments;
+        extra;
 
     Token = {
         BooleanLiteral: 1,
@@ -962,7 +962,7 @@ parseStatement: true */
 
     // 11.1 Primary Expressions
 
-    function parsePrimaryExpression() {
+    function parsePrimary() {
         var token, expr;
 
         if (match('[')) {
@@ -1036,6 +1036,10 @@ parseStatement: true */
         }
 
         return;
+    }
+
+    function parsePrimaryExpression() {
+        return parsePrimary();
     }
 
     // 11.2 Left-Hand-Side Expressions
@@ -2266,7 +2270,7 @@ parseStatement: true */
                 if (isLineTerminator(ch)) {
                     lineComment = false;
                     lineNumber += 1;
-                    comments.push({
+                    extra.comments.push({
                         range: [start, index - 1],
                         type: 'Line',
                         value: comment
@@ -2284,7 +2288,7 @@ parseStatement: true */
                         comment = comment.substr(0, comment.length - 1);
                         blockComment = false;
                         nextChar();
-                        comments.push({
+                        extra.comments.push({
                             range: [start, index - 1],
                             type: 'Block',
                             value: comment
@@ -2320,7 +2324,7 @@ parseStatement: true */
         }
 
         if (comment.length > 0) {
-            comments.push({
+            extra.comments.push({
                 range: [start, index],
                 type: (blockComment) ? 'Block' : 'Line',
                 value: comment
@@ -2328,17 +2332,49 @@ parseStatement: true */
         }
     }
 
-    exports.parse = function (code, options) {
+    function parsePrimaryRange() {
+        var pos, node;
 
-        var program,
-            comment = false,
-            original = {};
+        skipComment();
+        pos = index;
+        node = parsePrimary();
+        node.range = [pos, index - 1];
+        return node;
+    }
 
-        if (typeof options !== 'undefined') {
-            if (typeof options.comment === 'boolean') {
-                comment = options.comment;
-            }
+    function patch(options) {
+        var opt = options || {};
+
+        extra = {};
+
+        if (typeof opt.comment === 'boolean' && opt.comment) {
+            extra.skipComment = skipComment;
+            skipComment = scanComment;
+            extra.comments = [];
         }
+
+        if (typeof opt.range === 'boolean' && opt.range) {
+            extra.parsePrimaryExpression = parsePrimaryExpression;
+            parsePrimaryExpression = parsePrimaryRange;
+        }
+    }
+
+    function unpatch(options) {
+        var opt = options || {};
+
+        if (typeof opt.comment === 'boolean' && opt.comment) {
+            skipComment = extra.skipComment;
+        }
+
+        if (typeof opt.range === 'boolean' && opt.range) {
+            parsePrimaryExpression = extra.parsePrimaryExpression;
+        }
+
+        extra = {};
+    }
+
+    exports.parse = function (code, options) {
+        var program;
 
         source = code;
         index = 0;
@@ -2346,20 +2382,12 @@ parseStatement: true */
         length = source.length;
         buffer = null;
 
-        if (comment) {
-            // Run-time patching.
-            comments = [];
-            original.skipComment = skipComment;
-            skipComment = scanComment;
-        }
-
+        patch(options);
         program = parseProgram();
-
-        if (comment) {
-            program.comments = comments;
-            skipComment = original.skipComment;
-            comments = [];
+        if (typeof extra.comments !== 'undefined') {
+            program.comments = extra.comments;
         }
+        unpatch(options);
 
         return program;
     };

@@ -18,13 +18,14 @@ function parse(delay) {
     }
 
     parseId = window.setTimeout(function () {
-        var code, comment, result, el, str;
+        var code, comment, range, result, el, str;
 
         code = window.editor.getValue();
         comment = document.getElementById('comment').checked;
+        range = document.getElementById('range').checked;
 
         try {
-            result = esprima.parse(code, { comment: comment } );
+            result = esprima.parse(code, { comment: comment, range: range } );
             document.getElementById('syntax').textContent = JSON.stringify(result, undefined, 4);
         } catch (e) {
             document.getElementById('syntax').textContent = e.toString();
@@ -48,6 +49,7 @@ function parse(delay) {
 var answer = 6 * 7;</textarea></p>
 <p align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
 <p><label><input type="checkbox" id="comment" onchange="parse(1)"> Include comments</label></p>
+<p><label><input type="checkbox" id="range" onchange="parse(1)"> Syntax node range (start, end)</label></p>
 <p>Syntax tree:</p>
 <pre id="syntax"></pre>
 </div>

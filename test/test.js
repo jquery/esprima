@@ -4074,6 +4074,77 @@ data = {
 
     },
 
+    'Range': {
+
+        'this': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ThisExpression',
+                range: [0, 3]
+            }
+        },
+
+        '42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 42,
+                range: [0, 1]
+            }
+        },
+
+        '(1 + 2 ) * 3': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '*',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '+',
+                    left: {
+                        type: 'Literal',
+                        value: 1,
+                        range: [1, 1]
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 2,
+                        range: [5, 5]
+                    },
+                    range: [0, 7]
+                },
+                right: {
+                    type: 'Literal',
+                    value: 3,
+                    range: [11, 11]
+                }
+            }
+        },
+
+        'x = [ 42, ]': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 0]
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [{
+                        type: 'Literal',
+                        value: 42,
+                        range: [6, 7]
+                    }],
+                    range: [4, 10]
+                }
+            }
+        }
+
+    },
+
     'Invalid syntax': {
 
         '{': 'Line 1: Unexpected <EOF>',
@@ -4173,16 +4244,31 @@ if (typeof window !== 'undefined') {
             report.appendChild(e);
         }
 
+        function hasComment(syntax) {
+            return typeof syntax.comments !== 'undefined';
+        }
+
+        function hasRange(syntax) {
+            var result = false;
+            JSON.stringify(syntax, function (key, value) {
+                if (key === 'range') {
+                    result = true;
+                }
+                return value;
+            });
+            return result;
+        }
+
         function testParse(code, syntax) {
             var expected, tree, actual, options;
 
             options = {
-                comment: false
+                comment: false,
+                range: false
             };
 
-            if (typeof syntax.comments !== 'undefined') {
-                options.comment = true;
-            }
+            options.comment = hasComment(syntax);
+            options.range = hasRange(syntax) && !options.comment;
 
             expected = JSON.stringify(syntax, null, 4);
             try {
