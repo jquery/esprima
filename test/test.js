@@ -4217,7 +4217,15 @@ data = {
 
         'throw;': 'Line 1: Unexpected token ;',
 
-        'throw\n': 'Line 1: Unexpected line terminator after throw'
+        'throw\n': 'Line 1: Unexpected line terminator after throw',
+
+        '10 = 20': 'Line 1: Expected Left Hand Side Expression',
+
+        '10++': 'Line 1: Expected Left Hand Side Expression',
+
+        '++10': 'Line 1: Expected Left Hand Side Expression',
+
+        'for (10 in []);': 'Line 1: Expected Left Hand Side Expression'
     }
 };
 

@@ -790,6 +790,16 @@ parseStatement: true */
     }
 
 
+    // Return true if expr is left hand side expression
+
+    function isLeftHandSide(expr) {
+        return expr.type === Syntax.Identifier ||
+            expr.type === Syntax.MemberExpression ||
+            expr.type === Syntax.CallExpression ||
+            expr.type === Syntax.NewExpression;
+    }
+
+
     function consumeSemicolon() {
         var token, line;
 
@@ -1167,6 +1177,9 @@ parseStatement: true */
         var expr = parseLeftHandSideExpression();
 
         if ((match('++') || match('--')) && !peekLineTerminator()) {
+            if (!isLeftHandSide(expr)) {
+                throw new Error('Line ' + lineNumber + ': Expected Left Hand Side Expression');
+            }
             expr = {
                 type: Syntax.UpdateExpression,
                 operator: lex().value,
@@ -1181,12 +1194,18 @@ parseStatement: true */
     // 11.4 Unary Operators
 
     function parseUnaryExpression() {
+        var operator, expr;
 
         if (match('++') || match('--')) {
+            operator = lex().value;
+            expr = parseUnaryExpression();
+            if (!isLeftHandSide(expr)) {
+                throw new Error('Line ' + lineNumber + ': Expected Left Hand Side Expression');
+            }
             return {
                 type: Syntax.UpdateExpression,
-                operator: lex().value,
-                argument: parseUnaryExpression(),
+                operator: operator,
+                argument: expr,
                 prefix: true
             };
         }
@@ -1427,6 +1446,9 @@ parseStatement: true */
         var expr = parseConditionalExpression();
 
         if (matchAssign()) {
+            if (!isLeftHandSide(expr)) {
+                throw new Error('Line ' + lineNumber + ': Expected Left Hand Side Expression');
+            }
             expr = {
                 type: Syntax.AssignmentExpression,
                 operator: lex().value,
@@ -1706,6 +1728,9 @@ parseStatement: true */
                     left = init.left;
                     right = init.right;
                     init = null;
+                    if (!isLeftHandSide(left)) {
+                        throw new Error('Line ' + lineNumber + ': Expected Left Hand Side Expression');
+                    }
                 } else {
                     expect(';');
                 }
