@@ -2332,6 +2332,50 @@ parseStatement: true */
         }
     }
 
+    function tokenTypeAsString(type) {
+        switch (type) {
+        case Token.BooleanLiteral: return 'Boolean';
+        case Token.Identifier: return 'Identifier';
+        case Token.Keyword: return 'Keyword';
+        case Token.NullLiteral: return 'Null';
+        case Token.NumericLiteral: return 'Numeric';
+        case Token.Punctuator: return 'Punctuator';
+        case Token.StringLiteral: return 'String';
+        default:
+            throw new Error('Unknown token type');
+        }
+    }
+
+    function lexRange() {
+        var pos, token;
+
+        if (buffer) {
+            index = buffer.range[1];
+            lineNumber = buffer.lineNumber;
+            token = buffer;
+            buffer = null;
+            return token;
+        }
+
+        buffer = null;
+        skipComment();
+
+        pos = index;
+        token = advance();
+        token.range = [pos, index];
+        token.lineNumber = lineNumber;
+
+        if (token.type !== Token.EOF) {
+            extra.tokens.push({
+                type: tokenTypeAsString(token.type),
+                value: source.slice(pos, index),
+                range: [pos, index - 1]
+            });
+        }
+
+        return token;
+    }
+
     function parsePrimaryRange() {
         var pos, node;
 
@@ -2357,6 +2401,12 @@ parseStatement: true */
             extra.parsePrimaryExpression = parsePrimaryExpression;
             parsePrimaryExpression = parsePrimaryRange;
         }
+
+        if (typeof opt.tokens === 'boolean' && opt.tokens) {
+            extra.lex = lex;
+            lex = lexRange;
+            extra.tokens = [];
+        }
     }
 
     function unpatch(options) {
@@ -2368,6 +2418,10 @@ parseStatement: true */
 
         if (typeof opt.range === 'boolean' && opt.range) {
             parsePrimaryExpression = extra.parsePrimaryExpression;
+        }
+
+        if (typeof opt.tokens === 'boolean' && opt.tokens) {
+            lex = extra.lex;
         }
 
         extra = {};
@@ -2386,6 +2440,9 @@ parseStatement: true */
         program = parseProgram();
         if (typeof extra.comments !== 'undefined') {
             program.comments = extra.comments;
+        }
+        if (typeof extra.tokens !== 'undefined') {
+            program.tokens = extra.tokens;
         }
         unpatch(options);
 

@@ -31,18 +31,36 @@ data = {
     'Primary Expression': {
 
         'this': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'ThisExpression'
-            }
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'ThisExpression',
+                    range: [0, 3]
+                }
+            }],
+            tokens: [{
+                type: 'Keyword',
+                value: 'this',
+                range: [0, 3]
+            }]
         },
 
         '42': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'Literal',
-                value: 42
-            }
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    range: [0, 1]
+                }
+            }],
+            tokens: [{
+                type: 'Numeric',
+                value: '42',
+                range: [0, 1]
+            }]
         },
 
         '(1 + 2 ) * 3': {
@@ -73,19 +91,41 @@ data = {
     'Array Initializer': {
 
         'x = []': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ArrayExpression',
-                    elements: []
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [0, 0]
+                    },
+                    right: {
+                        type: 'ArrayExpression',
+                        elements: [],
+                        range: [4, 5]
+                    }
                 }
-            }
+            }],
+            tokens: [{
+                type: 'Identifier',
+                value: 'x',
+                range: [0, 0]
+            }, {
+                type: 'Punctuator',
+                value: '=',
+                range: [2, 2]
+            }, {
+                type: 'Punctuator',
+                value: '[',
+                range: [4, 4]
+            }, {
+                type: 'Punctuator',
+                value: ']',
+                range: [5, 5]
+            }]
         },
 
         'x = [ ]': {
@@ -4259,21 +4299,34 @@ if (typeof window !== 'undefined') {
             return result;
         }
 
+        function hasTokens(syntax) {
+            var result = false;
+            JSON.stringify(syntax, function (key, value) {
+                if (key === 'tokens') {
+                    result = true;
+                }
+                return value;
+            });
+            return result;
+        }
+
         function testParse(code, syntax) {
             var expected, tree, actual, options;
 
             options = {
                 comment: false,
-                range: false
+                range: false,
+                tokens: false
             };
 
             options.comment = hasComment(syntax);
             options.range = hasRange(syntax) && !options.comment;
+            options.tokens = hasTokens(syntax);
 
             expected = JSON.stringify(syntax, null, 4);
             try {
                 tree = esprima.parse(code, options);
-                tree = (options.comment) ? tree : tree.body[0];
+                tree = (options.comment || options.tokens) ? tree : tree.body[0];
                 actual = JSON.stringify(tree, null, 4);
 
                 total += 1;
