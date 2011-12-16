@@ -802,63 +802,148 @@ data = {
     'Regular Expression Literals': {
 
         'var x = /[a-z]/i': {
-            type: 'VariableDeclaration',
-            declarations: [{
-                id: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                init: {
-                    type: 'Literal',
-                    value: '/[a-z]/i'
-                }
+            type: 'Program',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: '/[a-z]/i',
+                        range: [8, 15]
+                    }
+                }],
+                kind: 'var'
             }],
-            kind: 'var'
+            tokens: [{
+                type: 'Keyword',
+                value: 'var',
+                range: [0, 2]
+            }, {
+                type: 'Identifier',
+                value: 'x',
+                range: [4, 4]
+            }, {
+                type: 'Punctuator',
+                value: '=',
+                range: [6, 6]
+            }, {
+                type: 'RegularExpression',
+                value: '/[a-z]/i',
+                range: [8, 15]
+            }]
         },
 
         'var x = /[P QR]/i': {
-            type: 'VariableDeclaration',
-            declarations: [{
-                id: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                init: {
-                    type: 'Literal',
-                    value: '/[P QR]/i'
-                }
+            type: 'Program',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: '/[P QR]/i',
+                        range: [8, 16]
+                    }
+                }],
+                kind: 'var'
             }],
-            kind: 'var'
+            tokens: [{
+                type: 'Keyword',
+                value: 'var',
+                range: [0, 2]
+            }, {
+                type: 'Identifier',
+                value: 'x',
+                range: [4, 4]
+            }, {
+                type: 'Punctuator',
+                value: '=',
+                range: [6, 6]
+            }, {
+                type: 'RegularExpression',
+                value: '/[P QR]/i',
+                range: [8, 16]
+            }]
         },
 
         'var x = /foo\\/bar/': {
-            type: 'VariableDeclaration',
-            declarations: [{
-                id: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                init: {
-                    type: 'Literal',
-                    value: '/foo\\/bar/'
-                }
+            type: 'Program',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: '/foo\\/bar/',
+                        range: [8, 17]
+                    }
+                }],
+                kind: 'var'
             }],
-            kind: 'var'
+            tokens: [{
+                type: 'Keyword',
+                value: 'var',
+                range: [0, 2]
+            }, {
+                type: 'Identifier',
+                value: 'x',
+                range: [4, 4]
+            }, {
+                type: 'Punctuator',
+                value: '=',
+                range: [6, 6]
+            }, {
+                type: 'RegularExpression',
+                value: '/foo\\/bar/',
+                range: [8, 17]
+            }]
+
         },
 
         'var x = /=([^=\\s]+/g': {
-            type: 'VariableDeclaration',
-            declarations: [{
-                id: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                init: {
-                    type: 'Literal',
-                    value: '/=([^=\\s]+/g'
-                }
+            type: 'Program',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: '/=([^=\\s]+/g',
+                        range: [8, 19]
+                    }
+                }],
+                kind: 'var'
             }],
-            kind: 'var'
+            tokens: [{
+                type: 'Keyword',
+                value: 'var',
+                range: [0, 2]
+            }, {
+                type: 'Identifier',
+                value: 'x',
+                range: [4, 4]
+            }, {
+                type: 'Punctuator',
+                value: '=',
+                range: [6, 6]
+            }, {
+                type: 'RegularExpression',
+                value: '/=([^=\\s]+/g',
+                range: [8, 19]
+            }]
         }
     },
 

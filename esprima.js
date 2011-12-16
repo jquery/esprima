@@ -2423,6 +2423,33 @@ parseStatement: true */
         return token;
     }
 
+    function scanRegExpRange() {
+        var pos, literal, token;
+
+        skipComment();
+
+        pos = index;
+        literal = extra.scanRegExp();
+
+        // Pop the previous token, which is likely '/' or '/='
+        if (extra.tokens.length > 0) {
+            token = extra.tokens[extra.tokens.length - 1];
+            if (token.range[0] === pos && token.type === 'Punctuator') {
+                if (token.value === '/' || token.value === '/=') {
+                    extra.tokens.pop();
+                }
+            }
+        }
+
+        extra.tokens.push({
+            type: 'RegularExpression',
+            value: literal,
+            range: [pos, index - 1]
+        });
+
+        return literal;
+    }
+
     function parsePrimaryRange() {
         var pos, node;
 
@@ -2451,24 +2478,34 @@ parseStatement: true */
 
         if (typeof opt.tokens === 'boolean' && opt.tokens) {
             extra.lex = lex;
+            extra.scanRegExp = scanRegExp;
+
             lex = lexRange;
+            scanRegExp = scanRegExpRange;
+
             extra.tokens = [];
         }
     }
 
     function unpatch(options) {
-        var opt = options || {};
-
-        if (typeof opt.comment === 'boolean' && opt.comment) {
+        if (typeof extra.skipComment === 'function') {
             skipComment = extra.skipComment;
         }
 
-        if (typeof opt.range === 'boolean' && opt.range) {
+        if (typeof extra.parsePrimaryExpression === 'function') {
             parsePrimaryExpression = extra.parsePrimaryExpression;
         }
 
-        if (typeof opt.tokens === 'boolean' && opt.tokens) {
+        if (typeof extra.lex === 'function') {
             lex = extra.lex;
+        }
+
+        if (typeof extra.lex === 'function') {
+            lex = extra.lex;
+        }
+
+        if (typeof extra.scanRegExp === 'function') {
+            scanRegExp = extra.scanRegExp;
         }
 
         extra = {};
