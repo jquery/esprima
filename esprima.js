@@ -23,6 +23,7 @@
 */
 
 /*global esprima:true, exports:true,
+throwError: true,
 parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
 parseStatement: true */
@@ -32,6 +33,7 @@ parseStatement: true */
 
     var Token,
         Syntax,
+        Messages,
         source,
         index,
         lineNumber,
@@ -91,9 +93,24 @@ parseStatement: true */
         WithStatement: 'WithStatement'
     };
 
+    Messages = {
+        unexpected_token:  'Unexpected token %0',
+        unexpected_token_number:  'Unexpected number',
+        unexpected_token_string:  'Unexpected string',
+        unexpected_token_identifier:  'Unexpected identifier',
+        unexpected_eos:  'Unexpected end of input',
+        newline_after_throw:  'Illegal newline after throw',
+        unterminated_regexp:  'Invalid regular expression: missing /',
+        invalid_lhs_in_assignment:  'Invalid left-hand side in assignment',
+        invalid_lhs_in_for_in:  'Invalid left-hand side in for-in',
+        invalid_lhs_in_postfix_op:  'Invalid left-hand side expression in postfix operation',
+        invalid_lhs_in_prefix_op:  'Invalid left-hand side expression in prefix operation'
+    };
+
     if (typeof Object.freeze === 'function') {
         Object.freeze(Token);
         Object.freeze(Syntax);
+        Object.freeze(Messages);
     }
 
     function isDecimalDigit(ch) {
@@ -532,8 +549,7 @@ parseStatement: true */
                 if (index >= length) {
                     ch = '<end>';
                 }
-                throw new Error('Line ' + lineNumber + ': Unexpected ' + ch +
-                    ' after the exponent sign');
+                throwError('unexpected_token', lineNumber, 'ILLEGAL');
             }
         }
 
@@ -573,7 +589,7 @@ parseStatement: true */
         }
 
         if (quote !== '') {
-            throw new Error('Line ' + lineNumber + ': Unterminated string constant');
+            throwError('unexpected_token', lineNumber, 'ILLEGAL');
         }
 
         return {
@@ -612,8 +628,7 @@ parseStatement: true */
                     classMarker = true;
                 }
                 if (isLineTerminator(ch)) {
-                    throw new Error('Line ' + lineNumber +
-                        ': Unexpected line terminator in a regular expression');
+                    throwError('unterminated_regexp', lineNumber);
                 }
             }
         }
@@ -658,8 +673,7 @@ parseStatement: true */
             return token;
         }
 
-        throw new Error('Line ' + lineNumber +
-            ': Unknown token from character ' + nextChar());
+        throwError('unexpected_token', lineNumber, 'ILLEGAL');
     }
 
     function lex() {
@@ -716,20 +730,36 @@ parseStatement: true */
         return found;
     }
 
+    // Throw an exception
+
+    function throwError(id, line) {
+        var args = Array.prototype.slice.call(arguments, 2);
+        throw new Error('Line ' + line + ': ' + Messages[id].replace(/%(\d)/g,
+                    function (whole, index) { return args[index] || ''; }));
+    }
+
     // Throw an exception because of the token.
 
     function throwUnexpected(token) {
         var s;
 
         if (token.type === Token.EOF) {
-            throw new Error('Line ' + lineNumber + ': Unexpected <EOF>');
+            throwError('unexpected_eos', lineNumber);
+        }
+
+        if (token.type === Token.NumericLiteral) {
+            throwError('unexpected_token_number', lineNumber);
+        }
+
+        if (token.type === Token.StringLiteral) {
+            throwError('unexpected_token_string', lineNumber);
         }
 
         s = token.value;
         if (s.length > 10) {
             s = s.substr(0, 10) + '...';
         }
-        throw new Error('Line ' + lineNumber + ': Unexpected token ' + s);
+        throwError('unexpected_token', lineNumber, s);
     }
 
     // Expect the next token to match the specified punctuator.
@@ -1045,7 +1075,7 @@ parseStatement: true */
             };
         }
 
-        return;
+        return throwUnexpected(token);
     }
 
     function parsePrimaryExpression() {
@@ -1084,8 +1114,7 @@ parseStatement: true */
                 lex();
                 token = lex();
                 if (token.type !== Token.Identifier) {
-                    throw new Error('Line ' + lineNumber +
-                        ': Expecting an identifier after dot (.)');
+                    throwUnexpected(token);
                 }
                 property = {
                     type: Syntax.Identifier,
@@ -1178,7 +1207,7 @@ parseStatement: true */
 
         if ((match('++') || match('--')) && !peekLineTerminator()) {
             if (!isLeftHandSide(expr)) {
-                throw new Error('Line ' + lineNumber + ': Expected Left Hand Side Expression');
+                throwError('invalid_lhs_in_postfix_op', lineNumber);
             }
             expr = {
                 type: Syntax.UpdateExpression,
@@ -1200,7 +1229,7 @@ parseStatement: true */
             operator = lex().value;
             expr = parseUnaryExpression();
             if (!isLeftHandSide(expr)) {
-                throw new Error('Line ' + lineNumber + ': Expected Left Hand Side Expression');
+                throwError('invalid_lhs_in_prefix_op', lineNumber);
             }
             return {
                 type: Syntax.UpdateExpression,
@@ -1417,13 +1446,7 @@ parseStatement: true */
     // 11.12 Conditional Operator
 
     function parseConditionalExpression() {
-        var token, expr;
-
-        token = lookahead();
-        expr = parseLogicalORExpression();
-        if (typeof expr === 'undefined') {
-            throwUnexpected(token);
-        }
+        var expr = parseLogicalORExpression();
 
         if (match('?')) {
             lex();
@@ -1447,7 +1470,7 @@ parseStatement: true */
 
         if (matchAssign()) {
             if (!isLeftHandSide(expr)) {
-                throw new Error('Line ' + lineNumber + ': Expected Left Hand Side Expression');
+                throwError('invalid_lhs_in_assignment', lineNumber);
             }
             expr = {
                 type: Syntax.AssignmentExpression,
@@ -1528,7 +1551,7 @@ parseStatement: true */
 
         token = lex();
         if (token.type !== Token.Identifier) {
-            throw new Error('Line ' + lineNumber + ': Expected an identifier');
+            throwUnexpected(token);
         }
 
         id = {
@@ -1729,7 +1752,7 @@ parseStatement: true */
                     right = init.right;
                     init = null;
                     if (!isLeftHandSide(left)) {
-                        throw new Error('Line ' + lineNumber + ': Expected Left Hand Side Expression');
+                        throwError('invalid_lhs_in_for_in', lineNumber);
                     }
                 } else {
                     expect(';');
@@ -1996,8 +2019,7 @@ parseStatement: true */
         expectKeyword('throw');
 
         if (peekLineTerminator()) {
-            throw new Error('Line ' + lineNumber +
-                ': Unexpected line terminator after throw');
+            throwError('newline_after_throw', lineNumber);
         }
 
         argument = parseExpression().expression;

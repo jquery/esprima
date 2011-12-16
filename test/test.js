@@ -4187,45 +4187,45 @@ data = {
 
     'Invalid syntax': {
 
-        '{': 'Line 1: Unexpected <EOF>',
+        '{': 'Line 1: Unexpected end of input',
 
         '}': 'Line 1: Unexpected token }',
 
-        '3ea': 'Line 1: Unexpected character a after the exponent sign',
+        '3ea': 'Line 1: Unexpected token ILLEGAL',
 
-        'var x = /\n/': 'Line 1: Unexpected line terminator in a regular expression',
+        'var x = /\n/': 'Line 1: Invalid regular expression: missing /',
 
-        'var x = "\n': 'Line 1: Unterminated string constant',
+        'var x = "\n': 'Line 1: Unexpected token ILLEGAL',
 
-        '1 + (': 'Line 1: Unexpected <EOF>',
+        '1 + (': 'Line 1: Unexpected end of input',
 
-        '\n\n\n{': 'Line 4: Unexpected <EOF>',
+        '\n\n\n{': 'Line 4: Unexpected end of input',
 
         '\n/* Some multiline\ncomment */\n)': 'Line 4: Unexpected token )',
 
-        '{ set 1 }': 'Line 1: Unexpected token 1',
+        '{ set 1 }': 'Line 1: Unexpected number',
 
-        '{ get 2 }': 'Line 1: Unexpected token 2',
+        '{ get 2 }': 'Line 1: Unexpected number',
 
         'a b;': 'Line 1: Unexpected token b',
 
-        'break 1;': 'Line 1: Unexpected token 1',
+        'break 1;': 'Line 1: Unexpected number',
 
-        'continue 2;': 'Line 1: Unexpected token 2',
+        'continue 2;': 'Line 1: Unexpected number',
 
-        'throw': 'Line 1: Unexpected <EOF>',
+        'throw': 'Line 1: Unexpected end of input',
 
         'throw;': 'Line 1: Unexpected token ;',
 
-        'throw\n': 'Line 1: Unexpected line terminator after throw',
+        'throw\n': 'Line 1: Illegal newline after throw',
 
-        '10 = 20': 'Line 1: Expected Left Hand Side Expression',
+        '10 = 20': 'Line 1: Invalid left-hand side in assignment',
 
-        '10++': 'Line 1: Expected Left Hand Side Expression',
+        '10++': 'Line 1: Invalid left-hand side expression in postfix operation',
 
-        '++10': 'Line 1: Expected Left Hand Side Expression',
+        '++10': 'Line 1: Invalid left-hand side expression in prefix operation',
 
-        'for (10 in []);': 'Line 1: Expected Left Hand Side Expression'
+        'for (10 in []);': 'Line 1: Invalid left-hand side in for-in'
     }
 };
 
