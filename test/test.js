@@ -4547,7 +4547,7 @@ if (typeof window !== 'undefined') {
             var report, e;
             report = document.getElementById('report');
             e = document.createElement('h4');
-            e.textContent = category;
+            setText(e, category);
             report.appendChild(e);
         }
 
@@ -4556,7 +4556,7 @@ if (typeof window !== 'undefined') {
             report = document.getElementById('report');
             e = document.createElement('pre');
             e.setAttribute('class', 'code');
-            e.textContent = code;
+            setText(e, code);
             report.appendChild(e);
         }
 
@@ -4568,30 +4568,30 @@ if (typeof window !== 'undefined') {
             report = document.getElementById('report');
 
             e = document.createElement('p');
-            e.textContent = 'Code:';
+            setText(e, 'Code:');
             report.appendChild(e);
 
             e = document.createElement('pre');
             e.setAttribute('class', 'code');
-            e.textContent = code;
+            setText(e, code);
             report.appendChild(e);
 
             e = document.createElement('p');
-            e.textContent = 'Expected';
+            setText(e, 'Expected');
             report.appendChild(e);
 
             e = document.createElement('pre');
             e.setAttribute('class', 'expected');
-            e.textContent = expected;
+            setText(e, expected);
             report.appendChild(e);
 
             e = document.createElement('p');
-            e.textContent = 'Actual';
+            setText(e, 'Actual');
             report.appendChild(e);
 
             e = document.createElement('pre');
             e.setAttribute('class', 'actual');
-            e.textContent = actual;
+            setText(e, actual);
             report.appendChild(e);
         }
 
@@ -4694,11 +4694,11 @@ if (typeof window !== 'undefined') {
         tick = (new Date()) - tick;
 
         if (failures > 0) {
-            document.getElementById('status').textContent = total + ' tests. ' +
-                'Failures: ' + failures + '. ' + tick + ' ms';
+            setText(document.getElementById('status'), total + ' tests. ' +
+                'Failures: ' + failures + '. ' + tick + ' ms');
         } else {
-            document.getElementById('status').textContent = total + ' tests. ' +
-                'No failure. ' + tick + ' ms';
+            setText(document.getElementById('status'), total + ' tests. ' +
+                'No failure. ' + tick + ' ms');
         }
     };
 } else {
