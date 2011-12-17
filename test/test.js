@@ -1415,12 +1415,15 @@ data = {
                 operator: '*',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [4, 4]
+                },
+                range: [0, 4]
             }
         },
 
@@ -1431,12 +1434,15 @@ data = {
                 operator: '/',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [4, 4]
+                },
+                range: [0, 4]
             }
         },
 
@@ -1447,12 +1453,15 @@ data = {
                 operator: '%',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [4, 4]
+                },
+                range: [0, 4]
             }
         }
     },
@@ -1466,12 +1475,15 @@ data = {
                 operator: '+',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [4, 4]
+                },
+                range: [0, 4]
             }
         },
 
@@ -1482,12 +1494,15 @@ data = {
                 operator: '-',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [4, 4]
+                },
+                range: [0, 4]
             }
         }
     },
@@ -1501,12 +1516,15 @@ data = {
                 operator: '<<',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [5, 5]
+                },
+                range: [0, 5]
             }
         },
 
@@ -1517,12 +1535,15 @@ data = {
                 operator: '>>',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [5, 5]
+                },
+                range: [0, 5]
             }
         },
 
@@ -1533,12 +1554,15 @@ data = {
                 operator: '>>>',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [6, 6]
+                },
+                range: [0, 6]
             }
         }
     },
@@ -1552,12 +1576,15 @@ data = {
                 operator: '<',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [4, 4]
+                },
+                range: [0, 4]
             }
         },
 
@@ -1568,12 +1595,15 @@ data = {
                 operator: '>',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [4, 4]
+                },
+                range: [0, 4]
             }
         },
 
@@ -1584,12 +1614,15 @@ data = {
                 operator: '<=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [5, 5]
+                },
+                range: [0, 5]
             }
         },
 
@@ -1600,12 +1633,15 @@ data = {
                 operator: '>=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [5, 5]
+                },
+                range: [0, 5]
             }
         },
 
@@ -1616,12 +1652,15 @@ data = {
                 operator: 'in',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [5, 5]
+                },
+                range: [0, 5]
             }
         },
 
@@ -1632,12 +1671,15 @@ data = {
                 operator: 'instanceof',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [13, 13]
+                },
+                range: [0, 13]
             }
         }
     },
@@ -1651,12 +1693,15 @@ data = {
                 operator: '==',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [5, 5]
+                },
+                range: [0, 5]
             }
         },
 
@@ -1667,12 +1712,15 @@ data = {
                 operator: '!=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [5, 5]
+                },
+                range: [0, 5]
             }
         },
 
@@ -1683,12 +1731,15 @@ data = {
                 operator: '===',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [6, 6]
+                },
+                range: [0, 6]
             }
         },
 
@@ -1699,12 +1750,15 @@ data = {
                 operator: '!==',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [6, 6]
+                },
+                range: [0, 6]
             }
         }
     },
@@ -1718,12 +1772,15 @@ data = {
                 operator: '&',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [4, 4]
+                },
+                range: [0, 4]
             }
         },
 
@@ -1734,12 +1791,15 @@ data = {
                 operator: '^',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [4, 4]
+                },
+                range: [0, 4]
             }
         },
 
@@ -1750,12 +1810,15 @@ data = {
                 operator: '|',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [4, 4]
+                },
+                range: [0, 4]
             }
         }
     },
@@ -1772,17 +1835,22 @@ data = {
                     operator: '+',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [4, 4]
+                    },
+                    range: [0, 4]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [8, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -1796,17 +1864,22 @@ data = {
                     operator: '-',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [4, 4]
+                    },
+                    range: [0, 4]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [8, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -1820,17 +1893,22 @@ data = {
                     operator: '+',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [4, 4]
+                    },
+                    range: [0, 4]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [8, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -1844,17 +1922,22 @@ data = {
                     operator: '-',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [4, 4]
+                    },
+                    range: [0, 4]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [8, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -1865,20 +1948,25 @@ data = {
                 operator: '+',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'BinaryExpression',
                     operator: '*',
                     left: {
                         type: 'Identifier',
-                        name: 'y'
+                        name: 'y',
+                        range: [4, 4]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'z'
-                    }
-                }
+                        name: 'z',
+                        range: [8, 8]
+                    },
+                    range: [4, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -1889,20 +1977,25 @@ data = {
                 operator: '+',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'BinaryExpression',
                     operator: '/',
                     left: {
                         type: 'Identifier',
-                        name: 'y'
+                        name: 'y',
+                        range: [4, 4]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'z'
-                    }
-                }
+                        name: 'z',
+                        range: [8, 8]
+                    },
+                    range: [4, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -1913,20 +2006,25 @@ data = {
                 operator: '-',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'BinaryExpression',
                     operator: '%',
                     left: {
                         type: 'Identifier',
-                        name: 'y'
+                        name: 'y',
+                        range: [4, 4]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'z'
-                    }
-                }
+                        name: 'z',
+                        range: [8, 8]
+                    },
+                    range: [4, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -1940,17 +2038,22 @@ data = {
                     operator: '*',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [4, 4]
+                    },
+                    range: [0, 4]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [8, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -1964,17 +2067,22 @@ data = {
                     operator: '*',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [4, 4]
+                    },
+                    range: [0, 4]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [8, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -1988,17 +2096,22 @@ data = {
                     operator: '*',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [4, 4]
+                    },
+                    range: [0, 4]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [8, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -2012,17 +2125,22 @@ data = {
                     operator: '%',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [4, 4]
+                    },
+                    range: [0, 4]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [8, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -2036,17 +2154,22 @@ data = {
                     operator: '<<',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [5, 5]
+                    },
+                    range: [0, 5]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [10, 10]
+                },
+                range: [0, 10]
             }
         },
 
@@ -2060,17 +2183,22 @@ data = {
                     operator: '|',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [4, 4]
+                    },
+                    range: [0, 4]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [8, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -2084,17 +2212,22 @@ data = {
                     operator: '&',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [4, 4]
+                    },
+                    range: [0, 4]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [8, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -2108,17 +2241,22 @@ data = {
                     operator: '^',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [4, 4]
+                    },
+                    range: [0, 4]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [8, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -2132,17 +2270,22 @@ data = {
                     operator: '&',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [4, 4]
+                    },
+                    range: [0, 4]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [8, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -2156,17 +2299,22 @@ data = {
                     operator: '|',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [4, 4]
+                    },
+                    range: [0, 4]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [8, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -2177,20 +2325,25 @@ data = {
                 operator: '|',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'BinaryExpression',
                     operator: '&',
                     left: {
                         type: 'Identifier',
-                        name: 'y'
+                        name: 'y',
+                        range: [4, 4]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'z'
-                    }
-                }
+                        name: 'z',
+                        range: [8, 8]
+                    },
+                    range: [4, 8]
+                },
+                range: [0, 8]
             }
         }
     },
@@ -2204,12 +2357,15 @@ data = {
                 operator: '||',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [5, 5]
+                },
+                range: [0, 5]
             }
         },
 
@@ -2220,12 +2376,15 @@ data = {
                 operator: '&&',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [5, 5]
+                },
+                range: [0, 5]
             }
         },
 
@@ -2239,17 +2398,22 @@ data = {
                     operator: '||',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [5, 5]
+                    },
+                    range: [0, 5]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [10, 10]
+                },
+                range: [0, 10]
             }
         },
 
@@ -2263,17 +2427,22 @@ data = {
                     operator: '&&',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [5, 5]
+                    },
+                    range: [0, 5]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'z'
-                }
+                    name: 'z',
+                    range: [10, 10]
+                },
+                range: [0, 10]
             }
         },
 
@@ -2284,20 +2453,25 @@ data = {
                 operator: '||',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'LogicalExpression',
                     operator: '&&',
                     left: {
                         type: 'Identifier',
-                        name: 'y'
+                        name: 'y',
+                        range: [5, 5]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'z'
-                    }
-                }
+                        name: 'z',
+                        range: [10, 10]
+                    },
+                    range: [5, 10]
+                },
+                range: [0, 10]
             }
         },
 
@@ -2308,20 +2482,25 @@ data = {
                 operator: '||',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'BinaryExpression',
                     operator: '^',
                     left: {
                         type: 'Identifier',
-                        name: 'y'
+                        name: 'y',
+                        range: [5, 5]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'z'
-                    }
-                }
+                        name: 'z',
+                        range: [9, 9]
+                    },
+                    range: [5, 9]
+                },
+                range: [0, 9]
             }
         }
     },
@@ -2334,15 +2513,18 @@ data = {
                 type: 'ConditionalExpression',
                 test: {
                     type: 'Identifier',
-                    name: 'y'
+                    name: 'y',
+                    range: [0, 0]
                 },
                 consequent: {
                     type: 'Literal',
-                    value: 1
+                    value: 1,
+                    range: [4, 4]
                 },
                 alternate: {
                     type: 'Literal',
-                    value: 2
+                    value: 2,
+                    range: [8, 8]
                 }
             }
         },
@@ -2356,20 +2538,25 @@ data = {
                     operator: '&&',
                     left: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'y'
-                    }
+                        name: 'y',
+                        range: [5, 5]
+                    },
+                    range: [0, 5]
                 },
                 consequent: {
                     type: 'Literal',
-                    value: 1
+                    value: 1,
+                    range: [9, 9]
                 },
                 alternate: {
                     type: 'Literal',
-                    value: 2
+                    value: 2,
+                    range: [13, 13]
                 }
             }
         }
@@ -3119,11 +3306,13 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [4, 4]
                 },
                 right: {
                     type: 'Literal',
-                    value: 0
+                    value: 0,
+                    range: [8, 8]
                 }
             },
             test: {
@@ -3131,19 +3320,23 @@ data = {
                 operator: '<',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [11, 11]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [15, 16]
+                },
+                range: [11, 16]
             },
             update: {
                 type: 'UpdateExpression',
                 operator: '++',
                 argument: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [19, 19]
                 },
                 prefix: false
             },
@@ -3159,11 +3352,13 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [4, 4]
                 },
                 right: {
                     type: 'Literal',
-                    value: 0
+                    value: 0,
+                    range: [8, 8]
                 }
             },
             test: {
@@ -3171,19 +3366,23 @@ data = {
                 operator: '<',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [11, 11]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [15, 16]
+                },
+                range: [11, 16]
             },
             update: {
                 type: 'UpdateExpression',
                 operator: '++',
                 argument: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [19, 19]
                 },
                 prefix: false
             },
@@ -3193,11 +3392,13 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'process'
+                        name: 'process',
+                        range: [24, 30]
                     },
                     'arguments': [{
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [32, 32]
                     }]
                 }
             }
@@ -3343,12 +3544,15 @@ data = {
                 operator: '*',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [7, 7]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [11, 11]
+                },
+                range: [7, 11]
             }
         }
 
@@ -3571,12 +3775,15 @@ data = {
                 operator: '*',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [6, 6]
                 },
                 right: {
                     type: 'Identifier',
-                    name: 'y'
-                }
+                    name: 'y',
+                    range: [10, 10]
+                },
+                range: [6, 10]
             }
         },
 
@@ -4242,7 +4449,8 @@ data = {
                     type: 'Literal',
                     value: 3,
                     range: [11, 11]
-                }
+                },
+                range: [0, 11]
             }
         },
 

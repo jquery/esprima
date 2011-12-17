@@ -26,7 +26,7 @@
 throwError: true,
 parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
-parseStatement: true */
+parseStatement: true, visitPostorder: true */
 
 (function (exports) {
     'use strict';
@@ -2460,23 +2460,44 @@ parseStatement: true */
         return node;
     }
 
-    function patch(options) {
-        var opt = options || {};
+    function processRange(program) {
 
+        function enclosed(a, b) {
+            if (a.hasOwnProperty('range') && b.hasOwnProperty('range')) {
+                return [a.range[0], b.range[1]];
+            }
+        }
+
+        visitPostorder(program, function (node) {
+            if (node.type === 'BinaryExpression') {
+                // Primary expression in a bracket, e.g. '(1 + 2)', already
+                // has the range info.
+                if (!node.hasOwnProperty('range')) {
+                    node.range = enclosed(node.left, node.right);
+                }
+            }
+            if (node.type === 'LogicalExpression') {
+                node.range = enclosed(node.left, node.right);
+            }
+        });
+        return program;
+    }
+
+    function patch(options) {
         extra = {};
 
-        if (typeof opt.comment === 'boolean' && opt.comment) {
+        if (typeof options.comment === 'boolean' && options.comment) {
             extra.skipComment = skipComment;
             skipComment = scanComment;
             extra.comments = [];
         }
 
-        if (typeof opt.range === 'boolean' && opt.range) {
+        if (typeof options.range === 'boolean' && options.range) {
             extra.parsePrimaryExpression = parsePrimaryExpression;
             parsePrimaryExpression = parsePrimaryRange;
         }
 
-        if (typeof opt.tokens === 'boolean' && opt.tokens) {
+        if (typeof options.tokens === 'boolean' && options.tokens) {
             extra.lex = lex;
             extra.scanRegExp = scanRegExp;
 
@@ -2487,17 +2508,13 @@ parseStatement: true */
         }
     }
 
-    function unpatch(options) {
+    function unpatch() {
         if (typeof extra.skipComment === 'function') {
             skipComment = extra.skipComment;
         }
 
         if (typeof extra.parsePrimaryExpression === 'function') {
             parsePrimaryExpression = extra.parsePrimaryExpression;
-        }
-
-        if (typeof extra.lex === 'function') {
-            lex = extra.lex;
         }
 
         if (typeof extra.lex === 'function') {
@@ -2511,8 +2528,11 @@ parseStatement: true */
         extra = {};
     }
 
-    function parse(code, options) {
-        var program;
+    function parse(code, opt) {
+        var options,
+            program;
+
+        options = opt || {};
 
         source = code;
         index = 0;
@@ -2521,21 +2541,29 @@ parseStatement: true */
         buffer = null;
 
         patch(options);
-        program = parseProgram();
-        if (typeof extra.comments !== 'undefined') {
-            program.comments = extra.comments;
+        try {
+            program = parseProgram();
+            if (typeof extra.comments !== 'undefined') {
+                program.comments = extra.comments;
+            }
+            if (typeof extra.tokens !== 'undefined') {
+                program.tokens = extra.tokens;
+            }
+            if (typeof options.range === 'boolean' && options.range) {
+                program = processRange(program);
+            }
+        } catch (e) {
+            throw e;
+        } finally {
+            unpatch();
         }
-        if (typeof extra.tokens !== 'undefined') {
-            program.tokens = extra.tokens;
-        }
-        unpatch(options);
 
         return program;
     }
 
     // Executes f on the object and its children (recursively).
 
-    function visit(object, f) {
+    function visitPreorder(object, f) {
         var key, child;
 
         if (f(object) === false) {
@@ -2545,10 +2573,24 @@ parseStatement: true */
             if (object.hasOwnProperty(key)) {
                 child = object[key];
                 if (typeof child === 'object') {
-                    visit(child, f);
+                    visitPreorder(child, f);
                 }
             }
         }
+    }
+
+    function visitPostorder(object, f) {
+        var key, child;
+
+        for (key in object) {
+            if (object.hasOwnProperty(key)) {
+                child = object[key];
+                if (typeof child === 'object') {
+                    visitPostorder(child, f);
+                }
+            }
+        }
+        f(object);
     }
 
     function traverse(code, options, f) {
@@ -2564,7 +2606,7 @@ parseStatement: true */
         }
 
         program = parse(code, options);
-        visit(program, f);
+        visitPreorder(program, f);
 
         return program;
     }
