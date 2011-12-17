@@ -4500,7 +4500,9 @@ data = {
 
         '{ get 2 }': 'Line 1: Unexpected number',
 
-        'a b;': 'Line 1: Unexpected token b',
+        'a b;': 'Line 1: Unexpected identifier',
+
+        'a if;': 'Line 1: Unexpected reserved word',
 
         'break 1;': 'Line 1: Unexpected number',
 
