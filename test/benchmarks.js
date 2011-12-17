@@ -35,30 +35,30 @@ function runBenchmarks() {
 
     function showStatus(name) {
         var el = document.getElementById(name + '-time');
-        el.textContent = 'Running...';
+        setText(el, 'Running...');
     }
 
     function finish() {
         var el = document.getElementById('status');
-        el.textContent = 'Completed.';
+        setText(el, 'Completed.');
         el = document.getElementById('total-size');
-        el.textContent = (totalSize / 1024).toFixed(1);
+        setText(el, (totalSize / 1024).toFixed(1));
         el = document.getElementById('total-time');
-        el.textContent = (1000 * totalTime).toFixed(1);
+        setText(el, (1000 * totalTime).toFixed(1));
     }
 
     function showResult(name, size, stats) {
         var el;
         el = document.getElementById(name + '-size');
-        el.textContent = (size / 1024).toFixed(1);
+        setText(el, (size / 1024).toFixed(1));
         el = document.getElementById(name + '-time');
-        el.textContent = (1000 * stats.mean).toFixed(1);
+        setText(el, (1000 * stats.mean).toFixed(1));
         el = document.getElementById(name + '-variance');
-        el.textContent = (1000 * stats.variance).toFixed(1);
+        setText(el, (1000 * stats.variance).toFixed(1));
     }
 
     function runBenchmark() {
-        var test, source, benchmark;
+        var el, test, source, benchmark;
 
         if (index >= fixture.length) {
             finish();
@@ -66,7 +66,8 @@ function runBenchmarks() {
         }
 
         test = fixture[index];
-        source = document.getElementById(test).textContent;
+        el = document.getElementById(test);
+        source = (typeof el.innerText === 'string') ? el.innerText : el.textContent;
         showStatus(test);
 
         // Force the result to be held in this array, thus defeating any
