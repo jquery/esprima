@@ -33,6 +33,7 @@ pre {
 }
 
 h1 {
+    margin-top: 2px;
     margin-bottom: 18px;
     font-size: 30px;
     line-height: 36px;
@@ -74,6 +75,35 @@ h4 {
     margin-left: auto;
     margin-right: auto;
     width: 960px;
+}
+
+.topbar {
+    top: 0;
+    margin: 0 0 0 480px;
+    padding: 0;
+    width: 300px;
+}
+
+.topbar ul {
+    padding: 5px 20px 5px 10px;
+    background-color: #222;
+    margin: 0 10px 0 0;
+}
+
+.topbar a {
+    color: #ddd;
+    text-decoration: none;
+}
+
+.topbar a:hover {
+    color: #fff;
+}
+
+.topbar .nav li {
+    background-color: #222;
+    display: inline;
+    padding: 4px 10px 4px 0px;
+    margin: 0;
 }
 
 .container .main {
