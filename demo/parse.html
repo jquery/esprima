@@ -18,15 +18,17 @@ function parse(delay) {
     }
 
     parseId = window.setTimeout(function () {
-        var code, comment, range, result, el, str;
+        var code, options, result, el, str;
 
         code = window.editor.getValue();
-        comment = document.getElementById('comment').checked;
-        range = document.getElementById('range').checked;
-        tokens = document.getElementById('tokens').checked;
+        options = {
+            comment: document.getElementById('comment').checked,
+            range: document.getElementById('range').checked,
+            tokens: document.getElementById('tokens').checked
+        };
 
         try {
-            result = esprima.parse(code, { comment: comment, range: range, tokens: tokens } );
+            result = esprima.parse(code, options);
             document.getElementById('syntax').textContent = JSON.stringify(result, undefined, 4);
         } catch (e) {
             document.getElementById('syntax').textContent = e.toString();
