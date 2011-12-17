@@ -36,11 +36,19 @@ function runBenchmarks() {
         'zeparser': 0
     };
 
+    function setText(el, str) {
+        if (typeof el.innerText === 'string') {
+            el.innerText = str;
+        } else {
+            el.textContent = str;
+        }
+    }
+
     function showVersion() {
         var el = document.getElementById('benchmarkjs-version');
-        el.textContent = ' version ' + window.Benchmark.version;
+        setText(el, ' version ' + window.Benchmark.version);
         el = document.getElementById('version');
-        el.textContent = window.esprima.version;
+        setText(el, window.esprima.version);
     }
 
     function showStatus(parser, name) {

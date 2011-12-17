@@ -4535,6 +4535,14 @@ if (typeof window !== 'undefined') {
             source,
             tick;
 
+        function setText(el, str) {
+            if (typeof el.innerText === 'string') {
+                el.innerText = str;
+            } else {
+                el.textContent = str;
+            }
+        }
+
         function startCategory(category) {
             var report, e;
             report = document.getElementById('report');
@@ -4669,7 +4677,7 @@ if (typeof window !== 'undefined') {
             }
         }
 
-        document.getElementById('version').textContent = esprima.version;
+        setText(document.getElementById('version'), esprima.version);
 
         tick = new Date();
         for (category in data) {

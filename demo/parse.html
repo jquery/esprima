@@ -84,7 +84,7 @@ var answer = 6 * 7;</textarea></p>
 <script>
 window.onload = function () {
     var el = document.getElementById('version');
-    if (typeof el.textContent === 'undefined') {
+    if (typeof el.innerText === 'string') {
         el.innerText = esprima.version;
     } else {
         el.textContent = esprima.version;

@@ -35,6 +35,14 @@ if (typeof window !== 'undefined') {
         var total = 0,
             failures = 0;
 
+        function setText(el, str) {
+            if (typeof el.innerText === 'string') {
+                el.innerText = str;
+            } else {
+                el.textContent = str;
+            }
+        }
+
         function reportFailure(expected, actual) {
             var report, e;
 
@@ -136,7 +144,7 @@ if (typeof window !== 'undefined') {
             return pattern;
         };
 
-        document.getElementById('version').textContent = esprima.version;
+        setText(document.getElementById('version'), esprima.version);
 
         window.setTimeout(function () {
             var tick, el;
