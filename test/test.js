@@ -910,7 +910,7 @@ data = {
 
         },
 
-        'var x = /=([^=\\s]+/g': {
+        'var x = /=([^=\\s])+/g': {
             type: 'Program',
             body: [{
                 type: 'VariableDeclaration',
@@ -921,8 +921,8 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: '/=([^=\\s]+/g',
-                        range: [8, 19]
+                        value: '/=([^=\\s])+/g',
+                        range: [8, 20]
                     }
                 }],
                 kind: 'var'
@@ -941,8 +941,8 @@ data = {
                 range: [6, 6]
             }, {
                 type: 'RegularExpression',
-                value: '/=([^=\\s]+/g',
-                range: [8, 19]
+                value: '/=([^=\\s])+/g',
+                range: [8, 20]
             }]
         }
     },
@@ -4486,6 +4486,8 @@ data = {
 
         '3ea': 'Line 1: Unexpected token ILLEGAL',
 
+        'var x = /(s/g': 'Line 1: Invalid regular expression',
+
         'var x = /\n/': 'Line 1: Invalid regular expression: missing /',
 
         'var x = "\n': 'Line 1: Unexpected token ILLEGAL',
@@ -4623,6 +4625,16 @@ if (typeof window !== 'undefined') {
             return result;
         }
 
+        // Special handling for regular expression literal since we need to
+        // convert it to a string literal, otherwise it will be decoded
+        // as object "{}" and the regular expression would be lost.
+        function adjustRegexLiteral(key, value) {
+            if (key === 'value' && value instanceof RegExp) {
+                value = value.toString();
+            }
+            return value;
+        }
+
         function testParse(code, syntax) {
             var expected, tree, actual, options;
 
@@ -4640,7 +4652,7 @@ if (typeof window !== 'undefined') {
             try {
                 tree = esprima.parse(code, options);
                 tree = (options.comment || options.tokens) ? tree : tree.body[0];
-                actual = JSON.stringify(tree, null, 4);
+                actual = JSON.stringify(tree, adjustRegexLiteral, 4);
 
                 total += 1;
                 if (expected === actual) {

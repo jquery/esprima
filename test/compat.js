@@ -132,9 +132,16 @@ if (typeof window !== 'undefined') {
                 };
             }
 
+            function adjustRegexLiteral(key, value) {
+                if (key === 'value' && value instanceof RegExp) {
+                    value = value.toString();
+                }
+                return value;
+            }
+
             pattern.assert = function (tree) {
                 var actual, expected;
-                actual = JSON.stringify(tree, null, 4);
+                actual = JSON.stringify(tree, adjustRegexLiteral, 4);
                 expected = JSON.stringify(obj, null, 4);
                 if (expected !== actual) {
                     reportFailure(expected, actual);

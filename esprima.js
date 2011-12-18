@@ -101,6 +101,7 @@ parseStatement: true, visitPostorder: true */
         UnexpectedReserved:  'Unexpected reserved word',
         UnexpectedEOS:  'Unexpected end of input',
         NewlineAfterThrow:  'Illegal newline after throw',
+        InvalidRegExp: 'Invalid regular expression',
         UnterminatedRegExp:  'Invalid regular expression: missing /',
         InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
         InvalidLHSInForIn:  'Invalid left-hand side in for-in',
@@ -601,7 +602,7 @@ parseStatement: true, visitPostorder: true */
     }
 
     function scanRegExp() {
-        var str = '', ch, classMarker = false;
+        var str = '', ch, pattern, flags, value, classMarker = false;
 
         buffer = null;
         skipComment();
@@ -635,15 +636,29 @@ parseStatement: true, visitPostorder: true */
             }
         }
 
+        // Exclude leading and trailing slash.
+        pattern = str.substr(1, str.length - 2);
+
+        flags = '';
         while (index < length) {
             ch = source[index];
             if (!isIdentifierPart(ch)) {
                 break;
             }
+            flags += ch;
             str += nextChar();
         }
 
-        return str;
+        try {
+            value = new RegExp(pattern, flags);
+        } catch (e) {
+            throwError(Messages.InvalidRegExp, lineNumber);
+        }
+
+        return {
+            literal: str,
+            value: value
+        };
     }
 
     function advance() {
@@ -1044,7 +1059,7 @@ parseStatement: true, visitPostorder: true */
         if (match('/') || match('/=')) {
             return {
                 type: Syntax.Literal,
-                value: scanRegExp()
+                value: scanRegExp().value
             };
         }
 
@@ -2438,12 +2453,12 @@ parseStatement: true, visitPostorder: true */
     }
 
     function scanRegExpRange() {
-        var pos, literal, token;
+        var pos, regex, token;
 
         skipComment();
 
         pos = index;
-        literal = extra.scanRegExp();
+        regex = extra.scanRegExp();
 
         // Pop the previous token, which is likely '/' or '/='
         if (extra.tokens.length > 0) {
@@ -2457,11 +2472,11 @@ parseStatement: true, visitPostorder: true */
 
         extra.tokens.push({
             type: 'RegularExpression',
-            value: literal,
+            value: regex.literal,
             range: [pos, index - 1]
         });
 
-        return literal;
+        return regex;
     }
 
     function parsePrimaryRange() {

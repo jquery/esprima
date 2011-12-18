@@ -20,6 +20,16 @@ function parse(delay) {
     parseId = window.setTimeout(function () {
         var code, options, result, el, str;
 
+        // Special handling for regular expression literal since we need to
+        // convert it to a string literal, otherwise it will be decoded
+        // as object "{}" and the regular expression would be lost.
+        function adjustRegexLiteral(key, value) {
+            if (key === 'value' && value instanceof RegExp) {
+                value = value.toString();
+            }
+            return value;
+        }
+
         if (typeof window.editor === 'undefined') {
             code = document.getElementById('code').value;
         } else {
@@ -33,7 +43,7 @@ function parse(delay) {
 
         try {
             result = esprima.parse(code, options);
-            str = JSON.stringify(result, undefined, 4);
+            str = JSON.stringify(result, adjustRegexLiteral, 4);
         } catch (e) {
             str = e.toString();
         }
