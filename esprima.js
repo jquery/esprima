@@ -105,7 +105,8 @@ parseStatement: true, visitPostorder: true */
         InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
         InvalidLHSInForIn:  'Invalid left-hand side in for-in',
         InvalidLHSInPostfixOp:  'Invalid left-hand side expression in postfix operation',
-        InvalidLHSInPrefixOp:  'Invalid left-hand side expression in prefix operation'
+        InvalidLHSInPrefixOp:  'Invalid left-hand side expression in prefix operation',
+        NoCatchOrFinally:  'Missing catch or finally after try'
     };
 
     if (typeof Object.freeze === 'function') {
@@ -2069,6 +2070,10 @@ parseStatement: true, visitPostorder: true */
         if (matchKeyword('finally')) {
             lex();
             finalizer = parseBlock();
+        }
+
+        if (handlers.length === 0 && !finalizer) {
+            throwError(Messages.NoCatchOrFinally, lineNumber);
         }
 
         return {

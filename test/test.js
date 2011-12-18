@@ -4520,7 +4520,9 @@ data = {
 
         '++10': 'Line 1: Invalid left-hand side expression in prefix operation',
 
-        'for (10 in []);': 'Line 1: Invalid left-hand side in for-in'
+        'for (10 in []);': 'Line 1: Invalid left-hand side in for-in',
+
+        'try { }': 'Line 1: Missing catch or finally after try'
     }
 };
 
