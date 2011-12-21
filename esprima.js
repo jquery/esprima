@@ -37,6 +37,7 @@ parseStatement: true, visitPostorder: true */
         source,
         index,
         lineNumber,
+        lineIndex,
         length,
         buffer,
         extra;
@@ -248,6 +249,7 @@ parseStatement: true, visitPostorder: true */
                 if (isLineTerminator(ch)) {
                     lineComment = false;
                     lineNumber += 1;
+                    lineIndex = index + 1;
                 }
             } else if (blockComment) {
                 nextChar();
@@ -259,6 +261,7 @@ parseStatement: true, visitPostorder: true */
                     }
                 } else if (isLineTerminator(ch)) {
                     lineNumber += 1;
+                    lineIndex = index + 1;
                 }
             } else if (ch === '/') {
                 ch = source[index + 1];
@@ -278,6 +281,7 @@ parseStatement: true, visitPostorder: true */
             } else if (isLineTerminator(ch)) {
                 nextChar();
                 lineNumber += 1;
+                lineIndex = index;
             } else {
                 break;
             }
@@ -699,6 +703,7 @@ parseStatement: true, visitPostorder: true */
         if (buffer) {
             index = buffer.range[1];
             lineNumber = buffer.lineNumber;
+            lineIndex = buffer.lineIndex;
             token = buffer;
             buffer = null;
             return token;
@@ -711,6 +716,7 @@ parseStatement: true, visitPostorder: true */
         token = advance();
         token.range = [pos, index];
         token.lineNumber = lineNumber;
+        token.lineIndex = lineIndex;
 
         return token;
     }
@@ -727,6 +733,7 @@ parseStatement: true, visitPostorder: true */
         token = lex();
         index = pos;
         lineNumber = line;
+        lineIndex = index;
 
         buffer = token;
         return buffer;
@@ -743,6 +750,7 @@ parseStatement: true, visitPostorder: true */
         found = lineNumber !== line;
         index = pos;
         lineNumber = line;
+        lineIndex = index;
 
         return found;
     }
@@ -865,6 +873,7 @@ parseStatement: true, visitPostorder: true */
         }
 
         line = lineNumber;
+        lineIndex = index;
         skipComment();
         if (lineNumber !== line) {
             return;
@@ -2332,7 +2341,7 @@ parseStatement: true, visitPostorder: true */
     // the comments is active.
 
     function scanComment() {
-        var comment, ch, start, blockComment, lineComment;
+        var comment, ch, start, blockComment, lineComment, lineStart;
 
         comment = '';
         blockComment = false;
@@ -2346,8 +2355,10 @@ parseStatement: true, visitPostorder: true */
                 if (isLineTerminator(ch)) {
                     lineComment = false;
                     lineNumber += 1;
+                    lineIndex = index + 1;
                     extra.comments.push({
                         range: [start, index - 1],
+                        prefix: source.slice(lineStart, start),
                         type: 'Line',
                         value: comment
                     });
@@ -2366,6 +2377,7 @@ parseStatement: true, visitPostorder: true */
                         nextChar();
                         extra.comments.push({
                             range: [start, index - 1],
+                            prefix: source.slice(lineStart, start),
                             type: 'Block',
                             value: comment
                         });
@@ -2373,16 +2385,19 @@ parseStatement: true, visitPostorder: true */
                     }
                 } else if (isLineTerminator(ch)) {
                     lineNumber += 1;
+                    lineIndex = index + 1;
                 }
             } else if (ch === '/') {
                 ch = source[index + 1];
                 if (ch === '/') {
                     start = index;
+                    lineStart = lineIndex;
                     nextChar();
                     nextChar();
                     lineComment = true;
                 } else if (ch === '*') {
                     start = index;
+                    lineStart = lineIndex;
                     nextChar();
                     nextChar();
                     blockComment = true;
@@ -2394,6 +2409,7 @@ parseStatement: true, visitPostorder: true */
             } else if (isLineTerminator(ch)) {
                 nextChar();
                 lineNumber += 1;
+                lineIndex = index;
             } else {
                 break;
             }
@@ -2565,6 +2581,7 @@ parseStatement: true, visitPostorder: true */
 
         source = code;
         index = 0;
+        lineIndex = 0;
         lineNumber = (source.length > 0) ? 1 : 0;
         length = source.length;
         buffer = null;
