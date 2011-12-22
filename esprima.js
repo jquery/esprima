@@ -2641,7 +2641,7 @@ parseStatement: true, visitPostorder: true */
     }
 
     // Sync with package.json.
-    exports.version = '0.9.4';
+    exports.version = '0.9.5';
 
     exports.parse = parse;
     exports.traverse = traverse;
