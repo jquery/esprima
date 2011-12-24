@@ -130,11 +130,12 @@ h4 {
 }
 
 textarea {
-    font-family: Monaco, Consolas, "Lucida Console", monospace;
+    font-family: Inconsolata, Monaco, Consolas, "Lucida Console", monospace;
     font-size: 13px;
     color: #555;
     width: 80%;
     padding: 7px;
+    overflow: auto;
 }
 
 table {

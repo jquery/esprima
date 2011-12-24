@@ -49,11 +49,7 @@ function parse(delay) {
         }
 
         el = document.getElementById('syntax');
-        if (typeof el.textContent === 'undefined') {
-            el.innerText = str;
-        } else {
-            el.textContent = str;
-        }
+        el.value = str;
 
         parseId = undefined;
     }, delay || 811);
@@ -85,7 +81,7 @@ var answer = 6 * 7;</textarea></p>
 <p><label><input type="checkbox" id="range"> Syntax node range (start, end)</label> <b>Experimental</b>: see <a href="http://code.google.com/p/esprima/issues/detail?id=6">issue #6</a>.</p>
 <p><label><input type="checkbox" id="tokens"> Tokens</label></p>
 <p>Syntax tree:</p>
-<pre id="syntax"></pre>
+<textarea id="syntax" rows="20" readonly></textarea>
 <div class="footer"><strong>Esprima</strong> is created by
 <a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
 </div>
