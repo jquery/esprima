@@ -4504,7 +4504,9 @@ data = {
 
         'a b;': 'Line 1: Unexpected identifier',
 
-        'a if;': 'Line 1: Unexpected reserved word',
+        'a if;': 'Line 1: Unexpected token if',
+
+        'a class;': 'Line 1: Unexpected reserved word',
 
         'break 1;': 'Line 1: Unexpected number',
 

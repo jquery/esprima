@@ -161,8 +161,25 @@ parseStatement: true, visitPostorder: true */
         return isIdentifierStart(ch) || isUnicodeDigit(ch);
     }
 
-    // 7.6.1.1 Keywords
     // 7.6.1.2 Future Reserved Words
+
+    function isFutureReservedWord(id) {
+        switch (id) {
+
+        // Future reserved words.
+        case 'class':
+        case 'enum':
+        case 'export':
+        case 'extends':
+        case 'import':
+        case 'super':
+            return true;
+        }
+
+        return false;
+    }
+
+    // 7.6.1.1 Keywords
 
     function isKeyword(id) {
         switch (id) {
@@ -194,15 +211,12 @@ parseStatement: true, visitPostorder: true */
         case 'void':
         case 'while':
         case 'with':
+            return true;
 
         // Future reserved words.
-        case 'class':
+        // 'const' is specialized as Keyword in V8.
         case 'const':
-        case 'enum':
-        case 'export':
-        case 'extends':
-        case 'import':
-        case 'super':
+            return true;
 
         // strict mode
         case 'implements':
@@ -217,7 +231,7 @@ parseStatement: true, visitPostorder: true */
             return true;
         }
 
-        return false;
+        return isFutureReservedWord(id);
     }
 
     // Return the next character and move forward.
@@ -776,7 +790,7 @@ parseStatement: true, visitPostorder: true */
             throwError(Messages.UnexpectedIdentifier, lineNumber);
         }
 
-        if (token.type === Token.Keyword) {
+        if (token.type === Token.Keyword && isFutureReservedWord(token.value)) {
             throwError(Messages.UnexpectedReserved, lineNumber);
         }
 
