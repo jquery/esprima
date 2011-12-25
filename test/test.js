@@ -4526,6 +4526,8 @@ data = {
 
         'for (10 in []);': 'Line 1: Invalid left-hand side in for-in',
 
+        'for (var i, i2 in {});': 'Line 1: Unexpected token in',
+
         'try { }': 'Line 1: Missing catch or finally after try'
     }
 };

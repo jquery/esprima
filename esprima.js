@@ -1775,7 +1775,7 @@ parseStatement: true, visitPostorder: true */
                     kind: kind
                 };
 
-                if (matchKeyword('in')) {
+                if (init.declarations.length === 1 && matchKeyword('in')) {
                     lex();
                     left = init;
                     right = parseExpression().expression;
