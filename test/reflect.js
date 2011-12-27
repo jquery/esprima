@@ -27,12 +27,12 @@ var thisExpr = Pattern({ type: "ThisExpression" });
 function funDecl(id, params, body) { return Pattern({ type: "FunctionDeclaration",
                                              id: id,
                                              params: params,
-                                             body: body,
+                                             body: body
                                              }) }
 function genFunDecl(id, params, body) { return Pattern({ type: "FunctionDeclaration",
                                                 id: id,
                                                 params: params,
-                                                body: body,
+                                                body: body
                                                 }) }
 function varDecl(decls) { return Pattern({ type: "VariableDeclaration", declarations: decls, kind: "var" }) }
 function letDecl(decls) { return Pattern({ type: "VariableDeclaration", declarations: decls, kind: "let" }) }
@@ -61,12 +61,12 @@ function letStmt(head, body) { return Pattern({ type: "LetStatement", head: head
 function funExpr(id, args, body, gen) { return Pattern({ type: "FunctionExpression",
                                                 id: id,
                                                 params: args,
-                                                body: body,
+                                                body: body
                                                 }) }
 function genFunExpr(id, args, body) { return Pattern({ type: "FunctionExpression",
                                               id: id,
                                               params: args,
-                                              body: body,
+                                              body: body
                                               }) }
 
 function unExpr(op, arg) { return Pattern({ type: "UnaryExpression", operator: op, argument: arg }) }
