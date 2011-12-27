@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Esprima: Parsing Demo</title>
+<script src="checkenv.js"></script>
 <script src="../esprima.js"></script>
 <script src="../assets/codemirror/codemirror.js"></script>
 <script src="../assets/codemirror/javascript.js"></script>
@@ -111,6 +112,8 @@ try {
     document.getElementById('comment').onclick = quickParse;
     document.getElementById('range').onclick = quickParse;
     document.getElementById('tokens').onclick = quickParse;
+
+    window.checkEnv();
 
     // This is just testing, to detect whether CodeMirror would fail or not
     window.editor = CodeMirror.fromTextArea(document.getElementById("test"));
