@@ -4678,6 +4678,13 @@ if (typeof window !== 'undefined') {
                 esprima.parse(code);
             } catch (e) {
                 actual = e.toString();
+
+                // Opera 9.64 produces an non-standard string in toString().
+                if (actual.substr(0, 6) !== 'Error:') {
+                    if (typeof e.message === 'string') {
+                        actual = 'Error: ' + e.message;
+                    }
+                }
             }
 
             if (expected === actual) {
