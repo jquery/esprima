@@ -2437,7 +2437,7 @@ parseStatement: true, visitPostorder: true */
     }
 
     function lexRange() {
-        var pos, token;
+        var pos, token, value;
 
         if (buffer) {
             index = buffer.range[1];
@@ -2456,9 +2456,13 @@ parseStatement: true, visitPostorder: true */
         token.lineNumber = lineNumber;
 
         if (token.type !== Token.EOF) {
+            value = source.slice(pos, index);
+            if (typeof value !== 'string') {
+                value = value.join('');
+            }
             extra.tokens.push({
                 type: tokenTypeAsString(token.type),
-                value: source.slice(pos, index),
+                value: value,
                 range: [pos, index - 1]
             });
         }
@@ -2571,6 +2575,16 @@ parseStatement: true, visitPostorder: true */
         extra = {};
     }
 
+    function stringToArray(str) {
+        var length = str.length,
+            result = [],
+            i;
+        for (i = 0; i < length; i += 1) {
+            result[i] = str.charAt(i);
+        }
+        return result;
+    }
+
     function parse(code, opt) {
         var options,
             program;
@@ -2582,6 +2596,12 @@ parseStatement: true, visitPostorder: true */
         lineNumber = (source.length > 0) ? 1 : 0;
         length = source.length;
         buffer = null;
+
+        if (length > 0) {
+            if (typeof source[0] === 'undefined') {
+                source = stringToArray(code);
+            }
+        }
 
         patch(options);
         try {
