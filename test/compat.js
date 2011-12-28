@@ -139,14 +139,17 @@ if (typeof window !== 'undefined') {
                 return value;
             }
 
-            pattern.assert = function (tree) {
-                var actual, expected;
-                actual = JSON.stringify(tree, adjustRegexLiteral, 4);
-                expected = JSON.stringify(obj, null, 4);
-                if (expected !== actual) {
-                    reportFailure(expected, actual);
-                }
-            };
+            if (obj.type && (obj.type === 'Program')) {
+                pattern.assert = function (tree) {
+                    var actual, expected;
+                    actual = JSON.stringify(tree, adjustRegexLiteral, 4);
+                    expected = JSON.stringify(obj, null, 4);
+
+                    if (expected !== actual) {
+                        reportFailure(expected, actual);
+                    }
+                };
+            }
 
             return pattern;
         };
