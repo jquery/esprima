@@ -2,9 +2,10 @@
 
 function runBenchmarks() {
     'use strict';
+
     var index = 0,
         totalSize = 0,
-        totalTime = 0,
+        totalTime = {},
         fixture;
 
     fixture = [
@@ -29,12 +30,13 @@ function runBenchmarks() {
         'narcissus ext-core-3.1.0'
     ];
 
-    totalTime = {
-        'esprima': 0,
-        'narcissus': 0,
-        'parsejs': 0,
-        'zeparser': 0
-    };
+    function id(i) {
+        return document.getElementById(i);
+    }
+
+    function kb(bytes) {
+        return (bytes / 1024).toFixed(1);
+    }
 
     function setText(el, str) {
         if (typeof el.innerText === 'string') {
@@ -44,52 +46,99 @@ function runBenchmarks() {
         }
     }
 
-    function showVersion() {
-        var el = document.getElementById('benchmarkjs-version');
-        setText(el, ' version ' + window.Benchmark.version);
-        el = document.getElementById('version');
-        setText(el, window.esprima.version);
+    function ready() {
+        setText(id('status'), 'Ready.');
+        id('run').disabled = false;
+        id('run').style.visibility = 'visible';
     }
 
-    function showStatus(parser, name) {
-        var el = document.getElementById(parser + '-' + name);
-        el.textContent = 'Running...';
-    }
+    function load(tst, callback) {
+        var el = id('status'),
+            xhr = new XMLHttpRequest(),
+            src = '3rdparty/' + tst + '.js';
 
-    function finish() {
-        var el = document.getElementById('status');
-        el.textContent = 'Completed.';
-        el = document.getElementById('total-size');
-        el.textContent = (totalSize / 1024).toFixed(1);
-        el = document.getElementById('esprima-time');
-        el.textContent = (1000 * totalTime.esprima).toFixed(1) + ' ms';
-        el = document.getElementById('narcissus-time');
-        if (totalTime.narcissus > 0) {
-            el.textContent = (1000 * totalTime.narcissus).toFixed(1) + ' ms';
+        // Already available? Don't reload from server.
+        if (window.data && window.data.hasOwnProperty(tst)) {
+            callback.apply();
         }
-        el = document.getElementById('parsejs-time');
-        el.textContent = (1000 * totalTime.parsejs).toFixed(1) + ' ms';
-        el = document.getElementById('zeparser-time');
-        el.textContent = (1000 * totalTime.zeparser).toFixed(1) + ' ms';
+
+        try {
+            xhr.timeout = 30000;
+            xhr.open('GET', src, true);
+            setText(el, 'Please wait. Loading ' + src);
+
+            xhr.ontimeout = function () {
+                setText(el, 'Please wait. Error: time out while loading ' + src + ' ');
+                callback.apply();
+            };
+
+            xhr.onreadystatechange = function () {
+                var success = false,
+                    size = 0;
+
+                if (this.readyState === XMLHttpRequest.DONE) {
+                    if (this.status === 200) {
+                        window.data = window.data || {};
+                        window.data[tst] = this.responseText;
+                        size = this.responseText.length;
+                        totalSize += size;
+                        success = true;
+                    }
+                }
+
+                if (success) {
+                    setText(id(tst + '-size'), kb(size));
+                } else {
+                    setText(el, 'Please wait. Error loading ' + src);
+                    setText(id(tst + '-size'), 'Error');
+                }
+
+                callback.apply();
+            };
+
+            xhr.send(null);
+        } catch (e) {
+            setText(el, 'Please wait. Error loading ' + src);
+            callback.apply();
+        }
     }
 
-    function showResult(parser, name, size, stats) {
-        var el;
-        el = document.getElementById(name + '-size');
-        el.textContent = (size / 1024).toFixed(1);
-        el = document.getElementById(parser + '-' + name);
-        if (stats.size === 0) {
-            el.textContent = 'N/A';
-        } else {
-            el.textContent = (1000 * stats.mean).toFixed(1) + ' ms';
+
+    function loadTests() {
+        var sources = fixture.slice();
+
+        function loadNextTest() {
+            var tst;
+
+            if (sources.length > 0) {
+                tst = sources[0].split(' ');
+                tst = tst[1];
+                sources.splice(0, 1);
+                window.setTimeout(function () {
+                    load(tst, loadNextTest);
+                }, 100);
+            } else {
+                setText(id('total-size'), kb(totalSize));
+                ready();
+            }
         }
+
+        id('run').style.visibility = 'hidden';
+        loadNextTest();
     }
 
     function runBenchmark() {
         var test, source, parser, fn, benchmark;
 
         if (index >= fixture.length) {
-            finish();
+            setText(id('total-size'), kb(totalSize));
+            setText(id('esprima-time'), (1000 * totalTime.esprima).toFixed(1) + ' ms');
+            setText(id('parsejs-time'), (1000 * totalTime.parsejs).toFixed(1) + ' ms');
+            setText(id('zeparser-time'), (1000 * totalTime.zeparser).toFixed(1) + ' ms');
+            if (totalTime.narcissus > 0) {
+                setText(id('narcissus-time'), (1000 * totalTime.narcissus).toFixed(1) + ' ms');
+            }
+            ready();
             return;
         }
 
@@ -97,12 +146,8 @@ function runBenchmarks() {
         parser = test[0];
         test = test[1];
 
-        if (!document.getElementById(test)) {
-            throw 'Unknown text fixture ' + test;
-        }
-
-        source = document.getElementById(test).textContent;
-        showStatus(parser, test);
+        source = window.data[test];
+        setText(id(parser + '-' + test), 'Running...');
 
         // Force the result to be held in this array, thus defeating any
         // possible "dead core elimination" optimization.
@@ -139,7 +184,7 @@ function runBenchmarks() {
 
         benchmark = new window.Benchmark(test, fn, {
             'onComplete': function () {
-                showResult(parser, this.name, source.length, this.stats);
+                setText(id(parser + '-' + this.name), (1000 * this.stats.mean).toFixed(1) + ' ms');
                 totalSize += source.length;
                 totalTime[parser] += this.stats.mean;
             }
@@ -152,7 +197,38 @@ function runBenchmarks() {
         }, 211);
     }
 
-    showVersion();
-    window.setTimeout(runBenchmark, 211);
+    id('run').onclick = function () {
+
+        var test;
+
+        for (index = 0; index < fixture.length; index += 1) {
+            test = fixture[index].split(' ').join('-');
+            setText(id(test), '');
+        }
+
+        setText(id('status'), 'Please wait. Running benchmarks...');
+        id('run').style.visibility = 'hidden';
+
+        index = 0;
+        totalTime = {
+            'esprima': 0,
+            'narcissus': 0,
+            'parsejs': 0,
+            'zeparser': 0
+        };
+
+        for (test in totalTime) {
+            if (totalTime.hasOwnProperty(test)) {
+                setText(id(test + '-time'), '');
+            }
+        }
+
+        runBenchmark();
+    };
+
+    setText(id('benchmarkjs-version'), ' version ' + window.Benchmark.version);
+    setText(id('version'), window.esprima.version);
+
+    loadTests();
 }
 
