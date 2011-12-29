@@ -4145,6 +4145,20 @@ data = {
                 }
             }],
             kind: 'var'
+        },
+
+        '(function(){})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: []
+                },
+                range: [0, 13]
+            }
         }
     },
 

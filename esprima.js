@@ -2510,12 +2510,15 @@ parseStatement: true, visitPostorder: true */
     function processRange(program) {
 
         function enclosed(a, b) {
-            if (a.hasOwnProperty('range') && b.hasOwnProperty('range')) {
+            if (typeof a.range === 'object' && typeof b.range === 'object') {
                 return [a.range[0], b.range[1]];
             }
         }
 
         visitPostorder(program, function (node) {
+            if (typeof node !== 'object') {
+                return;
+            }
             if (node.type === 'BinaryExpression') {
                 // Primary expression in a bracket, e.g. '(1 + 2)', already
                 // has the range info.
@@ -2635,7 +2638,7 @@ parseStatement: true, visitPostorder: true */
         for (key in object) {
             if (object.hasOwnProperty(key)) {
                 child = object[key];
-                if (typeof child === 'object') {
+                if (typeof child === 'object' && child !== null) {
                     visitPreorder(child, f);
                 }
             }
@@ -2648,7 +2651,7 @@ parseStatement: true, visitPostorder: true */
         for (key in object) {
             if (object.hasOwnProperty(key)) {
                 child = object[key];
-                if (typeof child === 'object') {
+                if (typeof child === 'object' && child !== null) {
                     visitPostorder(child, f);
                 }
             }
