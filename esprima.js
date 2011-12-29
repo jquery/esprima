@@ -650,6 +650,10 @@ parseStatement: true, visitPostorder: true */
             }
         }
 
+        if (str.length === 1) {
+            throwError(Messages.UnterminatedRegExp, lineNumber);
+        }
+
         // Exclude leading and trailing slash.
         pattern = str.substr(1, str.length - 2);
 

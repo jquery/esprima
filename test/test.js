@@ -4502,6 +4502,8 @@ data = {
 
         'var x = /(s/g': 'Line 1: Invalid regular expression',
 
+        '/': 'Line 1: Invalid regular expression: missing /',
+
         'var x = /\n/': 'Line 1: Invalid regular expression: missing /',
 
         'var x = "\n': 'Line 1: Unexpected token ILLEGAL',
