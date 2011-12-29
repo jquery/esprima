@@ -12,6 +12,7 @@ function runBenchmarks() {
     fixture = [
         'jquery-1.7.1',
         'jquery-1.6.4',
+        'jquery.mobile-1.0',
         'prototype-1.7.0.0',
         'prototype-1.6.1',
         'ext-core-3.1.0',
