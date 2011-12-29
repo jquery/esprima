@@ -28,7 +28,8 @@ function runBenchmarks() {
         return (bytes / 1024).toFixed(1);
     }
 
-    function setText(el, str) {
+    function setText(id, str) {
+        var el = document.getElementById(id);
         if (typeof el.innerText === 'string') {
             el.innerText = str;
         } else {
@@ -36,32 +37,23 @@ function runBenchmarks() {
         }
     }
 
-    function showResult(name, size, stats) {
-        var el;
-        el = id(name + '-time');
-        setText(el, (1000 * stats.mean).toFixed(1));
-        el = id(name + '-variance');
-        setText(el, (1000 * stats.variance).toFixed(1));
-    }
-
     function ready() {
-        setText(id('status'), 'Ready.');
+        setText('status', 'Ready.');
         id('run').disabled = false;
         id('run').style.visibility = 'visible';
     }
 
     function load(tst, callback) {
-        var el = id('status'),
-            xhr = new XMLHttpRequest(),
+        var xhr = new XMLHttpRequest(),
             src = '3rdparty/' + tst + '.js';
 
         try {
             xhr.timeout = 30000;
             xhr.open('GET', src, true);
-            setText(el, 'Please wait. Loading ' + src);
+            setText('status', 'Please wait. Loading ' + src);
 
             xhr.ontimeout = function () {
-                setText(el, 'Please wait. Error: time out while loading ' + src + ' ');
+                setText('status', 'Please wait. Error: time out while loading ' + src + ' ');
                 callback.apply();
             };
 
@@ -80,10 +72,10 @@ function runBenchmarks() {
                 }
 
                 if (success) {
-                    setText(id(tst + '-size'), kb(size));
+                    setText(tst + '-size', kb(size));
                 } else {
-                    setText(el, 'Please wait. Error loading ' + src);
-                    setText(id(tst + '-size'), 'Error');
+                    setText('status', 'Please wait. Error loading ' + src);
+                    setText(tst + '-size', 'Error');
                 }
 
                 callback.apply();
@@ -91,7 +83,7 @@ function runBenchmarks() {
 
             xhr.send(null);
         } catch (e) {
-            setText(el, 'Please wait. Error loading ' + src);
+            setText('status', 'Please wait. Error loading ' + src);
             callback.apply();
         }
     }
@@ -109,7 +101,7 @@ function runBenchmarks() {
                     load(tst, loadNextTest);
                 }, 100);
             } else {
-                setText(id('total-size'), kb(totalSize));
+                setText('total-size', kb(totalSize));
                 ready();
             }
         }
@@ -122,7 +114,7 @@ function runBenchmarks() {
         var el, test, source, benchmark;
 
         if (index >= fixture.length) {
-            setText(id('total-time'), (1000 * totalTime).toFixed(1));
+            setText('total-time', (1000 * totalTime).toFixed(1));
             ready();
             return;
         }
@@ -130,7 +122,7 @@ function runBenchmarks() {
         test = fixture[index];
         el = id(test);
         source = window.data[test];
-        setText(id(test + '-time'), 'Running...');
+        setText(test + '-time', 'Running...');
 
         // Force the result to be held in this array, thus defeating any
         // possible "dead core elimination" optimization.
@@ -141,7 +133,8 @@ function runBenchmarks() {
             window.tree.push(syntax.body.length);
         }, {
             'onComplete': function () {
-                showResult(this.name, source.length, this.stats);
+                setText(this.name + '-time', (1000 * this.stats.mean).toFixed(1));
+                setText(this.name + '-variance', (1000 * this.stats.variance).toFixed(1));
                 totalTime += this.stats.mean;
             }
         });
@@ -156,12 +149,12 @@ function runBenchmarks() {
     id('run').onclick = function () {
 
         for (index = 0; index < fixture.length; index += 1) {
-            setText(id(fixture[index] + '-time'), '');
-            setText(id(fixture[index] + '-variance'), '');
+            setText(fixture[index] + '-time', '');
+            setText(fixture[index] + '-variance', '');
         }
-        setText(id('total-time'), '');
+        setText('total-time', '');
 
-        setText(id('status'), 'Please wait. Running benchmarks...');
+        setText('status', 'Please wait. Running benchmarks...');
         id('run').style.visibility = 'hidden';
 
         index = 0;
@@ -169,8 +162,8 @@ function runBenchmarks() {
         runBenchmark();
     };
 
-    setText(id('benchmarkjs-version'), ' version ' + window.Benchmark.version);
-    setText(id('version'), window.esprima.version);
+    setText('benchmarkjs-version', ' version ' + window.Benchmark.version);
+    setText('version', window.esprima.version);
 
     loadTests();
 }

@@ -38,7 +38,8 @@ function runBenchmarks() {
         return (bytes / 1024).toFixed(1);
     }
 
-    function setText(el, str) {
+    function setText(id, str) {
+        var el = document.getElementById(id);
         if (typeof el.innerText === 'string') {
             el.innerText = str;
         } else {
@@ -47,14 +48,13 @@ function runBenchmarks() {
     }
 
     function ready() {
-        setText(id('status'), 'Ready.');
+        setText('status', 'Ready.');
         id('run').disabled = false;
         id('run').style.visibility = 'visible';
     }
 
     function load(tst, callback) {
-        var el = id('status'),
-            xhr = new XMLHttpRequest(),
+        var xhr = new XMLHttpRequest(),
             src = '3rdparty/' + tst + '.js';
 
         // Already available? Don't reload from server.
@@ -65,10 +65,10 @@ function runBenchmarks() {
         try {
             xhr.timeout = 30000;
             xhr.open('GET', src, true);
-            setText(el, 'Please wait. Loading ' + src);
+            setText('status', 'Please wait. Loading ' + src);
 
             xhr.ontimeout = function () {
-                setText(el, 'Please wait. Error: time out while loading ' + src + ' ');
+                setText('status', 'Please wait. Error: time out while loading ' + src + ' ');
                 callback.apply();
             };
 
@@ -87,10 +87,10 @@ function runBenchmarks() {
                 }
 
                 if (success) {
-                    setText(id(tst + '-size'), kb(size));
+                    setText(tst + '-size', kb(size));
                 } else {
-                    setText(el, 'Please wait. Error loading ' + src);
-                    setText(id(tst + '-size'), 'Error');
+                    setText('status', 'Please wait. Error loading ' + src);
+                    setText(tst + '-size', 'Error');
                 }
 
                 callback.apply();
@@ -98,7 +98,7 @@ function runBenchmarks() {
 
             xhr.send(null);
         } catch (e) {
-            setText(el, 'Please wait. Error loading ' + src);
+            setText('status', 'Please wait. Error loading ' + src);
             callback.apply();
         }
     }
@@ -118,7 +118,7 @@ function runBenchmarks() {
                     load(tst, loadNextTest);
                 }, 100);
             } else {
-                setText(id('total-size'), kb(totalSize));
+                setText('total-size', kb(totalSize));
                 ready();
             }
         }
@@ -131,12 +131,12 @@ function runBenchmarks() {
         var test, source, parser, fn, benchmark;
 
         if (index >= fixture.length) {
-            setText(id('total-size'), kb(totalSize));
-            setText(id('esprima-time'), (1000 * totalTime.esprima).toFixed(1) + ' ms');
-            setText(id('parsejs-time'), (1000 * totalTime.parsejs).toFixed(1) + ' ms');
-            setText(id('zeparser-time'), (1000 * totalTime.zeparser).toFixed(1) + ' ms');
+            setText('total-size', kb(totalSize));
+            setText('esprima-time', (1000 * totalTime.esprima).toFixed(1) + ' ms');
+            setText('parsejs-time', (1000 * totalTime.parsejs).toFixed(1) + ' ms');
+            setText('zeparser-time', (1000 * totalTime.zeparser).toFixed(1) + ' ms');
             if (totalTime.narcissus > 0) {
-                setText(id('narcissus-time'), (1000 * totalTime.narcissus).toFixed(1) + ' ms');
+                setText('narcissus-time', (1000 * totalTime.narcissus).toFixed(1) + ' ms');
             }
             ready();
             return;
@@ -147,7 +147,7 @@ function runBenchmarks() {
         test = test[1];
 
         source = window.data[test];
-        setText(id(parser + '-' + test), 'Running...');
+        setText(parser + '-' + test, 'Running...');
 
         // Force the result to be held in this array, thus defeating any
         // possible "dead core elimination" optimization.
@@ -184,7 +184,7 @@ function runBenchmarks() {
 
         benchmark = new window.Benchmark(test, fn, {
             'onComplete': function () {
-                setText(id(parser + '-' + this.name), (1000 * this.stats.mean).toFixed(1) + ' ms');
+                setText(parser + '-' + this.name, (1000 * this.stats.mean).toFixed(1) + ' ms');
                 totalSize += source.length;
                 totalTime[parser] += this.stats.mean;
             }
@@ -203,10 +203,10 @@ function runBenchmarks() {
 
         for (index = 0; index < fixture.length; index += 1) {
             test = fixture[index].split(' ').join('-');
-            setText(id(test), '');
+            setText(test, '');
         }
 
-        setText(id('status'), 'Please wait. Running benchmarks...');
+        setText('status', 'Please wait. Running benchmarks...');
         id('run').style.visibility = 'hidden';
 
         index = 0;
@@ -219,15 +219,15 @@ function runBenchmarks() {
 
         for (test in totalTime) {
             if (totalTime.hasOwnProperty(test)) {
-                setText(id(test + '-time'), '');
+                setText(test + '-time', '');
             }
         }
 
         runBenchmark();
     };
 
-    setText(id('benchmarkjs-version'), ' version ' + window.Benchmark.version);
-    setText(id('version'), window.esprima.version);
+    setText('benchmarkjs-version', ' version ' + window.Benchmark.version);
+    setText('version', window.esprima.version);
 
     loadTests();
 }
