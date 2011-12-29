@@ -2602,7 +2602,17 @@ parseStatement: true, visitPostorder: true */
 
         if (length > 0) {
             if (typeof source[0] === 'undefined') {
-                source = stringToArray(code);
+                // Try first to convert to a string. This is good as fast path
+                // for old IE which understands string indexing for string
+                // literals only and not for string object.
+                if (code instanceof String) {
+                    source = code.valueOf();
+                }
+
+                // Force accessing the characters via an array.
+                if (typeof source[0] === 'undefined') {
+                    source = stringToArray(code);
+                }
             }
         }
 

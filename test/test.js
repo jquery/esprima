@@ -4678,6 +4678,10 @@ if (typeof window !== 'undefined') {
                 } else {
                     reportFailure(code, expected, actual);
                 }
+
+                // Only to ensure that there is no error when using string object.
+                esprima.parse(new String(code), options);
+
             } catch (e) {
                 reportFailure(code, expected, e.toString());
             }
