@@ -1,5 +1,5 @@
-// CodeMirror v2.18
-
+// CodeMirror version 2.2
+//
 // All functions that need access to the editor's state live inside
 // the CodeMirror function. Below that, at the bottom of the file,
 // some utilities are defined.
@@ -21,10 +21,10 @@ var CodeMirror = (function() {
     wrapper.className = "CodeMirror" + (options.lineWrapping ? " CodeMirror-wrap" : "");
     // This mess creates the base DOM structure for the editor.
     wrapper.innerHTML =
-      '<div style="overflow: hidden; position: relative; width: 1px; height: 0px;">' + // Wraps and hides input textarea
+      '<div style="overflow: hidden; position: relative; width: 3px; height: 0px;">' + // Wraps and hides input textarea
         '<textarea style="position: absolute; padding: 0; width: 1px;" wrap="off" ' +
           'autocorrect="off" autocapitalize="off"></textarea></div>' +
-      '<div class="CodeMirror-scroll cm-s-' + options.theme + '">' +
+      '<div class="CodeMirror-scroll" tabindex="-1">' +
         '<div style="position: relative">' + // Set to the height of the text, causes scrolling
           '<div style="position: relative">' + // Moved around its parent to cover visible view
             '<div class="CodeMirror-gutter"><div class="CodeMirror-gutter-text"></div></div>' +
@@ -41,10 +41,11 @@ var CodeMirror = (function() {
         mover = code.firstChild, gutter = mover.firstChild, gutterText = gutter.firstChild,
         lineSpace = gutter.nextSibling.firstChild, measure = lineSpace.firstChild,
         cursor = measure.nextSibling, lineDiv = cursor.nextSibling;
+    themeChanged();
     // Needed to hide big blue blinking cursor on Mobile Safari
     if (/AppleWebKit/.test(navigator.userAgent) && /Mobile\/\w+/.test(navigator.userAgent)) input.style.width = "0px";
     if (!webkit) lineSpace.draggable = true;
-    if (options.tabindex != null) input.tabindex = options.tabindex;
+    if (options.tabindex != null) input.tabIndex = options.tabindex;
     if (!options.gutter && !options.lineNumbers) gutter.style.display = "none";
 
     // Check for problem with IE innerHTML not working when we have a
@@ -140,7 +141,7 @@ var CodeMirror = (function() {
         options[option] = value;
         if (option == "mode" || option == "indentUnit") loadMode();
         else if (option == "readOnly" && value) {onBlur(); input.blur();}
-        else if (option == "theme") scroller.className = scroller.className.replace(/cm-s-\w+/, "cm-s-" + value);
+        else if (option == "theme") themeChanged();
         else if (option == "lineWrapping" && oldVal != value) operation(wrappingChanged)();
         else if (option == "tabSize") operation(tabsChanged)();
         if (option == "lineNumbers" || option == "gutter" || option == "firstLineNumber" || option == "theme")
@@ -249,7 +250,7 @@ var CodeMirror = (function() {
       moveV: operation(moveV),
       toggleOverwrite: function() {overwrite = !overwrite;},
 
-      coordsFromIndex: function(off) {
+      posFromIndex: function(off) {
         var lineNo = 0, ch;
         doc.iter(0, doc.size, function(line) {
           var sz = line.text.length + 1;
@@ -258,6 +259,14 @@ var CodeMirror = (function() {
           ++lineNo;
         });
         return clipPos({line: lineNo, ch: ch});
+      },
+      indexFromPos: function (coords) {
+        if (coords.line < 0 || coords.ch < 0) return 0;
+        var index = coords.ch;
+        doc.iter(0, coords.line, function (line) {
+          index += line.text.length + 1;
+        });
+        return index;
       },
 
       operation: function(f){return operation(f)();},
@@ -431,14 +440,31 @@ var CodeMirror = (function() {
       e.dataTransfer.setData("Text", txt);
     }
     function handleKeyBinding(e) {
-      if (e.altGraphKey) return false;
-      var bound = lookupKey(e, options.extraKeys, options.keyMap);
-      var next = keyMap[options.keyMap].auto;
-      if (next) options.keyMap = next;
+      var name = keyNames[e.keyCode], next = keyMap[options.keyMap].auto, bound, dropShift;
+      if (name == null || e.altGraphKey) {
+        if (next) options.keyMap = next;
+        return null;
+      }
+      if (e.altKey) name = "Alt-" + name;
+      if (e.ctrlKey) name = "Ctrl-" + name;
+      if (e.metaKey) name = "Cmd-" + name;
+      if (e.shiftKey && (bound = lookupKey("Shift-" + name, options.extraKeys, options.keyMap))) {
+        dropShift = true;
+      } else {
+        bound = lookupKey(name, options.extraKeys, options.keyMap);
+      }
+      if (typeof bound == "string") {
+        if (commands.propertyIsEnumerable(bound)) bound = commands[bound];
+        else bound = null;
+      }
+      if (next && (bound || !isModifierKey(e))) options.keyMap = next;
       if (!bound) return false;
-      if (typeof bound != "string") bound(instance);
-      else if (commands.propertyIsEnumerable(bound)) commands[bound](instance);
-      else if (!next) return false;
+      if (dropShift) {
+        var prevShift = shiftSelecting;
+        shiftSelecting = null;
+        bound(instance);
+        shiftSelecting = prevShift;
+      } else bound(instance);
       e_preventDefault(e);
       return true;
     }
@@ -529,6 +555,7 @@ var CodeMirror = (function() {
         doc.iter(from.line, to.line, function(line) {
           if (line.text.length == maxLineLength) {recomputeMaxLength = true; return true;}
         });
+      if (from.line != to.line || newText.length > 1) gutterDirty = true;
 
       var nlines = to.line - from.line, firstLine = getLine(from.line), lastLine = getLine(to.line);
       // First adjust the line structure, taking some care to leave highlighting intact.
@@ -731,6 +758,8 @@ var CodeMirror = (function() {
     function scrollEditorIntoView() {
       if (!cursor.getBoundingClientRect) return;
       var rect = cursor.getBoundingClientRect();
+      // IE returns bogus coordinates when the instance sits inside of an iframe and the cursor is hidden
+      if (ie && rect.top == rect.bottom) return;
       var winH = window.innerHeight || Math.max(document.body.offsetHeight, document.documentElement.offsetHeight);
       if (rect.top < 0 || rect.bottom > winH) cursor.scrollIntoView();
     }
@@ -772,7 +801,7 @@ var CodeMirror = (function() {
     // Uses a set of changes plus the current scroll position to
     // determine which DOM updates have to be made, and makes the
     // updates.
-    function updateDisplay(changes) {
+    function updateDisplay(changes, suppressCallback) {
       if (!scroller.clientWidth) {
         showingFrom = showingTo = displayOffset = 0;
         return;
@@ -847,6 +876,8 @@ var CodeMirror = (function() {
       gutter.style.display = gutterDisplay;
       if (different || gutterDirty) updateGutter();
       updateCursor();
+      if (!suppressCallback && options.onUpdate) options.onUpdate(instance);
+      return true;
     }
 
     function computeIntact(intact, changes) {
@@ -1070,7 +1101,7 @@ var CodeMirror = (function() {
         var sawWord = false;
         for (;;) {
           if (dir < 0) if (!moveOnce()) break;
-          if (/\w/.test(lineObj.text.charAt(ch))) sawWord = true;
+          if (isWordChar(lineObj.text.charAt(ch))) sawWord = true;
           else if (sawWord) {if (dir < 0) {dir = 1; moveOnce();} break;}
           if (dir > 0) if (!moveOnce()) break;
         }
@@ -1102,8 +1133,8 @@ var CodeMirror = (function() {
     function selectWordAt(pos) {
       var line = getLine(pos.line).text;
       var start = pos.ch, end = pos.ch;
-      while (start > 0 && /\w/.test(line.charAt(start - 1))) --start;
-      while (end < line.length && /\w/.test(line.charAt(end))) ++end;
+      while (start > 0 && isWordChar(line.charAt(start - 1))) --start;
+      while (end < line.length && isWordChar(line.charAt(end))) ++end;
       setSelectionUser({line: pos.line, ch: start}, {line: pos.line, ch: end});
     }
     function selectLine(line) {
@@ -1128,7 +1159,7 @@ var CodeMirror = (function() {
         if (n) indentation = getLine(n-1).indentation(options.tabSize);
         else indentation = 0;
       }
-      else if (how == "smart") indentation = mode.indent(state, line.text.slice(curSpaceString.length));
+      else if (how == "smart") indentation = mode.indent(state, line.text.slice(curSpaceString.length), line.text);
       else if (how == "add") indentation = curSpace + options.indentUnit;
       else if (how == "subtract") indentation = curSpace - options.indentUnit;
       indentation = Math.max(0, indentation);
@@ -1187,6 +1218,10 @@ var CodeMirror = (function() {
     function tabsChanged() {
       tabText = computeTabText();
       updateDisplay(true);
+    }
+    function themeChanged() {
+      scroller.className = scroller.className.replace(/\s*cm-s-\w+/g, "") +
+        options.theme.replace(/(^|\s)\s*/g, " cm-s-");
     }
 
     function TextMarker() { this.set = []; }
@@ -1346,10 +1381,10 @@ var CodeMirror = (function() {
       // Include extra text at the end to make sure the measured line is wrapped in the right way.
       if (options.lineWrapping) {
         var end = line.text.indexOf(" ", ch + 2);
-        extra = line.text.slice(ch + 1, end < 0 ? line.text.length : end + (ie ? 5 : 0));
+        extra = htmlEscape(line.text.slice(ch + 1, end < 0 ? line.text.length : end + (ie ? 5 : 0)));
       }
       measure.innerHTML = "<pre>" + line.getHTML(null, null, false, tabText, ch) +
-        '<span id="CodeMirror-temp-' + tempId + '">' + (line.text.charAt(ch) || " ") + "</span>" +
+        '<span id="CodeMirror-temp-' + tempId + '">' + htmlEscape(line.text.charAt(ch) || " ") + "</span>" +
         extra + "</pre>";
       var elt = document.getElementById("CodeMirror-temp-" + tempId);
       var top = elt.offsetTop, left = elt.offsetLeft;
@@ -1414,22 +1449,25 @@ var CodeMirror = (function() {
       return {x: off.left + local.x, y: off.top + local.y, yBot: off.top + local.yBot};
     }
 
-    var cachedHeight, cachedFor, measureText = "<pre>";
-    for (var i = 0; i < 49; ++i) measureText += "x<br/>";
-    measureText += "x</pre>";
+    var cachedHeight, cachedHeightFor, measureText;
     function textHeight() {
-      var offsetHeight = lineDiv.offsetHeight;
-      if (offsetHeight == cachedFor) return cachedHeight;
-      cachedFor = offsetHeight;
+      if (measureText == null) {
+        measureText = "<pre>";
+        for (var i = 0; i < 49; ++i) measureText += "x<br/>";
+        measureText += "x</pre>";
+      }
+      var offsetHeight = lineDiv.clientHeight;
+      if (offsetHeight == cachedHeightFor) return cachedHeight;
+      cachedHeightFor = offsetHeight;
       measure.innerHTML = measureText;
       cachedHeight = measure.firstChild.offsetHeight / 50 || 1;
       measure.innerHTML = "";
       return cachedHeight;
     }
-    var cachedWidth, cachedFor = 0;
+    var cachedWidth, cachedWidthFor = 0;
     function charWidth() {
-      if (scroller.clientWidth == cachedFor) return cachedWidth;
-      cachedFor = scroller.clientWidth;
+      if (scroller.clientWidth == cachedWidthFor) return cachedWidth;
+      cachedWidthFor = scroller.clientWidth;
       return (cachedWidth = stringWidth("x"));
     }
     function paddingTop() {return lineSpace.offsetTop;}
@@ -1600,7 +1638,8 @@ var CodeMirror = (function() {
             if (hadState && compare(hadState, state)) return true;
           } else {
             if (changed !== false || !hadState) unchanged = 0;
-            else if (++unchanged > 3) return true;
+            else if (++unchanged > 3 && (!mode.indent || mode.indent(hadState, "") == mode.indent(state, "")))
+              return true;
           }
           ++i;
         });
@@ -1624,9 +1663,9 @@ var CodeMirror = (function() {
       changes = []; selectionChanged = false; callbacks = [];
     }
     function endOperation() {
-      var reScroll = false;
+      var reScroll = false, updated;
       if (selectionChanged) reScroll = !scrollCursorIntoView();
-      if (changes.length) updateDisplay(changes);
+      if (changes.length) updated = updateDisplay(changes, true);
       else {
         if (selectionChanged) updateCursor();
         if (gutterDirty) updateGutter();
@@ -1649,6 +1688,7 @@ var CodeMirror = (function() {
       if (tc && options.onChange && instance)
         options.onChange(instance, tc);
       for (var i = 0; i < cbs.length; ++i) cbs[i](instance);
+      if (updated && options.onUpdate) options.onUpdate(instance);
     }
     var nestedOperation = 0;
     function operation(f) {
@@ -1689,6 +1729,7 @@ var CodeMirror = (function() {
     onCursorActivity: null,
     onGutterClick: null,
     onHighlightComplete: null,
+    onUpdate: null,
     onFocus: null, onBlur: null, onScroll: null,
     matchBrackets: false,
     workTime: 100,
@@ -1807,7 +1848,7 @@ var CodeMirror = (function() {
     "Ctrl-Home": "goDocStart", "Alt-Up": "goDocStart", "Ctrl-End": "goDocEnd", "Ctrl-Down": "goDocEnd",
     "Ctrl-Left": "goWordLeft", "Ctrl-Right": "goWordRight", "Alt-Left": "goLineStart", "Alt-Right": "goLineEnd",
     "Ctrl-Backspace": "delWordLeft", "Ctrl-Delete": "delWordRight", "Ctrl-S": "save", "Ctrl-F": "find",
-    "Ctrl-G": "findNext", "Shift-Ctrl-G": "findPrev", "Ctrl-R": "replace", "Shift-Ctrl-R": "replaceAll",
+    "Ctrl-G": "findNext", "Shift-Ctrl-G": "findPrev", "Shift-Ctrl-F": "replace", "Shift-Ctrl-R": "replaceAll",
     fallthrough: "basic"
   };
   keyMap.macDefault = {
@@ -1826,12 +1867,7 @@ var CodeMirror = (function() {
     "Alt-D": "delWordRight", "Alt-Backspace": "delWordLeft", "Ctrl-K": "killLine", "Ctrl-T": "transposeChars"
   };
 
-  function lookupKey(event, extraMap, map) {
-    var name = keyNames[event.keyCode];
-    if (name == null) return null;
-    if (event.altKey) name = "Alt-" + name;
-    if (event.ctrlKey) name = "Ctrl-" + name;
-    if (event.metaKey) name = "Cmd-" + name;
+  function lookupKey(name, extraMap, map) {
     function lookup(name, map, ft) {
       var found = map[name];
       if (found != null) return found;
@@ -1844,14 +1880,11 @@ var CodeMirror = (function() {
       }
       return null;
     }
-    function lookup0(name) {
-      return extraMap ? lookup(name, extraMap, map) : lookup(name, keyMap[map]);
-    }
-    if (event.shiftKey) {
-      var found = lookup0("Shift-" + name);
-      if (found != null) return found;
-    }
-    return lookup0(name);
+    return extraMap ? lookup(name, extraMap, map) : lookup(name, keyMap[map]);
+  }
+  function isModifierKey(event) {
+    var name = keyNames[event.keyCode];
+    return name == "Ctrl" || name == "Alt" || name == "Shift" || name == "Mod";
   }
 
   CodeMirror.fromTextArea = function(textarea, options) {
@@ -1881,6 +1914,7 @@ var CodeMirror = (function() {
       textarea.parentNode.insertBefore(node, textarea.nextSibling);
     }, options);
     instance.save = save;
+    instance.getTextArea = function() { return textarea; };
     instance.toTextArea = function() {
       save();
       textarea.parentNode.removeChild(instance.getWrapperElement());
@@ -2674,6 +2708,9 @@ var CodeMirror = (function() {
       if (collection[i] == elt) return i;
     return -1;
   }
+  function isWordChar(ch) {
+    return /\w/.test(ch) || ch.toUpperCase() != ch.toLowerCase();
+  }
 
   // See if "".split is the broken IE version, if so, provide an
   // alternative way to split lines.
@@ -2706,7 +2743,7 @@ var CodeMirror = (function() {
   var keyNames = {3: "Enter", 8: "Backspace", 9: "Tab", 13: "Enter", 16: "Shift", 17: "Ctrl", 18: "Alt",
                   19: "Pause", 20: "CapsLock", 27: "Esc", 32: "Space", 33: "PageUp", 34: "PageDown", 35: "End",
                   36: "Home", 37: "Left", 38: "Up", 39: "Right", 40: "Down", 44: "PrintScrn", 45: "Insert",
-                  46: "Delete", 59: ";", 91: "Win", 92: "Win", 93: "Select", 186: ";", 187: "=", 188: ",",
+                  46: "Delete", 59: ";", 91: "Mod", 92: "Mod", 93: "Mod", 186: ";", 187: "=", 188: ",",
                   189: "-", 190: ".", 191: "/", 192: "`", 219: "[", 220: "\\", 221: "]", 222: "'", 63276: "PageUp",
                   63277: "PageDown", 63275: "End", 63273: "Home", 63234: "Left", 63232: "Up", 63235: "Right",
                   63233: "Down", 63302: "Insert", 63272: "Delete"};
