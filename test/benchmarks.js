@@ -19,7 +19,9 @@ function runBenchmarks() {
         'ext-core-3.1.0',
         'ext-core-3.0.0',
         'mootools-1.4.1',
-        'mootools-1.3.2'
+        'mootools-1.3.2',
+        'backbone-0.5.3',
+        'underscore-1.2.3'
     ];
 
     function id(i) {
@@ -168,7 +170,7 @@ function runBenchmarks() {
     }
 
     id('runquick').onclick = function () {
-        suite = ['jquery-1.7.1', 'jquery.mobile-1.0'];
+        suite = ['jquery-1.7.1', 'jquery.mobile-1.0', 'backbone-0.5.3'];
         startBenchmarks();
     };
 
