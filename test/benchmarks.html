@@ -36,7 +36,10 @@ window.onload = function () {
 
 <p>Esprima version <span id="version"></span>.</p>
 
-<p><span id="status">Please wait...</span> <input id="run" type="submit" value="Run benchmarks" disabled /></p>
+<p><span id="status">Please wait...</span>
+<input id="runquick" type="submit" value="Run quick benchmarks" disabled />
+<input id="runfull" type="submit" value="Run full benchmarks" disabled />
+</p>
 
 <table>
 <thead><tr><th>Source</th><th>Size (KiB)</th><th>Time (ms)</th><th>Variance</th></tr></thead>
@@ -53,6 +56,10 @@ window.onload = function () {
     <tr><td>Total</td><td id="total-size"></td><td id="total-time"></td><td></td></tr>
 </tbody>
 </table>
+
+<p><strong>Note</strong>: On a modern machine and up-to-date web browsers,
+running full benchmarks suite takes around 1 minute.<br>
+For the quick benchmarks, the running time is only about 10 seconds.</p>
 
 <div class="footer"><strong>Esprima</strong> is created by
 <a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.

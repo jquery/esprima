@@ -7,7 +7,8 @@ function runBenchmarks() {
     var index = 0,
         totalSize = 0,
         totalTime = 0,
-        fixture;
+        fixture,
+        suite;
 
     fixture = [
         'jquery-1.7.1',
@@ -40,8 +41,10 @@ function runBenchmarks() {
 
     function ready() {
         setText('status', 'Ready.');
-        id('run').disabled = false;
-        id('run').style.visibility = 'visible';
+        id('runquick').disabled = false;
+        id('runquick').style.visibility = 'visible';
+        id('runfull').disabled = false;
+        id('runfull').style.visibility = 'visible';
     }
 
     function load(tst, callback) {
@@ -107,20 +110,21 @@ function runBenchmarks() {
             }
         }
 
-        id('run').style.visibility = 'hidden';
+        id('runquick').style.visibility = 'hidden';
+        id('runfull').style.visibility = 'hidden';
         loadNextTest();
     }
 
     function runBenchmark() {
         var el, test, source, benchmark;
 
-        if (index >= fixture.length) {
+        if (index >= suite.length) {
             setText('total-time', (1000 * totalTime).toFixed(1));
             ready();
             return;
         }
 
-        test = fixture[index];
+        test = suite[index];
         el = id(test);
         source = window.data[test];
         setText(test + '-time', 'Running...');
@@ -147,8 +151,7 @@ function runBenchmarks() {
         }, 211);
     }
 
-    id('run').onclick = function () {
-
+    function startBenchmarks() {
         for (index = 0; index < fixture.length; index += 1) {
             setText(fixture[index] + '-time', '');
             setText(fixture[index] + '-variance', '');
@@ -156,11 +159,22 @@ function runBenchmarks() {
         setText('total-time', '');
 
         setText('status', 'Please wait. Running benchmarks...');
-        id('run').style.visibility = 'hidden';
+        id('runquick').style.visibility = 'hidden';
+        id('runfull').style.visibility = 'hidden';
 
         index = 0;
         totalTime = 0;
         runBenchmark();
+    }
+
+    id('runquick').onclick = function () {
+        suite = ['jquery-1.7.1', 'jquery.mobile-1.0'];
+        startBenchmarks();
+    };
+
+    id('runfull').onclick = function () {
+        suite = fixture.slice();
+        startBenchmarks();
     };
 
     setText('benchmarkjs-version', ' version ' + window.Benchmark.version);
