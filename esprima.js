@@ -2574,17 +2574,22 @@ parseStatement: true, visitPostorder: true */
             if (typeof node !== 'object') {
                 return;
             }
-            if (node.type === 'BinaryExpression') {
+
+            switch (node.type) {
+
+            case Syntax.BinaryExpression:
                 // Primary expression in a bracket, e.g. '(1 + 2)', already
                 // has the range info.
                 if (!node.hasOwnProperty('range')) {
                     node.range = enclosed(node.left, node.right);
                 }
-            }
-            if (node.type === 'LogicalExpression') {
+                break;
+
+            case Syntax.LogicalExpression:
                 node.range = enclosed(node.left, node.right);
-            }
-            if (node.type === 'UpdateExpression') {
+                break;
+
+            case Syntax.UpdateExpression:
                 child = node.argument;
                 if (child.hasOwnProperty('range')) {
                     if (node.prefix) {
@@ -2593,6 +2598,10 @@ parseStatement: true, visitPostorder: true */
                         node.range = enclosed(child, findAfter(child.range[1]));
                     }
                 }
+                break;
+
+            default:
+                break;
             }
         });
 
