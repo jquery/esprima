@@ -1273,9 +1273,11 @@ data = {
                 operator: '++',
                 argument: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
-                prefix: false
+                prefix: false,
+                range: [0, 2]
             }
         },
 
@@ -1286,9 +1288,11 @@ data = {
                 operator: '--',
                 argument: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
-                prefix: false
+                prefix: false,
+                range: [0, 2]
             }
         }
     },
@@ -1302,9 +1306,11 @@ data = {
                 operator: '++',
                 argument: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [2, 2]
                 },
-                prefix: true
+                prefix: true,
+                range: [0, 2]
             }
         },
 
@@ -1315,9 +1321,11 @@ data = {
                 operator: '--',
                 argument: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [2, 2]
                 },
-                prefix: true
+                prefix: true,
+                range: [0, 2]
             }
         },
 
@@ -3338,7 +3346,8 @@ data = {
                     name: 'x',
                     range: [19, 19]
                 },
-                prefix: false
+                prefix: false,
+                range: [19, 21]
             },
             body: {
                 type: 'EmptyStatement'
@@ -3384,7 +3393,8 @@ data = {
                     name: 'x',
                     range: [19, 19]
                 },
-                prefix: false
+                prefix: false,
+                range: [19, 21]
             },
             body: {
                 type: 'ExpressionStatement',

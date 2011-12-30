@@ -22,6 +22,7 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*jslint bitwise:true */
 /*global esprima:true, exports:true,
 throwError: true,
 parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
@@ -2519,7 +2520,57 @@ parseStatement: true, visitPostorder: true */
             }
         }
 
+        function findBefore(pos) {
+            var left = 0,
+                right = extra.tokens.length - 1,
+                middle,
+                token;
+
+            while (left < right) {
+                middle = (left + right) >> 1;
+                token = extra.tokens[middle];
+                if (pos > token.range[1]) {
+                    left = Math.min(middle + 1, right);
+                } else {
+                    right = Math.max(middle - 1, left);
+                }
+            }
+
+            token = extra.tokens[left];
+            if (pos > token.range[1]) {
+                return token;
+            } else {
+                return extra.tokens[left - 1];
+            }
+        }
+
+        function findAfter(pos) {
+            var left = 0,
+                right = extra.tokens.length - 1,
+                middle,
+                token;
+
+            while (left < right) {
+                middle = (left + right) >> 1;
+                token = extra.tokens[middle];
+                if (pos < token.range[0]) {
+                    right = Math.max(middle - 1, left);
+                } else {
+                    left = Math.min(middle + 1, right);
+                }
+            }
+
+            token = extra.tokens[left];
+            if (pos < token.range[0]) {
+                return token;
+            } else {
+                return extra.tokens[right + 1];
+            }
+        }
+
         visitPostorder(program, function (node) {
+            var child;
+
             if (typeof node !== 'object') {
                 return;
             }
@@ -2533,25 +2584,44 @@ parseStatement: true, visitPostorder: true */
             if (node.type === 'LogicalExpression') {
                 node.range = enclosed(node.left, node.right);
             }
+            if (node.type === 'UpdateExpression') {
+                child = node.argument;
+                if (child.hasOwnProperty('range')) {
+                    if (node.prefix) {
+                        node.range = enclosed(findBefore(child.range[0]), child);
+                    } else {
+                        node.range = enclosed(child, findAfter(child.range[1]));
+                    }
+                }
+            }
         });
+
         return program;
     }
 
     function patch(options) {
+
+        var opt = {
+            comment: typeof options.comment === 'boolean' && options.comment,
+            range: typeof options.range === 'boolean' && options.range,
+            tokens: typeof options.tokens === 'boolean' && options.tokens
+        };
+
         extra = {};
 
-        if (typeof options.comment === 'boolean' && options.comment) {
+        if (opt.comment) {
             extra.skipComment = skipComment;
             skipComment = scanComment;
             extra.comments = [];
         }
 
-        if (typeof options.range === 'boolean' && options.range) {
+        if (opt.range) {
             extra.parsePrimaryExpression = parsePrimaryExpression;
             parsePrimaryExpression = parsePrimaryRange;
         }
 
-        if (typeof options.tokens === 'boolean' && options.tokens) {
+        // Range processing will need the list of tokens as well.
+        if (opt.range || opt.tokens) {
             extra.lex = lex;
             extra.scanRegExp = scanRegExp;
 
@@ -2627,7 +2697,11 @@ parseStatement: true, visitPostorder: true */
                 program.comments = extra.comments;
             }
             if (typeof extra.tokens !== 'undefined') {
-                program.tokens = extra.tokens;
+                // Range processing might produce the list of tokens. Thus,
+                // only export the tokens when it is explicit in the options.
+                if (typeof options.tokens === 'boolean' && options.tokens) {
+                    program.tokens = extra.tokens;
+                }
             }
             if (typeof options.range === 'boolean' && options.range) {
                 program = processRange(program);
