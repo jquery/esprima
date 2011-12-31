@@ -27,7 +27,7 @@
 throwError: true,
 parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
-parseStatement: true, visitPostorder: true */
+parseStatement: true */
 
 (function (exports) {
     'use strict';
@@ -2568,11 +2568,23 @@ parseStatement: true, visitPostorder: true */
             }
         }
 
-        visitPostorder(program, function (node) {
-            var child;
+        function processNode(node) {
+            var i, child;
 
-            if (typeof node !== 'object') {
+            if (node === null || typeof node !== 'object') {
                 return;
+            }
+
+            if ((node instanceof Array) && node.length) {
+                for (i = 0; i < node.length; i += 1) {
+                    processNode(node[i]);
+                }
+            } else {
+                for (i in node) {
+                    if (node.hasOwnProperty(i)) {
+                        processNode(node[i]);
+                    }
+                }
             }
 
             switch (node.type) {
@@ -2604,9 +2616,9 @@ parseStatement: true, visitPostorder: true */
             default:
                 break;
             }
-        });
+        }
 
-        return program;
+        processNode(program);
     }
 
     function patch(options) {
@@ -2714,7 +2726,7 @@ parseStatement: true, visitPostorder: true */
                 }
             }
             if (typeof options.range === 'boolean' && options.range) {
-                program = processRange(program);
+                processRange(program);
             }
         } catch (e) {
             throw e;
@@ -2741,20 +2753,6 @@ parseStatement: true, visitPostorder: true */
                 }
             }
         }
-    }
-
-    function visitPostorder(object, f) {
-        var key, child;
-
-        for (key in object) {
-            if (object.hasOwnProperty(key)) {
-                child = object[key];
-                if (typeof child === 'object' && child !== null) {
-                    visitPostorder(child, f);
-                }
-            }
-        }
-        f(object);
     }
 
     function traverse(code, options, f) {
