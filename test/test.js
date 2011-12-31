@@ -111,7 +111,8 @@ data = {
                         type: 'ArrayExpression',
                         elements: [],
                         range: [4, 5]
-                    }
+                    },
+                    range: [0, 5]
                 }
             }],
             tokens: [{
@@ -175,25 +176,6 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ArrayExpression',
-                    elements: [{
-                        type: 'Literal',
-                        value: 42
-                    }]
-                }
-            }
-        },
-
-        'x = [ 42, ]': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
                     name: 'x',
                     range: [0, 0]
                 },
@@ -205,7 +187,8 @@ data = {
                         range: [6, 7]
                     }],
                     range: [4, 10]
-                }
+                },
+                range: [0, 10]
             }
         },
 
@@ -2585,12 +2568,15 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [4, 5]
+                },
+                range: [0, 5]
             }
         },
 
@@ -2601,12 +2587,15 @@ data = {
                 operator: '*=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [5, 6]
+                },
+                range: [0, 6]
             }
         },
 
@@ -2617,12 +2606,15 @@ data = {
                 operator: '/=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [5, 6]
+                },
+                range: [0, 6]
             }
         },
 
@@ -2633,12 +2625,15 @@ data = {
                 operator: '%=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [5, 6]
+                },
+                range: [0, 6]
             }
         },
 
@@ -2649,12 +2644,15 @@ data = {
                 operator: '+=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [5, 6]
+                },
+                range: [0, 6]
             }
         },
 
@@ -2665,12 +2663,15 @@ data = {
                 operator: '-=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [5, 6]
+                },
+                range: [0, 6]
             }
         },
 
@@ -2681,12 +2682,15 @@ data = {
                 operator: '<<=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [6, 7]
+                },
+                range: [0, 7]
             }
         },
 
@@ -2697,12 +2701,15 @@ data = {
                 operator: '>>=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [6, 7]
+                },
+                range: [0, 7]
             }
         },
 
@@ -2713,12 +2720,15 @@ data = {
                 operator: '>>>=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [7, 8]
+                },
+                range: [0, 8]
             }
         },
 
@@ -2729,12 +2739,15 @@ data = {
                 operator: '&=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [5, 6]
+                },
+                range: [0, 6]
             }
         },
 
@@ -2745,12 +2758,15 @@ data = {
                 operator: '^=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [5, 6]
+                },
+                range: [0, 6]
             }
         },
 
@@ -2761,12 +2777,15 @@ data = {
                 operator: '|=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [5, 6]
+                },
+                range: [0, 6]
             }
         }
     },
@@ -3327,7 +3346,8 @@ data = {
                     type: 'Literal',
                     value: 0,
                     range: [8, 8]
-                }
+                },
+                range: [4, 8]
             },
             test: {
                 type: 'BinaryExpression',
@@ -3374,7 +3394,8 @@ data = {
                     type: 'Literal',
                     value: 0,
                     range: [8, 8]
-                }
+                },
+                range: [4, 8]
             },
             test: {
                 type: 'BinaryExpression',
@@ -3580,7 +3601,8 @@ data = {
             type: 'WithStatement',
             object: {
                 type: 'Identifier',
-                name: 'x'
+                name: 'x',
+                range: [6, 6]
             },
             body: {
                 type: 'ExpressionStatement',
@@ -3589,12 +3611,15 @@ data = {
                     operator: '=',
                     left: {
                         type: 'Identifier',
-                        name: 'foo'
+                        name: 'foo',
+                        range: [9, 11]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'bar'
-                    }
+                        name: 'bar',
+                        range: [15, 17]
+                    },
+                    range: [9, 17]
                 }
             }
         },
@@ -3603,7 +3628,8 @@ data = {
             type: 'WithStatement',
             object: {
                 type: 'Identifier',
-                name: 'x'
+                name: 'x',
+                range: [6, 6]
             },
             body: {
                 type: 'ExpressionStatement',
@@ -3612,12 +3638,15 @@ data = {
                     operator: '=',
                     left: {
                         type: 'Identifier',
-                        name: 'foo'
+                        name: 'foo',
+                        range: [9, 11]
                     },
                     right: {
                         type: 'Identifier',
-                        name: 'bar'
-                    }
+                        name: 'bar',
+                        range: [15, 17]
+                    },
+                    range: [9, 17]
                 }
             }
         },
@@ -3626,7 +3655,8 @@ data = {
             type: 'WithStatement',
             object: {
                 type: 'Identifier',
-                name: 'x'
+                name: 'x',
+                range: [6, 6]
             },
             body: {
                 type: 'BlockStatement',
@@ -3637,12 +3667,15 @@ data = {
                         operator: '=',
                         left: {
                             type: 'Identifier',
-                            name: 'foo'
+                            name: 'foo',
+                            range: [11, 13]
                         },
                         right: {
                             type: 'Identifier',
-                            name: 'bar'
-                        }
+                            name: 'bar',
+                            range: [17, 19]
+                        },
+                        range: [11, 19]
                     }
                 }]
             }

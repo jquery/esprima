@@ -2577,16 +2577,17 @@ parseStatement: true, visitPostorder: true */
 
             switch (node.type) {
 
+            case Syntax.AssignmentExpression:
+            case Syntax.LogicalExpression:
+                node.range = enclosed(node.left, node.right);
+                break;
+
             case Syntax.BinaryExpression:
                 // Primary expression in a bracket, e.g. '(1 + 2)', already
                 // has the range info.
                 if (!node.hasOwnProperty('range')) {
                     node.range = enclosed(node.left, node.right);
                 }
-                break;
-
-            case Syntax.LogicalExpression:
-                node.range = enclosed(node.left, node.right);
                 break;
 
             case Syntax.UpdateExpression:
