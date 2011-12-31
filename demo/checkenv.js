@@ -9,6 +9,9 @@
         if (window.platform.name === 'Safari' && majorVersion <= 3) {
             throw new Error('CodeMirror does not support Safari <= 3');
         }
+        if (window.platform.name === 'Opera' && majorVersion <= 8) {
+            throw new Error('CodeMirror does not support Opera <= 8');
+        }
     };
 
 }(window));
