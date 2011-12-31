@@ -2512,6 +2512,23 @@ parseStatement: true */
         return node;
     }
 
+    function parseBlockRange() {
+        var pos, block;
+
+        expect('{');
+        pos = index;
+
+        block = parseStatementList();
+
+        expect('}');
+
+        return {
+            type: Syntax.BlockStatement,
+            body: block,
+            range: [pos - 1, index - 1]
+        };
+    }
+
     function processRange(program) {
 
         function enclosed(a, b) {
@@ -2640,6 +2657,8 @@ parseStatement: true */
         if (opt.range) {
             extra.parsePrimaryExpression = parsePrimaryExpression;
             parsePrimaryExpression = parsePrimaryRange;
+            extra.parseBlock = parseBlock;
+            parseBlock = parseBlockRange;
         }
 
         // Range processing will need the list of tokens as well.
@@ -2661,6 +2680,10 @@ parseStatement: true */
 
         if (typeof extra.parsePrimaryExpression === 'function') {
             parsePrimaryExpression = extra.parsePrimaryExpression;
+        }
+
+        if (typeof extra.parseBlock === 'function') {
+            parseBlock = extra.parseBlock;
         }
 
         if (typeof extra.lex === 'function') {
