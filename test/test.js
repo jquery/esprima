@@ -73,17 +73,22 @@ data = {
                     operator: '+',
                     left: {
                         type: 'Literal',
-                        value: 1
+                        value: 1,
+                        range: [1, 1]
                     },
                     right: {
                         type: 'Literal',
-                        value: 2
-                    }
+                        value: 2,
+                        range: [5, 5]
+                    },
+                    range: [0, 7]
                 },
                 right: {
                     type: 'Literal',
-                    value: 3
-                }
+                    value: 3,
+                    range: [11, 11]
+                },
+                range: [0, 11]
             }
         }
     },
@@ -182,23 +187,24 @@ data = {
             }
         },
 
-        'x = [ , 42 ]': {
+        'x = [ 42, ]': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ArrayExpression',
-                    elements: [
-                        null, {
-                            type: 'Literal',
-                            value: 42
-                        }
-                    ]
+                    elements: [{
+                        type: 'Literal',
+                        value: 42,
+                        range: [6, 7]
+                    }],
+                    range: [4, 10]
                 }
             }
         },
@@ -4426,78 +4432,6 @@ data = {
                     name: 'error'
                 }
             }]
-        }
-
-    },
-
-    'Range': {
-
-        'this': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'ThisExpression',
-                range: [0, 3]
-            }
-        },
-
-        '42': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'Literal',
-                value: 42,
-                range: [0, 1]
-            }
-        },
-
-        '(1 + 2 ) * 3': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'BinaryExpression',
-                operator: '*',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '+',
-                    left: {
-                        type: 'Literal',
-                        value: 1,
-                        range: [1, 1]
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 2,
-                        range: [5, 5]
-                    },
-                    range: [0, 7]
-                },
-                right: {
-                    type: 'Literal',
-                    value: 3,
-                    range: [11, 11]
-                },
-                range: [0, 11]
-            }
-        },
-
-        'x = [ 42, ]': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x',
-                    range: [0, 0]
-                },
-                right: {
-                    type: 'ArrayExpression',
-                    elements: [{
-                        type: 'Literal',
-                        value: 42,
-                        range: [6, 7]
-                    }],
-                    range: [4, 10]
-                }
-            }
         }
 
     },
