@@ -4165,7 +4165,8 @@ data = {
                 params: [],
                 body: {
                     type: 'BlockStatement',
-                    body: []
+                    body: [],
+                    range: [11, 12]
                 },
                 range: [0, 13]
             }
