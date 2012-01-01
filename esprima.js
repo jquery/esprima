@@ -2820,7 +2820,7 @@ parseStatement: true */
     }
 
     // Sync with package.json.
-    exports.version = '0.9.5';
+    exports.version = '0.9.6';
 
     exports.parse = parse;
     exports.traverse = traverse;
