@@ -2569,7 +2569,7 @@ parseStatement: true */
         }
 
         function processNode(node) {
-            var i, child, token;
+            var i, range, child, token;
 
             if (node === null || typeof node !== 'object') {
                 return;
@@ -2591,19 +2591,19 @@ parseStatement: true */
 
             case Syntax.AssignmentExpression:
             case Syntax.LogicalExpression:
-                node.range = enclosed(node.left, node.right);
+                range = enclosed(node.left, node.right);
                 break;
 
             case Syntax.BinaryExpression:
                 // Primary expression in a bracket, e.g. '(1 + 2)', already
                 // has the range info.
                 if (!node.hasOwnProperty('range')) {
-                    node.range = enclosed(node.left, node.right);
+                    range = enclosed(node.left, node.right);
                 }
                 break;
 
             case Syntax.ConditionalExpression:
-                node.range = enclosed(node.test, node.alternate);
+                range = enclosed(node.test, node.alternate);
                 break;
 
             case Syntax.MemberExpression:
@@ -2633,34 +2633,38 @@ parseStatement: true */
                         }
                     }
                 }
-                node.range = enclosed(node.object, child);
+                range = enclosed(node.object, child);
                 break;
 
             case Syntax.UnaryExpression:
                 child = node.argument;
                 if (child.hasOwnProperty('range')) {
-                    node.range = enclosed(findBefore(child.range[0]), child);
+                    range = enclosed(findBefore(child.range[0]), child);
                 }
                 break;
 
             case Syntax.SequenceExpression:
                 child = node.expressions[node.expressions.length - 1];
-                node.range = enclosed(node.expressions[0], child);
+                range = enclosed(node.expressions[0], child);
                 break;
 
             case Syntax.UpdateExpression:
                 child = node.argument;
                 if (child.hasOwnProperty('range')) {
                     if (node.prefix) {
-                        node.range = enclosed(findBefore(child.range[0]), child);
+                        range = enclosed(findBefore(child.range[0]), child);
                     } else {
-                        node.range = enclosed(child, findAfter(child.range[1]));
+                        range = enclosed(child, findAfter(child.range[1]));
                     }
                 }
                 break;
 
             default:
                 break;
+            }
+
+            if (typeof range !== 'undefined') {
+                node.range = range;
             }
         }
 
