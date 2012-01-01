@@ -2569,7 +2569,7 @@ parseStatement: true */
         }
 
         function processNode(node) {
-            var i, child;
+            var i, child, token;
 
             if (node === null || typeof node !== 'object') {
                 return;
@@ -2604,6 +2604,36 @@ parseStatement: true */
 
             case Syntax.ConditionalExpression:
                 node.range = enclosed(node.test, node.alternate);
+                break;
+
+            case Syntax.MemberExpression:
+
+                child = node.property;
+
+                // This is for the construct like 'foo[bar]'.
+                // Find the first token after the closing bracket ].
+                if (node.computed && node.property.hasOwnProperty('range')) {
+                    token = findAfter(child.range[1]);
+                    if (typeof token !== 'undefined') {
+                        if (token.type === 'Punctuator' && token.value === ']') {
+                            child = token;
+                        }
+                    }
+                }
+
+                // This is for the construct like 'foo.bar'.
+                // Find the first token after the dot sign.
+                if (!node.computed && node.object.hasOwnProperty('range')) {
+                    token = findAfter(node.object.range[1]);
+                    if (typeof token !== 'undefined' && token.value === '.') {
+                        token = findAfter(token.range[1]);
+                        if (typeof token !== 'undefined') {
+                            node.property.range = token.range;
+                            child = node.property;
+                        }
+                    }
+                }
+                node.range = enclosed(node.object, child);
                 break;
 
             case Syntax.UnaryExpression:

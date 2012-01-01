@@ -1019,12 +1019,15 @@ data = {
                 computed: false,
                 object: {
                     type: 'Identifier',
-                    name: 'universe'
+                    name: 'universe',
+                    range: [0, 7]
                 },
                 property: {
                     type: 'Identifier',
-                    name: 'milkyway'
-                }
+                    name: 'milkyway',
+                    range: [9, 16]
+                },
+                range: [0, 16]
             }
         },
 
@@ -1038,17 +1041,22 @@ data = {
                     computed: false,
                     object: {
                         type: 'Identifier',
-                        name: 'universe'
+                        name: 'universe',
+                        range: [0, 7]
                     },
                     property: {
                         type: 'Identifier',
-                        name: 'milkyway'
-                    }
+                        name: 'milkyway',
+                        range: [9, 16]
+                    },
+                    range: [0, 16]
                 },
                 property: {
                     type: 'Identifier',
-                    name: 'solarsystem'
-                }
+                    name: 'solarsystem',
+                    range: [18, 28]
+                },
+                range: [0, 28]
             }
         },
 
@@ -1065,22 +1073,29 @@ data = {
                         computed: false,
                         object: {
                             type: 'Identifier',
-                            name: 'universe'
+                            name: 'universe',
+                            range: [0, 7]
                         },
                         property: {
                             type: 'Identifier',
-                            name: 'milkyway'
-                        }
+                            name: 'milkyway',
+                            range: [9, 16]
+                        },
+                        range: [0, 16]
                     },
                     property: {
                         type: 'Identifier',
-                        name: 'solarsystem'
-                    }
+                        name: 'solarsystem',
+                        range: [18, 28]
+                    },
+                    range: [0, 28]
                 },
                 property: {
                     type: 'Identifier',
-                    name: 'Earth'
-                }
+                    name: 'Earth',
+                    range: [30, 34]
+                },
+                range: [0, 34]
             }
         },
 
@@ -1113,12 +1128,15 @@ data = {
                 computed: true,
                 object: {
                     type: 'Identifier',
-                    name: 'universe'
+                    name: 'universe',
+                    range: [0, 7]
                 },
                 property: {
                     type: 'Identifier',
-                    name: 'galaxyName'
-                }
+                    name: 'galaxyName',
+                    range: [9, 18]
+                },
+                range: [0, 19]
             }
         },
 
@@ -1132,17 +1150,22 @@ data = {
                     computed: true,
                     object: {
                         type: 'Identifier',
-                        name: 'universe'
+                        name: 'universe',
+                        range: [0, 7]
                     },
                     property: {
                         type: 'Literal',
-                        value: 42
-                    }
+                        value: 42,
+                        range: [9, 10]
+                    },
+                    range: [0, 11]
                 },
                 property: {
                     type: 'Identifier',
-                    name: 'galaxies'
-                }
+                    name: 'galaxies',
+                    range: [13, 20]
+                },
+                range: [0, 20]
             }
         },
 
