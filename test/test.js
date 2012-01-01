@@ -2536,7 +2536,8 @@ data = {
                     type: 'Literal',
                     value: 2,
                     range: [8, 8]
-                }
+                },
+                range: [0, 8]
             }
         },
 
@@ -2568,7 +2569,8 @@ data = {
                     type: 'Literal',
                     value: 2,
                     range: [13, 13]
-                }
+                },
+                range: [0, 13]
             }
         }
     },

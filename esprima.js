@@ -2602,6 +2602,10 @@ parseStatement: true */
                 }
                 break;
 
+            case Syntax.ConditionalExpression:
+                node.range = enclosed(node.test, node.alternate);
+                break;
+
             case Syntax.UnaryExpression:
                 child = node.argument;
                 if (child.hasOwnProperty('range')) {
