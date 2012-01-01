@@ -1106,18 +1106,23 @@ data = {
                 computed: true,
                 object: {
                     type: 'Identifier',
-                    name: 'universe'
+                    name: 'universe',
+                    range: [0, 7]
                 },
                 property: {
                     type: 'SequenceExpression',
                     expressions: [{
                         type: 'Identifier',
-                        name: 'galaxyName'
+                        name: 'galaxyName',
+                        range: [9, 18]
                     }, {
                         type: 'Identifier',
-                        name: 'otherUselessName'
-                    }]
-                }
+                        name: 'otherUselessName',
+                        range: [21, 36]
+                    }],
+                    range: [9, 36]
+                },
+                range: [0, 37]
             }
         },
 
@@ -3052,13 +3057,16 @@ data = {
                 expressions: [
                     {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [0, 0]
                     },
                     {
                         type: 'Identifier',
-                        name: 'y'
+                        name: 'y',
+                        range: [3, 3]
                     }
-                ]
+                ],
+                range: [0, 3]
             }
         }
 

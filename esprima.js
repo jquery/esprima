@@ -2643,6 +2643,11 @@ parseStatement: true */
                 }
                 break;
 
+            case Syntax.SequenceExpression:
+                child = node.expressions[node.expressions.length - 1];
+                node.range = enclosed(node.expressions[0], child);
+                break;
+
             case Syntax.UpdateExpression:
                 child = node.argument;
                 if (child.hasOwnProperty('range')) {
