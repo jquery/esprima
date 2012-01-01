@@ -1325,8 +1325,10 @@ data = {
                 operator: '+',
                 argument: {
                     type: 'Identifier',
-                    name: 'x'
-                }
+                    name: 'x',
+                    range: [1, 1]
+                },
+                range: [0, 1]
             }
         },
 
@@ -1337,8 +1339,10 @@ data = {
                 operator: '-',
                 argument: {
                     type: 'Identifier',
-                    name: 'x'
-                }
+                    name: 'x',
+                    range: [1, 1]
+                },
+                range: [0, 1]
             }
         },
 
@@ -1349,8 +1353,10 @@ data = {
                 operator: '~',
                 argument: {
                     type: 'Identifier',
-                    name: 'x'
-                }
+                    name: 'x',
+                    range: [1, 1]
+                },
+                range: [0, 1]
             }
         },
 
@@ -1361,8 +1367,10 @@ data = {
                 operator: '!',
                 argument: {
                     type: 'Identifier',
-                    name: 'x'
-                }
+                    name: 'x',
+                    range: [1, 1]
+                },
+                range: [0, 1]
             }
         },
 
@@ -1373,8 +1381,10 @@ data = {
                 operator: 'void',
                 argument: {
                     type: 'Identifier',
-                    name: 'x'
-                }
+                    name: 'x',
+                    range: [5, 5]
+                },
+                range: [0, 5]
             }
         },
 
@@ -1385,8 +1395,10 @@ data = {
                 operator: 'delete',
                 argument: {
                     type: 'Identifier',
-                    name: 'x'
-                }
+                    name: 'x',
+                    range: [7, 7]
+                },
+                range: [0, 7]
             }
         },
 
@@ -1397,8 +1409,10 @@ data = {
                 operator: 'typeof',
                 argument: {
                     type: 'Identifier',
-                    name: 'x'
-                }
+                    name: 'x',
+                    range: [7, 7]
+                },
+                range: [0, 7]
             }
         }
     },

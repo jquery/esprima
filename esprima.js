@@ -2602,6 +2602,13 @@ parseStatement: true */
                 }
                 break;
 
+            case Syntax.UnaryExpression:
+                child = node.argument;
+                if (child.hasOwnProperty('range')) {
+                    node.range = enclosed(findBefore(child.range[0]), child);
+                }
+                break;
+
             case Syntax.UpdateExpression:
                 child = node.argument;
                 if (child.hasOwnProperty('range')) {
