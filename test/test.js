@@ -30,7 +30,7 @@ data = {
 
     'Primary Expression': {
 
-        'this': {
+        'this\n': {
             type: 'Program',
             body: [{
                 type: 'ExpressionStatement',
@@ -43,24 +43,26 @@ data = {
                 type: 'Keyword',
                 value: 'this',
                 range: [0, 3]
-            }]
+            }],
+            range: [0, 5]
         },
 
-        '42': {
+        '\n    42\n\n': {
             type: 'Program',
             body: [{
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Literal',
                     value: 42,
-                    range: [0, 1]
+                    range: [5, 6]
                 }
             }],
             tokens: [{
                 type: 'Numeric',
                 value: '42',
-                range: [0, 1]
-            }]
+                range: [5, 6]
+            }],
+            range: [0,9]
         },
 
         '(1 + 2 ) * 3': {
@@ -131,7 +133,8 @@ data = {
                 type: 'Punctuator',
                 value: ']',
                 range: [5, 5]
-            }]
+            }],
+            range: [0, 6]
         },
 
         'x = [ ]': {
@@ -823,7 +826,8 @@ data = {
                 type: 'RegularExpression',
                 value: '/[a-z]/i',
                 range: [8, 15]
-            }]
+            }],
+            range: [0, 16]
         },
 
         'var x = /[P QR]/i': {
@@ -859,7 +863,8 @@ data = {
                 type: 'RegularExpression',
                 value: '/[P QR]/i',
                 range: [8, 16]
-            }]
+            }],
+            range: [0, 17]
         },
 
         'var x = /foo\\/bar/': {
@@ -895,8 +900,8 @@ data = {
                 type: 'RegularExpression',
                 value: '/foo\\/bar/',
                 range: [8, 17]
-            }]
-
+            }],
+            range: [0, 18]
         },
 
         'var x = /=([^=\\s])+/g': {
@@ -932,7 +937,8 @@ data = {
                 type: 'RegularExpression',
                 value: '/=([^=\\s])+/g',
                 range: [8, 20]
-            }]
+            }],
+            range: [0, 21]
         }
     },
 
