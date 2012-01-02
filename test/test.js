@@ -22,7 +22,8 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*global document: true, window:true, esprima: true */
+/*jslint browser:true node:true */
+/*global esprima:true, describe:true, it:true */
 
 var runTests, data;
 
@@ -62,7 +63,7 @@ data = {
                 value: '42',
                 range: [5, 6]
             }],
-            range: [0,9]
+            range: [0, 9]
         },
 
         '(1 + 2 ) * 3': {
@@ -4580,10 +4581,12 @@ data = {
 
 
 function hasComment(syntax) {
+    'use strict';
     return typeof syntax.comments !== 'undefined';
 }
 
 function hasRange(syntax) {
+    'use strict';
     var result = false;
     JSON.stringify(syntax, function (key, value) {
         if (key === 'range') {
@@ -4595,6 +4598,7 @@ function hasRange(syntax) {
 }
 
 function hasTokens(syntax) {
+    'use strict';
     var result = false;
     JSON.stringify(syntax, function (key, value) {
         if (key === 'tokens') {
@@ -4609,6 +4613,7 @@ function hasTokens(syntax) {
 // convert it to a string literal, otherwise it will be decoded
 // as object "{}" and the regular expression would be lost.
 function adjustRegexLiteral(key, value) {
+    'use strict';
     if (key === 'value' && value instanceof RegExp) {
         value = value.toString();
     }
@@ -4778,49 +4783,55 @@ if (typeof window !== 'undefined') {
         }
     };
 } else {
-    require('should');
-    var esprima = require('../esprima');
 
-    function addTest(code, expected) {
-        if (typeof expected !== 'string') {
-            return function () {
-                var tree, actual, options;
+    (function () {
+        'use strict';
 
-                options = {
-                    comment: false,
-                    range: false,
-                    tokens: false
+        require('should');
+        var esprima = require('../esprima');
+
+        function addTest(code, expected) {
+            if (typeof expected !== 'string') {
+                return function () {
+                    var tree, actual, options;
+
+                    options = {
+                        comment: false,
+                        range: false,
+                        tokens: false
+                    };
+
+                    options.comment = hasComment(expected);
+                    options.range = hasRange(expected) && !options.comment;
+                    options.tokens = hasTokens(expected);
+
+                    expected = JSON.stringify(expected, null, 4);
+                    tree = esprima.parse(code, options);
+                    tree = (options.comment || options.tokens) ? tree : tree.body[0];
+                    actual = JSON.stringify(tree, adjustRegexLiteral, 4);
+                    actual.should.equal(expected);
                 };
+            } else {
+                return function () {
+                    var actual;
 
-                options.comment = hasComment(expected);
-                options.range = hasRange(expected) && !options.comment;
-                options.tokens = hasTokens(expected);
-
-                expected = JSON.stringify(expected, null, 4);
-                tree = esprima.parse(code, options);
-                tree = (options.comment || options.tokens) ? tree : tree.body[0];
-                actual = JSON.stringify(tree, adjustRegexLiteral, 4);
-                actual.should.equal(expected);
-            };
-        } else {
-            return function () {
-                var actual;
-
-                expected = 'Error: ' + expected;
-                try {
-                    esprima.parse(code);
-                } catch (e) {
-                    actual = e.toString();
-                }
-                actual.should.equal(expected);
-            };
+                    expected = 'Error: ' + expected;
+                    try {
+                        esprima.parse(code);
+                    } catch (e) {
+                        actual = e.toString();
+                    }
+                    actual.should.equal(expected);
+                };
+            }
         }
-    }
-    Object.keys(data).forEach(function (category) {
-        describe(category, function () {
-            Object.keys(data[category]).forEach(function (source) {
-                it(source, addTest(source, data[category][source]));
+
+        Object.keys(data).forEach(function (category) {
+            describe(category, function () {
+                Object.keys(data[category]).forEach(function (source) {
+                    it(source, addTest(source, data[category][source]));
+                });
             });
         });
-    });
+    }());
 }
