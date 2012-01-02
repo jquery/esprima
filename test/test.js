@@ -4572,6 +4572,43 @@ data = {
     }
 };
 
+
+function hasComment(syntax) {
+    return typeof syntax.comments !== 'undefined';
+}
+
+function hasRange(syntax) {
+    var result = false;
+    JSON.stringify(syntax, function (key, value) {
+        if (key === 'range') {
+            result = true;
+        }
+        return value;
+    });
+    return result;
+}
+
+function hasTokens(syntax) {
+    var result = false;
+    JSON.stringify(syntax, function (key, value) {
+        if (key === 'tokens') {
+            result = true;
+        }
+        return value;
+    });
+    return result;
+}
+
+// Special handling for regular expression literal since we need to
+// convert it to a string literal, otherwise it will be decoded
+// as object "{}" and the regular expression would be lost.
+function adjustRegexLiteral(key, value) {
+    if (key === 'value' && value instanceof RegExp) {
+        value = value.toString();
+    }
+    return value;
+}
+
 if (typeof window !== 'undefined') {
     // Run all tests in a browser environment.
     runTests = function () {
@@ -4641,42 +4678,6 @@ if (typeof window !== 'undefined') {
             e.setAttribute('class', 'actual');
             setText(e, actual);
             report.appendChild(e);
-        }
-
-        function hasComment(syntax) {
-            return typeof syntax.comments !== 'undefined';
-        }
-
-        function hasRange(syntax) {
-            var result = false;
-            JSON.stringify(syntax, function (key, value) {
-                if (key === 'range') {
-                    result = true;
-                }
-                return value;
-            });
-            return result;
-        }
-
-        function hasTokens(syntax) {
-            var result = false;
-            JSON.stringify(syntax, function (key, value) {
-                if (key === 'tokens') {
-                    result = true;
-                }
-                return value;
-            });
-            return result;
-        }
-
-        // Special handling for regular expression literal since we need to
-        // convert it to a string literal, otherwise it will be decoded
-        // as object "{}" and the regular expression would be lost.
-        function adjustRegexLiteral(key, value) {
-            if (key === 'value' && value instanceof RegExp) {
-                value = value.toString();
-            }
-            return value;
         }
 
         function testParse(code, syntax) {
@@ -4771,8 +4772,49 @@ if (typeof window !== 'undefined') {
         }
     };
 } else {
-    // TODO: Run all tests in another environment.
-    runTests = function () {
-        'use strict';
-    };
+    require('should');
+    var esprima = require('../esprima');
+
+    function addTest(code, expected) {
+        if (typeof expected !== 'string') {
+            return function () {
+                var tree, actual, options;
+
+                options = {
+                    comment: false,
+                    range: false,
+                    tokens: false
+                };
+
+                options.comment = hasComment(expected);
+                options.range = hasRange(expected) && !options.comment;
+                options.tokens = hasTokens(expected);
+
+                expected = JSON.stringify(expected, null, 4);
+                tree = esprima.parse(code, options);
+                tree = (options.comment || options.tokens) ? tree : tree.body[0];
+                actual = JSON.stringify(tree, adjustRegexLiteral, 4);
+                actual.should.equal(expected);
+            };
+        } else {
+            return function () {
+                var actual;
+
+                expected = 'Error: ' + expected;
+                try {
+                    esprima.parse(code);
+                } catch (e) {
+                    actual = e.toString();
+                }
+                actual.should.equal(expected);
+            };
+        }
+    }
+    Object.keys(data).forEach(function (category) {
+        describe(category, function () {
+            Object.keys(data[category]).forEach(function (source) {
+                it(source, addTest(source, data[category][source]));
+            });
+        });
+    });
 }
