@@ -22,5 +22,9 @@
     "licenses": [{
         "type": "BSD",
         "url": "http://github.com/ariya/esprima/raw/master/LICENSE.BSD"
-    }]
+    }],
+    "devDependencies": {
+        "mocha": ">= 0.8.1",
+        "should": ">= 0.4.2"
+    }
 }
