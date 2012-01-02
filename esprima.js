@@ -2659,6 +2659,10 @@ parseStatement: true */
                 }
                 break;
 
+            case Syntax.Program:
+                range = [0, length];
+                break;
+
             default:
                 break;
             }
