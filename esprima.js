@@ -1590,7 +1590,7 @@ parseStatement: true */
 
     // 12.2 Variable Statement
 
-    function parseVariableDeclaration() {
+    function parseVariableDeclaration(kind) {
         var token, id, init;
 
         token = lex();
@@ -1604,7 +1604,10 @@ parseStatement: true */
         };
 
         init = null;
-        if (match('=')) {
+        if (kind === 'const') {
+            expect('=');
+            init = parseAssignmentExpression();
+        } else if (match('=')) {
             lex();
             init = parseAssignmentExpression();
         }
@@ -1615,11 +1618,11 @@ parseStatement: true */
         };
     }
 
-    function parseVariableDeclarationList() {
+    function parseVariableDeclarationList(kind) {
         var list = [];
 
         while (index < length) {
-            list.push(parseVariableDeclaration());
+            list.push(parseVariableDeclaration(kind));
             if (!match(',')) {
                 break;
             }
@@ -1629,38 +1632,23 @@ parseStatement: true */
         return list;
     }
 
-    function parseVariableStatement() {
+    // kind may be `const`, `let` or `var`
+    // const and let are both experimental and not in the specification yet.
+    // see http://wiki.ecmascript.org/doku.php?id=harmony:const
+    // and http://wiki.ecmascript.org/doku.php?id=harmony:let
+    function parseVariableStatement(kind) {
         var declarations;
 
-        expectKeyword('var');
+        expectKeyword(kind);
 
-        declarations = parseVariableDeclarationList();
+        declarations = parseVariableDeclarationList(kind);
 
         consumeSemicolon();
 
         return {
             type: Syntax.VariableDeclaration,
             declarations: declarations,
-            kind: 'var'
-        };
-    }
-
-    // http://wiki.ecmascript.org/doku.php?id=harmony:let.
-    // Warning: This is experimental and not in the specification yet.
-
-    function parseLetStatement() {
-        var declarations;
-
-        expectKeyword('let');
-
-        declarations = parseVariableDeclarationList();
-
-        consumeSemicolon();
-
-        return {
-            type: Syntax.VariableDeclaration,
-            declarations: declarations,
-            kind: 'let'
+            kind: kind
         };
     }
 
@@ -2157,6 +2145,10 @@ parseStatement: true */
             switch (token.value) {
             case 'break':
                 return parseBreakStatement();
+            case 'const':
+            case 'let':
+            case 'var':
+                return parseVariableStatement(token.value);
             case 'continue':
                 return parseContinueStatement();
             case 'debugger':
@@ -2167,8 +2159,6 @@ parseStatement: true */
                 return parseForStatement();
             case 'if':
                 return parseIfStatement();
-            case 'let':
-                return parseLetStatement();
             case 'return':
                 return parseReturnStatement();
             case 'switch':
@@ -2177,8 +2167,6 @@ parseStatement: true */
                 return parseThrowStatement();
             case 'try':
                 return parseTryStatement();
-            case 'var':
-                return parseVariableStatement();
             case 'while':
                 return parseWhileStatement();
             case 'with':

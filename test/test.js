@@ -3039,6 +3039,63 @@ data = {
         }
     },
 
+    'Const Statement': {
+
+        '{ const x = 42 }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42
+                    }
+                }],
+                kind: 'const'
+            }]
+        },
+
+        '{ const x = 14, y = 3, z = 1977 }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 14
+                    }
+                }, {
+                    id: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 3
+                    }
+                }, {
+                    id: {
+                        type: 'Identifier',
+                        name: 'z'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 1977
+                    }
+                }],
+                kind: 'const'
+            }]
+        }
+    },
+
     'Empty Statement': {
 
         ';': {
@@ -4575,7 +4632,13 @@ data = {
 
         'for (var i, i2 in {});': 'Line 1: Unexpected token in',
 
-        'try { }': 'Line 1: Missing catch or finally after try'
+        'try { }': 'Line 1: Missing catch or finally after try',
+
+        'const x = 12, y;': 'Line 1: Unexpected token ;',
+
+        'const x, y = 12;': 'Line 1: Unexpected token ,',
+
+        'const x;': 'Line 1: Unexpected token ;'
     }
 };
 
