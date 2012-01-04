@@ -266,6 +266,38 @@ data = {
                     }]
                 }
             }
+        },
+
+        '日本語 = []': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: '日本語'
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: []
+                }
+            }
+        },
+
+        'T\u203F = []': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'T\u203F'
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: []
+                }
+            }
         }
 
     },
@@ -4575,7 +4607,9 @@ data = {
 
         'for (var i, i2 in {});': 'Line 1: Unexpected token in',
 
-        'try { }': 'Line 1: Missing catch or finally after try'
+        'try { }': 'Line 1: Missing catch or finally after try',
+
+        '\u203F = 10': 'Line 1: Unexpected token ILLEGAL'
     }
 };
 
