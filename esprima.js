@@ -1563,7 +1563,7 @@ parseStatement: true */
             if (match('}')) {
                 break;
             }
-            statement = parseStatement();
+            statement = parseSourceElement();
             if (typeof statement === 'undefined') {
                 break;
             }
@@ -1632,11 +1632,27 @@ parseStatement: true */
         return list;
     }
 
-    // kind may be `const`, `let` or `var`
-    // const and let are both experimental and not in the specification yet.
+    function parseVariableStatement() {
+        var declarations;
+
+        expectKeyword('var');
+
+        declarations = parseVariableDeclarationList();
+
+        consumeSemicolon();
+
+        return {
+            type: Syntax.VariableDeclaration,
+            declarations: declarations,
+            kind: 'var'
+        };
+    }
+
+    // kind may be `const` or `let`
+    // Both are experimental and not in the specification yet.
     // see http://wiki.ecmascript.org/doku.php?id=harmony:const
     // and http://wiki.ecmascript.org/doku.php?id=harmony:let
-    function parseVariableStatement(kind) {
+    function parseConstLetDeclaration(kind) {
         var declarations;
 
         expectKeyword(kind);
@@ -2145,10 +2161,6 @@ parseStatement: true */
             switch (token.value) {
             case 'break':
                 return parseBreakStatement();
-            case 'const':
-            case 'let':
-            case 'var':
-                return parseVariableStatement(token.value);
             case 'continue':
                 return parseContinueStatement();
             case 'debugger':
@@ -2167,6 +2179,8 @@ parseStatement: true */
                 return parseThrowStatement();
             case 'try':
                 return parseTryStatement();
+            case 'var':
+                return parseVariableStatement();
             case 'while':
                 return parseWhileStatement();
             case 'with':
@@ -2308,8 +2322,16 @@ parseStatement: true */
             return;
         }
 
-        if (matchKeyword('function')) {
-            return parseFunctionDeclaration();
+        if (token.type === Token.Keyword) {
+            switch (token.value) {
+            case 'const':
+            case 'let':
+                return parseConstLetDeclaration(token.value);
+            case 'function':
+                return parseFunctionDeclaration();
+            default:
+                break;
+            }
         }
 
         return parseStatement();
