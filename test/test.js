@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
+  Copyright (C) 2012 Arpad Borsos <arpad.borsos@googlemail.com>
   Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2011 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2011 Arpad Borsos <arpad.borsos@googlemail.com>
@@ -3494,6 +3495,18 @@ data = {
 
     'Let Statement': {
 
+        'let x': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                id: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                init: null
+            }],
+            kind: 'let'
+        },
+
         '{ let x }': {
             type: 'BlockStatement',
             body: [{
@@ -3564,6 +3577,78 @@ data = {
         }
     },
 
+    'Const Statement': {
+
+        'const x = 42': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                id: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                init: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }],
+            kind: 'const'
+        },
+
+        '{ const x = 42 }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42
+                    }
+                }],
+                kind: 'const'
+            }]
+        },
+
+        '{ const x = 14, y = 3, z = 1977 }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 14
+                    }
+                }, {
+                    id: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 3
+                    }
+                }, {
+                    id: {
+                        type: 'Identifier',
+                        name: 'z'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 1977
+                    }
+                }],
+                kind: 'const'
+            }]
+        }
+    },
+
     'Empty Statement': {
 
         ';': {
@@ -3621,6 +3706,71 @@ data = {
                         name: 'goodMorning'
                     },
                     'arguments': []
+                }
+            },
+            alternate: null
+        },
+
+        'if (morning) (function(){})': {
+            type: 'IfStatement',
+            test: {
+                type: 'Identifier',
+                name: 'morning'
+            },
+            consequent: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'FunctionExpression',
+                    id: null,
+                    params: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: []
+                    }
+                }
+            },
+            alternate: null
+        },
+
+        'if (morning) var x = 0;': {
+            type: 'IfStatement',
+            test: {
+                type: 'Identifier',
+                name: 'morning'
+            },
+            consequent: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 0
+                    }
+                }],
+                kind: 'var'
+            },
+            alternate: null
+        },
+
+        'if (morning) function a(){}': {
+            type: 'IfStatement',
+            test: {
+                type: 'Identifier',
+                name: 'morning'
+            },
+            consequent: {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'a'
+                },
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: []
                 }
             },
             alternate: null
@@ -3847,6 +3997,29 @@ data = {
             }
         },
 
+        'for(let x = 0;;);': {
+            type: 'ForStatement',
+            init: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 0
+                    }
+                }],
+                kind: 'let'
+            },
+            test: null,
+            update: null,
+            body: {
+                type: 'EmptyStatement'
+            }
+        },
+
         'for(var x = 0, y = 1;;);': {
             type: 'ForStatement',
             init: {
@@ -4059,6 +4232,40 @@ data = {
                     init: null
                 }],
                 kind: 'var'
+            },
+            right: {
+                type: 'Identifier',
+                name: 'list'
+            },
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'process'
+                    },
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x'
+                    }]
+                }
+            },
+            each: false
+        },
+
+        'for (let x in list) process(x);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: null
+                }],
+                kind: 'let'
             },
             right: {
                 type: 'Identifier',
@@ -5130,7 +5337,17 @@ data = {
 
         'try { }': 'Line 1: Missing catch or finally after try',
 
-        '\u203F = 10': 'Line 1: Unexpected token ILLEGAL'
+        '\u203F = 10': 'Line 1: Unexpected token ILLEGAL',
+
+        'const x = 12, y;': 'Line 1: Unexpected token ;',
+
+        'const x, y = 12;': 'Line 1: Unexpected token ,',
+
+        'const x;': 'Line 1: Unexpected token ;',
+
+        'if(true) let a = 1;': 'Line 1: Unexpected token let',
+
+        'if(true) const a = 1;': 'Line 1: Unexpected token const'
     }
 };
 

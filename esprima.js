@@ -1,5 +1,6 @@
 /*
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
+  Copyright (C) 2012 Arpad Borsos <arpad.borsos@googlemail.com>
   Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
 
   Redistribution and use in source and binary forms, with or without
@@ -28,7 +29,7 @@
 throwError: true,
 parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
-parseStatement: true */
+parseStatement: true, parseSourceElement: true */
 
 (function (exports) {
     'use strict';
@@ -1582,7 +1583,7 @@ parseStatement: true */
             if (match('}')) {
                 break;
             }
-            statement = parseStatement();
+            statement = parseSourceElement();
             if (typeof statement === 'undefined') {
                 break;
             }
@@ -1609,7 +1610,7 @@ parseStatement: true */
 
     // 12.2 Variable Statement
 
-    function parseVariableDeclaration() {
+    function parseVariableDeclaration(kind) {
         var token, id, init;
 
         token = lex();
@@ -1623,7 +1624,10 @@ parseStatement: true */
         };
 
         init = null;
-        if (match('=')) {
+        if (kind === 'const') {
+            expect('=');
+            init = parseAssignmentExpression();
+        } else if (match('=')) {
             lex();
             init = parseAssignmentExpression();
         }
@@ -1634,11 +1638,11 @@ parseStatement: true */
         };
     }
 
-    function parseVariableDeclarationList() {
+    function parseVariableDeclarationList(kind) {
         var list = [];
 
         while (index < length) {
-            list.push(parseVariableDeclaration());
+            list.push(parseVariableDeclaration(kind));
             if (!match(',')) {
                 break;
             }
@@ -1664,22 +1668,23 @@ parseStatement: true */
         };
     }
 
-    // http://wiki.ecmascript.org/doku.php?id=harmony:let.
-    // Warning: This is experimental and not in the specification yet.
-
-    function parseLetStatement() {
+    // kind may be `const` or `let`
+    // Both are experimental and not in the specification yet.
+    // see http://wiki.ecmascript.org/doku.php?id=harmony:const
+    // and http://wiki.ecmascript.org/doku.php?id=harmony:let
+    function parseConstLetDeclaration(kind) {
         var declarations;
 
-        expectKeyword('let');
+        expectKeyword(kind);
 
-        declarations = parseVariableDeclarationList();
+        declarations = parseVariableDeclarationList(kind);
 
         consumeSemicolon();
 
         return {
             type: Syntax.VariableDeclaration,
             declarations: declarations,
-            kind: 'let'
+            kind: kind
         };
     }
 
@@ -2186,8 +2191,6 @@ parseStatement: true */
                 return parseForStatement();
             case 'if':
                 return parseIfStatement();
-            case 'let':
-                return parseLetStatement();
             case 'return':
                 return parseReturnStatement();
             case 'switch':
@@ -2339,8 +2342,16 @@ parseStatement: true */
             return;
         }
 
-        if (matchKeyword('function')) {
-            return parseFunctionDeclaration();
+        if (token.type === Token.Keyword) {
+            switch (token.value) {
+            case 'const':
+            case 'let':
+                return parseConstLetDeclaration(token.value);
+            case 'function':
+                return parseFunctionDeclaration();
+            default:
+                break;
+            }
         }
 
         return parseStatement();
