@@ -261,9 +261,8 @@ if (typeof window !== 'undefined') {
 
     (function () {
         'use strict';
-        require.paths.push(__dirname + '/3rdparty/');
         var fs = require('fs'),
-            Benchmark = require('benchmark'),
+            Benchmark = require('./3rdparty/benchmark'),
             esprima = require('../esprima'),
             option = process.argv[2];
 
