@@ -338,7 +338,8 @@ parseStatement: true */
 
         if (id === 'null') {
             return {
-                type: Token.NullLiteral
+                type: Token.NullLiteral,
+                value: id
             };
         }
 
@@ -682,6 +683,13 @@ parseStatement: true */
         };
     }
 
+    function isIdentifierName(token) {
+        return token.type === Token.Identifier ||
+            token.type === Token.Keyword ||
+            token.type === Token.BooleanLiteral ||
+            token.type === Token.NullLiteral;
+    }
+
     function advance() {
         var ch, token;
 
@@ -955,16 +963,11 @@ parseStatement: true */
             property = {};
             switch (token.type) {
             case Token.Identifier:
-                property.key = {
-                    type: Syntax.Identifier,
-                    name: token.value
-                };
-
                 // Property Assignment: Getter and Setter.
 
                 if (token.value === 'get' && !match(':')) {
                     token = lex();
-                    if (token.type !== Token.Identifier) {
+                    if (!isIdentifierName(token)) {
                         throwUnexpected(token);
                     }
                     expect('(');
@@ -987,7 +990,7 @@ parseStatement: true */
 
                 if (token.value === 'set' && !match(':')) {
                     token = lex();
-                    if (token.type !== Token.Identifier) {
+                    if (!isIdentifierName(token)) {
                         throwUnexpected(token);
                     }
                     property.key = {
@@ -1012,7 +1015,21 @@ parseStatement: true */
                     property.kind = 'set';
                     break;
                 }
+                property.key = {
+                    type: Syntax.Identifier,
+                    name: token.value
+                };
+                expect(':');
+                property.value = parseAssignmentExpression();
+                break;
 
+            case Token.Keyword:
+            case Token.BooleanLiteral:
+            case Token.NullLiteral:
+                property.key = {
+                    type: Syntax.Identifier,
+                    name: token.value
+                };
                 expect(':');
                 property.value = parseAssignmentExpression();
                 break;
@@ -1159,7 +1176,7 @@ parseStatement: true */
             if (match('.')) {
                 lex();
                 token = lex();
-                if (token.type !== Token.Identifier) {
+                if (!isIdentifierName(token)) {
                     throwUnexpected(token);
                 }
                 property = {

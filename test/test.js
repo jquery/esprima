@@ -364,6 +364,106 @@ data = {
             }
         },
 
+        'x = { if: 42 }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'if'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42
+                        }
+                    }]
+                }
+            }
+        },
+
+        'x = { true: 42 }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'true'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42
+                        }
+                    }]
+                }
+            }
+        },
+
+        'x = { false: 42 }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'false'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42
+                        }
+                    }]
+                }
+            }
+        },
+
+        'x = { null: 42 }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'null'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42
+                        }
+                    }]
+                }
+            }
+        },
+
         'x = { "answer": 42 }': {
             type: 'ExpressionStatement',
             expression: {
@@ -457,6 +557,130 @@ data = {
             }
         },
 
+        'x = { get if() {} }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'if'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = { get true() {} }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'true'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = { get false() {} }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'false'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = { get null() {} }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'null'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
         'x = { set width(w) { m_width = w } }': {
             type: 'ExpressionStatement',
             expression: {
@@ -490,6 +714,198 @@ data = {
                                         left: {
                                             type: 'Identifier',
                                             name: 'm_width'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
+        'x = { set if(w) { m_if = w } }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'if'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_if'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
+        'x = { set true(w) { m_true = w } }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'true'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_true'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
+        'x = { set false(w) { m_false = w } }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'false'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_false'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
+        'x = { set null(w) { m_null = w } }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Identifier',
+                            name: 'null'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_null'
                                         },
                                         right: {
                                             type: 'Identifier',
@@ -558,8 +974,6 @@ data = {
                 }
             }
         }
-
-
     },
 
     'Comments': {
@@ -1319,6 +1733,82 @@ data = {
                     type: 'Literal',
                     value: 2014
                 }]
+            }
+        },
+
+        'universe.if': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Identifier',
+                    name: 'universe',
+                    range: [0, 7]
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'if',
+                    range: [9, 10]
+                },
+                range: [0, 10]
+            }
+        },
+
+        'universe.true': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Identifier',
+                    name: 'universe',
+                    range: [0, 7]
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'true',
+                    range: [9, 12]
+                },
+                range: [0, 12]
+            }
+        },
+
+        'universe.false': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Identifier',
+                    name: 'universe',
+                    range: [0, 7]
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'false',
+                    range: [9, 13]
+                },
+                range: [0, 13]
+            }
+        },
+
+        'universe.null': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Identifier',
+                    name: 'universe',
+                    range: [0, 7]
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'null',
+                    range: [9, 12]
+                },
+                range: [0, 12]
             }
         }
     },
@@ -4574,6 +5064,8 @@ data = {
 
         'var x = "\n': 'Line 1: Unexpected token ILLEGAL',
 
+        'var if = 42': 'Line 1: Unexpected token if',
+
         '1 + (': 'Line 1: Unexpected end of input',
 
         '\n\n\n{': 'Line 4: Unexpected end of input',
@@ -4584,7 +5076,33 @@ data = {
 
         '{ get 2 }': 'Line 1: Unexpected number',
 
+        '({ set: s(if) { } })': 'Line 1: Unexpected token if',
+
+        '({ set: s() { } })': 'Line 1: Unexpected token {',
+
+        '({ set: s(a, b) { } })': 'Line 1: Unexpected token {',
+
+        '({ get: g(d) { } })': 'Line 1: Unexpected token {',
+
+        'function t(if) { }': 'Line 1: Unexpected token if',
+
+        'function t(true) { }': 'Line 1: Unexpected token true',
+
+        'function t(false) { }': 'Line 1: Unexpected token false',
+
+        'function t(null) { }': 'Line 1: Unexpected token null',
+
+        'function null() { }': 'Line 1: Unexpected token null',
+
+        'function true() { }': 'Line 1: Unexpected token true',
+
+        'function false() { }': 'Line 1: Unexpected token false',
+
+        'function if() { }': 'Line 1: Unexpected token if',
+
         'a b;': 'Line 1: Unexpected identifier',
+
+        'if.a;': 'Line 1: Unexpected token .',
 
         'a if;': 'Line 1: Unexpected token if',
 
