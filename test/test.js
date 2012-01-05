@@ -682,6 +682,68 @@ data = {
             }
         },
 
+        'x = { get "undef"() {} }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Literal',
+                            value: 'undef'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = { get 10() {} }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Literal',
+                            value: 10
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
         'x = { set width(w) { m_width = w } }': {
             type: 'ExpressionStatement',
             expression: {
@@ -889,6 +951,102 @@ data = {
                         key: {
                             type: 'Identifier',
                             name: 'null'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_null'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
+        'x = { set "null"(w) { m_null = w } }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Literal',
+                            value: 'null'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_null'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
+        'x = { set 10(w) { m_null = w } }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        key: {
+                            type: 'Literal',
+                            value: 10
                         },
                         value: {
                             type: 'FunctionExpression',

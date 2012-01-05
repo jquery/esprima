@@ -968,36 +968,54 @@ parseStatement: true, parseSourceElement: true */
 
                 if (token.value === 'get' && !match(':')) {
                     token = lex();
-                    if (!isIdentifierName(token)) {
+                    if (!isIdentifierName(token) &&
+                            token.type !== Token.StringLiteral &&
+                            token.type !== Token.NumericLiteral) {
                         throwUnexpected(token);
+                    }
+                    if (token.type === Token.StringLiteral ||
+                            token.type === Token.NumericLiteral) {
+                        property.key = {
+                            type: Syntax.Literal,
+                            value: token.value
+                        };
+                    } else {
+                        property.key = {
+                            type: Syntax.Identifier,
+                            name: token.value
+                        };
                     }
                     expect('(');
                     expect(')');
-                    property = {
-                        key: {
-                            type: Syntax.Identifier,
-                            name: token.value
-                        },
-                        value: {
-                            type: Syntax.FunctionExpression,
-                            id: null,
-                            params: [],
-                            body: parseBlock()
-                        },
-                        kind: 'get'
+                    property.value = {
+                        type: Syntax.FunctionExpression,
+                        id: null,
+                        params: [],
+                        body: parseBlock()
                     };
+                    property.kind = 'get';
                     break;
                 }
 
                 if (token.value === 'set' && !match(':')) {
                     token = lex();
-                    if (!isIdentifierName(token)) {
+                    if (!isIdentifierName(token) &&
+                            token.type !== Token.StringLiteral &&
+                            token.type !== Token.NumericLiteral) {
                         throwUnexpected(token);
                     }
-                    property.key = {
-                        type: Syntax.Identifier,
-                        name: token.value
-                    };
+                    if (token.type === Token.StringLiteral ||
+                            token.type === Token.NumericLiteral) {
+                        property.key = {
+                            type: Syntax.Literal,
+                            value: token.value
+                        };
+                    } else {
+                        property.key = {
+                            type: Syntax.Identifier,
+                            name: token.value
+                        };
+                    }
                     expect('(');
                     token = lex();
                     if (token.type !== Token.Identifier) {
