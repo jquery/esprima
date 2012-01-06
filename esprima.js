@@ -2882,3 +2882,4 @@ parseStatement: true, parseSourceElement: true */
     exports.traverse = traverse;
 
 }(typeof exports === 'undefined' ? (esprima = {}) : exports));
+/* vim: set sw=4 ts=4 et tw=80 : */
