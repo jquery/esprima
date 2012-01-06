@@ -153,3 +153,4 @@ function collectRegex() {
     setText('version', window.esprima.version);
     process(1);
 }
+/* vim: set sw=4 ts=4 et tw=80 : */

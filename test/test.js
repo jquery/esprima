@@ -5765,3 +5765,4 @@ if (typeof window !== 'undefined') {
         });
     }());
 }
+/* vim: set sw=4 ts=4 et tw=80 : */
