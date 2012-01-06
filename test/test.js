@@ -27,7 +27,7 @@
 */
 
 /*jslint browser:true node:true */
-/*global esprima:true, describe:true, it:true */
+/*global esprima:true */
 
 var runTests, data;
 
@@ -5550,6 +5550,77 @@ function adjustRegexLiteral(key, value) {
     return value;
 }
 
+if (typeof window === 'undefined') {
+    var esprima = require('../esprima');
+}
+
+function NotMatchingError(expected, actual) {
+    'use strict';
+    Error.call(this, 'Expected ');
+    this.expected = expected;
+    this.actual = actual;
+}
+NotMatchingError.prototype = new Error();
+
+function testParse(code, syntax) {
+    'use strict';
+    var expected, tree, actual, options;
+
+    options = {
+        comment: false,
+        range: false,
+        tokens: false
+    };
+
+    options.comment = hasComment(syntax);
+    options.range = hasRange(syntax) && !options.comment;
+    options.tokens = hasTokens(syntax);
+
+    expected = JSON.stringify(syntax, null, 4);
+    try {
+        tree = esprima.parse(code, options);
+        tree = (options.comment || options.tokens) ? tree : tree.body[0];
+        actual = JSON.stringify(tree, adjustRegexLiteral, 4);
+    } catch (e) {
+        throw new NotMatchingError(expected, e.toString());
+    }
+    if (expected !== actual) {
+        throw new NotMatchingError(expected, actual);
+    }
+}
+
+function testError(code, exception) {
+    'use strict';
+    var expected, actual;
+
+    expected = 'Error: ' + exception;
+    try {
+        esprima.parse(code);
+    } catch (e) {
+        actual = e.toString();
+
+        // Opera 9.64 produces an non-standard string in toString().
+        if (actual.substr(0, 6) !== 'Error:') {
+            if (typeof e.message === 'string') {
+                actual = 'Error: ' + e.message;
+            }
+        }
+    }
+
+    if (expected !== actual) {
+        throw new NotMatchingError(expected, actual);
+    }
+}
+
+function runTest(code, result) {
+    'use strict';
+    if (typeof result === 'string') {
+        testError(code, result);
+    } else {
+        testParse(code, result);
+    }
+}
+
 if (typeof window !== 'undefined') {
     // Run all tests in a browser environment.
     runTests = function () {
@@ -5559,7 +5630,8 @@ if (typeof window !== 'undefined') {
             category,
             fixture,
             source,
-            tick;
+            tick,
+            expected;
 
         function setText(el, str) {
             if (typeof el.innerText === 'string') {
@@ -5588,8 +5660,6 @@ if (typeof window !== 'undefined') {
 
         function reportFailure(code, expected, actual) {
             var report, e;
-
-            failures += 1;
 
             report = document.getElementById('report');
 
@@ -5621,73 +5691,6 @@ if (typeof window !== 'undefined') {
             report.appendChild(e);
         }
 
-        function testParse(code, syntax) {
-            var expected, tree, actual, options;
-
-            options = {
-                comment: false,
-                range: false,
-                tokens: false
-            };
-
-            options.comment = hasComment(syntax);
-            options.range = hasRange(syntax) && !options.comment;
-            options.tokens = hasTokens(syntax);
-
-            expected = JSON.stringify(syntax, null, 4);
-            try {
-                tree = esprima.parse(code, options);
-                tree = (options.comment || options.tokens) ? tree : tree.body[0];
-                actual = JSON.stringify(tree, adjustRegexLiteral, 4);
-
-                total += 1;
-                if (expected === actual) {
-                    reportSuccess(code);
-                } else {
-                    reportFailure(code, expected, actual);
-                }
-
-                // Only to ensure that there is no error when using string object.
-                esprima.parse(new String(code), options);
-
-            } catch (e) {
-                reportFailure(code, expected, e.toString());
-            }
-        }
-
-        function testError(code, exception) {
-            var expected, actual;
-
-            expected = 'Error: ' + exception;
-            total += 1;
-            try {
-                esprima.parse(code);
-            } catch (e) {
-                actual = e.toString();
-
-                // Opera 9.64 produces an non-standard string in toString().
-                if (actual.substr(0, 6) !== 'Error:') {
-                    if (typeof e.message === 'string') {
-                        actual = 'Error: ' + e.message;
-                    }
-                }
-            }
-
-            if (expected === actual) {
-                reportSuccess(code);
-            } else {
-                reportFailure(code, expected, actual);
-            }
-        }
-
-        function runTest(code, result) {
-            if (typeof result === 'string') {
-                testError(code, result);
-            } else {
-                testParse(code, result);
-            }
-        }
-
         setText(document.getElementById('version'), esprima.version);
 
         tick = new Date();
@@ -5697,7 +5700,15 @@ if (typeof window !== 'undefined') {
                 fixture = data[category];
                 for (source in fixture) {
                     if (fixture.hasOwnProperty(source)) {
-                        runTest(source, fixture[source]);
+                        expected = fixture[source];
+                        total += 1;
+                        try {
+                            runTest(source, expected);
+                            reportSuccess(source, JSON.stringify(expected, null, 4));
+                        } catch (e) {
+                            failures += 1;
+                            reportFailure(source, e.expected, e.actual);
+                        }
                     }
                 }
             }
@@ -5713,56 +5724,40 @@ if (typeof window !== 'undefined') {
         }
     };
 } else {
-
     (function () {
         'use strict';
 
-        require('should');
-        var esprima = require('../esprima');
-
-        function addTest(code, expected) {
-            if (typeof expected !== 'string') {
-                return function () {
-                    var tree, actual, options;
-
-                    options = {
-                        comment: false,
-                        range: false,
-                        tokens: false
-                    };
-
-                    options.comment = hasComment(expected);
-                    options.range = hasRange(expected) && !options.comment;
-                    options.tokens = hasTokens(expected);
-
-                    expected = JSON.stringify(expected, null, 4);
-                    tree = esprima.parse(code, options);
-                    tree = (options.comment || options.tokens) ? tree : tree.body[0];
-                    actual = JSON.stringify(tree, adjustRegexLiteral, 4);
-                    actual.should.equal(expected);
-                };
-            } else {
-                return function () {
-                    var actual;
-
-                    expected = 'Error: ' + expected;
-                    try {
-                        esprima.parse(code);
-                    } catch (e) {
-                        actual = e.toString();
-                    }
-                    actual.should.equal(expected);
-                };
-            }
-        }
+        var total = 0,
+            failures = [],
+            tick = new Date(),
+            expected,
+            header;
 
         Object.keys(data).forEach(function (category) {
-            describe(category, function () {
-                Object.keys(data[category]).forEach(function (source) {
-                    it(source, addTest(source, data[category][source]));
-                });
+            Object.keys(data[category]).forEach(function (source) {
+                total += 1;
+                expected = data[category][source];
+                try {
+                    runTest(source, expected);
+                } catch (e) {
+                    e.source = source;
+                    failures.push(e);
+                }
             });
         });
+        tick = (new Date()) - tick;
+
+        header = total + ' tests. ' + failures.length + ' failures. ' +
+            tick + ' ms';
+        if (failures.length) {
+            console.error(header);
+            failures.forEach(function (failure) {
+                console.error(failure.source + ': Expected\n    ' +
+                    failure.expected.split('\n').join('\n    ') +
+                    '\nto match\n    ' + failure.actual);
+            });
+        }
+        console.log(header);
     }());
 }
 /* vim: set sw=4 ts=4 et tw=80 : */

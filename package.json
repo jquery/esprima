@@ -23,12 +23,8 @@
         "type": "BSD",
         "url": "http://github.com/ariya/esprima/raw/master/LICENSE.BSD"
     }],
-    "devDependencies": {
-        "mocha": ">= 0.8.1",
-        "should": ">= 0.4.2"
-    },
     "scripts": {
-        "test": "node_modules/.bin/mocha test/test.js",
+        "test": "node test/test.js",
         "benchmark": "node test/benchmarks.js",
         "benchmark-quick": "node test/benchmarks.js quick"
     }
