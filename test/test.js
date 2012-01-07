@@ -5609,7 +5609,10 @@ NotMatchingError.prototype = new Error();
 
 function testParse(code, syntax) {
     'use strict';
-    var expected, tree, actual, options;
+    var expected, tree, actual, options, StringObject;
+
+    // alias, so that JSLint does not complain.
+    StringObject = String;
 
     options = {
         comment: false,
@@ -5626,6 +5629,10 @@ function testParse(code, syntax) {
         tree = esprima.parse(code, options);
         tree = (options.comment || options.tokens) ? tree : tree.body[0];
         actual = JSON.stringify(tree, adjustRegexLiteral, 4);
+
+        // Only to ensure that there is no error when using string object.
+        esprima.parse(new StringObject(code), options);
+
     } catch (e) {
         throw new NotMatchingError(expected, e.toString());
     }
