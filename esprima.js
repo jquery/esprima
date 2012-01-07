@@ -29,6 +29,7 @@
 throwError: true,
 parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
+parseLeftHandSideExpression: true,
 parseStatement: true, parseSourceElement: true */
 
 (function (exports) {
@@ -1186,10 +1187,25 @@ parseStatement: true, parseSourceElement: true */
         return args;
     }
 
-    function parseMemberExpression() {
-        var expr, token, property;
+    function parseLeftHandSideExpressionAllowCall() {
+        var useNew, expr, token, property;
 
-        expr = parsePrimaryExpression();
+        useNew = matchKeyword('new');
+        if (useNew) {
+            // Read the keyword.
+            lex();
+            expr = {
+                type: Syntax.NewExpression,
+                callee: parseLeftHandSideExpression()
+            };
+            if (match('(')) {
+                expr['arguments'] = parseArguments();
+            } else {
+                expr['arguments'] = [];
+            }
+        } else {
+            expr = parsePrimaryExpression();
+        }
 
         while (index < length) {
             if (match('.')) {
@@ -1236,47 +1252,58 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseLeftHandSideExpression() {
-        var useNew, expr, args;
+        var useNew, expr, token, property;
 
         useNew = matchKeyword('new');
         if (useNew) {
             // Read the keyword.
             lex();
-            expr = parseLeftHandSideExpression();
-        } else {
-            expr = parseMemberExpression();
-        }
-
-        if (match('(')) {
-            args = parseArguments();
-        }
-
-        if (useNew) {
-
-            // Force to have at least an empty argument list.
-            if (typeof args === 'undefined') {
-                args = [];
-            }
-
-            // e.g. "new x()" thus adopt the CallExpression of "x()".
-            if (expr.type === Syntax.CallExpression) {
-                args = expr['arguments'];
-                expr = expr.callee;
-            }
-
-            return {
+            expr = {
                 type: Syntax.NewExpression,
-                callee: expr,
-                'arguments': args
+                callee: parseLeftHandSideExpression()
             };
+            if (match('(')) {
+                expr['arguments'] = parseArguments();
+            } else {
+                expr['arguments'] = [];
+            }
+        } else {
+            expr = parsePrimaryExpression();
         }
 
-        if (typeof args !== 'undefined') {
-            return {
-                type: Syntax.CallExpression,
-                callee: expr,
-                'arguments': args
-            };
+        while (index < length) {
+            if (match('.')) {
+                lex();
+                token = lex();
+                if (!isIdentifierName(token)) {
+                    throwUnexpected(token);
+                }
+                property = {
+                    type: Syntax.Identifier,
+                    name: token.value
+                };
+                expr = {
+                    type: Syntax.MemberExpression,
+                    computed: false,
+                    object: expr,
+                    property: property
+                };
+            } else if (match('[')) {
+                lex();
+                property = parseExpression();
+                if (property.type === Syntax.ExpressionStatement) {
+                    property = property.expression;
+                }
+                expr = {
+                    type: Syntax.MemberExpression,
+                    computed: true,
+                    object: expr,
+                    property: property
+                };
+                expect(']');
+            } else {
+                break;
+            }
         }
 
         return expr;
@@ -1285,7 +1312,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.3 Postfix Expressions
 
     function parsePostfixExpression() {
-        var expr = parseLeftHandSideExpression();
+        var expr = parseLeftHandSideExpressionAllowCall();
 
         if ((match('++') || match('--')) && !peekLineTerminator()) {
             if (!isLeftHandSide(expr)) {

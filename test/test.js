@@ -1609,6 +1609,51 @@ data = {
             }
         },
 
+        'new foo().bar()': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: "MemberExpression",
+                    computed: false,
+                    object: {
+                        type: "NewExpression",
+                        callee: {
+                            type: "Identifier",
+                            name: "foo"
+                        },
+                        "arguments": []
+                    },
+                    property: {
+                        type: "Identifier",
+                        name: "bar"
+                    }
+                },
+                'arguments': []
+            }
+        },
+
+        'new foo.bar()': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'NewExpression',
+                callee: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'Identifier',
+                        name: 'foo'
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'bar'
+                    }
+                },
+                'arguments': []
+            }
+        },
+
+
         'foo(bar, baz)': {
             type: 'ExpressionStatement',
             expression: {
