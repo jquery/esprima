@@ -1658,7 +1658,14 @@ parseStatement: true, parseSourceElement: true */
     // 11.11 Binary Logical Operators
 
     function parseLogicalANDExpression() {
-        var expr = parseBitwiseXORExpression();
+        var expr, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        expr = parseBitwiseXORExpression();
 
         while (match('&&')) {
             lex();
@@ -1668,13 +1675,23 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseBitwiseXORExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
         }
 
         return expr;
     }
 
     function parseLogicalORExpression() {
-        var expr = parseLogicalANDExpression();
+        var expr, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        expr = parseLogicalANDExpression();
 
         while (match('||')) {
             lex();
@@ -1684,6 +1701,9 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseLogicalANDExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
         }
 
         return expr;
@@ -2809,10 +2829,6 @@ parseStatement: true, parseSourceElement: true */
             }
 
             switch (node.type) {
-
-            case Syntax.LogicalExpression:
-                range = enclosed(node.left, node.right);
-                break;
 
             case Syntax.ConditionalExpression:
                 range = enclosed(node.test, node.alternate);
