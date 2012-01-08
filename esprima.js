@@ -1358,36 +1358,53 @@ parseStatement: true, parseSourceElement: true */
     // 11.4 Unary Operators
 
     function parseUnaryExpression() {
-        var operator, expr;
+        var operator, expr, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
 
         if (match('++') || match('--')) {
             operator = lex().value;
             expr = parseUnaryExpression();
             if (!isLeftHandSide(expr)) {
-                throwError(Messages.InvalidLHSInPrefixOp, lineNumber);
+                throwError(Messages.InvalidLHSInPrefixOp);
             }
-            return {
+            expr = {
                 type: Syntax.UpdateExpression,
                 operator: operator,
                 argument: expr,
                 prefix: true
             };
+            if (tracking) {
+                finish(expr);
+            }
+            return expr;
         }
 
         if (match('+') || match('-') || match('~') || match('!')) {
-            return {
+            expr = {
                 type: Syntax.UnaryExpression,
                 operator: lex().value,
                 argument: parseUnaryExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
+            return expr;
         }
 
         if (matchKeyword('delete') || matchKeyword('void') || matchKeyword('typeof')) {
-            return {
+            expr = {
                 type: Syntax.UnaryExpression,
                 operator: lex().value,
                 argument: parseUnaryExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
+            return expr;
         }
 
         return parsePostfixExpression();
@@ -2735,13 +2752,6 @@ parseStatement: true, parseSourceElement: true */
                     }
                 }
                 range = enclosed(node.object, child);
-                break;
-
-            case Syntax.UnaryExpression:
-                child = node.argument;
-                if (child.hasOwnProperty('range')) {
-                    range = enclosed(findBefore(child.range[0]), child);
-                }
                 break;
 
             case Syntax.SequenceExpression:
