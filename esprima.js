@@ -1712,7 +1712,14 @@ parseStatement: true, parseSourceElement: true */
     // 11.12 Conditional Operator
 
     function parseConditionalExpression() {
-        var expr = parseLogicalORExpression();
+        var expr, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        expr = parseLogicalORExpression();
 
         if (match('?')) {
             lex();
@@ -1723,6 +1730,9 @@ parseStatement: true, parseSourceElement: true */
             expr.consequent = parseAssignmentExpression();
             expect(':');
             expr.alternate = parseAssignmentExpression();
+            if (tracking) {
+                finish(expr);
+            }
         }
 
         return expr;
@@ -2829,10 +2839,6 @@ parseStatement: true, parseSourceElement: true */
             }
 
             switch (node.type) {
-
-            case Syntax.ConditionalExpression:
-                range = enclosed(node.test, node.alternate);
-                break;
 
             case Syntax.MemberExpression:
 
