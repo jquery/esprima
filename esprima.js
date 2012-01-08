@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2012 Kris Kowal <kris.kowal@cixar.com>
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Arpad Borsos <arpad.borsos@googlemail.com>
   Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -43,6 +44,7 @@ parseStatement: true, parseSourceElement: true */
         index,
         lineNumber,
         length,
+        tracking,
         buffer,
         extra;
 
@@ -237,6 +239,23 @@ parseStatement: true, parseSourceElement: true */
         }
 
         return isFutureReservedWord(id);
+    }
+
+    // Start, then finish, tracking the range or location of a part.
+
+    function start() {
+        var startIndex = index;
+
+        return function (object) {
+            object.range = [startIndex, index - 1];
+            return object;
+        };
+    }
+
+    // Copy the range from the originating token.
+
+    function finish(syntax, token) {
+        syntax.range = token.range;
     }
 
     // Return the next character and move forward.
@@ -2823,6 +2842,7 @@ parseStatement: true, parseSourceElement: true */
         index = 0;
         lineNumber = (source.length > 0) ? 1 : 0;
         length = source.length;
+        tracking = (typeof options.range === 'boolean' && options.range);
         buffer = null;
 
         if (length > 0) {
