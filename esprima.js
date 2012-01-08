@@ -1423,7 +1423,14 @@ parseStatement: true, parseSourceElement: true */
     // 11.5 Multiplicative Operators
 
     function parseMultiplicativeExpression() {
-        var expr = parseUnaryExpression();
+        var expr, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        expr = parseUnaryExpression();
 
         while (match('*') || match('/') || match('%')) {
             expr = {
@@ -1432,6 +1439,9 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseUnaryExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
         }
 
         return expr;
@@ -1440,7 +1450,14 @@ parseStatement: true, parseSourceElement: true */
     // 11.6 Additive Operators
 
     function parseAdditiveExpression() {
-        var expr = parseMultiplicativeExpression();
+        var expr, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        expr = parseMultiplicativeExpression();
 
         while (match('+') || match('-')) {
             expr = {
@@ -1449,6 +1466,9 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseMultiplicativeExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
         }
 
         return expr;
@@ -1457,24 +1477,39 @@ parseStatement: true, parseSourceElement: true */
     // 11.7 Bitwise Shift Operators
 
     function parseShiftExpression() {
-        var expr = parseAdditiveExpression();
+        var expr, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        expr = parseAdditiveExpression();
 
         while (match('<<') || match('>>') || match('>>>')) {
-            expr =  {
+            expr = {
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
                 left: expr,
                 right: parseAdditiveExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
         }
 
         return expr;
     }
-
     // 11.8 Relational Operators
 
     function parseRelationalExpression() {
-        var expr = parseShiftExpression();
+        var expr, finish;
+
+        if (tracking) {
+            finish = start();
+        }
+
+        expr = parseShiftExpression();
 
         if (match('<') || match('>') || match('<=') || match('>=')) {
             expr = {
@@ -1483,6 +1518,9 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseRelationalExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
         } else if (matchKeyword('in')) {
             lex();
             expr = {
@@ -1491,6 +1529,9 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseRelationalExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
         } else if (matchKeyword('instanceof')) {
             lex();
             expr = {
@@ -1499,6 +1540,9 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseRelationalExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
         }
 
         return expr;
@@ -1507,7 +1551,14 @@ parseStatement: true, parseSourceElement: true */
     // 11.9 Equality Operators
 
     function parseEqualityExpression() {
-        var expr = parseRelationalExpression();
+        var expr, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        expr = parseRelationalExpression();
 
         while (match('==') || match('!=') || match('===') || match('!==')) {
             expr = {
@@ -1516,6 +1567,9 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseRelationalExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
         }
 
         return expr;
@@ -1524,7 +1578,14 @@ parseStatement: true, parseSourceElement: true */
     // 11.10 Binary Bitwise Operators
 
     function parseBitwiseANDExpression() {
-        var expr = parseEqualityExpression();
+        var expr, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        expr = parseEqualityExpression();
 
         while (match('&')) {
             lex();
@@ -1534,13 +1595,23 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseEqualityExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
         }
 
         return expr;
     }
 
     function parseBitwiseORExpression() {
-        var expr = parseBitwiseANDExpression();
+        var expr, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        expr = parseBitwiseANDExpression();
 
         while (match('|')) {
             lex();
@@ -1550,13 +1621,23 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseBitwiseANDExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
         }
 
         return expr;
     }
 
     function parseBitwiseXORExpression() {
-        var expr = parseBitwiseORExpression();
+        var expr, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        expr = parseBitwiseORExpression();
 
         while (match('^')) {
             lex();
@@ -1566,6 +1647,9 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseBitwiseORExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
         }
 
         return expr;
@@ -2720,14 +2804,6 @@ parseStatement: true, parseSourceElement: true */
             case Syntax.AssignmentExpression:
             case Syntax.LogicalExpression:
                 range = enclosed(node.left, node.right);
-                break;
-
-            case Syntax.BinaryExpression:
-                // Primary expression in a bracket, e.g. '(1 + 2)', already
-                // has the range info.
-                if (!node.hasOwnProperty('range')) {
-                    range = enclosed(node.left, node.right);
-                }
                 break;
 
             case Syntax.ConditionalExpression:
