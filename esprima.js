@@ -1214,7 +1214,12 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseLeftHandSideExpressionAllowCall() {
-        var useNew, expr, token, property;
+        var useNew, expr, token, property, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
 
         useNew = matchKeyword('new');
         if (useNew) {
@@ -1250,6 +1255,10 @@ parseStatement: true, parseSourceElement: true */
                     object: expr,
                     property: property
                 };
+                if (tracking) {
+                    property.range = [token.range[0], token.range[1] - 1];
+                    finish(expr);
+                }
             } else if (match('[')) {
                 lex();
                 property = parseExpression();
@@ -1263,12 +1272,18 @@ parseStatement: true, parseSourceElement: true */
                     property: property
                 };
                 expect(']');
+                if (tracking) {
+                    finish(expr);
+                }
             } else if (match('(')) {
                 expr = {
                     type: Syntax.CallExpression,
                     callee: expr,
                     'arguments': parseArguments()
                 };
+                if (tracking) {
+                    finish(expr);
+                }
             } else {
                 break;
             }
@@ -1278,7 +1293,12 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseLeftHandSideExpression() {
-        var useNew, expr, token, property;
+        var useNew, expr, token, property, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
 
         useNew = matchKeyword('new');
         if (useNew) {
@@ -1314,6 +1334,10 @@ parseStatement: true, parseSourceElement: true */
                     object: expr,
                     property: property
                 };
+                if (tracking) {
+                    property.range = [token.range[0], token.range[1] - 1];
+                    finish(expr);
+                }
             } else if (match('[')) {
                 lex();
                 property = parseExpression();
@@ -1327,6 +1351,10 @@ parseStatement: true, parseSourceElement: true */
                     property: property
                 };
                 expect(']');
+                if (tracking) {
+                    property.range = [token.range[0], token.range[1] - 1];
+                    finish(expr);
+                }
             } else {
                 break;
             }
@@ -2863,42 +2891,6 @@ parseStatement: true, parseSourceElement: true */
                         processNode(node[i]);
                     }
                 }
-            }
-
-            switch (node.type) {
-
-            case Syntax.MemberExpression:
-
-                child = node.property;
-
-                // This is for the construct like 'foo[bar]'.
-                // Find the first token after the closing bracket ].
-                if (node.computed && node.property.hasOwnProperty('range')) {
-                    token = findAfter(child.range[1]);
-                    if (typeof token !== 'undefined') {
-                        if (token.type === 'Punctuator' && token.value === ']') {
-                            child = token;
-                        }
-                    }
-                }
-
-                // This is for the construct like 'foo.bar'.
-                // Find the first token after the dot sign.
-                if (!node.computed && node.object.hasOwnProperty('range')) {
-                    token = findAfter(node.object.range[1]);
-                    if (typeof token !== 'undefined' && token.value === '.') {
-                        token = findAfter(token.range[1]);
-                        if (typeof token !== 'undefined') {
-                            node.property.range = token.range;
-                            child = node.property;
-                        }
-                    }
-                }
-                range = enclosed(node.object, child);
-                break;
-
-            default:
-                break;
             }
 
             if (typeof range !== 'undefined') {
