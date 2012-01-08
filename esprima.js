@@ -2818,89 +2818,6 @@ parseStatement: true, parseSourceElement: true */
         return node;
     }
 
-    function processRange(program) {
-
-        function enclosed(a, b) {
-            if (typeof a.range === 'object' && typeof b.range === 'object') {
-                return [a.range[0], b.range[1]];
-            }
-        }
-
-        function findBefore(pos) {
-            var left = 0,
-                right = extra.tokens.length - 1,
-                middle,
-                token;
-
-            while (left < right) {
-                middle = (left + right) >> 1;
-                token = extra.tokens[middle];
-                if (pos > token.range[1]) {
-                    left = Math.min(middle + 1, right);
-                } else {
-                    right = Math.max(middle - 1, left);
-                }
-            }
-
-            token = extra.tokens[left];
-            if (pos > token.range[1]) {
-                return token;
-            } else {
-                return extra.tokens[left - 1];
-            }
-        }
-
-        function findAfter(pos) {
-            var left = 0,
-                right = extra.tokens.length - 1,
-                middle,
-                token;
-
-            while (left < right) {
-                middle = (left + right) >> 1;
-                token = extra.tokens[middle];
-                if (pos < token.range[0]) {
-                    right = Math.max(middle - 1, left);
-                } else {
-                    left = Math.min(middle + 1, right);
-                }
-            }
-
-            token = extra.tokens[left];
-            if (pos < token.range[0]) {
-                return token;
-            } else {
-                return extra.tokens[right + 1];
-            }
-        }
-
-        function processNode(node) {
-            var i, range, child, token;
-
-            if (node === null || typeof node !== 'object') {
-                return;
-            }
-
-            if ((node instanceof Array) && node.length) {
-                for (i = 0; i < node.length; i += 1) {
-                    processNode(node[i]);
-                }
-            } else {
-                for (i in node) {
-                    if (node.hasOwnProperty(i)) {
-                        processNode(node[i]);
-                    }
-                }
-            }
-
-            if (typeof range !== 'undefined') {
-                node.range = range;
-            }
-        }
-
-        processNode(program);
-    }
-
     function patch(options) {
 
         var opt = {
@@ -2922,8 +2839,7 @@ parseStatement: true, parseSourceElement: true */
             parsePrimaryExpression = parsePrimaryRange;
         }
 
-        // Range processing will need the list of tokens as well.
-        if (opt.range || opt.tokens) {
+        if (opt.tokens) {
             extra.lex = lex;
             extra.scanRegExp = scanRegExp;
 
@@ -3000,14 +2916,7 @@ parseStatement: true, parseSourceElement: true */
                 program.comments = extra.comments;
             }
             if (typeof extra.tokens !== 'undefined') {
-                // Range processing might produce the list of tokens. Thus,
-                // only export the tokens when it is explicit in the options.
-                if (typeof options.tokens === 'boolean' && options.tokens) {
-                    program.tokens = extra.tokens;
-                }
-            }
-            if (typeof options.range === 'boolean' && options.range) {
-                processRange(program);
+                program.tokens = extra.tokens;
             }
         } catch (e) {
             throw e;
