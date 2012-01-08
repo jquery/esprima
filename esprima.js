@@ -1338,7 +1338,14 @@ parseStatement: true, parseSourceElement: true */
     // 11.3 Postfix Expressions
 
     function parsePostfixExpression() {
-        var expr = parseLeftHandSideExpressionAllowCall();
+        var expr, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        expr = parseLeftHandSideExpressionAllowCall();
 
         if ((match('++') || match('--')) && !peekLineTerminator()) {
             if (!isLeftHandSide(expr)) {
@@ -1350,6 +1357,9 @@ parseStatement: true, parseSourceElement: true */
                 argument: expr,
                 prefix: false
             };
+            if (tracking) {
+                finish(expr);
+            }
         }
 
         return expr;
@@ -2757,17 +2767,6 @@ parseStatement: true, parseSourceElement: true */
             case Syntax.SequenceExpression:
                 child = node.expressions[node.expressions.length - 1];
                 range = enclosed(node.expressions[0], child);
-                break;
-
-            case Syntax.UpdateExpression:
-                child = node.argument;
-                if (child.hasOwnProperty('range')) {
-                    if (node.prefix) {
-                        range = enclosed(findBefore(child.range[0]), child);
-                    } else {
-                        range = enclosed(child, findAfter(child.range[1]));
-                    }
-                }
                 break;
 
             case Syntax.Program:
