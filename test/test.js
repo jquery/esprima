@@ -44,12 +44,12 @@ data = {
                     range: [0, 3]
                 }
             }],
+            range: [0, 4],
             tokens: [{
                 type: 'Keyword',
                 value: 'this',
                 range: [0, 3]
-            }],
-            range: [0, 5]
+            }]
         },
 
         '\n    42\n\n': {
@@ -62,12 +62,12 @@ data = {
                     range: [5, 6]
                 }
             }],
+            range: [5, 8],
             tokens: [{
                 type: 'Numeric',
                 value: '42',
                 range: [5, 6]
-            }],
-            range: [0, 9]
+            }]
         },
 
         '(1 + 2 ) * 3': {
@@ -122,6 +122,7 @@ data = {
                     range: [0, 5]
                 }
             }],
+            range: [0, 5],
             tokens: [{
                 type: 'Identifier',
                 value: 'x',
@@ -138,8 +139,7 @@ data = {
                 type: 'Punctuator',
                 value: ']',
                 range: [5, 5]
-            }],
-            range: [0, 6]
+            }]
         },
 
         'x = [ ]': {
@@ -1419,6 +1419,7 @@ data = {
                 }],
                 kind: 'var'
             }],
+            range: [0, 15],
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
@@ -1435,8 +1436,7 @@ data = {
                 type: 'RegularExpression',
                 value: '/[a-z]/i',
                 range: [8, 15]
-            }],
-            range: [0, 16]
+            }]
         },
 
         'var x = /[P QR]/i': {
@@ -1456,6 +1456,7 @@ data = {
                 }],
                 kind: 'var'
             }],
+            range: [0, 16],
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
@@ -1472,8 +1473,7 @@ data = {
                 type: 'RegularExpression',
                 value: '/[P QR]/i',
                 range: [8, 16]
-            }],
-            range: [0, 17]
+            }]
         },
 
         'var x = /foo\\/bar/': {
@@ -1493,6 +1493,7 @@ data = {
                 }],
                 kind: 'var'
             }],
+            range: [0, 17],
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
@@ -1509,8 +1510,7 @@ data = {
                 type: 'RegularExpression',
                 value: '/foo\\/bar/',
                 range: [8, 17]
-            }],
-            range: [0, 18]
+            }]
         },
 
         'var x = /=([^=\\s])+/g': {
@@ -1530,6 +1530,7 @@ data = {
                 }],
                 kind: 'var'
             }],
+            range: [0, 20],
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
@@ -1546,8 +1547,7 @@ data = {
                 type: 'RegularExpression',
                 value: '/=([^=\\s])+/g',
                 range: [8, 20]
-            }],
-            range: [0, 21]
+            }]
         }
     },
 

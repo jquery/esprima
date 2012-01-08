@@ -2606,10 +2606,23 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseProgram() {
-        return {
+        var syntax, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        syntax = {
             type: Syntax.Program,
             body: parseSourceElements()
         };
+
+        if (tracking) {
+            finish(syntax);
+        }
+
+        return syntax;
     }
 
     // The following functions are needed only when the option to preserve
@@ -2882,10 +2895,6 @@ parseStatement: true, parseSourceElement: true */
                     }
                 }
                 range = enclosed(node.object, child);
-                break;
-
-            case Syntax.Program:
-                range = [0, length];
                 break;
 
             default:
