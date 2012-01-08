@@ -1711,8 +1711,14 @@ parseStatement: true, parseSourceElement: true */
     // 11.13 Assignment Operators
 
     function parseAssignmentExpression() {
+        var expr, finish;
 
-        var expr = parseConditionalExpression();
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        expr = parseConditionalExpression();
 
         if (matchAssign()) {
             if (!isLeftHandSide(expr)) {
@@ -1724,6 +1730,9 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseAssignmentExpression()
             };
+            if (tracking) {
+                finish(expr);
+            }
         }
 
         return expr;
@@ -2801,7 +2810,6 @@ parseStatement: true, parseSourceElement: true */
 
             switch (node.type) {
 
-            case Syntax.AssignmentExpression:
             case Syntax.LogicalExpression:
                 range = enclosed(node.left, node.right);
                 break;
