@@ -591,7 +591,7 @@ parseStatement: true, parseSourceElement: true */
                 if (index >= length) {
                     ch = '<end>';
                 }
-                throwError(Messages.UnexpectedToken, lineNumber, 'ILLEGAL');
+                throwError(Messages.UnexpectedToken, 'ILLEGAL');
             }
         }
 
@@ -631,7 +631,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (quote !== '') {
-            throwError(Messages.UnexpectedToken, lineNumber, 'ILLEGAL');
+            throwError(Messages.UnexpectedToken, 'ILLEGAL');
         }
 
         return {
@@ -670,13 +670,13 @@ parseStatement: true, parseSourceElement: true */
                     classMarker = true;
                 }
                 if (isLineTerminator(ch)) {
-                    throwError(Messages.UnterminatedRegExp, lineNumber);
+                    throwError(Messages.UnterminatedRegExp);
                 }
             }
         }
 
         if (str.length === 1) {
-            throwError(Messages.UnterminatedRegExp, lineNumber);
+            throwError(Messages.UnterminatedRegExp);
         }
 
         // Exclude leading and trailing slash.
@@ -695,7 +695,7 @@ parseStatement: true, parseSourceElement: true */
         try {
             value = new RegExp(pattern, flags);
         } catch (e) {
-            throwError(Messages.InvalidRegExp, lineNumber);
+            throwError(Messages.InvalidRegExp);
         }
 
         return {
@@ -740,7 +740,7 @@ parseStatement: true, parseSourceElement: true */
             return token;
         }
 
-        throwError(Messages.UnexpectedToken, lineNumber, 'ILLEGAL');
+        throwError(Messages.UnexpectedToken, 'ILLEGAL');
     }
 
     function lex() {
@@ -799,10 +799,17 @@ parseStatement: true, parseSourceElement: true */
 
     // Throw an exception
 
-    function throwError(message, line) {
-        var args = Array.prototype.slice.call(arguments, 2);
-        throw new Error('Line ' + line + ': ' + message.replace(/%(\d)/g,
-                    function (whole, index) { return args[index] || ''; }));
+    function throwError(messageFormat) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        throw new Error(
+            'Line ' + lineNumber +
+                ': ' + messageFormat.replace(
+                    /%(\d)/g,
+                    function (whole, index) {
+                        return args[index] || '';
+                    }
+                )
+        );
     }
 
     // Throw an exception because of the token.
@@ -811,30 +818,30 @@ parseStatement: true, parseSourceElement: true */
         var s;
 
         if (token.type === Token.EOF) {
-            throwError(Messages.UnexpectedEOS, lineNumber);
+            throwError(Messages.UnexpectedEOS);
         }
 
         if (token.type === Token.NumericLiteral) {
-            throwError(Messages.UnexpectedNumber, lineNumber);
+            throwError(Messages.UnexpectedNumber);
         }
 
         if (token.type === Token.StringLiteral) {
-            throwError(Messages.UnexpectedString, lineNumber);
+            throwError(Messages.UnexpectedString);
         }
 
         if (token.type === Token.Identifier) {
-            throwError(Messages.UnexpectedIdentifier, lineNumber);
+            throwError(Messages.UnexpectedIdentifier);
         }
 
         if (token.type === Token.Keyword && isFutureReservedWord(token.value)) {
-            throwError(Messages.UnexpectedReserved, lineNumber);
+            throwError(Messages.UnexpectedReserved);
         }
 
         s = token.value;
         if (s.length > 10) {
             s = s.substr(0, 10) + '...';
         }
-        throwError(Messages.UnexpectedToken, lineNumber, s);
+        throwError(Messages.UnexpectedToken, s);
     }
 
     // Expect the next token to match the specified punctuator.
@@ -1335,7 +1342,7 @@ parseStatement: true, parseSourceElement: true */
 
         if ((match('++') || match('--')) && !peekLineTerminator()) {
             if (!isLeftHandSide(expr)) {
-                throwError(Messages.InvalidLHSInPostfixOp, lineNumber);
+                throwError(Messages.InvalidLHSInPostfixOp);
             }
             expr = {
                 type: Syntax.UpdateExpression,
@@ -1598,7 +1605,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (matchAssign()) {
             if (!isLeftHandSide(expr)) {
-                throwError(Messages.InvalidLHSInAssignment, lineNumber);
+                throwError(Messages.InvalidLHSInAssignment);
             }
             expr = {
                 type: Syntax.AssignmentExpression,
@@ -1884,7 +1891,7 @@ parseStatement: true, parseSourceElement: true */
                     right = init.right;
                     init = null;
                     if (!isLeftHandSide(left)) {
-                        throwError(Messages.InvalidLHSInForIn, lineNumber);
+                        throwError(Messages.InvalidLHSInForIn);
                     }
                 } else {
                     expect(';');
@@ -2151,7 +2158,7 @@ parseStatement: true, parseSourceElement: true */
         expectKeyword('throw');
 
         if (peekLineTerminator()) {
-            throwError(Messages.NewlineAfterThrow, lineNumber);
+            throwError(Messages.NewlineAfterThrow);
         }
 
         argument = parseExpression().expression;
@@ -2195,7 +2202,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (handlers.length === 0 && !finalizer) {
-            throwError(Messages.NoCatchOrFinally, lineNumber);
+            throwError(Messages.NoCatchOrFinally);
         }
 
         return {
