@@ -1771,7 +1771,14 @@ parseStatement: true, parseSourceElement: true */
     // 11.14 Comma Operator
 
     function parseExpression() {
-        var expr = parseAssignmentExpression();
+        var expr, syntax, finish;
+
+        if (tracking) {
+            skipComment();
+            finish = start();
+        }
+
+        expr = parseAssignmentExpression();
 
         if (match(',')) {
             expr = {
@@ -1786,12 +1793,19 @@ parseStatement: true, parseSourceElement: true */
                 lex();
                 expr.expressions.push(parseAssignmentExpression());
             }
+
         }
 
-        return {
+        syntax = {
             type: Syntax.ExpressionStatement,
             expression: expr
         };
+
+        if (tracking) {
+            finish(expr);
+        }
+
+        return syntax;
     }
 
     // 12.1 Block
@@ -2868,11 +2882,6 @@ parseStatement: true, parseSourceElement: true */
                     }
                 }
                 range = enclosed(node.object, child);
-                break;
-
-            case Syntax.SequenceExpression:
-                child = node.expressions[node.expressions.length - 1];
-                range = enclosed(node.expressions[0], child);
                 break;
 
             case Syntax.Program:

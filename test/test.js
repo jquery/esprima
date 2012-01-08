@@ -4391,7 +4391,8 @@ data = {
                         type: 'Identifier',
                         name: 'x',
                         range: [32, 32]
-                    }]
+                    }],
+                    range: [24, 33]
                 }
             }
         },
