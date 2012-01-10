@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
   Copyright (C) 2012 Kris Kowal <kris.kowal@cixar.com>
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -1114,7 +1115,7 @@ parseStatement: true, parseSourceElement: true */
 
     // 11.1 Primary Expressions
 
-    function parsePrimary() {
+    function parsePrimaryExpression() {
         var token, expr;
 
         if (match('[')) {
@@ -1188,10 +1189,6 @@ parseStatement: true, parseSourceElement: true */
         }
 
         return throwUnexpected(token);
-    }
-
-    function parsePrimaryExpression() {
-        return parsePrimary();
     }
 
     // 11.2 Left-Hand-Side Expressions
@@ -1369,14 +1366,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.3 Postfix Expressions
 
     function parsePostfixExpression() {
-        var expr, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
-
-        expr = parseLeftHandSideExpressionAllowCall();
+        var expr = parseLeftHandSideExpressionAllowCall();
 
         if ((match('++') || match('--')) && !peekLineTerminator()) {
             if (!isLeftHandSide(expr)) {
@@ -1388,9 +1378,6 @@ parseStatement: true, parseSourceElement: true */
                 argument: expr,
                 prefix: false
             };
-            if (tracking) {
-                finish(expr);
-            }
         }
 
         return expr;
@@ -1399,12 +1386,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.4 Unary Operators
 
     function parseUnaryExpression() {
-        var operator, expr, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
+        var operator, expr;
 
         if (match('++') || match('--')) {
             operator = lex().value;
@@ -1418,9 +1400,6 @@ parseStatement: true, parseSourceElement: true */
                 argument: expr,
                 prefix: true
             };
-            if (tracking) {
-                finish(expr);
-            }
             return expr;
         }
 
@@ -1430,9 +1409,6 @@ parseStatement: true, parseSourceElement: true */
                 operator: lex().value,
                 argument: parseUnaryExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
             return expr;
         }
 
@@ -1442,9 +1418,6 @@ parseStatement: true, parseSourceElement: true */
                 operator: lex().value,
                 argument: parseUnaryExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
             return expr;
         }
 
@@ -1454,14 +1427,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.5 Multiplicative Operators
 
     function parseMultiplicativeExpression() {
-        var expr, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
-
-        expr = parseUnaryExpression();
+        var expr = parseUnaryExpression();
 
         while (match('*') || match('/') || match('%')) {
             expr = {
@@ -1470,9 +1436,6 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseUnaryExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
         }
 
         return expr;
@@ -1481,14 +1444,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.6 Additive Operators
 
     function parseAdditiveExpression() {
-        var expr, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
-
-        expr = parseMultiplicativeExpression();
+        var expr = parseMultiplicativeExpression();
 
         while (match('+') || match('-')) {
             expr = {
@@ -1497,9 +1453,6 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseMultiplicativeExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
         }
 
         return expr;
@@ -1508,14 +1461,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.7 Bitwise Shift Operators
 
     function parseShiftExpression() {
-        var expr, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
-
-        expr = parseAdditiveExpression();
+        var expr = parseAdditiveExpression();
 
         while (match('<<') || match('>>') || match('>>>')) {
             expr = {
@@ -1524,9 +1470,6 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseAdditiveExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
         }
 
         return expr;
@@ -1534,11 +1477,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.8 Relational Operators
 
     function parseRelationalExpression() {
-        var expr, finish, previousAllowIn;
-
-        if (tracking) {
-            finish = start();
-        }
+        var expr, previousAllowIn;
 
         previousAllowIn = allowIn;
         allowIn = true;
@@ -1552,9 +1491,6 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseRelationalExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
         } else if (allowIn && matchKeyword('in')) {
             lex();
             expr = {
@@ -1563,9 +1499,6 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseRelationalExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
         } else if (matchKeyword('instanceof')) {
             lex();
             expr = {
@@ -1574,9 +1507,6 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseRelationalExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
         }
 
         return expr;
@@ -1585,14 +1515,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.9 Equality Operators
 
     function parseEqualityExpression() {
-        var expr, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
-
-        expr = parseRelationalExpression();
+        var expr = parseRelationalExpression();
 
         while (match('==') || match('!=') || match('===') || match('!==')) {
             expr = {
@@ -1601,9 +1524,6 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseRelationalExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
         }
 
         return expr;
@@ -1612,14 +1532,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.10 Binary Bitwise Operators
 
     function parseBitwiseANDExpression() {
-        var expr, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
-
-        expr = parseEqualityExpression();
+        var expr = parseEqualityExpression();
 
         while (match('&')) {
             lex();
@@ -1629,23 +1542,13 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseEqualityExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
         }
 
         return expr;
     }
 
     function parseBitwiseORExpression() {
-        var expr, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
-
-        expr = parseBitwiseANDExpression();
+        var expr = parseBitwiseANDExpression();
 
         while (match('|')) {
             lex();
@@ -1655,23 +1558,13 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseBitwiseANDExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
         }
 
         return expr;
     }
 
     function parseBitwiseXORExpression() {
-        var expr, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
-
-        expr = parseBitwiseORExpression();
+        var expr = parseBitwiseORExpression();
 
         while (match('^')) {
             lex();
@@ -1681,9 +1574,6 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseBitwiseORExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
         }
 
         return expr;
@@ -1692,14 +1582,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.11 Binary Logical Operators
 
     function parseLogicalANDExpression() {
-        var expr, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
-
-        expr = parseBitwiseXORExpression();
+        var expr = parseBitwiseXORExpression();
 
         while (match('&&')) {
             lex();
@@ -1709,23 +1592,13 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseBitwiseXORExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
         }
 
         return expr;
     }
 
     function parseLogicalORExpression() {
-        var expr, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
-
-        expr = parseLogicalANDExpression();
+        var expr = parseLogicalANDExpression();
 
         while (match('||')) {
             lex();
@@ -1735,9 +1608,6 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseLogicalANDExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
         }
 
         return expr;
@@ -1746,12 +1616,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.12 Conditional Operator
 
     function parseConditionalExpression() {
-        var expr, finish, previousAllowIn;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
+        var expr, previousAllowIn;
 
         expr = parseLogicalORExpression();
 
@@ -1767,9 +1632,6 @@ parseStatement: true, parseSourceElement: true */
             allowIn = previousAllowIn;
             expect(':');
             expr.alternate = parseAssignmentExpression();
-            if (tracking) {
-                finish(expr);
-            }
         }
 
         return expr;
@@ -1778,12 +1640,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.13 Assignment Operators
 
     function parseAssignmentExpression() {
-        var expr, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
+        var expr;
 
         expr = parseConditionalExpression();
 
@@ -1797,9 +1654,6 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseAssignmentExpression()
             };
-            if (tracking) {
-                finish(expr);
-            }
         }
 
         return expr;
@@ -2649,23 +2503,10 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseProgram() {
-        var syntax, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
-
-        syntax = {
+        return {
             type: Syntax.Program,
             body: parseSourceElements()
         };
-
-        if (tracking) {
-            finish(syntax);
-        }
-
-        return syntax;
     }
 
     // The following functions are needed only when the option to preserve
@@ -2823,14 +2664,42 @@ parseStatement: true, parseSourceElement: true */
         return regex;
     }
 
-    function parsePrimaryRange() {
-        var pos, node;
+    function wrapTracking(parseFunction) {
 
-        skipComment();
-        pos = index;
-        node = parsePrimary();
-        node.range = [pos, index - 1];
-        return node;
+        function isBinary(node) {
+            return node.type === Syntax.LogicalExpression ||
+                node.type === Syntax.BinaryExpression;
+        }
+
+        function visit(node) {
+            if (typeof node.left.range === 'undefined' && isBinary(node.left)) {
+                visit(node.left);
+            }
+            if (typeof node.right.range === 'undefined' && isBinary(node.right)) {
+                visit(node.right);
+            }
+
+            // Expression enclosed in brackets () already has the correct range.
+            if (typeof node.range === 'undefined') {
+                node.range = [node.left.range[0], node.right.range[1]];
+            }
+        }
+
+        return function () {
+            var start, node;
+
+            skipComment();
+            start = index;
+
+            node = parseFunction.call(null);
+
+            node.range = [start, index - 1];
+            if (isBinary(node)) {
+                visit(node);
+            }
+
+            return node;
+        };
     }
 
     function patch(options) {
@@ -2850,8 +2719,39 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (opt.range) {
+            extra.parseAdditiveExpression = parseAdditiveExpression;
+            extra.parseAssignmentExpression = parseAssignmentExpression;
+            extra.parseBitwiseANDExpression = parseBitwiseANDExpression;
+            extra.parseBitwiseORExpression = parseBitwiseORExpression;
+            extra.parseBitwiseXORExpression = parseBitwiseXORExpression;
+            extra.parseConditionalExpression = parseConditionalExpression;
+            extra.parseEqualityExpression = parseEqualityExpression;
+            extra.parseLogicalANDExpression = parseLogicalANDExpression;
+            extra.parseLogicalORExpression = parseLogicalORExpression;
+            extra.parseMultiplicativeExpression = parseMultiplicativeExpression;
+            extra.parsePostfixExpression = parsePostfixExpression;
             extra.parsePrimaryExpression = parsePrimaryExpression;
-            parsePrimaryExpression = parsePrimaryRange;
+            extra.parseProgram = parseProgram;
+            extra.parseRelationalExpression = parseRelationalExpression;
+            extra.parseShiftExpression = parseShiftExpression;
+            extra.parseUnaryExpression = parseUnaryExpression;
+
+            parseAdditiveExpression = wrapTracking(extra.parseAdditiveExpression);
+            parseAssignmentExpression = wrapTracking(extra.parseAssignmentExpression);
+            parseBitwiseANDExpression = wrapTracking(extra.parseBitwiseANDExpression);
+            parseBitwiseORExpression = wrapTracking(extra.parseBitwiseORExpression);
+            parseBitwiseXORExpression = wrapTracking(extra.parseBitwiseXORExpression);
+            parseConditionalExpression = wrapTracking(extra.parseConditionalExpression);
+            parseEqualityExpression = wrapTracking(extra.parseEqualityExpression);
+            parseLogicalANDExpression = wrapTracking(extra.parseLogicalANDExpression);
+            parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);
+            parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);
+            parsePostfixExpression = wrapTracking(extra.parsePostfixExpression);
+            parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
+            parseProgram = wrapTracking(extra.parseProgram);
+            parseRelationalExpression = wrapTracking(extra.parseRelationalExpression);
+            parseShiftExpression = wrapTracking(extra.parseShiftExpression);
+            parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);
         }
 
         if (opt.tokens) {
@@ -2870,8 +2770,68 @@ parseStatement: true, parseSourceElement: true */
             skipComment = extra.skipComment;
         }
 
+        if (typeof extra.parseAdditiveExpression === 'function') {
+            parseAdditiveExpression = extra.parseAdditiveExpression;
+        }
+
+        if (typeof extra.parseAssignmentExpression === 'function') {
+            parseAssignmentExpression = extra.parseAssignmentExpression;
+        }
+
+        if (typeof extra.parseBitwiseANDExpression === 'function') {
+            parseBitwiseANDExpression = extra.parseBitwiseANDExpression;
+        }
+
+        if (typeof extra.parseBitwiseORExpression === 'function') {
+            parseBitwiseORExpression = extra.parseBitwiseORExpression;
+        }
+
+        if (typeof extra.parseBitwiseXORExpression === 'function') {
+            parseBitwiseXORExpression = extra.parseBitwiseXORExpression;
+        }
+
+        if (typeof extra.parseConditionalExpression === 'function') {
+            parseConditionalExpression = extra.parseConditionalExpression;
+        }
+
+        if (typeof extra.parseEqualityExpression === 'function') {
+            parseEqualityExpression = extra.parseEqualityExpression;
+        }
+
+        if (typeof extra.parseLogicalANDExpression === 'function') {
+            parseLogicalANDExpression = extra.parseLogicalANDExpression;
+        }
+
+        if (typeof extra.parseLogicalORExpression === 'function') {
+            parseLogicalORExpression = extra.parseLogicalORExpression;
+        }
+
+        if (typeof extra.parseMultiplicativeExpression === 'function') {
+            parseMultiplicativeExpression = extra.parseMultiplicativeExpression;
+        }
+
         if (typeof extra.parsePrimaryExpression === 'function') {
             parsePrimaryExpression = extra.parsePrimaryExpression;
+        }
+
+        if (typeof extra.parsePostfixExpression === 'function') {
+            parsePostfixExpression = extra.parsePostfixExpression;
+        }
+
+        if (typeof extra.parseProgram === 'function') {
+            parseProgram = extra.parseProgram;
+        }
+
+        if (typeof extra.parseRelationalExpression === 'function') {
+            parseRelationalExpression = extra.parseRelationalExpression;
+        }
+
+        if (typeof extra.parseShiftExpression === 'function') {
+            parseShiftExpression = extra.parseShiftExpression;
+        }
+
+        if (typeof extra.parseUnaryExpression === 'function') {
+            parseUnaryExpression = extra.parseUnaryExpression;
         }
 
         if (typeof extra.lex === 'function') {
