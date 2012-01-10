@@ -1614,19 +1614,19 @@ data = {
             expression: {
                 type: 'CallExpression',
                 callee: {
-                    type: "MemberExpression",
+                    type: 'MemberExpression',
                     computed: false,
                     object: {
-                        type: "NewExpression",
+                        type: 'NewExpression',
                         callee: {
-                            type: "Identifier",
-                            name: "foo"
+                            type: 'Identifier',
+                            name: 'foo'
                         },
-                        "arguments": []
+                        'arguments': []
                     },
                     property: {
-                        type: "Identifier",
-                        name: "bar"
+                        type: 'Identifier',
+                        name: 'bar'
                     }
                 },
                 'arguments': []
@@ -4458,6 +4458,43 @@ data = {
             each: false
         },
 
+        'for (var x = 42 in list) process(x);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42
+                    }
+                }],
+                kind: 'var'
+            },
+            right: {
+                type: 'Identifier',
+                name: 'list'
+            },
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'process'
+                    },
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x'
+                    }]
+                }
+            },
+            each: false
+        },
+
         'for (let x in list) process(x);': {
             type: 'ForInStatement',
             left: {
@@ -4490,8 +4527,100 @@ data = {
                 }
             },
             each: false
-        }
+        },
 
+        'for (let x = 42 in list) process(x);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42
+                    }
+                }],
+                kind: 'let'
+            },
+            right: {
+                type: 'Identifier',
+                name: 'list'
+            },
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'process'
+                    },
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x'
+                    }]
+                }
+            },
+            each: false
+        },
+
+        'for (var i = function() { return 10 in [] } in list) process(x);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    id: {
+                        type: 'Identifier',
+                        name: 'i'
+                    },
+                    init: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [{
+                                type: 'ReturnStatement',
+                                'argument': {
+                                    type: 'BinaryExpression',
+                                    operator: 'in',
+                                    left: {
+                                        type: 'Literal',
+                                        value: 10
+                                    },
+                                    right: {
+                                        type: 'ArrayExpression',
+                                        elements: []
+                                    }
+                                }
+                            }]
+                        }
+                    }
+                }],
+                kind: 'var'
+            },
+            right: {
+                type: 'Identifier',
+                name: 'list'
+            },
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'process'
+                    },
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x'
+                    }]
+                }
+            },
+            each: false
+        }
     },
 
     'continue statement': {
@@ -5538,6 +5667,8 @@ data = {
         'for (10 in []);': 'Line 1: Invalid left-hand side in for-in',
 
         'for (var i, i2 in {});': 'Line 1: Unexpected token in',
+
+        'for ((i in {}));': 'Line 1: Unexpected token )',
 
         'try { }': 'Line 1: Missing catch or finally after try',
 

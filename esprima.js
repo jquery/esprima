@@ -41,6 +41,7 @@ parseStatement: true, parseSourceElement: true */
         Messages,
         Regex,
         source,
+        allowIn,
         index,
         lineNumber,
         length,
@@ -1531,13 +1532,16 @@ parseStatement: true, parseSourceElement: true */
     // 11.8 Relational Operators
 
     function parseRelationalExpression() {
-        var expr, finish;
+        var expr, finish, previousAllowIn;
 
         if (tracking) {
             finish = start();
         }
 
+        previousAllowIn = allowIn;
+        allowIn = true;
         expr = parseShiftExpression();
+        allowIn = previousAllowIn;
 
         if (match('<') || match('>') || match('<=') || match('>=')) {
             expr = {
@@ -1549,7 +1553,7 @@ parseStatement: true, parseSourceElement: true */
             if (tracking) {
                 finish(expr);
             }
-        } else if (matchKeyword('in')) {
+        } else if (allowIn && matchKeyword('in')) {
             lex();
             expr = {
                 type: Syntax.BinaryExpression,
@@ -1740,7 +1744,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.12 Conditional Operator
 
     function parseConditionalExpression() {
-        var expr, finish;
+        var expr, finish, previousAllowIn;
 
         if (tracking) {
             skipComment();
@@ -1755,7 +1759,10 @@ parseStatement: true, parseSourceElement: true */
                 type: Syntax.ConditionalExpression,
                 test: expr
             };
+            previousAllowIn = allowIn;
+            allowIn = true;
             expr.consequent = parseAssignmentExpression();
+            allowIn = previousAllowIn;
             expect(':');
             expr.alternate = parseAssignmentExpression();
             if (tracking) {
@@ -2061,11 +2068,13 @@ parseStatement: true, parseSourceElement: true */
         } else {
             if (matchKeyword('var') || matchKeyword('let')) {
                 kind = lex().value;
+                allowIn = false;
                 init = {
                     type: Syntax.VariableDeclaration,
                     declarations: parseVariableDeclarationList(),
                     kind: kind
                 };
+                allowIn = true;
 
                 if (init.declarations.length === 1 && matchKeyword('in')) {
                     lex();
@@ -2074,20 +2083,23 @@ parseStatement: true, parseSourceElement: true */
                     init = null;
                 }
             } else {
+                allowIn = false;
                 init = parseExpression().expression;
-            }
+                allowIn = true;
 
-            if (typeof left === 'undefined') {
-                if (init.hasOwnProperty('operator') && init.operator === 'in') {
-                    left = init.left;
-                    right = init.right;
+                if (matchKeyword('in')) {
+                    lex();
+                    left = init;
+                    right = parseExpression().expression;
                     init = null;
                     if (!isLeftHandSide(left)) {
                         throwError(Messages.InvalidLHSInForIn);
                     }
-                } else {
-                    expect(';');
                 }
+            }
+
+            if (typeof left === 'undefined') {
+                expect(';');
             }
         }
 
@@ -2892,6 +2904,7 @@ parseStatement: true, parseSourceElement: true */
         length = source.length;
         tracking = (typeof options.range === 'boolean' && options.range);
         buffer = null;
+        allowIn = true;
 
         if (length > 0) {
             if (typeof source[0] === 'undefined') {
