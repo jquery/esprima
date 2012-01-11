@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Arpad Borsos <arpad.borsos@googlemail.com>
   Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -1407,6 +1408,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -1444,6 +1446,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -1481,6 +1484,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -1518,6 +1522,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -3619,6 +3624,7 @@ data = {
         'var x': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'x'
@@ -3631,12 +3637,14 @@ data = {
         'var x, y;': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'x'
                 },
                 init: null
             }, {
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'y'
@@ -3649,6 +3657,7 @@ data = {
         'var x = 42': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'x'
@@ -3664,6 +3673,7 @@ data = {
         'var x = 14, y = 3, z = 1977': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'x'
@@ -3673,6 +3683,7 @@ data = {
                     value: 14
                 }
             }, {
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'y'
@@ -3682,6 +3693,7 @@ data = {
                     value: 3
                 }
             }, {
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'z'
@@ -3701,6 +3713,7 @@ data = {
         'let x': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'x'
@@ -3715,6 +3728,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -3730,6 +3744,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -3748,6 +3763,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -3757,6 +3773,7 @@ data = {
                         value: 14
                     }
                 }, {
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'y'
@@ -3766,6 +3783,7 @@ data = {
                         value: 3
                     }
                 }, {
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'z'
@@ -3785,6 +3803,7 @@ data = {
         'const x = 42': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'x'
@@ -3802,6 +3821,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -3820,6 +3840,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -3829,6 +3850,7 @@ data = {
                         value: 14
                     }
                 }, {
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'y'
@@ -3838,6 +3860,7 @@ data = {
                         value: 3
                     }
                 }, {
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'z'
@@ -3944,6 +3967,7 @@ data = {
             consequent: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4182,6 +4206,7 @@ data = {
             init: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4205,6 +4230,7 @@ data = {
             init: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4228,6 +4254,7 @@ data = {
             init: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4237,6 +4264,7 @@ data = {
                         value: 0
                     }
                 }, {
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'y'
@@ -4429,6 +4457,7 @@ data = {
             left: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4463,6 +4492,7 @@ data = {
             left: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4500,6 +4530,7 @@ data = {
             left: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4534,6 +4565,7 @@ data = {
             left: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -4571,6 +4603,7 @@ data = {
             left: {
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'i'
@@ -5255,6 +5288,7 @@ data = {
         'var hi = function() { sayHi() };': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'hi'
@@ -5285,6 +5319,7 @@ data = {
         'var hello = function hi() { sayHi() };': {
             type: 'VariableDeclaration',
             declarations: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'hello'
@@ -5381,6 +5416,7 @@ data = {
             body: [{
                 type: 'VariableDeclaration',
                 declarations: [{
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'x'
@@ -5390,6 +5426,7 @@ data = {
                         value: 14
                     }
                 }, {
+                    type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
                         name: 'y'

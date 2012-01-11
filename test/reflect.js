@@ -34,6 +34,7 @@ function genFunDecl(id, params, body) { return Pattern({ type: "FunctionDeclarat
                                                 params: params,
                                                 body: body
                                                 }) }
+function declarator(id, init) { return Pattern({ type: "VariableDeclarator", id: id, init: init }) }
 function varDecl(decls) { return Pattern({ type: "VariableDeclaration", declarations: decls, kind: "var" }) }
 function letDecl(decls) { return Pattern({ type: "VariableDeclaration", declarations: decls, kind: "let" }) }
 function constDecl(decls) { return Pattern({ type: "VariableDeclaration", declarations: decls, kind: "const" }) }
@@ -173,13 +174,13 @@ function assertError(src, errorType) {
 // declarations
 
 assertDecl("var x = 1, y = 2, z = 3",
-           varDecl([{ id: ident("x"), init: lit(1) },
-                    { id: ident("y"), init: lit(2) },
-                    { id: ident("z"), init: lit(3) }]));
+           varDecl([declarator(ident("x"), lit(1)),
+                    declarator(ident("y"), lit(2)),
+                    declarator(ident("z"), lit(3))]));
 assertDecl("var x, y, z",
-           varDecl([{ id: ident("x"), init: null },
-                    { id: ident("y"), init: null },
-                    { id: ident("z"), init: null }]));
+           varDecl([declarator(ident("x"), null),
+                    declarator(ident("y"), null),
+                    declarator(ident("z"), null)]));
 assertDecl("function foo() { }",
            funDecl(ident("foo"), [], blockStmt([])));
 assertDecl("function foo() { return 42 }",
@@ -312,15 +313,15 @@ program([exprStmt(ident("f")),
 assertStmt("throw 42", throwStmt(lit(42)));
 assertStmt("for (;;) break", forStmt(null, null, null, breakStmt(null)));
 assertStmt("for (x; y; z) break", forStmt(ident("x"), ident("y"), ident("z"), breakStmt(null)));
-assertStmt("for (var x; y; z) break", forStmt(varDecl([{ id: ident("x"), init: null }]), ident("y"), ident("z"), breakStmt(null)));
-assertStmt("for (var x = 42; y; z) break", forStmt(varDecl([{ id: ident("x"), init: lit(42) }]), ident("y"), ident("z"), breakStmt(null)));
+assertStmt("for (var x; y; z) break", forStmt(varDecl([declarator(ident("x"), null)]), ident("y"), ident("z"), breakStmt(null)));
+assertStmt("for (var x = 42; y; z) break", forStmt(varDecl([declarator(ident("x"), lit(42))]), ident("y"), ident("z"), breakStmt(null)));
 assertStmt("for (x; ; z) break", forStmt(ident("x"), null, ident("z"), breakStmt(null)));
-assertStmt("for (var x; ; z) break", forStmt(varDecl([{ id: ident("x"), init: null }]), null, ident("z"), breakStmt(null)));
-assertStmt("for (var x = 42; ; z) break", forStmt(varDecl([{ id: ident("x"), init: lit(42) }]), null, ident("z"), breakStmt(null)));
+assertStmt("for (var x; ; z) break", forStmt(varDecl([declarator(ident("x"), null)]), null, ident("z"), breakStmt(null)));
+assertStmt("for (var x = 42; ; z) break", forStmt(varDecl([declarator(ident("x"), lit(42))]), null, ident("z"), breakStmt(null)));
 assertStmt("for (x; y; ) break", forStmt(ident("x"), ident("y"), null, breakStmt(null)));
-assertStmt("for (var x; y; ) break", forStmt(varDecl([{ id: ident("x"), init: null }]), ident("y"), null, breakStmt(null)));
-assertStmt("for (var x = 42; y; ) break", forStmt(varDecl([{ id: ident("x"), init: lit(42) }]), ident("y"), null, breakStmt(null)));
-assertStmt("for (var x in y) break", forInStmt(varDecl([{ id: ident("x"), init: null }]), ident("y"), breakStmt(null)));
+assertStmt("for (var x; y; ) break", forStmt(varDecl([declarator(ident("x"), null)]), ident("y"), null, breakStmt(null)));
+assertStmt("for (var x = 42; y; ) break", forStmt(varDecl([declarator(ident("x"),lit(42))]), ident("y"), null, breakStmt(null)));
+assertStmt("for (var x in y) break", forInStmt(varDecl([declarator(ident("x"),null)]), ident("y"), breakStmt(null)));
 assertStmt("for (x in y) break", forInStmt(ident("x"), ident("y"), breakStmt(null)));
 assertStmt("{ }", blockStmt([]));
 assertStmt("{ throw 1; throw 2; throw 3; }", blockStmt([ throwStmt(lit(1)), throwStmt(lit(2)), throwStmt(lit(3))]));
@@ -378,8 +379,8 @@ assertStmt("function f() { function g() { } function g() { return 42 } }",
                                               funDecl(ident("g"), [], blockStmt([returnStmt(lit(42))]))])));
 
 assertStmt("function f() { var x = 42; var x = 43; }",
-           funDecl(ident("f"), [], blockStmt([varDecl([{ id: ident("x"), init: lit(42) }]),
-                                              varDecl([{ id: ident("x"), init: lit(43) }])])));
+           funDecl(ident("f"), [], blockStmt([varDecl([declarator(ident("x"),lit(42))]),
+                                              varDecl([declarator(ident("x"),lit(43))])])));
 
 // getters and setters
 
