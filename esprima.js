@@ -2642,6 +2642,9 @@ parseStatement: true, parseSourceElement: true */
             start = index;
 
             node = parseFunction.apply(null, arguments);
+            if (typeof node === 'undefined') {
+                return;
+            }
 
             node.range = [start, index - 1];
             if (isBinary(node)) {
@@ -2700,6 +2703,7 @@ parseStatement: true, parseSourceElement: true */
             extra.parsePrimaryExpression = parsePrimaryExpression;
             extra.parseProgram = parseProgram;
             extra.parseRelationalExpression = parseRelationalExpression;
+            extra.parseStatement = parseStatement;
             extra.parseShiftExpression = parseShiftExpression;
             extra.parseUnaryExpression = parseUnaryExpression;
 
@@ -2721,6 +2725,7 @@ parseStatement: true, parseSourceElement: true */
             parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
             parseProgram = wrapTracking(extra.parseProgram);
             parseRelationalExpression = wrapTracking(extra.parseRelationalExpression);
+            parseStatement = wrapTracking(extra.parseStatement);
             parseShiftExpression = wrapTracking(extra.parseShiftExpression);
             parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);
         }
@@ -2760,6 +2765,7 @@ parseStatement: true, parseSourceElement: true */
             parsePostfixExpression = extra.parsePostfixExpression;
             parseProgram = extra.parseProgram;
             parseRelationalExpression = extra.parseRelationalExpression;
+            parseStatement = extra.parseStatement;
             parseShiftExpression = extra.parseShiftExpression;
             parseUnaryExpression = extra.parseUnaryExpression;
         }

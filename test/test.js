@@ -44,7 +44,7 @@ data = {
                     type: 'ThisExpression',
                     range: [0, 3]
                 },
-                range: [0, 3]
+                range: [0, 4]
             }],
             range: [0, 4],
             tokens: [{
@@ -63,7 +63,7 @@ data = {
                     value: 42,
                     range: [5, 6]
                 },
-                range: [5, 6]
+                range: [5, 8]
             }],
             range: [5, 8],
             tokens: [{
@@ -1424,7 +1424,8 @@ data = {
                         range: [8, 15]
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [0, 15]
             }],
             range: [0, 15],
             tokens: [{
@@ -1462,7 +1463,8 @@ data = {
                         range: [8, 16]
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [0, 16]
             }],
             range: [0, 16],
             tokens: [{
@@ -1500,7 +1502,8 @@ data = {
                         range: [8, 17]
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [0, 17]
             }],
             range: [0, 17],
             tokens: [{
@@ -1538,7 +1541,8 @@ data = {
                         range: [8, 20]
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [0, 20]
             }],
             range: [0, 20],
             tokens: [{
@@ -4445,8 +4449,10 @@ data = {
                 range: [19, 21]
             },
             body: {
-                type: 'EmptyStatement'
-            }
+                type: 'EmptyStatement',
+                range: [23, 23]
+            },
+            range: [0, 23]
         },
 
         'for(x = 0; x < 42; x++) process(x);': {
@@ -4508,8 +4514,9 @@ data = {
                     }],
                     range: [24, 33]
                 },
-                range: [24, 33]
-            }
+                range: [24, 34]
+            },
+            range: [0, 34]
         },
 
         'for(x in list) process(x);': {
@@ -4829,7 +4836,8 @@ data = {
                     range: [11, 11]
                 },
                 range: [7, 11]
-            }
+            },
+            range: [0, 11]
         }
 
     },
@@ -4861,7 +4869,8 @@ data = {
                     range: [9, 17]
                 },
                 range: [9, 17]
-            }
+            },
+            range: [0, 17]
         },
 
         'with (x) foo = bar;': {
@@ -4888,8 +4897,9 @@ data = {
                     },
                     range: [9, 17]
                 },
-                range: [9, 17]
-            }
+                range: [9, 18]
+            },
+            range: [0, 18]
         },
 
         'with (x) { foo = bar }': {
@@ -4918,9 +4928,11 @@ data = {
                         },
                         range: [11, 19]
                     },
-                    range: [11, 19]
-                }]
-            }
+                    range: [11, 20]
+                }],
+                range: [9, 21]
+            },
+            range: [0, 21]
         }
 
     },
@@ -5075,7 +5087,8 @@ data = {
                     range: [10, 10]
                 },
                 range: [6, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'throw { message: "Error" }': {
