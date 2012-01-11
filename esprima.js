@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
   Copyright (C) 2012 Kris Kowal <kris.kowal@cixar.com>
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Arpad Borsos <arpad.borsos@googlemail.com>
@@ -97,6 +98,7 @@ parseStatement: true, parseSourceElement: true */
         UnaryExpression: 'UnaryExpression',
         UpdateExpression: 'UpdateExpression',
         VariableDeclaration: 'VariableDeclaration',
+        VariableDeclarator: 'VariableDeclarator',
         WhileStatement: 'WhileStatement',
         WithStatement: 'WithStatement'
     };
@@ -1903,6 +1905,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         return {
+            type: Syntax.VariableDeclarator,
             id: id,
             init: init
         };
