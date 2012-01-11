@@ -43,7 +43,8 @@ data = {
                 expression: {
                     type: 'ThisExpression',
                     range: [0, 3]
-                }
+                },
+                range: [0, 3]
             }],
             range: [0, 4],
             tokens: [{
@@ -61,7 +62,8 @@ data = {
                     type: 'Literal',
                     value: 42,
                     range: [5, 6]
-                }
+                },
+                range: [5, 6]
             }],
             range: [5, 8],
             tokens: [{
@@ -97,7 +99,8 @@ data = {
                     range: [11, 11]
                 },
                 range: [0, 11]
-            }
+            },
+            range: [0, 11]
         }
     },
 
@@ -121,7 +124,8 @@ data = {
                         range: [4, 5]
                     },
                     range: [0, 5]
-                }
+                },
+                range: [0, 5]
             }],
             range: [0, 5],
             tokens: [{
@@ -198,7 +202,8 @@ data = {
                     range: [4, 10]
                 },
                 range: [0, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'x = [ ,, 42 ]': {
@@ -1693,7 +1698,8 @@ data = {
                     range: [9, 16]
                 },
                 range: [0, 16]
-            }
+            },
+            range: [0, 16]
         },
 
         'universe.milkyway.solarsystem': {
@@ -1722,7 +1728,8 @@ data = {
                     range: [18, 28]
                 },
                 range: [0, 28]
-            }
+            },
+            range: [0, 28]
         },
 
         'universe.milkyway.solarsystem.Earth': {
@@ -1761,7 +1768,8 @@ data = {
                     range: [30, 34]
                 },
                 range: [0, 34]
-            }
+            },
+            range: [0, 34]
         },
 
         'universe[galaxyName, otherUselessName]': {
@@ -1788,7 +1796,8 @@ data = {
                     range: [9, 36]
                 },
                 range: [0, 37]
-            }
+            },
+            range: [0, 37]
         },
 
         'universe[galaxyName]': {
@@ -1807,7 +1816,8 @@ data = {
                     range: [9, 18]
                 },
                 range: [0, 19]
-            }
+            },
+            range: [0, 19]
         },
 
         'universe[42].galaxies': {
@@ -1836,7 +1846,8 @@ data = {
                     range: [13, 20]
                 },
                 range: [0, 20]
-            }
+            },
+            range: [0, 20]
         },
 
         'universe(42).galaxies': {
@@ -1961,7 +1972,8 @@ data = {
                     range: [9, 10]
                 },
                 range: [0, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'universe.true': {
@@ -1980,7 +1992,8 @@ data = {
                     range: [9, 12]
                 },
                 range: [0, 12]
-            }
+            },
+            range: [0, 12]
         },
 
         'universe.false': {
@@ -1999,7 +2012,8 @@ data = {
                     range: [9, 13]
                 },
                 range: [0, 13]
-            }
+            },
+            range: [0, 13]
         },
 
         'universe.null': {
@@ -2018,7 +2032,8 @@ data = {
                     range: [9, 12]
                 },
                 range: [0, 12]
-            }
+            },
+            range: [0, 12]
         }
     },
 
@@ -2036,7 +2051,8 @@ data = {
                 },
                 prefix: false,
                 range: [0, 2]
-            }
+            },
+            range: [0, 2]
         },
 
         'x--': {
@@ -2051,7 +2067,8 @@ data = {
                 },
                 prefix: false,
                 range: [0, 2]
-            }
+            },
+            range: [0, 2]
         }
     },
 
@@ -2069,7 +2086,8 @@ data = {
                 },
                 prefix: true,
                 range: [0, 2]
-            }
+            },
+            range: [0, 2]
         },
 
         '--x': {
@@ -2084,7 +2102,8 @@ data = {
                 },
                 prefix: true,
                 range: [0, 2]
-            }
+            },
+            range: [0, 2]
         },
 
         '+x': {
@@ -2098,7 +2117,8 @@ data = {
                     range: [1, 1]
                 },
                 range: [0, 1]
-            }
+            },
+            range: [0, 1]
         },
 
         '-x': {
@@ -2112,7 +2132,8 @@ data = {
                     range: [1, 1]
                 },
                 range: [0, 1]
-            }
+            },
+            range: [0, 1]
         },
 
         '~x': {
@@ -2126,7 +2147,8 @@ data = {
                     range: [1, 1]
                 },
                 range: [0, 1]
-            }
+            },
+            range: [0, 1]
         },
 
         '!x': {
@@ -2140,7 +2162,8 @@ data = {
                     range: [1, 1]
                 },
                 range: [0, 1]
-            }
+            },
+            range: [0, 1]
         },
 
         'void x': {
@@ -2154,7 +2177,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'delete x': {
@@ -2168,7 +2192,8 @@ data = {
                     range: [7, 7]
                 },
                 range: [0, 7]
-            }
+            },
+            range: [0, 7]
         },
 
         'typeof x': {
@@ -2182,7 +2207,8 @@ data = {
                     range: [7, 7]
                 },
                 range: [0, 7]
-            }
+            },
+            range: [0, 7]
         }
     },
 
@@ -2204,7 +2230,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x / y': {
@@ -2223,7 +2250,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x % y': {
@@ -2242,7 +2270,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         }
     },
 
@@ -2264,7 +2293,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x - y': {
@@ -2283,7 +2313,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         }
     },
 
@@ -2305,7 +2336,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x >> y': {
@@ -2324,7 +2356,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x >>> y': {
@@ -2343,7 +2376,8 @@ data = {
                     range: [6, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         }
     },
 
@@ -2365,7 +2399,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x > y': {
@@ -2384,7 +2419,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x <= y': {
@@ -2403,7 +2439,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x >= y': {
@@ -2422,7 +2459,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x in y': {
@@ -2441,7 +2479,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x instanceof y': {
@@ -2460,7 +2499,8 @@ data = {
                     range: [13, 13]
                 },
                 range: [0, 13]
-            }
+            },
+            range: [0, 13]
         }
     },
 
@@ -2482,7 +2522,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x != y': {
@@ -2501,7 +2542,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x === y': {
@@ -2520,7 +2562,8 @@ data = {
                     range: [6, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x !== y': {
@@ -2539,7 +2582,8 @@ data = {
                     range: [6, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         }
     },
 
@@ -2561,7 +2605,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x ^ y': {
@@ -2580,7 +2625,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         },
 
         'x | y': {
@@ -2599,7 +2645,8 @@ data = {
                     range: [4, 4]
                 },
                 range: [0, 4]
-            }
+            },
+            range: [0, 4]
         }
     },
 
@@ -2631,7 +2678,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x - y + z': {
@@ -2660,7 +2708,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x + y - z': {
@@ -2689,7 +2738,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x - y - z': {
@@ -2718,7 +2768,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x + y * z': {
@@ -2747,7 +2798,8 @@ data = {
                     range: [4, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x + y / z': {
@@ -2776,7 +2828,8 @@ data = {
                     range: [4, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x - y % z': {
@@ -2805,7 +2858,8 @@ data = {
                     range: [4, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x * y * z': {
@@ -2834,7 +2888,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x * y / z': {
@@ -2863,7 +2918,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x * y % z': {
@@ -2892,7 +2948,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x % y * z': {
@@ -2921,7 +2978,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x << y << z': {
@@ -2950,7 +3008,8 @@ data = {
                     range: [10, 10]
                 },
                 range: [0, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'x | y | z': {
@@ -2979,7 +3038,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x & y & z': {
@@ -3008,7 +3068,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x ^ y ^ z': {
@@ -3037,7 +3098,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x & y | z': {
@@ -3066,7 +3128,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x | y ^ z': {
@@ -3095,7 +3158,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x | y & z': {
@@ -3124,7 +3188,8 @@ data = {
                     range: [4, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         }
     },
 
@@ -3146,7 +3211,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x && y': {
@@ -3165,7 +3231,8 @@ data = {
                     range: [5, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x || y || z': {
@@ -3194,7 +3261,8 @@ data = {
                     range: [10, 10]
                 },
                 range: [0, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'x && y && z': {
@@ -3223,7 +3291,8 @@ data = {
                     range: [10, 10]
                 },
                 range: [0, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'x || y && z': {
@@ -3252,7 +3321,8 @@ data = {
                     range: [5, 10]
                 },
                 range: [0, 10]
-            }
+            },
+            range: [0, 10]
         },
 
         'x || y ^ z': {
@@ -3281,7 +3351,8 @@ data = {
                     range: [5, 9]
                 },
                 range: [0, 9]
-            }
+            },
+            range: [0, 9]
         }
     },
 
@@ -3307,7 +3378,8 @@ data = {
                     range: [8, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x && y ? 1 : 2': {
@@ -3340,7 +3412,8 @@ data = {
                     range: [13, 13]
                 },
                 range: [0, 13]
-            }
+            },
+            range: [0, 13]
         }
     },
 
@@ -3362,7 +3435,8 @@ data = {
                     range: [4, 5]
                 },
                 range: [0, 5]
-            }
+            },
+            range: [0, 5]
         },
 
         'x *= 42': {
@@ -3381,7 +3455,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x /= 42': {
@@ -3400,7 +3475,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x %= 42': {
@@ -3419,7 +3495,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x += 42': {
@@ -3438,7 +3515,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x -= 42': {
@@ -3457,7 +3535,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x <<= 42': {
@@ -3476,7 +3555,8 @@ data = {
                     range: [6, 7]
                 },
                 range: [0, 7]
-            }
+            },
+            range: [0, 7]
         },
 
         'x >>= 42': {
@@ -3495,7 +3575,8 @@ data = {
                     range: [6, 7]
                 },
                 range: [0, 7]
-            }
+            },
+            range: [0, 7]
         },
 
         'x >>>= 42': {
@@ -3514,7 +3595,8 @@ data = {
                     range: [7, 8]
                 },
                 range: [0, 8]
-            }
+            },
+            range: [0, 8]
         },
 
         'x &= 42': {
@@ -3533,7 +3615,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x ^= 42': {
@@ -3552,7 +3635,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         },
 
         'x |= 42': {
@@ -3571,7 +3655,8 @@ data = {
                     range: [5, 6]
                 },
                 range: [0, 6]
-            }
+            },
+            range: [0, 6]
         }
     },
 
@@ -3910,7 +3995,8 @@ data = {
                     }
                 ],
                 range: [0, 3]
-            }
+            },
+            range: [0, 3]
         }
 
     },
@@ -4421,7 +4507,8 @@ data = {
                         range: [32, 32]
                     }],
                     range: [24, 33]
-                }
+                },
+                range: [24, 33]
             }
         },
 
@@ -4772,7 +4859,8 @@ data = {
                         range: [15, 17]
                     },
                     range: [9, 17]
-                }
+                },
+                range: [9, 17]
             }
         },
 
@@ -4799,7 +4887,8 @@ data = {
                         range: [15, 17]
                     },
                     range: [9, 17]
-                }
+                },
+                range: [9, 17]
             }
         },
 
@@ -4828,7 +4917,8 @@ data = {
                             range: [17, 19]
                         },
                         range: [11, 19]
-                    }
+                    },
+                    range: [11, 19]
                 }]
             }
         }
@@ -5361,7 +5451,8 @@ data = {
                     body: []
                 },
                 range: [0, 13]
-            }
+            },
+            range: [0, 13]
         }
     },
 

@@ -1662,14 +1662,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.14 Comma Operator
 
     function parseExpression() {
-        var expr, syntax, finish;
-
-        if (tracking) {
-            skipComment();
-            finish = start();
-        }
-
-        expr = parseAssignmentExpression();
+        var expr = parseAssignmentExpression();
 
         if (match(',')) {
             expr = {
@@ -1687,16 +1680,10 @@ parseStatement: true, parseSourceElement: true */
 
         }
 
-        syntax = {
+        return {
             type: Syntax.ExpressionStatement,
             expression: expr
         };
-
-        if (tracking) {
-            finish(expr);
-        }
-
-        return syntax;
     }
 
     // 12.1 Block
@@ -2698,6 +2685,12 @@ parseStatement: true, parseSourceElement: true */
                 visit(node);
             }
 
+            if (node.type === Syntax.ExpressionStatement) {
+                if (typeof node.expression.range === 'undefined') {
+                    node.expression.range = node.range;
+                }
+            }
+
             return node;
         };
     }
@@ -2726,6 +2719,7 @@ parseStatement: true, parseSourceElement: true */
             extra.parseBitwiseXORExpression = parseBitwiseXORExpression;
             extra.parseConditionalExpression = parseConditionalExpression;
             extra.parseEqualityExpression = parseEqualityExpression;
+            extra.parseExpression = parseExpression;
             extra.parseLogicalANDExpression = parseLogicalANDExpression;
             extra.parseLogicalORExpression = parseLogicalORExpression;
             extra.parseMultiplicativeExpression = parseMultiplicativeExpression;
@@ -2743,6 +2737,7 @@ parseStatement: true, parseSourceElement: true */
             parseBitwiseXORExpression = wrapTracking(extra.parseBitwiseXORExpression);
             parseConditionalExpression = wrapTracking(extra.parseConditionalExpression);
             parseEqualityExpression = wrapTracking(extra.parseEqualityExpression);
+            parseExpression = wrapTracking(extra.parseExpression);
             parseLogicalANDExpression = wrapTracking(extra.parseLogicalANDExpression);
             parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);
             parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);
@@ -2792,6 +2787,10 @@ parseStatement: true, parseSourceElement: true */
 
         if (typeof extra.parseConditionalExpression === 'function') {
             parseConditionalExpression = extra.parseConditionalExpression;
+        }
+
+        if (typeof extra.parseExpression === 'function') {
+            parseExpression = extra.parseExpression;
         }
 
         if (typeof extra.parseEqualityExpression === 'function') {
