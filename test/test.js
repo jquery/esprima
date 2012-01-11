@@ -5942,6 +5942,7 @@ if (typeof window !== 'undefined') {
             });
         }
         console.log(header);
+        process.exit(failures.length === 0 ? 0 : 1);
     }());
 }
 /* vim: set sw=4 ts=4 et tw=80 : */
