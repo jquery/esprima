@@ -2741,83 +2741,26 @@ parseStatement: true, parseSourceElement: true */
             skipComment = extra.skipComment;
         }
 
-        if (typeof extra.parseAdditiveExpression === 'function') {
+        if (tracking) {
             parseAdditiveExpression = extra.parseAdditiveExpression;
-        }
-
-        if (typeof extra.parseAssignmentExpression === 'function') {
             parseAssignmentExpression = extra.parseAssignmentExpression;
-        }
-
-        if (typeof extra.parseBitwiseANDExpression === 'function') {
             parseBitwiseANDExpression = extra.parseBitwiseANDExpression;
-        }
-
-        if (typeof extra.parseBitwiseORExpression === 'function') {
             parseBitwiseORExpression = extra.parseBitwiseORExpression;
-        }
-
-        if (typeof extra.parseBitwiseXORExpression === 'function') {
             parseBitwiseXORExpression = extra.parseBitwiseXORExpression;
-        }
-
-        if (typeof extra.parseCallMember === 'function') {
             parseCallMember = extra.parseCallMember;
-        }
-
-        if (typeof extra.parseComputedMember === 'function') {
             parseComputedMember = extra.parseComputedMember;
-        }
-
-        if (typeof extra.parseConditionalExpression === 'function') {
             parseConditionalExpression = extra.parseConditionalExpression;
-        }
-
-        if (typeof extra.parseExpression === 'function') {
             parseExpression = extra.parseExpression;
-        }
-
-        if (typeof extra.parseEqualityExpression === 'function') {
             parseEqualityExpression = extra.parseEqualityExpression;
-        }
-
-        if (typeof extra.parseLogicalANDExpression === 'function') {
             parseLogicalANDExpression = extra.parseLogicalANDExpression;
-        }
-
-        if (typeof extra.parseLogicalORExpression === 'function') {
             parseLogicalORExpression = extra.parseLogicalORExpression;
-        }
-
-        if (typeof extra.parseMultiplicativeExpression === 'function') {
             parseMultiplicativeExpression = extra.parseMultiplicativeExpression;
-        }
-
-        if (typeof extra.parseNonComputedMember === 'function') {
             parseNonComputedMember = extra.parseNonComputedMember;
-        }
-
-        if (typeof extra.parsePrimaryExpression === 'function') {
             parsePrimaryExpression = extra.parsePrimaryExpression;
-        }
-
-        if (typeof extra.parsePostfixExpression === 'function') {
             parsePostfixExpression = extra.parsePostfixExpression;
-        }
-
-        if (typeof extra.parseProgram === 'function') {
             parseProgram = extra.parseProgram;
-        }
-
-        if (typeof extra.parseRelationalExpression === 'function') {
             parseRelationalExpression = extra.parseRelationalExpression;
-        }
-
-        if (typeof extra.parseShiftExpression === 'function') {
             parseShiftExpression = extra.parseShiftExpression;
-        }
-
-        if (typeof extra.parseUnaryExpression === 'function') {
             parseUnaryExpression = extra.parseUnaryExpression;
         }
 
