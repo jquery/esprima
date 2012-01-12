@@ -245,23 +245,6 @@ parseStatement: true, parseSourceElement: true */
         return isFutureReservedWord(id);
     }
 
-    // Start, then finish, tracking the range or location of a part.
-
-    function start() {
-        var startIndex = index;
-
-        return function (object) {
-            object.range = [startIndex, index - 1];
-            return object;
-        };
-    }
-
-    // Copy the range from the originating token.
-
-    function finish(syntax, token) {
-        syntax.range = token.range;
-    }
-
     // Return the next character and move forward.
 
     function nextChar() {
