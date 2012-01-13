@@ -2640,9 +2640,11 @@ parseStatement: true, parseSourceElement: true */
             }
 
             if (node.type === Syntax.MemberExpression) {
-                node.range[0] = node.object.range[0];
-                if (typeof node.property.range === 'undefined') {
-                    node.property.range = [start, index - 1];
+                if (typeof node.object.range !== 'undefined') {
+                    node.range[0] = node.object.range[0];
+                    if (typeof node.property.range === 'undefined') {
+                        node.property.range = [start, index - 1];
+                    }
                 }
             }
 
