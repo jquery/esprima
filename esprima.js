@@ -47,7 +47,6 @@ parseStatement: true, parseSourceElement: true */
         index,
         lineNumber,
         length,
-        tracking,
         buffer,
         extra;
 
@@ -2651,23 +2650,14 @@ parseStatement: true, parseSourceElement: true */
         };
     }
 
-    function patch(options) {
+    function patch() {
 
-        var opt = {
-            comment: typeof options.comment === 'boolean' && options.comment,
-            range: typeof options.range === 'boolean' && options.range,
-            tokens: typeof options.tokens === 'boolean' && options.tokens
-        };
-
-        extra = {};
-
-        if (opt.comment) {
+        if (extra.comments) {
             extra.skipComment = skipComment;
             skipComment = scanComment;
-            extra.comments = [];
         }
 
-        if (opt.range) {
+        if (extra.range) {
             extra.parseAdditiveExpression = parseAdditiveExpression;
             extra.parseAssignmentExpression = parseAssignmentExpression;
             extra.parseBitwiseANDExpression = parseBitwiseANDExpression;
@@ -2713,14 +2703,12 @@ parseStatement: true, parseSourceElement: true */
             parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);
         }
 
-        if (opt.tokens) {
+        if (typeof extra.tokens !== 'undefined') {
             extra.lex = lex;
             extra.scanRegExp = scanRegExp;
 
             lex = lexRange;
             scanRegExp = scanRegExpRange;
-
-            extra.tokens = [];
         }
     }
 
@@ -2729,7 +2717,7 @@ parseStatement: true, parseSourceElement: true */
             skipComment = extra.skipComment;
         }
 
-        if (tracking) {
+        if (extra.range) {
             parseAdditiveExpression = extra.parseAdditiveExpression;
             parseAssignmentExpression = extra.parseAssignmentExpression;
             parseBitwiseANDExpression = extra.parseBitwiseANDExpression;
@@ -2760,8 +2748,6 @@ parseStatement: true, parseSourceElement: true */
         if (typeof extra.scanRegExp === 'function') {
             scanRegExp = extra.scanRegExp;
         }
-
-        extra = {};
     }
 
     function stringToArray(str) {
@@ -2774,19 +2760,26 @@ parseStatement: true, parseSourceElement: true */
         return result;
     }
 
-    function parse(code, opt) {
-        var options,
-            program;
-
-        options = opt || {};
+    function parse(code, options) {
+        var program;
 
         source = code;
         index = 0;
         lineNumber = (source.length > 0) ? 1 : 0;
         length = source.length;
-        tracking = (typeof options.range === 'boolean' && options.range);
         buffer = null;
         allowIn = true;
+
+        extra = {};
+        if (typeof options !== 'undefined') {
+            extra.range = (typeof options.range === 'boolean') && options.range;
+            if (typeof options.tokens === 'boolean' && options.tokens) {
+                extra.tokens = [];
+            }
+            if (typeof options.comment === 'boolean' && options.comment) {
+                extra.comments = [];
+            }
+        }
 
         if (length > 0) {
             if (typeof source[0] === 'undefined') {
@@ -2804,7 +2797,7 @@ parseStatement: true, parseSourceElement: true */
             }
         }
 
-        patch(options);
+        patch();
         try {
             program = parseProgram();
             if (typeof extra.comments !== 'undefined') {
@@ -2817,6 +2810,7 @@ parseStatement: true, parseSourceElement: true */
             throw e;
         } finally {
             unpatch();
+            extra = {};
         }
 
         return program;
