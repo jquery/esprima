@@ -116,6 +116,24 @@ function collectRegex() {
             };
 
             result = [];
+
+            // Executes f on the object and its children (recursively).
+            function visit(object, f) {
+                var key, child;
+
+                if (f.call(null, object) === false) {
+                    return;
+                }
+                for (key in object) {
+                    if (object.hasOwnProperty(key)) {
+                        child = object[key];
+                        if (typeof child === 'object' && child !== null) {
+                            visit(child, f);
+                        }
+                    }
+                }
+            }
+
             function collect(node) {
                 var str;
                 if (node.type === 'Literal') {
@@ -129,7 +147,7 @@ function collectRegex() {
             }
 
             try {
-                window.esprima.traverse(code, options, collect);
+                visit(window.esprima.parse(code, options), collect);
 
                 if (result.length > 0) {
                     str = '<p>Found <b>' + result.length + '</b> regex(s):</p>';

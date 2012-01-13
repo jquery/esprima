@@ -2818,47 +2818,10 @@ parseStatement: true, parseSourceElement: true */
         return program;
     }
 
-    // Executes f on the object and its children (recursively).
-
-    function visitPreorder(object, f) {
-        var key, child;
-
-        if (f(object) === false) {
-            return;
-        }
-        for (key in object) {
-            if (object.hasOwnProperty(key)) {
-                child = object[key];
-                if (typeof child === 'object' && child !== null) {
-                    visitPreorder(child, f);
-                }
-            }
-        }
-    }
-
-    function traverse(code, options, f) {
-        var program;
-
-        if (typeof options === 'undefined') {
-            throw new Error('Wrong use of traverse() function');
-        }
-
-        if (typeof f === 'undefined') {
-            f = options;
-            options = {};
-        }
-
-        program = parse(code, options);
-        visitPreorder(program, f);
-
-        return program;
-    }
-
     // Sync with package.json.
     exports.version = '0.9.6';
 
     exports.parse = parse;
-    exports.traverse = traverse;
 
 }(typeof exports === 'undefined' ? (esprima = {}) : exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
