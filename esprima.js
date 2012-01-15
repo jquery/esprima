@@ -1195,20 +1195,25 @@ parseStatement: true, parseSourceElement: true */
         return args;
     }
 
-    function parseNonComputedMember(object) {
+    function parseNonComputedProperty() {
         var token = lex();
+
         if (!isIdentifierName(token)) {
             throwUnexpected(token);
         }
 
         return {
+            type: Syntax.Identifier,
+            name: token.value
+        };
+    }
+
+    function parseNonComputedMember(object) {
+        return {
             type: Syntax.MemberExpression,
             computed: false,
             object: object,
-            property: {
-                type: Syntax.Identifier,
-                name: token.value
-            }
+            property: parseNonComputedProperty()
         };
     }
 
@@ -2641,9 +2646,6 @@ parseStatement: true, parseSourceElement: true */
             if (node.type === Syntax.MemberExpression) {
                 if (typeof node.object.range !== 'undefined') {
                     node.range[0] = node.object.range[0];
-                    if (typeof node.property.range === 'undefined') {
-                        node.property.range = [start, index - 1];
-                    }
                 }
             }
 
@@ -2673,6 +2675,7 @@ parseStatement: true, parseSourceElement: true */
             extra.parseLogicalORExpression = parseLogicalORExpression;
             extra.parseMultiplicativeExpression = parseMultiplicativeExpression;
             extra.parseNonComputedMember = parseNonComputedMember;
+            extra.parseNonComputedProperty = parseNonComputedProperty;
             extra.parsePostfixExpression = parsePostfixExpression;
             extra.parsePrimaryExpression = parsePrimaryExpression;
             extra.parseProgram = parseProgram;
@@ -2695,6 +2698,7 @@ parseStatement: true, parseSourceElement: true */
             parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);
             parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);
             parseNonComputedMember = wrapTracking(extra.parseNonComputedMember);
+            parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
             parsePostfixExpression = wrapTracking(extra.parsePostfixExpression);
             parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
             parseProgram = wrapTracking(extra.parseProgram);
@@ -2733,6 +2737,7 @@ parseStatement: true, parseSourceElement: true */
             parseLogicalORExpression = extra.parseLogicalORExpression;
             parseMultiplicativeExpression = extra.parseMultiplicativeExpression;
             parseNonComputedMember = extra.parseNonComputedMember;
+            parseNonComputedProperty = extra.parseNonComputedProperty;
             parsePrimaryExpression = extra.parsePrimaryExpression;
             parsePostfixExpression = extra.parsePostfixExpression;
             parseProgram = extra.parseProgram;
