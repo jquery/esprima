@@ -1112,7 +1112,7 @@ parseStatement: true, parseSourceElement: true */
             lex();
             expr = parseExpression();
             expect(')');
-            return expr.expression;
+            return expr;
         }
 
         if (matchKeyword('function')) {
@@ -1217,9 +1217,6 @@ parseStatement: true, parseSourceElement: true */
 
         expect('[');
         property = parseExpression();
-        if (property.type === Syntax.ExpressionStatement) {
-            property = property.expression;
-        }
         expr = {
             type: Syntax.MemberExpression,
             computed: true,
@@ -1624,11 +1621,7 @@ parseStatement: true, parseSourceElement: true */
             }
 
         }
-
-        return {
-            type: Syntax.ExpressionStatement,
-            expression: expr
-        };
+        return expr;
     }
 
     // 12.1 Block
@@ -1764,7 +1757,10 @@ parseStatement: true, parseSourceElement: true */
 
         consumeSemicolon();
 
-        return expr;
+        return {
+            type: Syntax.ExpressionStatement,
+            expression: expr
+        };
     }
 
     // 12.5 If statement
@@ -1776,7 +1772,7 @@ parseStatement: true, parseSourceElement: true */
 
         expect('(');
 
-        test = parseExpression().expression;
+        test = parseExpression();
 
         expect(')');
 
@@ -1810,7 +1806,7 @@ parseStatement: true, parseSourceElement: true */
 
         expect('(');
 
-        test = parseExpression().expression;
+        test = parseExpression();
 
         expect(')');
 
@@ -1830,7 +1826,7 @@ parseStatement: true, parseSourceElement: true */
 
         expect('(');
 
-        test = parseExpression().expression;
+        test = parseExpression();
 
         expect(')');
 
@@ -1868,18 +1864,18 @@ parseStatement: true, parseSourceElement: true */
                 if (init.declarations.length === 1 && matchKeyword('in')) {
                     lex();
                     left = init;
-                    right = parseExpression().expression;
+                    right = parseExpression();
                     init = null;
                 }
             } else {
                 allowIn = false;
-                init = parseExpression().expression;
+                init = parseExpression();
                 allowIn = true;
 
                 if (matchKeyword('in')) {
                     lex();
                     left = init;
-                    right = parseExpression().expression;
+                    right = parseExpression();
                     init = null;
                     if (!isLeftHandSide(left)) {
                         throwError(Messages.InvalidLHSInForIn);
@@ -1895,12 +1891,12 @@ parseStatement: true, parseSourceElement: true */
         if (typeof left === 'undefined') {
 
             if (!match(';')) {
-                test = parseExpression().expression;
+                test = parseExpression();
             }
             expect(';');
 
             if (!match(')')) {
-                update = parseExpression().expression;
+                update = parseExpression();
             }
         }
 
@@ -2017,7 +2013,7 @@ parseStatement: true, parseSourceElement: true */
         // 'return' followed by a space and an identifier is very common.
         if (source[index] === ' ') {
             if (isIdentifierStart(source[index + 1])) {
-                argument = parseExpression().expression;
+                argument = parseExpression();
                 consumeSemicolon();
                 return {
                     type: Syntax.ReturnStatement,
@@ -2036,7 +2032,7 @@ parseStatement: true, parseSourceElement: true */
         if (!match(';')) {
             token = lookahead();
             if (!match('}') && token.type !== Token.EOF) {
-                argument = parseExpression().expression;
+                argument = parseExpression();
             }
         }
 
@@ -2057,7 +2053,7 @@ parseStatement: true, parseSourceElement: true */
 
         expect('(');
 
-        object = parseExpression().expression;
+        object = parseExpression();
 
         expect(')');
 
@@ -2097,7 +2093,7 @@ parseStatement: true, parseSourceElement: true */
 
         expect('(');
 
-        discriminant = parseExpression().expression;
+        discriminant = parseExpression();
 
         expect(')');
 
@@ -2123,7 +2119,7 @@ parseStatement: true, parseSourceElement: true */
                 test = null;
             } else {
                 expectKeyword('case');
-                test = parseExpression().expression;
+                test = parseExpression();
             }
             expect(':');
 
@@ -2154,7 +2150,7 @@ parseStatement: true, parseSourceElement: true */
             throwError(Messages.NewlineAfterThrow);
         }
 
-        argument = parseExpression().expression;
+        argument = parseExpression();
 
         consumeSemicolon();
 
@@ -2177,7 +2173,7 @@ parseStatement: true, parseSourceElement: true */
             lex();
             expect('(');
             if (!match(')')) {
-                param = parseExpression().expression;
+                param = parseExpression();
             }
             expect(')');
 
@@ -2222,7 +2218,7 @@ parseStatement: true, parseSourceElement: true */
 
     function parseStatement() {
         var token = lookahead(),
-            stat;
+            expr;
 
         if (token.type === Token.EOF) {
             return;
@@ -2274,32 +2270,35 @@ parseStatement: true, parseSourceElement: true */
             }
         }
 
-        stat = parseExpression();
+        expr = parseExpression();
 
-        if (stat.expression.type === Syntax.FunctionExpression) {
-            if (stat.expression.id !== null) {
+        if (expr.type === Syntax.FunctionExpression) {
+            if (expr.id !== null) {
                 return {
                     type: Syntax.FunctionDeclaration,
-                    id: stat.expression.id,
-                    params: stat.expression.params,
-                    body: stat.expression.body
+                    id: expr.id,
+                    params: expr.params,
+                    body: expr.body
                 };
             }
         }
 
         // 12.12 Labelled Statements
-        if ((stat.expression.type === Syntax.Identifier) && match(':')) {
+        if ((expr.type === Syntax.Identifier) && match(':')) {
             lex();
             return {
                 type: Syntax.LabeledStatement,
-                label: stat.expression,
+                label: expr,
                 body: parseStatement()
             };
         }
 
         consumeSemicolon();
 
-        return stat;
+        return {
+            type: Syntax.ExpressionStatement,
+            expression: expr
+        };
     }
 
     // 13 Function Definition
@@ -2728,8 +2727,8 @@ parseStatement: true, parseSourceElement: true */
             parseCallMember = extra.parseCallMember;
             parseComputedMember = extra.parseComputedMember;
             parseConditionalExpression = extra.parseConditionalExpression;
-            parseExpression = extra.parseExpression;
             parseEqualityExpression = extra.parseEqualityExpression;
+            parseExpression = extra.parseExpression;
             parseLogicalANDExpression = extra.parseLogicalANDExpression;
             parseLogicalORExpression = extra.parseLogicalORExpression;
             parseMultiplicativeExpression = extra.parseMultiplicativeExpression;
