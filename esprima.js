@@ -2254,6 +2254,8 @@ parseStatement: true, parseSourceElement: true */
                 return parseDoWhileStatement();
             case 'for':
                 return parseForStatement();
+            case 'function':
+                return parseFunctionDeclaration();
             case 'if':
                 return parseIfStatement();
             case 'return':
@@ -2276,17 +2278,6 @@ parseStatement: true, parseSourceElement: true */
         }
 
         expr = parseExpression();
-
-        if (expr.type === Syntax.FunctionExpression) {
-            if (expr.id !== null) {
-                return {
-                    type: Syntax.FunctionDeclaration,
-                    id: expr.id,
-                    params: expr.params,
-                    body: expr.body
-                };
-            }
-        }
 
         // 12.12 Labelled Statements
         if ((expr.type === Syntax.Identifier) && match(':')) {
@@ -2635,12 +2626,6 @@ parseStatement: true, parseSourceElement: true */
             node.range = [start, index - 1];
             if (isBinary(node)) {
                 visit(node);
-            }
-
-            if (node.type === Syntax.ExpressionStatement) {
-                if (typeof node.expression.range === 'undefined') {
-                    node.expression.range = node.range;
-                }
             }
 
             if (node.type === Syntax.MemberExpression) {
