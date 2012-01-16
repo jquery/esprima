@@ -309,13 +309,14 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function scanIdentifier() {
-        var ch, id;
+        var ch, start, id;
 
         ch = source[index];
         if (!isIdentifierStart(ch)) {
             return;
         }
 
+        start = index;
         id = nextChar();
         while (index < length) {
             ch = source[index];
@@ -330,14 +331,18 @@ parseStatement: true, parseSourceElement: true */
         if (id.length === 1) {
             return {
                 type: Token.Identifier,
-                value: id
+                value: id,
+                lineNumber: lineNumber,
+                range: [start, index]
             };
         }
 
         if (isKeyword(id)) {
             return {
                 type: Token.Keyword,
-                value: id
+                value: id,
+                lineNumber: lineNumber,
+                range: [start, index]
             };
         }
 
@@ -346,7 +351,9 @@ parseStatement: true, parseSourceElement: true */
         if (id === 'null') {
             return {
                 type: Token.NullLiteral,
-                value: id
+                value: id,
+                lineNumber: lineNumber,
+                range: [start, index]
             };
         }
 
@@ -355,20 +362,25 @@ parseStatement: true, parseSourceElement: true */
         if (id === 'true' || id === 'false') {
             return {
                 type: Token.BooleanLiteral,
-                value: id
+                value: id,
+                lineNumber: lineNumber,
+                range: [start, index]
             };
         }
 
         return {
             type: Token.Identifier,
-            value: id
+            value: id,
+            lineNumber: lineNumber,
+            range: [start, index]
         };
     }
 
     // 7.7 Punctuators
 
     function scanPunctuator() {
-        var ch1 = source[index],
+        var start = index,
+            ch1 = source[index],
             ch2,
             ch3,
             ch4;
@@ -379,7 +391,9 @@ parseStatement: true, parseSourceElement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: ch1
+                value: ch1,
+                lineNumber: lineNumber,
+                range: [start, index]
             };
         }
 
@@ -387,7 +401,9 @@ parseStatement: true, parseSourceElement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: ch1
+                value: ch1,
+                lineNumber: lineNumber,
+                range: [start, index]
             };
         }
 
@@ -398,7 +414,9 @@ parseStatement: true, parseSourceElement: true */
         if (ch1 === '.' && !isDecimalDigit(ch2)) {
             return {
                 type: Token.Punctuator,
-                value: nextChar()
+                value: nextChar(),
+                lineNumber: lineNumber,
+                range: [start, index]
             };
         }
 
@@ -417,7 +435,9 @@ parseStatement: true, parseSourceElement: true */
                 nextChar();
                 return {
                     type: Token.Punctuator,
-                    value: '>>>='
+                    value: '>>>=',
+                    lineNumber: lineNumber,
+                    range: [start, index]
                 };
             }
         }
@@ -430,7 +450,9 @@ parseStatement: true, parseSourceElement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: '==='
+                value: '===',
+                lineNumber: lineNumber,
+                range: [start, index]
             };
         }
 
@@ -440,7 +462,9 @@ parseStatement: true, parseSourceElement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: '!=='
+                value: '!==',
+                lineNumber: lineNumber,
+                range: [start, index]
             };
         }
 
@@ -450,7 +474,9 @@ parseStatement: true, parseSourceElement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: '>>>'
+                value: '>>>',
+                lineNumber: lineNumber,
+                range: [start, index]
             };
         }
 
@@ -460,7 +486,9 @@ parseStatement: true, parseSourceElement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: '<<='
+                value: '<<=',
+                lineNumber: lineNumber,
+                range: [start, index]
             };
         }
 
@@ -470,7 +498,9 @@ parseStatement: true, parseSourceElement: true */
             nextChar();
             return {
                 type: Token.Punctuator,
-                value: '>>='
+                value: '>>=',
+                lineNumber: lineNumber,
+                range: [start, index]
             };
         }
 
@@ -483,7 +513,9 @@ parseStatement: true, parseSourceElement: true */
                 nextChar();
                 return {
                     type: Token.Punctuator,
-                    value: ch1 + ch2
+                    value: ch1 + ch2,
+                    lineNumber: lineNumber,
+                    range: [start, index]
                 };
             }
         }
@@ -494,7 +526,9 @@ parseStatement: true, parseSourceElement: true */
                 nextChar();
                 return {
                     type: Token.Punctuator,
-                    value: ch1 + ch2
+                    value: ch1 + ch2,
+                    lineNumber: lineNumber,
+                    range: [start, index]
                 };
             }
         }
@@ -504,7 +538,9 @@ parseStatement: true, parseSourceElement: true */
         if ('[]<>+-*%&|^!~?:=/'.indexOf(ch1) >= 0) {
             return {
                 type: Token.Punctuator,
-                value: nextChar()
+                value: nextChar(),
+                lineNumber: lineNumber,
+                range: [start, index]
             };
         }
     }
@@ -512,13 +548,14 @@ parseStatement: true, parseSourceElement: true */
     // 7.8.3 Numeric Literals
 
     function scanNumericLiteral() {
-        var number, ch;
+        var number, start, ch;
 
         ch = source[index];
         if (!isDecimalDigit(ch) && (ch !== '.')) {
             return;
         }
 
+        start = index;
         number = '';
         if (ch !== '.') {
             number = nextChar();
@@ -536,7 +573,9 @@ parseStatement: true, parseSourceElement: true */
                 }
                 return {
                     type: Token.NumericLiteral,
-                    value: parseInt(number, 16)
+                    value: parseInt(number, 16),
+                    lineNumber: lineNumber,
+                    range: [start, index]
                 };
             }
 
@@ -583,7 +622,9 @@ parseStatement: true, parseSourceElement: true */
 
         return {
             type: Token.NumericLiteral,
-            value: parseFloat(number)
+            value: parseFloat(number),
+            lineNumber: lineNumber,
+            range: [start, index]
         };
     }
 
@@ -591,12 +632,13 @@ parseStatement: true, parseSourceElement: true */
 
     // TODO Unicode
     function scanStringLiteral() {
-        var str = '', quote, ch;
+        var str = '', quote, start, ch;
 
         quote = source[index];
         if (quote !== '\'' && quote !== '"') {
             return;
         }
+        start = index;
         nextChar();
 
         while (index < length) {
@@ -622,7 +664,9 @@ parseStatement: true, parseSourceElement: true */
 
         return {
             type: Token.StringLiteral,
-            value: str
+            value: str,
+            lineNumber: lineNumber,
+            range: [start, index]
         };
     }
 
@@ -702,7 +746,9 @@ parseStatement: true, parseSourceElement: true */
 
         if (index >= length) {
             return {
-                type: Token.EOF
+                type: Token.EOF,
+                lineNumber: lineNumber,
+                range: [index, index]
             };
         }
 
@@ -730,7 +776,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function lex() {
-        var pos, token;
+        var token;
 
         if (buffer) {
             index = buffer.range[1];
@@ -743,12 +789,7 @@ parseStatement: true, parseSourceElement: true */
         buffer = null;
         skipComment();
 
-        pos = index;
-        token = advance();
-        token.range = [pos, index];
-        token.lineNumber = lineNumber;
-
-        return token;
+        return advance();
     }
 
     function lookahead() {
@@ -2546,8 +2587,6 @@ parseStatement: true, parseSourceElement: true */
 
         pos = index;
         token = advance();
-        token.range = [pos, index];
-        token.lineNumber = lineNumber;
 
         if (token.type !== Token.EOF) {
             value = source.slice(pos, index);
