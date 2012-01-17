@@ -1151,6 +1151,26 @@ data = {
             }
         },
 
+        '42 /*The*/ /*Answer*/': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }],
+            comments: [{
+                range: [3, 9],
+                type: 'Block',
+                value: 'The'
+            }, {
+                range: [11, 20],
+                type: 'Block',
+                value: 'Answer'
+            }]
+        },
+
         '/* multiline\ncomment\nshould\nbe\nignored */ 42': {
             type: 'ExpressionStatement',
             expression: {

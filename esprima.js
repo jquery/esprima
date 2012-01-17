@@ -2479,6 +2479,28 @@ parseStatement: true, parseSourceElement: true */
     // The following functions are needed only when the option to preserve
     // the comments is active.
 
+    function addComment(start, end, type, value) {
+        if (value.length <= 0) {
+            return;
+        }
+
+        // Because the way the actual token is scanned, often the comments
+        // (if any) are skipped twice during the lexical analysis.
+        // Thus, we need to skip adding a comment if the comment array already
+        // handled it.
+        if (extra.comments.length > 0) {
+            if (extra.comments[extra.comments.length - 1].range[1] > start) {
+                return;
+            }
+        }
+
+        extra.comments.push({
+            range: [start, end],
+            type: type,
+            value: value
+        });
+    }
+
     function scanComment() {
         var comment, ch, start, blockComment, lineComment;
 
@@ -2494,11 +2516,7 @@ parseStatement: true, parseSourceElement: true */
                 if (isLineTerminator(ch)) {
                     lineComment = false;
                     lineNumber += 1;
-                    extra.comments.push({
-                        range: [start, index - 1],
-                        type: 'Line',
-                        value: comment
-                    });
+                    addComment(start, index - 1, 'Line', comment);
                     comment = '';
                 } else {
                     comment += ch;
@@ -2512,11 +2530,7 @@ parseStatement: true, parseSourceElement: true */
                         comment = comment.substr(0, comment.length - 1);
                         blockComment = false;
                         nextChar();
-                        extra.comments.push({
-                            range: [start, index - 1],
-                            type: 'Block',
-                            value: comment
-                        });
+                        addComment(start, index - 1, 'Block', comment);
                         comment = '';
                     }
                 } else if (isLineTerminator(ch)) {
@@ -2547,13 +2561,7 @@ parseStatement: true, parseSourceElement: true */
             }
         }
 
-        if (comment.length > 0) {
-            extra.comments.push({
-                range: [start, index],
-                type: (blockComment) ? 'Block' : 'Line',
-                value: comment
-            });
-        }
+        addComment(start, index, (blockComment) ? 'Block' : 'Line', comment);
     }
 
     function tokenTypeAsString(type) {
