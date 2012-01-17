@@ -744,6 +744,8 @@ parseStatement: true, parseSourceElement: true */
     function advance() {
         var ch, token;
 
+        skipComment();
+
         if (index >= length) {
             return {
                 type: Token.EOF,
@@ -787,13 +789,11 @@ parseStatement: true, parseSourceElement: true */
         }
 
         buffer = null;
-        skipComment();
-
         return advance();
     }
 
     function lookahead() {
-        var pos, line, token;
+        var pos, line;
 
         if (buffer !== null) {
             return buffer;
@@ -801,11 +801,10 @@ parseStatement: true, parseSourceElement: true */
 
         pos = index;
         line = lineNumber;
-        token = lex();
+        buffer = advance();
         index = pos;
         lineNumber = line;
 
-        buffer = token;
         return buffer;
     }
 
@@ -2571,39 +2570,28 @@ parseStatement: true, parseSourceElement: true */
         }
     }
 
-    function lexRange() {
-        var pos, token, value;
-
-        if (buffer) {
-            index = buffer.range[1];
-            lineNumber = buffer.lineNumber;
-            token = buffer;
-            buffer = null;
-            return token;
-        }
-
-        buffer = null;
-        skipComment();
-
-        pos = index;
-        token = advance();
+    function collectToken() {
+        var token = extra.advance(),
+            range,
+            value;
 
         if (token.type !== Token.EOF) {
-            value = source.slice(pos, index);
+            range = [token.range[0], token.range[1] - 1];
+            value = source.slice(token.range[0], token.range[1]);
             if (typeof value !== 'string') {
                 value = value.join('');
             }
             extra.tokens.push({
                 type: tokenTypeAsString(token.type),
                 value: value,
-                range: [pos, index - 1]
+                range: range
             });
         }
 
         return token;
     }
 
-    function scanRegExpRange() {
+    function collectRegex() {
         var pos, regex, token;
 
         skipComment();
@@ -2733,11 +2721,11 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (typeof extra.tokens !== 'undefined') {
-            extra.lex = lex;
+            extra.advance = advance;
             extra.scanRegExp = scanRegExp;
 
-            lex = lexRange;
-            scanRegExp = scanRegExpRange;
+            advance = collectToken;
+            scanRegExp = collectRegex;
         }
     }
 
@@ -2776,6 +2764,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (typeof extra.scanRegExp === 'function') {
+            advance = extra.advance;
             scanRegExp = extra.scanRegExp;
         }
     }
