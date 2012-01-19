@@ -271,6 +271,9 @@ parseStatement: true, parseSourceElement: true */
                 nextChar();
                 if (isLineTerminator(ch)) {
                     lineComment = false;
+                    if (ch ===  '\r' && source[index] === '\n') {
+                        nextChar();
+                    }
                     lineNumber += 1;
                 }
             } else if (blockComment) {
@@ -282,6 +285,9 @@ parseStatement: true, parseSourceElement: true */
                         blockComment = false;
                     }
                 } else if (isLineTerminator(ch)) {
+                    if (ch ===  '\r' && source[index] === '\n') {
+                        nextChar();
+                    }
                     lineNumber += 1;
                 }
             } else if (ch === '/') {
@@ -301,6 +307,9 @@ parseStatement: true, parseSourceElement: true */
                 nextChar();
             } else if (isLineTerminator(ch)) {
                 nextChar();
+                if (ch ===  '\r' && source[index] === '\n') {
+                    nextChar();
+                }
                 lineNumber += 1;
             } else {
                 break;
@@ -2515,8 +2524,11 @@ parseStatement: true, parseSourceElement: true */
                 ch = nextChar();
                 if (isLineTerminator(ch)) {
                     lineComment = false;
-                    lineNumber += 1;
                     addComment(start, index - 1, 'Line', comment);
+                    if (ch ===  '\r' && source[index] === '\n') {
+                        nextChar();
+                    }
+                    lineNumber += 1;
                     comment = '';
                 } else {
                     comment += ch;
@@ -2534,6 +2546,9 @@ parseStatement: true, parseSourceElement: true */
                         comment = '';
                     }
                 } else if (isLineTerminator(ch)) {
+                    if (ch ===  '\r' && source[index] === '\n') {
+                        nextChar();
+                    }
                     lineNumber += 1;
                 }
             } else if (ch === '/') {
@@ -2555,6 +2570,9 @@ parseStatement: true, parseSourceElement: true */
                 nextChar();
             } else if (isLineTerminator(ch)) {
                 nextChar();
+                if (ch ===  '\r' && source[index] === '\n') {
+                    nextChar();
+                }
                 lineNumber += 1;
             } else {
                 break;

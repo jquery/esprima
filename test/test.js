@@ -5843,7 +5843,27 @@ data = {
 
         'if(true) let a = 1;': 'Line 1: Unexpected token let',
 
-        'if(true) const a = 1;': 'Line 1: Unexpected token const'
+        'if(true) const a = 1;': 'Line 1: Unexpected token const',
+
+        '\n]': 'Line 2: Unexpected token ]',
+
+        '\r]': 'Line 2: Unexpected token ]',
+
+        '\r\n]': 'Line 2: Unexpected token ]',
+
+        '\n\r]': 'Line 3: Unexpected token ]',
+
+        '//\r\n]': 'Line 2: Unexpected token ]',
+
+        '//\n\r]': 'Line 3: Unexpected token ]',
+
+        '//\r \n]': 'Line 3: Unexpected token ]',
+
+        '/*\r\n*/]': 'Line 2: Unexpected token ]',
+
+        '/*\n\r*/]': 'Line 3: Unexpected token ]',
+
+        '/*\r \n*/]': 'Line 3: Unexpected token ]'
     }
 };
 
