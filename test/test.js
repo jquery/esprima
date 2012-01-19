@@ -5757,6 +5757,10 @@ data = {
 
         '3ea': 'Line 1: Unexpected token ILLEGAL',
 
+        '3in[]': 'Line 1: Unexpected token ILLEGAL',
+
+        '0x3in[]': 'Line 1: Unexpected token ILLEGAL',
+
         'var x = /(s/g': 'Line 1: Invalid regular expression',
 
         '/': 'Line 1: Invalid regular expression: missing /',

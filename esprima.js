@@ -580,6 +580,12 @@ parseStatement: true, parseSourceElement: true */
                     }
                     number += nextChar();
                 }
+                if (index < length) {
+                    ch = source[index];
+                    if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
+                        throwError(Messages.UnexpectedToken, 'ILLEGAL');
+                    }
+                }
                 return {
                     type: Token.NumericLiteral,
                     value: parseInt(number, 16),
@@ -625,6 +631,13 @@ parseStatement: true, parseSourceElement: true */
                 if (index >= length) {
                     ch = '<end>';
                 }
+                throwError(Messages.UnexpectedToken, 'ILLEGAL');
+            }
+        }
+
+        if (index < length) {
+            ch = source[index];
+            if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
                 throwError(Messages.UnexpectedToken, 'ILLEGAL');
             }
         }
