@@ -5345,12 +5345,17 @@ data = {
                         type: 'CallExpression',
                         callee: {
                             type: 'Identifier',
-                            name: 'sayHi'
+                            name: 'sayHi',
+                            range: [19, 23]
                         },
-                        'arguments': []
-                    }
-                }]
-            }
+                        'arguments': [],
+                        range: [19, 25]
+                    },
+                    range: [19, 26]
+                }],
+                range: [17, 28]
+            },
+            range: [0, 28]
         },
 
         'function hello(a) { sayHi(); }': {
@@ -5481,7 +5486,8 @@ data = {
                 params: [],
                 body: {
                     type: 'BlockStatement',
-                    body: []
+                    body: [],
+                    range: [11, 12]
                 },
                 range: [0, 13]
             },
