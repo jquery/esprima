@@ -33,8 +33,8 @@
 
 <p>Type ECMAScript code:</p>
     <p><textarea id="code" autofocus="autofocus" cols="70" rows="25" spellcheck="false">
-var bubbleSwap = function (list, i, j) {
-    var k = list[i]; list[i] = list[j]; list[j] = k;
+Array.prototype.swap = function (i, j) {
+    var k = this[i]; this[i] = this[j]; this[j] = k;
 }
 
 function bubbleSort(list) {
@@ -42,12 +42,13 @@ function bubbleSort(list) {
     for (p = 1; p &lt; items.length; ++p) {
         for (q = 0; q &lt; items.length - p; ++q) {
             if (items[q + 1] &lt; items[q]) {
-                bubbleSwap(items, q, q + 1);
+                items.swap(q, q + 1);
                 swapped =true;
             }
         }
         if (!swapped) break;
     }
+    return items;
 }
 
 var N = 100, data = []; while (N &gt; 0) data.push(N--);
