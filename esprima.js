@@ -2880,6 +2880,116 @@ parseStatement: true, parseSourceElement: true */
         return program;
     }
 
+    // Executes visitor on the object and its children (recursively).
+
+    function traverse(object, visitor, master) {
+        var key, child, parent, path;
+
+        parent = (typeof master === 'undefined') ? [] : master;
+
+        if (visitor.call(null, object, parent) === false) {
+            return;
+        }
+        for (key in object) {
+            if (object.hasOwnProperty(key)) {
+                child = object[key];
+                path = [ object ];
+                path.push(parent);
+                if (typeof child === 'object' && child !== null) {
+                    traverse(child, visitor, path);
+                }
+            }
+        }
+    }
+
+    // Insert a prolog in the body of every function.
+    // It will be in the form of a function call:
+    //
+    //     traceName(functionName, [start, end]);
+    //
+    // where [start, end] denotes the function range and functionName
+    // represents the associated reference for the function (deduces
+    // on a best-effort basis if it is not a function declaration).
+
+    function traceFunctionEntrance(traceName) {
+
+        return function (code) {
+            var tree,
+                functionList,
+                signature,
+                pos,
+                i;
+
+
+            tree = parse(code, { range: true });
+
+            functionList = [];
+            traverse(tree, function (node, path) {
+                var parent, name;
+                if (node.type === Syntax.FunctionDeclaration) {
+                    functionList.push({
+                        name: node.id.name,
+                        range: node.range,
+                        blockStart: node.body.range[0]
+                    });
+                } else if (node.type === Syntax.FunctionExpression) {
+                    parent = path[0];
+                    if (parent.type === Syntax.AssignmentExpression) {
+                        if (typeof parent.left.range !== 'undefined') {
+                            functionList.push({
+                                name: code.slice(parent.left.range[0],
+                                          parent.left.range[1] + 1),
+                                range: node.range,
+                                blockStart: node.body.range[0]
+                            });
+                        }
+                    } else if (parent.type === Syntax.VariableDeclarator) {
+                        functionList.push({
+                            name: parent.id.name,
+                            range: node.range,
+                            blockStart: node.body.range[0]
+                        });
+                    } else if (parent.type === Syntax.CallExpression) {
+                        functionList.push({
+                            name: parent.id ? parent.id.name : '[Anonymous]',
+                            range: node.range,
+                            blockStart: node.body.range[0]
+                        });
+                    } else if (typeof parent.length === 'number') {
+                        functionList.push({
+                            name: parent.id ? parent.id.name : '[Anonymous]',
+                            range: node.range,
+                            blockStart: node.body.range[0]
+                        });
+                    } else if (typeof parent.key !== 'undefined') {
+                        if (parent.key.type === 'Identifier') {
+                            if (parent.value === node && parent.key.name) {
+                                functionList.push({
+                                    name: parent.key.name,
+                                    range: node.range,
+                                    blockStart: node.body.range[0]
+                                });
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Insert the instrumentation code from the last entry.
+            // This is to ensure that the range for each entry remains valid)
+            // (it won't shift due to some new inserting string before the range).
+            for (i = functionList.length - 1; i >= 0; i -= 1) {
+                signature = traceName + '(\'' + functionList[i].name + '\', ' +
+                    '[' + functionList[i].range[0] + ', ' +
+                    functionList[i].range[1] + ']);';
+                pos = functionList[i].blockStart + 1;
+                code = code.slice(0, pos) + '\n' + signature + code.slice(pos, code.length);
+            }
+
+            return code;
+        };
+    }
+
     function modify(code, modifiers) {
         var i,
             len = modifiers.length;
@@ -2901,6 +3011,10 @@ parseStatement: true, parseSourceElement: true */
     exports.parse = parse;
 
     exports.modify = modify;
+
+    exports.Tracer = {
+        FunctionEntrance: traceFunctionEntrance
+    };
 
 }(typeof exports === 'undefined' ? (esprima = {}) : exports));
 /* vim: set sw=4 ts=4 et tw=80 : */

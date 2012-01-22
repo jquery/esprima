@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
   Copyright (C) 2012 Arpad Borsos <arpad.borsos@googlemail.com>
@@ -5755,6 +5756,89 @@ data = {
 
     },
 
+    'Trace Function Entrance': {
+
+        'function hello() {}': {
+            modifiers: [{
+                name: 'Tracer.FunctionEntrance',
+                config: 'EnterFunction'
+            }],
+            result: 'function hello() {\nEnterFunction(\'hello\', [0, 18]);}'
+        },
+
+        'hello = function() {}': {
+            modifiers: [{
+                name: 'Tracer.FunctionEntrance',
+                config: 'Enter'
+            }],
+            result: 'hello = function() {\nEnter(\'hello\', [8, 20]);}'
+        },
+
+        'var hello = function() {}': {
+            modifiers: [{
+                name: 'Tracer.FunctionEntrance',
+                config: 'TRACE'
+            }],
+            result: 'var hello = function() {\nTRACE(\'hello\', [12, 24]);}'
+        },
+
+        'var hello = function say() {}': {
+            modifiers: [{
+                name: 'Tracer.FunctionEntrance',
+                config: 'TRACE'
+            }],
+            result: 'var hello = function say() {\nTRACE(\'hello\', [12, 28]);}'
+        },
+
+        'hello = function () {}': {
+            modifiers: [{
+                name: 'Tracer.FunctionEntrance',
+                config: 'EnterFunction'
+            }],
+            result: 'hello = function () {\nEnterFunction(\'hello\', [8, 21]);}'
+        },
+
+        '\n\nfunction say(name) { print(name);}': {
+            modifiers: [{
+                name: 'Tracer.FunctionEntrance',
+                config: 'EnterFunction'
+            }],
+            result: '\n\nfunction say(name) {\nEnterFunction(\'say\', [2, 35]); print(name);}'
+        },
+
+        '(function(){}())': {
+            modifiers: [{
+                name: 'Tracer.FunctionEntrance',
+                config: 'EnterFunction'
+            }],
+            result: '(function(){\nEnterFunction(\'[Anonymous]\', [1, 12]);}())'
+        },
+
+        '(function(){})()': {
+            modifiers: [{
+                name: 'Tracer.FunctionEntrance',
+                config: 'EnterFunction'
+            }],
+            result: '(function(){\nEnterFunction(\'[Anonymous]\', [0, 13]);})()'
+        },
+
+        '[14, 3].forEach(function(x) { alert(x) })': {
+            modifiers: [{
+                name: 'Tracer.FunctionEntrance',
+                config: 'TR'
+            }],
+            result: '[14, 3].forEach(function(x) {\nTR(\'[Anonymous]\', [16, 39]); alert(x) })'
+        },
+
+        'var x = { y: function(z) {} }': {
+            modifiers: [{
+                name: 'Tracer.FunctionEntrance',
+                config: 'TR'
+            }],
+            result: 'var x = { y: function(z) {\nTR(\'y\', [13, 26]);} }'
+        }
+    },
+
     'Invalid syntax': {
 
         '{': 'Line 1: Unexpected end of input',
@@ -5987,12 +6071,48 @@ function testError(code, exception) {
     }
 }
 
+function testModify(code, result) {
+    'use strict';
+    var actual, expected, i, modifier, modifiers;
+
+    function findModifier(name) {
+        var properties = name.split('.'),
+            object = esprima,
+            i;
+        for (i = 0; i < properties.length; i += 1) {
+            object = object[properties[i]];
+        }
+        return object;
+    }
+
+    esprima.Tracer.FunctionEntrance('EnterFunction');
+    modifiers = [];
+    for (i = 0; i < result.modifiers.length; i += 1) {
+        modifier = result.modifiers[i];
+        modifiers.push(findModifier(modifier.name).call(null, modifier.config));
+    }
+
+    expected = result.result;
+    try {
+        actual = esprima.modify(code, modifiers);
+    } catch (e) {
+        throw new NotMatchingError(expected, e.toString());
+    }
+    if (expected !== actual) {
+        throw new NotMatchingError(expected, actual);
+    }
+}
+
 function runTest(code, result) {
     'use strict';
     if (typeof result === 'string') {
         testError(code, result);
     } else {
-        testParse(code, result);
+        if (result.hasOwnProperty('modifiers')) {
+            testModify(code, result);
+        } else {
+            testParse(code, result);
+        }
     }
 }
 
