@@ -26,9 +26,13 @@
 
 <h1>Regular Expression Collector <small>uncovers all your secrets</small></h1>
 
-<p><strong>Note</strong>: Only regular expression literals are collected. Objects created using <code>RegExp</code> are not considered.</p>
+<p><strong>Note</strong>: Only regular expression literals and objects created with <code>RegExp</code> are considered.</p>
 <p>Type ECMAScript code:</p>
     <p><textarea id="code" autofocus="autofocus" cols="70" rows="15" spellcheck="false">
+var letterRE = new RegExp('[a-zA-Z]', 'g'),
+    digitRE = RegExp('[0-9]');
+
+
 // This is from json2.js.
 
 if (/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@')

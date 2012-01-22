@@ -134,13 +134,53 @@ function collectRegex() {
                 }
             }
 
+            function createRegex(pattern, mode) {
+                var literal;
+                try {
+                    literal = new RegExp(pattern, mode);
+                } catch (e) {
+                    // Invalid regular expression.
+                    return;
+                }
+                return literal;
+            }
+
             function collect(node) {
-                var str;
+                var str, arg, value;
                 if (node.type === 'Literal') {
                     if (node.value instanceof RegExp) {
                         str = node.value.toString();
                         if (str[0] === '/') {
                             result.push(node);
+                        }
+                    }
+                }
+                if (node.type === 'NewExpression' || node.type === 'CallExpression') {
+                    if (node.callee.type === 'Identifier' && node.callee.name === 'RegExp') {
+                        arg = node['arguments'];
+                        if (arg.length === 1 && arg[0].type === 'Literal') {
+                            if (typeof arg[0].value === 'string') {
+                                value = createRegex(arg[0].value);
+                                if (value) {
+                                    result.push({
+                                        type: 'Literal',
+                                        value: value,
+                                        range: node.range
+                                    });
+                                }
+                            }
+                        }
+                        if (arg.length === 2 && arg[0].type === 'Literal' && arg[1].type === 'Literal') {
+                            if (typeof arg[0].value === 'string' && typeof arg[1].value === 'string') {
+                                value = createRegex(arg[0].value, arg[1].value);
+                                if (value) {
+                                    result.push({
+                                        type: 'Literal',
+                                        value: value,
+                                        range: node.range
+                                    });
+                                }
+                            }
                         }
                     }
                 }
