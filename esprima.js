@@ -2880,10 +2880,27 @@ parseStatement: true, parseSourceElement: true */
         return program;
     }
 
+    function modify(code, modifiers) {
+        var i,
+            len = modifiers.length;
+
+        if (typeof modifiers !== 'object') {
+            throw new Error('Wrong use of esprima.modify() function');
+        }
+
+        for (i = 0; i < len; i += 1) {
+            code = modifiers[i].call(null, code);
+        }
+
+        return code;
+    }
+
     // Sync with package.json.
     exports.version = '0.9.6';
 
     exports.parse = parse;
+
+    exports.modify = modify;
 
 }(typeof exports === 'undefined' ? (esprima = {}) : exports));
 /* vim: set sw=4 ts=4 et tw=80 : */
