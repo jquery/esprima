@@ -65,6 +65,7 @@ var KEYWORDS = array_to_hash([
         "catch",
         "const",
         "continue",
+        "debugger",
         "default",
         "delete",
         "do",
@@ -93,7 +94,6 @@ var RESERVED_WORDS = array_to_hash([
         "byte",
         "char",
         "class",
-        "debugger",
         "double",
         "enum",
         "export",
@@ -909,8 +909,11 @@ function parse($TEXT, exigent_mode, embed_tokens) {
                         init = is("keyword", "var")
                                 ? (next(), var_(true))
                                 : expression(true, true);
-                        if (is("operator", "in"))
+                        if (is("operator", "in")) {
+                                if (init[0] == "var" && init[1].length > 1)
+                                        croak("Only one variable declaration allowed in for..in loop");
                                 return for_in(init);
+                        }
                 }
                 return regular_for(init);
         };
