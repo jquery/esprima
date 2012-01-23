@@ -4209,6 +4209,27 @@ data = {
             }
         },
 
+        '{ do { } while (false) false }': {
+            type: 'BlockStatement',
+            body: [{
+                type: 'DoWhileStatement',
+                body: {
+                    type: 'BlockStatement',
+                    body: []
+                },
+                test: {
+                    type: 'Literal',
+                    value: false
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: false
+                }
+            }]
+        },
+
         'while (true) doSomething()': {
             type: 'WhileStatement',
             test: {
