@@ -25,6 +25,7 @@
 
 
 /*jslint browser: true node: true */
+/*global load:true, print:true */
 var setupBenchmarks,
     fixture;
 
@@ -259,12 +260,35 @@ if (typeof window !== 'undefined') {
     };
 } else {
 
-    (function () {
+    (function (global) {
         'use strict';
-        var fs = require('fs'),
-            Benchmark = require('./3rdparty/benchmark'),
-            esprima = require('../esprima'),
+        var Benchmark,
+            esprima,
+            dirname,
+            option,
+            fs,
+            readFileSync,
+            log;
+
+        if (typeof require === 'undefined') {
+            dirname = 'test';
+            load(dirname + '/3rdparty/benchmark.js');
+            load(dirname + '/../esprima.js');
+            Benchmark = global.Benchmark;
+            esprima = global.esprima;
+            readFileSync = global.read;
+            log = print;
+        } else {
+            Benchmark = require('./3rdparty/benchmark');
+            esprima = require('../esprima');
+            fs = require('fs');
             option = process.argv[2];
+            readFileSync = function readFileSync(filename) {
+                return fs.readFileSync(filename, 'utf-8');
+            };
+            dirname = __dirname;
+            log = console.log.bind(console);
+        }
 
         function runTests(tests) {
             var index,
@@ -273,7 +297,7 @@ if (typeof window !== 'undefined') {
                 totalSize = 0;
 
             tests.reduce(function (suite, filename) {
-                var source = fs.readFileSync(__dirname + '/3rdparty/' + slug(filename) + '.js', 'utf-8'),
+                var source = readFileSync(dirname + '/3rdparty/' + slug(filename) + '.js'),
                     size = source.length;
                 totalSize += size;
                 return suite.add(filename, function () {
@@ -281,16 +305,16 @@ if (typeof window !== 'undefined') {
                     tree.push(syntax.body.length);
                 }, {
                     'onComplete': function (event, bench) {
-                        console.log(this.name +
-                                    ' size ' + kb(size) +
-                                    ' time ' + (1000 * this.stats.mean).toFixed(1) +
-                                    ' variance ' + (1000 * this.stats.variance).toFixed(1));
+                        log(this.name +
+                            ' size ' + kb(size) +
+                            ' time ' + (1000 * this.stats.mean).toFixed(1) +
+                            ' variance ' + (1000 * this.stats.variance).toFixed(1));
                         totalTime += this.stats.mean;
                     }
                 });
             }, new Benchmark.Suite()).on('complete', function () {
-                console.log('Total size ' + kb(totalSize) +
-                            ' time ' + (1000 * totalTime).toFixed(1));
+                log('Total size ' + kb(totalSize) +
+                    ' time ' + (1000 * totalTime).toFixed(1));
             }).run();
         }
 
@@ -299,6 +323,6 @@ if (typeof window !== 'undefined') {
         } else {
             runTests(fixture);
         }
-    }());
+    }(this));
 }
 /* vim: set sw=4 ts=4 et tw=80 : */
