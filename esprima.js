@@ -46,6 +46,7 @@ parseStatement: true, parseSourceElement: true */
         allowIn,
         index,
         lineNumber,
+        lineStart,
         length,
         buffer,
         extra;
@@ -275,6 +276,7 @@ parseStatement: true, parseSourceElement: true */
                         nextChar();
                     }
                     lineNumber += 1;
+                    lineStart = index;
                 }
             } else if (blockComment) {
                 nextChar();
@@ -289,6 +291,7 @@ parseStatement: true, parseSourceElement: true */
                         nextChar();
                     }
                     lineNumber += 1;
+                    lineStart = index;
                 }
             } else if (ch === '/') {
                 ch = source[index + 1];
@@ -311,6 +314,7 @@ parseStatement: true, parseSourceElement: true */
                     nextChar();
                 }
                 lineNumber += 1;
+                lineStart = index;
             } else {
                 break;
             }
@@ -342,6 +346,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.Identifier,
                 value: id,
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [start, index]
             };
         }
@@ -351,6 +356,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.Keyword,
                 value: id,
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [start, index]
             };
         }
@@ -362,6 +368,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.NullLiteral,
                 value: id,
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [start, index]
             };
         }
@@ -373,6 +380,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.BooleanLiteral,
                 value: id,
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [start, index]
             };
         }
@@ -381,6 +389,7 @@ parseStatement: true, parseSourceElement: true */
             type: Token.Identifier,
             value: id,
             lineNumber: lineNumber,
+            lineStart: lineStart,
             range: [start, index]
         };
     }
@@ -402,6 +411,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.Punctuator,
                 value: ch1,
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [start, index]
             };
         }
@@ -412,6 +422,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.Punctuator,
                 value: ch1,
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [start, index]
             };
         }
@@ -425,6 +436,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.Punctuator,
                 value: nextChar(),
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [start, index]
             };
         }
@@ -446,6 +458,7 @@ parseStatement: true, parseSourceElement: true */
                     type: Token.Punctuator,
                     value: '>>>=',
                     lineNumber: lineNumber,
+                    lineStart: lineStart,
                     range: [start, index]
                 };
             }
@@ -461,6 +474,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.Punctuator,
                 value: '===',
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [start, index]
             };
         }
@@ -473,6 +487,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.Punctuator,
                 value: '!==',
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [start, index]
             };
         }
@@ -485,6 +500,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.Punctuator,
                 value: '>>>',
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [start, index]
             };
         }
@@ -497,6 +513,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.Punctuator,
                 value: '<<=',
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [start, index]
             };
         }
@@ -509,6 +526,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.Punctuator,
                 value: '>>=',
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [start, index]
             };
         }
@@ -524,6 +542,7 @@ parseStatement: true, parseSourceElement: true */
                     type: Token.Punctuator,
                     value: ch1 + ch2,
                     lineNumber: lineNumber,
+                    lineStart: lineStart,
                     range: [start, index]
                 };
             }
@@ -537,6 +556,7 @@ parseStatement: true, parseSourceElement: true */
                     type: Token.Punctuator,
                     value: ch1 + ch2,
                     lineNumber: lineNumber,
+                    lineStart: lineStart,
                     range: [start, index]
                 };
             }
@@ -549,6 +569,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.Punctuator,
                 value: nextChar(),
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [start, index]
             };
         }
@@ -583,13 +604,14 @@ parseStatement: true, parseSourceElement: true */
                 if (index < length) {
                     ch = source[index];
                     if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
-                        throwError(Messages.UnexpectedToken, 'ILLEGAL');
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
                 }
                 return {
                     type: Token.NumericLiteral,
                     value: parseInt(number, 16),
                     lineNumber: lineNumber,
+                    lineStart: lineStart,
                     range: [start, index]
                 };
             }
@@ -631,14 +653,14 @@ parseStatement: true, parseSourceElement: true */
                 if (index >= length) {
                     ch = '<end>';
                 }
-                throwError(Messages.UnexpectedToken, 'ILLEGAL');
+                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
             }
         }
 
         if (index < length) {
             ch = source[index];
             if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
-                throwError(Messages.UnexpectedToken, 'ILLEGAL');
+                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
             }
         }
 
@@ -646,6 +668,7 @@ parseStatement: true, parseSourceElement: true */
             type: Token.NumericLiteral,
             value: parseFloat(number),
             lineNumber: lineNumber,
+            lineStart: lineStart,
             range: [start, index]
         };
     }
@@ -681,13 +704,14 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (quote !== '') {
-            throwError(Messages.UnexpectedToken, 'ILLEGAL');
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
         }
 
         return {
             type: Token.StringLiteral,
             value: str,
             lineNumber: lineNumber,
+            lineStart: lineStart,
             range: [start, index]
         };
     }
@@ -722,13 +746,13 @@ parseStatement: true, parseSourceElement: true */
                     classMarker = true;
                 }
                 if (isLineTerminator(ch)) {
-                    throwError(Messages.UnterminatedRegExp);
+                    throwError({}, Messages.UnterminatedRegExp);
                 }
             }
         }
 
         if (str.length === 1) {
-            throwError(Messages.UnterminatedRegExp);
+            throwError({}, Messages.UnterminatedRegExp);
         }
 
         // Exclude leading and trailing slash.
@@ -747,7 +771,7 @@ parseStatement: true, parseSourceElement: true */
         try {
             value = new RegExp(pattern, flags);
         } catch (e) {
-            throwError(Messages.InvalidRegExp);
+            throwError({}, Messages.InvalidRegExp);
         }
 
         return {
@@ -772,6 +796,7 @@ parseStatement: true, parseSourceElement: true */
             return {
                 type: Token.EOF,
                 lineNumber: lineNumber,
+                lineStart: lineStart,
                 range: [index, index]
             };
         }
@@ -796,7 +821,7 @@ parseStatement: true, parseSourceElement: true */
             return token;
         }
 
-        throwError(Messages.UnexpectedToken, 'ILLEGAL');
+        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
     }
 
     function lex() {
@@ -805,6 +830,7 @@ parseStatement: true, parseSourceElement: true */
         if (buffer) {
             index = buffer.range[1];
             lineNumber = buffer.lineNumber;
+            lineStart = buffer.lineStart;
             token = buffer;
             buffer = null;
             return token;
@@ -815,7 +841,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function lookahead() {
-        var pos, line;
+        var pos, line, start;
 
         if (buffer !== null) {
             return buffer;
@@ -823,9 +849,11 @@ parseStatement: true, parseSourceElement: true */
 
         pos = index;
         line = lineNumber;
+        start = lineStart;
         buffer = advance();
         index = pos;
         lineNumber = line;
+        lineStart = start;
 
         return buffer;
     }
@@ -833,31 +861,45 @@ parseStatement: true, parseSourceElement: true */
     // Return true if there is a line terminator before the next token.
 
     function peekLineTerminator() {
-        var pos, line, found;
+        var pos, line, start, found;
 
         pos = index;
         line = lineNumber;
+        start = lineStart;
         skipComment();
         found = lineNumber !== line;
         index = pos;
         lineNumber = line;
+        lineStart = start;
 
         return found;
     }
 
     // Throw an exception
 
-    function throwError(messageFormat) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        throw new Error(
-            'Line ' + lineNumber +
-                ': ' + messageFormat.replace(
-                    /%(\d)/g,
-                    function (whole, index) {
-                        return args[index] || '';
-                    }
-                )
-        );
+    function throwError(token, messageFormat) {
+        var error,
+            args = Array.prototype.slice.call(arguments, 2),
+            msg = messageFormat.replace(
+                /%(\d)/g,
+                function (whole, index) {
+                    return args[index] || '';
+                }
+            );
+
+        if (typeof token.lineNumber === 'number') {
+            error = new Error('Line ' + token.lineNumber + ': ' + msg);
+            error.index = token.range[0];
+            error.lineNumber = token.lineNumber;
+            error.column = token.range[0] - lineStart + 1;
+        } else {
+            error = new Error('Line ' + lineNumber + ': ' + msg);
+            error.index = index;
+            error.lineNumber = lineNumber;
+            error.column = index - lineStart + 1;
+        }
+
+        throw error;
     }
 
     // Throw an exception because of the token.
@@ -866,30 +908,30 @@ parseStatement: true, parseSourceElement: true */
         var s;
 
         if (token.type === Token.EOF) {
-            throwError(Messages.UnexpectedEOS);
+            throwError(token, Messages.UnexpectedEOS);
         }
 
         if (token.type === Token.NumericLiteral) {
-            throwError(Messages.UnexpectedNumber);
+            throwError(token, Messages.UnexpectedNumber);
         }
 
         if (token.type === Token.StringLiteral) {
-            throwError(Messages.UnexpectedString);
+            throwError(token, Messages.UnexpectedString);
         }
 
         if (token.type === Token.Identifier) {
-            throwError(Messages.UnexpectedIdentifier);
+            throwError(token, Messages.UnexpectedIdentifier);
         }
 
         if (token.type === Token.Keyword && isFutureReservedWord(token.value)) {
-            throwError(Messages.UnexpectedReserved);
+            throwError(token, Messages.UnexpectedReserved);
         }
 
         s = token.value;
         if (s.length > 10) {
             s = s.substr(0, 10) + '...';
         }
-        throwError(Messages.UnexpectedToken, s);
+        throwError(token, Messages.UnexpectedToken, s);
     }
 
     // Expect the next token to match the specified punctuator.
@@ -1379,7 +1421,7 @@ parseStatement: true, parseSourceElement: true */
 
         if ((match('++') || match('--')) && !peekLineTerminator()) {
             if (!isLeftHandSide(expr)) {
-                throwError(Messages.InvalidLHSInPostfixOp);
+                throwError(lookahead(), Messages.InvalidLHSInPostfixOp);
             }
             expr = {
                 type: Syntax.UpdateExpression,
@@ -1395,17 +1437,17 @@ parseStatement: true, parseSourceElement: true */
     // 11.4 Unary Operators
 
     function parseUnaryExpression() {
-        var operator, expr;
+        var token, expr;
 
         if (match('++') || match('--')) {
-            operator = lex().value;
+            token = lex();
             expr = parseUnaryExpression();
             if (!isLeftHandSide(expr)) {
-                throwError(Messages.InvalidLHSInPrefixOp);
+                throwError(token.value, Messages.InvalidLHSInPrefixOp);
             }
             expr = {
                 type: Syntax.UpdateExpression,
-                operator: operator,
+                operator: token.value,
                 argument: expr,
                 prefix: true
             };
@@ -1655,7 +1697,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (matchAssign()) {
             if (!isLeftHandSide(expr)) {
-                throwError(Messages.InvalidLHSInAssignment);
+                throwError({}, Messages.InvalidLHSInAssignment);
             }
             expr = {
                 type: Syntax.AssignmentExpression,
@@ -1947,7 +1989,7 @@ parseStatement: true, parseSourceElement: true */
                     right = parseExpression();
                     init = null;
                     if (!isLeftHandSide(left)) {
-                        throwError(Messages.InvalidLHSInForIn);
+                        throwError({}, Messages.InvalidLHSInForIn);
                     }
                 }
             }
@@ -2216,7 +2258,7 @@ parseStatement: true, parseSourceElement: true */
         expectKeyword('throw');
 
         if (peekLineTerminator()) {
-            throwError(Messages.NewlineAfterThrow);
+            throwError({}, Messages.NewlineAfterThrow);
         }
 
         argument = parseExpression();
@@ -2260,7 +2302,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (handlers.length === 0 && !finalizer) {
-            throwError(Messages.NoCatchOrFinally);
+            throwError({}, Messages.NoCatchOrFinally);
         }
 
         return {
@@ -2544,6 +2586,7 @@ parseStatement: true, parseSourceElement: true */
                         nextChar();
                     }
                     lineNumber += 1;
+                    lineStart = index + 1;
                     comment = '';
                 } else {
                     comment += ch;
@@ -2565,6 +2608,7 @@ parseStatement: true, parseSourceElement: true */
                         nextChar();
                     }
                     lineNumber += 1;
+                    lineStart = index + 1;
                 }
             } else if (ch === '/') {
                 ch = source[index + 1];
@@ -2589,6 +2633,7 @@ parseStatement: true, parseSourceElement: true */
                     nextChar();
                 }
                 lineNumber += 1;
+                lineStart = index + 1;
             } else {
                 break;
             }
@@ -2832,6 +2877,7 @@ parseStatement: true, parseSourceElement: true */
         source = code;
         index = 0;
         lineNumber = (source.length > 0) ? 1 : 0;
+        lineStart = 0;
         length = source.length;
         buffer = null;
         allowIn = true;

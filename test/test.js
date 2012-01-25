@@ -5862,123 +5862,418 @@ data = {
 
     'Invalid syntax': {
 
-        '{': 'Line 1: Unexpected end of input',
+        '{': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
 
-        '}': 'Line 1: Unexpected token }',
+        '}': {
+            index: 0,
+            lineNumber: 1,
+            column: 1,
+            message: 'Error: Line 1: Unexpected token }'
+        },
 
-        '3ea': 'Line 1: Unexpected token ILLEGAL',
+        '3ea': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
 
-        '3in[]': 'Line 1: Unexpected token ILLEGAL',
+        '3in[]': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
 
-        '0x3in[]': 'Line 1: Unexpected token ILLEGAL',
+        '0x3in[]': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
 
-        'var x = /(s/g': 'Line 1: Invalid regular expression',
+        'var x = /(s/g': {
+            index: 13,
+            lineNumber: 1,
+            column: 14,
+            message: 'Error: Line 1: Invalid regular expression'
+        },
 
-        '/': 'Line 1: Invalid regular expression: missing /',
+        '/': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Invalid regular expression: missing /'
+        },
 
-        'var x = /\n/': 'Line 1: Invalid regular expression: missing /',
+        'var x = /\n/': {
+            index: 10,
+            lineNumber: 1,
+            column: 11,
+            message: 'Error: Line 1: Invalid regular expression: missing /'
+        },
 
-        'var x = "\n': 'Line 1: Unexpected token ILLEGAL',
+        'var x = "\n': {
+            index: 10,
+            lineNumber: 1,
+            column: 11,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
 
-        'var if = 42': 'Line 1: Unexpected token if',
+        'var if = 42': {
+            index: 4,
+            lineNumber: 1,
+            column: 5,
+            message: 'Error: Line 1: Unexpected token if'
+        },
 
-        '1 + (': 'Line 1: Unexpected end of input',
+        '1 + (': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
 
-        '\n\n\n{': 'Line 4: Unexpected end of input',
+        '\n\n\n{': {
+            index: 4,
+            lineNumber: 4,
+            column: 2,
+            message: 'Error: Line 4: Unexpected end of input'
+        },
 
-        '\n/* Some multiline\ncomment */\n)': 'Line 4: Unexpected token )',
+        '\n/* Some multiline\ncomment */\n)': {
+            index: 30,
+            lineNumber: 4,
+            column: 1,
+            message: 'Error: Line 4: Unexpected token )'
+        },
 
-        '{ set 1 }': 'Line 1: Unexpected number',
+        '{ set 1 }': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Unexpected number'
+        },
 
-        '{ get 2 }': 'Line 1: Unexpected number',
+        '{ get 2 }': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Unexpected number'
+        },
 
-        '({ set: s(if) { } })': 'Line 1: Unexpected token if',
+        '({ set: s(if) { } })': {
+            index: 10,
+            lineNumber: 1,
+            column: 11,
+            message: 'Error: Line 1: Unexpected token if'
+        },
 
-        '({ set: s() { } })': 'Line 1: Unexpected token {',
+        '({ set: s() { } })': {
+            index: 12,
+            lineNumber: 1,
+            column: 13,
+            message: 'Error: Line 1: Unexpected token {'
+        },
 
-        '({ set: s(a, b) { } })': 'Line 1: Unexpected token {',
+        '({ set: s(a, b) { } })': {
+            index: 16,
+            lineNumber: 1,
+            column: 17,
+            message: 'Error: Line 1: Unexpected token {'
+        },
 
-        '({ get: g(d) { } })': 'Line 1: Unexpected token {',
+        '({ get: g(d) { } })': {
+            index: 13,
+            lineNumber: 1,
+            column: 14,
+            message: 'Error: Line 1: Unexpected token {'
+        },
 
-        'function t(if) { }': 'Line 1: Unexpected token if',
+        'function t(if) { }': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Unexpected token if'
+        },
 
-        'function t(true) { }': 'Line 1: Unexpected token true',
+        'function t(true) { }': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Unexpected token true'
+        },
 
-        'function t(false) { }': 'Line 1: Unexpected token false',
+        'function t(false) { }': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Unexpected token false'
+        },
 
-        'function t(null) { }': 'Line 1: Unexpected token null',
+        'function t(null) { }': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Unexpected token null'
+        },
 
-        'function null() { }': 'Line 1: Unexpected token null',
+        'function null() { }': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token null'
+        },
 
-        'function true() { }': 'Line 1: Unexpected token true',
+        'function true() { }': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token true'
+        },
 
-        'function false() { }': 'Line 1: Unexpected token false',
+        'function false() { }': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token false'
+        },
 
-        'function if() { }': 'Line 1: Unexpected token if',
+        'function if() { }': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token if'
+        },
 
-        'a b;': 'Line 1: Unexpected identifier',
+        'a b;': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected identifier'
+        },
 
-        'if.a;': 'Line 1: Unexpected token .',
+        'if.a;': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token .'
+        },
 
-        'a if;': 'Line 1: Unexpected token if',
+        'a if;': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token if'
+        },
 
-        'a class;': 'Line 1: Unexpected reserved word',
+        'a class;': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected reserved word'
+        },
 
-        'break 1;': 'Line 1: Unexpected number',
+        'break 1;': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Unexpected number'
+        },
 
-        'continue 2;': 'Line 1: Unexpected number',
+        'continue 2;': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected number'
+        },
 
-        'throw': 'Line 1: Unexpected end of input',
+        'throw': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
 
-        'throw;': 'Line 1: Unexpected token ;',
+        'throw;': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Unexpected token ;'
+        },
 
-        'throw\n': 'Line 1: Illegal newline after throw',
+        'throw\n': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Illegal newline after throw'
+        },
 
-        '10 = 20': 'Line 1: Invalid left-hand side in assignment',
+        '10 = 20': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
 
-        '10++': 'Line 1: Invalid left-hand side expression in postfix operation',
+        '10++': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Invalid left-hand side expression in postfix operation'
+        },
 
-        '++10': 'Line 1: Invalid left-hand side expression in prefix operation',
+        '++10': {
+            index: 4,
+            lineNumber: 1,
+            column: 5,
+            message: 'Error: Line 1: Invalid left-hand side expression in prefix operation'
+        },
 
-        'for (10 in []);': 'Line 1: Invalid left-hand side in for-in',
+        'for (10 in []);': {
+            index: 13,
+            lineNumber: 1,
+            column: 14,
+            message: 'Error: Line 1: Invalid left-hand side in for-in'
+        },
 
-        'for (var i, i2 in {});': 'Line 1: Unexpected token in',
+        'for (var i, i2 in {});': {
+            index: 15,
+            lineNumber: 1,
+            column: 16,
+            message: 'Error: Line 1: Unexpected token in'
+        },
 
-        'for ((i in {}));': 'Line 1: Unexpected token )',
+        'for ((i in {}));': {
+            index: 14,
+            lineNumber: 1,
+            column: 15,
+            message: 'Error: Line 1: Unexpected token )'
+        },
 
-        'try { }': 'Line 1: Missing catch or finally after try',
+        'try { }': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Missing catch or finally after try'
+        },
 
-        '\u203F = 10': 'Line 1: Unexpected token ILLEGAL',
+        '\u203F = 10': {
+            index: 0,
+            lineNumber: 1,
+            column: 1,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
 
-        'const x = 12, y;': 'Line 1: Unexpected token ;',
+        'const x = 12, y;': {
+            index: 15,
+            lineNumber: 1,
+            column: 16,
+            message: 'Error: Line 1: Unexpected token ;'
+        },
 
-        'const x, y = 12;': 'Line 1: Unexpected token ,',
+        'const x, y = 12;': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected token ,'
+        },
 
-        'const x;': 'Line 1: Unexpected token ;',
+        'const x;': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected token ;'
+        },
 
-        'if(true) let a = 1;': 'Line 1: Unexpected token let',
+        'if(true) let a = 1;': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token let'
+        },
 
-        'if(true) const a = 1;': 'Line 1: Unexpected token const',
+        'if(true) const a = 1;': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token const'
+        },
 
-        '\n]': 'Line 2: Unexpected token ]',
+        '\n]': {
+            index: 1,
+            lineNumber: 2,
+            column: 1,
+            message: 'Error: Line 2: Unexpected token ]'
+        },
 
-        '\r]': 'Line 2: Unexpected token ]',
+        '\r]': {
+            index: 1,
+            lineNumber: 2,
+            column: 1,
+            message: 'Error: Line 2: Unexpected token ]'
+        },
 
-        '\r\n]': 'Line 2: Unexpected token ]',
+        '\r\n]': {
+            index: 2,
+            lineNumber: 2,
+            column: 1,
+            message: 'Error: Line 2: Unexpected token ]'
+        },
 
-        '\n\r]': 'Line 3: Unexpected token ]',
+        '\n\r]': {
+            index: 2,
+            lineNumber: 3,
+            column: 1,
+            message: 'Error: Line 3: Unexpected token ]'
+        },
 
-        '//\r\n]': 'Line 2: Unexpected token ]',
+        '//\r\n]': {
+            index: 4,
+            lineNumber: 2,
+            column: 1,
+            message: 'Error: Line 2: Unexpected token ]'
+        },
 
-        '//\n\r]': 'Line 3: Unexpected token ]',
+        '//\n\r]': {
+            index: 4,
+            lineNumber: 3,
+            column: 1,
+            message: 'Error: Line 3: Unexpected token ]'
+        },
 
-        '//\r \n]': 'Line 3: Unexpected token ]',
+        '//\r \n]': {
+            index: 5,
+            lineNumber: 3,
+            column: 1,
+            message: 'Error: Line 3: Unexpected token ]'
+        },
 
-        '/*\r\n*/]': 'Line 2: Unexpected token ]',
+        '/*\r\n*/]': {
+            index: 6,
+            lineNumber: 2,
+            column: 3,
+            message: 'Error: Line 2: Unexpected token ]'
+        },
 
-        '/*\n\r*/]': 'Line 3: Unexpected token ]',
+        '/*\n\r*/]': {
+            index: 6,
+            lineNumber: 3,
+            column: 3,
+            message: 'Error: Line 3: Unexpected token ]'
+        },
 
-        '/*\r \n*/]': 'Line 3: Unexpected token ]'
+        '/*\r \n*/]': {
+            index: 7,
+            lineNumber: 3,
+            column: 3,
+            message: 'Error: Line 3: Unexpected token ]'
+        }
     }
 };
 
@@ -6071,20 +6366,29 @@ function testParse(code, syntax) {
 
 function testError(code, exception) {
     'use strict';
-    var expected, actual;
+    var expected, msg, actual;
 
-    expected = 'Error: ' + exception;
+    expected = JSON.stringify(exception);
+
     try {
         esprima.parse(code);
     } catch (e) {
-        actual = e.toString();
+        msg = e.toString();
 
         // Opera 9.64 produces an non-standard string in toString().
-        if (actual.substr(0, 6) !== 'Error:') {
+        if (msg.substr(0, 6) !== 'Error:') {
             if (typeof e.message === 'string') {
-                actual = 'Error: ' + e.message;
+                msg = 'Error: ' + e.message;
             }
         }
+
+        actual = JSON.stringify({
+            index: e.index,
+            lineNumber: e.lineNumber,
+            column: e.column,
+            message: msg
+        });
+
     }
 
     if (expected !== actual) {
@@ -6126,7 +6430,7 @@ function testModify(code, result) {
 
 function runTest(code, result) {
     'use strict';
-    if (typeof result === 'string') {
+    if (typeof result === 'string' || result.hasOwnProperty('lineNumber')) {
         testError(code, result);
     } else {
         if (result.hasOwnProperty('modifiers')) {
