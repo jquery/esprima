@@ -11,6 +11,7 @@
 <script src="../assets/codemirror/javascript.js"></script>
 <link rel="stylesheet" type="text/css" href="../assets/codemirror/codemirror.css"/>
 <link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+<link rel="stylesheet" type="text/css" href="parse.css"/>
 <script>
 /*jslint sloppy:true browser:true */
 /*global esprima:true */
@@ -40,13 +41,17 @@ function parse(delay) {
         }
         options = {
             comment: document.getElementById('comment').checked,
-            range: document.getElementById('range').checked,
-            tokens: document.getElementById('tokens').checked
+            range: document.getElementById('range').checked
         };
 
+        document.getElementById('tokens').value = '';
+
         try {
+
             result = esprima.parse(code, options);
             str = JSON.stringify(result, adjustRegexLiteral, 4);
+            document.getElementById('tokens').value = JSON.stringify(esprima.parse(code,
+                { tokens : true }).tokens, adjustRegexLiteral, 4);
         } catch (e) {
             str = e.toString();
         }
@@ -82,23 +87,59 @@ var answer = 6 * 7;</textarea></p>
 <p id="codemirror" align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
 <p><label><input type="checkbox" id="comment"> Include comments</label></p>
 <p><label><input type="checkbox" id="range"> Syntax node range (start, end)</label> <b>Experimental</b>: see <a href="http://code.google.com/p/esprima/issues/detail?id=6">issue #6</a>.</p>
-<p><label><input type="checkbox" id="tokens"> Tokens</label></p>
-<p>Syntax tree:</p>
-<textarea id="syntax" rows="20" readonly></textarea>
-<div class="footer"><strong>Esprima</strong> is created by
-<a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
+<div class="tabs">
+    <ul>
+    <li id="tab_syntax" class="active">
+    <h3><a id="show_syntax">Syntax</a></h3>
+    <div class="tab">
+        <textarea id="syntax" rows="20" readonly></textarea>
+    </div>
+    </li>
+    <li id="tab_tokens">
+     <h3><a id="show_tokens">Tokens</a></h3>
+     <div class="tab">
+        <textarea id="tokens" rows="20" readonly></textarea>
+    </div>
+    </li>
+</ul>
 </div>
+
+
+<!--
+<div class="footer"><strong>Esprima</strong> is created by
+    <a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
+</div>
+-->
+
 <p id="testbox"><textarea id="test"></textarea></p>
 </div>
 <script>
 window.onload = function () {
-    var el = document.getElementById('version');
+    var id, el;
+
+    id = function (i) {
+        return document.getElementById(i);
+    };
+
+    el = id('version');
     if (typeof el.innerText === 'string') {
         el.innerText = esprima.version;
     } else {
         el.textContent = esprima.version;
     }
-    parse(1);
+    try {
+        parse(1);
+    } catch (e) { }
+
+    id('show_syntax').onclick = function () {
+        id('tab_syntax').setAttribute('class', 'active');
+        id('tab_tokens').setAttribute('class', '');
+    };
+
+    id('show_tokens').onclick = function () {
+        id('tab_syntax').setAttribute('class', '');
+        id('tab_tokens').setAttribute('class', 'active');
+    };
 };
 </script>
 <script>
