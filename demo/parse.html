@@ -132,13 +132,13 @@ window.onload = function () {
     } catch (e) { }
 
     id('show_syntax').onclick = function () {
-        id('tab_syntax').setAttribute('class', 'active');
-        id('tab_tokens').setAttribute('class', '');
+        id('tab_syntax').className = 'active';
+        id('tab_tokens').className = '';
     };
 
     id('show_tokens').onclick = function () {
-        id('tab_syntax').setAttribute('class', '');
-        id('tab_tokens').setAttribute('class', 'active');
+        id('tab_syntax').className = '';
+        id('tab_tokens').className = 'active';
     };
 };
 </script>

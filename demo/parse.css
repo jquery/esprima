@@ -6,10 +6,13 @@
     position: relative;
     display: block;
     margin-top: 30px;
+    height: 1px;
 }
 
-.tabs li {
+.tabs ul, .tabs li {
     list-style-type: none;
+    margin: 0;
+    line-height: 0px;
 }
 
 .tabs h3 {
@@ -41,9 +44,7 @@
 
 .tabs h3 a {
     padding: 0 10px;
-    display: block;
-    height: 29px;
-    line-height: 30px;
+    line-height: 29px;
     font-size: 13px;
     font-weight: normal;
 }
