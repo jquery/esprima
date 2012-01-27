@@ -2704,61 +2704,87 @@ parseStatement: true, parseSourceElement: true */
         return regex;
     }
 
-    function wrapTracking(parseFunction) {
+    function wrapTrackingFunction(range, loc) {
 
-        function isBinary(node) {
-            return node.type === Syntax.LogicalExpression ||
-                node.type === Syntax.BinaryExpression;
-        }
+        return function (parseFunction) {
 
-        function visit(node) {
-            if (typeof node.left.range === 'undefined' && isBinary(node.left)) {
-                visit(node.left);
-            }
-            if (typeof node.right.range === 'undefined' && isBinary(node.right)) {
-                visit(node.right);
+            function isBinary(node) {
+                return node.type === Syntax.LogicalExpression ||
+                    node.type === Syntax.BinaryExpression;
             }
 
-            // Expression enclosed in brackets () already has the correct range.
-            if (typeof node.range === 'undefined') {
-                node.range = [node.left.range[0], node.right.range[1]];
-            }
-        }
+            function visit(node) {
+                if (typeof node.left.range === 'undefined' && isBinary(node.left)) {
+                    visit(node.left);
+                }
+                if (typeof node.right.range === 'undefined' && isBinary(node.right)) {
+                    visit(node.right);
+                }
 
-        return function () {
-            var start, node;
-
-            skipComment();
-            start = index;
-
-            node = parseFunction.apply(null, arguments);
-            if (typeof node === 'undefined') {
-                return;
-            }
-
-            node.range = [start, index - 1];
-            if (isBinary(node)) {
-                visit(node);
-            }
-
-            if (node.type === Syntax.MemberExpression) {
-                if (typeof node.object.range !== 'undefined') {
-                    node.range[0] = node.object.range[0];
+                // Expression enclosed in brackets () already has the correct range.
+                if (typeof node.range === 'undefined') {
+                    node.range = [node.left.range[0], node.right.range[1]];
                 }
             }
 
-            return node;
+            return function () {
+                var node, rangeInfo, locInfo;
+
+                skipComment();
+                rangeInfo = [index, 0];
+                locInfo = {
+                    start: {
+                        line: lineNumber,
+                        column: index - lineStart
+                    }
+                };
+
+                node = parseFunction.apply(null, arguments);
+                if (typeof node === 'undefined') {
+                    return;
+                }
+
+                if (range) {
+                    rangeInfo[1] = index - 1;
+                    node.range = rangeInfo;
+                    if (isBinary(node)) {
+                        visit(node);
+                    }
+
+                    if (node.type === Syntax.MemberExpression) {
+                        if (typeof node.object.range !== 'undefined') {
+                            node.range[0] = node.object.range[0];
+                        }
+                    }
+                }
+
+                if (loc) {
+                    locInfo.end = {
+                        line: lineNumber,
+                        column: index - lineStart
+                    };
+                    node.loc = locInfo;
+                }
+
+                return node;
+            };
+
         };
     }
 
     function patch() {
+
+        var wrapTracking;
 
         if (extra.comments) {
             extra.skipComment = skipComment;
             skipComment = scanComment;
         }
 
-        if (extra.range) {
+        if (extra.range || extra.loc) {
+
+            wrapTracking = wrapTrackingFunction(extra.range, extra.loc);
+
             extra.parseAdditiveExpression = parseAdditiveExpression;
             extra.parseAssignmentExpression = parseAssignmentExpression;
             extra.parseBitwiseANDExpression = parseBitwiseANDExpression;
@@ -2824,7 +2850,7 @@ parseStatement: true, parseSourceElement: true */
             skipComment = extra.skipComment;
         }
 
-        if (extra.range) {
+        if (extra.range || extra.loc) {
             parseAdditiveExpression = extra.parseAdditiveExpression;
             parseAssignmentExpression = extra.parseAssignmentExpression;
             parseBitwiseANDExpression = extra.parseBitwiseANDExpression;
@@ -2885,6 +2911,7 @@ parseStatement: true, parseSourceElement: true */
         extra = {};
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
+            extra.loc = (typeof options.loc === 'boolean') && options.loc;
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
             }
