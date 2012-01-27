@@ -103,6 +103,7 @@ data = {
             },
             range: [0, 11]
         }
+
     },
 
     'Array Initializer': {
@@ -155,13 +156,17 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ArrayExpression',
-                    elements: []
-                }
-            }
+                    elements: [],
+                    range: [4, 6]
+                },
+                range: [0, 6]
+            },
+            range: [0, 6]
         },
 
         'x = [ 42 ]': {
@@ -171,16 +176,21 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ArrayExpression',
                     elements: [{
                         type: 'Literal',
-                        value: 42
-                    }]
-                }
-            }
+                        value: 42,
+                        range: [6, 7]
+                    }],
+                    range: [4, 9]
+                },
+                range: [0, 9]
+            },
+            range: [0, 9]
         },
 
         'x = [ 42, ]': {
@@ -214,19 +224,24 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ArrayExpression',
                     elements: [
                         null,
-                        null, {
+                        null,
+                        {
                             type: 'Literal',
-                            value: 42
-                        }
-                    ]
-                }
-            }
+                            value: 42,
+                            range: [9, 10]
+                        }],
+                    range: [4, 12]
+                },
+                range: [0, 12]
+            },
+            range: [0, 12]
         },
 
         'x = [ 1, 2, 3, ]': {
@@ -236,22 +251,29 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ArrayExpression',
                     elements: [{
                         type: 'Literal',
-                        value: 1
+                        value: 1,
+                        range: [6, 6]
                     }, {
                         type: 'Literal',
-                        value: 2
+                        value: 2,
+                        range: [9, 9]
                     }, {
                         type: 'Literal',
-                        value: 3
-                    }]
-                }
-            }
+                        value: 3,
+                        range: [12, 12]
+                    }],
+                    range: [4, 15]
+                },
+                range: [0, 15]
+            },
+            range: [0, 15]
         },
 
         'x = [ 1, 2,, 3, ]': {
@@ -261,22 +283,29 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ArrayExpression',
                     elements: [{
                         type: 'Literal',
-                        value: 1
+                        value: 1,
+                        range: [6, 6]
                     }, {
                         type: 'Literal',
-                        value: 2
+                        value: 2,
+                        range: [9, 9]
                     }, null, {
                         type: 'Literal',
-                        value: 3
-                    }]
-                }
-            }
+                        value: 3,
+                        range: [13, 13]
+                    }],
+                    range: [4, 16]
+                },
+                range: [0, 16]
+            },
+            range: [0, 16]
         },
 
         '日本語 = []': {
@@ -286,13 +315,17 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: '日本語'
+                    name: '日本語',
+                    range: [0, 2]
                 },
                 right: {
                     type: 'ArrayExpression',
-                    elements: []
-                }
-            }
+                    elements: [],
+                    range: [6, 7]
+                },
+                range: [0, 7]
+            },
+            range: [0, 7]
         },
 
         'T\u203F = []': {
@@ -302,13 +335,17 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'T\u203F'
+                    name: 'T\u203F',
+                    range: [0, 1]
                 },
                 right: {
                     type: 'ArrayExpression',
-                    elements: []
-                }
-            }
+                    elements: [],
+                    range: [5, 6]
+                },
+                range: [0, 6]
+            },
+            range: [0, 6]
         }
 
     },
@@ -322,13 +359,17 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
-                    properties: []
-                }
-            }
+                    properties: [],
+                    range: [4, 5]
+                },
+                range: [0, 5]
+            },
+            range: [0, 5]
         },
 
         'x = { }': {
@@ -338,13 +379,17 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
-                    properties: []
-                }
-            }
+                    properties: [],
+                    range: [4, 6]
+                },
+                range: [0, 6]
+            },
+            range: [0, 6]
         },
 
         'x = { answer: 42 }': {
@@ -354,7 +399,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -365,11 +411,15 @@ data = {
                         },
                         value: {
                             type: 'Literal',
-                            value: 42
+                            value: 42,
+                            range: [14, 15]
                         }
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 17]
+                },
+                range: [0, 17]
+            },
+            range: [0, 17]
         },
 
         'x = { if: 42 }': {
@@ -379,7 +429,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -390,11 +441,15 @@ data = {
                         },
                         value: {
                             type: 'Literal',
-                            value: 42
+                            value: 42,
+                            range: [10, 11]
                         }
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 13]
+                },
+                range: [0, 13]
+            },
+            range: [0, 13]
         },
 
         'x = { true: 42 }': {
@@ -404,7 +459,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -415,11 +471,15 @@ data = {
                         },
                         value: {
                             type: 'Literal',
-                            value: 42
+                            value: 42,
+                            range: [12, 13]
                         }
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 15]
+                },
+                range: [0, 15]
+            },
+            range: [0, 15]
         },
 
         'x = { false: 42 }': {
@@ -429,7 +489,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -440,11 +501,15 @@ data = {
                         },
                         value: {
                             type: 'Literal',
-                            value: 42
+                            value: 42,
+                            range: [13, 14]
                         }
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 16]
+                },
+                range: [0, 16]
+            },
+            range: [0, 16]
         },
 
         'x = { null: 42 }': {
@@ -454,7 +519,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -465,11 +531,15 @@ data = {
                         },
                         value: {
                             type: 'Literal',
-                            value: 42
+                            value: 42,
+                            range: [12, 13]
                         }
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 15]
+                },
+                range: [0, 15]
+            },
+            range: [0, 15]
         },
 
         'x = { "answer": 42 }': {
@@ -479,7 +549,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -490,11 +561,15 @@ data = {
                         },
                         value: {
                             type: 'Literal',
-                            value: 42
+                            value: 42,
+                            range: [16, 17]
                         }
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 19]
+                },
+                range: [0, 19]
+            },
+            range: [0, 19]
         },
 
         'x = { get width() { return m_width } }': {
@@ -504,7 +579,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -523,15 +599,21 @@ data = {
                                     type: 'ReturnStatement',
                                     argument: {
                                         type: 'Identifier',
-                                        name: 'm_width'
-                                    }
-                                }]
+                                        name: 'm_width',
+                                        range: [27, 33]
+                                    },
+                                    range: [20, 34]
+                                }],
+                                range: [18, 35]
                             }
                         },
                         kind: 'get'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 37]
+                },
+                range: [0, 37]
+            },
+            range: [0, 37]
         },
 
         'x = { get undef() {} }': {
@@ -541,7 +623,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -556,13 +639,17 @@ data = {
                             params: [],
                             body: {
                                 type: 'BlockStatement',
-                                body: []
+                                body: [],
+                                range: [18, 19]
                             }
                         },
                         kind: 'get'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 21]
+                },
+                range: [0, 21]
+            },
+            range: [0, 21]
         },
 
         'x = { get if() {} }': {
@@ -572,7 +659,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -587,13 +675,17 @@ data = {
                             params: [],
                             body: {
                                 type: 'BlockStatement',
-                                body: []
+                                body: [],
+                                range: [15, 16]
                             }
                         },
                         kind: 'get'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 18]
+                },
+                range: [0, 18]
+            },
+            range: [0, 18]
         },
 
         'x = { get true() {} }': {
@@ -603,7 +695,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -618,13 +711,17 @@ data = {
                             params: [],
                             body: {
                                 type: 'BlockStatement',
-                                body: []
+                                body: [],
+                                range: [17, 18]
                             }
                         },
                         kind: 'get'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 20]
+                },
+                range: [0, 20]
+            },
+            range: [0, 20]
         },
 
         'x = { get false() {} }': {
@@ -634,7 +731,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -649,13 +747,17 @@ data = {
                             params: [],
                             body: {
                                 type: 'BlockStatement',
-                                body: []
+                                body: [],
+                                range: [18, 19]
                             }
                         },
                         kind: 'get'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 21]
+                },
+                range: [0, 21]
+            },
+            range: [0, 21]
         },
 
         'x = { get null() {} }': {
@@ -665,7 +767,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -680,13 +783,17 @@ data = {
                             params: [],
                             body: {
                                 type: 'BlockStatement',
-                                body: []
+                                body: [],
+                                range: [17, 18]
                             }
                         },
                         kind: 'get'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 20]
+                },
+                range: [0, 20]
+            },
+            range: [0, 20]
         },
 
         'x = { get "undef"() {} }': {
@@ -696,7 +803,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -711,13 +819,17 @@ data = {
                             params: [],
                             body: {
                                 type: 'BlockStatement',
-                                body: []
+                                body: [],
+                                range: [20, 21]
                             }
                         },
                         kind: 'get'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 23]
+                },
+                range: [0, 23]
+            },
+            range: [0, 23]
         },
 
         'x = { get 10() {} }': {
@@ -727,7 +839,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -742,13 +855,17 @@ data = {
                             params: [],
                             body: {
                                 type: 'BlockStatement',
-                                body: []
+                                body: [],
+                                range: [15, 16]
                             }
                         },
                         kind: 'get'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 18]
+                },
+                range: [0, 18]
+            },
+            range: [0, 18]
         },
 
         'x = { set width(w) { m_width = w } }': {
@@ -758,7 +875,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -783,20 +901,28 @@ data = {
                                         operator: '=',
                                         left: {
                                             type: 'Identifier',
-                                            name: 'm_width'
+                                            name: 'm_width',
+                                            range: [21, 27]
                                         },
                                         right: {
                                             type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
+                                            name: 'w',
+                                            range: [31, 31]
+                                        },
+                                        range: [21, 31]
+                                    },
+                                    range: [21, 32]
+                                }],
+                                range: [19, 33]
                             }
                         },
                         kind: 'set'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 35]
+                },
+                range: [0, 35]
+            },
+            range: [0, 35]
         },
 
         'x = { set if(w) { m_if = w } }': {
@@ -806,7 +932,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -831,20 +958,28 @@ data = {
                                         operator: '=',
                                         left: {
                                             type: 'Identifier',
-                                            name: 'm_if'
+                                            name: 'm_if',
+                                            range: [18, 21]
                                         },
                                         right: {
                                             type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
+                                            name: 'w',
+                                            range: [25, 25]
+                                        },
+                                        range: [18, 25]
+                                    },
+                                    range: [18, 26]
+                                }],
+                                range: [16, 27]
                             }
                         },
                         kind: 'set'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 29]
+                },
+                range: [0, 29]
+            },
+            range: [0, 29]
         },
 
         'x = { set true(w) { m_true = w } }': {
@@ -854,7 +989,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -879,20 +1015,28 @@ data = {
                                         operator: '=',
                                         left: {
                                             type: 'Identifier',
-                                            name: 'm_true'
+                                            name: 'm_true',
+                                            range: [20, 25]
                                         },
                                         right: {
                                             type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
+                                            name: 'w',
+                                            range: [29, 29]
+                                        },
+                                        range: [20, 29]
+                                    },
+                                    range: [20, 30]
+                                }],
+                                range: [18, 31]
                             }
                         },
                         kind: 'set'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 33]
+                },
+                range: [0, 33]
+            },
+            range: [0, 33]
         },
 
         'x = { set false(w) { m_false = w } }': {
@@ -902,7 +1046,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -927,20 +1072,28 @@ data = {
                                         operator: '=',
                                         left: {
                                             type: 'Identifier',
-                                            name: 'm_false'
+                                            name: 'm_false',
+                                            range: [21, 27]
                                         },
                                         right: {
                                             type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
+                                            name: 'w',
+                                            range: [31, 31]
+                                        },
+                                        range: [21, 31]
+                                    },
+                                    range: [21, 32]
+                                }],
+                                range: [19, 33]
                             }
                         },
                         kind: 'set'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 35]
+                },
+                range: [0, 35]
+            },
+            range: [0, 35]
         },
 
         'x = { set null(w) { m_null = w } }': {
@@ -950,7 +1103,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -975,20 +1129,28 @@ data = {
                                         operator: '=',
                                         left: {
                                             type: 'Identifier',
-                                            name: 'm_null'
+                                            name: 'm_null',
+                                            range: [20, 25]
                                         },
                                         right: {
                                             type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
+                                            name: 'w',
+                                            range: [29, 29]
+                                        },
+                                        range: [20, 29]
+                                    },
+                                    range: [20, 30]
+                                }],
+                                range: [18, 31]
                             }
                         },
                         kind: 'set'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 33]
+                },
+                range: [0, 33]
+            },
+            range: [0, 33]
         },
 
         'x = { set "null"(w) { m_null = w } }': {
@@ -998,7 +1160,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -1023,20 +1186,28 @@ data = {
                                         operator: '=',
                                         left: {
                                             type: 'Identifier',
-                                            name: 'm_null'
+                                            name: 'm_null',
+                                            range: [22, 27]
                                         },
                                         right: {
                                             type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
+                                            name: 'w',
+                                            range: [31, 31]
+                                        },
+                                        range: [22, 31]
+                                    },
+                                    range: [22, 32]
+                                }],
+                                range: [20, 33]
                             }
                         },
                         kind: 'set'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 35]
+                },
+                range: [0, 35]
+            },
+            range: [0, 35]
         },
 
         'x = { set 10(w) { m_null = w } }': {
@@ -1046,7 +1217,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -1071,23 +1243,29 @@ data = {
                                         operator: '=',
                                         left: {
                                             type: 'Identifier',
-                                            name: 'm_null'
+                                            name: 'm_null',
+                                            range: [18, 23]
                                         },
                                         right: {
                                             type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
+                                            name: 'w',
+                                            range: [27, 27]
+                                        },
+                                        range: [18, 27]
+                                    },
+                                    range: [18, 28]
+                                }],
+                                range: [16, 29]
                             }
                         },
                         kind: 'set'
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 31]
+                },
+                range: [0, 31]
+            },
+            range: [0, 31]
         },
-
-        // This should not be treated as getter.
 
         'x = { get: 42 }': {
             type: 'ExpressionStatement',
@@ -1096,7 +1274,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -1107,14 +1286,16 @@ data = {
                         },
                         value: {
                             type: 'Literal',
-                            value: 42
+                            value: 42,
+                            range: [11, 12]
                         }
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 14]
+                },
+                range: [0, 14]
+            },
+            range: [0, 14]
         },
-
-        // This should not be treated as setter.
 
         'x = { set: 43 }': {
             type: 'ExpressionStatement',
@@ -1123,7 +1304,8 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [0, 0]
                 },
                 right: {
                     type: 'ObjectExpression',
@@ -1134,12 +1316,17 @@ data = {
                         },
                         value: {
                             type: 'Literal',
-                            value: 43
+                            value: 43,
+                            range: [11, 12]
                         }
-                    }]
-                }
-            }
+                    }],
+                    range: [4, 14]
+                },
+                range: [0, 14]
+            },
+            range: [0, 14]
         }
+
     },
 
     'Comments': {
@@ -1148,8 +1335,10 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 42
-            }
+                value: 42,
+                range: [20, 21]
+            },
+            range: [20, 21]
         },
 
         '42 /*The*/ /*Answer*/': {
@@ -1158,9 +1347,12 @@ data = {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [0, 1]
+                },
+                range: [0, 20]
             }],
+            range: [0, 20],
             comments: [{
                 range: [3, 9],
                 type: 'Block',
@@ -1176,16 +1368,20 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 42
-            }
+                value: 42,
+                range: [42, 43]
+            },
+            range: [42, 43]
         },
 
         '// line comment\n42': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 42
-            }
+                value: 42,
+                range: [16, 17]
+            },
+            range: [16, 17]
         },
 
         '// Hello, world!\n42': {
@@ -1194,9 +1390,12 @@ data = {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [17, 18]
+                },
+                range: [17, 18]
             }],
+            range: [17, 18],
             comments: [{
                 range: [0, 16],
                 type: 'Line',
@@ -1210,9 +1409,12 @@ data = {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [37, 38]
+                },
+                range: [37, 38]
             }],
+            range: [37, 38],
             comments: [{
                 range: [0, 16],
                 type: 'Line',
@@ -1230,7 +1432,8 @@ data = {
                 type: 'IfStatement',
                 test: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [4, 4]
                 },
                 consequent: {
                     type: 'BlockStatement',
@@ -1240,14 +1443,20 @@ data = {
                             type: 'CallExpression',
                             callee: {
                                 type: 'Identifier',
-                                name: 'doThat'
+                                name: 'doThat',
+                                range: [25, 30]
                             },
-                            'arguments': []
-                        }
-                    }]
+                            'arguments': [],
+                            range: [25, 32]
+                        },
+                        range: [25, 33]
+                    }],
+                    range: [7, 35]
                 },
-                alternate: null
+                alternate: null,
+                range: [0, 35]
             }],
+            range: [0, 35],
             comments: [{
                 range: [9, 24],
                 type: 'Line',
@@ -1261,13 +1470,15 @@ data = {
                 type: 'SwitchStatement',
                 discriminant: {
                     type: 'Identifier',
-                    name: 'answer'
+                    name: 'answer',
+                    range: [8, 13]
                 },
                 cases: [{
                     type: 'SwitchCase',
                     test: {
                         type: 'Literal',
-                        value: 42
+                        value: 42,
+                        range: [23, 24]
                     },
                     consequent: [{
                         type: 'ExpressionStatement',
@@ -1275,13 +1486,18 @@ data = {
                             type: 'CallExpression',
                             callee: {
                                 type: 'Identifier',
-                                name: 'bingo'
+                                name: 'bingo',
+                                range: [41, 45]
                             },
-                            'arguments': []
-                        }
+                            'arguments': [],
+                            range: [41, 47]
+                        },
+                        range: [41, 48]
                     }]
-                }]
+                }],
+                range: [0, 49]
             }],
+            range: [0, 49],
             comments: [{
                 range: [27, 39],
                 type: 'Block',
@@ -1293,109 +1509,136 @@ data = {
 
     'Numeric Literals': {
 
-        '42': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'Literal',
-                value: 42
-            }
-        },
-
         '0': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 0
-            }
+                value: 0,
+                range: [0, 0]
+            },
+            range: [0, 0]
+        },
+
+        '42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 42,
+                range: [0, 1]
+            },
+            range: [0, 1]
         },
 
         '.14': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 0.14
-            }
+                value: 0.14,
+                range: [0, 2]
+            },
+            range: [0, 2]
         },
 
         '3.14159': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 3.14159
-            }
+                value: 3.14159,
+                range: [0, 6]
+            },
+            range: [0, 6]
         },
 
         '6.02214179e+23': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 6.02214179e+23
-            }
+                value: 6.02214179e+23,
+                range: [0, 13]
+            },
+            range: [0, 13]
         },
 
         '1.492417830e-10': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 1.492417830e-10
-            }
+                value: 1.492417830e-10,
+                range: [0, 14]
+            },
+            range: [0, 14]
         },
 
         '0x0': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 0x0
-            }
+                value: 0,
+                range: [0, 2]
+            },
+            range: [0, 2]
         },
 
         '0xabc': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 0xabc
-            }
+                value: 0xabc,
+                range: [0, 4]
+            },
+            range: [0, 4]
         },
 
         '0xdef': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 0xdef
-            }
+                value: 0xdef,
+                range: [0, 4]
+            },
+            range: [0, 4]
         },
 
         '0X1A': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 0X1A
-            }
+                value: 0x1A,
+                range: [0, 3]
+            },
+            range: [0, 3]
         },
 
         '0x10': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 0x10
-            }
+                value: 0x10,
+                range: [0, 3]
+            },
+            range: [0, 3]
         },
 
         '0x100': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 0x100
-            }
+                value: 0x100,
+                range: [0, 4]
+            },
+            range: [0, 4]
         },
 
         '0X04': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 0X04
-            }
+                value: 0X04,
+                range: [0, 3]
+            },
+            range: [0, 3]
         }
+
     },
 
     'String Literals': {
@@ -1404,25 +1647,20 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 'Hello'
-            }
+                value: 'Hello',
+                range: [0, 6]
+            },
+            range: [0, 6]
         },
 
         '"Hello\nworld"': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: 'Hello\nworld'
-            }
-        },
-
-
-        '"Hello\\\n world"': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'Literal',
-                value: 'Hello world'
-            }
+                value: 'Hello\nworld',
+                range: [0, 12]
+            },
+            range: [0, 12]
         }
 
     },
@@ -1584,6 +1822,7 @@ data = {
                 range: [8, 20]
             }]
         }
+
     },
 
     'Left-Hand-Side Expression': {
@@ -1594,10 +1833,13 @@ data = {
                 type: 'NewExpression',
                 callee: {
                     type: 'Identifier',
-                    name: 'Button'
+                    name: 'Button',
+                    range: [4, 9]
                 },
-                'arguments': []
-            }
+                'arguments': [],
+                range: [0, 9]
+            },
+            range: [0, 9]
         },
 
         'new Button()': {
@@ -1606,10 +1848,13 @@ data = {
                 type: 'NewExpression',
                 callee: {
                     type: 'Identifier',
-                    name: 'Button'
+                    name: 'Button',
+                    range: [4, 9]
                 },
-                'arguments': []
-            }
+                'arguments': [],
+                range: [0, 11]
+            },
+            range: [0, 11]
         },
 
         'new new foo': {
@@ -1620,12 +1865,15 @@ data = {
                     type: 'NewExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'foo'
+                        name: 'foo',
+                        range: [8, 10]
                     },
                     'arguments': []
                 },
-                'arguments': []
-            }
+                'arguments': [],
+                range: [0, 10]
+            },
+            range: [0, 10]
         },
 
         'new new foo()': {
@@ -1636,12 +1884,15 @@ data = {
                     type: 'NewExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'foo'
+                        name: 'foo',
+                        range: [8, 10]
                     },
                     'arguments': []
                 },
-                'arguments': []
-            }
+                'arguments': [],
+                range: [0, 12]
+            },
+            range: [0, 12]
         },
 
         'new foo().bar()': {
@@ -1655,17 +1906,22 @@ data = {
                         type: 'NewExpression',
                         callee: {
                             type: 'Identifier',
-                            name: 'foo'
+                            name: 'foo',
+                            range: [4, 6]
                         },
                         'arguments': []
                     },
                     property: {
                         type: 'Identifier',
-                        name: 'bar'
-                    }
+                        name: 'bar',
+                        range: [10, 12]
+                    },
+                    range: [10, 12]
                 },
-                'arguments': []
-            }
+                'arguments': [],
+                range: [0, 14]
+            },
+            range: [0, 14]
         },
 
         'new foo.bar()': {
@@ -1677,17 +1933,21 @@ data = {
                     computed: false,
                     object: {
                         type: 'Identifier',
-                        name: 'foo'
+                        name: 'foo',
+                        range: [4, 6]
                     },
                     property: {
                         type: 'Identifier',
-                        name: 'bar'
-                    }
+                        name: 'bar',
+                        range: [8, 10]
+                    },
+                    range: [4, 10]
                 },
-                'arguments': []
-            }
+                'arguments': [],
+                range: [0, 12]
+            },
+            range: [0, 12]
         },
-
 
         'foo(bar, baz)': {
             type: 'ExpressionStatement',
@@ -1695,16 +1955,21 @@ data = {
                 type: 'CallExpression',
                 callee: {
                     type: 'Identifier',
-                    name: 'foo'
+                    name: 'foo',
+                    range: [0, 2]
                 },
                 'arguments': [{
                     type: 'Identifier',
-                    name: 'bar'
+                    name: 'bar',
+                    range: [4, 6]
                 }, {
                     type: 'Identifier',
-                    name: 'baz'
-                }]
-            }
+                    name: 'baz',
+                    range: [9, 11]
+                }],
+                range: [0, 12]
+            },
+            range: [0, 12]
         },
 
         'universe.milkyway': {
@@ -1884,18 +2149,24 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'universe'
+                        name: 'universe',
+                        range: [0, 7]
                     },
                     'arguments': [{
                         type: 'Literal',
-                        value: 42
-                    }]
+                        value: 42,
+                        range: [9, 10]
+                    }],
+                    range: [8, 11]
                 },
                 property: {
                     type: 'Identifier',
-                    name: 'galaxies'
-                }
-            }
+                    name: 'galaxies',
+                    range: [13, 20]
+                },
+                range: [8, 20]
+            },
+            range: [0, 20]
         },
 
         'universe(42).galaxies(14, 3, 77).milkyway': {
@@ -1912,34 +2183,46 @@ data = {
                             type: 'CallExpression',
                             callee: {
                                 type: 'Identifier',
-                                name: 'universe'
+                                name: 'universe',
+                                range: [0, 7]
                             },
                             'arguments': [{
                                 type: 'Literal',
-                                value: 42
-                            }]
+                                value: 42,
+                                range: [9, 10]
+                            }],
+                            range: [8, 11]
                         },
                         property: {
                             type: 'Identifier',
-                            name: 'galaxies'
-                        }
+                            name: 'galaxies',
+                            range: [13, 20]
+                        },
+                        range: [8, 20]
                     },
                     'arguments': [{
                         type: 'Literal',
-                        value: 14
+                        value: 14,
+                        range: [22, 23]
                     }, {
                         type: 'Literal',
-                        value: 3
+                        value: 3,
+                        range: [26, 26]
                     }, {
                         type: 'Literal',
-                        value: 77
-                    }]
+                        value: 77,
+                        range: [29, 30]
+                    }],
+                    range: [21, 31]
                 },
                 property: {
                     type: 'Identifier',
-                    name: 'milkyway'
-                }
-            }
+                    name: 'milkyway',
+                    range: [33, 40]
+                },
+                range: [21, 40]
+            },
+            range: [0, 40]
         },
 
         'earth.asia.Indonesia.prepareForElection(2014)': {
@@ -1957,28 +2240,38 @@ data = {
                             computed: false,
                             object: {
                                 type: 'Identifier',
-                                name: 'earth'
+                                name: 'earth',
+                                range: [0, 4]
                             },
                             property: {
                                 type: 'Identifier',
-                                name: 'asia'
-                            }
+                                name: 'asia',
+                                range: [6, 9]
+                            },
+                            range: [0, 9]
                         },
                         property: {
                             type: 'Identifier',
-                            name: 'Indonesia'
-                        }
+                            name: 'Indonesia',
+                            range: [11, 19]
+                        },
+                        range: [0, 19]
                     },
                     property: {
                         type: 'Identifier',
-                        name: 'prepareForElection'
-                    }
+                        name: 'prepareForElection',
+                        range: [21, 38]
+                    },
+                    range: [0, 38]
                 },
                 'arguments': [{
                     type: 'Literal',
-                    value: 2014
-                }]
-            }
+                    value: 2014,
+                    range: [40, 43]
+                }],
+                range: [0, 44]
+            },
+            range: [0, 44]
         },
 
         'universe.if': {
@@ -2060,6 +2353,7 @@ data = {
             },
             range: [0, 12]
         }
+
     },
 
     'Postfix Expressions': {
@@ -2095,6 +2389,7 @@ data = {
             },
             range: [0, 2]
         }
+
     },
 
     'Unary Operators': {
@@ -2235,6 +2530,7 @@ data = {
             },
             range: [0, 7]
         }
+
     },
 
     'Multiplicative Operators': {
@@ -2298,6 +2594,7 @@ data = {
             },
             range: [0, 4]
         }
+
     },
 
     'Additive Operators': {
@@ -2341,6 +2638,7 @@ data = {
             },
             range: [0, 4]
         }
+
     },
 
     'Bitwise Shift Operator': {
@@ -2404,6 +2702,7 @@ data = {
             },
             range: [0, 6]
         }
+
     },
 
     'Relational Operators': {
@@ -2527,6 +2826,7 @@ data = {
             },
             range: [0, 13]
         }
+
     },
 
     'Equality Operators': {
@@ -2610,9 +2910,10 @@ data = {
             },
             range: [0, 6]
         }
+
     },
 
-    'Binary Bitwise Operators' : {
+    'Binary Bitwise Operators': {
 
         'x & y': {
             type: 'ExpressionStatement',
@@ -2673,6 +2974,7 @@ data = {
             },
             range: [0, 4]
         }
+
     },
 
     'Binary Expressions': {
@@ -3216,6 +3518,7 @@ data = {
             },
             range: [0, 8]
         }
+
     },
 
     'Binary Logical Operators': {
@@ -3379,6 +3682,7 @@ data = {
             },
             range: [0, 9]
         }
+
     },
 
     'Conditional Operator': {
@@ -3440,6 +3744,7 @@ data = {
             },
             range: [0, 13]
         }
+
     },
 
     'Assignment Operators': {
@@ -3683,6 +3988,7 @@ data = {
             },
             range: [0, 6]
         }
+
     },
 
     'Block': {
@@ -3693,9 +3999,12 @@ data = {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'foo'
-                }
-            }]
+                    name: 'foo',
+                    range: [2, 4]
+                },
+                range: [2, 5]
+            }],
+            range: [0, 6]
         },
 
         '{ doThis(); doThat(); }': {
@@ -3706,27 +4015,36 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'doThis'
+                        name: 'doThis',
+                        range: [2, 7]
                     },
-                    'arguments': []
-                }
+                    'arguments': [],
+                    range: [2, 9]
+                },
+                range: [2, 10]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'doThat'
+                        name: 'doThat',
+                        range: [12, 17]
                     },
-                    'arguments': []
-                }
-            }]
+                    'arguments': [],
+                    range: [12, 19]
+                },
+                range: [12, 20]
+            }],
+            range: [0, 22]
         },
 
         '{}': {
             type: 'BlockStatement',
-            body: []
+            body: [],
+            range: [0, 1]
         }
+
     },
 
     'Variable Statement': {
@@ -3741,7 +4059,8 @@ data = {
                 },
                 init: null
             }],
-            kind: 'var'
+            kind: 'var',
+            range: [0, 4]
         },
 
         'var x, y;': {
@@ -3761,7 +4080,8 @@ data = {
                 },
                 init: null
             }],
-            kind: 'var'
+            kind: 'var',
+            range: [0, 8]
         },
 
         'var x = 42': {
@@ -3774,10 +4094,12 @@ data = {
                 },
                 init: {
                     type: 'Literal',
-                    value: 42
+                    value: 42,
+                    range: [8, 9]
                 }
             }],
-            kind: 'var'
+            kind: 'var',
+            range: [0, 9]
         },
 
         'var x = 14, y = 3, z = 1977': {
@@ -3790,7 +4112,8 @@ data = {
                 },
                 init: {
                     type: 'Literal',
-                    value: 14
+                    value: 14,
+                    range: [8, 9]
                 }
             }, {
                 type: 'VariableDeclarator',
@@ -3800,7 +4123,8 @@ data = {
                 },
                 init: {
                     type: 'Literal',
-                    value: 3
+                    value: 3,
+                    range: [16, 16]
                 }
             }, {
                 type: 'VariableDeclarator',
@@ -3810,10 +4134,12 @@ data = {
                 },
                 init: {
                     type: 'Literal',
-                    value: 1977
+                    value: 1977,
+                    range: [23, 26]
                 }
             }],
-            kind: 'var'
+            kind: 'var',
+            range: [0, 26]
         }
 
     },
@@ -3846,7 +4172,8 @@ data = {
                     init: null
                 }],
                 kind: 'let'
-            }]
+            }],
+            range: [0, 8]
         },
 
         '{ let x = 42 }': {
@@ -3861,11 +4188,13 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 42
+                        value: 42,
+                        range: [10, 11]
                     }
                 }],
                 kind: 'let'
-            }]
+            }],
+            range: [0, 13]
         },
 
         '{ let x = 14, y = 3, z = 1977 }': {
@@ -3880,7 +4209,8 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 14
+                        value: 14,
+                        range: [10, 11]
                     }
                 }, {
                     type: 'VariableDeclarator',
@@ -3890,7 +4220,8 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 3
+                        value: 3,
+                        range: [18, 18]
                     }
                 }, {
                     type: 'VariableDeclarator',
@@ -3900,12 +4231,15 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 1977
+                        value: 1977,
+                        range: [25, 28]
                     }
                 }],
                 kind: 'let'
-            }]
+            }],
+            range: [0, 30]
         }
+
     },
 
     'Const Statement': {
@@ -3920,7 +4254,8 @@ data = {
                 },
                 init: {
                     type: 'Literal',
-                    value: 42
+                    value: 42,
+                    range: [10, 11]
                 }
             }],
             kind: 'const'
@@ -3938,11 +4273,13 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 42
+                        value: 42,
+                        range: [12, 13]
                     }
                 }],
                 kind: 'const'
-            }]
+            }],
+            range: [0, 15]
         },
 
         '{ const x = 14, y = 3, z = 1977 }': {
@@ -3957,7 +4294,8 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 14
+                        value: 14,
+                        range: [12, 13]
                     }
                 }, {
                     type: 'VariableDeclarator',
@@ -3967,7 +4305,8 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 3
+                        value: 3,
+                        range: [20, 20]
                     }
                 }, {
                     type: 'VariableDeclarator',
@@ -3977,18 +4316,22 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 1977
+                        value: 1977,
+                        range: [27, 30]
                     }
                 }],
                 kind: 'const'
-            }]
+            }],
+            range: [0, 32]
         }
+
     },
 
     'Empty Statement': {
 
         ';': {
-            type: 'EmptyStatement'
+            type: 'EmptyStatement',
+            range: [0, 0]
         }
 
     },
@@ -3999,26 +4342,25 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Identifier',
-                name: 'x'
-            }
+                name: 'x',
+                range: [0, 0]
+            },
+            range: [0, 0]
         },
 
         'x, y': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'SequenceExpression',
-                expressions: [
-                    {
-                        type: 'Identifier',
-                        name: 'x',
-                        range: [0, 0]
-                    },
-                    {
-                        type: 'Identifier',
-                        name: 'y',
-                        range: [3, 3]
-                    }
-                ],
+                expressions: [{
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 0]
+                }, {
+                    type: 'Identifier',
+                    name: 'y',
+                    range: [3, 3]
+                }],
                 range: [0, 3]
             },
             range: [0, 3]
@@ -4032,7 +4374,8 @@ data = {
             type: 'IfStatement',
             test: {
                 type: 'Identifier',
-                name: 'morning'
+                name: 'morning',
+                range: [4, 10]
             },
             consequent: {
                 type: 'ExpressionStatement',
@@ -4040,19 +4383,24 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'goodMorning'
+                        name: 'goodMorning',
+                        range: [13, 23]
                     },
-                    'arguments': []
-                }
+                    'arguments': [],
+                    range: [13, 25]
+                },
+                range: [13, 25]
             },
-            alternate: null
+            alternate: null,
+            range: [0, 25]
         },
 
         'if (morning) (function(){})': {
             type: 'IfStatement',
             test: {
                 type: 'Identifier',
-                name: 'morning'
+                name: 'morning',
+                range: [4, 10]
             },
             consequent: {
                 type: 'ExpressionStatement',
@@ -4062,18 +4410,23 @@ data = {
                     params: [],
                     body: {
                         type: 'BlockStatement',
-                        body: []
-                    }
-                }
+                        body: [],
+                        range: [24, 25]
+                    },
+                    range: [13, 26]
+                },
+                range: [13, 26]
             },
-            alternate: null
+            alternate: null,
+            range: [0, 26]
         },
 
         'if (morning) var x = 0;': {
             type: 'IfStatement',
             test: {
                 type: 'Identifier',
-                name: 'morning'
+                name: 'morning',
+                range: [4, 10]
             },
             consequent: {
                 type: 'VariableDeclaration',
@@ -4085,19 +4438,23 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 0
+                        value: 0,
+                        range: [21, 21]
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [13, 22]
             },
-            alternate: null
+            alternate: null,
+            range: [0, 22]
         },
 
         'if (morning) function a(){}': {
             type: 'IfStatement',
             test: {
                 type: 'Identifier',
-                name: 'morning'
+                name: 'morning',
+                range: [4, 10]
             },
             consequent: {
                 type: 'FunctionDeclaration',
@@ -4108,17 +4465,21 @@ data = {
                 params: [],
                 body: {
                     type: 'BlockStatement',
-                    body: []
-                }
+                    body: [],
+                    range: [25, 26]
+                },
+                range: [13, 26]
             },
-            alternate: null
+            alternate: null,
+            range: [0, 26]
         },
 
         'if (morning) goodMorning(); else goodDay()': {
             type: 'IfStatement',
             test: {
                 type: 'Identifier',
-                name: 'morning'
+                name: 'morning',
+                range: [4, 10]
             },
             consequent: {
                 type: 'ExpressionStatement',
@@ -4126,10 +4487,13 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'goodMorning'
+                        name: 'goodMorning',
+                        range: [13, 23]
                     },
-                    'arguments': []
-                }
+                    'arguments': [],
+                    range: [13, 25]
+                },
+                range: [13, 26]
             },
             alternate: {
                 type: 'ExpressionStatement',
@@ -4137,11 +4501,15 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'goodDay'
+                        name: 'goodDay',
+                        range: [33, 39]
                     },
-                    'arguments': []
-                }
-            }
+                    'arguments': [],
+                    range: [33, 41]
+                },
+                range: [33, 41]
+            },
+            range: [0, 41]
         }
 
     },
@@ -4156,15 +4524,20 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'keep'
+                        name: 'keep',
+                        range: [3, 6]
                     },
-                    'arguments': []
-                }
+                    'arguments': [],
+                    range: [3, 8]
+                },
+                range: [3, 9]
             },
             test: {
                 type: 'Literal',
-                value: true
-            }
+                value: true,
+                range: [18, 21]
+            },
+            range: [0, 22]
         },
 
         'do { x++; y--; } while (x < 10)': {
@@ -4178,10 +4551,13 @@ data = {
                         operator: '++',
                         argument: {
                             type: 'Identifier',
-                            name: 'x'
+                            name: 'x',
+                            range: [5, 5]
                         },
-                        prefix: false
-                    }
+                        prefix: false,
+                        range: [5, 7]
+                    },
+                    range: [5, 8]
                 }, {
                     type: 'ExpressionStatement',
                     expression: {
@@ -4189,24 +4565,32 @@ data = {
                         operator: '--',
                         argument: {
                             type: 'Identifier',
-                            name: 'y'
+                            name: 'y',
+                            range: [10, 10]
                         },
-                        prefix: false
-                    }
-                }]
+                        prefix: false,
+                        range: [10, 12]
+                    },
+                    range: [10, 13]
+                }],
+                range: [3, 15]
             },
             test: {
                 type: 'BinaryExpression',
                 operator: '<',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [24, 24]
                 },
                 right: {
                     type: 'Literal',
-                    value: 10
-                }
-            }
+                    value: 10,
+                    range: [28, 29]
+                },
+                range: [24, 29]
+            },
+            range: [0, 30]
         },
 
         '{ do { } while (false) false }': {
@@ -4215,26 +4599,33 @@ data = {
                 type: 'DoWhileStatement',
                 body: {
                     type: 'BlockStatement',
-                    body: []
+                    body: [],
+                    range: [5, 7]
                 },
                 test: {
                     type: 'Literal',
-                    value: false
-                }
+                    value: false,
+                    range: [16, 20]
+                },
+                range: [2, 21]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Literal',
-                    value: false
-                }
-            }]
+                    value: false,
+                    range: [23, 27]
+                },
+                range: [23, 28]
+            }],
+            range: [0, 29]
         },
 
         'while (true) doSomething()': {
             type: 'WhileStatement',
             test: {
                 type: 'Literal',
-                value: true
+                value: true,
+                range: [7, 10]
             },
             body: {
                 type: 'ExpressionStatement',
@@ -4242,11 +4633,15 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'doSomething'
+                        name: 'doSomething',
+                        range: [13, 23]
                     },
-                    'arguments': []
-                }
-            }
+                    'arguments': [],
+                    range: [13, 25]
+                },
+                range: [13, 25]
+            },
+            range: [0, 25]
         },
 
         'while (x < 10) { x++; y--; }': {
@@ -4256,12 +4651,15 @@ data = {
                 operator: '<',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [7, 7]
                 },
                 right: {
                     type: 'Literal',
-                    value: 10
-                }
+                    value: 10,
+                    range: [11, 12]
+                },
+                range: [7, 12]
             },
             body: {
                 type: 'BlockStatement',
@@ -4272,10 +4670,13 @@ data = {
                         operator: '++',
                         argument: {
                             type: 'Identifier',
-                            name: 'x'
+                            name: 'x',
+                            range: [17, 17]
                         },
-                        prefix: false
-                    }
+                        prefix: false,
+                        range: [17, 19]
+                    },
+                    range: [17, 20]
                 }, {
                     type: 'ExpressionStatement',
                     expression: {
@@ -4283,12 +4684,17 @@ data = {
                         operator: '--',
                         argument: {
                             type: 'Identifier',
-                            name: 'y'
+                            name: 'y',
+                            range: [22, 22]
                         },
-                        prefix: false
-                    }
-                }]
-            }
+                        prefix: false,
+                        range: [22, 24]
+                    },
+                    range: [22, 25]
+                }],
+                range: [15, 27]
+            },
+            range: [0, 27]
         },
 
         'for(;;);': {
@@ -4297,8 +4703,10 @@ data = {
             test: null,
             update: null,
             body: {
-                type: 'EmptyStatement'
-            }
+                type: 'EmptyStatement',
+                range: [7, 7]
+            },
+            range: [0, 7]
         },
 
         'for(;;){}': {
@@ -4308,8 +4716,10 @@ data = {
             update: null,
             body: {
                 type: 'BlockStatement',
-                body: []
-            }
+                body: [],
+                range: [7, 8]
+            },
+            range: [0, 8]
         },
 
         'for(x = 0;;);': {
@@ -4319,18 +4729,23 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [4, 4]
                 },
                 right: {
                     type: 'Literal',
-                    value: 0
-                }
+                    value: 0,
+                    range: [8, 8]
+                },
+                range: [4, 8]
             },
             test: null,
             update: null,
             body: {
-                type: 'EmptyStatement'
-            }
+                type: 'EmptyStatement',
+                range: [12, 12]
+            },
+            range: [0, 12]
         },
 
         'for(var x = 0;;);': {
@@ -4345,7 +4760,8 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 0
+                        value: 0,
+                        range: [12, 12]
                     }
                 }],
                 kind: 'var'
@@ -4353,8 +4769,10 @@ data = {
             test: null,
             update: null,
             body: {
-                type: 'EmptyStatement'
-            }
+                type: 'EmptyStatement',
+                range: [16, 16]
+            },
+            range: [0, 16]
         },
 
         'for(let x = 0;;);': {
@@ -4369,7 +4787,8 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 0
+                        value: 0,
+                        range: [12, 12]
                     }
                 }],
                 kind: 'let'
@@ -4377,8 +4796,10 @@ data = {
             test: null,
             update: null,
             body: {
-                type: 'EmptyStatement'
-            }
+                type: 'EmptyStatement',
+                range: [16, 16]
+            },
+            range: [0, 16]
         },
 
         'for(var x = 0, y = 1;;);': {
@@ -4393,7 +4814,8 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 0
+                        value: 0,
+                        range: [12, 12]
                     }
                 }, {
                     type: 'VariableDeclarator',
@@ -4403,7 +4825,8 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 1
+                        value: 1,
+                        range: [19, 19]
                     }
                 }],
                 kind: 'var'
@@ -4411,8 +4834,10 @@ data = {
             test: null,
             update: null,
             body: {
-                type: 'EmptyStatement'
-            }
+                type: 'EmptyStatement',
+                range: [23, 23]
+            },
+            range: [0, 23]
         },
 
         'for(x = 0; x < 42;);': {
@@ -4422,29 +4847,37 @@ data = {
                 operator: '=',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [4, 4]
                 },
                 right: {
                     type: 'Literal',
-                    value: 0
-                }
+                    value: 0,
+                    range: [8, 8]
+                },
+                range: [4, 8]
             },
             test: {
                 type: 'BinaryExpression',
                 operator: '<',
                 left: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [11, 11]
                 },
                 right: {
                     type: 'Literal',
-                    value: 42
-                }
+                    value: 42,
+                    range: [15, 16]
+                },
+                range: [11, 16]
             },
             update: null,
             body: {
-                type: 'EmptyStatement'
-            }
+                type: 'EmptyStatement',
+                range: [19, 19]
+            },
+            range: [0, 19]
         },
 
         'for(x = 0; x < 42; x++);': {
@@ -4565,11 +4998,13 @@ data = {
             type: 'ForInStatement',
             left: {
                 type: 'Identifier',
-                name: 'x'
+                name: 'x',
+                range: [4, 4]
             },
             right: {
                 type: 'Identifier',
-                name: 'list'
+                name: 'list',
+                range: [9, 12]
             },
             body: {
                 type: 'ExpressionStatement',
@@ -4577,15 +5012,20 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'process'
+                        name: 'process',
+                        range: [15, 21]
                     },
                     'arguments': [{
                         type: 'Identifier',
-                        name: 'x'
-                    }]
-                }
+                        name: 'x',
+                        range: [23, 23]
+                    }],
+                    range: [15, 24]
+                },
+                range: [15, 25]
             },
-            each: false
+            each: false,
+            range: [0, 25]
         },
 
         'for (var x in list) process(x);': {
@@ -4604,7 +5044,8 @@ data = {
             },
             right: {
                 type: 'Identifier',
-                name: 'list'
+                name: 'list',
+                range: [14, 17]
             },
             body: {
                 type: 'ExpressionStatement',
@@ -4612,15 +5053,20 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'process'
+                        name: 'process',
+                        range: [20, 26]
                     },
                     'arguments': [{
                         type: 'Identifier',
-                        name: 'x'
-                    }]
-                }
+                        name: 'x',
+                        range: [28, 28]
+                    }],
+                    range: [20, 29]
+                },
+                range: [20, 30]
             },
-            each: false
+            each: false,
+            range: [0, 30]
         },
 
         'for (var x = 42 in list) process(x);': {
@@ -4635,14 +5081,16 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 42
+                        value: 42,
+                        range: [13, 14]
                     }
                 }],
                 kind: 'var'
             },
             right: {
                 type: 'Identifier',
-                name: 'list'
+                name: 'list',
+                range: [19, 22]
             },
             body: {
                 type: 'ExpressionStatement',
@@ -4650,15 +5098,20 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'process'
+                        name: 'process',
+                        range: [25, 31]
                     },
                     'arguments': [{
                         type: 'Identifier',
-                        name: 'x'
-                    }]
-                }
+                        name: 'x',
+                        range: [33, 33]
+                    }],
+                    range: [25, 34]
+                },
+                range: [25, 35]
             },
-            each: false
+            each: false,
+            range: [0, 35]
         },
 
         'for (let x in list) process(x);': {
@@ -4677,7 +5130,8 @@ data = {
             },
             right: {
                 type: 'Identifier',
-                name: 'list'
+                name: 'list',
+                range: [14, 17]
             },
             body: {
                 type: 'ExpressionStatement',
@@ -4685,15 +5139,20 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'process'
+                        name: 'process',
+                        range: [20, 26]
                     },
                     'arguments': [{
                         type: 'Identifier',
-                        name: 'x'
-                    }]
-                }
+                        name: 'x',
+                        range: [28, 28]
+                    }],
+                    range: [20, 29]
+                },
+                range: [20, 30]
             },
-            each: false
+            each: false,
+            range: [0, 30]
         },
 
         'for (let x = 42 in list) process(x);': {
@@ -4708,14 +5167,16 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 42
+                        value: 42,
+                        range: [13, 14]
                     }
                 }],
                 kind: 'let'
             },
             right: {
                 type: 'Identifier',
-                name: 'list'
+                name: 'list',
+                range: [19, 22]
             },
             body: {
                 type: 'ExpressionStatement',
@@ -4723,15 +5184,20 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'process'
+                        name: 'process',
+                        range: [25, 31]
                     },
                     'arguments': [{
                         type: 'Identifier',
-                        name: 'x'
-                    }]
-                }
+                        name: 'x',
+                        range: [33, 33]
+                    }],
+                    range: [25, 34]
+                },
+                range: [25, 35]
             },
-            each: false
+            each: false,
+            range: [0, 35]
         },
 
         'for (var i = function() { return 10 in [] } in list) process(x);': {
@@ -4752,27 +5218,34 @@ data = {
                             type: 'BlockStatement',
                             body: [{
                                 type: 'ReturnStatement',
-                                'argument': {
+                                argument: {
                                     type: 'BinaryExpression',
                                     operator: 'in',
                                     left: {
                                         type: 'Literal',
-                                        value: 10
+                                        value: 10,
+                                        range: [33, 34]
                                     },
                                     right: {
                                         type: 'ArrayExpression',
-                                        elements: []
-                                    }
-                                }
-                            }]
-                        }
+                                        elements: [],
+                                        range: [39, 40]
+                                    },
+                                    range: [33, 40]
+                                },
+                                range: [26, 41]
+                            }],
+                            range: [24, 42]
+                        },
+                        range: [13, 42]
                     }
                 }],
                 kind: 'var'
             },
             right: {
                 type: 'Identifier',
-                name: 'list'
+                name: 'list',
+                range: [47, 50]
             },
             body: {
                 type: 'ExpressionStatement',
@@ -4780,23 +5253,30 @@ data = {
                     type: 'CallExpression',
                     callee: {
                         type: 'Identifier',
-                        name: 'process'
+                        name: 'process',
+                        range: [53, 59]
                     },
                     'arguments': [{
                         type: 'Identifier',
-                        name: 'x'
-                    }]
-                }
+                        name: 'x',
+                        range: [61, 61]
+                    }],
+                    range: [53, 62]
+                },
+                range: [53, 63]
             },
-            each: false
+            each: false,
+            range: [0, 63]
         }
+
     },
 
     'continue statement': {
 
         'continue': {
             type: 'ContinueStatement',
-            label: null
+            label: null,
+            range: [0, 7]
         },
 
         'continue done': {
@@ -4804,7 +5284,8 @@ data = {
             label: {
                 type: 'Identifier',
                 name: 'done'
-            }
+            },
+            range: [0, 12]
         },
 
         'continue done;': {
@@ -4812,7 +5293,8 @@ data = {
             label: {
                 type: 'Identifier',
                 name: 'done'
-            }
+            },
+            range: [0, 13]
         }
 
     },
@@ -4821,7 +5303,8 @@ data = {
 
         'break': {
             type: 'BreakStatement',
-            label: null
+            label: null,
+            range: [0, 4]
         },
 
         'break done': {
@@ -4829,7 +5312,8 @@ data = {
             label: {
                 type: 'Identifier',
                 name: 'done'
-            }
+            },
+            range: [0, 9]
         },
 
         'break done;': {
@@ -4837,7 +5321,8 @@ data = {
             label: {
                 type: 'Identifier',
                 name: 'done'
-            }
+            },
+            range: [0, 10]
         }
 
     },
@@ -4846,20 +5331,24 @@ data = {
 
         'return': {
             type: 'ReturnStatement',
-            argument: null
+            argument: null,
+            range: [0, 5]
         },
 
         'return;': {
             type: 'ReturnStatement',
-            argument: null
+            argument: null,
+            range: [0, 6]
         },
 
         'return x;': {
             type: 'ReturnStatement',
             argument: {
                 type: 'Identifier',
-                name: 'x'
-            }
+                name: 'x',
+                range: [7, 7]
+            },
+            range: [0, 8]
         },
 
         'return x * y': {
@@ -4985,21 +5474,25 @@ data = {
             type: 'SwitchStatement',
             discriminant: {
                 type: 'Identifier',
-                name: 'x'
-            }
+                name: 'x',
+                range: [8, 8]
+            },
+            range: [0, 12]
         },
 
         'switch (answer) { case 42: hi(); break; }': {
             type: 'SwitchStatement',
             discriminant: {
                 type: 'Identifier',
-                name: 'answer'
+                name: 'answer',
+                range: [8, 13]
             },
             cases: [{
                 type: 'SwitchCase',
                 test: {
                     type: 'Literal',
-                    value: 42
+                    value: 42,
+                    range: [23, 24]
                 },
                 consequent: [{
                     type: 'ExpressionStatement',
@@ -5007,28 +5500,35 @@ data = {
                         type: 'CallExpression',
                         callee: {
                             type: 'Identifier',
-                            name: 'hi'
+                            name: 'hi',
+                            range: [27, 28]
                         },
-                        'arguments': []
-                    }
+                        'arguments': [],
+                        range: [27, 30]
+                    },
+                    range: [27, 31]
                 }, {
                     type: 'BreakStatement',
-                    label: null
+                    label: null,
+                    range: [33, 38]
                 }]
-            }]
+            }],
+            range: [0, 40]
         },
 
         'switch (answer) { case 42: hi(); break; default: break }': {
             type: 'SwitchStatement',
             discriminant: {
                 type: 'Identifier',
-                name: 'answer'
+                name: 'answer',
+                range: [8, 13]
             },
             cases: [{
                 type: 'SwitchCase',
                 test: {
                     type: 'Literal',
-                    value: 42
+                    value: 42,
+                    range: [23, 24]
                 },
                 consequent: [{
                     type: 'ExpressionStatement',
@@ -5036,22 +5536,28 @@ data = {
                         type: 'CallExpression',
                         callee: {
                             type: 'Identifier',
-                            name: 'hi'
+                            name: 'hi',
+                            range: [27, 28]
                         },
-                        'arguments': []
-                    }
+                        'arguments': [],
+                        range: [27, 30]
+                    },
+                    range: [27, 31]
                 }, {
                     type: 'BreakStatement',
-                    label: null
+                    label: null,
+                    range: [33, 38]
                 }]
             }, {
                 type: 'SwitchCase',
                 test: null,
                 consequent: [{
                     type: 'BreakStatement',
-                    label: null
+                    label: null,
+                    range: [49, 54]
                 }]
-            }]
+            }],
+            range: [0, 55]
         }
 
     },
@@ -5062,7 +5568,8 @@ data = {
             type: 'LabeledStatement',
             label: {
                 type: 'Identifier',
-                name: 'start'
+                name: 'start',
+                range: [0, 4]
             },
             body: {
                 type: 'ForStatement',
@@ -5074,31 +5581,39 @@ data = {
                     label: {
                         type: 'Identifier',
                         name: 'start'
-                    }
-                }
-            }
+                    },
+                    range: [16, 26]
+                },
+                range: [7, 26]
+            },
+            range: [0, 26]
         },
 
         'start: while (true) break start': {
             type: 'LabeledStatement',
             label: {
                 type: 'Identifier',
-                name: 'start'
+                name: 'start',
+                range: [0, 4]
             },
             body: {
                 type: 'WhileStatement',
                 test: {
                     type: 'Literal',
-                    value: true
+                    value: true,
+                    range: [14, 17]
                 },
                 body: {
                     type: 'BreakStatement',
                     label: {
                         type: 'Identifier',
                         name: 'start'
-                    }
-                }
-            }
+                    },
+                    range: [20, 30]
+                },
+                range: [7, 30]
+            },
+            range: [0, 30]
         }
 
     },
@@ -5109,8 +5624,10 @@ data = {
             type: 'ThrowStatement',
             argument: {
                 type: 'Identifier',
-                name: 'x'
-            }
+                name: 'x',
+                range: [6, 6]
+            },
+            range: [0, 7]
         },
 
         'throw x * y': {
@@ -5144,10 +5661,13 @@ data = {
                     },
                     value: {
                         type: 'Literal',
-                        value: 'Error'
+                        value: 'Error',
+                        range: [17, 23]
                     }
-                }]
-            }
+                }],
+                range: [6, 25]
+            },
+            range: [0, 25]
         }
 
     },
@@ -5158,34 +5678,40 @@ data = {
             type: 'TryStatement',
             block: {
                 type: 'BlockStatement',
-                body: []
+                body: [],
+                range: [4, 6]
             },
             handlers: [{
                 type: 'CatchClause',
                 param: {
                     type: 'Identifier',
-                    name: 'e'
+                    name: 'e',
+                    range: [15, 15]
                 },
                 guard: null,
                 body: {
                     type: 'BlockStatement',
-                    body: []
+                    body: [],
+                    range: [18, 20]
                 }
             }],
-            finalizer: null
+            finalizer: null,
+            range: [0, 20]
         },
 
         'try { } catch (e) { say(e) }': {
             type: 'TryStatement',
             block: {
                 type: 'BlockStatement',
-                body: []
+                body: [],
+                range: [4, 6]
             },
             handlers: [{
                 type: 'CatchClause',
                 param: {
                     type: 'Identifier',
-                    name: 'e'
+                    name: 'e',
+                    range: [15, 15]
                 },
                 guard: null,
                 body: {
@@ -5196,24 +5722,31 @@ data = {
                             type: 'CallExpression',
                             callee: {
                                 type: 'Identifier',
-                                name: 'say'
+                                name: 'say',
+                                range: [20, 22]
                             },
                             'arguments': [{
                                 type: 'Identifier',
-                                name: 'e'
-                            }]
-                        }
-                    }]
+                                name: 'e',
+                                range: [24, 24]
+                            }],
+                            range: [20, 25]
+                        },
+                        range: [20, 26]
+                    }],
+                    range: [18, 27]
                 }
             }],
-            finalizer: null
+            finalizer: null,
+            range: [0, 27]
         },
 
         'try { } finally { cleanup(stuff) }': {
             type: 'TryStatement',
             block: {
                 type: 'BlockStatement',
-                body: []
+                body: [],
+                range: [4, 6]
             },
             handlers: [],
             finalizer: {
@@ -5224,15 +5757,21 @@ data = {
                         type: 'CallExpression',
                         callee: {
                             type: 'Identifier',
-                            name: 'cleanup'
+                            name: 'cleanup',
+                            range: [18, 24]
                         },
                         'arguments': [{
                             type: 'Identifier',
-                            name: 'stuff'
-                        }]
-                    }
-                }]
-            }
+                            name: 'stuff',
+                            range: [26, 30]
+                        }],
+                        range: [18, 31]
+                    },
+                    range: [18, 32]
+                }],
+                range: [16, 33]
+            },
+            range: [0, 33]
         },
 
         'try { doThat(); } catch (e) { say(e) }': {
@@ -5245,17 +5784,22 @@ data = {
                         type: 'CallExpression',
                         callee: {
                             type: 'Identifier',
-                            name: 'doThat'
+                            name: 'doThat',
+                            range: [6, 11]
                         },
-                        'arguments': []
-                    }
-                }]
+                        'arguments': [],
+                        range: [6, 13]
+                    },
+                    range: [6, 14]
+                }],
+                range: [4, 16]
             },
             handlers: [{
                 type: 'CatchClause',
                 param: {
                     type: 'Identifier',
-                    name: 'e'
+                    name: 'e',
+                    range: [25, 25]
                 },
                 guard: null,
                 body: {
@@ -5266,17 +5810,23 @@ data = {
                             type: 'CallExpression',
                             callee: {
                                 type: 'Identifier',
-                                name: 'say'
+                                name: 'say',
+                                range: [30, 32]
                             },
                             'arguments': [{
                                 type: 'Identifier',
-                                name: 'e'
-                            }]
-                        }
-                    }]
+                                name: 'e',
+                                range: [34, 34]
+                            }],
+                            range: [30, 35]
+                        },
+                        range: [30, 36]
+                    }],
+                    range: [28, 37]
                 }
             }],
-            finalizer: null
+            finalizer: null,
+            range: [0, 37]
         },
 
         'try { doThat(); } catch (e) { say(e) } finally { cleanup(stuff) }': {
@@ -5289,17 +5839,22 @@ data = {
                         type: 'CallExpression',
                         callee: {
                             type: 'Identifier',
-                            name: 'doThat'
+                            name: 'doThat',
+                            range: [6, 11]
                         },
-                        'arguments': []
-                    }
-                }]
+                        'arguments': [],
+                        range: [6, 13]
+                    },
+                    range: [6, 14]
+                }],
+                range: [4, 16]
             },
             handlers: [{
                 type: 'CatchClause',
                 param: {
                     type: 'Identifier',
-                    name: 'e'
+                    name: 'e',
+                    range: [25, 25]
                 },
                 guard: null,
                 body: {
@@ -5310,14 +5865,19 @@ data = {
                             type: 'CallExpression',
                             callee: {
                                 type: 'Identifier',
-                                name: 'say'
+                                name: 'say',
+                                range: [30, 32]
                             },
                             'arguments': [{
                                 type: 'Identifier',
-                                name: 'e'
-                            }]
-                        }
-                    }]
+                                name: 'e',
+                                range: [34, 34]
+                            }],
+                            range: [30, 35]
+                        },
+                        range: [30, 36]
+                    }],
+                    range: [28, 37]
                 }
             }],
             finalizer: {
@@ -5328,16 +5888,21 @@ data = {
                         type: 'CallExpression',
                         callee: {
                             type: 'Identifier',
-                            name: 'cleanup'
+                            name: 'cleanup',
+                            range: [49, 55]
                         },
                         'arguments': [{
                             type: 'Identifier',
-                            name: 'stuff'
-                        }]
-                    }
-                }]
-            }
-
+                            name: 'stuff',
+                            range: [57, 61]
+                        }],
+                        range: [49, 62]
+                    },
+                    range: [49, 63]
+                }],
+                range: [47, 64]
+            },
+            range: [0, 64]
         }
 
     },
@@ -5345,7 +5910,8 @@ data = {
     'debugger statement': {
 
         'debugger;': {
-            type: 'DebuggerStatement'
+            type: 'DebuggerStatement',
+            range: [0, 8]
         }
 
     },
@@ -5398,12 +5964,17 @@ data = {
                         type: 'CallExpression',
                         callee: {
                             type: 'Identifier',
-                            name: 'sayHi'
+                            name: 'sayHi',
+                            range: [20, 24]
                         },
-                        'arguments': []
-                    }
-                }]
-            }
+                        'arguments': [],
+                        range: [20, 26]
+                    },
+                    range: [20, 27]
+                }],
+                range: [18, 29]
+            },
+            range: [0, 29]
         },
 
         'function hello(a, b) { sayHi(); }': {
@@ -5427,12 +5998,17 @@ data = {
                         type: 'CallExpression',
                         callee: {
                             type: 'Identifier',
-                            name: 'sayHi'
+                            name: 'sayHi',
+                            range: [23, 27]
                         },
-                        'arguments': []
-                    }
-                }]
-            }
+                        'arguments': [],
+                        range: [23, 29]
+                    },
+                    range: [23, 30]
+                }],
+                range: [21, 32]
+            },
+            range: [0, 32]
         },
 
         'var hi = function() { sayHi() };': {
@@ -5455,15 +6031,21 @@ data = {
                                 type: 'CallExpression',
                                 callee: {
                                     type: 'Identifier',
-                                    name: 'sayHi'
+                                    name: 'sayHi',
+                                    range: [22, 26]
                                 },
-                                'arguments': []
-                            }
-                        }]
-                    }
+                                'arguments': [],
+                                range: [22, 28]
+                            },
+                            range: [22, 29]
+                        }],
+                        range: [20, 30]
+                    },
+                    range: [9, 30]
                 }
             }],
-            kind: 'var'
+            kind: 'var',
+            range: [0, 31]
         },
 
         'var hello = function hi() { sayHi() };': {
@@ -5489,15 +6071,21 @@ data = {
                                 type: 'CallExpression',
                                 callee: {
                                     type: 'Identifier',
-                                    name: 'sayHi'
+                                    name: 'sayHi',
+                                    range: [28, 32]
                                 },
-                                'arguments': []
-                            }
-                        }]
-                    }
+                                'arguments': [],
+                                range: [28, 34]
+                            },
+                            range: [28, 35]
+                        }],
+                        range: [26, 36]
+                    },
+                    range: [12, 36]
                 }
             }],
-            kind: 'var'
+            kind: 'var',
+            range: [0, 37]
         },
 
         '(function(){})': {
@@ -5515,6 +6103,7 @@ data = {
             },
             range: [0, 13]
         }
+
     },
 
     'Automatic semicolon insertion': {
@@ -5525,8 +6114,10 @@ data = {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'x'
-                }
+                    name: 'x',
+                    range: [2, 2]
+                },
+                range: [2, 3]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
@@ -5534,11 +6125,15 @@ data = {
                     operator: '++',
                     argument: {
                         type: 'Identifier',
-                        name: 'y'
+                        name: 'y',
+                        range: [6, 6]
                     },
-                    prefix: true
-                }
-            }]
+                    prefix: true,
+                    range: [4, 6]
+                },
+                range: [4, 7]
+            }],
+            range: [0, 8]
         },
 
         '{ x\n--y }': {
@@ -5547,8 +6142,10 @@ data = {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'x'
-                }
+                    name: 'x',
+                    range: [2, 2]
+                },
+                range: [2, 3]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
@@ -5556,11 +6153,15 @@ data = {
                     operator: '--',
                     argument: {
                         type: 'Identifier',
-                        name: 'y'
+                        name: 'y',
+                        range: [6, 6]
                     },
-                    prefix: true
-                }
-            }]
+                    prefix: true,
+                    range: [4, 6]
+                },
+                range: [4, 7]
+            }],
+            range: [0, 8]
         },
 
         '{ var x = 14, y = 3\nz; }': {
@@ -5575,7 +6176,8 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 14
+                        value: 14,
+                        range: [10, 11]
                     }
                 }, {
                     type: 'VariableDeclarator',
@@ -5585,143 +6187,184 @@ data = {
                     },
                     init: {
                         type: 'Literal',
-                        value: 3
+                        value: 3,
+                        range: [18, 18]
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [2, 19]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'z'
-                }
-            }]
+                    name: 'z',
+                    range: [20, 20]
+                },
+                range: [20, 21]
+            }],
+            range: [0, 23]
         },
 
         '{ continue\nthere; }': {
             type: 'BlockStatement',
             body: [{
                 type: 'ContinueStatement',
-                label: null
+                label: null,
+                range: [2, 9]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'there'
-                }
-            }]
+                    name: 'there',
+                    range: [11, 15]
+                },
+                range: [11, 16]
+            }],
+            range: [0, 18]
         },
 
         '{ continue // Comment\nthere; }': {
             type: 'BlockStatement',
             body: [{
                 type: 'ContinueStatement',
-                label: null
+                label: null,
+                range: [2, 9]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'there'
-                }
-            }]
+                    name: 'there',
+                    range: [22, 26]
+                },
+                range: [22, 27]
+            }],
+            range: [0, 29]
         },
 
         '{ continue /* Multiline\nComment */there; }': {
             type: 'BlockStatement',
             body: [{
                 type: 'ContinueStatement',
-                label: null
+                label: null,
+                range: [2, 9]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'there'
-                }
-            }]
+                    name: 'there',
+                    range: [34, 38]
+                },
+                range: [34, 39]
+            }],
+            range: [0, 41]
         },
 
         '{ break\nthere; }': {
             type: 'BlockStatement',
             body: [{
                 type: 'BreakStatement',
-                label: null
+                label: null,
+                range: [2, 6]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'there'
-                }
-            }]
+                    name: 'there',
+                    range: [8, 12]
+                },
+                range: [8, 13]
+            }],
+            range: [0, 15]
         },
 
         '{ break // Comment\nthere; }': {
             type: 'BlockStatement',
             body: [{
                 type: 'BreakStatement',
-                label: null
+                label: null,
+                range: [2, 6]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'there'
-                }
-            }]
+                    name: 'there',
+                    range: [19, 23]
+                },
+                range: [19, 24]
+            }],
+            range: [0, 26]
         },
 
         '{ break /* Multiline\nComment */there; }': {
             type: 'BlockStatement',
             body: [{
                 type: 'BreakStatement',
-                label: null
+                label: null,
+                range: [2, 6]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'there'
-                }
-            }]
+                    name: 'there',
+                    range: [31, 35]
+                },
+                range: [31, 36]
+            }],
+            range: [0, 38]
         },
 
         '{ return\nx; }': {
             type: 'BlockStatement',
             body: [{
                 type: 'ReturnStatement',
-                argument: null
+                argument: null,
+                range: [2, 7]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'x'
-                }
-            }]
+                    name: 'x',
+                    range: [9, 9]
+                },
+                range: [9, 10]
+            }],
+            range: [0, 12]
         },
 
         '{ return // Comment\nx; }': {
             type: 'BlockStatement',
             body: [{
                 type: 'ReturnStatement',
-                argument: null
+                argument: null,
+                range: [2, 7]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'x'
-                }
-            }]
+                    name: 'x',
+                    range: [20, 20]
+                },
+                range: [20, 21]
+            }],
+            range: [0, 23]
         },
 
         '{ return/* Multiline\nComment */x; }': {
             type: 'BlockStatement',
             body: [{
                 type: 'ReturnStatement',
-                argument: null
+                argument: null,
+                range: [2, 7]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'x'
-                }
-            }]
+                    name: 'x',
+                    range: [31, 31]
+                },
+                range: [31, 32]
+            }],
+            range: [0, 34]
         },
 
         '{ throw error\nerror; }': {
@@ -5730,15 +6373,20 @@ data = {
                 type: 'ThrowStatement',
                 argument: {
                     type: 'Identifier',
-                    name: 'error'
-                }
+                    name: 'error',
+                    range: [8, 12]
+                },
+                range: [2, 13]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'error'
-                }
-            }]
+                    name: 'error',
+                    range: [14, 18]
+                },
+                range: [14, 19]
+            }],
+            range: [0, 21]
         },
 
         '{ throw error// Comment\nerror; }': {
@@ -5747,15 +6395,20 @@ data = {
                 type: 'ThrowStatement',
                 argument: {
                     type: 'Identifier',
-                    name: 'error'
-                }
+                    name: 'error',
+                    range: [8, 12]
+                },
+                range: [2, 23]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'error'
-                }
-            }]
+                    name: 'error',
+                    range: [24, 28]
+                },
+                range: [24, 29]
+            }],
+            range: [0, 31]
         },
 
         '{ throw error/* Multiline\nComment */error; }': {
@@ -5764,15 +6417,20 @@ data = {
                 type: 'ThrowStatement',
                 argument: {
                     type: 'Identifier',
-                    name: 'error'
-                }
+                    name: 'error',
+                    range: [8, 12]
+                },
+                range: [2, 35]
             }, {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
-                    name: 'error'
-                }
-            }]
+                    name: 'error',
+                    range: [36, 40]
+                },
+                range: [36, 41]
+            }],
+            range: [0, 43]
         }
 
     },
@@ -6283,18 +6941,6 @@ function hasComment(syntax) {
     return typeof syntax.comments !== 'undefined';
 }
 
-function hasRange(syntax) {
-    'use strict';
-    var result = false;
-    JSON.stringify(syntax, function (key, value) {
-        if (key === 'range') {
-            result = true;
-        }
-        return value;
-    });
-    return result;
-}
-
 function hasTokens(syntax) {
     'use strict';
     var result = false;
@@ -6339,12 +6985,11 @@ function testParse(code, syntax) {
 
     options = {
         comment: false,
-        range: false,
+        range: true,
         tokens: false
     };
 
     options.comment = hasComment(syntax);
-    options.range = hasRange(syntax) && !options.comment;
     options.tokens = hasTokens(syntax);
 
     expected = JSON.stringify(syntax, null, 4);
