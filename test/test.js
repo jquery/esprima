@@ -10865,6 +10865,14 @@ data = {
             result: 'hello = function() {\nEnter({ name: \'hello\', lineNumber: 1, range: [8, 20] });}'
         },
 
+        'hi = function() {}': {
+            modifiers: [{
+                name: 'Tracer.FunctionEntrance',
+                config: 'customTracer'
+            }],
+            result: 'hi = function() {\n// function "hi" at line 1\n}'
+        },
+
         'var hello = function() {}': {
             modifiers: [{
                 name: 'Tracer.FunctionEntrance',
@@ -11456,7 +11464,7 @@ function testError(code, exception) {
 
 function testModify(code, result) {
     'use strict';
-    var actual, expected, i, modifier, modifiers;
+    var actual, expected, i, modifier, config, modifiers;
 
     function findModifier(name) {
         var properties = name.split('.'),
@@ -11468,11 +11476,21 @@ function testModify(code, result) {
         return object;
     }
 
+    function customTracerFunction(functionInfo) {
+        var name = functionInfo.name,
+            lineNumber = functionInfo.loc.start.line;
+        return '// function "' + name + '" at line ' + lineNumber + '\n';
+    }
+
     esprima.Tracer.FunctionEntrance('EnterFunction');
     modifiers = [];
     for (i = 0; i < result.modifiers.length; i += 1) {
         modifier = result.modifiers[i];
-        modifiers.push(findModifier(modifier.name).call(null, modifier.config));
+        config = modifier.config;
+        if (config === 'customTracer') {
+            config = customTracerFunction;
+        }
+        modifiers.push(findModifier(modifier.name).call(null, config));
     }
 
     expected = result.result;

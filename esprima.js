@@ -2991,6 +2991,10 @@ parseStatement: true, parseSourceElement: true */
     // The name of the function represents the associated reference for
     // the function (deduced on a best-effort basis if it is not
     // a function declaration).
+    //
+    // If traceName is a function instead of a string, it will be invoked and
+    // the result will be used as the entire prolog. The arguments for the
+    // invocation are the function name, range, and location info.
 
     function traceFunctionEntrance(traceName) {
 
@@ -3071,14 +3075,18 @@ parseStatement: true, parseSourceElement: true */
                     range: functionList[i].range,
                     loc: functionList[i].loc
                 };
-                signature = traceName + '({ ';
-                signature += 'name: \'' + functionList[i].name + '\', ';
-                if (typeof functionList[i].loc !== 'undefined') {
-                    signature += 'lineNumber: ' + functionList[i].loc.start.line + ', ';
+                if (typeof traceName === 'function') {
+                    signature = traceName.call(null, param);
+                } else {
+                    signature = traceName + '({ ';
+                    signature += 'name: \'' + functionList[i].name + '\', ';
+                    if (typeof functionList[i].loc !== 'undefined') {
+                        signature += 'lineNumber: ' + functionList[i].loc.start.line + ', ';
+                    }
+                    signature += 'range: [' + functionList[i].range[0] + ', ' +
+                        functionList[i].range[1] + '] ';
+                    signature += '});';
                 }
-                signature += 'range: [' + functionList[i].range[0] + ', ' +
-                    functionList[i].range[1] + '] ';
-                signature += '});';
                 pos = functionList[i].blockStart + 1;
                 code = code.slice(0, pos) + '\n' + signature + code.slice(pos, code.length);
             }
