@@ -10854,7 +10854,7 @@ data = {
                 name: 'Tracer.FunctionEntrance',
                 config: 'EnterFunction'
             }],
-            result: 'function hello() {\nEnterFunction(\'hello\', [0, 18]);}'
+            result: 'function hello() {\nEnterFunction({ name: \'hello\', range: [0, 18] });}'
         },
 
         'hello = function() {}': {
@@ -10862,7 +10862,7 @@ data = {
                 name: 'Tracer.FunctionEntrance',
                 config: 'Enter'
             }],
-            result: 'hello = function() {\nEnter(\'hello\', [8, 20]);}'
+            result: 'hello = function() {\nEnter({ name: \'hello\', lineNumber: 1, range: [8, 20] });}'
         },
 
         'var hello = function() {}': {
@@ -10870,7 +10870,7 @@ data = {
                 name: 'Tracer.FunctionEntrance',
                 config: 'TRACE'
             }],
-            result: 'var hello = function() {\nTRACE(\'hello\', [12, 24]);}'
+            result: 'var hello = function() {\nTRACE({ name: \'hello\', lineNumber: 1, range: [12, 24] });}'
         },
 
         'var hello = function say() {}': {
@@ -10878,7 +10878,7 @@ data = {
                 name: 'Tracer.FunctionEntrance',
                 config: 'TRACE'
             }],
-            result: 'var hello = function say() {\nTRACE(\'hello\', [12, 28]);}'
+            result: 'var hello = function say() {\nTRACE({ name: \'hello\', lineNumber: 1, range: [12, 28] });}'
         },
 
         'hello = function () {}': {
@@ -10886,7 +10886,7 @@ data = {
                 name: 'Tracer.FunctionEntrance',
                 config: 'EnterFunction'
             }],
-            result: 'hello = function () {\nEnterFunction(\'hello\', [8, 21]);}'
+            result: 'hello = function () {\nEnterFunction({ name: \'hello\', lineNumber: 1, range: [8, 21] });}'
         },
 
         '\n\nfunction say(name) { print(name);}': {
@@ -10894,7 +10894,7 @@ data = {
                 name: 'Tracer.FunctionEntrance',
                 config: 'EnterFunction'
             }],
-            result: '\n\nfunction say(name) {\nEnterFunction(\'say\', [2, 35]); print(name);}'
+            result: '\n\nfunction say(name) {\nEnterFunction({ name: \'say\', range: [2, 35] }); print(name);}'
         },
 
         '(function(){}())': {
@@ -10902,7 +10902,7 @@ data = {
                 name: 'Tracer.FunctionEntrance',
                 config: 'EnterFunction'
             }],
-            result: '(function(){\nEnterFunction(\'[Anonymous]\', [1, 12]);}())'
+            result: '(function(){\nEnterFunction({ name: \'[Anonymous]\', lineNumber: 1, range: [1, 12] });}())'
         },
 
         '(function(){})()': {
@@ -10910,7 +10910,7 @@ data = {
                 name: 'Tracer.FunctionEntrance',
                 config: 'EnterFunction'
             }],
-            result: '(function(){\nEnterFunction(\'[Anonymous]\', [0, 13]);})()'
+            result: '(function(){\nEnterFunction({ name: \'[Anonymous]\', lineNumber: 1, range: [0, 13] });})()'
         },
 
         '[14, 3].forEach(function(x) { alert(x) })': {
@@ -10918,7 +10918,7 @@ data = {
                 name: 'Tracer.FunctionEntrance',
                 config: 'TR'
             }],
-            result: '[14, 3].forEach(function(x) {\nTR(\'[Anonymous]\', [16, 39]); alert(x) })'
+            result: '[14, 3].forEach(function(x) {\nTR({ name: \'[Anonymous]\', lineNumber: 1, range: [16, 39] }); alert(x) })'
         },
 
         'var x = { y: function(z) {} }': {
@@ -10926,7 +10926,7 @@ data = {
                 name: 'Tracer.FunctionEntrance',
                 config: 'TR'
             }],
-            result: 'var x = { y: function(z) {\nTR(\'y\', [13, 26]);} }'
+            result: 'var x = { y: function(z) {\nTR({ name: \'y\', lineNumber: 1, range: [13, 26] });} }'
         }
     },
 

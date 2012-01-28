@@ -61,59 +61,12 @@ function traceRun() {
             code = window.editor.getValue();
         }
 
-        // While waiting for (line, column) support in Esprima
-        // (see http://code.google.com/p/esprima/issues/detail?id=6).
-        lookup = (function (str) {
-            var i, len, ch, table;
-
-            table = [];
-            if (typeof str === 'string') {
-                len = str.length;
-                for (i = 0; i < len; i += 1) {
-                    if (isLineTerminator(str.charAt(i))) {
-                        table.push(i);
-                    }
-                }
-                table.push(len);
-            }
-
-            function binarySearch(pos, p, q) {
-                var middle = Math.floor((p + q) / 2),
-                    value = table[middle];
-
-                if (p >= q) {
-                    if (pos < value) {
-                        return {
-                            line: p,
-                            column: (p > 0) ? (pos - table[p - 1] - 1) : pos
-                        };
-                    } else {
-                        return {
-                            line: p + 1,
-                            column: pos - table[p]
-                        };
-                    }
-                }
-                if (pos < value) {
-                    return binarySearch(pos, p, Math.max(p, middle - 1));
-                } else {
-                    return binarySearch(pos, Math.min(middle + 1, q), q);
-                }
-            }
-
-            return function (pos) {
-                var loc = binarySearch(pos, 0, table.length - 1);
-                return loc.line + 1;
-            };
-        }(code));
-
         code = window.esprima.modify(code, [
             window.esprima.Tracer.FunctionEntrance('window.TRACE.enterFunction')
         ]);
 
         // Enclose in IIFE.
         code = '(function() {\n' + code + '\n}())';
-
 
         return code;
     }
@@ -138,8 +91,8 @@ function traceRun() {
 
     window.TRACE = {
         hits: {},
-        enterFunction: function (name, range) {
-            var key = name + ' at line ' + lookup(range[0]);
+        enterFunction: function (info) {
+            var key = info.name + ' at line ' + info.lineNumber;
             if (this.hits.hasOwnProperty(key)) {
                 this.hits[key] = this.hits[key] + 1;
             } else {

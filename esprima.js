@@ -2980,23 +2980,30 @@ parseStatement: true, parseSourceElement: true */
     // Insert a prolog in the body of every function.
     // It will be in the form of a function call:
     //
-    //     traceName(functionName, [start, end]);
+    //     traceName(object);
     //
-    // where [start, end] denotes the function range and functionName
-    // represents the associated reference for the function (deduces
-    // on a best-effort basis if it is not a function declaration).
+    // where the object contains the following properties:
+    //
+    //    'name' holds the name of the function
+    //    'lineNumber' holds the starting line number of the function block
+    //    'range' contains the index-based range of the function
+    //
+    // The name of the function represents the associated reference for
+    // the function (deduced on a best-effort basis if it is not
+    // a function declaration).
 
     function traceFunctionEntrance(traceName) {
 
         return function (code) {
             var tree,
                 functionList,
+                param,
                 signature,
                 pos,
                 i;
 
 
-            tree = parse(code, { range: true });
+            tree = parse(code, { range: true, loc: true });
 
             functionList = [];
             traverse(tree, function (node, path) {
@@ -3015,6 +3022,7 @@ parseStatement: true, parseSourceElement: true */
                                 name: code.slice(parent.left.range[0],
                                           parent.left.range[1] + 1),
                                 range: node.range,
+                                loc: node.loc,
                                 blockStart: node.body.range[0]
                             });
                         }
@@ -3022,18 +3030,21 @@ parseStatement: true, parseSourceElement: true */
                         functionList.push({
                             name: parent.id.name,
                             range: node.range,
+                            loc: node.loc,
                             blockStart: node.body.range[0]
                         });
                     } else if (parent.type === Syntax.CallExpression) {
                         functionList.push({
                             name: parent.id ? parent.id.name : '[Anonymous]',
                             range: node.range,
+                            loc: node.loc,
                             blockStart: node.body.range[0]
                         });
                     } else if (typeof parent.length === 'number') {
                         functionList.push({
                             name: parent.id ? parent.id.name : '[Anonymous]',
                             range: node.range,
+                            loc: node.loc,
                             blockStart: node.body.range[0]
                         });
                     } else if (typeof parent.key !== 'undefined') {
@@ -3042,6 +3053,7 @@ parseStatement: true, parseSourceElement: true */
                                 functionList.push({
                                     name: parent.key.name,
                                     range: node.range,
+                                    loc: node.loc,
                                     blockStart: node.body.range[0]
                                 });
                             }
@@ -3054,9 +3066,19 @@ parseStatement: true, parseSourceElement: true */
             // This is to ensure that the range for each entry remains valid)
             // (it won't shift due to some new inserting string before the range).
             for (i = functionList.length - 1; i >= 0; i -= 1) {
-                signature = traceName + '(\'' + functionList[i].name + '\', ' +
-                    '[' + functionList[i].range[0] + ', ' +
-                    functionList[i].range[1] + ']);';
+                param = {
+                    name: functionList[i].name,
+                    range: functionList[i].range,
+                    loc: functionList[i].loc
+                };
+                signature = traceName + '({ ';
+                signature += 'name: \'' + functionList[i].name + '\', ';
+                if (typeof functionList[i].loc !== 'undefined') {
+                    signature += 'lineNumber: ' + functionList[i].loc.start.line + ', ';
+                }
+                signature += 'range: [' + functionList[i].range[0] + ', ' +
+                    functionList[i].range[1] + '] ';
+                signature += '});';
                 pos = functionList[i].blockStart + 1;
                 code = code.slice(0, pos) + '\n' + signature + code.slice(pos, code.length);
             }
