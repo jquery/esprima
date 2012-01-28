@@ -53,7 +53,7 @@ function traceRun() {
     }
 
     function insertTracer() {
-        var code, i, functionList, signature, pos;
+        var tracer, code, i, functionList, signature, pos;
 
         if (typeof window.editor === 'undefined') {
             code = document.getElementById('code').value;
@@ -61,9 +61,8 @@ function traceRun() {
             code = window.editor.getValue();
         }
 
-        code = window.esprima.modify(code, [
-            window.esprima.Tracer.FunctionEntrance('window.TRACE.enterFunction')
-        ]);
+        tracer = window.esprima.Tracer.FunctionEntrance('window.TRACE.enterFunction');
+        code = window.esprima.modify(code, tracer);
 
         // Enclose in IIFE.
         code = '(function() {\n' + code + '\n}())';

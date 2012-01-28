@@ -3096,15 +3096,16 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function modify(code, modifiers) {
-        var i,
-            len = modifiers.length;
+        var i;
 
-        if (typeof modifiers !== 'object') {
+        if (Object.prototype.toString.call(modifiers) === '[object Array]') {
+            for (i = 0; i < modifiers.length; i += 1) {
+                code = modifiers[i].call(null, code);
+            }
+        } else if (typeof modifiers === 'function') {
+            code = modifiers.call(null, code);
+        } else {
             throw new Error('Wrong use of esprima.modify() function');
-        }
-
-        for (i = 0; i < len; i += 1) {
-            code = modifiers[i].call(null, code);
         }
 
         return code;

@@ -10850,92 +10850,106 @@ data = {
     'Trace Function Entrance': {
 
         'function hello() {}': {
-            modifiers: [{
+            modifiers: {
                 name: 'Tracer.FunctionEntrance',
                 config: 'EnterFunction'
-            }],
+            },
             result: 'function hello() {\nEnterFunction({ name: \'hello\', range: [0, 18] });}'
         },
 
         'hello = function() {}': {
-            modifiers: [{
+            modifiers: {
                 name: 'Tracer.FunctionEntrance',
                 config: 'Enter'
-            }],
+            },
             result: 'hello = function() {\nEnter({ name: \'hello\', lineNumber: 1, range: [8, 20] });}'
         },
 
         'hi = function() {}': {
-            modifiers: [{
+            modifiers: {
                 name: 'Tracer.FunctionEntrance',
                 config: 'customTracer'
-            }],
+            },
             result: 'hi = function() {\n// function "hi" at line 1\n}'
         },
 
         'var hello = function() {}': {
-            modifiers: [{
+            modifiers: {
                 name: 'Tracer.FunctionEntrance',
                 config: 'TRACE'
-            }],
+            },
             result: 'var hello = function() {\nTRACE({ name: \'hello\', lineNumber: 1, range: [12, 24] });}'
         },
 
         'var hello = function say() {}': {
-            modifiers: [{
+            modifiers: {
                 name: 'Tracer.FunctionEntrance',
                 config: 'TRACE'
-            }],
+            },
             result: 'var hello = function say() {\nTRACE({ name: \'hello\', lineNumber: 1, range: [12, 28] });}'
         },
 
         'hello = function () {}': {
-            modifiers: [{
+            modifiers: {
                 name: 'Tracer.FunctionEntrance',
                 config: 'EnterFunction'
-            }],
+            },
             result: 'hello = function () {\nEnterFunction({ name: \'hello\', lineNumber: 1, range: [8, 21] });}'
         },
 
         '\n\nfunction say(name) { print(name);}': {
-            modifiers: [{
+            modifiers: {
                 name: 'Tracer.FunctionEntrance',
                 config: 'EnterFunction'
-            }],
+            },
             result: '\n\nfunction say(name) {\nEnterFunction({ name: \'say\', range: [2, 35] }); print(name);}'
         },
 
         '(function(){}())': {
-            modifiers: [{
+            modifiers: {
                 name: 'Tracer.FunctionEntrance',
                 config: 'EnterFunction'
-            }],
+            },
             result: '(function(){\nEnterFunction({ name: \'[Anonymous]\', lineNumber: 1, range: [1, 12] });}())'
         },
 
         '(function(){})()': {
-            modifiers: [{
+            modifiers: {
                 name: 'Tracer.FunctionEntrance',
                 config: 'EnterFunction'
-            }],
+            },
             result: '(function(){\nEnterFunction({ name: \'[Anonymous]\', lineNumber: 1, range: [0, 13] });})()'
         },
 
         '[14, 3].forEach(function(x) { alert(x) })': {
-            modifiers: [{
+            modifiers: {
                 name: 'Tracer.FunctionEntrance',
                 config: 'TR'
-            }],
+            },
             result: '[14, 3].forEach(function(x) {\nTR({ name: \'[Anonymous]\', lineNumber: 1, range: [16, 39] }); alert(x) })'
         },
 
         'var x = { y: function(z) {} }': {
-            modifiers: [{
+            modifiers: {
                 name: 'Tracer.FunctionEntrance',
                 config: 'TR'
-            }],
+            },
             result: 'var x = { y: function(z) {\nTR({ name: \'y\', lineNumber: 1, range: [13, 26] });} }'
+        },
+
+        'p = function() {\n}': {
+            modifiers: [{
+                name: 'Tracer.FunctionEntrance',
+                config: 'X'
+            }, {
+                name: 'Tracer.FunctionEntrance',
+                config: 'Y'
+            }],
+            result: 'p = function() {\n' +
+                'Y({ name: \'p\', lineNumber: 1, range: [4, 66] });\n' +
+                'X({ name: \'p\', lineNumber: 1, range: [4, 17] });\n}'
         }
+
     },
 
     'Invalid syntax': {
@@ -11482,15 +11496,23 @@ function testModify(code, result) {
         return '// function "' + name + '" at line ' + lineNumber + '\n';
     }
 
-    esprima.Tracer.FunctionEntrance('EnterFunction');
-    modifiers = [];
-    for (i = 0; i < result.modifiers.length; i += 1) {
-        modifier = result.modifiers[i];
+    if (Object.prototype.toString.call(result.modifiers) === '[object Array]') {
+        modifiers = [];
+        for (i = 0; i < result.modifiers.length; i += 1) {
+            modifier = result.modifiers[i];
+            config = modifier.config;
+            if (config === 'customTracer') {
+                config = customTracerFunction;
+            }
+            modifiers.push(findModifier(modifier.name).call(null, config));
+        }
+    } else {
+        modifier = result.modifiers;
         config = modifier.config;
         if (config === 'customTracer') {
             config = customTracerFunction;
         }
-        modifiers.push(findModifier(modifier.name).call(null, config));
+        modifiers = findModifier(modifier.name).call(null, config);
     }
 
     expected = result.result;
