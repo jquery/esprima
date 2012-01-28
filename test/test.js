@@ -5021,7 +5021,11 @@ data = {
                             end: { line: 1, column: 5 }
                         }
                     },
-                    range: [0, 4]
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 right: {
                     type: 'Identifier',
@@ -5071,7 +5075,11 @@ data = {
                             end: { line: 1, column: 5 }
                         }
                     },
-                    range: [0, 4]
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 right: {
                     type: 'Identifier',
@@ -5121,7 +5129,11 @@ data = {
                             end: { line: 1, column: 5 }
                         }
                     },
-                    range: [0, 4]
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 right: {
                     type: 'Identifier',
@@ -5171,7 +5183,11 @@ data = {
                             end: { line: 1, column: 5 }
                         }
                     },
-                    range: [0, 4]
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 right: {
                     type: 'Identifier',
@@ -5383,7 +5399,11 @@ data = {
                             end: { line: 1, column: 5 }
                         }
                     },
-                    range: [0, 4]
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 right: {
                     type: 'Identifier',
@@ -5433,7 +5453,11 @@ data = {
                             end: { line: 1, column: 5 }
                         }
                     },
-                    range: [0, 4]
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 right: {
                     type: 'Identifier',
@@ -5483,7 +5507,11 @@ data = {
                             end: { line: 1, column: 5 }
                         }
                     },
-                    range: [0, 4]
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 right: {
                     type: 'Identifier',
@@ -5533,7 +5561,11 @@ data = {
                             end: { line: 1, column: 5 }
                         }
                     },
-                    range: [0, 4]
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 right: {
                     type: 'Identifier',
@@ -5583,7 +5615,11 @@ data = {
                             end: { line: 1, column: 6 }
                         }
                     },
-                    range: [0, 5]
+                    range: [0, 5],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 6 }
+                    }
                 },
                 right: {
                     type: 'Identifier',
@@ -5633,7 +5669,11 @@ data = {
                             end: { line: 1, column: 5 }
                         }
                     },
-                    range: [0, 4]
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 right: {
                     type: 'Identifier',
@@ -5683,7 +5723,11 @@ data = {
                             end: { line: 1, column: 5 }
                         }
                     },
-                    range: [0, 4]
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 right: {
                     type: 'Identifier',
@@ -5733,7 +5777,11 @@ data = {
                             end: { line: 1, column: 5 }
                         }
                     },
-                    range: [0, 4]
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 right: {
                     type: 'Identifier',
@@ -6021,7 +6069,11 @@ data = {
                             end: { line: 1, column: 6 }
                         }
                     },
-                    range: [0, 5]
+                    range: [0, 5],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 6 }
+                    }
                 },
                 right: {
                     type: 'Identifier',
@@ -6071,7 +6123,11 @@ data = {
                             end: { line: 1, column: 6 }
                         }
                     },
-                    range: [0, 5]
+                    range: [0, 5],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 6 }
+                    }
                 },
                 right: {
                     type: 'Identifier',

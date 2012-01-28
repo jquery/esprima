@@ -2714,16 +2714,34 @@ parseStatement: true, parseSourceElement: true */
             }
 
             function visit(node) {
-                if (typeof node.left.range === 'undefined' && isBinary(node.left)) {
-                    visit(node.left);
-                }
-                if (typeof node.right.range === 'undefined' && isBinary(node.right)) {
-                    visit(node.right);
+                if (range) {
+                    if (isBinary(node.left) && (typeof node.left.range === 'undefined')) {
+                        visit(node.left);
+                    }
+                    if (isBinary(node.right) && (typeof node.right.range === 'undefined')) {
+                        visit(node.right);
+                    }
+
+                    // Expression enclosed in brackets () already has the correct range.
+                    if (typeof node.range === 'undefined') {
+                        node.range = [node.left.range[0], node.right.range[1]];
+                    }
                 }
 
-                // Expression enclosed in brackets () already has the correct range.
-                if (typeof node.range === 'undefined') {
-                    node.range = [node.left.range[0], node.right.range[1]];
+                if (loc) {
+                    if (isBinary(node.left) && (typeof node.left.loc === 'undefined')) {
+                        visit(node.left);
+                    }
+                    if (isBinary(node.right) && (typeof node.right.loc === 'undefined')) {
+                        visit(node.right);
+                    }
+
+                    if (typeof node.loc === 'undefined') {
+                        node.loc = {
+                            start: node.left.loc.start,
+                            end: node.right.loc.end
+                        };
+                    }
                 }
             }
 
@@ -2747,9 +2765,6 @@ parseStatement: true, parseSourceElement: true */
                 if (range) {
                     rangeInfo[1] = index - 1;
                     node.range = rangeInfo;
-                    if (isBinary(node)) {
-                        visit(node);
-                    }
                 }
 
                 if (loc) {
@@ -2758,6 +2773,10 @@ parseStatement: true, parseSourceElement: true */
                         column: index - lineStart
                     };
                     node.loc = locInfo;
+                }
+
+                if (isBinary(node)) {
+                    visit(node);
                 }
 
                 if (node.type === Syntax.MemberExpression) {
