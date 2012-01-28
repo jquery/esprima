@@ -2750,12 +2750,6 @@ parseStatement: true, parseSourceElement: true */
                     if (isBinary(node)) {
                         visit(node);
                     }
-
-                    if (node.type === Syntax.MemberExpression) {
-                        if (typeof node.object.range !== 'undefined') {
-                            node.range[0] = node.object.range[0];
-                        }
-                    }
                 }
 
                 if (loc) {
@@ -2766,6 +2760,14 @@ parseStatement: true, parseSourceElement: true */
                     node.loc = locInfo;
                 }
 
+                if (node.type === Syntax.MemberExpression) {
+                    if (typeof node.object.range !== 'undefined') {
+                        node.range[0] = node.object.range[0];
+                    }
+                    if (typeof node.object.loc !== 'undefined') {
+                        node.loc.start = node.object.loc.start;
+                    }
+                }
                 return node;
             };
 
