@@ -22,10 +22,100 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*jslint node: true */
 /*global document: true, window:true, esprima: true, testReflect: true */
 
 var runTests;
 
+function getContext(esprima, reportCase, reportFailure) {
+    'use strict';
+
+    var Reflect, Pattern;
+
+    // Maps Mozilla Reflect object to our Esprima parser.
+    Reflect = {
+        parse: function (code) {
+            var result;
+
+            reportCase(code);
+
+            try {
+                result = esprima.parse(code);
+            } catch (error) {
+                result = error;
+            }
+
+            return result;
+        }
+    };
+
+    // This is used by Reflect test suite to match a syntax tree.
+    Pattern = function (obj) {
+        var pattern;
+
+        // Poor man's deep object cloning.
+        pattern = JSON.parse(JSON.stringify(obj));
+
+        // Special handling for regular expression literal since we need to
+        // convert it to a string literal, otherwise it will be decoded
+        // as object "{}" and the regular expression would be lost.
+        if (obj.type && obj.type === 'Literal') {
+            if (obj.value instanceof RegExp) {
+                pattern = {
+                    type: obj.type,
+                    value: obj.value.toString()
+                };
+            }
+        }
+
+        // Special handling for branch statement because SpiderMonkey
+        // prefers to put the 'alternate' property before 'consequent'.
+        if (obj.type && obj.type === 'IfStatement') {
+            pattern = {
+                type: pattern.type,
+                test: pattern.test,
+                consequent: pattern.consequent,
+                alternate: pattern.alternate
+            };
+        }
+
+        // Special handling for do while statement because SpiderMonkey
+        // prefers to put the 'test' property before 'body'.
+        if (obj.type && obj.type === 'DoWhileStatement') {
+            pattern = {
+                type: pattern.type,
+                body: pattern.body,
+                test: pattern.test
+            };
+        }
+
+        function adjustRegexLiteral(key, value) {
+            if (key === 'value' && value instanceof RegExp) {
+                value = value.toString();
+            }
+            return value;
+        }
+
+        if (obj.type && (obj.type === 'Program')) {
+            pattern.assert = function (tree) {
+                var actual, expected;
+                actual = JSON.stringify(tree, adjustRegexLiteral, 4);
+                expected = JSON.stringify(obj, null, 4);
+
+                if (expected !== actual) {
+                    reportFailure(expected, actual);
+                }
+            };
+        }
+
+        return pattern;
+    };
+
+    return {
+        Reflect: Reflect,
+        Pattern: Pattern
+    };
+}
 
 if (typeof window !== 'undefined') {
     // Run all tests in a browser environment.
@@ -41,6 +131,16 @@ if (typeof window !== 'undefined') {
             } else {
                 el.textContent = str;
             }
+        }
+
+        function reportCase(code) {
+            var report, e;
+            report = document.getElementById('report');
+            e = document.createElement('pre');
+            e.setAttribute('class', 'code');
+            setText(e, code);
+            report.appendChild(e);
+            total += 1;
         }
 
         function reportFailure(expected, actual) {
@@ -69,98 +169,13 @@ if (typeof window !== 'undefined') {
             report.appendChild(e);
         }
 
-        // Maps Mozilla Reflect object to our Esprima parser.
-        window.Reflect = {
-            parse: function (code) {
-                var result, report, e;
-
-                report = document.getElementById('report');
-                e = document.createElement('pre');
-                e.setAttribute('class', 'code');
-                setText(e, code);
-                report.appendChild(e);
-
-                total += 1;
-
-                try {
-                    result = esprima.parse(code);
-                } catch (error) {
-                    result = error;
-                }
-
-                return result;
-            }
-        };
-
-        // This is used by Reflect test suite to match a syntax tree.
-        window.Pattern = function (obj) {
-            var pattern;
-
-            // Poor man's deep object cloning.
-            pattern = JSON.parse(JSON.stringify(obj));
-
-            // Special handling for regular expression literal since we need to
-            // convert it to a string literal, otherwise it will be decoded
-            // as object "{}" and the regular expression would be lost.
-            if (obj.type && obj.type === 'Literal') {
-                if (obj.value instanceof RegExp) {
-                    pattern = {
-                        type: obj.type,
-                        value: obj.value.toString()
-                    };
-                }
-            }
-
-            // Special handling for branch statement because SpiderMonkey
-            // prefers to put the 'alternate' property before 'consequent'.
-            if (obj.type && obj.type === 'IfStatement') {
-                pattern = {
-                    type: pattern.type,
-                    test: pattern.test,
-                    consequent: pattern.consequent,
-                    alternate: pattern.alternate
-                };
-            }
-
-            // Special handling for do while statement because SpiderMonkey
-            // prefers to put the 'test' property before 'body'.
-            if (obj.type && obj.type === 'DoWhileStatement') {
-                pattern = {
-                    type: pattern.type,
-                    body: pattern.body,
-                    test: pattern.test
-                };
-            }
-
-            function adjustRegexLiteral(key, value) {
-                if (key === 'value' && value instanceof RegExp) {
-                    value = value.toString();
-                }
-                return value;
-            }
-
-            if (obj.type && (obj.type === 'Program')) {
-                pattern.assert = function (tree) {
-                    var actual, expected;
-                    actual = JSON.stringify(tree, adjustRegexLiteral, 4);
-                    expected = JSON.stringify(obj, null, 4);
-
-                    if (expected !== actual) {
-                        reportFailure(expected, actual);
-                    }
-                };
-            }
-
-            return pattern;
-        };
-
         setText(document.getElementById('version'), esprima.version);
 
         window.setTimeout(function () {
-            var tick;
+            var tick, context = getContext(esprima, reportCase, reportFailure);
 
             tick = new Date();
-            testReflect();
+            testReflect(context.Reflect, context.Pattern);
             tick = (new Date()) - tick;
 
             if (failures > 0) {
@@ -171,13 +186,50 @@ if (typeof window !== 'undefined') {
                     'No failure. ' + tick + ' ms');
             }
         }, 513);
-
-        testReflect();
     };
 } else {
-    // TODO: Run all tests in another environment.
-    runTests = function () {
+    (function (global) {
         'use strict';
-    };
+        var esprima = require('../esprima'),
+            tick,
+            total = 0,
+            failures = [],
+            header,
+            current,
+            context;
+
+        function reportCase(code) {
+            total += 1;
+            current = code;
+        }
+
+        function reportFailure(expected, actual) {
+            failures.push({
+                source: current,
+                expected: expected.toString(),
+                actual: actual.toString()
+            });
+        }
+
+        context = getContext(esprima, reportCase, reportFailure);
+
+        tick = new Date();
+        require('./reflect').testReflect(context.Reflect, context.Pattern);
+        tick = (new Date()) - tick;
+
+        header = total + ' tests. ' + failures.length + ' failures. ' +
+            tick + ' ms';
+        if (failures.length) {
+            console.error(header);
+            failures.forEach(function (failure) {
+                console.error(failure.source + ': Expected\n    ' +
+                    failure.expected.split('\n').join('\n    ') +
+                    '\nto match\n    ' + failure.actual);
+            });
+        } else {
+            console.log(header);
+        }
+        process.exit(failures.length === 0 ? 0 : 1);
+    }(this));
 }
 /* vim: set sw=4 ts=4 et tw=80 : */

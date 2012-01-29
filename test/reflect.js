@@ -15,7 +15,9 @@
  * http://creativecommons.org/licenses/publicdomain/
  */
 
-function testReflect() {
+(function (exports) {
+
+function testReflect(Reflect, Pattern) {
 
 function program(elts) { return Pattern({ type: "Program", body: elts }) }
 function exprStmt(expr) { return Pattern({ type: "ExpressionStatement", expression: expr }) }
@@ -394,3 +396,7 @@ assertStmt("function f() { var x = 42; var x = 43; }",
                         kind: "set" } ]));
 
 }
+
+exports.testReflect = testReflect;
+
+}(typeof exports === 'undefined' ? this : exports));

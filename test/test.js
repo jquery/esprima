@@ -11730,8 +11730,9 @@ if (typeof window !== 'undefined') {
                     failure.expected.split('\n').join('\n    ') +
                     '\nto match\n    ' + failure.actual);
             });
+        } else {
+            console.log(header);
         }
-        console.log(header);
         process.exit(failures.length === 0 ? 0 : 1);
     }());
 }
