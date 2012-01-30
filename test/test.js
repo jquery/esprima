@@ -10910,7 +10910,7 @@ data = {
                 name: 'Tracer.FunctionEntrance',
                 config: 'EnterFunction'
             },
-            result: 'function hello() {\nEnterFunction({ name: \'hello\', range: [0, 18] });}'
+            result: 'function hello() {\nEnterFunction({ name: \'hello\', lineNumber: 1, range: [0, 18] });}'
         },
 
         'hello = function() {}': {
@@ -10958,7 +10958,7 @@ data = {
                 name: 'Tracer.FunctionEntrance',
                 config: 'EnterFunction'
             },
-            result: '\n\nfunction say(name) {\nEnterFunction({ name: \'say\', range: [2, 35] }); print(name);}'
+            result: '\n\nfunction say(name) {\nEnterFunction({ name: \'say\', lineNumber: 3, range: [2, 35] }); print(name);}'
         },
 
         '(function(){}())': {

@@ -3037,6 +3037,7 @@ parseStatement: true, parseSourceElement: true */
                     functionList.push({
                         name: node.id.name,
                         range: node.range,
+                        loc: node.loc,
                         blockStart: node.body.range[0]
                     });
                 } else if (node.type === Syntax.FunctionExpression) {
