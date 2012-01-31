@@ -24,7 +24,7 @@
         "url": "http://github.com/ariya/esprima/raw/master/LICENSE.BSD"
     }],
     "scripts": {
-        "test": "node test/test.js",
+        "test": "node test/run.js",
         "benchmark": "node test/benchmarks.js",
         "benchmark-quick": "node test/benchmarks.js quick"
     }
