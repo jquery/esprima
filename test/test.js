@@ -2725,6 +2725,96 @@ data = {
             }
         },
 
+        '"\\n\\r\\b\\f\\\\\\\'\\"\\0"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: '\n\r\b\f\\\'"\x00',
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
+        '"\\u0061"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'a',
+                range: [0, 7],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 8 }
+                }
+            },
+            range: [0, 7],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 8 }
+            }
+        },
+
+        '"\\x61"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'a',
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 6 }
+                }
+            },
+            range: [0, 5],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 6 }
+            }
+        },
+
+        '"\\u00"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'u00',
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 6 }
+                }
+            },
+            range: [0, 5],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 6 }
+            }
+        },
+
+        '"\\xt"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'xt',
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 5 }
+                }
+            },
+            range: [0, 4],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 5 }
+            }
+        },
+
         '"Hello\nworld"': {
             type: 'ExpressionStatement',
             expression: {
@@ -2948,6 +3038,108 @@ data = {
                 type: 'RegularExpression',
                 value: '/=([^=\\s])+/g',
                 range: [8, 20]
+            }]
+        },
+
+        'var x = /[P QR]/\\u0067': {
+            type: 'Program',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: '/[P QR]/g',
+                        range: [8, 21],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 22 }
+                        }
+                    }
+                }],
+                kind: 'var',
+                range: [0, 21],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 22 }
+                }
+            }],
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            },
+            tokens: [{
+                type: 'Keyword',
+                value: 'var',
+                range: [0, 2]
+            }, {
+                type: 'Identifier',
+                value: 'x',
+                range: [4, 4]
+            }, {
+                type: 'Punctuator',
+                value: '=',
+                range: [6, 6]
+            }, {
+                type: 'RegularExpression',
+                value: '/[P QR]/\\u0067',
+                range: [8, 21]
+            }]
+        },
+
+        'var x = /[P QR]/\\g': {
+            type: 'Program',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: '/[P QR]/g',
+                        range: [8, 17],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 18 }
+                        }
+                    }
+                }],
+                kind: 'var',
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 18 }
+                }
+            }],
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            },
+            tokens: [{
+                type: 'Keyword',
+                value: 'var',
+                range: [0, 2]
+            }, {
+                type: 'Identifier',
+                value: 'x',
+                range: [4, 4]
+            }, {
+                type: 'Punctuator',
+                value: '=',
+                range: [6, 6]
+            }, {
+                type: 'RegularExpression',
+                value: '/[P QR]/\\g',
+                range: [8, 17]
             }]
         }
 
@@ -7340,6 +7532,78 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 4 }
             }
+        },
+
+        '\\u0061': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Identifier',
+                name: 'a',
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 6 }
+                }
+            },
+            range: [0, 5],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 6 }
+            }
+        },
+
+        'a\\u0061': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Identifier',
+                name: 'aa',
+                range: [0, 6],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            range: [0, 6],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 7 }
+            }
+        },
+
+        '\\ua': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Identifier',
+                name: 'ua',
+                range: [0, 2],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            },
+            range: [0, 2],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            }
+        },
+
+        'a\\u': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Identifier',
+                name: 'au',
+                range: [0, 2],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            },
+            range: [0, 2],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            }
         }
 
     },
@@ -11421,6 +11685,48 @@ data = {
             lineNumber: 3,
             column: 3,
             message: 'Error: Line 3: Unexpected token ]'
+        },
+
+        '\\\\': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '\\u005c': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '\\x': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '\\u0000': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '"\\': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '"\\u': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
         }
     }
 };

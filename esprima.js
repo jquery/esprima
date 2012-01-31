@@ -321,8 +321,23 @@ parseStatement: true, parseSourceElement: true */
         }
     }
 
+    function scanHexEscape(prefix) {
+        var i, len, ch, code = 0;
+
+        len = (prefix === 'u') ? 4 : 2;
+        for (i = 0; i < len; i += 1) {
+            if (index < length && isHexDigit(source[index])) {
+                ch = nextChar();
+                code = code * 16 + '0123456789abcdef'.indexOf(ch.toLowerCase());
+            } else {
+                return '';
+            }
+        }
+        return String.fromCharCode(code);
+    }
+
     function scanIdentifier() {
-        var ch, start, id;
+        var ch, start, id, restore;
 
         ch = source[index];
         if (!isIdentifierStart(ch)) {
@@ -330,13 +345,52 @@ parseStatement: true, parseSourceElement: true */
         }
 
         start = index;
-        id = nextChar();
+        if (ch === '\\') {
+            nextChar();
+            if (source[index] !== 'u') {
+                return;
+            }
+            nextChar();
+            restore = index;
+            ch = scanHexEscape('u');
+            if (ch) {
+                if (ch === '\\' || !isIdentifierStart(ch)) {
+                    return;
+                }
+                id = ch;
+            } else {
+                index = restore;
+                id = 'u';
+            }
+        } else {
+            id = nextChar();
+        }
+
         while (index < length) {
             ch = source[index];
             if (!isIdentifierPart(ch)) {
                 break;
             }
-            id += nextChar();
+            if (ch === '\\') {
+                nextChar();
+                if (source[index] !== 'u') {
+                    return;
+                }
+                nextChar();
+                restore = index;
+                ch = scanHexEscape('u');
+                if (ch) {
+                    if (ch === '\\' || !isIdentifierPart(ch)) {
+                        return;
+                    }
+                    id += ch;
+                } else {
+                    index = restore;
+                    id += 'u';
+                }
+            } else {
+                id += nextChar();
+            }
         }
 
         // There is no keyword or literal with only one character.
@@ -675,9 +729,8 @@ parseStatement: true, parseSourceElement: true */
 
     // 7.8.4 String Literals
 
-    // TODO Unicode
     function scanStringLiteral() {
-        var str = '', quote, start, ch;
+        var str = '', quote, start, ch, unescaped, restore;
 
         quote = source[index];
         if (quote !== '\'' && quote !== '"') {
@@ -695,8 +748,43 @@ parseStatement: true, parseSourceElement: true */
             } else if (ch === '\\') {
                 ch = nextChar();
                 if (!isLineTerminator(ch)) {
-                    str += '\\';
-                    str += ch;
+                    switch (ch) {
+                    case 'n':
+                        str += '\n';
+                        break;
+                    case 'r':
+                        str += '\r';
+                        break;
+                    case 't':
+                        str += '\t';
+                        break;
+                    case 'u':
+                    case 'x':
+                        restore = index;
+                        unescaped = scanHexEscape(ch);
+                        if (unescaped) {
+                            str += unescaped;
+                        } else {
+                            index = restore;
+                            str += ch;
+                        }
+                        break;
+                    case 'b':
+                        str += '\b';
+                        break;
+                    case 'f':
+                        str += '\f';
+                        break;
+                    case 'v':
+                        str += '\v';
+                        break;
+                    case '0':
+                        str += '\u0000';
+                        break;
+                    default:
+                        str += ch;
+                        break;
+                    }
                 }
             } else {
                 str += ch;
@@ -717,7 +805,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function scanRegExp() {
-        var str = '', ch, pattern, flags, value, classMarker = false;
+        var str = '', ch, pattern, flags, value, classMarker = false, restore;
 
         buffer = null;
         skipComment();
@@ -764,8 +852,32 @@ parseStatement: true, parseSourceElement: true */
             if (!isIdentifierPart(ch)) {
                 break;
             }
-            flags += ch;
-            str += nextChar();
+
+            nextChar();
+            if (ch === '\\' && index < length) {
+                ch = source[index];
+                if (ch === 'u') {
+                    nextChar();
+                    restore = index;
+                    ch = scanHexEscape('u');
+                    if (ch) {
+                        flags += ch;
+                        str += '\\u';
+                        for (; restore < index; restore += 1) {
+                            str += source[restore];
+                        }
+                    } else {
+                        index = restore;
+                        flags += 'u';
+                        str += '\\u';
+                    }
+                } else {
+                    str += '\\';
+                }
+            } else {
+                flags += ch;
+                str += ch;
+            }
         }
 
         try {
