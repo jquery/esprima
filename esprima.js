@@ -664,6 +664,7 @@ parseStatement: true, parseSourceElement: true */
                 return {
                     type: Token.NumericLiteral,
                     value: parseInt(number, 16),
+                    raw: source.slice(start, index),
                     lineNumber: lineNumber,
                     lineStart: lineStart,
                     range: [start, index]
@@ -721,6 +722,7 @@ parseStatement: true, parseSourceElement: true */
         return {
             type: Token.NumericLiteral,
             value: parseFloat(number),
+            raw: source.slice(start, index),
             lineNumber: lineNumber,
             lineStart: lineStart,
             range: [start, index]
@@ -798,6 +800,7 @@ parseStatement: true, parseSourceElement: true */
         return {
             type: Token.StringLiteral,
             value: str,
+            raw: source.slice(start, index),
             lineNumber: lineNumber,
             lineStart: lineStart,
             range: [start, index]
@@ -1206,7 +1209,8 @@ parseStatement: true, parseSourceElement: true */
                             token.type === Token.NumericLiteral) {
                         property.key = {
                             type: Syntax.Literal,
-                            value: token.value
+                            value: token.value,
+                            raw: token.raw
                         };
                     } else {
                         property.key = {
@@ -1237,7 +1241,8 @@ parseStatement: true, parseSourceElement: true */
                             token.type === Token.NumericLiteral) {
                         property.key = {
                             type: Syntax.Literal,
-                            value: token.value
+                            value: token.value,
+                            raw: token.raw
                         };
                     } else {
                         property.key = {
@@ -1286,7 +1291,8 @@ parseStatement: true, parseSourceElement: true */
             case Token.NumericLiteral:
                 property.key = {
                     type: Syntax.Literal,
-                    value: token.value
+                    value: token.value,
+                    raw: token.raw
                 };
                 expect(':');
                 property.value = parseAssignmentExpression();
@@ -1314,7 +1320,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.1 Primary Expressions
 
     function parsePrimaryExpression() {
-        var token, expr;
+        var token, expr, regex;
 
         if (match('[')) {
             return parseArrayInitialiser();
@@ -1343,9 +1349,12 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (match('/') || match('/=')) {
+            regex = scanRegExp();
+
             return {
                 type: Syntax.Literal,
-                value: scanRegExp().value
+                value: regex.value,
+                raw: regex.literal
             };
         }
 
@@ -1361,28 +1370,32 @@ parseStatement: true, parseSourceElement: true */
         if (token.type === Token.BooleanLiteral) {
             return {
                 type: Syntax.Literal,
-                value: (token.value === 'true')
+                value: (token.value === 'true'),
+                raw: token.value
             };
         }
 
         if (token.type === Token.NullLiteral) {
             return {
                 type: Syntax.Literal,
-                value: null
+                value: null,
+                raw: token.value
             };
         }
 
         if (token.type === Token.NumericLiteral) {
             return {
                 type: Syntax.Literal,
-                value: token.value
+                value: token.value,
+                raw: token.raw
             };
         }
 
         if (token.type === Token.StringLiteral) {
             return {
                 type: Syntax.Literal,
-                value: token.value
+                value: token.value,
+                raw: token.raw
             };
         }
 
