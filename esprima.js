@@ -646,7 +646,7 @@ parseStatement: true, parseSourceElement: true */
             ch = source[index];
 
             // Hex number starts with '0x'.
-            if (ch === 'x' || ch === 'X') {
+            if (number === '0' && (ch === 'x' || ch === 'X')) {
                 number += nextChar();
                 while (index < length) {
                     ch = source[index];
@@ -655,6 +655,12 @@ parseStatement: true, parseSourceElement: true */
                     }
                     number += nextChar();
                 }
+
+                if (number.length <= 2) {
+                    // only 0x
+                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                }
+
                 if (index < length) {
                     ch = source[index];
                     if (isIdentifierStart(ch) || isDecimalDigit(ch)) {

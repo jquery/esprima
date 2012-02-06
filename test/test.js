@@ -11328,6 +11328,27 @@ data = {
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
+        '3x': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '3x0': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0x': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
         '3in[]': {
             index: 1,
             lineNumber: 1,
