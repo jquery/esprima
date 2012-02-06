@@ -673,6 +673,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'answer'
@@ -685,7 +686,8 @@ data = {
                                 start: { line: 1, column: 14 },
                                 end: { line: 1, column: 16 }
                             }
-                        }
+                        },
+                        kind: 'init'
                     }],
                     range: [4, 17],
                     loc: {
@@ -723,6 +725,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'if'
@@ -735,7 +738,8 @@ data = {
                                 start: { line: 1, column: 10 },
                                 end: { line: 1, column: 12 }
                             }
-                        }
+                        },
+                        kind: 'init'
                     }],
                     range: [4, 13],
                     loc: {
@@ -773,6 +777,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'true'
@@ -785,7 +790,8 @@ data = {
                                 start: { line: 1, column: 12 },
                                 end: { line: 1, column: 14 }
                             }
-                        }
+                        },
+                        kind: 'init'
                     }],
                     range: [4, 15],
                     loc: {
@@ -823,6 +829,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'false'
@@ -835,7 +842,8 @@ data = {
                                 start: { line: 1, column: 13 },
                                 end: { line: 1, column: 15 }
                             }
-                        }
+                        },
+                        kind: 'init'
                     }],
                     range: [4, 16],
                     loc: {
@@ -873,6 +881,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'null'
@@ -885,7 +894,8 @@ data = {
                                 start: { line: 1, column: 12 },
                                 end: { line: 1, column: 14 }
                             }
-                        }
+                        },
+                        kind: 'init'
                     }],
                     range: [4, 15],
                     loc: {
@@ -923,6 +933,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Literal',
                             value: 'answer'
@@ -935,7 +946,8 @@ data = {
                                 start: { line: 1, column: 16 },
                                 end: { line: 1, column: 18 }
                             }
-                        }
+                        },
+                        kind: 'init'
                     }],
                     range: [4, 19],
                     loc: {
@@ -973,6 +985,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'width'
@@ -1045,6 +1058,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'undef'
@@ -1101,6 +1115,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'if'
@@ -1157,6 +1172,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'true'
@@ -1213,6 +1229,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'false'
@@ -1269,6 +1286,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'null'
@@ -1325,6 +1343,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Literal',
                             value: 'undef'
@@ -1381,6 +1400,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Literal',
                             value: 10
@@ -1437,6 +1457,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'width'
@@ -1530,6 +1551,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'if'
@@ -1623,6 +1645,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'true'
@@ -1716,6 +1739,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'false'
@@ -1809,6 +1833,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'null'
@@ -1902,6 +1927,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Literal',
                             value: 'null'
@@ -1995,6 +2021,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Literal',
                             value: 10
@@ -2088,6 +2115,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'get'
@@ -2100,7 +2128,8 @@ data = {
                                 start: { line: 1, column: 11 },
                                 end: { line: 1, column: 13 }
                             }
-                        }
+                        },
+                        kind: 'init'
                     }],
                     range: [4, 14],
                     loc: {
@@ -2138,6 +2167,7 @@ data = {
                 right: {
                     type: 'ObjectExpression',
                     properties: [{
+                        type: 'Property',
                         key: {
                             type: 'Identifier',
                             name: 'set'
@@ -2150,7 +2180,8 @@ data = {
                                 start: { line: 1, column: 11 },
                                 end: { line: 1, column: 13 }
                             }
-                        }
+                        },
+                        kind: 'init'
                     }],
                     range: [4, 14],
                     loc: {
@@ -9791,6 +9822,7 @@ data = {
             argument: {
                 type: 'ObjectExpression',
                 properties: [{
+                    type: 'Property',
                     key: {
                         type: 'Identifier',
                         name: 'message'
@@ -9803,7 +9835,8 @@ data = {
                             start: { line: 1, column: 17 },
                             end: { line: 1, column: 24 }
                         }
-                    }
+                    },
+                    kind: 'init'
                 }],
                 range: [6, 25],
                 loc: {

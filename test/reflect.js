@@ -84,6 +84,7 @@ function newExpr(callee, args) { return Pattern({ type: "NewExpression", callee:
 function callExpr(callee, args) { return Pattern({ type: "CallExpression", callee: callee, arguments: args }) }
 function arrExpr(elts) { return Pattern({ type: "ArrayExpression", elements: elts }) }
 function objExpr(elts) { return Pattern({ type: "ObjectExpression", properties: elts }) }
+function objProp(key, value, kind) { return Pattern({ type: "Property", key: key, value: value, kind: kind }) }
 
 function arrPatt(elts) { return Pattern({ type: "ArrayPattern", elements: elts }) }
 function objPatt(elts) { return Pattern({ type: "ObjectPattern", properties: elts }) }
@@ -282,21 +283,21 @@ assertExpr("[,,,1,2,3,,]", arrExpr([,,,lit(1),lit(2),lit(3),undefined]));
 assertExpr("[,,,1,2,3,,,]", arrExpr([,,,lit(1),lit(2),lit(3),undefined,undefined]));
 assertExpr("[,,,,,]", arrExpr([undefined,undefined,undefined,undefined,undefined]));
 assertExpr("({})", objExpr([]));
-assertExpr("({x:1})", objExpr([{ key: ident("x"), value: lit(1) }]));
-assertExpr("({x:1, y:2})", objExpr([{ key: ident("x"), value: lit(1) },
-                                    { key: ident("y"), value: lit(2) } ]));
-assertExpr("({x:1, y:2, z:3})", objExpr([{ key: ident("x"), value: lit(1) },
-                                         { key: ident("y"), value: lit(2) },
-                                         { key: ident("z"), value: lit(3) } ]));
-assertExpr("({x:1, 'y':2, z:3})", objExpr([{ key: ident("x"), value: lit(1) },
-                                           { key: lit("y"), value: lit(2) },
-                                           { key: ident("z"), value: lit(3) } ]));
-assertExpr("({'x':1, 'y':2, z:3})", objExpr([{ key: lit("x"), value: lit(1) },
-                                             { key: lit("y"), value: lit(2) },
-                                             { key: ident("z"), value: lit(3) } ]));
-assertExpr("({'x':1, 'y':2, 3:3})", objExpr([{ key: lit("x"), value: lit(1) },
-                                             { key: lit("y"), value: lit(2) },
-                                             { key: lit(3), value: lit(3) } ]));
+assertExpr("({x:1})", objExpr([objProp(ident("x"), lit(1), "init")]));
+assertExpr("({x:1, y:2})", objExpr([objProp(ident("x"), lit(1), "init"),
+                                    objProp(ident("y"), lit(2), "init")]));
+assertExpr("({x:1, y:2, z:3})", objExpr([objProp(ident("x"), lit(1), "init"),
+                                         objProp(ident("y"), lit(2), "init"),
+                                         objProp(ident("z"), lit(3), "init") ]));
+assertExpr("({x:1, 'y':2, z:3})", objExpr([objProp(ident("x"), lit(1), "init"),
+                                           objProp(lit("y"), lit(2), "init"),
+                                           objProp(ident("z"), lit(3), "init") ]));
+assertExpr("({'x':1, 'y':2, z:3})", objExpr([objProp(lit("x"), lit(1), "init"),
+                                             objProp(lit("y"), lit(2), "init"),
+                                             objProp(ident("z"), lit(3), "init") ]));
+assertExpr("({'x':1, 'y':2, 3:3})", objExpr([objProp(lit("x"), lit(1), "init"),
+                                             objProp(lit("y"), lit(2), "init"),
+                                             objProp(lit(3), lit(3), "init") ]));
 
 // Bug 571617: eliminate constant-folding
 assertExpr("2 + 3", binExpr("+", lit(2), lit(3)));
@@ -387,13 +388,13 @@ assertStmt("function f() { var x = 42; var x = 43; }",
 // getters and setters
 
  assertExpr("({ get x() { return 42 } })",
-            objExpr([ { key: ident("x"),
-                        value: funExpr(null, [], blockStmt([returnStmt(lit(42))])),
-                        kind: "get" } ]));
+            objExpr([ objProp(ident("x"),
+                              funExpr(null, [], blockStmt([returnStmt(lit(42))])),
+                              "get" ) ]));
  assertExpr("({ set x(v) { return 42 } })",
-            objExpr([ { key: ident("x"),
-                        value: funExpr(null, [ident("v")], blockStmt([returnStmt(lit(42))])),
-                        kind: "set" } ]));
+            objExpr([ objProp(ident("x"),
+                              funExpr(null, [ident("v")], blockStmt([returnStmt(lit(42))])),
+                              "set" ) ]));
 
 }
 
