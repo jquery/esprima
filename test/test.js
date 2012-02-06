@@ -2326,6 +2326,68 @@ data = {
             }]
         },
 
+        '//\n42': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    range: [3, 4],
+                    loc: {
+                        start: { line: 2, column: -1 },
+                        end: { line: 2, column: 1 }
+                    }
+                },
+                range: [3, 4],
+                loc: {
+                    start: { line: 2, column: -1 },
+                    end: { line: 2, column: 1 }
+                }
+            }],
+            range: [3, 4],
+            loc: {
+                start: { line: 2, column: -1 },
+                end: { line: 2, column: 1 }
+            },
+            comments: [{
+                range: [0, 2],
+                type: 'Line',
+                value: ''
+            }]
+        },
+
+        '/**/42': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 6 }
+                    }
+                },
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 6 }
+                }
+            }],
+            range: [4, 5],
+            loc: {
+                start: { line: 1, column: 4 },
+                end: { line: 1, column: 6 }
+            },
+            comments: [{
+                range: [0, 3],
+                type: 'Block',
+                value: ''
+            }]
+        },
+
         '// Hello, world!\n\n//   Another hello\n42': {
             type: 'Program',
             body: [{

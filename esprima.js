@@ -2667,7 +2667,7 @@ parseStatement: true, parseSourceElement: true */
     // the comments is active.
 
     function addComment(start, end, type, value) {
-        if (value.length <= 0) {
+        if (typeof start !== 'number') {
             return;
         }
 
