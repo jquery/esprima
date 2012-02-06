@@ -1190,7 +1190,7 @@ parseStatement: true, parseSourceElement: true */
                 break;
             }
 
-            property = {};
+            property = { type: 'Property' };
             switch (token.type) {
             case Token.Identifier:
                 // Property Assignment: Getter and Setter.
@@ -1269,6 +1269,7 @@ parseStatement: true, parseSourceElement: true */
                 };
                 expect(':');
                 property.value = parseAssignmentExpression();
+                property.kind = 'init';
                 break;
 
             case Token.Keyword:
@@ -1280,6 +1281,7 @@ parseStatement: true, parseSourceElement: true */
                 };
                 expect(':');
                 property.value = parseAssignmentExpression();
+                property.kind = 'init';
                 break;
 
             case Token.StringLiteral:
@@ -1290,6 +1292,7 @@ parseStatement: true, parseSourceElement: true */
                 };
                 expect(':');
                 property.value = parseAssignmentExpression();
+                property.kind = 'init';
                 break;
 
             default:
