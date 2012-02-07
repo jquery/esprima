@@ -1206,12 +1206,8 @@ parseStatement: true, parseSourceElement: true */
                         throwUnexpected(token);
                     }
                     if (token.type === Token.StringLiteral ||
-                            token.type === Token.NumericLiteral) {
-                        property.key = {
-                            type: Syntax.Literal,
-                            value: token.value,
-                            raw: token.raw
-                        };
+                        token.type === Token.NumericLiteral) {
+                        property.key = createLiteral(token.value, token.raw);
                     } else {
                         property.key = {
                             type: Syntax.Identifier,
@@ -1238,12 +1234,8 @@ parseStatement: true, parseSourceElement: true */
                         throwUnexpected(token);
                     }
                     if (token.type === Token.StringLiteral ||
-                            token.type === Token.NumericLiteral) {
-                        property.key = {
-                            type: Syntax.Literal,
-                            value: token.value,
-                            raw: token.raw
-                        };
+                        token.type === Token.NumericLiteral) {
+                        property.key = createLiteral(token.value, token.raw);
                     } else {
                         property.key = {
                             type: Syntax.Identifier,
@@ -1289,11 +1281,7 @@ parseStatement: true, parseSourceElement: true */
 
             case Token.StringLiteral:
             case Token.NumericLiteral:
-                property.key = {
-                    type: Syntax.Literal,
-                    value: token.value,
-                    raw: token.raw
-                };
+                property.key = createLiteral(token.value, token.raw);
                 expect(':');
                 property.value = parseAssignmentExpression();
                 break;
@@ -1351,11 +1339,7 @@ parseStatement: true, parseSourceElement: true */
         if (match('/') || match('/=')) {
             regex = scanRegExp();
 
-            return {
-                type: Syntax.Literal,
-                value: regex.value,
-                raw: regex.literal
-            };
+            return createLiteral(regex.value, regex.literal);
         }
 
         token = lex();
@@ -1368,35 +1352,19 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (token.type === Token.BooleanLiteral) {
-            return {
-                type: Syntax.Literal,
-                value: (token.value === 'true'),
-                raw: token.value
-            };
+            return createLiteral((token.value === 'true'), token.value);
         }
 
         if (token.type === Token.NullLiteral) {
-            return {
-                type: Syntax.Literal,
-                value: null,
-                raw: token.value
-            };
+            return createLiteral(null, token.value);
         }
 
         if (token.type === Token.NumericLiteral) {
-            return {
-                type: Syntax.Literal,
-                value: token.value,
-                raw: token.raw
-            };
+            return createLiteral(token.value, token.raw);
         }
 
         if (token.type === Token.StringLiteral) {
-            return {
-                type: Syntax.Literal,
-                value: token.value,
-                raw: token.raw
-            };
+            return createLiteral(token.value, token.raw);
         }
 
         return throwUnexpected(token);
@@ -2829,6 +2797,21 @@ parseStatement: true, parseSourceElement: true */
         return regex;
     }
 
+    function createLiteral(value) {
+        return {
+            type: Syntax.Literal,
+            value: value
+        };
+    }
+
+    function createRawLiteral(value, raw_value) {
+        return {
+            type: Syntax.Literal,
+            value: value,
+            raw: raw_value
+        };
+    }
+
     function wrapTrackingFunction(range, loc) {
 
         return function (parseFunction) {
@@ -2927,6 +2910,11 @@ parseStatement: true, parseSourceElement: true */
             skipComment = scanComment;
         }
 
+        if (extra.raw) {
+            extra.createLiteral = createLiteral;
+            createLiteral = createRawLiteral;
+        }
+
         if (extra.range || extra.loc) {
 
             wrapTracking = wrapTrackingFunction(extra.range, extra.loc);
@@ -2996,6 +2984,10 @@ parseStatement: true, parseSourceElement: true */
             skipComment = extra.skipComment;
         }
 
+        if (extra.raw) {
+            createLiteral = extra.createLiteral;
+        }
+
         if (extra.range || extra.loc) {
             parseAdditiveExpression = extra.parseAdditiveExpression;
             parseAssignmentExpression = extra.parseAssignmentExpression;
@@ -3058,6 +3050,7 @@ parseStatement: true, parseSourceElement: true */
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
+            extra.raw = (typeof options.raw === 'boolean') && options.raw;
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
             }

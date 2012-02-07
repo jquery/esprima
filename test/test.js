@@ -11905,7 +11905,8 @@ function testParse(code, syntax) {
         comment: false,
         range: true,
         loc: true,
-        tokens: false
+        tokens: false,
+		raw: true
     };
 
     options.comment = hasComment(syntax);
