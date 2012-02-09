@@ -671,6 +671,7 @@ parseStatement: true, parseSourceElement: true */
                 return {
                     type: Token.NumericLiteral,
                     value: parseInt(number, 16),
+                    raw: source.slice(start, index),
                     lineNumber: lineNumber,
                     lineStart: lineStart,
                     range: [start, index]
@@ -728,6 +729,7 @@ parseStatement: true, parseSourceElement: true */
         return {
             type: Token.NumericLiteral,
             value: parseFloat(number),
+            raw: source.slice(start, index),
             lineNumber: lineNumber,
             lineStart: lineStart,
             range: [start, index]
@@ -805,6 +807,7 @@ parseStatement: true, parseSourceElement: true */
         return {
             type: Token.StringLiteral,
             value: str,
+            raw: source.slice(start, index),
             lineNumber: lineNumber,
             lineStart: lineStart,
             range: [start, index]
@@ -1210,10 +1213,7 @@ parseStatement: true, parseSourceElement: true */
                     }
                     if (token.type === Token.StringLiteral ||
                         token.type === Token.NumericLiteral) {
-                        property_key = {
-                            type: Syntax.Literal,
-                            value: token.value
-                        };
+                        property_key = createLiteral(token.value, token.raw);
                     } else {
                         property_key = {
                             type: Syntax.Identifier,
@@ -1242,10 +1242,7 @@ parseStatement: true, parseSourceElement: true */
                     }
                     if (token.type === Token.StringLiteral ||
                         token.type === Token.NumericLiteral) {
-                        property_key = {
-                            type: Syntax.Literal,
-                            value: token.value
-                        };
+                        property_key = createLiteral(token.value, token.raw);
                     } else {
                         property_key = {
                             type: Syntax.Identifier,
@@ -1306,10 +1303,7 @@ parseStatement: true, parseSourceElement: true */
                 expect(':');
                 property = {
                     type: 'Property',
-                    key: {
-                        type: Syntax.Literal,
-                        value: token.value
-                    },
+                    key: createLiteral(token.value, token.raw),
                     value: parseAssignmentExpression(),
                     kind: 'init'
                 };
@@ -1337,7 +1331,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.1 Primary Expressions
 
     function parsePrimaryExpression() {
-        var token, expr;
+        var token, expr, regex;
 
         if (match('[')) {
             return parseArrayInitialiser();
@@ -1366,10 +1360,9 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (match('/') || match('/=')) {
-            return {
-                type: Syntax.Literal,
-                value: scanRegExp().value
-            };
+            regex = scanRegExp();
+
+            return createLiteral(regex.value, regex.literal);
         }
 
         token = lex();
@@ -1382,31 +1375,19 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (token.type === Token.BooleanLiteral) {
-            return {
-                type: Syntax.Literal,
-                value: (token.value === 'true')
-            };
+            return createLiteral((token.value === 'true'), token.value);
         }
 
         if (token.type === Token.NullLiteral) {
-            return {
-                type: Syntax.Literal,
-                value: null
-            };
+            return createLiteral(null, token.value);
         }
 
         if (token.type === Token.NumericLiteral) {
-            return {
-                type: Syntax.Literal,
-                value: token.value
-            };
+            return createLiteral(token.value, token.raw);
         }
 
         if (token.type === Token.StringLiteral) {
-            return {
-                type: Syntax.Literal,
-                value: token.value
-            };
+            return createLiteral(token.value, token.raw);
         }
 
         return throwUnexpected(token);
@@ -1802,7 +1783,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.12 Conditional Operator
 
     function parseConditionalExpression() {
-        var expr, previousAllowIn, consequent, alternate;
+        var expr, previousAllowIn, consequent;
 
         expr = parseLogicalORExpression();
 
@@ -1813,13 +1794,12 @@ parseStatement: true, parseSourceElement: true */
             consequent = parseAssignmentExpression();
             allowIn = previousAllowIn;
             expect(':');
-            alternate = parseAssignmentExpression();
 
             expr = {
                 type: Syntax.ConditionalExpression,
                 test: expr,
                 consequent: consequent,
-                alternate: alternate
+                alternate: parseAssignmentExpression()
             };
         }
 
@@ -2913,6 +2893,21 @@ parseStatement: true, parseSourceElement: true */
         return regex;
     }
 
+    function createLiteral(value) {
+        return {
+            type: Syntax.Literal,
+            value: value
+        };
+    }
+
+    function createRawLiteral(value, raw_value) {
+        return {
+            type: Syntax.Literal,
+            value: value,
+            raw: raw_value
+        };
+    }
+
     function wrapTrackingFunction(range, loc) {
 
         return function (parseFunction) {
@@ -3011,6 +3006,11 @@ parseStatement: true, parseSourceElement: true */
             skipComment = scanComment;
         }
 
+        if (extra.raw) {
+            extra.createLiteral = createLiteral;
+            createLiteral = createRawLiteral;
+        }
+
         if (extra.range || extra.loc) {
 
             wrapTracking = wrapTrackingFunction(extra.range, extra.loc);
@@ -3082,6 +3082,10 @@ parseStatement: true, parseSourceElement: true */
             skipComment = extra.skipComment;
         }
 
+        if (extra.raw) {
+            createLiteral = extra.createLiteral;
+        }
+
         if (extra.range || extra.loc) {
             parseAdditiveExpression = extra.parseAdditiveExpression;
             parseAssignmentExpression = extra.parseAssignmentExpression;
@@ -3145,6 +3149,7 @@ parseStatement: true, parseSourceElement: true */
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
+            extra.raw = (typeof options.raw === 'boolean') && options.raw;
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
             }
