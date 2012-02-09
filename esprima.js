@@ -1186,7 +1186,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.1.5 Object Initialiser
 
     function parseObjectInitialiser() {
-        var token, expr, properties = [], property;
+        var token, expr, properties = [], property, property_key;
 
         expect('{');
 
@@ -1197,7 +1197,6 @@ parseStatement: true, parseSourceElement: true */
                 break;
             }
 
-            property = { type: 'Property' };
             switch (token.type) {
             case Token.Identifier:
                 // Property Assignment: Getter and Setter.
@@ -1210,30 +1209,31 @@ parseStatement: true, parseSourceElement: true */
                         throwUnexpected(token);
                     }
                     if (token.type === Token.StringLiteral ||
-                            token.type === Token.NumericLiteral) {
-                        property.key = {
+                        token.type === Token.NumericLiteral) {
+                        property_key = {
                             type: Syntax.Literal,
                             value: token.value
                         };
                     } else {
-                        property.key = {
+                        property_key = {
                             type: Syntax.Identifier,
                             name: token.value
                         };
                     }
                     expect('(');
                     expect(')');
-                    property.value = {
-                        type: Syntax.FunctionExpression,
-                        id: null,
-                        params: [],
-                        body: parseBlock()
+                    property = {
+                        type: 'Property',
+                        key: property_key,
+                        value: {
+                            type: Syntax.FunctionExpression,
+                            id: null,
+                            params: [],
+                            body: parseBlock()
+                        },
+                        kind: 'get'
                     };
-                    property.kind = 'get';
-                    break;
-                }
-
-                if (token.value === 'set' && !match(':')) {
+                } else if (token.value === 'set' && !match(':')) {
                     token = lex();
                     if (!isIdentifierName(token) &&
                             token.type !== Token.StringLiteral &&
@@ -1241,13 +1241,13 @@ parseStatement: true, parseSourceElement: true */
                         throwUnexpected(token);
                     }
                     if (token.type === Token.StringLiteral ||
-                            token.type === Token.NumericLiteral) {
-                        property.key = {
+                        token.type === Token.NumericLiteral) {
+                        property_key = {
                             type: Syntax.Literal,
                             value: token.value
                         };
                     } else {
-                        property.key = {
+                        property_key = {
                             type: Syntax.Identifier,
                             name: token.value
                         };
@@ -1258,48 +1258,61 @@ parseStatement: true, parseSourceElement: true */
                         throwUnexpected(token);
                     }
                     expect(')');
-                    property.value = {
-                        type: Syntax.FunctionExpression,
-                        id: null,
-                        params: [{
+                    property = {
+                        type: 'Property',
+                        key: property_key,
+                        value: {
+                            type: Syntax.FunctionExpression,
+                            id: null,
+                            params: [{
+                                type: Syntax.Identifier,
+                                name: token.value
+                            }],
+                            body: parseBlock()
+                        },
+                        kind: 'set'
+                    };
+                } else {
+                    expect(':');
+                    property = {
+                        type: 'Property',
+                        key: {
                             type: Syntax.Identifier,
                             name: token.value
-                        }],
-                        body: parseBlock()
+                        },
+                        value: parseAssignmentExpression(),
+                        kind: 'init'
                     };
-                    property.kind = 'set';
-                    break;
                 }
-                property.key = {
-                    type: Syntax.Identifier,
-                    name: token.value
-                };
-                expect(':');
-                property.value = parseAssignmentExpression();
-                property.kind = 'init';
                 break;
 
             case Token.Keyword:
             case Token.BooleanLiteral:
             case Token.NullLiteral:
-                property.key = {
-                    type: Syntax.Identifier,
-                    name: token.value
-                };
                 expect(':');
-                property.value = parseAssignmentExpression();
-                property.kind = 'init';
+                property = {
+                    type: 'Property',
+                    key: {
+                        type: Syntax.Identifier,
+                        name: token.value
+                    },
+                    value: parseAssignmentExpression(),
+                    kind: 'init'
+                };
                 break;
 
             case Token.StringLiteral:
             case Token.NumericLiteral:
-                property.key = {
-                    type: Syntax.Literal,
-                    value: token.value
-                };
                 expect(':');
-                property.value = parseAssignmentExpression();
-                property.kind = 'init';
+                property = {
+                    type: 'Property',
+                    key: {
+                        type: Syntax.Literal,
+                        value: token.value
+                    },
+                    value: parseAssignmentExpression(),
+                    kind: 'init'
+                };
                 break;
 
             default:
@@ -1789,22 +1802,25 @@ parseStatement: true, parseSourceElement: true */
     // 11.12 Conditional Operator
 
     function parseConditionalExpression() {
-        var expr, previousAllowIn;
+        var expr, previousAllowIn, consequent, alternate;
 
         expr = parseLogicalORExpression();
 
         if (match('?')) {
             lex();
-            expr = {
-                type: Syntax.ConditionalExpression,
-                test: expr
-            };
             previousAllowIn = allowIn;
             allowIn = true;
-            expr.consequent = parseAssignmentExpression();
+            consequent = parseAssignmentExpression();
             allowIn = previousAllowIn;
             expect(':');
-            expr.alternate = parseAssignmentExpression();
+            alternate = parseAssignmentExpression();
+
+            expr = {
+                type: Syntax.ConditionalExpression,
+                test: expr,
+                consequent: consequent,
+                alternate: alternate
+            };
         }
 
         return expr;
