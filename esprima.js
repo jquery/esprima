@@ -44,6 +44,7 @@ parseStatement: true, parseSourceElement: true */
         Regex,
         source,
         allowIn,
+        strict,
         index,
         lineNumber,
         lineStart,
@@ -2526,8 +2527,50 @@ parseStatement: true, parseSourceElement: true */
 
     // 13 Function Definition
 
+    function parseFunctionSourceElements() {
+        var sourceElement, sourceElements = [], token, directive;
+
+        expect('{');
+
+        while (index < length) {
+            token = lookahead();
+            if (token.type !== Token.StringLiteral) {
+                break;
+            }
+
+            sourceElement = parseSourceElement();
+            sourceElements.push(sourceElement);
+            if (sourceElement.expression.type === Syntax.Literal) {
+                directive = source.slice(token.range[0] + 1, token.range[1] - 1);
+                if (directive === 'use strict') {
+                    strict = true;
+                }
+                continue;
+            }
+            break;
+        }
+
+        while (index < length) {
+            if (match('}')) {
+                break;
+            }
+            sourceElement = parseSourceElement();
+            if (typeof sourceElement === 'undefined') {
+                break;
+            }
+            sourceElements.push(sourceElement);
+        }
+
+        expect('}');
+
+        return {
+            type: Syntax.BlockStatement,
+            body: sourceElements
+        };
+    }
+
     function parseFunctionDeclaration() {
-        var token, id = null, params = [], body;
+        var token, id = null, params = [], body, previousStrict;
 
         expectKeyword('function');
 
@@ -2561,7 +2604,10 @@ parseStatement: true, parseSourceElement: true */
 
         expect(')');
 
-        body = parseBlock();
+        previousStrict = strict;
+        strict = false;
+        body = parseFunctionSourceElements();
+        strict = previousStrict;
 
         return {
             type: Syntax.FunctionDeclaration,
@@ -2572,7 +2618,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseFunctionExpression() {
-        var token, id = null, params = [], body;
+        var token, id = null, params = [], body, previousStrict;
 
         expectKeyword('function');
 
@@ -2608,7 +2654,10 @@ parseStatement: true, parseSourceElement: true */
 
         expect(')');
 
-        body = parseBlock();
+        previousStrict = strict;
+        strict = false;
+        body = parseFunctionSourceElements();
+        strict = previousStrict;
 
         return {
             type: Syntax.FunctionExpression,
@@ -2644,7 +2693,25 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseSourceElements() {
-        var sourceElement, sourceElements = [];
+        var sourceElement, sourceElements = [], token, directive;
+
+        while (index < length) {
+            token = lookahead();
+            if (token.type !== Token.StringLiteral) {
+                break;
+            }
+
+            sourceElement = parseSourceElement();
+            sourceElements.push(sourceElement);
+            if (sourceElement.expression.type === Syntax.Literal) {
+                directive = source.slice(token.range[0] + 1, token.range[1] - 1);
+                if (directive === 'use strict') {
+                    strict = true;
+                }
+                continue;
+            }
+            break;
+        }
 
         while (index < length) {
             sourceElement = parseSourceElement();
@@ -2657,10 +2724,15 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseProgram() {
-        return {
+        var program, previousStrict;
+        previousStrict = strict;
+        strict = false;
+        program = {
             type: Syntax.Program,
             body: parseSourceElements()
         };
+        strict = previousStrict;
+        return program;
     }
 
     // The following functions are needed only when the option to preserve
@@ -2933,6 +3005,7 @@ parseStatement: true, parseSourceElement: true */
             extra.parseBitwiseORExpression = parseBitwiseORExpression;
             extra.parseBitwiseXORExpression = parseBitwiseXORExpression;
             extra.parseBlock = parseBlock;
+            extra.parseFunctionSourceElements = parseFunctionSourceElements;
             extra.parseCallMember = parseCallMember;
             extra.parseComputedMember = parseComputedMember;
             extra.parseConditionalExpression = parseConditionalExpression;
@@ -2958,6 +3031,7 @@ parseStatement: true, parseSourceElement: true */
             parseBitwiseORExpression = wrapTracking(extra.parseBitwiseORExpression);
             parseBitwiseXORExpression = wrapTracking(extra.parseBitwiseXORExpression);
             parseBlock = wrapTracking(extra.parseBlock);
+            parseFunctionSourceElements = wrapTracking(extra.parseFunctionSourceElements);
             parseCallMember = wrapTracking(extra.parseCallMember);
             parseComputedMember = wrapTracking(extra.parseComputedMember);
             parseConditionalExpression = wrapTracking(extra.parseConditionalExpression);
@@ -2999,6 +3073,7 @@ parseStatement: true, parseSourceElement: true */
             parseBitwiseORExpression = extra.parseBitwiseORExpression;
             parseBitwiseXORExpression = extra.parseBitwiseXORExpression;
             parseBlock = extra.parseBlock;
+            parseFunctionSourceElements = extra.parseFunctionSourceElements;
             parseCallMember = extra.parseCallMember;
             parseComputedMember = extra.parseComputedMember;
             parseConditionalExpression = extra.parseConditionalExpression;
