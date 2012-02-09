@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
   Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
 
   Redistribution and use in source and binary forms, with or without
@@ -89,9 +90,12 @@ function getContext(esprima, reportCase, reportFailure) {
             };
         }
 
-        function adjustRegexLiteral(key, value) {
+        function adjustRegexLiteralAndRaw(key, value) {
             if (key === 'value' && value instanceof RegExp) {
                 value = value.toString();
+            } else if (key === 'raw' && typeof value === "string") {
+                // Ignore Esprima-specific 'raw' property.
+                return undefined;
             }
             return value;
         }
@@ -99,7 +103,7 @@ function getContext(esprima, reportCase, reportFailure) {
         if (obj.type && (obj.type === 'Program')) {
             pattern.assert = function (tree) {
                 var actual, expected;
-                actual = JSON.stringify(tree, adjustRegexLiteral, 4);
+                actual = JSON.stringify(tree, adjustRegexLiteralAndRaw, 4);
                 expected = JSON.stringify(obj, null, 4);
 
                 if (expected !== actual) {
