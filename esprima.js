@@ -42,6 +42,8 @@ parseStatement: true, parseSourceElement: true */
         Syntax,
         Messages,
         Regex,
+        Precedence,
+        BinaryPrecedence,
         source,
         allowIn,
         strict,
@@ -50,6 +52,8 @@ parseStatement: true, parseSourceElement: true */
         lineStart,
         length,
         buffer,
+        base,
+        indent,
         extra;
 
     Token = {
@@ -120,6 +124,28 @@ parseStatement: true, parseSourceElement: true */
         InvalidLHSInPostfixOp:  'Invalid left-hand side expression in postfix operation',
         InvalidLHSInPrefixOp:  'Invalid left-hand side expression in prefix operation',
         NoCatchOrFinally:  'Missing catch or finally after try'
+    };
+
+    Precedence = {
+        Sequence: 0,
+        Assignment: 1,
+        Conditional: 2,
+        LogicalOR: 3,
+        LogicalAND: 4,
+        LogicalXOR: 5,
+        BitwiseOR: 6,
+        BitwiseAND: 7,
+        Equality: 8,
+        Relational: 9,
+        BitwiseSHIFT: 10,
+        Additive: 11,
+        Multiplicative: 12,
+        Unary: 13,
+        Postfix: 14,
+        Call: 15,
+        New: 16,
+        Member: 17,
+        Primary: 18
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -2540,14 +2566,14 @@ parseStatement: true, parseSourceElement: true */
 
             sourceElement = parseSourceElement();
             sourceElements.push(sourceElement);
-            if (sourceElement.expression.type === Syntax.Literal) {
-                directive = source.slice(token.range[0] + 1, token.range[1] - 1);
-                if (directive === 'use strict') {
-                    strict = true;
-                }
-                continue;
+            if (sourceElement.expression.type !== Syntax.Literal) {
+                // this is not directive
+                break;
             }
-            break;
+            directive = source.slice(token.range[0] + 1, token.range[1] - 1);
+            if (directive === 'use strict') {
+                strict = true;
+            }
         }
 
         while (index < length) {
@@ -2703,14 +2729,14 @@ parseStatement: true, parseSourceElement: true */
 
             sourceElement = parseSourceElement();
             sourceElements.push(sourceElement);
-            if (sourceElement.expression.type === Syntax.Literal) {
-                directive = source.slice(token.range[0] + 1, token.range[1] - 1);
-                if (directive === 'use strict') {
-                    strict = true;
-                }
-                continue;
+            if (sourceElement.expression.type !== Syntax.Literal) {
+                // this is not directive
+                break;
             }
-            break;
+            directive = source.slice(token.range[0] + 1, token.range[1] - 1);
+            if (directive === 'use strict') {
+                strict = true;
+            }
         }
 
         while (index < length) {
@@ -3329,12 +3355,342 @@ parseStatement: true, parseSourceElement: true */
         return code;
     }
 
+    function unicodeEscape(ch) {
+        var result, i;
+        result = ch.charCodeAt(0).toString(16);
+        for (i = result.length; i < 4; i += 1) {
+            result = '0' + result;
+        }
+        return '\\u' + result;
+    }
+
+    function escapeString(str) {
+        var result = '', i, len, ch;
+
+        for (i = 0, len = str.length; i < len; i += 1) {
+            ch = str[i];
+            if ('\'\\\b\f\n\r\t'.indexOf(ch) >= 0) {
+                result += '\\';
+                switch (ch) {
+                case '\'':
+                    result += '\'';
+                    break;
+                case '\\':
+                    result += '\\';
+                    break;
+                case '\b':
+                    result += 'b';
+                    break;
+                case '\f':
+                    result += 'f';
+                    break;
+                case '\n':
+                    result += 'n';
+                    break;
+                case '\r':
+                    result += 'r';
+                    break;
+                case '\t':
+                    result += 't';
+                    break;
+                }
+            } else if (ch < ' ' || ch.charCodeAt(0) >= 0x80) {
+                result += unicodeEscape(ch);
+            } else {
+                result += ch;
+            }
+        }
+
+        return '\'' + result + '\'';
+    }
+
+    BinaryPrecedence = {
+        '||': Precedence.LogicalOR,
+        '&&': Precedence.LogicalAND,
+        '^': Precedence.LogicalXOR,
+        '|': Precedence.BitwiseOR,
+        '&': Precedence.BitwiseAND,
+        '==': Precedence.Equality,
+        '!=': Precedence.Equality,
+        '===': Precedence.Equality,
+        '!==': Precedence.Equality,
+        '<': Precedence.Relational,
+        '>': Precedence.Relational,
+        '<=': Precedence.Relational,
+        '>=': Precedence.Relational,
+        'in': Precedence.Relational,
+        'instanceof': Precedence.Relational,
+        '<<': Precedence.BitwiseSHIFT,
+        '>>': Precedence.BitwiseSHIFT,
+        '>>>': Precedence.BitwiseSHIFT,
+        '+': Precedence.Additive,
+        '-': Precedence.Additive,
+        '*': Precedence.Multiplicative,
+        '%': Precedence.Multiplicative,
+        '/': Precedence.Multiplicative
+    };
+
+    function addIndent(stmt) {
+        return base + stmt;
+    }
+
+    function parenthesize(text, current, should) {
+        return (current < should) ?  '(' + text + ')' : text;
+    }
+
+    function generateExpression(expr, precedence) {
+        var result, currentPrecedence, previousBase, i, len, raw;
+
+        if (!precedence) {
+            precedence = Precedence.SequenceExpression;
+        }
+
+        switch (expr.type) {
+        case Syntax.SequenceExpression:
+            result = '';
+            for (i = 0, len = expr.expressions.length; i < len; i += 1) {
+                result += generateExpression(expr.expressions[i], Precedence.Assignment);
+                if ((i + 1) < len) {
+                    result += ', ';
+                }
+            }
+            result = parenthesize(result, Precedence.Sequence, precedence);
+            break;
+
+        case Syntax.AssignmentExpression:
+            result = parenthesize(
+                generateExpression(expr.left) + ' ' + expr.operator + ' ' +
+                    generateExpression(expr.right, Precedence.Assignment),
+                Precedence.Assignment,
+                precedence
+            );
+            break;
+
+        case Syntax.ConditionalExpression:
+            result = parenthesize(
+                generateExpression(expr.test, Precedence.LogicalOR) + ' ? ' +
+                    generateExpression(expr.consequent, Precedence.Assignment) + ' : ' +
+                    generateExpression(expr.alternate, Precedence.Assignment),
+                Precedence.Conditional,
+                precedence
+            );
+            break;
+
+        case Syntax.LogicalExpression:
+        case Syntax.BinaryExpression:
+            currentPrecedence = BinaryPrecedence[expr.operator];
+
+            result = generateExpression(expr.left, currentPrecedence) +
+                ' ' + expr.operator + ' ' +
+                generateExpression(expr.right, currentPrecedence + 1);
+            if (expr.operator === 'in') {
+                // TODO parenthesize only in allowIn = false case
+                result = '(' + result + ')';
+            } else {
+                result = parenthesize(result, currentPrecedence, precedence);
+            }
+            break;
+
+        case Syntax.CallExpression:
+            result = '';
+            for (i = 0, len = expr['arguments'].length; i < len; i += 1) {
+                result += generateExpression(expr['arguments'][i], Precedence.Assignment);
+                if ((i + 1) < len) {
+                    result += ', ';
+                }
+            }
+            result = parenthesize(
+                generateExpression(expr.callee, Precedence.Call) + '(' + result + ')',
+                Precedence.Call,
+                precedence
+            );
+            break;
+
+        case Syntax.NewExpression:
+            result = '';
+            for (i = 0, len = expr['arguments'].length; i < len; i += 1) {
+                result += generateExpression(expr['arguments'][i], Precedence.Assignment);
+                if ((i + 1) < len) {
+                    result += ', ';
+                }
+            }
+            result = parenthesize(
+                'new ' + generateExpression(expr.callee, Precedence.New) + '(' + result + ')',
+                Precedence.New,
+                precedence
+            );
+            break;
+
+        case Syntax.MemberExpression:
+            result = generateExpression(expr.object, Precedence.Call);
+            if (expr.computed) {
+                result += '[' + generateExpression(expr.property) + ']';
+            } else {
+                if (expr.object.type === Syntax.Literal && typeof expr.object.value === 'number') {
+                    if (result.indexOf('.') < 0) {
+                        if (!/[eExX]/.test(result) && !(result.length >= 2 && result[0] === '0')) {
+                            result += '.';
+                        }
+                    }
+                }
+                result += '.' + expr.property.name;
+            }
+            result = parenthesize(result, Precedence.Member, precedence);
+            break;
+
+        case Syntax.UnaryExpression:
+            result = expr.operator;
+            if (result.length > 2) {
+                result += ' ';
+            }
+            result = parenthesize(
+                result + generateExpression(expr.argument, Precedence.Unary),
+                Precedence.Unary,
+                precedence
+            );
+            break;
+
+        case Syntax.UpdateExpression:
+            if (expr.prefix) {
+                result = parenthesize(
+                    expr.operator +
+                        generateExpression(expr.argument, Precedence.Unary),
+                    Precedence.Unary,
+                    precedence
+                );
+            } else {
+                result = parenthesize(
+                    generateExpression(expr.argument, Precedence.Postfix) +
+                        expr.operator,
+                    Precedence.Postfix,
+                    precedence
+                );
+            }
+            break;
+
+        case Syntax.FunctionExpression:
+            break;
+
+        case Syntax.ArrayExpression:
+            if (!expr.elements.length) {
+                result = '[]';
+                break;
+            }
+            result = '[\n';
+            previousBase = base;
+            base += indent;
+            for (i = 0, len = expr.elements.length; i < len; i += 1) {
+                if (!expr.elements[i]) {
+                    result += addIndent('');
+                    if ((i + 1) === len) {
+                        result += ',';
+                    }
+                } else {
+                    result += addIndent(generateExpression(expr.elements[i], Precedence.Assignment));
+                }
+                if ((i + 1) < len) {
+                    result += ',\n';
+                }
+            }
+            base = previousBase;
+            result += '\n' + addIndent(']');
+            break;
+
+        case Syntax.ObjectExpression:
+            if (!expr.properties.length) {
+                result = '{}';
+                break;
+            }
+            result = '{\n';
+            previousBase = base;
+            base += indent;
+            for (i = 0, len = expr.properties.length; i < len; i += 1) {
+                // TODO accessor is not implemented yet because of FunctionLiteral
+                result += addIndent(
+                    generateExpression(expr.properties[i].key) + ': ' +
+                        generateExpression(expr.properties[i].value, Precedence.Assignment)
+                );
+                if ((i + 1) < len) {
+                    result += ',\n';
+                }
+            }
+            base = previousBase;
+            result += '\n' + addIndent('}');
+            break;
+
+        case Syntax.ThisExpression:
+            result = 'this';
+            break;
+
+        case Syntax.Identifier:
+            result = expr.name;
+            break;
+
+        case Syntax.Literal:
+            if (expr.hasOwnProperty('raw')) {
+                try {
+                    raw = parse(expr.raw).body[0].expression;
+                    if (raw.type === Syntax.Literal) {
+                        if (raw.value === expr.value) {
+                            result = expr.raw;
+                            break;
+                        }
+                    }
+                } catch (e) {
+                    // not use raw property
+                }
+            }
+
+            if (expr.value === null) {
+                result = 'null';
+                break;
+            }
+
+            if (typeof expr.value === 'string') {
+                result = escapeString(expr.value);
+                break;
+            }
+
+            if (typeof expr.value === 'number' && expr.value === Infinity) {
+                // Infinity is variable
+                result = '1e+1000';
+                break;
+            }
+
+            result = expr.value.toString();
+            break;
+
+        default:
+            break;
+        }
+
+        if (!result) {
+            throw new Error('Unknown expression type: ' + expr.type);
+        }
+        return result;
+    }
+
+    function wrapGeneratorEntryPoint(func) {
+        return function generate(tree, options) {
+            if (typeof options !== 'undefined') {
+                base = options.base || '';
+                indent = options.indent || '    ';
+            } else {
+                base = '';
+                indent = '    ';
+            }
+            return func(tree);
+        };
+    }
+
     // Sync with package.json.
     exports.version = '0.9.7';
 
     exports.parse = parse;
 
     exports.modify = modify;
+
+    exports.generateExpression = wrapGeneratorEntryPoint(generateExpression);
 
     exports.Tracer = {
         FunctionEntrance: traceFunctionEntrance

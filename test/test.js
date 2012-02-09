@@ -11367,6 +11367,2245 @@ data = {
 
     },
 
+    'Generate Expression': {
+        'this': {
+            fromExpression: {
+                type: 'ThisExpression'
+            }
+        },
+
+        '42': {
+            fromExpression: {
+                type: 'Literal',
+                value: 42
+            }
+        },
+
+        '(1 + 2) * 3': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '*',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '+',
+                    left: {
+                        type: 'Literal',
+                        value: 1
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 2
+                    }
+                },
+                right: {
+                    type: 'Literal',
+                    value: 3
+                }
+            }
+        },
+
+        'x = []': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: []
+                }
+            }
+        },
+
+        'x = [\n    42\n]': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [{
+                        type: 'Literal',
+                        value: 42
+                    }]
+                }
+            }
+        },
+
+        'x = [\n    ,\n    ,\n    42\n]': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 0]
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [
+                        null,
+                        null,
+                        {
+                            type: 'Literal',
+                            value: 42
+                        }]
+                }
+            }
+        },
+
+        'x = [\n    1,\n    2,\n    3\n]': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [{
+                        type: 'Literal',
+                        value: 1
+                    }, {
+                        type: 'Literal',
+                        value: 2
+                    }, {
+                        type: 'Literal',
+                        value: 3
+                    }]
+                }
+            }
+        },
+
+        'x = [\n    1,\n    2,\n    ,\n    3\n]': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [{
+                        type: 'Literal',
+                        value: 1
+                    }, {
+                        type: 'Literal',
+                        value: 2
+                    }, null, {
+                        type: 'Literal',
+                        value: 3
+                    }]
+                }
+            }
+        },
+
+        'x = [\n    ,\n]': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [ null ]
+                }
+            }
+        },
+
+        'x = [\n    20,\n    ,\n]': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [{
+                        type: 'Literal',
+                        value: 20
+                    }, null ]
+                }
+            }
+        },
+
+        '日本語 = []': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: '日本語'
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: []
+                }
+            }
+        },
+
+        'T\u203F = []': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'T\u203F'
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: []
+                }
+            }
+        },
+
+        'x = {}': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: []
+                }
+            }
+        },
+
+        'x = {\n    answer: 42\n}': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'answer'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42
+                        },
+                        kind: 'init'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    if: 42\n}': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'if'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42
+                        },
+                        kind: 'init'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    true: 42\n}': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'true'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42
+                        },
+                        kind: 'init'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    false: 42\n}': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'false'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42
+                        },
+                        kind: 'init'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    null: 42\n}': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'null'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42
+                        },
+                        kind: 'init'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    \'answer\': 42\n}': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Literal',
+                            value: 'answer'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42
+                        },
+                        kind: 'init'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    get: 42\n}': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'get'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42
+                        },
+                        kind: 'init'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    set: 43\n}': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'set'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 43
+                        },
+                        kind: 'init'
+                    }]
+                }
+            }
+        },
+
+        '0': {
+            fromExpression: {
+                type: 'Literal',
+                value: 0
+            }
+        },
+
+        '0.14': {
+            fromExpression: {
+                type: 'Literal',
+                value: 0.14
+            }
+        },
+
+        '\'Hello\'': {
+            fromExpression: {
+                type: 'Literal',
+                value: 'Hello'
+            }
+        },
+
+        '\'\\n\\r\\b\\f\\\\\\\'"\\u0000\'': {
+            fromExpression: {
+                type: 'Literal',
+                value: '\n\r\b\f\\\'"\x00'
+            }
+        },
+
+        '\'0\'': {
+            fromExpression: {
+                type: 'Literal',
+                value: '0'
+            }
+        },
+
+        '\'Hello\\nworld\'': {
+            fromExpression: {
+                type: 'Literal',
+                value: 'Hello\nworld'
+            }
+        },
+
+        '/a/': {
+            fromExpression: {
+                type: 'Literal',
+                value: /a/
+            }
+        },
+
+        'new Button()': {
+            fromExpression: {
+                type: 'NewExpression',
+                callee: {
+                    type: 'Identifier',
+                    name: 'Button'
+                },
+                'arguments': []
+            }
+        },
+
+        'new new foo(0)()': {
+            fromExpression: {
+                type: 'NewExpression',
+                callee: {
+                    type: 'NewExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'foo'
+                    },
+                    'arguments': [{
+                        type: 'Literal',
+                        value: 0
+                    }]
+                },
+                'arguments': []
+            }
+        },
+
+        'new new foo()(0)': {
+            fromExpression: {
+                type: 'NewExpression',
+                callee: {
+                    type: 'NewExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'foo'
+                    },
+                    'arguments': []
+                },
+                'arguments': [{
+                    type: 'Literal',
+                    value: 0
+                }]
+            }
+        },
+
+        'new foo().bar()': {
+            fromExpression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'NewExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'foo'
+                        },
+                        'arguments': []
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'bar'
+                    }
+                },
+                'arguments': []
+            }
+        },
+
+        'new foo.bar()': {
+            fromExpression: {
+                type: 'NewExpression',
+                callee: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'Identifier',
+                        name: 'foo'
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'bar'
+                    }
+                },
+                'arguments': []
+            }
+        },
+
+        'foo(bar, baz)': {
+            fromExpression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'Identifier',
+                    name: 'foo'
+                },
+                'arguments': [{
+                    type: 'Identifier',
+                    name: 'bar'
+                }, {
+                    type: 'Identifier',
+                    name: 'baz'
+                }]
+            }
+        },
+
+        'universe.milkyway': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Identifier',
+                    name: 'universe'
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'milkyway'
+                }
+            }
+        },
+
+        'universe.milkyway.solarsystem': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'Identifier',
+                        name: 'universe'
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'milkyway'
+                    }
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'solarsystem'
+                }
+            }
+        },
+
+        'universe.milkyway.solarsystem.Earth': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'MemberExpression',
+                        computed: false,
+                        object: {
+                            type: 'Identifier',
+                            name: 'universe'
+                        },
+                        property: {
+                            type: 'Identifier',
+                            name: 'milkyway'
+                        }
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'solarsystem'
+                    }
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'Earth'
+                }
+            }
+        },
+
+        'universe[galaxyName, otherUselessName]': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: true,
+                object: {
+                    type: 'Identifier',
+                    name: 'universe'
+                },
+                property: {
+                    type: 'SequenceExpression',
+                    expressions: [{
+                        type: 'Identifier',
+                        name: 'galaxyName'
+                    }, {
+                        type: 'Identifier',
+                        name: 'otherUselessName'
+                    }]
+                }
+            }
+        },
+
+        'universe[galaxyName]': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: true,
+                object: {
+                    type: 'Identifier',
+                    name: 'universe'
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'galaxyName'
+                }
+            }
+        },
+
+        'universe[42].galaxies': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'MemberExpression',
+                    computed: true,
+                    object: {
+                        type: 'Identifier',
+                        name: 'universe'
+                    },
+                    property: {
+                        type: 'Literal',
+                        value: 42
+                    }
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'galaxies'
+                }
+            }
+        },
+
+        'universe(42).galaxies': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'universe'
+                    },
+                    'arguments': [{
+                        type: 'Literal',
+                        value: 42
+                    }]
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'galaxies'
+                }
+            }
+        },
+
+        'universe(42).galaxies(14, 3, 77).milkyway': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'MemberExpression',
+                        computed: false,
+                        object: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'universe'
+                            },
+                            'arguments': [{
+                                type: 'Literal',
+                                value: 42
+                            }]
+                        },
+                        property: {
+                            type: 'Identifier',
+                            name: 'galaxies'
+                        }
+                    },
+                    'arguments': [{
+                        type: 'Literal',
+                        value: 14
+                    }, {
+                        type: 'Literal',
+                        value: 3
+                    }, {
+                        type: 'Literal',
+                        value: 77
+                    }]
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'milkyway'
+                }
+            }
+        },
+
+        'earth.asia.Indonesia.prepareForElection(2014)': {
+            fromExpression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'MemberExpression',
+                        computed: false,
+                        object: {
+                            type: 'MemberExpression',
+                            computed: false,
+                            object: {
+                                type: 'Identifier',
+                                name: 'earth'
+                            },
+                            property: {
+                                type: 'Identifier',
+                                name: 'asia'
+                            }
+                        },
+                        property: {
+                            type: 'Identifier',
+                            name: 'Indonesia'
+                        }
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'prepareForElection'
+                    }
+                },
+                'arguments': [{
+                    type: 'Literal',
+                    value: 2014
+                }]
+            }
+        },
+
+        'universe.if': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Identifier',
+                    name: 'universe'
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'if'
+                }
+            }
+        },
+
+        'universe.true': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Identifier',
+                    name: 'universe'
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'true'
+                }
+            }
+        },
+
+        'universe.false': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Identifier',
+                    name: 'universe'
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'false'
+                }
+            }
+        },
+
+        'universe.null': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Identifier',
+                    name: 'universe'
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'null'
+                }
+            }
+        },
+
+        '\'string\'.toString': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Literal',
+                    value: 'string'
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'toString'
+                }
+            }
+        },
+
+        '42..toString': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Literal',
+                    value: 42
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'toString'
+                }
+            }
+        },
+
+        '1e+1000.toString': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Literal',
+                    value: Infinity
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'toString'
+                }
+            }
+        },
+
+        '1e+100.toString': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Literal',
+                    value: 1e100
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'toString'
+                }
+            }
+        },
+
+        'x++': {
+            fromExpression: {
+                type: 'UpdateExpression',
+                operator: '++',
+                argument: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                prefix: false
+            }
+        },
+
+        'x--': {
+            fromExpression: {
+                type: 'UpdateExpression',
+                operator: '--',
+                argument: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                prefix: false
+            }
+        },
+
+        '++x': {
+            fromExpression: {
+                type: 'UpdateExpression',
+                operator: '++',
+                argument: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                prefix: true
+            }
+        },
+
+        '--x': {
+            fromExpression: {
+                type: 'UpdateExpression',
+                operator: '--',
+                argument: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                prefix: true
+            }
+        },
+
+        '+x': {
+            fromExpression: {
+                type: 'UnaryExpression',
+                operator: '+',
+                argument: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }
+        },
+
+        '-x': {
+            fromExpression: {
+                type: 'UnaryExpression',
+                operator: '-',
+                argument: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }
+        },
+
+        '~x': {
+            fromExpression: {
+                type: 'UnaryExpression',
+                operator: '~',
+                argument: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }
+        },
+
+        '!x': {
+            fromExpression: {
+                type: 'UnaryExpression',
+                operator: '!',
+                argument: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }
+        },
+
+        'void x': {
+            fromExpression: {
+                type: 'UnaryExpression',
+                operator: 'void',
+                argument: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }
+        },
+
+        'delete x': {
+            fromExpression: {
+                type: 'UnaryExpression',
+                operator: 'delete',
+                argument: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }
+        },
+
+        'typeof x': {
+            fromExpression: {
+                type: 'UnaryExpression',
+                operator: 'typeof',
+                argument: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }
+        },
+
+        'x * y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '*',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x / y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '/',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x % y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '%',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x + y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '+',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x - y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '-',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x << y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '<<',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x >> y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '>>',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x >>> y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '>>>',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x < y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '<',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x > y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '>',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x <= y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '<=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x >= y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '>=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        '(x in y)': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: 'in',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x instanceof y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: 'instanceof',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x == y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '==',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x != y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '!=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x === y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '===',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x !== y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '!==',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x & y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '&',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x ^ y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '^',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x | y': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '|',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x + y + z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '+',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '+',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x - y + z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '+',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '-',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x + y - z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '-',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '+',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x - y - z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '-',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '-',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x + y * z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '+',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'BinaryExpression',
+                    operator: '*',
+                    left: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'z'
+                    }
+                }
+            }
+        },
+
+        'x + y / z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '+',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'BinaryExpression',
+                    operator: '/',
+                    left: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'z'
+                    }
+                }
+            }
+        },
+
+        'x - y % z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '-',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'BinaryExpression',
+                    operator: '%',
+                    left: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'z'
+                    }
+                }
+            }
+        },
+
+        'x * y * z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '*',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '*',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x * y / z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '/',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '*',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x * y % z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '%',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '*',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x % y * z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '*',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '%',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x << y << z': {
+            type: 'ExpressionStatement',
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '<<',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '<<',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x | y | z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '|',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '|',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x & y & z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '&',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '&',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x ^ y ^ z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '^',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '^',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x & y | z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '|',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '&',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x | y ^ z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '^',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '|',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x | y & z': {
+            fromExpression: {
+                type: 'BinaryExpression',
+                operator: '|',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'BinaryExpression',
+                    operator: '&',
+                    left: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'z'
+                    }
+                }
+            }
+        },
+
+        'x || y': {
+            fromExpression: {
+                type: 'LogicalExpression',
+                operator: '||',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x && y': {
+            fromExpression: {
+                type: 'LogicalExpression',
+                operator: '&&',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y'
+                }
+            }
+        },
+
+        'x || y || z': {
+            fromExpression: {
+                type: 'LogicalExpression',
+                operator: '||',
+                left: {
+                    type: 'LogicalExpression',
+                    operator: '||',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x && y && z': {
+            fromExpression: {
+                type: 'LogicalExpression',
+                operator: '&&',
+                left: {
+                    type: 'LogicalExpression',
+                    operator: '&&',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z'
+                }
+            }
+        },
+
+        'x || y && z': {
+            fromExpression: {
+                type: 'LogicalExpression',
+                operator: '||',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'LogicalExpression',
+                    operator: '&&',
+                    left: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'z'
+                    }
+                }
+            }
+        },
+
+        'x || y ^ z': {
+            fromExpression: {
+                type: 'LogicalExpression',
+                operator: '||',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'BinaryExpression',
+                    operator: '^',
+                    left: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'z'
+                    }
+                }
+            }
+        },
+
+        'y ? 1 : 2': {
+            fromExpression: {
+                type: 'ConditionalExpression',
+                test: {
+                    type: 'Identifier',
+                    name: 'y'
+                },
+                consequent: {
+                    type: 'Literal',
+                    value: 1
+                },
+                alternate: {
+                    type: 'Literal',
+                    value: 2
+                }
+            }
+        },
+
+        'x && y ? 1 : 2': {
+            fromExpression: {
+                type: 'ConditionalExpression',
+                test: {
+                    type: 'LogicalExpression',
+                    operator: '&&',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                },
+                consequent: {
+                    type: 'Literal',
+                    value: 1
+                },
+                alternate: {
+                    type: 'Literal',
+                    value: 2
+                }
+            }
+        },
+
+        'x = 42': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }
+        },
+
+        'x *= 42': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '*=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }
+        },
+
+        'x /= 42': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '/=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }
+        },
+
+        'x %= 42': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '%=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }
+        },
+
+        'x += 42': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '+=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }
+        },
+
+        'x -= 42': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '-=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }
+        },
+
+        'x <<= 42': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '<<=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }
+        },
+
+        'x >>= 42': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '>>=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }
+        },
+
+        'x >>>= 42': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '>>>=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }
+        },
+
+        'x &= 42': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '&=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }
+        },
+
+        'x ^= 42': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '^=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }
+        },
+
+        'x |= 42': {
+            fromExpression: {
+                type: 'AssignmentExpression',
+                operator: '|=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42
+                }
+            }
+        },
+
+        '0x20.toString': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Literal',
+                    value: 0x20,
+                    raw: '0x20'
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'toString'
+                }
+            }
+        },
+
+        '0..toString': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Literal',
+                    value: 0,
+                    raw: '0.'
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'toString'
+                }
+            }
+        },
+
+        '1e2.toString': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Literal',
+                    value: 100,
+                    raw: '1e2'
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'toString'
+                }
+            }
+        },
+
+        '"TEST"': {
+            fromExpression: {
+                type: 'Literal',
+                value: 'TEST',
+                raw: '"TEST"'
+            }
+        },
+
+        '1..toString': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Literal',
+                    value: 1,
+                    raw: '20'
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'toString'
+                }
+            }
+        },
+
+        '2..toString': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Literal',
+                    value: 2,
+                    raw: '"TEST"'
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'toString'
+                }
+            }
+        },
+
+        '3..toString': {
+            fromExpression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Literal',
+                    value: 3,
+                    raw: null
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'toString'
+                }
+            }
+        }
+
+    },
+
     'Invalid syntax': {
 
         '{': {
@@ -12004,16 +14243,31 @@ function testModify(code, result) {
     }
 }
 
+function testGenerateExpression(expected, result) {
+    'use strict';
+    var actual;
+
+    try {
+        actual = esprima.generateExpression(result.fromExpression);
+    } catch (e) {
+        console.log(e.stack);
+        throw new NotMatchingError(expected, e.toString());
+    }
+    if (expected !== actual) {
+        throw new NotMatchingError(expected, actual);
+    }
+}
+
 function runTest(code, result) {
     'use strict';
-    if (typeof result === 'string' || result.hasOwnProperty('lineNumber')) {
+    if (result.hasOwnProperty('lineNumber')) {
         testError(code, result);
+    } else if (result.hasOwnProperty('modifiers')) {
+        testModify(code, result);
+    } else if (result.hasOwnProperty('fromExpression')) {
+        testGenerateExpression(code, result);
     } else {
-        if (result.hasOwnProperty('modifiers')) {
-            testModify(code, result);
-        } else {
-            testParse(code, result);
-        }
+        testParse(code, result);
     }
 }
 
