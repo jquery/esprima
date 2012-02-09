@@ -74,6 +74,7 @@ data = {
                 expression: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [5, 6],
                     loc: {
                         start: { line: 2, column: 4 },
@@ -109,6 +110,7 @@ data = {
                     left: {
                         type: 'Literal',
                         value: 1,
+                        raw: '1',
                         range: [1, 1],
                         loc: {
                             start: { line: 1, column: 1 },
@@ -118,6 +120,7 @@ data = {
                     right: {
                         type: 'Literal',
                         value: 2,
+                        raw: '2',
                         range: [5, 5],
                         loc: {
                             start: { line: 1, column: 5 },
@@ -133,6 +136,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 3,
+                    raw: '3',
                     range: [11, 11],
                     loc: {
                         start: { line: 1, column: 11 },
@@ -272,6 +276,7 @@ data = {
                     elements: [{
                         type: 'Literal',
                         value: 42,
+                        raw: '42',
                         range: [6, 7],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -316,6 +321,7 @@ data = {
                     elements: [{
                         type: 'Literal',
                         value: 42,
+                        raw: '42',
                         range: [6, 7],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -363,6 +369,7 @@ data = {
                         {
                             type: 'Literal',
                             value: 42,
+                            raw: '42',
                             range: [9, 10],
                             loc: {
                                 start: { line: 1, column: 9 },
@@ -407,6 +414,7 @@ data = {
                     elements: [{
                         type: 'Literal',
                         value: 1,
+                        raw: '1',
                         range: [6, 6],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -415,6 +423,7 @@ data = {
                     }, {
                         type: 'Literal',
                         value: 2,
+                        raw: '2',
                         range: [9, 9],
                         loc: {
                             start: { line: 1, column: 9 },
@@ -423,6 +432,7 @@ data = {
                     }, {
                         type: 'Literal',
                         value: 3,
+                        raw: '3',
                         range: [12, 12],
                         loc: {
                             start: { line: 1, column: 12 },
@@ -467,6 +477,7 @@ data = {
                     elements: [{
                         type: 'Literal',
                         value: 1,
+                        raw: '1',
                         range: [6, 6],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -475,6 +486,7 @@ data = {
                     }, {
                         type: 'Literal',
                         value: 2,
+                        raw: '2',
                         range: [9, 9],
                         loc: {
                             start: { line: 1, column: 9 },
@@ -483,6 +495,7 @@ data = {
                     }, null, {
                         type: 'Literal',
                         value: 3,
+                        raw: '3',
                         range: [13, 13],
                         loc: {
                             start: { line: 1, column: 13 },
@@ -681,6 +694,7 @@ data = {
                         value: {
                             type: 'Literal',
                             value: 42,
+                            raw: '42',
                             range: [14, 15],
                             loc: {
                                 start: { line: 1, column: 14 },
@@ -733,6 +747,7 @@ data = {
                         value: {
                             type: 'Literal',
                             value: 42,
+                            raw: '42',
                             range: [10, 11],
                             loc: {
                                 start: { line: 1, column: 10 },
@@ -785,6 +800,7 @@ data = {
                         value: {
                             type: 'Literal',
                             value: 42,
+                            raw: '42',
                             range: [12, 13],
                             loc: {
                                 start: { line: 1, column: 12 },
@@ -837,6 +853,7 @@ data = {
                         value: {
                             type: 'Literal',
                             value: 42,
+                            raw: '42',
                             range: [13, 14],
                             loc: {
                                 start: { line: 1, column: 13 },
@@ -889,6 +906,7 @@ data = {
                         value: {
                             type: 'Literal',
                             value: 42,
+                            raw: '42',
                             range: [12, 13],
                             loc: {
                                 start: { line: 1, column: 12 },
@@ -936,11 +954,13 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Literal',
-                            value: 'answer'
+                            value: 'answer',
+                            raw: '"answer"'
                         },
                         value: {
                             type: 'Literal',
                             value: 42,
+                            raw: '42',
                             range: [16, 17],
                             loc: {
                                 start: { line: 1, column: 16 },
@@ -1346,7 +1366,8 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Literal',
-                            value: 'undef'
+                            value: 'undef',
+                            raw: '"undef"'
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -1403,7 +1424,8 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Literal',
-                            value: 10
+                            value: 10,
+                            raw: '10'
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -1930,7 +1952,8 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Literal',
-                            value: 'null'
+                            value: 'null',
+                            raw: '"null"'
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -2024,7 +2047,8 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Literal',
-                            value: 10
+                            value: 10,
+                            raw: '10'
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -2123,6 +2147,7 @@ data = {
                         value: {
                             type: 'Literal',
                             value: 42,
+                            raw: '42',
                             range: [11, 12],
                             loc: {
                                 start: { line: 1, column: 11 },
@@ -2175,6 +2200,7 @@ data = {
                         value: {
                             type: 'Literal',
                             value: 43,
+                            raw: '43',
                             range: [11, 12],
                             loc: {
                                 start: { line: 1, column: 11 },
@@ -2211,6 +2237,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 42,
+                raw: '42',
                 range: [20, 21],
                 loc: {
                     start: { line: 1, column: 20 },
@@ -2231,6 +2258,7 @@ data = {
                 expression: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [0, 1],
                     loc: {
                         start: { line: 1, column: 0 },
@@ -2264,6 +2292,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 42,
+                raw: '42',
                 range: [42, 43],
                 loc: {
                     start: { line: 5, column: 11 },
@@ -2282,6 +2311,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 42,
+                raw: '42',
                 range: [16, 17],
                 loc: {
                     start: { line: 2, column: 0 },
@@ -2302,6 +2332,7 @@ data = {
                 expression: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [17, 18],
                     loc: {
                         start: { line: 2, column: -1 },
@@ -2395,6 +2426,7 @@ data = {
                 expression: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [37, 38],
                     loc: {
                         start: { line: 4, column: -1 },
@@ -2507,6 +2539,7 @@ data = {
                     test: {
                         type: 'Literal',
                         value: 42,
+                        raw: '42',
                         range: [23, 24],
                         loc: {
                             start: { line: 1, column: 23 },
@@ -2567,6 +2600,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 0,
+                raw: '0',
                 range: [0, 0],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2585,6 +2619,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 42,
+                raw: '42',
                 range: [0, 1],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2603,6 +2638,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 0.14,
+                raw: '.14',
                 range: [0, 2],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2621,6 +2657,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 3.14159,
+                raw: '3.14159',
                 range: [0, 6],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2639,6 +2676,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 6.02214179e+23,
+                raw: '6.02214179e+23',
                 range: [0, 13],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2657,6 +2695,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 1.49241783e-10,
+                raw: '1.492417830e-10',
                 range: [0, 14],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2675,6 +2714,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 0,
+                raw: '0x0',
                 range: [0, 2],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2693,6 +2733,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 0xabc,
+                raw: '0xabc',
                 range: [0, 4],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2711,6 +2752,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 0xdef,
+                raw: '0xdef',
                 range: [0, 4],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2729,6 +2771,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 0x1A,
+                raw: '0X1A',
                 range: [0, 3],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2747,6 +2790,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 0x10,
+                raw: '0x10',
                 range: [0, 3],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2765,6 +2809,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 0x100,
+                raw: '0x100',
                 range: [0, 4],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2783,6 +2828,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 0X04,
+                raw: '0X04',
                 range: [0, 3],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2805,6 +2851,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 'Hello',
+                raw: '"Hello"',
                 range: [0, 6],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2823,6 +2870,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: '\n\r\b\f\\\'"\x00',
+                raw: '"\\n\\r\\b\\f\\\\\\\'\\"\\0"',
                 range: [0, 17],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2841,6 +2889,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 'a',
+                raw: '"\\u0061"',
                 range: [0, 7],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2859,6 +2908,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 'a',
+                raw: '"\\x61"',
                 range: [0, 5],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2877,6 +2927,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 'u00',
+                raw: '"\\u00"',
                 range: [0, 5],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2895,6 +2946,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 'xt',
+                raw: '"\\xt"',
                 range: [0, 4],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2913,6 +2965,7 @@ data = {
             expression: {
                 type: 'Literal',
                 value: 'Hello\nworld',
+                raw: '"Hello\nworld"',
                 range: [0, 12],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -2943,6 +2996,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: '/[a-z]/i',
+                        raw: '/[a-z]/i',
                         range: [8, 15],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -2994,6 +3048,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: '/[P QR]/i',
+                        raw: '/[P QR]/i',
                         range: [8, 16],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -3045,6 +3100,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: '/foo\\/bar/',
+                        raw: '/foo\\/bar/',
                         range: [8, 17],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -3096,6 +3152,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: '/=([^=\\s])+/g',
+                        raw: '/=([^=\\s])+/g',
                         range: [8, 20],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -3147,6 +3204,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: '/[P QR]/g',
+                        raw: '/[P QR]/\\u0067',
                         range: [8, 21],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -3198,6 +3256,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: '/[P QR]/g',
+                        raw: '/[P QR]/\\g',
                         range: [8, 17],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -3763,6 +3822,7 @@ data = {
                     property: {
                         type: 'Literal',
                         value: 42,
+                        raw: '42',
                         range: [9, 10],
                         loc: {
                             start: { line: 1, column: 9 },
@@ -3816,6 +3876,7 @@ data = {
                     'arguments': [{
                         type: 'Literal',
                         value: 42,
+                        raw: '42',
                         range: [9, 10],
                         loc: {
                             start: { line: 1, column: 9 },
@@ -3874,6 +3935,7 @@ data = {
                             'arguments': [{
                                 type: 'Literal',
                                 value: 42,
+                                raw: '42',
                                 range: [9, 10],
                                 loc: {
                                     start: { line: 1, column: 9 },
@@ -3904,6 +3966,7 @@ data = {
                     'arguments': [{
                         type: 'Literal',
                         value: 14,
+                        raw: '14',
                         range: [22, 23],
                         loc: {
                             start: { line: 1, column: 22 },
@@ -3912,6 +3975,7 @@ data = {
                     }, {
                         type: 'Literal',
                         value: 3,
+                        raw: '3',
                         range: [26, 26],
                         loc: {
                             start: { line: 1, column: 26 },
@@ -3920,6 +3984,7 @@ data = {
                     }, {
                         type: 'Literal',
                         value: 77,
+                        raw: '77',
                         range: [29, 30],
                         loc: {
                             start: { line: 1, column: 29 },
@@ -4024,6 +4089,7 @@ data = {
                 'arguments': [{
                     type: 'Literal',
                     value: 2014,
+                    raw: '2014',
                     range: [40, 43],
                     loc: {
                         start: { line: 1, column: 40 },
@@ -6564,6 +6630,7 @@ data = {
                 consequent: {
                     type: 'Literal',
                     value: 1,
+                    raw: '1',
                     range: [4, 4],
                     loc: {
                         start: { line: 1, column: 4 },
@@ -6573,6 +6640,7 @@ data = {
                 alternate: {
                     type: 'Literal',
                     value: 2,
+                    raw: '2',
                     range: [8, 8],
                     loc: {
                         start: { line: 1, column: 8 },
@@ -6626,6 +6694,7 @@ data = {
                 consequent: {
                     type: 'Literal',
                     value: 1,
+                    raw: '1',
                     range: [9, 9],
                     loc: {
                         start: { line: 1, column: 9 },
@@ -6635,6 +6704,7 @@ data = {
                 alternate: {
                     type: 'Literal',
                     value: 2,
+                    raw: '2',
                     range: [13, 13],
                     loc: {
                         start: { line: 1, column: 13 },
@@ -6675,6 +6745,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [4, 5],
                     loc: {
                         start: { line: 1, column: 4 },
@@ -6711,6 +6782,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [5, 6],
                     loc: {
                         start: { line: 1, column: 5 },
@@ -6747,6 +6819,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [5, 6],
                     loc: {
                         start: { line: 1, column: 5 },
@@ -6783,6 +6856,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [5, 6],
                     loc: {
                         start: { line: 1, column: 5 },
@@ -6819,6 +6893,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [5, 6],
                     loc: {
                         start: { line: 1, column: 5 },
@@ -6855,6 +6930,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [5, 6],
                     loc: {
                         start: { line: 1, column: 5 },
@@ -6891,6 +6967,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [6, 7],
                     loc: {
                         start: { line: 1, column: 6 },
@@ -6927,6 +7004,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [6, 7],
                     loc: {
                         start: { line: 1, column: 6 },
@@ -6963,6 +7041,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [7, 8],
                     loc: {
                         start: { line: 1, column: 7 },
@@ -6999,6 +7078,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [5, 6],
                     loc: {
                         start: { line: 1, column: 5 },
@@ -7035,6 +7115,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [5, 6],
                     loc: {
                         start: { line: 1, column: 5 },
@@ -7071,6 +7152,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [5, 6],
                     loc: {
                         start: { line: 1, column: 5 },
@@ -7248,6 +7330,7 @@ data = {
                 init: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [8, 9],
                     loc: {
                         start: { line: 1, column: 8 },
@@ -7274,6 +7357,7 @@ data = {
                 init: {
                     type: 'Literal',
                     value: 14,
+                    raw: '14',
                     range: [8, 9],
                     loc: {
                         start: { line: 1, column: 8 },
@@ -7289,6 +7373,7 @@ data = {
                 init: {
                     type: 'Literal',
                     value: 3,
+                    raw: '3',
                     range: [16, 16],
                     loc: {
                         start: { line: 1, column: 16 },
@@ -7304,6 +7389,7 @@ data = {
                 init: {
                     type: 'Literal',
                     value: 1977,
+                    raw: '1977',
                     range: [23, 26],
                     loc: {
                         start: { line: 1, column: 23 },
@@ -7370,6 +7456,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 42,
+                        raw: '42',
                         range: [10, 11],
                         loc: {
                             start: { line: 1, column: 10 },
@@ -7399,6 +7486,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 14,
+                        raw: '14',
                         range: [10, 11],
                         loc: {
                             start: { line: 1, column: 10 },
@@ -7414,6 +7502,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 3,
+                        raw: '3',
                         range: [18, 18],
                         loc: {
                             start: { line: 1, column: 18 },
@@ -7429,6 +7518,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 1977,
+                        raw: '1977',
                         range: [25, 28],
                         loc: {
                             start: { line: 1, column: 25 },
@@ -7460,6 +7550,7 @@ data = {
                 init: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [10, 11],
                     loc: {
                         start: { line: 1, column: 10 },
@@ -7483,6 +7574,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 42,
+                        raw: '42',
                         range: [12, 13],
                         loc: {
                             start: { line: 1, column: 12 },
@@ -7512,6 +7604,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 14,
+                        raw: '14',
                         range: [12, 13],
                         loc: {
                             start: { line: 1, column: 12 },
@@ -7527,6 +7620,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 3,
+                        raw: '3',
                         range: [20, 20],
                         loc: {
                             start: { line: 1, column: 20 },
@@ -7542,6 +7636,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 1977,
+                        raw: '1977',
                         range: [27, 30],
                         loc: {
                             start: { line: 1, column: 27 },
@@ -7816,6 +7911,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 0,
+                        raw: '0',
                         range: [21, 21],
                         loc: {
                             start: { line: 1, column: 21 },
@@ -7984,6 +8080,7 @@ data = {
             test: {
                 type: 'Literal',
                 value: true,
+                raw: 'true',
                 range: [18, 21],
                 loc: {
                     start: { line: 1, column: 18 },
@@ -8075,6 +8172,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 10,
+                    raw: '10',
                     range: [28, 29],
                     loc: {
                         start: { line: 1, column: 28 },
@@ -8110,6 +8208,7 @@ data = {
                 test: {
                     type: 'Literal',
                     value: false,
+                    raw: 'false',
                     range: [16, 20],
                     loc: {
                         start: { line: 1, column: 16 },
@@ -8126,6 +8225,7 @@ data = {
                 expression: {
                     type: 'Literal',
                     value: false,
+                    raw: 'false',
                     range: [23, 27],
                     loc: {
                         start: { line: 1, column: 23 },
@@ -8150,6 +8250,7 @@ data = {
             test: {
                 type: 'Literal',
                 value: true,
+                raw: 'true',
                 range: [7, 10],
                 loc: {
                     start: { line: 1, column: 7 },
@@ -8206,6 +8307,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 10,
+                    raw: '10',
                     range: [11, 12],
                     loc: {
                         start: { line: 1, column: 11 },
@@ -8344,6 +8446,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 0,
+                    raw: '0',
                     range: [8, 8],
                     loc: {
                         start: { line: 1, column: 8 },
@@ -8386,6 +8489,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 0,
+                        raw: '0',
                         range: [12, 12],
                         loc: {
                             start: { line: 1, column: 12 },
@@ -8425,6 +8529,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 0,
+                        raw: '0',
                         range: [12, 12],
                         loc: {
                             start: { line: 1, column: 12 },
@@ -8464,6 +8569,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 0,
+                        raw: '0',
                         range: [12, 12],
                         loc: {
                             start: { line: 1, column: 12 },
@@ -8479,6 +8585,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 1,
+                        raw: '1',
                         range: [19, 19],
                         loc: {
                             start: { line: 1, column: 19 },
@@ -8522,6 +8629,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 0,
+                    raw: '0',
                     range: [8, 8],
                     loc: {
                         start: { line: 1, column: 8 },
@@ -8549,6 +8657,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [15, 16],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -8594,6 +8703,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 0,
+                    raw: '0',
                     range: [8, 8],
                     loc: {
                         start: { line: 1, column: 8 },
@@ -8621,6 +8731,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [15, 16],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -8684,6 +8795,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 0,
+                    raw: '0',
                     range: [8, 8],
                     loc: {
                         start: { line: 1, column: 8 },
@@ -8711,6 +8823,7 @@ data = {
                 right: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [15, 16],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -8923,6 +9036,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 42,
+                        raw: '42',
                         range: [13, 14],
                         loc: {
                             start: { line: 1, column: 13 },
@@ -9061,6 +9175,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 42,
+                        raw: '42',
                         range: [13, 14],
                         loc: {
                             start: { line: 1, column: 13 },
@@ -9145,6 +9260,7 @@ data = {
                                     left: {
                                         type: 'Literal',
                                         value: 10,
+                                        raw: '10',
                                         range: [33, 34],
                                         loc: {
                                             start: { line: 1, column: 33 },
@@ -9605,6 +9721,7 @@ data = {
                 test: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [23, 24],
                     loc: {
                         start: { line: 1, column: 23 },
@@ -9669,6 +9786,7 @@ data = {
                 test: {
                     type: 'Literal',
                     value: 42,
+                    raw: '42',
                     range: [23, 24],
                     loc: {
                         start: { line: 1, column: 23 },
@@ -9790,6 +9908,7 @@ data = {
                 test: {
                     type: 'Literal',
                     value: true,
+                    raw: 'true',
                     range: [14, 17],
                     loc: {
                         start: { line: 1, column: 14 },
@@ -9892,6 +10011,7 @@ data = {
                     value: {
                         type: 'Literal',
                         value: 'Error',
+                        raw: '"Error"',
                         range: [17, 23],
                         loc: {
                             start: { line: 1, column: 17 },
@@ -10776,6 +10896,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 14,
+                        raw: '14',
                         range: [10, 11],
                         loc: {
                             start: { line: 1, column: 10 },
@@ -10791,6 +10912,7 @@ data = {
                     init: {
                         type: 'Literal',
                         value: 3,
+                        raw: '3',
                         range: [18, 18],
                         loc: {
                             start: { line: 1, column: 18 },
@@ -11899,7 +12021,8 @@ function testParse(code, syntax) {
         comment: false,
         range: true,
         loc: true,
-        tokens: false
+        tokens: false,
+		raw: true
     };
 
     options.comment = hasComment(syntax);
