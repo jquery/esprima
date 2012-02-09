@@ -671,6 +671,7 @@ parseStatement: true, parseSourceElement: true */
                 return {
                     type: Token.NumericLiteral,
                     value: parseInt(number, 16),
+                    raw: source.slice(start, index),
                     lineNumber: lineNumber,
                     lineStart: lineStart,
                     range: [start, index]
@@ -728,6 +729,7 @@ parseStatement: true, parseSourceElement: true */
         return {
             type: Token.NumericLiteral,
             value: parseFloat(number),
+            raw: source.slice(start, index),
             lineNumber: lineNumber,
             lineStart: lineStart,
             range: [start, index]
@@ -805,6 +807,7 @@ parseStatement: true, parseSourceElement: true */
         return {
             type: Token.StringLiteral,
             value: str,
+            raw: source.slice(start, index),
             lineNumber: lineNumber,
             lineStart: lineStart,
             range: [start, index]
@@ -1186,7 +1189,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.1.5 Object Initialiser
 
     function parseObjectInitialiser() {
-        var token, expr, properties = [], property;
+        var token, expr, properties = [], property, property_key;
 
         expect('{');
 
@@ -1197,7 +1200,6 @@ parseStatement: true, parseSourceElement: true */
                 break;
             }
 
-            property = { type: 'Property' };
             switch (token.type) {
             case Token.Identifier:
                 // Property Assignment: Getter and Setter.
@@ -1210,30 +1212,28 @@ parseStatement: true, parseSourceElement: true */
                         throwUnexpected(token);
                     }
                     if (token.type === Token.StringLiteral ||
-                            token.type === Token.NumericLiteral) {
-                        property.key = {
-                            type: Syntax.Literal,
-                            value: token.value
-                        };
+                        token.type === Token.NumericLiteral) {
+                        property_key = createLiteral(token.value, token.raw);
                     } else {
-                        property.key = {
+                        property_key = {
                             type: Syntax.Identifier,
                             name: token.value
                         };
                     }
                     expect('(');
                     expect(')');
-                    property.value = {
-                        type: Syntax.FunctionExpression,
-                        id: null,
-                        params: [],
-                        body: parseBlock()
+                    property = {
+                        type: 'Property',
+                        key: property_key,
+                        value: {
+                            type: Syntax.FunctionExpression,
+                            id: null,
+                            params: [],
+                            body: parseBlock()
+                        },
+                        kind: 'get'
                     };
-                    property.kind = 'get';
-                    break;
-                }
-
-                if (token.value === 'set' && !match(':')) {
+                } else if (token.value === 'set' && !match(':')) {
                     token = lex();
                     if (!isIdentifierName(token) &&
                             token.type !== Token.StringLiteral &&
@@ -1241,13 +1241,10 @@ parseStatement: true, parseSourceElement: true */
                         throwUnexpected(token);
                     }
                     if (token.type === Token.StringLiteral ||
-                            token.type === Token.NumericLiteral) {
-                        property.key = {
-                            type: Syntax.Literal,
-                            value: token.value
-                        };
+                        token.type === Token.NumericLiteral) {
+                        property_key = createLiteral(token.value, token.raw);
                     } else {
-                        property.key = {
+                        property_key = {
                             type: Syntax.Identifier,
                             name: token.value
                         };
@@ -1258,48 +1255,58 @@ parseStatement: true, parseSourceElement: true */
                         throwUnexpected(token);
                     }
                     expect(')');
-                    property.value = {
-                        type: Syntax.FunctionExpression,
-                        id: null,
-                        params: [{
+                    property = {
+                        type: 'Property',
+                        key: property_key,
+                        value: {
+                            type: Syntax.FunctionExpression,
+                            id: null,
+                            params: [{
+                                type: Syntax.Identifier,
+                                name: token.value
+                            }],
+                            body: parseBlock()
+                        },
+                        kind: 'set'
+                    };
+                } else {
+                    expect(':');
+                    property = {
+                        type: 'Property',
+                        key: {
                             type: Syntax.Identifier,
                             name: token.value
-                        }],
-                        body: parseBlock()
+                        },
+                        value: parseAssignmentExpression(),
+                        kind: 'init'
                     };
-                    property.kind = 'set';
-                    break;
                 }
-                property.key = {
-                    type: Syntax.Identifier,
-                    name: token.value
-                };
-                expect(':');
-                property.value = parseAssignmentExpression();
-                property.kind = 'init';
                 break;
 
             case Token.Keyword:
             case Token.BooleanLiteral:
             case Token.NullLiteral:
-                property.key = {
-                    type: Syntax.Identifier,
-                    name: token.value
-                };
                 expect(':');
-                property.value = parseAssignmentExpression();
-                property.kind = 'init';
+                property = {
+                    type: 'Property',
+                    key: {
+                        type: Syntax.Identifier,
+                        name: token.value
+                    },
+                    value: parseAssignmentExpression(),
+                    kind: 'init'
+                };
                 break;
 
             case Token.StringLiteral:
             case Token.NumericLiteral:
-                property.key = {
-                    type: Syntax.Literal,
-                    value: token.value
-                };
                 expect(':');
-                property.value = parseAssignmentExpression();
-                property.kind = 'init';
+                property = {
+                    type: 'Property',
+                    key: createLiteral(token.value, token.raw),
+                    value: parseAssignmentExpression(),
+                    kind: 'init'
+                };
                 break;
 
             default:
@@ -1324,7 +1331,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.1 Primary Expressions
 
     function parsePrimaryExpression() {
-        var token, expr;
+        var token, expr, regex;
 
         if (match('[')) {
             return parseArrayInitialiser();
@@ -1353,10 +1360,9 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (match('/') || match('/=')) {
-            return {
-                type: Syntax.Literal,
-                value: scanRegExp().value
-            };
+            regex = scanRegExp();
+
+            return createLiteral(regex.value, regex.literal);
         }
 
         token = lex();
@@ -1369,31 +1375,19 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (token.type === Token.BooleanLiteral) {
-            return {
-                type: Syntax.Literal,
-                value: (token.value === 'true')
-            };
+            return createLiteral((token.value === 'true'), token.value);
         }
 
         if (token.type === Token.NullLiteral) {
-            return {
-                type: Syntax.Literal,
-                value: null
-            };
+            return createLiteral(null, token.value);
         }
 
         if (token.type === Token.NumericLiteral) {
-            return {
-                type: Syntax.Literal,
-                value: token.value
-            };
+            return createLiteral(token.value, token.raw);
         }
 
         if (token.type === Token.StringLiteral) {
-            return {
-                type: Syntax.Literal,
-                value: token.value
-            };
+            return createLiteral(token.value, token.raw);
         }
 
         return throwUnexpected(token);
@@ -1789,22 +1783,24 @@ parseStatement: true, parseSourceElement: true */
     // 11.12 Conditional Operator
 
     function parseConditionalExpression() {
-        var expr, previousAllowIn;
+        var expr, previousAllowIn, consequent;
 
         expr = parseLogicalORExpression();
 
         if (match('?')) {
             lex();
-            expr = {
-                type: Syntax.ConditionalExpression,
-                test: expr
-            };
             previousAllowIn = allowIn;
             allowIn = true;
-            expr.consequent = parseAssignmentExpression();
+            consequent = parseAssignmentExpression();
             allowIn = previousAllowIn;
             expect(':');
-            expr.alternate = parseAssignmentExpression();
+
+            expr = {
+                type: Syntax.ConditionalExpression,
+                test: expr,
+                consequent: consequent,
+                alternate: parseAssignmentExpression()
+            };
         }
 
         return expr;
@@ -2897,6 +2893,21 @@ parseStatement: true, parseSourceElement: true */
         return regex;
     }
 
+    function createLiteral(value) {
+        return {
+            type: Syntax.Literal,
+            value: value
+        };
+    }
+
+    function createRawLiteral(value, raw_value) {
+        return {
+            type: Syntax.Literal,
+            value: value,
+            raw: raw_value
+        };
+    }
+
     function wrapTrackingFunction(range, loc) {
 
         return function (parseFunction) {
@@ -2995,6 +3006,11 @@ parseStatement: true, parseSourceElement: true */
             skipComment = scanComment;
         }
 
+        if (extra.raw) {
+            extra.createLiteral = createLiteral;
+            createLiteral = createRawLiteral;
+        }
+
         if (extra.range || extra.loc) {
 
             wrapTracking = wrapTrackingFunction(extra.range, extra.loc);
@@ -3066,6 +3082,10 @@ parseStatement: true, parseSourceElement: true */
             skipComment = extra.skipComment;
         }
 
+        if (extra.raw) {
+            createLiteral = extra.createLiteral;
+        }
+
         if (extra.range || extra.loc) {
             parseAdditiveExpression = extra.parseAdditiveExpression;
             parseAssignmentExpression = extra.parseAssignmentExpression;
@@ -3129,6 +3149,7 @@ parseStatement: true, parseSourceElement: true */
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
+            extra.raw = (typeof options.raw === 'boolean') && options.raw;
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
             }
