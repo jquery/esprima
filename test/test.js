@@ -1038,6 +1038,11 @@ data = {
                                     start: { line: 1, column: 18 },
                                     end: { line: 1, column: 36 }
                                 }
+                            },
+                            range: [18, 35],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 36 }
                             }
                         },
                         kind: 'get'
@@ -1095,6 +1100,11 @@ data = {
                                     start: { line: 1, column: 18 },
                                     end: { line: 1, column: 20 }
                                 }
+                            },
+                            range: [18, 19],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 20 }
                             }
                         },
                         kind: 'get'
@@ -1152,6 +1162,11 @@ data = {
                                     start: { line: 1, column: 15 },
                                     end: { line: 1, column: 17 }
                                 }
+                            },
+                            range: [15, 16],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 17 }
                             }
                         },
                         kind: 'get'
@@ -1209,6 +1224,11 @@ data = {
                                     start: { line: 1, column: 17 },
                                     end: { line: 1, column: 19 }
                                 }
+                            },
+                            range: [17, 18],
+                            loc: {
+                                start: { line: 1, column: 17 },
+                                end: { line: 1, column: 19 }
                             }
                         },
                         kind: 'get'
@@ -1266,6 +1286,11 @@ data = {
                                     start: { line: 1, column: 18 },
                                     end: { line: 1, column: 20 }
                                 }
+                            },
+                            range: [18, 19],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 20 }
                             }
                         },
                         kind: 'get'
@@ -1323,6 +1348,11 @@ data = {
                                     start: { line: 1, column: 17 },
                                     end: { line: 1, column: 19 }
                                 }
+                            },
+                            range: [17, 18],
+                            loc: {
+                                start: { line: 1, column: 17 },
+                                end: { line: 1, column: 19 }
                             }
                         },
                         kind: 'get'
@@ -1381,6 +1411,11 @@ data = {
                                     start: { line: 1, column: 20 },
                                     end: { line: 1, column: 22 }
                                 }
+                            },
+                            range: [20, 21],
+                            loc: {
+                                start: { line: 1, column: 20 },
+                                end: { line: 1, column: 22 }
                             }
                         },
                         kind: 'get'
@@ -1439,6 +1474,11 @@ data = {
                                     start: { line: 1, column: 15 },
                                     end: { line: 1, column: 17 }
                                 }
+                            },
+                            range: [15, 16],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 17 }
                             }
                         },
                         kind: 'get'
@@ -1533,6 +1573,11 @@ data = {
                                     start: { line: 1, column: 19 },
                                     end: { line: 1, column: 34 }
                                 }
+                            },
+                            range: [19, 33],
+                            loc: {
+                                start: { line: 1, column: 19 },
+                                end: { line: 1, column: 34 }
                             }
                         },
                         kind: 'set'
@@ -1627,6 +1672,11 @@ data = {
                                     start: { line: 1, column: 16 },
                                     end: { line: 1, column: 28 }
                                 }
+                            },
+                            range: [16, 27],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 28 }
                             }
                         },
                         kind: 'set'
@@ -1721,6 +1771,11 @@ data = {
                                     start: { line: 1, column: 18 },
                                     end: { line: 1, column: 32 }
                                 }
+                            },
+                            range: [18, 31],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 32 }
                             }
                         },
                         kind: 'set'
@@ -1815,6 +1870,11 @@ data = {
                                     start: { line: 1, column: 19 },
                                     end: { line: 1, column: 34 }
                                 }
+                            },
+                            range: [19, 33],
+                            loc: {
+                                start: { line: 1, column: 19 },
+                                end: { line: 1, column: 34 }
                             }
                         },
                         kind: 'set'
@@ -1909,6 +1969,11 @@ data = {
                                     start: { line: 1, column: 18 },
                                     end: { line: 1, column: 32 }
                                 }
+                            },
+                            range: [18, 31],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 32 }
                             }
                         },
                         kind: 'set'
@@ -2004,6 +2069,11 @@ data = {
                                     start: { line: 1, column: 20 },
                                     end: { line: 1, column: 34 }
                                 }
+                            },
+                            range: [20, 33],
+                            loc: {
+                                start: { line: 1, column: 20 },
+                                end: { line: 1, column: 34 }
                             }
                         },
                         kind: 'set'
@@ -2099,6 +2169,11 @@ data = {
                                     start: { line: 1, column: 16 },
                                     end: { line: 1, column: 30 }
                                 }
+                            },
+                            range: [16, 29],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 30 }
                             }
                         },
                         kind: 'set'

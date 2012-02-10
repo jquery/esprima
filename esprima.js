@@ -1214,6 +1214,15 @@ parseStatement: true, parseSourceElement: true */
 
     // 11.1.5 Object Initialiser
 
+    function parsePropertyFunction(param) {
+        return {
+            type: Syntax.FunctionExpression,
+            id: null,
+            params: param,
+            body: parseBlock()
+        };
+    }
+
     function parseObjectInitialiser() {
         var token, expr, properties = [], property, property_key;
 
@@ -1251,12 +1260,7 @@ parseStatement: true, parseSourceElement: true */
                     property = {
                         type: 'Property',
                         key: property_key,
-                        value: {
-                            type: Syntax.FunctionExpression,
-                            id: null,
-                            params: [],
-                            body: parseBlock()
-                        },
+                        value: parsePropertyFunction([]),
                         kind: 'get'
                     };
                 } else if (token.value === 'set' && !match(':')) {
@@ -1284,15 +1288,10 @@ parseStatement: true, parseSourceElement: true */
                     property = {
                         type: 'Property',
                         key: property_key,
-                        value: {
-                            type: Syntax.FunctionExpression,
-                            id: null,
-                            params: [{
-                                type: Syntax.Identifier,
-                                name: token.value
-                            }],
-                            body: parseBlock()
-                        },
+                        value: parsePropertyFunction([{
+                            type: Syntax.Identifier,
+                            name: token.value
+                        }]),
                         kind: 'set'
                     };
                 } else {
@@ -3052,6 +3051,7 @@ parseStatement: true, parseSourceElement: true */
             extra.parseEqualityExpression = parseEqualityExpression;
             extra.parseExpression = parseExpression;
             extra.parseFunctionDeclaration = parseFunctionDeclaration;
+            extra.parseFunctionExpression = parseFunctionExpression;
             extra.parseLogicalANDExpression = parseLogicalANDExpression;
             extra.parseLogicalORExpression = parseLogicalORExpression;
             extra.parseMultiplicativeExpression = parseMultiplicativeExpression;
@@ -3061,6 +3061,7 @@ parseStatement: true, parseSourceElement: true */
             extra.parsePostfixExpression = parsePostfixExpression;
             extra.parsePrimaryExpression = parsePrimaryExpression;
             extra.parseProgram = parseProgram;
+            extra.parsePropertyFunction = parsePropertyFunction;
             extra.parseRelationalExpression = parseRelationalExpression;
             extra.parseStatement = parseStatement;
             extra.parseShiftExpression = parseShiftExpression;
@@ -3082,6 +3083,7 @@ parseStatement: true, parseSourceElement: true */
             parseEqualityExpression = wrapTracking(extra.parseEqualityExpression);
             parseExpression = wrapTracking(extra.parseExpression);
             parseFunctionDeclaration = wrapTracking(extra.parseFunctionDeclaration);
+            parseFunctionExpression = wrapTracking(extra.parseFunctionExpression);
             parseLogicalANDExpression = wrapTracking(extra.parseLogicalANDExpression);
             parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);
             parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);
@@ -3091,6 +3093,7 @@ parseStatement: true, parseSourceElement: true */
             parsePostfixExpression = wrapTracking(extra.parsePostfixExpression);
             parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
             parseProgram = wrapTracking(extra.parseProgram);
+            parsePropertyFunction = wrapTracking(extra.parsePropertyFunction);
             parseRelationalExpression = wrapTracking(extra.parseRelationalExpression);
             parseStatement = wrapTracking(extra.parseStatement);
             parseShiftExpression = wrapTracking(extra.parseShiftExpression);
@@ -3132,6 +3135,7 @@ parseStatement: true, parseSourceElement: true */
             parseEqualityExpression = extra.parseEqualityExpression;
             parseExpression = extra.parseExpression;
             parseFunctionDeclaration = extra.parseFunctionDeclaration;
+            parseFunctionExpression = extra.parseFunctionExpression;
             parseLogicalANDExpression = extra.parseLogicalANDExpression;
             parseLogicalORExpression = extra.parseLogicalORExpression;
             parseMultiplicativeExpression = extra.parseMultiplicativeExpression;
@@ -3141,6 +3145,7 @@ parseStatement: true, parseSourceElement: true */
             parsePrimaryExpression = extra.parsePrimaryExpression;
             parsePostfixExpression = extra.parsePostfixExpression;
             parseProgram = extra.parseProgram;
+            parsePropertyFunction = extra.parsePropertyFunction;
             parseRelationalExpression = extra.parseRelationalExpression;
             parseStatement = extra.parseStatement;
             parseShiftExpression = extra.parseShiftExpression;
