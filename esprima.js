@@ -699,7 +699,6 @@ parseStatement: true, parseSourceElement: true */
                 return {
                     type: Token.NumericLiteral,
                     value: parseInt(number, 16),
-                    raw: source.slice(start, index),
                     lineNumber: lineNumber,
                     lineStart: lineStart,
                     range: [start, index]
@@ -757,7 +756,6 @@ parseStatement: true, parseSourceElement: true */
         return {
             type: Token.NumericLiteral,
             value: parseFloat(number),
-            raw: source.slice(start, index),
             lineNumber: lineNumber,
             lineStart: lineStart,
             range: [start, index]
@@ -835,7 +833,6 @@ parseStatement: true, parseSourceElement: true */
         return {
             type: Token.StringLiteral,
             value: str,
-            raw: source.slice(start, index),
             lineNumber: lineNumber,
             lineStart: lineStart,
             range: [start, index]
@@ -843,11 +840,12 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function scanRegExp() {
-        var str = '', ch, pattern, flags, value, classMarker = false, restore;
+        var str = '', ch, start, pattern, flags, value, classMarker = false, restore;
 
         buffer = null;
         skipComment();
 
+        start = index;
         ch = source[index];
         if (ch !== '/') {
             return;
@@ -926,7 +924,8 @@ parseStatement: true, parseSourceElement: true */
 
         return {
             literal: str,
-            value: value
+            value: value,
+            range: [start, index]
         };
     }
 
@@ -1233,7 +1232,7 @@ parseStatement: true, parseSourceElement: true */
 
         case Token.StringLiteral:
         case Token.NumericLiteral:
-            key = createLiteral(token.value, token.raw);
+            key = createLiteral(token);
             break;
 
         case Token.Identifier:
@@ -1403,7 +1402,7 @@ parseStatement: true, parseSourceElement: true */
         if (match('/') || match('/=')) {
             regex = scanRegExp();
 
-            return createLiteral(regex.value, regex.literal);
+            return createLiteral(regex);
         }
 
         token = lex();
@@ -1415,20 +1414,15 @@ parseStatement: true, parseSourceElement: true */
             };
         }
 
+        if (token.type === Token.NullLiteral ||
+                token.type === Token.NumericLiteral ||
+                token.type === Token.StringLiteral) {
+            return createLiteral(token);
+        }
+
         if (token.type === Token.BooleanLiteral) {
-            return createLiteral((token.value === 'true'), token.value);
-        }
-
-        if (token.type === Token.NullLiteral) {
-            return createLiteral(null, token.value);
-        }
-
-        if (token.type === Token.NumericLiteral) {
-            return createLiteral(token.value, token.raw);
-        }
-
-        if (token.type === Token.StringLiteral) {
-            return createLiteral(token.value, token.raw);
+            token.value = (token.value === 'true');
+            return createLiteral(token);
         }
 
         return throwUnexpected(token);
@@ -2938,18 +2932,18 @@ parseStatement: true, parseSourceElement: true */
         return regex;
     }
 
-    function createLiteral(value) {
+    function createLiteral(token) {
         return {
             type: Syntax.Literal,
-            value: value
+            value: token.value
         };
     }
 
-    function createRawLiteral(value, raw_value) {
+    function createRawLiteral(token) {
         return {
             type: Syntax.Literal,
-            value: value,
-            raw: raw_value
+            value: token.value,
+            raw: source.slice(token.range[0], token.range[1])
         };
     }
 
