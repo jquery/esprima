@@ -10070,6 +10070,11 @@ data = {
                         start: { line: 1, column: 18 },
                         end: { line: 1, column: 21 }
                     }
+                },
+                range: [8, 20],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 21 }
                 }
             }],
             finalizer: null,
@@ -10144,6 +10149,11 @@ data = {
                         start: { line: 1, column: 18 },
                         end: { line: 1, column: 28 }
                     }
+                },
+                range: [8, 27],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 28 }
                 }
             }],
             finalizer: null,
@@ -10304,6 +10314,11 @@ data = {
                         start: { line: 1, column: 28 },
                         end: { line: 1, column: 38 }
                     }
+                },
+                range: [18, 37],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 38 }
                 }
             }],
             finalizer: null,
@@ -10403,6 +10418,11 @@ data = {
                         start: { line: 1, column: 28 },
                         end: { line: 1, column: 38 }
                     }
+                },
+                range: [18, 37],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 38 }
                 }
             }],
             finalizer: {

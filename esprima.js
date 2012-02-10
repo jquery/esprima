@@ -2417,6 +2417,25 @@ parseStatement: true, parseSourceElement: true */
 
     // 12.14 The try statement
 
+    function parseCatchClause() {
+        var param;
+
+        expectKeyword('catch');
+
+        expect('(');
+        if (!match(')')) {
+            param = parseExpression();
+        }
+        expect(')');
+
+        return {
+            type: Syntax.CatchClause,
+            param: param,
+            guard: null,
+            body: parseBlock()
+        };
+    }
+
     function parseTryStatement() {
         var block, handlers = [], param, finalizer = null;
 
@@ -2425,19 +2444,7 @@ parseStatement: true, parseSourceElement: true */
         block = parseBlock();
 
         if (matchKeyword('catch')) {
-            lex();
-            expect('(');
-            if (!match(')')) {
-                param = parseExpression();
-            }
-            expect(')');
-
-            handlers.push({
-                type: Syntax.CatchClause,
-                param: param,
-                guard: null,
-                body: parseBlock()
-            });
+            handlers.push(parseCatchClause());
         }
 
         if (matchKeyword('finally')) {
@@ -3049,6 +3056,7 @@ parseStatement: true, parseSourceElement: true */
             extra.parseBlock = parseBlock;
             extra.parseFunctionSourceElements = parseFunctionSourceElements;
             extra.parseCallMember = parseCallMember;
+            extra.parseCatchClause = parseCatchClause;
             extra.parseComputedMember = parseComputedMember;
             extra.parseConditionalExpression = parseConditionalExpression;
             extra.parseEqualityExpression = parseEqualityExpression;
@@ -3075,6 +3083,7 @@ parseStatement: true, parseSourceElement: true */
             parseBlock = wrapTracking(extra.parseBlock);
             parseFunctionSourceElements = wrapTracking(extra.parseFunctionSourceElements);
             parseCallMember = wrapTracking(extra.parseCallMember);
+            parseCatchClause = wrapTracking(extra.parseCatchClause);
             parseComputedMember = wrapTracking(extra.parseComputedMember);
             parseConditionalExpression = wrapTracking(extra.parseConditionalExpression);
             parseEqualityExpression = wrapTracking(extra.parseEqualityExpression);
@@ -3121,6 +3130,7 @@ parseStatement: true, parseSourceElement: true */
             parseBlock = extra.parseBlock;
             parseFunctionSourceElements = extra.parseFunctionSourceElements;
             parseCallMember = extra.parseCallMember;
+            parseCatchClause = extra.parseCatchClause;
             parseComputedMember = extra.parseComputedMember;
             parseConditionalExpression = extra.parseConditionalExpression;
             parseEqualityExpression = extra.parseEqualityExpression;
