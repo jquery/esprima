@@ -980,7 +980,12 @@ data = {
                         key: {
                             type: 'Literal',
                             value: 'answer',
-                            raw: '"answer"'
+                            raw: '"answer"',
+                            range: [6, 13],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 14 }
+                            }
                         },
                         value: {
                             type: 'Literal',
@@ -1038,7 +1043,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'width'
+                            name: 'width',
+                            range: [10, 14],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 15 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -1121,7 +1131,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'undef'
+                            name: 'undef',
+                            range: [10, 14],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 15 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -1188,7 +1203,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'if'
+                            name: 'if',
+                            range: [10, 11],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 12 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -1255,7 +1275,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'true'
+                            name: 'true',
+                            range: [10, 13],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 14 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -1322,7 +1347,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'false'
+                            name: 'false',
+                            range: [10, 14],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 15 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -1389,7 +1419,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'null'
+                            name: 'null',
+                            range: [10, 13],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 14 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -1457,7 +1492,12 @@ data = {
                         key: {
                             type: 'Literal',
                             value: 'undef',
-                            raw: '"undef"'
+                            raw: '"undef"',
+                            range: [10, 16],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 17 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -1525,7 +1565,12 @@ data = {
                         key: {
                             type: 'Literal',
                             value: 10,
-                            raw: '10'
+                            raw: '10',
+                            range: [10, 11],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 12 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -1592,7 +1637,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'width'
+                            name: 'width',
+                            range: [10, 14],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 15 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -1696,7 +1746,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'if'
+                            name: 'if',
+                            range: [10, 11],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 12 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -1800,7 +1855,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'true'
+                            name: 'true',
+                            range: [10, 13],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 14 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -1904,7 +1964,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'false'
+                            name: 'false',
+                            range: [10, 14],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 15 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -2008,7 +2073,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'null'
+                            name: 'null',
+                            range: [10, 13],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 14 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -2113,7 +2183,12 @@ data = {
                         key: {
                             type: 'Literal',
                             value: 'null',
-                            raw: '"null"'
+                            raw: '"null"',
+                            range: [10, 15],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 16 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
@@ -2218,7 +2293,12 @@ data = {
                         key: {
                             type: 'Literal',
                             value: 10,
-                            raw: '10'
+                            raw: '10',
+                            range: [10, 11],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 12 }
+                            }
                         },
                         value: {
                             type: 'FunctionExpression',
