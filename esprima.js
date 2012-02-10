@@ -2083,6 +2083,14 @@ parseStatement: true, parseSourceElement: true */
         };
     }
 
+    function parseForVariableDeclaration(kind) {
+        return {
+            type: Syntax.VariableDeclaration,
+            declarations: parseVariableDeclarationList(),
+            kind: kind
+        };
+    }
+
     function parseForStatement() {
         var kind, init, test, update, left, right, body;
 
@@ -2098,11 +2106,7 @@ parseStatement: true, parseSourceElement: true */
             if (matchKeyword('var') || matchKeyword('let')) {
                 kind = lex().value;
                 allowIn = false;
-                init = {
-                    type: Syntax.VariableDeclaration,
-                    declarations: parseVariableDeclarationList(),
-                    kind: kind
-                };
+                init = parseForVariableDeclaration(kind);
                 allowIn = true;
 
                 if (init.declarations.length === 1 && matchKeyword('in')) {
@@ -3048,8 +3052,10 @@ parseStatement: true, parseSourceElement: true */
             extra.parseCatchClause = parseCatchClause;
             extra.parseComputedMember = parseComputedMember;
             extra.parseConditionalExpression = parseConditionalExpression;
+            extra.parseConstLetDeclaration = parseConstLetDeclaration;
             extra.parseEqualityExpression = parseEqualityExpression;
             extra.parseExpression = parseExpression;
+            extra.parseForVariableDeclaration = parseForVariableDeclaration;
             extra.parseFunctionDeclaration = parseFunctionDeclaration;
             extra.parseFunctionExpression = parseFunctionExpression;
             extra.parseLogicalANDExpression = parseLogicalANDExpression;
@@ -3080,8 +3086,10 @@ parseStatement: true, parseSourceElement: true */
             parseCatchClause = wrapTracking(extra.parseCatchClause);
             parseComputedMember = wrapTracking(extra.parseComputedMember);
             parseConditionalExpression = wrapTracking(extra.parseConditionalExpression);
+            parseConstLetDeclaration = wrapTracking(extra.parseConstLetDeclaration);
             parseEqualityExpression = wrapTracking(extra.parseEqualityExpression);
             parseExpression = wrapTracking(extra.parseExpression);
+            parseForVariableDeclaration = wrapTracking(extra.parseForVariableDeclaration);
             parseFunctionDeclaration = wrapTracking(extra.parseFunctionDeclaration);
             parseFunctionExpression = wrapTracking(extra.parseFunctionExpression);
             parseLogicalANDExpression = wrapTracking(extra.parseLogicalANDExpression);
@@ -3132,8 +3140,10 @@ parseStatement: true, parseSourceElement: true */
             parseCatchClause = extra.parseCatchClause;
             parseComputedMember = extra.parseComputedMember;
             parseConditionalExpression = extra.parseConditionalExpression;
+            parseConstLetDeclaration = extra.parseConstLetDeclaration;
             parseEqualityExpression = extra.parseEqualityExpression;
             parseExpression = extra.parseExpression;
+            parseForVariableDeclaration = extra.parseForVariableDeclaration;
             parseFunctionDeclaration = extra.parseFunctionDeclaration;
             parseFunctionExpression = extra.parseFunctionExpression;
             parseLogicalANDExpression = extra.parseLogicalANDExpression;

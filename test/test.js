@@ -7586,7 +7586,12 @@ data = {
                     end: { line: 1, column: 5 }
                 }
             }],
-            kind: 'let'
+            kind: 'let',
+            range: [0, 4],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 5 }
+            }
         },
 
         '{ let x }': {
@@ -7606,7 +7611,12 @@ data = {
                         end: { line: 1, column: 7 }
                     }
                 }],
-                kind: 'let'
+                kind: 'let',
+                range: [2, 7],
+                loc: {
+                    start: { line: 1, column: 2 },
+                    end: { line: 1, column: 8 }
+                }
             }],
             range: [0, 8],
             loc: {
@@ -7641,7 +7651,12 @@ data = {
                         end: { line: 1, column: 12 }
                     }
                 }],
-                kind: 'let'
+                kind: 'let',
+                range: [2, 12],
+                loc: {
+                    start: { line: 1, column: 2 },
+                    end: { line: 1, column: 13 }
+                }
             }],
             range: [0, 13],
             loc: {
@@ -7718,7 +7733,12 @@ data = {
                         end: { line: 1, column: 29 }
                     }
                 }],
-                kind: 'let'
+                kind: 'let',
+                range: [2, 29],
+                loc: {
+                    start: { line: 1, column: 2 },
+                    end: { line: 1, column: 30 }
+                }
             }],
             range: [0, 30],
             loc: {
@@ -7755,7 +7775,12 @@ data = {
                     end: { line: 1, column: 12 }
                 }
             }],
-            kind: 'const'
+            kind: 'const',
+            range: [0, 11],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
         },
 
         '{ const x = 42 }': {
@@ -7784,7 +7809,12 @@ data = {
                         end: { line: 1, column: 14 }
                     }
                 }],
-                kind: 'const'
+                kind: 'const',
+                range: [2, 14],
+                loc: {
+                    start: { line: 1, column: 2 },
+                    end: { line: 1, column: 15 }
+                }
             }],
             range: [0, 15],
             loc: {
@@ -7861,7 +7891,12 @@ data = {
                         end: { line: 1, column: 31 }
                     }
                 }],
-                kind: 'const'
+                kind: 'const',
+                range: [2, 31],
+                loc: {
+                    start: { line: 1, column: 2 },
+                    end: { line: 1, column: 32 }
+                }
             }],
             range: [0, 32],
             loc: {
@@ -8724,7 +8759,12 @@ data = {
                         end: { line: 1, column: 13 }
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [8, 12],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 13 }
+                }
             },
             test: null,
             update: null,
@@ -8769,7 +8809,12 @@ data = {
                         end: { line: 1, column: 13 }
                     }
                 }],
-                kind: 'let'
+                kind: 'let',
+                range: [8, 12],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 13 }
+                }
             },
             test: null,
             update: null,
@@ -8835,7 +8880,12 @@ data = {
                         end: { line: 1, column: 20 }
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [8, 19],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 20 }
+                }
             },
             test: null,
             update: null,
@@ -9217,7 +9267,12 @@ data = {
                         end: { line: 1, column: 10 }
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [9, 9],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 10 }
+                }
             },
             right: {
                 type: 'Identifier',
@@ -9296,7 +9351,12 @@ data = {
                         end: { line: 1, column: 15 }
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [9, 14],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 15 }
+                }
             },
             right: {
                 type: 'Identifier',
@@ -9366,7 +9426,12 @@ data = {
                         end: { line: 1, column: 10 }
                     }
                 }],
-                kind: 'let'
+                kind: 'let',
+                range: [9, 9],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 10 }
+                }
             },
             right: {
                 type: 'Identifier',
@@ -9445,7 +9510,12 @@ data = {
                         end: { line: 1, column: 15 }
                     }
                 }],
-                kind: 'let'
+                kind: 'let',
+                range: [9, 14],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 15 }
+                }
             },
             right: {
                 type: 'Identifier',
@@ -9568,7 +9638,12 @@ data = {
                         end: { line: 1, column: 43 }
                     }
                 }],
-                kind: 'var'
+                kind: 'var',
+                range: [9, 42],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 43 }
+                }
             },
             right: {
                 type: 'Identifier',
