@@ -3405,7 +3405,12 @@ data = {
                             end: { line: 1, column: 11 }
                         }
                     },
-                    'arguments': []
+                    'arguments': [],
+                    range: [4, 10],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 11 }
+                    }
                 },
                 'arguments': [],
                 range: [0, 10],
@@ -3436,7 +3441,12 @@ data = {
                             end: { line: 1, column: 11 }
                         }
                     },
-                    'arguments': []
+                    'arguments': [],
+                    range: [4, 12],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 13 }
+                    }
                 },
                 'arguments': [],
                 range: [0, 12],
@@ -3470,7 +3480,12 @@ data = {
                                 end: { line: 1, column: 7 }
                             }
                         },
-                        'arguments': []
+                        'arguments': [],
+                        range: [0, 8],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 9 }
+                        }
                     },
                     property: {
                         type: 'Identifier',
@@ -3481,9 +3496,9 @@ data = {
                             end: { line: 1, column: 13 }
                         }
                     },
-                    range: [10, 12],
+                    range: [0, 12],
                     loc: {
-                        start: { line: 1, column: 10 },
+                        start: { line: 1, column: 0 },
                         end: { line: 1, column: 13 }
                     }
                 },

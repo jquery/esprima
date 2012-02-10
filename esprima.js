@@ -1486,25 +1486,29 @@ parseStatement: true, parseSourceElement: true */
         };
     }
 
+    function parseNewExpression() {
+        var expr;
+
+        expectKeyword('new');
+
+        expr = {
+            type: Syntax.NewExpression,
+            callee: parseLeftHandSideExpression(),
+            'arguments': []
+        };
+
+        if (match('(')) {
+            expr['arguments'] = parseArguments();
+        }
+
+        return expr;
+    }
+
     function parseLeftHandSideExpressionAllowCall() {
         var useNew, expr;
 
         useNew = matchKeyword('new');
-        if (useNew) {
-            // Read the keyword.
-            lex();
-            expr = {
-                type: Syntax.NewExpression,
-                callee: parseLeftHandSideExpression()
-            };
-            if (match('(')) {
-                expr['arguments'] = parseArguments();
-            } else {
-                expr['arguments'] = [];
-            }
-        } else {
-            expr = parsePrimaryExpression();
-        }
+        expr = useNew ? parseNewExpression() : parsePrimaryExpression();
 
         while (index < length) {
             if (match('.')) {
@@ -1526,21 +1530,7 @@ parseStatement: true, parseSourceElement: true */
         var useNew, expr;
 
         useNew = matchKeyword('new');
-        if (useNew) {
-            // Read the keyword.
-            lex();
-            expr = {
-                type: Syntax.NewExpression,
-                callee: parseLeftHandSideExpression()
-            };
-            if (match('(')) {
-                expr['arguments'] = parseArguments();
-            } else {
-                expr['arguments'] = [];
-            }
-        } else {
-            expr = parsePrimaryExpression();
-        }
+        expr = useNew ? parseNewExpression() : parsePrimaryExpression();
 
         while (index < length) {
             if (match('.')) {
@@ -3065,6 +3055,7 @@ parseStatement: true, parseSourceElement: true */
             extra.parseLogicalANDExpression = parseLogicalANDExpression;
             extra.parseLogicalORExpression = parseLogicalORExpression;
             extra.parseMultiplicativeExpression = parseMultiplicativeExpression;
+            extra.parseNewExpression = parseNewExpression;
             extra.parseNonComputedMember = parseNonComputedMember;
             extra.parseNonComputedProperty = parseNonComputedProperty;
             extra.parsePostfixExpression = parsePostfixExpression;
@@ -3094,6 +3085,7 @@ parseStatement: true, parseSourceElement: true */
             parseLogicalANDExpression = wrapTracking(extra.parseLogicalANDExpression);
             parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);
             parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);
+            parseNewExpression = wrapTracking(extra.parseNewExpression);
             parseNonComputedMember = wrapTracking(extra.parseNonComputedMember);
             parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
             parsePostfixExpression = wrapTracking(extra.parsePostfixExpression);
@@ -3143,6 +3135,7 @@ parseStatement: true, parseSourceElement: true */
             parseLogicalANDExpression = extra.parseLogicalANDExpression;
             parseLogicalORExpression = extra.parseLogicalORExpression;
             parseMultiplicativeExpression = extra.parseMultiplicativeExpression;
+            parseNewExpression = extra.parseNewExpression;
             parseNonComputedMember = extra.parseNonComputedMember;
             parseNonComputedProperty = extra.parseNonComputedProperty;
             parsePrimaryExpression = extra.parsePrimaryExpression;
