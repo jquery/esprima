@@ -3074,6 +3074,7 @@ parseStatement: true, parseSourceElement: true */
             extra.parseStatement = parseStatement;
             extra.parseShiftExpression = parseShiftExpression;
             extra.parseUnaryExpression = parseUnaryExpression;
+            extra.parseVariableDeclaration = parseVariableDeclaration;
 
             parseAdditiveExpression = wrapTracking(extra.parseAdditiveExpression);
             parseAssignmentExpression = wrapTracking(extra.parseAssignmentExpression);
@@ -3101,6 +3102,7 @@ parseStatement: true, parseSourceElement: true */
             parseStatement = wrapTracking(extra.parseStatement);
             parseShiftExpression = wrapTracking(extra.parseShiftExpression);
             parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);
+            parseVariableDeclaration = wrapTracking(extra.parseVariableDeclaration);
         }
 
         if (typeof extra.tokens !== 'undefined') {
@@ -3148,6 +3150,7 @@ parseStatement: true, parseSourceElement: true */
             parseStatement = extra.parseStatement;
             parseShiftExpression = extra.parseShiftExpression;
             parseUnaryExpression = extra.parseUnaryExpression;
+            parseVariableDeclaration = extra.parseVariableDeclaration;
         }
 
         if (typeof extra.lex === 'function') {

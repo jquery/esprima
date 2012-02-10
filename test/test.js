@@ -3004,6 +3004,11 @@ data = {
                             start: { line: 1, column: 8 },
                             end: { line: 1, column: 16 }
                         }
+                    },
+                    range: [4, 15],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 16 }
                     }
                 }],
                 kind: 'var',
@@ -3056,6 +3061,11 @@ data = {
                             start: { line: 1, column: 8 },
                             end: { line: 1, column: 17 }
                         }
+                    },
+                    range: [4, 16],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 17 }
                     }
                 }],
                 kind: 'var',
@@ -3108,6 +3118,11 @@ data = {
                             start: { line: 1, column: 8 },
                             end: { line: 1, column: 18 }
                         }
+                    },
+                    range: [4, 17],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 18 }
                     }
                 }],
                 kind: 'var',
@@ -3160,6 +3175,11 @@ data = {
                             start: { line: 1, column: 8 },
                             end: { line: 1, column: 21 }
                         }
+                    },
+                    range: [4, 20],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 21 }
                     }
                 }],
                 kind: 'var',
@@ -3212,6 +3232,11 @@ data = {
                             start: { line: 1, column: 8 },
                             end: { line: 1, column: 22 }
                         }
+                    },
+                    range: [4, 21],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 22 }
                     }
                 }],
                 kind: 'var',
@@ -3264,6 +3289,11 @@ data = {
                             start: { line: 1, column: 8 },
                             end: { line: 1, column: 18 }
                         }
+                    },
+                    range: [4, 17],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 18 }
                     }
                 }],
                 kind: 'var',
@@ -7286,7 +7316,12 @@ data = {
                     type: 'Identifier',
                     name: 'x'
                 },
-                init: null
+                init: null,
+                range: [4, 4],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }],
             kind: 'var',
             range: [0, 4],
@@ -7304,14 +7339,24 @@ data = {
                     type: 'Identifier',
                     name: 'x'
                 },
-                init: null
+                init: null,
+                range: [4, 4],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'y'
                 },
-                init: null
+                init: null,
+                range: [7, 7],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 8 }
+                }
             }],
             kind: 'var',
             range: [0, 8],
@@ -7338,6 +7383,11 @@ data = {
                         start: { line: 1, column: 8 },
                         end: { line: 1, column: 10 }
                     }
+                },
+                range: [4, 9],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 10 }
                 }
             }],
             kind: 'var',
@@ -7365,6 +7415,11 @@ data = {
                         start: { line: 1, column: 8 },
                         end: { line: 1, column: 10 }
                     }
+                },
+                range: [4, 9],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 10 }
                 }
             }, {
                 type: 'VariableDeclarator',
@@ -7381,6 +7436,11 @@ data = {
                         start: { line: 1, column: 16 },
                         end: { line: 1, column: 17 }
                     }
+                },
+                range: [12, 16],
+                loc: {
+                    start: { line: 1, column: 12 },
+                    end: { line: 1, column: 17 }
                 }
             }, {
                 type: 'VariableDeclarator',
@@ -7397,6 +7457,11 @@ data = {
                         start: { line: 1, column: 23 },
                         end: { line: 1, column: 27 }
                     }
+                },
+                range: [19, 26],
+                loc: {
+                    start: { line: 1, column: 19 },
+                    end: { line: 1, column: 27 }
                 }
             }],
             kind: 'var',
@@ -7419,7 +7484,12 @@ data = {
                     type: 'Identifier',
                     name: 'x'
                 },
-                init: null
+                init: null,
+                range: [4, 4],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }],
             kind: 'let'
         },
@@ -7434,7 +7504,12 @@ data = {
                         type: 'Identifier',
                         name: 'x'
                     },
-                    init: null
+                    init: null,
+                    range: [6, 6],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 7 }
+                    }
                 }],
                 kind: 'let'
             }],
@@ -7464,6 +7539,11 @@ data = {
                             start: { line: 1, column: 10 },
                             end: { line: 1, column: 12 }
                         }
+                    },
+                    range: [6, 11],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 12 }
                     }
                 }],
                 kind: 'let'
@@ -7494,6 +7574,11 @@ data = {
                             start: { line: 1, column: 10 },
                             end: { line: 1, column: 12 }
                         }
+                    },
+                    range: [6, 11],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 12 }
                     }
                 }, {
                     type: 'VariableDeclarator',
@@ -7510,6 +7595,11 @@ data = {
                             start: { line: 1, column: 18 },
                             end: { line: 1, column: 19 }
                         }
+                    },
+                    range: [14, 18],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 19 }
                     }
                 }, {
                     type: 'VariableDeclarator',
@@ -7526,6 +7616,11 @@ data = {
                             start: { line: 1, column: 25 },
                             end: { line: 1, column: 29 }
                         }
+                    },
+                    range: [21, 28],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 29 }
                     }
                 }],
                 kind: 'let'
@@ -7558,6 +7653,11 @@ data = {
                         start: { line: 1, column: 10 },
                         end: { line: 1, column: 12 }
                     }
+                },
+                range: [6, 11],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 12 }
                 }
             }],
             kind: 'const'
@@ -7582,6 +7682,11 @@ data = {
                             start: { line: 1, column: 12 },
                             end: { line: 1, column: 14 }
                         }
+                    },
+                    range: [8, 13],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 14 }
                     }
                 }],
                 kind: 'const'
@@ -7612,6 +7717,11 @@ data = {
                             start: { line: 1, column: 12 },
                             end: { line: 1, column: 14 }
                         }
+                    },
+                    range: [8, 13],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 14 }
                     }
                 }, {
                     type: 'VariableDeclarator',
@@ -7628,6 +7738,11 @@ data = {
                             start: { line: 1, column: 20 },
                             end: { line: 1, column: 21 }
                         }
+                    },
+                    range: [16, 20],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 21 }
                     }
                 }, {
                     type: 'VariableDeclarator',
@@ -7644,6 +7759,11 @@ data = {
                             start: { line: 1, column: 27 },
                             end: { line: 1, column: 31 }
                         }
+                    },
+                    range: [23, 30],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 31 }
                     }
                 }],
                 kind: 'const'
@@ -7919,6 +8039,11 @@ data = {
                             start: { line: 1, column: 21 },
                             end: { line: 1, column: 22 }
                         }
+                    },
+                    range: [17, 21],
+                    loc: {
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 22 }
                     }
                 }],
                 kind: 'var',
@@ -8497,6 +8622,11 @@ data = {
                             start: { line: 1, column: 12 },
                             end: { line: 1, column: 13 }
                         }
+                    },
+                    range: [8, 12],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 13 }
                     }
                 }],
                 kind: 'var'
@@ -8537,6 +8667,11 @@ data = {
                             start: { line: 1, column: 12 },
                             end: { line: 1, column: 13 }
                         }
+                    },
+                    range: [8, 12],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 13 }
                     }
                 }],
                 kind: 'let'
@@ -8577,6 +8712,11 @@ data = {
                             start: { line: 1, column: 12 },
                             end: { line: 1, column: 13 }
                         }
+                    },
+                    range: [8, 12],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 13 }
                     }
                 }, {
                     type: 'VariableDeclarator',
@@ -8593,6 +8733,11 @@ data = {
                             start: { line: 1, column: 19 },
                             end: { line: 1, column: 20 }
                         }
+                    },
+                    range: [15, 19],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 20 }
                     }
                 }],
                 kind: 'var'
@@ -8970,7 +9115,12 @@ data = {
                         type: 'Identifier',
                         name: 'x'
                     },
-                    init: null
+                    init: null,
+                    range: [9, 9],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 10 }
+                    }
                 }],
                 kind: 'var'
             },
@@ -9044,6 +9194,11 @@ data = {
                             start: { line: 1, column: 13 },
                             end: { line: 1, column: 15 }
                         }
+                    },
+                    range: [9, 14],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 15 }
                     }
                 }],
                 kind: 'var'
@@ -9109,7 +9264,12 @@ data = {
                         type: 'Identifier',
                         name: 'x'
                     },
-                    init: null
+                    init: null,
+                    range: [9, 9],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 10 }
+                    }
                 }],
                 kind: 'let'
             },
@@ -9183,6 +9343,11 @@ data = {
                             start: { line: 1, column: 13 },
                             end: { line: 1, column: 15 }
                         }
+                    },
+                    range: [9, 14],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 15 }
                     }
                 }],
                 kind: 'let'
@@ -9301,6 +9466,11 @@ data = {
                             start: { line: 1, column: 13 },
                             end: { line: 1, column: 43 }
                         }
+                    },
+                    range: [9, 42],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 43 }
                     }
                 }],
                 kind: 'var'
@@ -10695,6 +10865,11 @@ data = {
                         start: { line: 1, column: 9 },
                         end: { line: 1, column: 31 }
                     }
+                },
+                range: [4, 30],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 31 }
                 }
             }],
             kind: 'var',
@@ -10759,6 +10934,11 @@ data = {
                         start: { line: 1, column: 12 },
                         end: { line: 1, column: 37 }
                     }
+                },
+                range: [4, 36],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 37 }
                 }
             }],
             kind: 'var',
@@ -10924,6 +11104,11 @@ data = {
                             start: { line: 1, column: 10 },
                             end: { line: 1, column: 12 }
                         }
+                    },
+                    range: [6, 11],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 12 }
                     }
                 }, {
                     type: 'VariableDeclarator',
@@ -10940,6 +11125,11 @@ data = {
                             start: { line: 1, column: 18 },
                             end: { line: 1, column: 19 }
                         }
+                    },
+                    range: [14, 18],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 19 }
                     }
                 }],
                 kind: 'var',
