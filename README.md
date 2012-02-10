@@ -11,6 +11,9 @@ or in a Node.js application via the package manager:
 
     npm install esprima
 
+Esprima parser output is compatible with Mozilla (SpiderMonkey)
+[Parser API](https://developer.mozilla.org/en/SpiderMonkey/Parser_API).
+
 A very simple example:
 
     esprima.parse('var answer=42').body[0].declarations[0].init

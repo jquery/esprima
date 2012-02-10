@@ -33,6 +33,9 @@ parsing infrastructure for multipurpose analysis. It is also written in ECMAScri
 
 <pre>npm install esprima</pre>
 
+<p>Esprima parser output is compatible with Mozilla (SpiderMonkey)
+<a href="https://developer.mozilla.org/en/SpiderMonkey/Parser_API">Parser API</a>.</p>
+
 <p>A very simple example:</p>
 
 <pre>esprima.parse('var answer=42').body[0].declarations[0].init</pre>
