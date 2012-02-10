@@ -124,7 +124,8 @@ parseStatement: true, parseSourceElement: true */
         InvalidLHSInForIn:  'Invalid left-hand side in for-in',
         InvalidLHSInPostfixOp:  'Invalid left-hand side expression in postfix operation',
         InvalidLHSInPrefixOp:  'Invalid left-hand side expression in prefix operation',
-        NoCatchOrFinally:  'Missing catch or finally after try'
+        NoCatchOrFinally:  'Missing catch or finally after try',
+        StrictDelete: 'Delete of an unqualified identifier in strict mode.'
     };
 
     Precedence = {
@@ -1615,6 +1616,9 @@ parseStatement: true, parseSourceElement: true */
                 operator: lex().value,
                 argument: parseUnaryExpression()
             };
+            if (strict && expr.operator === 'delete' && expr.argument.type === 'Identifier') {
+                throwError({}, Messages.StrictDelete);
+            }
             return expr;
         }
 

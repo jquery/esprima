@@ -14801,6 +14801,13 @@ data = {
             lineNumber: 1,
             column: 4,
             message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '(function () { \'use strict\'; delete i; }())': {
+            index: 37,
+            lineNumber: 1,
+            column: 38,
+            message: 'Error: Line 1: Delete of an unqualified identifier in strict mode.'
         }
     }
 };
