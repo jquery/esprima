@@ -701,7 +701,12 @@ data = {
                                 end: { line: 1, column: 16 }
                             }
                         },
-                        kind: 'init'
+                        kind: 'init',
+                        range: [6, 15],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 16 }
+                        }
                     }],
                     range: [4, 17],
                     loc: {
@@ -754,7 +759,12 @@ data = {
                                 end: { line: 1, column: 12 }
                             }
                         },
-                        kind: 'init'
+                        kind: 'init',
+                        range: [6, 11],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 12 }
+                        }
                     }],
                     range: [4, 13],
                     loc: {
@@ -807,7 +817,12 @@ data = {
                                 end: { line: 1, column: 14 }
                             }
                         },
-                        kind: 'init'
+                        kind: 'init',
+                        range: [6, 13],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 14 }
+                        }
                     }],
                     range: [4, 15],
                     loc: {
@@ -860,7 +875,12 @@ data = {
                                 end: { line: 1, column: 15 }
                             }
                         },
-                        kind: 'init'
+                        kind: 'init',
+                        range: [6, 14],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 15 }
+                        }
                     }],
                     range: [4, 16],
                     loc: {
@@ -913,7 +933,12 @@ data = {
                                 end: { line: 1, column: 14 }
                             }
                         },
-                        kind: 'init'
+                        kind: 'init',
+                        range: [6, 13],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 14 }
+                        }
                     }],
                     range: [4, 15],
                     loc: {
@@ -967,7 +992,12 @@ data = {
                                 end: { line: 1, column: 18 }
                             }
                         },
-                        kind: 'init'
+                        kind: 'init',
+                        range: [6, 17],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 18 }
+                        }
                     }],
                     range: [4, 19],
                     loc: {
@@ -1045,7 +1075,12 @@ data = {
                                 end: { line: 1, column: 36 }
                             }
                         },
-                        kind: 'get'
+                        kind: 'get',
+                        range: [6, 35],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 36 }
+                        }
                     }],
                     range: [4, 37],
                     loc: {
@@ -1107,7 +1142,12 @@ data = {
                                 end: { line: 1, column: 20 }
                             }
                         },
-                        kind: 'get'
+                        kind: 'get',
+                        range: [6, 19],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 20 }
+                        }
                     }],
                     range: [4, 21],
                     loc: {
@@ -1169,7 +1209,12 @@ data = {
                                 end: { line: 1, column: 17 }
                             }
                         },
-                        kind: 'get'
+                        kind: 'get',
+                        range: [6, 16],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 17 }
+                        }
                     }],
                     range: [4, 18],
                     loc: {
@@ -1231,7 +1276,12 @@ data = {
                                 end: { line: 1, column: 19 }
                             }
                         },
-                        kind: 'get'
+                        kind: 'get',
+                        range: [6, 18],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 19 }
+                        }
                     }],
                     range: [4, 20],
                     loc: {
@@ -1293,7 +1343,12 @@ data = {
                                 end: { line: 1, column: 20 }
                             }
                         },
-                        kind: 'get'
+                        kind: 'get',
+                        range: [6, 19],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 20 }
+                        }
                     }],
                     range: [4, 21],
                     loc: {
@@ -1355,7 +1410,12 @@ data = {
                                 end: { line: 1, column: 19 }
                             }
                         },
-                        kind: 'get'
+                        kind: 'get',
+                        range: [6, 18],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 19 }
+                        }
                     }],
                     range: [4, 20],
                     loc: {
@@ -1418,7 +1478,12 @@ data = {
                                 end: { line: 1, column: 22 }
                             }
                         },
-                        kind: 'get'
+                        kind: 'get',
+                        range: [6, 21],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 22 }
+                        }
                     }],
                     range: [4, 23],
                     loc: {
@@ -1481,7 +1546,12 @@ data = {
                                 end: { line: 1, column: 17 }
                             }
                         },
-                        kind: 'get'
+                        kind: 'get',
+                        range: [6, 16],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 17 }
+                        }
                     }],
                     range: [4, 18],
                     loc: {
@@ -1580,7 +1650,12 @@ data = {
                                 end: { line: 1, column: 34 }
                             }
                         },
-                        kind: 'set'
+                        kind: 'set',
+                        range: [6, 33],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 34 }
+                        }
                     }],
                     range: [4, 35],
                     loc: {
@@ -1679,7 +1754,12 @@ data = {
                                 end: { line: 1, column: 28 }
                             }
                         },
-                        kind: 'set'
+                        kind: 'set',
+                        range: [6, 27],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 28 }
+                        }
                     }],
                     range: [4, 29],
                     loc: {
@@ -1778,7 +1858,12 @@ data = {
                                 end: { line: 1, column: 32 }
                             }
                         },
-                        kind: 'set'
+                        kind: 'set',
+                        range: [6, 31],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 32 }
+                        }
                     }],
                     range: [4, 33],
                     loc: {
@@ -1877,7 +1962,12 @@ data = {
                                 end: { line: 1, column: 34 }
                             }
                         },
-                        kind: 'set'
+                        kind: 'set',
+                        range: [6, 33],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 34 }
+                        }
                     }],
                     range: [4, 35],
                     loc: {
@@ -1976,7 +2066,12 @@ data = {
                                 end: { line: 1, column: 32 }
                             }
                         },
-                        kind: 'set'
+                        kind: 'set',
+                        range: [6, 31],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 32 }
+                        }
                     }],
                     range: [4, 33],
                     loc: {
@@ -2076,7 +2171,12 @@ data = {
                                 end: { line: 1, column: 34 }
                             }
                         },
-                        kind: 'set'
+                        kind: 'set',
+                        range: [6, 33],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 34 }
+                        }
                     }],
                     range: [4, 35],
                     loc: {
@@ -2176,7 +2276,12 @@ data = {
                                 end: { line: 1, column: 30 }
                             }
                         },
-                        kind: 'set'
+                        kind: 'set',
+                        range: [6, 29],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 30 }
+                        }
                     }],
                     range: [4, 31],
                     loc: {
@@ -2229,7 +2334,12 @@ data = {
                                 end: { line: 1, column: 13 }
                             }
                         },
-                        kind: 'init'
+                        kind: 'init',
+                        range: [6, 12],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 13 }
+                        }
                     }],
                     range: [4, 14],
                     loc: {
@@ -2282,7 +2392,12 @@ data = {
                                 end: { line: 1, column: 13 }
                             }
                         },
-                        kind: 'init'
+                        kind: 'init',
+                        range: [6, 12],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 13 }
+                        }
                     }],
                     range: [4, 14],
                     loc: {
@@ -10375,7 +10490,12 @@ data = {
                             end: { line: 1, column: 24 }
                         }
                     },
-                    kind: 'init'
+                    kind: 'init',
+                    range: [8, 23],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 24 }
+                    }
                 }],
                 range: [6, 25],
                 loc: {

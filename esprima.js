@@ -94,6 +94,7 @@ parseStatement: true, parseSourceElement: true */
         NewExpression: 'NewExpression',
         ObjectExpression: 'ObjectExpression',
         Program: 'Program',
+        Property: 'Property',
         ReturnStatement: 'ReturnStatement',
         SequenceExpression: 'SequenceExpression',
         SwitchStatement: 'SwitchStatement',
@@ -1223,97 +1224,75 @@ parseStatement: true, parseSourceElement: true */
         };
     }
 
-    function parseObjectInitialiser() {
-        var token, expr, properties = [], property, property_key;
+    function parseObjectProperty() {
+        var token, property, key;
 
-        expect('{');
+        token = lex();
 
-        // TODO handle 'get' and 'set'
-        while (index < length) {
-            token = lex();
-            if (token.type === Token.Punctuator && token.value === '}') {
-                break;
-            }
+        switch (token.type) {
 
-            switch (token.type) {
-            case Token.Identifier:
-                // Property Assignment: Getter and Setter.
+        case Token.Identifier:
+            // Property Assignment: Getter and Setter.
 
-                if (token.value === 'get' && !match(':')) {
-                    token = lex();
-                    if (!isIdentifierName(token) &&
-                            token.type !== Token.StringLiteral &&
-                            token.type !== Token.NumericLiteral) {
-                        throwUnexpected(token);
-                    }
-                    if (token.type === Token.StringLiteral ||
-                            token.type === Token.NumericLiteral) {
-                        property_key = createLiteral(token.value, token.raw);
-                    } else {
-                        property_key = {
-                            type: Syntax.Identifier,
-                            name: token.value
-                        };
-                    }
-                    expect('(');
-                    expect(')');
-                    property = {
-                        type: 'Property',
-                        key: property_key,
-                        value: parsePropertyFunction([]),
-                        kind: 'get'
-                    };
-                } else if (token.value === 'set' && !match(':')) {
-                    token = lex();
-                    if (!isIdentifierName(token) &&
-                            token.type !== Token.StringLiteral &&
-                            token.type !== Token.NumericLiteral) {
-                        throwUnexpected(token);
-                    }
-                    if (token.type === Token.StringLiteral ||
-                            token.type === Token.NumericLiteral) {
-                        property_key = createLiteral(token.value, token.raw);
-                    } else {
-                        property_key = {
-                            type: Syntax.Identifier,
-                            name: token.value
-                        };
-                    }
-                    expect('(');
-                    token = lex();
-                    if (token.type !== Token.Identifier) {
-                        throwUnexpected(token);
-                    }
-                    expect(')');
-                    property = {
-                        type: 'Property',
-                        key: property_key,
-                        value: parsePropertyFunction([{
-                            type: Syntax.Identifier,
-                            name: token.value
-                        }]),
-                        kind: 'set'
-                    };
+            if (token.value === 'get' && !match(':')) {
+                token = lex();
+                if (!isIdentifierName(token) &&
+                        token.type !== Token.StringLiteral &&
+                        token.type !== Token.NumericLiteral) {
+                    throwUnexpected(token);
+                }
+                if (token.type === Token.StringLiteral ||
+                        token.type === Token.NumericLiteral) {
+                    key = createLiteral(token.value, token.raw);
                 } else {
-                    expect(':');
-                    property = {
-                        type: 'Property',
-                        key: {
-                            type: Syntax.Identifier,
-                            name: token.value
-                        },
-                        value: parseAssignmentExpression(),
-                        kind: 'init'
+                    key = {
+                        type: Syntax.Identifier,
+                        name: token.value
                     };
                 }
-                break;
-
-            case Token.Keyword:
-            case Token.BooleanLiteral:
-            case Token.NullLiteral:
+                expect('(');
+                expect(')');
+                property = {
+                    type: Syntax.Property,
+                    key: key,
+                    value: parsePropertyFunction([]),
+                    kind: 'get'
+                };
+            } else if (token.value === 'set' && !match(':')) {
+                token = lex();
+                if (!isIdentifierName(token) &&
+                        token.type !== Token.StringLiteral &&
+                        token.type !== Token.NumericLiteral) {
+                    throwUnexpected(token);
+                }
+                if (token.type === Token.StringLiteral ||
+                        token.type === Token.NumericLiteral) {
+                    key = createLiteral(token.value, token.raw);
+                } else {
+                    key = {
+                        type: Syntax.Identifier,
+                        name: token.value
+                    };
+                }
+                expect('(');
+                token = lex();
+                if (token.type !== Token.Identifier) {
+                    throwUnexpected(token);
+                }
+                expect(')');
+                property = {
+                    type: Syntax.Property,
+                    key: key,
+                    value: parsePropertyFunction([{
+                        type: Syntax.Identifier,
+                        name: token.value
+                    }]),
+                    kind: 'set'
+                };
+            } else {
                 expect(':');
                 property = {
-                    type: 'Property',
+                    type: Syntax.Property,
                     key: {
                         type: Syntax.Identifier,
                         name: token.value
@@ -1321,23 +1300,56 @@ parseStatement: true, parseSourceElement: true */
                     value: parseAssignmentExpression(),
                     kind: 'init'
                 };
-                break;
-
-            case Token.StringLiteral:
-            case Token.NumericLiteral:
-                expect(':');
-                property = {
-                    type: 'Property',
-                    key: createLiteral(token.value, token.raw),
-                    value: parseAssignmentExpression(),
-                    kind: 'init'
-                };
-                break;
-
-            default:
-                throwUnexpected(token);
             }
-            properties.push(property);
+            break;
+
+        case Token.Keyword:
+        case Token.BooleanLiteral:
+        case Token.NullLiteral:
+            expect(':');
+            property = {
+                type: Syntax.Property,
+                key: {
+                    type: Syntax.Identifier,
+                    name: token.value
+                },
+                value: parseAssignmentExpression(),
+                kind: 'init'
+            };
+            break;
+
+        case Token.StringLiteral:
+        case Token.NumericLiteral:
+            expect(':');
+            property = {
+                type: Syntax.Property,
+                key: createLiteral(token.value, token.raw),
+                value: parseAssignmentExpression(),
+                kind: 'init'
+            };
+            break;
+
+        default:
+            throwUnexpected(token);
+        }
+
+        return property;
+    }
+
+    function parseObjectInitialiser() {
+        var token, properties = [];
+
+        expect('{');
+
+        while (index < length) {
+
+            token = lookahead();
+            if (token.type === Token.Punctuator && token.value === '}') {
+                lex();
+                break;
+            }
+
+            properties.push(parseObjectProperty());
 
             token = lookahead();
             if (token.type === Token.Punctuator && token.value === '}') {
@@ -3064,6 +3076,7 @@ parseStatement: true, parseSourceElement: true */
             extra.parseNewExpression = parseNewExpression;
             extra.parseNonComputedMember = parseNonComputedMember;
             extra.parseNonComputedProperty = parseNonComputedProperty;
+            extra.parseObjectProperty = parseObjectProperty;
             extra.parsePostfixExpression = parsePostfixExpression;
             extra.parsePrimaryExpression = parsePrimaryExpression;
             extra.parseProgram = parseProgram;
@@ -3098,6 +3111,7 @@ parseStatement: true, parseSourceElement: true */
             parseNewExpression = wrapTracking(extra.parseNewExpression);
             parseNonComputedMember = wrapTracking(extra.parseNonComputedMember);
             parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
+            parseObjectProperty = wrapTracking(extra.parseObjectProperty);
             parsePostfixExpression = wrapTracking(extra.parsePostfixExpression);
             parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
             parseProgram = wrapTracking(extra.parseProgram);
@@ -3152,6 +3166,7 @@ parseStatement: true, parseSourceElement: true */
             parseNewExpression = extra.parseNewExpression;
             parseNonComputedMember = extra.parseNonComputedMember;
             parseNonComputedProperty = extra.parseNonComputedProperty;
+            parseObjectProperty = extra.parseObjectProperty;
             parsePrimaryExpression = extra.parsePrimaryExpression;
             parsePostfixExpression = extra.parsePostfixExpression;
             parseProgram = extra.parseProgram;
