@@ -2573,7 +2573,12 @@ data = {
                             start: { line: 1, column: 41 },
                             end: { line: 1, column: 49 }
                         }
-                    }]
+                    }],
+                    range: [41, 48],
+                    loc: {
+                        start: { line: 1, column: 41 },
+                        end: { line: 1, column: 49 }
+                    }
                 }],
                 range: [0, 49],
                 loc: {
@@ -9933,7 +9938,12 @@ data = {
                         start: { line: 1, column: 33 },
                         end: { line: 1, column: 39 }
                     }
-                }]
+                }],
+                range: [27, 38],
+                loc: {
+                    start: { line: 1, column: 27 },
+                    end: { line: 1, column: 39 }
+                }
             }],
             range: [0, 40],
             loc: {
@@ -9998,7 +10008,12 @@ data = {
                         start: { line: 1, column: 33 },
                         end: { line: 1, column: 39 }
                     }
-                }]
+                }],
+                range: [27, 38],
+                loc: {
+                    start: { line: 1, column: 27 },
+                    end: { line: 1, column: 39 }
+                }
             }, {
                 type: 'SwitchCase',
                 test: null,
@@ -10010,7 +10025,12 @@ data = {
                         start: { line: 1, column: 49 },
                         end: { line: 1, column: 55 }
                     }
-                }]
+                }],
+                range: [49, 54],
+                loc: {
+                    start: { line: 1, column: 49 },
+                    end: { line: 1, column: 55 }
+                }
             }],
             range: [0, 55],
             loc: {

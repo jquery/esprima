@@ -2323,7 +2323,7 @@ parseStatement: true, parseSourceElement: true */
 
     // 12.10 The swith statement
 
-    function parseSwitchConsequent() {
+    function parseSwitchCase(test) {
         var consequent = [],
             statement;
 
@@ -2338,7 +2338,11 @@ parseStatement: true, parseSourceElement: true */
             consequent.push(statement);
         }
 
-        return consequent;
+        return {
+            type: Syntax.SwitchCase,
+            test: test,
+            consequent: consequent
+        };
     }
 
     function parseSwitchStatement() {
@@ -2378,11 +2382,7 @@ parseStatement: true, parseSourceElement: true */
             }
             expect(':');
 
-            cases.push({
-                type: Syntax.SwitchCase,
-                test: test,
-                consequent: parseSwitchConsequent()
-            });
+            cases.push(parseSwitchCase(test));
         }
 
         expect('}');
@@ -3073,6 +3073,7 @@ parseStatement: true, parseSourceElement: true */
             extra.parseRelationalExpression = parseRelationalExpression;
             extra.parseStatement = parseStatement;
             extra.parseShiftExpression = parseShiftExpression;
+            extra.parseSwitchCase = parseSwitchCase;
             extra.parseUnaryExpression = parseUnaryExpression;
             extra.parseVariableDeclaration = parseVariableDeclaration;
 
@@ -3101,6 +3102,7 @@ parseStatement: true, parseSourceElement: true */
             parseRelationalExpression = wrapTracking(extra.parseRelationalExpression);
             parseStatement = wrapTracking(extra.parseStatement);
             parseShiftExpression = wrapTracking(extra.parseShiftExpression);
+            parseSwitchCase = wrapTracking(extra.parseSwitchCase);
             parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);
             parseVariableDeclaration = wrapTracking(extra.parseVariableDeclaration);
         }
@@ -3149,6 +3151,7 @@ parseStatement: true, parseSourceElement: true */
             parseRelationalExpression = extra.parseRelationalExpression;
             parseStatement = extra.parseStatement;
             parseShiftExpression = extra.parseShiftExpression;
+            parseSwitchCase = extra.parseSwitchCase;
             parseUnaryExpression = extra.parseUnaryExpression;
             parseVariableDeclaration = extra.parseVariableDeclaration;
         }
