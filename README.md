@@ -37,8 +37,8 @@ for further info.
 
 ### License
 
-Copyright (C) 2011 [Ariya Hidayat](http://ariya.ofilabs.com/about)
- (twitter: [@ariyahidayat](http://twitter.com/ariyahidayat)).
+Copyright (C) 2012, 2011 [Ariya Hidayat](http://ariya.ofilabs.com/about)
+ (twitter: [@ariyahidayat](http://twitter.com/ariyahidayat)) and other contributors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
