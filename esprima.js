@@ -1408,7 +1408,43 @@ parseStatement: true, parseSourceElement: true */
     // 11.1 Primary Expressions
 
     function parsePrimaryExpression() {
-        var token, expr, regex;
+        var expr,
+            token = lookahead(),
+            type = token.type;
+
+        if (type === Token.Identifier) {
+            return {
+                type: Syntax.Identifier,
+                name: lex().value
+            };
+        }
+
+        if (type === Token.StringLiteral || type === Token.NumericLiteral) {
+            return createLiteral(lex());
+        }
+
+        if (type === Token.Keyword) {
+            if (matchKeyword('this')) {
+                lex();
+                return {
+                    type: Syntax.ThisExpression
+                };
+            }
+
+            if (matchKeyword('function')) {
+                return parseFunctionExpression();
+            }
+        }
+
+        if (type === Token.BooleanLiteral) {
+            lex();
+            token.value = (token.value === 'true');
+            return createLiteral(token);
+        }
+
+        if (type === Token.NullLiteral) {
+            return createLiteral(lex());
+        }
 
         if (match('[')) {
             return parseArrayInitialiser();
@@ -1425,44 +1461,11 @@ parseStatement: true, parseSourceElement: true */
             return expr;
         }
 
-        if (matchKeyword('function')) {
-            return parseFunctionExpression();
-        }
-
-        if (matchKeyword('this')) {
-            lex();
-            return {
-                type: Syntax.ThisExpression
-            };
-        }
-
         if (match('/') || match('/=')) {
-            regex = scanRegExp();
-
-            return createLiteral(regex);
+            return createLiteral(scanRegExp());
         }
 
-        token = lex();
-
-        if (token.type === Token.Identifier) {
-            return {
-                type: Syntax.Identifier,
-                name: token.value
-            };
-        }
-
-        if (token.type === Token.NullLiteral ||
-                token.type === Token.NumericLiteral ||
-                token.type === Token.StringLiteral) {
-            return createLiteral(token);
-        }
-
-        if (token.type === Token.BooleanLiteral) {
-            token.value = (token.value === 'true');
-            return createLiteral(token);
-        }
-
-        return throwUnexpected(token);
+        return throwUnexpected(lex());
     }
 
     // 11.2 Left-Hand-Side Expressions
