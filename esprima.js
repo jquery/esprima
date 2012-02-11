@@ -2944,9 +2944,6 @@ parseStatement: true, parseSourceElement: true */
         if (token.type !== Token.EOF) {
             range = [token.range[0], token.range[1] - 1];
             value = sliceSource(token.range[0], token.range[1]);
-            if (typeof value !== 'string') {
-                value = value.join('');
-            }
             extra.tokens.push({
                 type: tokenTypeAsString(token.type),
                 value: value,
