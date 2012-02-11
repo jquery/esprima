@@ -14808,7 +14808,57 @@ data = {
             lineNumber: 1,
             column: 38,
             message: 'Error: Line 1: Delete of an unqualified identifier in strict mode.'
+        },
+
+        'function hello() {\'use strict\'; ({ i: 42, i: 42 }) }': {
+            index: 47,
+            lineNumber: 1,
+            column: 48,
+            message: 'Error: Line 1: Duplicate data property in object literal not allowed in strict mode'
+        },
+
+        'function hello() {\'use strict\'; ({ get i() { }, i: 42 }) }': {
+            index: 53,
+            lineNumber: 1,
+            column: 54,
+            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        'function hello() {\'use strict\'; ({ i: 42, get i() { } }) }': {
+            index: 53,
+            lineNumber: 1,
+            column: 54,
+            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        'function hello() {\'use strict\'; ({ set i(x) { }, i: 42 }) }': {
+            index: 54,
+            lineNumber: 1,
+            column: 55,
+            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        'function hello() {\'use strict\'; ({ i: 42, set i(x) { } }) }': {
+            index: 54,
+            lineNumber: 1,
+            column: 55,
+            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        'function hello() {\'use strict\'; ({ get i() { }, get i() { } }) }': {
+            index: 59,
+            lineNumber: 1,
+            column: 60,
+            message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
+        },
+
+        'function hello() {\'use strict\'; ({ set i(x) { }, set i(x) { } }) }': {
+            index: 61,
+            lineNumber: 1,
+            column: 62,
+            message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
         }
+
     }
 };
 

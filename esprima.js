@@ -40,6 +40,7 @@ parseStatement: true, parseSourceElement: true */
 
     var Token,
         Syntax,
+        PropertyKind,
         Messages,
         Regex,
         Precedence,
@@ -110,6 +111,12 @@ parseStatement: true, parseSourceElement: true */
         WithStatement: 'WithStatement'
     };
 
+    PropertyKind = {
+        Data: 1,
+        Get: 2,
+        Set: 4
+    };
+
     Messages = {
         UnexpectedToken:  'Unexpected token %0',
         UnexpectedNumber:  'Unexpected number',
@@ -125,7 +132,10 @@ parseStatement: true, parseSourceElement: true */
         InvalidLHSInPostfixOp:  'Invalid left-hand side expression in postfix operation',
         InvalidLHSInPrefixOp:  'Invalid left-hand side expression in prefix operation',
         NoCatchOrFinally:  'Missing catch or finally after try',
-        StrictDelete: 'Delete of an unqualified identifier in strict mode.'
+        StrictDelete:  'Delete of an unqualified identifier in strict mode.',
+        StrictDuplicateProperty:  'Duplicate data property in object literal not allowed in strict mode',
+        StrictAccessorDataProperty:  'Object literal may not have data and accessor property with the same name',
+        StrictAccessorGetSet:  'Object literal may not have multiple get/set accessors with the same name'
     };
 
     Precedence = {
@@ -1340,7 +1350,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseObjectInitialiser() {
-        var token, properties = [];
+        var token, properties = [], property, name, kind, map = {}, toString = String;
 
         expect('{');
 
@@ -1352,7 +1362,34 @@ parseStatement: true, parseSourceElement: true */
                 break;
             }
 
-            properties.push(parseObjectProperty());
+            property = parseObjectProperty();
+            if (strict) {
+                if (property.key.type === Syntax.Identifier) {
+                    name = property.key.name;
+                } else {
+                    name = toString(property.key.value);
+                }
+                kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
+                if (map.hasOwnProperty(name)) {
+                    if (map[name] === PropertyKind.Data) {
+                        if (kind === PropertyKind.Data) {
+                            throwError({}, Messages.StrictDuplicateProperty);
+                        } else {
+                            throwError({}, Messages.StrictAccessorDataProperty);
+                        }
+                    } else {
+                        if (kind === PropertyKind.Data) {
+                            throwError({}, Messages.StrictAccessorDataProperty);
+                        } else if (map[name] & kind) {
+                            throwError({}, Messages.StrictAccessorGetSet);
+                        }
+                    }
+                    map[name] |= kind;
+                } else {
+                    map[name] = kind;
+                }
+            }
+            properties.push(property);
 
             token = lookahead();
             if (token.type === Token.Punctuator && token.value === '}') {
