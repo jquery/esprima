@@ -173,6 +173,16 @@ parseStatement: true, parseSourceElement: true */
         Object.freeze(Regex);
     }
 
+    function sliceSource(from, to) {
+        return source.slice(from, to);
+    }
+
+    if (typeof 'esprima'[0] === 'undefined') {
+        sliceSource = function sliceArraySource(from, to) {
+            return source.slice(from, to).join('');
+        };
+    }
+
     function isDecimalDigit(ch) {
         return '0123456789'.indexOf(ch) >= 0;
     }
@@ -2619,7 +2629,7 @@ parseStatement: true, parseSourceElement: true */
                 // this is not directive
                 break;
             }
-            directive = source.slice(token.range[0] + 1, token.range[1] - 1);
+            directive = sliceSource(token.range[0] + 1, token.range[1] - 1);
             if (directive === 'use strict') {
                 strict = true;
             }
@@ -2782,7 +2792,7 @@ parseStatement: true, parseSourceElement: true */
                 // this is not directive
                 break;
             }
-            directive = source.slice(token.range[0] + 1, token.range[1] - 1);
+            directive = sliceSource(token.range[0] + 1, token.range[1] - 1);
             if (directive === 'use strict') {
                 strict = true;
             }
@@ -2931,7 +2941,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (token.type !== Token.EOF) {
             range = [token.range[0], token.range[1] - 1];
-            value = source.slice(token.range[0], token.range[1]);
+            value = sliceSource(token.range[0], token.range[1]);
             if (typeof value !== 'string') {
                 value = value.join('');
             }
@@ -2983,7 +2993,7 @@ parseStatement: true, parseSourceElement: true */
         return {
             type: Syntax.Literal,
             value: token.value,
-            raw: source.slice(token.range[0], token.range[1])
+            raw: sliceSource(token.range[0], token.range[1])
         };
     }
 
@@ -3470,6 +3480,10 @@ parseStatement: true, parseSourceElement: true */
 
     function escapeString(str) {
         var result = '', i, len, ch;
+
+        if (typeof str[0] === 'undefined') {
+            str = stringToArray(str);
+        }
 
         for (i = 0, len = str.length; i < len; i += 1) {
             ch = str[i];
