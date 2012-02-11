@@ -1275,7 +1275,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseObjectProperty() {
-        var token, property, key;
+        var token, property, key, param;
 
         token = lookahead();
 
@@ -1298,18 +1298,16 @@ parseStatement: true, parseSourceElement: true */
             } else if (token.value === 'set' && !match(':')) {
                 key = parseObjectPropertyKey();
                 expect('(');
-                token = lex();
+                token = lookahead();
                 if (token.type !== Token.Identifier) {
-                    throwUnexpected(token);
+                    throwUnexpected(lex());
                 }
+                param = [ parseObjectPropertyKey() ];
                 expect(')');
                 property = {
                     type: Syntax.Property,
                     key: key,
-                    value: parsePropertyFunction([{
-                        type: Syntax.Identifier,
-                        name: token.value
-                    }]),
+                    value: parsePropertyFunction(param),
                     kind: 'set'
                 };
             } else {

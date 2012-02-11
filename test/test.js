@@ -1649,7 +1649,12 @@ data = {
                             id: null,
                             params: [{
                                 type: 'Identifier',
-                                name: 'w'
+                                name: 'w',
+                                range: [16, 16],
+                                loc: {
+                                    start: { line: 1, column: 16 },
+                                    end: { line: 1, column: 17 }
+                                }
                             }],
                             body: {
                                 type: 'BlockStatement',
@@ -1758,7 +1763,12 @@ data = {
                             id: null,
                             params: [{
                                 type: 'Identifier',
-                                name: 'w'
+                                name: 'w',
+                                range: [13, 13],
+                                loc: {
+                                    start: { line: 1, column: 13 },
+                                    end: { line: 1, column: 14 }
+                                }
                             }],
                             body: {
                                 type: 'BlockStatement',
@@ -1867,7 +1877,12 @@ data = {
                             id: null,
                             params: [{
                                 type: 'Identifier',
-                                name: 'w'
+                                name: 'w',
+                                range: [15, 15],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 16 }
+                                }
                             }],
                             body: {
                                 type: 'BlockStatement',
@@ -1976,7 +1991,12 @@ data = {
                             id: null,
                             params: [{
                                 type: 'Identifier',
-                                name: 'w'
+                                name: 'w',
+                                range: [16, 16],
+                                loc: {
+                                    start: { line: 1, column: 16 },
+                                    end: { line: 1, column: 17 }
+                                }
                             }],
                             body: {
                                 type: 'BlockStatement',
@@ -2085,7 +2105,12 @@ data = {
                             id: null,
                             params: [{
                                 type: 'Identifier',
-                                name: 'w'
+                                name: 'w',
+                                range: [15, 15],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 16 }
+                                }
                             }],
                             body: {
                                 type: 'BlockStatement',
@@ -2195,7 +2220,12 @@ data = {
                             id: null,
                             params: [{
                                 type: 'Identifier',
-                                name: 'w'
+                                name: 'w',
+                                range: [17, 17],
+                                loc: {
+                                    start: { line: 1, column: 17 },
+                                    end: { line: 1, column: 18 }
+                                }
                             }],
                             body: {
                                 type: 'BlockStatement',
@@ -2305,7 +2335,12 @@ data = {
                             id: null,
                             params: [{
                                 type: 'Identifier',
-                                name: 'w'
+                                name: 'w',
+                                range: [13, 13],
+                                loc: {
+                                    start: { line: 1, column: 13 },
+                                    end: { line: 1, column: 14 }
+                                }
                             }],
                             body: {
                                 type: 'BlockStatement',
