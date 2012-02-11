@@ -12088,20 +12088,20 @@ data = {
 
     'Generate Expression': {
         'this': {
-            fromExpression: {
+            from: {
                 type: 'ThisExpression'
             }
         },
 
         '42': {
-            fromExpression: {
+            from: {
                 type: 'Literal',
                 value: 42
             }
         },
 
         '(1 + 2) * 3': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '*',
                 left: {
@@ -12124,7 +12124,7 @@ data = {
         },
 
         'x = []': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12139,7 +12139,7 @@ data = {
         },
 
         'x = [\n    42\n]': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12157,7 +12157,7 @@ data = {
         },
 
         'x = [\n    ,\n    ,\n    42\n]': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12179,7 +12179,7 @@ data = {
         },
 
         'x = [\n    1,\n    2,\n    3\n]': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12203,7 +12203,7 @@ data = {
         },
 
         'x = [\n    1,\n    2,\n    ,\n    3\n]': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12227,7 +12227,7 @@ data = {
         },
 
         'x = [\n    ,\n]': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12242,7 +12242,7 @@ data = {
         },
 
         'x = [\n    20,\n    ,\n]': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12260,7 +12260,7 @@ data = {
         },
 
         '日本語 = []': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12275,7 +12275,7 @@ data = {
         },
 
         'T\u203F = []': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12290,7 +12290,7 @@ data = {
         },
 
         'x = {}': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12305,7 +12305,7 @@ data = {
         },
 
         'x = {\n    answer: 42\n}': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12331,7 +12331,7 @@ data = {
         },
 
         'x = {\n    if: 42\n}': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12357,7 +12357,7 @@ data = {
         },
 
         'x = {\n    true: 42\n}': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12383,7 +12383,7 @@ data = {
         },
 
         'x = {\n    false: 42\n}': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12409,7 +12409,7 @@ data = {
         },
 
         'x = {\n    null: 42\n}': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12435,7 +12435,7 @@ data = {
         },
 
         'x = {\n    \'answer\': 42\n}': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12460,8 +12460,603 @@ data = {
             }
         },
 
+        'x = {\n    get width() {\n        return m_width;\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 0]
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'width'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ReturnStatement',
+                                    argument: {
+                                        type: 'Identifier',
+                                        name: 'm_width'
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    get undef() {\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'undef'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    get if() {\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'if'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    get true() {\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'true'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    get false() {\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'false'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    get null() {\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'null'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    get "undef"() {\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Literal',
+                            value: 'undef',
+                            raw: '"undef"'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    get 10() {\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Literal',
+                            value: 10,
+                            raw: '10'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: []
+                            }
+                        },
+                        kind: 'get'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    set width(w) {\n        m_width = w;\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'width'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_width'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    set if(w) {\n        m_if = w;\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'if'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_if'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    set true(w) {\n        m_true = w;\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'true'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_true'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    set false(w) {\n        m_false = w;\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'false'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_false'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    set null(w) {\n        m_null = w;\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'null'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_null'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    set "null"(w) {\n        m_null = w;\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Literal',
+                            value: 'null',
+                            raw: '"null"'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_null'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
+        'x = {\n    set 10(w) {\n        m_null = w;\n    }\n}': {
+            from: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Literal',
+                            value: 10,
+                            raw: '10'
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'w'
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'AssignmentExpression',
+                                        operator: '=',
+                                        left: {
+                                            type: 'Identifier',
+                                            name: 'm_null'
+                                        },
+                                        right: {
+                                            type: 'Identifier',
+                                            name: 'w'
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        kind: 'set'
+                    }]
+                }
+            }
+        },
+
         'x = {\n    get: 42\n}': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12487,7 +13082,7 @@ data = {
         },
 
         'x = {\n    set: 43\n}': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -12513,56 +13108,56 @@ data = {
         },
 
         '0': {
-            fromExpression: {
+            from: {
                 type: 'Literal',
                 value: 0
             }
         },
 
         '0.14': {
-            fromExpression: {
+            from: {
                 type: 'Literal',
                 value: 0.14
             }
         },
 
         '\'Hello\'': {
-            fromExpression: {
+            from: {
                 type: 'Literal',
                 value: 'Hello'
             }
         },
 
         '\'\\n\\r\\b\\f\\\\\\\'"\\u0000\'': {
-            fromExpression: {
+            from: {
                 type: 'Literal',
                 value: '\n\r\b\f\\\'"\x00'
             }
         },
 
         '\'0\'': {
-            fromExpression: {
+            from: {
                 type: 'Literal',
                 value: '0'
             }
         },
 
         '\'Hello\\nworld\'': {
-            fromExpression: {
+            from: {
                 type: 'Literal',
                 value: 'Hello\nworld'
             }
         },
 
         '/a/': {
-            fromExpression: {
+            from: {
                 type: 'Literal',
                 value: /a/
             }
         },
 
         'new Button()': {
-            fromExpression: {
+            from: {
                 type: 'NewExpression',
                 callee: {
                     type: 'Identifier',
@@ -12573,7 +13168,7 @@ data = {
         },
 
         'new new foo(0)()': {
-            fromExpression: {
+            from: {
                 type: 'NewExpression',
                 callee: {
                     type: 'NewExpression',
@@ -12591,7 +13186,7 @@ data = {
         },
 
         'new new foo()(0)': {
-            fromExpression: {
+            from: {
                 type: 'NewExpression',
                 callee: {
                     type: 'NewExpression',
@@ -12609,7 +13204,7 @@ data = {
         },
 
         'new foo().bar()': {
-            fromExpression: {
+            from: {
                 type: 'CallExpression',
                 callee: {
                     type: 'MemberExpression',
@@ -12632,7 +13227,7 @@ data = {
         },
 
         'new foo.bar()': {
-            fromExpression: {
+            from: {
                 type: 'NewExpression',
                 callee: {
                     type: 'MemberExpression',
@@ -12651,7 +13246,7 @@ data = {
         },
 
         'foo(bar, baz)': {
-            fromExpression: {
+            from: {
                 type: 'CallExpression',
                 callee: {
                     type: 'Identifier',
@@ -12668,7 +13263,7 @@ data = {
         },
 
         'universe.milkyway': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -12683,7 +13278,7 @@ data = {
         },
 
         'universe.milkyway.solarsystem': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -12706,7 +13301,7 @@ data = {
         },
 
         'universe.milkyway.solarsystem.Earth': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -12737,7 +13332,7 @@ data = {
         },
 
         'universe[galaxyName, otherUselessName]': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: true,
                 object: {
@@ -12758,7 +13353,7 @@ data = {
         },
 
         'universe[galaxyName]': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: true,
                 object: {
@@ -12773,7 +13368,7 @@ data = {
         },
 
         'universe[42].galaxies': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -12796,7 +13391,7 @@ data = {
         },
 
         'universe(42).galaxies': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -12818,7 +13413,7 @@ data = {
         },
 
         'universe(42).galaxies(14, 3, 77).milkyway': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -12861,7 +13456,7 @@ data = {
         },
 
         'earth.asia.Indonesia.prepareForElection(2014)': {
-            fromExpression: {
+            from: {
                 type: 'CallExpression',
                 callee: {
                     type: 'MemberExpression',
@@ -12899,7 +13494,7 @@ data = {
         },
 
         'universe.if': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -12914,7 +13509,7 @@ data = {
         },
 
         'universe.true': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -12929,7 +13524,7 @@ data = {
         },
 
         'universe.false': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -12944,7 +13539,7 @@ data = {
         },
 
         'universe.null': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -12959,7 +13554,7 @@ data = {
         },
 
         '\'string\'.toString': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -12974,7 +13569,7 @@ data = {
         },
 
         '42..toString': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -12989,7 +13584,7 @@ data = {
         },
 
         '1e+1000.toString': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -13004,7 +13599,7 @@ data = {
         },
 
         '1e+100.toString': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -13019,7 +13614,7 @@ data = {
         },
 
         'x++': {
-            fromExpression: {
+            from: {
                 type: 'UpdateExpression',
                 operator: '++',
                 argument: {
@@ -13031,7 +13626,7 @@ data = {
         },
 
         'x--': {
-            fromExpression: {
+            from: {
                 type: 'UpdateExpression',
                 operator: '--',
                 argument: {
@@ -13043,7 +13638,7 @@ data = {
         },
 
         '++x': {
-            fromExpression: {
+            from: {
                 type: 'UpdateExpression',
                 operator: '++',
                 argument: {
@@ -13055,7 +13650,7 @@ data = {
         },
 
         '--x': {
-            fromExpression: {
+            from: {
                 type: 'UpdateExpression',
                 operator: '--',
                 argument: {
@@ -13067,7 +13662,7 @@ data = {
         },
 
         '+x': {
-            fromExpression: {
+            from: {
                 type: 'UnaryExpression',
                 operator: '+',
                 argument: {
@@ -13078,7 +13673,7 @@ data = {
         },
 
         '-x': {
-            fromExpression: {
+            from: {
                 type: 'UnaryExpression',
                 operator: '-',
                 argument: {
@@ -13089,7 +13684,7 @@ data = {
         },
 
         '~x': {
-            fromExpression: {
+            from: {
                 type: 'UnaryExpression',
                 operator: '~',
                 argument: {
@@ -13100,7 +13695,7 @@ data = {
         },
 
         '!x': {
-            fromExpression: {
+            from: {
                 type: 'UnaryExpression',
                 operator: '!',
                 argument: {
@@ -13111,7 +13706,7 @@ data = {
         },
 
         'void x': {
-            fromExpression: {
+            from: {
                 type: 'UnaryExpression',
                 operator: 'void',
                 argument: {
@@ -13122,7 +13717,7 @@ data = {
         },
 
         'delete x': {
-            fromExpression: {
+            from: {
                 type: 'UnaryExpression',
                 operator: 'delete',
                 argument: {
@@ -13133,7 +13728,7 @@ data = {
         },
 
         'typeof x': {
-            fromExpression: {
+            from: {
                 type: 'UnaryExpression',
                 operator: 'typeof',
                 argument: {
@@ -13144,7 +13739,7 @@ data = {
         },
 
         'x * y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '*',
                 left: {
@@ -13159,7 +13754,7 @@ data = {
         },
 
         'x / y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '/',
                 left: {
@@ -13174,7 +13769,7 @@ data = {
         },
 
         'x % y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '%',
                 left: {
@@ -13189,7 +13784,7 @@ data = {
         },
 
         'x + y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '+',
                 left: {
@@ -13204,7 +13799,7 @@ data = {
         },
 
         'x - y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '-',
                 left: {
@@ -13219,7 +13814,7 @@ data = {
         },
 
         'x << y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '<<',
                 left: {
@@ -13234,7 +13829,7 @@ data = {
         },
 
         'x >> y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '>>',
                 left: {
@@ -13249,7 +13844,7 @@ data = {
         },
 
         'x >>> y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '>>>',
                 left: {
@@ -13264,7 +13859,7 @@ data = {
         },
 
         'x < y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '<',
                 left: {
@@ -13279,7 +13874,7 @@ data = {
         },
 
         'x > y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '>',
                 left: {
@@ -13294,7 +13889,7 @@ data = {
         },
 
         'x <= y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '<=',
                 left: {
@@ -13309,7 +13904,7 @@ data = {
         },
 
         'x >= y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '>=',
                 left: {
@@ -13324,7 +13919,7 @@ data = {
         },
 
         '(x in y)': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: 'in',
                 left: {
@@ -13339,7 +13934,7 @@ data = {
         },
 
         'x instanceof y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: 'instanceof',
                 left: {
@@ -13354,7 +13949,7 @@ data = {
         },
 
         'x == y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '==',
                 left: {
@@ -13369,7 +13964,7 @@ data = {
         },
 
         'x != y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '!=',
                 left: {
@@ -13384,7 +13979,7 @@ data = {
         },
 
         'x === y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '===',
                 left: {
@@ -13399,7 +13994,7 @@ data = {
         },
 
         'x !== y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '!==',
                 left: {
@@ -13414,7 +14009,7 @@ data = {
         },
 
         'x & y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '&',
                 left: {
@@ -13429,7 +14024,7 @@ data = {
         },
 
         'x ^ y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '^',
                 left: {
@@ -13444,7 +14039,7 @@ data = {
         },
 
         'x | y': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '|',
                 left: {
@@ -13459,7 +14054,7 @@ data = {
         },
 
         'x + y + z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '+',
                 left: {
@@ -13482,7 +14077,7 @@ data = {
         },
 
         'x - y + z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '+',
                 left: {
@@ -13505,7 +14100,7 @@ data = {
         },
 
         'x + y - z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '-',
                 left: {
@@ -13528,7 +14123,7 @@ data = {
         },
 
         'x - y - z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '-',
                 left: {
@@ -13551,7 +14146,7 @@ data = {
         },
 
         'x + y * z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '+',
                 left: {
@@ -13574,7 +14169,7 @@ data = {
         },
 
         'x + y / z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '+',
                 left: {
@@ -13597,7 +14192,7 @@ data = {
         },
 
         'x - y % z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '-',
                 left: {
@@ -13620,7 +14215,7 @@ data = {
         },
 
         'x * y * z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '*',
                 left: {
@@ -13643,7 +14238,7 @@ data = {
         },
 
         'x * y / z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '/',
                 left: {
@@ -13666,7 +14261,7 @@ data = {
         },
 
         'x * y % z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '%',
                 left: {
@@ -13689,7 +14284,7 @@ data = {
         },
 
         'x % y * z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '*',
                 left: {
@@ -13713,7 +14308,7 @@ data = {
 
         'x << y << z': {
             type: 'ExpressionStatement',
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '<<',
                 left: {
@@ -13736,7 +14331,7 @@ data = {
         },
 
         'x | y | z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '|',
                 left: {
@@ -13759,7 +14354,7 @@ data = {
         },
 
         'x & y & z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '&',
                 left: {
@@ -13782,7 +14377,7 @@ data = {
         },
 
         'x ^ y ^ z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '^',
                 left: {
@@ -13805,7 +14400,7 @@ data = {
         },
 
         'x & y | z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '|',
                 left: {
@@ -13828,7 +14423,7 @@ data = {
         },
 
         'x | y ^ z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '^',
                 left: {
@@ -13851,7 +14446,7 @@ data = {
         },
 
         'x | y & z': {
-            fromExpression: {
+            from: {
                 type: 'BinaryExpression',
                 operator: '|',
                 left: {
@@ -13874,7 +14469,7 @@ data = {
         },
 
         'x || y': {
-            fromExpression: {
+            from: {
                 type: 'LogicalExpression',
                 operator: '||',
                 left: {
@@ -13889,7 +14484,7 @@ data = {
         },
 
         'x && y': {
-            fromExpression: {
+            from: {
                 type: 'LogicalExpression',
                 operator: '&&',
                 left: {
@@ -13904,7 +14499,7 @@ data = {
         },
 
         'x || y || z': {
-            fromExpression: {
+            from: {
                 type: 'LogicalExpression',
                 operator: '||',
                 left: {
@@ -13927,7 +14522,7 @@ data = {
         },
 
         'x && y && z': {
-            fromExpression: {
+            from: {
                 type: 'LogicalExpression',
                 operator: '&&',
                 left: {
@@ -13950,7 +14545,7 @@ data = {
         },
 
         'x || y && z': {
-            fromExpression: {
+            from: {
                 type: 'LogicalExpression',
                 operator: '||',
                 left: {
@@ -13973,7 +14568,7 @@ data = {
         },
 
         'x || y ^ z': {
-            fromExpression: {
+            from: {
                 type: 'LogicalExpression',
                 operator: '||',
                 left: {
@@ -13996,7 +14591,7 @@ data = {
         },
 
         'y ? 1 : 2': {
-            fromExpression: {
+            from: {
                 type: 'ConditionalExpression',
                 test: {
                     type: 'Identifier',
@@ -14014,7 +14609,7 @@ data = {
         },
 
         'x && y ? 1 : 2': {
-            fromExpression: {
+            from: {
                 type: 'ConditionalExpression',
                 test: {
                     type: 'LogicalExpression',
@@ -14040,7 +14635,7 @@ data = {
         },
 
         'x = 42': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14055,7 +14650,7 @@ data = {
         },
 
         'x *= 42': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '*=',
                 left: {
@@ -14070,7 +14665,7 @@ data = {
         },
 
         'x /= 42': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '/=',
                 left: {
@@ -14085,7 +14680,7 @@ data = {
         },
 
         'x %= 42': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '%=',
                 left: {
@@ -14100,7 +14695,7 @@ data = {
         },
 
         'x += 42': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '+=',
                 left: {
@@ -14115,7 +14710,7 @@ data = {
         },
 
         'x -= 42': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '-=',
                 left: {
@@ -14130,7 +14725,7 @@ data = {
         },
 
         'x <<= 42': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '<<=',
                 left: {
@@ -14145,7 +14740,7 @@ data = {
         },
 
         'x >>= 42': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '>>=',
                 left: {
@@ -14160,7 +14755,7 @@ data = {
         },
 
         'x >>>= 42': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '>>>=',
                 left: {
@@ -14175,7 +14770,7 @@ data = {
         },
 
         'x &= 42': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '&=',
                 left: {
@@ -14190,7 +14785,7 @@ data = {
         },
 
         'x ^= 42': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '^=',
                 left: {
@@ -14205,7 +14800,7 @@ data = {
         },
 
         'x |= 42': {
-            fromExpression: {
+            from: {
                 type: 'AssignmentExpression',
                 operator: '|=',
                 left: {
@@ -14220,7 +14815,7 @@ data = {
         },
 
         '0x20.toString': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -14236,7 +14831,7 @@ data = {
         },
 
         '0..toString': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -14252,7 +14847,7 @@ data = {
         },
 
         '1e2.toString': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -14268,7 +14863,7 @@ data = {
         },
 
         '"TEST"': {
-            fromExpression: {
+            from: {
                 type: 'Literal',
                 value: 'TEST',
                 raw: '"TEST"'
@@ -14276,7 +14871,7 @@ data = {
         },
 
         '1..toString': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -14292,7 +14887,7 @@ data = {
         },
 
         '2..toString': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -14308,7 +14903,7 @@ data = {
         },
 
         '3..toString': {
-            fromExpression: {
+            from: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -14319,6 +14914,2606 @@ data = {
                 property: {
                     type: 'Identifier',
                     name: 'toString'
+                }
+            }
+        }
+
+    },
+
+    'Generate Statement': {
+
+        '{\n    foo;\n}': {
+            from: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'foo'
+                    }
+                }]
+            }
+        },
+
+        '{\n    doThis();\n    doThat();\n}': {
+            from: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'doThis'
+                        },
+                        'arguments': []
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'doThat'
+                        },
+                        'arguments': []
+                    }
+                }]
+            }
+        },
+
+        '{\n}': {
+            from: {
+                type: 'BlockStatement',
+                body: []
+            }
+        },
+
+        'var x;': {
+            from: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: null
+                }],
+                kind: 'var'
+            }
+        },
+
+        'var x, y;': {
+            from: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: null
+                }, {
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    init: null
+                }],
+                kind: 'var'
+            }
+        },
+
+        'var x = 42;': {
+            from: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42'
+                    }
+                }],
+                kind: 'var'
+            }
+        },
+
+        'var x = 14, y = 3, z = 1977;': {
+            from: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 14,
+                        raw: '14'
+                    }
+                }, {
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'y'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 3,
+                        raw: '3'
+                    }
+                }, {
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'z'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 1977,
+                        raw: '1977'
+                    }
+                }],
+                kind: 'var'
+            }
+        },
+
+        'var x = function () {\n};': {
+            from: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: []
+                        }
+                    }
+                }],
+                kind: 'var'
+            }
+        },
+
+        'let x;': {
+            from: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: null
+                }],
+                kind: 'let'
+            }
+        },
+
+        '{\n    let x;\n}': {
+            from: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: null
+                    }],
+                    kind: 'let'
+                }]
+            }
+        },
+
+        '{\n    let x = 42;\n}': {
+            from: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 42,
+                            raw: '42'
+                        }
+                    }],
+                    kind: 'let'
+                }]
+            }
+        },
+
+        '{\n    let x = 14, y = 3, z = 1977;\n}': {
+            from: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 14,
+                            raw: '14'
+                        }
+                    }, {
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'y'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 3,
+                            raw: '3'
+                        }
+                    }, {
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'z'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 1977,
+                            raw: '1977'
+                        }
+                    }],
+                    kind: 'let'
+                }]
+            }
+        },
+
+        'const x = 42;': {
+            from: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42'
+                    }
+                }],
+                kind: 'const'
+            }
+        },
+
+        '{\n    const x = 42;\n}': {
+            from: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 42,
+                            raw: '42'
+                        }
+                    }],
+                    kind: 'const'
+                }]
+            }
+        },
+
+        '{\n    const x = 14, y = 3, z = 1977;\n}': {
+            from: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 14,
+                            raw: '14'
+                        }
+                    }, {
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'y'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 3,
+                            raw: '3'
+                        }
+                    }, {
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'z'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 1977,
+                            raw: '1977'
+                        }
+                    }],
+                    kind: 'const'
+                }]
+            }
+        },
+
+        ';': {
+            from: {
+                type: 'EmptyStatement'
+            }
+        },
+
+        'x;': {
+            from: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }
+        },
+
+        'x, y;': {
+            from: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'SequenceExpression',
+                    expressions: [{
+                        type: 'Identifier',
+                        name: 'x'
+                    }, {
+                        type: 'Identifier',
+                        name: 'y'
+                    }]
+                }
+            }
+        },
+
+        'a;': {
+            from: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'a'
+                }
+            }
+        },
+
+        'aa;': {
+            from: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Identifier',
+                    name: 'aa'
+                }
+            }
+        },
+
+        'if (morning)\n    goodMorning();': {
+            from: {
+                type: 'IfStatement',
+                test: {
+                    type: 'Identifier',
+                    name: 'morning'
+                },
+                consequent: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'goodMorning'
+                        },
+                        'arguments': []
+                    }
+                },
+                alternate: null
+            }
+        },
+
+        'if ({\n        morning: true\n    })\n    goodMorning();': {
+            from: {
+                type: 'IfStatement',
+                test: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'morning'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: true
+                        },
+                        kind: 'init'
+                    }]
+                },
+                consequent: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'goodMorning'
+                        },
+                        'arguments': []
+                    }
+                },
+                alternate: null
+            }
+        },
+
+        'if (morning)\n    (function () {\n    });': {
+            from: {
+                type: 'IfStatement',
+                test: {
+                    type: 'Identifier',
+                    name: 'morning'
+                },
+                consequent: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: []
+                        }
+                    }
+                },
+                alternate: null
+            }
+        },
+
+        'if (morning)\n    var x = 0;': {
+            from: {
+                type: 'IfStatement',
+                test: {
+                    type: 'Identifier',
+                    name: 'morning'
+                },
+                consequent: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 0,
+                            raw: '0'
+                        }
+                    }],
+                    kind: 'var'
+                },
+                alternate: null
+            }
+        },
+
+        'if (morning) {\n    var x = 0;\n}': {
+            from: {
+                type: 'IfStatement',
+                test: {
+                    type: 'Identifier',
+                    name: 'morning'
+                },
+                consequent: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'VariableDeclaration',
+                        declarations: [{
+                            type: 'VariableDeclarator',
+                            id: {
+                                type: 'Identifier',
+                                name: 'x'
+                            },
+                            init: {
+                                type: 'Literal',
+                                value: 0,
+                                raw: '0'
+                            }
+                        }],
+                        kind: 'var'
+                    }]
+                },
+                alternate: null
+            }
+        },
+
+        'if (morning)\n    goodMorning();\nelse\n    goodDay();': {
+            from: {
+                type: 'IfStatement',
+                test: {
+                    type: 'Identifier',
+                    name: 'morning'
+                },
+                consequent: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'goodMorning'
+                        },
+                        'arguments': []
+                    }
+                },
+                alternate: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'goodDay'
+                        },
+                        'arguments': []
+                    }
+                }
+            }
+        },
+
+        'if (morning) {\n    goodMorning();\n} else {\n    goodDay();\n}': {
+            from: {
+                type: 'IfStatement',
+                test: {
+                    type: 'Identifier',
+                    name: 'morning'
+                },
+                consequent: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'goodMorning'
+                            },
+                            'arguments': []
+                        }
+                    }]
+                },
+                alternate: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'goodDay'
+                            },
+                            'arguments': []
+                        }
+                    }]
+                }
+            }
+        },
+
+        'if (morning) {\n    goodMorning();\n} else if (afternoon) {\n    goodDay();\n} else {\n    goodEvening();\n}': {
+            from: {
+                type: 'IfStatement',
+                test: {
+                    type: 'Identifier',
+                    name: 'morning'
+                },
+                consequent: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'goodMorning'
+                            },
+                            'arguments': []
+                        }
+                    }]
+                },
+                alternate: {
+                    type: 'IfStatement',
+                    test: {
+                        type: 'Identifier',
+                        name: 'afternoon'
+                    },
+                    consequent: {
+                        type: 'BlockStatement',
+                        body: [{
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'CallExpression',
+                                callee: {
+                                    type: 'Identifier',
+                                    name: 'goodDay'
+                                },
+                                'arguments': []
+                            }
+                        }]
+                    },
+                    alternate: {
+                        type: 'BlockStatement',
+                        body: [{
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'CallExpression',
+                                callee: {
+                                    type: 'Identifier',
+                                    name: 'goodEvening'
+                                },
+                                'arguments': []
+                            }
+                        }]
+                    }
+                }
+            }
+        },
+
+        'do\n    keep();\nwhile (true);': {
+            from: {
+                type: 'DoWhileStatement',
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'keep'
+                        },
+                        'arguments': []
+                    }
+                },
+                test: {
+                    type: 'Literal',
+                    value: true,
+                    raw: 'true'
+                }
+            }
+        },
+
+
+        'do\n    keep();\nwhile ({\n    morning: true\n});': {
+            from: {
+                type: 'DoWhileStatement',
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'keep'
+                        },
+                        'arguments': []
+                    }
+                },
+                test: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'morning'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: true
+                        },
+                        kind: 'init'
+                    }]
+                }
+            }
+        },
+
+        'do {\n    x++;\n    y--;\n} while (x < 10);': {
+            from: {
+                type: 'DoWhileStatement',
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'UpdateExpression',
+                            operator: '++',
+                            argument: {
+                                type: 'Identifier',
+                                name: 'x'
+                            },
+                            prefix: false
+                        }
+                    }, {
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'UpdateExpression',
+                            operator: '--',
+                            argument: {
+                                type: 'Identifier',
+                                name: 'y'
+                            },
+                            prefix: false
+                        }
+                    }]
+                },
+                test: {
+                    type: 'BinaryExpression',
+                    operator: '<',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 10,
+                        raw: '10'
+                    }
+                }
+            }
+        },
+
+        '{\n    do {\n    } while (false);\n    false;\n}': {
+            from: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'DoWhileStatement',
+                    body: {
+                        type: 'BlockStatement',
+                        body: []
+                    },
+                    test: {
+                        type: 'Literal',
+                        value: false,
+                        raw: 'false'
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: false,
+                        raw: 'false'
+                    }
+                }]
+            }
+        },
+
+        'while (true)\n    doSomething();': {
+            from: {
+                type: 'WhileStatement',
+                test: {
+                    type: 'Literal',
+                    value: true,
+                    raw: 'true'
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'doSomething'
+                        },
+                        'arguments': []
+                    }
+                }
+            }
+        },
+
+
+        'while ({\n        morning: true\n    })\n    doSomething();': {
+            from: {
+                type: 'WhileStatement',
+                test: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'morning'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: true
+                        },
+                        kind: 'init'
+                    }]
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'doSomething'
+                        },
+                        'arguments': []
+                    }
+                }
+            }
+        },
+
+        'while (x < 10) {\n    x++;\n    y--;\n}': {
+            from: {
+                type: 'WhileStatement',
+                test: {
+                    type: 'BinaryExpression',
+                    operator: '<',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 10,
+                        raw: '10'
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'UpdateExpression',
+                            operator: '++',
+                            argument: {
+                                type: 'Identifier',
+                                name: 'x'
+                            },
+                            prefix: false
+                        }
+                    }, {
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'UpdateExpression',
+                            operator: '--',
+                            argument: {
+                                type: 'Identifier',
+                                name: 'y'
+                            },
+                            prefix: false
+                        }
+                    }]
+                }
+            }
+        },
+
+        'for (;;);': {
+            from: {
+                type: 'ForStatement',
+                init: null,
+                test: null,
+                update: null,
+                body: {
+                    type: 'EmptyStatement'
+                }
+            }
+        },
+
+        'for (;;) {\n}': {
+            from: {
+                type: 'ForStatement',
+                init: null,
+                test: null,
+                update: null,
+                body: {
+                    type: 'BlockStatement',
+                    body: []
+                }
+            }
+        },
+
+        'for (x = 0;;);': {
+            from: {
+                type: 'ForStatement',
+                init: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0'
+                    }
+                },
+                test: null,
+                update: null,
+                body: {
+                    type: 'EmptyStatement'
+                }
+            }
+        },
+
+
+        'for (x = {\n        morning: true\n    }; {\n        afternoon: true\n    }; {\n        evening: true\n    });': {
+            from: {
+                type: 'ForStatement',
+                init: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'ObjectExpression',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'morning'
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: true
+                            },
+                            kind: 'init'
+                        }]
+                    }
+                },
+                test: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'afternoon'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: true
+                        },
+                        kind: 'init'
+                    }]
+                },
+                update: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'evening'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: true
+                        },
+                        kind: 'init'
+                    }]
+                },
+                body: {
+                    type: 'EmptyStatement'
+                }
+            }
+        },
+
+        'for (var x = 0;;);': {
+            from: {
+                type: 'ForStatement',
+                init: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 0,
+                            raw: '0'
+                        }
+                    }],
+                    kind: 'var'
+                },
+                test: null,
+                update: null,
+                body: {
+                    type: 'EmptyStatement'
+                }
+            }
+        },
+
+        'for (var x = {\n            morning: true\n        };;);': {
+            from: {
+                type: 'ForStatement',
+                init: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'ObjectExpression',
+                            properties: [{
+                                type: 'Property',
+                                key: {
+                                    type: 'Identifier',
+                                    name: 'morning'
+                                },
+                                value: {
+                                    type: 'Literal',
+                                    value: true
+                                },
+                                kind: 'init'
+                            }]
+                        }
+                    }],
+                    kind: 'var'
+                },
+                test: null,
+                update: null,
+                body: {
+                    type: 'EmptyStatement'
+                }
+            }
+        },
+
+        'for (let x = 0;;);': {
+            from: {
+                type: 'ForStatement',
+                init: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 0,
+                            raw: '0'
+                        }
+                    }],
+                    kind: 'let'
+                },
+                test: null,
+                update: null,
+                body: {
+                    type: 'EmptyStatement'
+                }
+            }
+        },
+
+        'for (var x = 0, y = 1;;);': {
+            from: {
+                type: 'ForStatement',
+                init: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 0,
+                            raw: '0'
+                        }
+                    }, {
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'y'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 1,
+                            raw: '1'
+                        }
+                    }],
+                    kind: 'var'
+                },
+                test: null,
+                update: null,
+                body: {
+                    type: 'EmptyStatement'
+                }
+            }
+        },
+
+        'for (x = 0; x < 42;);': {
+            from: {
+                type: 'ForStatement',
+                init: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0'
+                    }
+                },
+                test: {
+                    type: 'BinaryExpression',
+                    operator: '<',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42'
+                    }
+                },
+                update: null,
+                body: {
+                    type: 'EmptyStatement'
+                }
+            }
+        },
+
+        'for (x = 0; x < 42; x++);': {
+            from: {
+                type: 'ForStatement',
+                init: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0'
+                    }
+                },
+                test: {
+                    type: 'BinaryExpression',
+                    operator: '<',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42'
+                    }
+                },
+                update: {
+                    type: 'UpdateExpression',
+                    operator: '++',
+                    argument: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    prefix: false
+                },
+                body: {
+                    type: 'EmptyStatement'
+                }
+            }
+        },
+
+        'for (x = 0; x < 42; x++)\n    process(x);': {
+            from: {
+                type: 'ForStatement',
+                init: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0'
+                    }
+                },
+                test: {
+                    type: 'BinaryExpression',
+                    operator: '<',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42'
+                    }
+                },
+                update: {
+                    type: 'UpdateExpression',
+                    operator: '++',
+                    argument: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    prefix: false
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'process'
+                        },
+                        'arguments': [{
+                            type: 'Identifier',
+                            name: 'x'
+                        }]
+                    }
+                }
+            }
+        },
+
+        'for (x in list)\n    process(x);': {
+            from: {
+                type: 'ForInStatement',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'list'
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'process'
+                        },
+                        'arguments': [{
+                            type: 'Identifier',
+                            name: 'x'
+                        }]
+                    }
+                },
+                each: false
+            }
+        },
+
+        'for (x in {\n        morning: true\n    })\n    process(x);': {
+            from: {
+                type: 'ForInStatement',
+                left: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'morning'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: true
+                        },
+                        kind: 'init'
+                    }]
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'process'
+                        },
+                        'arguments': [{
+                            type: 'Identifier',
+                            name: 'x'
+                        }]
+                    }
+                },
+                each: false
+            }
+        },
+
+        'for (var x in list)\n    process(x);': {
+            from: {
+                type: 'ForInStatement',
+                left: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: null
+                    }],
+                    kind: 'var'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'list'
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'process'
+                        },
+                        'arguments': [{
+                            type: 'Identifier',
+                            name: 'x'
+                        }]
+                    }
+                },
+                each: false
+            }
+        },
+
+        'for (var x in {\n        morning: true\n    })\n    process(x);': {
+            from: {
+                type: 'ForInStatement',
+                left: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: null
+                    }],
+                    kind: 'var'
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'morning'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: true
+                        },
+                        kind: 'init'
+                    }]
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'process'
+                        },
+                        'arguments': [{
+                            type: 'Identifier',
+                            name: 'x'
+                        }]
+                    }
+                },
+                each: false
+            }
+        },
+
+        'for (var x = 42 in list)\n    process(x);': {
+            from: {
+                type: 'ForInStatement',
+                left: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 42,
+                            raw: '42'
+                        }
+                    }],
+                    kind: 'var'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'list'
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'process'
+                        },
+                        'arguments': [{
+                            type: 'Identifier',
+                            name: 'x'
+                        }]
+                    }
+                },
+                each: false
+            }
+        },
+
+        'for (var x = {\n            morning: true\n        } in list)\n    process(x);': {
+            from: {
+                type: 'ForInStatement',
+                left: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'ObjectExpression',
+                            properties: [{
+                                type: 'Property',
+                                key: {
+                                    type: 'Identifier',
+                                    name: 'morning'
+                                },
+                                value: {
+                                    type: 'Literal',
+                                    value: true
+                                },
+                                kind: 'init'
+                            }]
+                        }
+                    }],
+                    kind: 'var'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'list'
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'process'
+                        },
+                        'arguments': [{
+                            type: 'Identifier',
+                            name: 'x'
+                        }]
+                    }
+                },
+                each: false
+            }
+        },
+
+        'for (let x in list)\n    process(x);': {
+            from: {
+                type: 'ForInStatement',
+                left: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: null
+                    }],
+                    kind: 'let'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'list'
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'process'
+                        },
+                        'arguments': [{
+                            type: 'Identifier',
+                            name: 'x'
+                        }]
+                    }
+                },
+                each: false
+            }
+        },
+
+        'for (let x = 42 in list)\n    process(x);': {
+            from: {
+                type: 'ForInStatement',
+                left: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 42,
+                            raw: '42'
+                        }
+                    }],
+                    kind: 'let'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'list'
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'process'
+                        },
+                        'arguments': [{
+                            type: 'Identifier',
+                            name: 'x'
+                        }]
+                    }
+                },
+                each: false
+            }
+        },
+
+        'for (var i = function () {\n            return (10 in []);\n        } in list)\n    process(x);': {
+            from: {
+                type: 'ForInStatement',
+                left: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'i'
+                        },
+                        init: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ReturnStatement',
+                                    argument: {
+                                        type: 'BinaryExpression',
+                                        operator: 'in',
+                                        left: {
+                                            type: 'Literal',
+                                            value: 10,
+                                            raw: '10'
+                                        },
+                                        right: {
+                                            type: 'ArrayExpression',
+                                            elements: []
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }],
+                    kind: 'var'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'list'
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'process'
+                        },
+                        'arguments': [{
+                            type: 'Identifier',
+                            name: 'x'
+                        }]
+                    }
+                },
+                each: false
+            }
+        },
+
+        'for (var x = (42 in arr) in list)\n    process(x);': {
+            from: {
+                type: 'ForInStatement',
+                left: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'BinaryExpression',
+                            operator: 'in',
+                            left: {
+                                type: 'Literal',
+                                value: 42,
+                                raw: '42'
+                            },
+                            right: {
+                                type: 'Identifier',
+                                name: 'arr'
+                            }
+                        }
+                    }],
+                    kind: 'var'
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'list'
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'process'
+                        },
+                        'arguments': [{
+                            type: 'Identifier',
+                            name: 'x'
+                        }]
+                    }
+                },
+                each: false
+            }
+        },
+
+        'for (var x = 42 in (arr in list))\n    process(x);': {
+            from: {
+                type: 'ForInStatement',
+                left: {
+                    type: 'VariableDeclaration',
+                    declarations: [{
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x'
+                        },
+                        init: {
+                            type: 'Literal',
+                            value: 42,
+                            raw: '42'
+                        }
+                    }],
+                    kind: 'var'
+                },
+                right: {
+                    type: 'BinaryExpression',
+                    operator: 'in',
+                    left: {
+                        type: 'Identifier',
+                        name: 'arr'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'list'
+                    }
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'process'
+                        },
+                        'arguments': [{
+                            type: 'Identifier',
+                            name: 'x'
+                        }]
+                    }
+                },
+                each: false
+            }
+        },
+
+        'continue;': {
+            from: {
+                type: 'ContinueStatement',
+                label: null
+            }
+        },
+
+        'continue done;': {
+            from: {
+                type: 'ContinueStatement',
+                label: {
+                    type: 'Identifier',
+                    name: 'done'
+                }
+            }
+        },
+
+        'break;': {
+            from: {
+                type: 'BreakStatement',
+                label: null
+            }
+        },
+
+        'break done;': {
+            from: {
+                type: 'BreakStatement',
+                label: {
+                    type: 'Identifier',
+                    name: 'done'
+                }
+            }
+        },
+
+        'return;': {
+            from: {
+                type: 'ReturnStatement',
+                argument: null
+            }
+        },
+
+        'return x;': {
+            from: {
+                type: 'ReturnStatement',
+                argument: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }
+        },
+
+        'return x * y;': {
+            from: {
+                type: 'ReturnStatement',
+                argument: {
+                    type: 'BinaryExpression',
+                    operator: '*',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                }
+            }
+        },
+
+        'return {\n    morning: true\n};': {
+            from: {
+                type: 'ReturnStatement',
+                argument: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'morning'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: true
+                        },
+                        kind: 'init'
+                    }]
+                }
+            }
+        },
+
+        'with (x)\n    foo = bar;': {
+            from: {
+                type: 'WithStatement',
+                object: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'AssignmentExpression',
+                        operator: '=',
+                        left: {
+                            type: 'Identifier',
+                            name: 'foo'
+                        },
+                        right: {
+                            type: 'Identifier',
+                            name: 'bar'
+                        }
+                    }
+                }
+            }
+        },
+
+        'with ({\n        morning: true\n    })\n    foo = bar;': {
+            from: {
+                type: 'WithStatement',
+                object: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'morning'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: true
+                        },
+                        kind: 'init'
+                    }]
+                },
+                body: {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'AssignmentExpression',
+                        operator: '=',
+                        left: {
+                            type: 'Identifier',
+                            name: 'foo'
+                        },
+                        right: {
+                            type: 'Identifier',
+                            name: 'bar'
+                        }
+                    }
+                }
+            }
+        },
+
+        'with (x) {\n    foo = bar;\n}': {
+            from: {
+                type: 'WithStatement',
+                object: {
+                    type: 'Identifier',
+                    name: 'x'
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'AssignmentExpression',
+                            operator: '=',
+                            left: {
+                                type: 'Identifier',
+                                name: 'foo'
+                            },
+                            right: {
+                                type: 'Identifier',
+                                name: 'bar'
+                            }
+                        }
+                    }]
+                }
+            }
+        },
+
+        'switch (x) {\n}': {
+            from: {
+                type: 'SwitchStatement',
+                discriminant: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }
+        },
+
+        'switch ({\n        morning: true\n    }) {\n}': {
+            from: {
+                type: 'SwitchStatement',
+                discriminant: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'morning'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: true
+                        },
+                        kind: 'init'
+                    }]
+                }
+            }
+        },
+
+        'switch (answer) {\ncase 42:\n    hi();\n    break;\n}': {
+            from: {
+                type: 'SwitchStatement',
+                discriminant: {
+                    type: 'Identifier',
+                    name: 'answer'
+                },
+                cases: [{
+                    type: 'SwitchCase',
+                    test: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42'
+                    },
+                    consequent: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'hi'
+                            },
+                            'arguments': []
+                        }
+                    }, {
+                        type: 'BreakStatement',
+                        label: null
+                    }]
+                }]
+            }
+        },
+
+        'switch (answer) {\ncase {\n        morning: true\n    }:\n    hi();\n    break;\n}': {
+            from: {
+                type: 'SwitchStatement',
+                discriminant: {
+                    type: 'Identifier',
+                    name: 'answer'
+                },
+                cases: [{
+                    type: 'SwitchCase',
+                    test: {
+                        type: 'ObjectExpression',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'morning'
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: true
+                            },
+                            kind: 'init'
+                        }]
+                    },
+                    consequent: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'hi'
+                            },
+                            'arguments': []
+                        }
+                    }, {
+                        type: 'BreakStatement',
+                        label: null
+                    }]
+                }]
+            }
+        },
+
+        'switch (answer) {\ncase 42: {\n        hi();\n        break;\n    }\n}': {
+            from: {
+                type: 'SwitchStatement',
+                discriminant: {
+                    type: 'Identifier',
+                    name: 'answer'
+                },
+                cases: [{
+                    type: 'SwitchCase',
+                    test: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42'
+                    },
+                    consequent: [{
+                        type: 'BlockStatement',
+                        body: [{
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'CallExpression',
+                                callee: {
+                                    type: 'Identifier',
+                                    name: 'hi'
+                                },
+                                'arguments': []
+                            }
+                        }, {
+                            type: 'BreakStatement',
+                            label: null
+                        }]
+                    }]
+                }]
+            }
+        },
+
+        'switch (answer) {\ncase 42:\n    hi();\n    break;\ndefault:\n    break;\n}': {
+            from: {
+                type: 'SwitchStatement',
+                discriminant: {
+                    type: 'Identifier',
+                    name: 'answer'
+                },
+                cases: [{
+                    type: 'SwitchCase',
+                    test: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42'
+                    },
+                    consequent: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'hi'
+                            },
+                            'arguments': []
+                        }
+                    }, {
+                        type: 'BreakStatement',
+                        label: null
+                    }]
+                }, {
+                    type: 'SwitchCase',
+                    test: null,
+                    consequent: [{
+                        type: 'BreakStatement',
+                        label: null
+                    }]
+                }]
+            }
+        },
+
+        'start:\n    for (;;)\n        break start;': {
+            from: {
+                type: 'LabeledStatement',
+                label: {
+                    type: 'Identifier',
+                    name: 'start'
+                },
+                body: {
+                    type: 'ForStatement',
+                    init: null,
+                    test: null,
+                    update: null,
+                    body: {
+                        type: 'BreakStatement',
+                        label: {
+                            type: 'Identifier',
+                            name: 'start'
+                        }
+                    }
+                }
+            }
+        },
+
+        'start:\n    while (true)\n        break start;': {
+            from: {
+                type: 'LabeledStatement',
+                label: {
+                    type: 'Identifier',
+                    name: 'start'
+                },
+                body: {
+                    type: 'WhileStatement',
+                    test: {
+                        type: 'Literal',
+                        value: true,
+                        raw: 'true'
+                    },
+                    body: {
+                        type: 'BreakStatement',
+                        label: {
+                            type: 'Identifier',
+                            name: 'start'
+                        }
+                    }
+                }
+            }
+        },
+
+        'throw x;': {
+            from: {
+                type: 'ThrowStatement',
+                argument: {
+                    type: 'Identifier',
+                    name: 'x'
+                }
+            }
+        },
+
+        'throw x * y;': {
+            from: {
+                type: 'ThrowStatement',
+                argument: {
+                    type: 'BinaryExpression',
+                    operator: '*',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y'
+                    }
+                }
+            }
+        },
+
+        'throw {\n    morning: true\n};': {
+            from: {
+                type: 'ThrowStatement',
+                argument: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'morning'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: true
+                        },
+                        kind: 'init'
+                    }]
+                }
+            }
+        },
+
+        'throw {\n    message: "Error"\n};': {
+            from: {
+                type: 'ThrowStatement',
+                argument: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'message'
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 'Error',
+                            raw: '"Error"'
+                        },
+                        kind: 'init'
+                    }]
+                }
+            }
+        },
+
+        'try {\n} catch (e) {\n}': {
+            from: {
+                type: 'TryStatement',
+                block: {
+                    type: 'BlockStatement',
+                    body: []
+                },
+                handlers: [{
+                    type: 'CatchClause',
+                    param: {
+                        type: 'Identifier',
+                        name: 'e'
+                    },
+                    guard: null,
+                    body: {
+                        type: 'BlockStatement',
+                        body: []
+                    }
+                }],
+                finalizer: null
+            }
+        },
+
+        'try {\n} catch (e) {\n    say(e);\n}': {
+            from: {
+                type: 'TryStatement',
+                block: {
+                    type: 'BlockStatement',
+                    body: []
+                },
+                handlers: [{
+                    type: 'CatchClause',
+                    param: {
+                        type: 'Identifier',
+                        name: 'e'
+                    },
+                    guard: null,
+                    body: {
+                        type: 'BlockStatement',
+                        body: [{
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'CallExpression',
+                                callee: {
+                                    type: 'Identifier',
+                                    name: 'say'
+                                },
+                                'arguments': [{
+                                    type: 'Identifier',
+                                    name: 'e'
+                                }]
+                            }
+                        }]
+                    }
+                }],
+                finalizer: null
+            }
+        },
+
+        'try {\n} finally {\n    cleanup(stuff);\n}': {
+            from: {
+                type: 'TryStatement',
+                block: {
+                    type: 'BlockStatement',
+                    body: []
+                },
+                handlers: [],
+                finalizer: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'cleanup'
+                            },
+                            'arguments': [{
+                                type: 'Identifier',
+                                name: 'stuff'
+                            }]
+                        }
+                    }]
+                }
+            }
+        },
+
+        'try {\n    doThat();\n} catch (e) {\n    say(e);\n}': {
+            from: {
+                type: 'TryStatement',
+                block: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'doThat'
+                            },
+                            'arguments': []
+                        }
+                    }]
+                },
+                handlers: [{
+                    type: 'CatchClause',
+                    param: {
+                        type: 'Identifier',
+                        name: 'e'
+                    },
+                    guard: null,
+                    body: {
+                        type: 'BlockStatement',
+                        body: [{
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'CallExpression',
+                                callee: {
+                                    type: 'Identifier',
+                                    name: 'say'
+                                },
+                                'arguments': [{
+                                    type: 'Identifier',
+                                    name: 'e'
+                                }]
+                            }
+                        }]
+                    }
+                }],
+                finalizer: null
+            }
+        },
+
+        'try {\n    doThat();\n} catch (e) {\n    say(e);\n} finally {\n    cleanup(stuff);\n}': {
+            from: {
+                type: 'TryStatement',
+                block: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'doThat'
+                            },
+                            'arguments': []
+                        }
+                    }]
+                },
+                handlers: [{
+                    type: 'CatchClause',
+                    param: {
+                        type: 'Identifier',
+                        name: 'e'
+                    },
+                    guard: null,
+                    body: {
+                        type: 'BlockStatement',
+                        body: [{
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'CallExpression',
+                                callee: {
+                                    type: 'Identifier',
+                                    name: 'say'
+                                },
+                                'arguments': [{
+                                    type: 'Identifier',
+                                    name: 'e'
+                                }]
+                            }
+                        }]
+                    }
+                }],
+                finalizer: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'cleanup'
+                            },
+                            'arguments': [{
+                                type: 'Identifier',
+                                name: 'stuff'
+                            }]
+                        }
+                    }]
+                }
+            }
+        },
+
+        'debugger;': {
+            from: {
+                type: 'DebuggerStatement'
+            }
+        },
+
+        'function hello() {\n    sayHi();\n}': {
+            from: {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'hello'
+                },
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'sayHi'
+                            },
+                            'arguments': []
+                        }
+                    }]
+                }
+            }
+        },
+
+        'function hello(a) {\n    sayHi();\n}': {
+            from: {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'hello'
+                },
+                params: [{
+                    type: 'Identifier',
+                    name: 'a'
+                }],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'sayHi'
+                            },
+                            'arguments': []
+                        }
+                    }]
+                }
+            }
+        },
+
+        'function hello(a, b) {\n    sayHi();\n}': {
+            from: {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'hello'
+                },
+                params: [{
+                    type: 'Identifier',
+                    name: 'a'
+                }, {
+                    type: 'Identifier',
+                    name: 'b'
+                }],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'sayHi'
+                            },
+                            'arguments': []
+                        }
+                    }]
+                }
+            }
+        },
+
+        'var hi = function () {\n    sayHi();\n};': {
+            from: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'hi'
+                    },
+                    init: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [{
+                                type: 'ExpressionStatement',
+                                expression: {
+                                    type: 'CallExpression',
+                                    callee: {
+                                        type: 'Identifier',
+                                        name: 'sayHi'
+                                    },
+                                    'arguments': []
+                                }
+                            }]
+                        }
+                    }
+                }],
+                kind: 'var'
+            }
+        },
+
+        'var hello = function hi() {\n    sayHi();\n};': {
+            from: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'hello'
+                    },
+                    init: {
+                        type: 'FunctionExpression',
+                        id: {
+                            type: 'Identifier',
+                            name: 'hi'
+                        },
+                        params: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [{
+                                type: 'ExpressionStatement',
+                                expression: {
+                                    type: 'CallExpression',
+                                    callee: {
+                                        type: 'Identifier',
+                                        name: 'sayHi'
+                                    },
+                                    'arguments': []
+                                }
+                            }]
+                        }
+                    }
+                }],
+                kind: 'var'
+            }
+        },
+
+        '(function () {\n});': {
+            from: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'FunctionExpression',
+                    id: null,
+                    params: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: []
+                    }
                 }
             }
         }
@@ -15020,12 +18215,12 @@ function testModify(code, result) {
     }
 }
 
-function testGenerateExpression(expected, result) {
+function testGenerate(expected, result) {
     'use strict';
     var actual;
 
     try {
-        actual = esprima.generateExpression(result.fromExpression);
+        actual = esprima.generate(result.from, { indent: '    ' });
     } catch (e) {
         console.log(e.stack);
         throw new NotMatchingError(expected, e.toString());
@@ -15041,8 +18236,8 @@ function runTest(code, result) {
         testError(code, result);
     } else if (result.hasOwnProperty('modifiers')) {
         testModify(code, result);
-    } else if (result.hasOwnProperty('fromExpression')) {
-        testGenerateExpression(code, result);
+    } else if (result.hasOwnProperty('from')) {
+        testGenerate(code, result);
     } else {
         testParse(code, result);
     }
