@@ -841,6 +841,8 @@ parseStatement: true, parseSourceElement: true */
                         break;
                     }
                 }
+            } else if (isLineTerminator(ch)) {
+                break;
             } else {
                 str += ch;
             }
