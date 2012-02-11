@@ -689,7 +689,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'answer'
+                            name: 'answer',
+                            range: [6, 11],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 12 }
+                            }
                         },
                         value: {
                             type: 'Literal',
@@ -747,7 +752,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'if'
+                            name: 'if',
+                            range: [6, 7],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 8 }
+                            }
                         },
                         value: {
                             type: 'Literal',
@@ -805,7 +815,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'true'
+                            name: 'true',
+                            range: [6, 9],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 10 }
+                            }
                         },
                         value: {
                             type: 'Literal',
@@ -863,7 +878,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'false'
+                            name: 'false',
+                            range: [6, 10],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 11 }
+                            }
                         },
                         value: {
                             type: 'Literal',
@@ -921,7 +941,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'null'
+                            name: 'null',
+                            range: [6, 9],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 10 }
+                            }
                         },
                         value: {
                             type: 'Literal',
@@ -2437,7 +2462,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'get'
+                            name: 'get',
+                            range: [6, 8],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 9 }
+                            }
                         },
                         value: {
                             type: 'Literal',
@@ -2495,7 +2525,12 @@ data = {
                         type: 'Property',
                         key: {
                             type: 'Identifier',
-                            name: 'set'
+                            name: 'set',
+                            range: [6, 8],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 9 }
+                            }
                         },
                         value: {
                             type: 'Literal',
@@ -10593,7 +10628,12 @@ data = {
                     type: 'Property',
                     key: {
                         type: 'Identifier',
-                        name: 'message'
+                        name: 'message',
+                        range: [8, 14],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 15 }
+                        }
                     },
                     value: {
                         type: 'Literal',

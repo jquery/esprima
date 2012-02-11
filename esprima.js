@@ -1275,15 +1275,16 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseObjectProperty() {
-        var token, property, key, param;
+        var token, property, key, id, param;
 
         token = lookahead();
 
         switch (token.type) {
 
         case Token.Identifier:
+            id = parseObjectPropertyKey();
+
             // Property Assignment: Getter and Setter.
-            lex();
 
             if (token.value === 'get' && !match(':')) {
                 key = parseObjectPropertyKey();
@@ -1314,10 +1315,7 @@ parseStatement: true, parseSourceElement: true */
                 expect(':');
                 property = {
                     type: Syntax.Property,
-                    key: {
-                        type: Syntax.Identifier,
-                        name: token.value
-                    },
+                    key: id,
                     value: parseAssignmentExpression(),
                     kind: 'init'
                 };
@@ -1327,19 +1325,6 @@ parseStatement: true, parseSourceElement: true */
         case Token.Keyword:
         case Token.BooleanLiteral:
         case Token.NullLiteral:
-            lex();
-            expect(':');
-            property = {
-                type: Syntax.Property,
-                key: {
-                    type: Syntax.Identifier,
-                    name: token.value
-                },
-                value: parseAssignmentExpression(),
-                kind: 'init'
-            };
-            break;
-
         case Token.StringLiteral:
         case Token.NumericLiteral:
             key = parseObjectPropertyKey();
