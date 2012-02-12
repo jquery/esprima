@@ -2134,16 +2134,18 @@ parseStatement: true, parseSourceElement: true */
         };
     }
 
-    function parseForVariableDeclaration(kind) {
+    function parseForVariableDeclaration() {
+        var token = lex();
+
         return {
             type: Syntax.VariableDeclaration,
             declarations: parseVariableDeclarationList(),
-            kind: kind
+            kind: token.value
         };
     }
 
     function parseForStatement() {
-        var kind, init, test, update, left, right, body;
+        var init, test, update, left, right, body;
 
         init = test = update = null;
 
@@ -2155,9 +2157,8 @@ parseStatement: true, parseSourceElement: true */
             lex();
         } else {
             if (matchKeyword('var') || matchKeyword('let')) {
-                kind = lex().value;
                 allowIn = false;
-                init = parseForVariableDeclaration(kind);
+                init = parseForVariableDeclaration();
                 allowIn = true;
 
                 if (init.declarations.length === 1 && matchKeyword('in')) {

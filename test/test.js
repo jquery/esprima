@@ -9160,9 +9160,9 @@ data = {
                     }
                 }],
                 kind: 'var',
-                range: [8, 12],
+                range: [4, 12],
                 loc: {
-                    start: { line: 1, column: 8 },
+                    start: { line: 1, column: 4 },
                     end: { line: 1, column: 13 }
                 }
             },
@@ -9215,9 +9215,9 @@ data = {
                     }
                 }],
                 kind: 'let',
-                range: [8, 12],
+                range: [4, 12],
                 loc: {
-                    start: { line: 1, column: 8 },
+                    start: { line: 1, column: 4 },
                     end: { line: 1, column: 13 }
                 }
             },
@@ -9296,9 +9296,9 @@ data = {
                     }
                 }],
                 kind: 'var',
-                range: [8, 19],
+                range: [4, 19],
                 loc: {
-                    start: { line: 1, column: 8 },
+                    start: { line: 1, column: 4 },
                     end: { line: 1, column: 20 }
                 }
             },
@@ -9688,9 +9688,9 @@ data = {
                     }
                 }],
                 kind: 'var',
-                range: [9, 9],
+                range: [5, 9],
                 loc: {
-                    start: { line: 1, column: 9 },
+                    start: { line: 1, column: 5 },
                     end: { line: 1, column: 10 }
                 }
             },
@@ -9777,9 +9777,9 @@ data = {
                     }
                 }],
                 kind: 'var',
-                range: [9, 14],
+                range: [5, 14],
                 loc: {
-                    start: { line: 1, column: 9 },
+                    start: { line: 1, column: 5 },
                     end: { line: 1, column: 15 }
                 }
             },
@@ -9857,9 +9857,9 @@ data = {
                     }
                 }],
                 kind: 'let',
-                range: [9, 9],
+                range: [5, 9],
                 loc: {
-                    start: { line: 1, column: 9 },
+                    start: { line: 1, column: 5 },
                     end: { line: 1, column: 10 }
                 }
             },
@@ -9946,9 +9946,9 @@ data = {
                     }
                 }],
                 kind: 'let',
-                range: [9, 14],
+                range: [5, 14],
                 loc: {
-                    start: { line: 1, column: 9 },
+                    start: { line: 1, column: 5 },
                     end: { line: 1, column: 15 }
                 }
             },
@@ -10079,9 +10079,9 @@ data = {
                     }
                 }],
                 kind: 'var',
-                range: [9, 42],
+                range: [5, 42],
                 loc: {
-                    start: { line: 1, column: 9 },
+                    start: { line: 1, column: 5 },
                     end: { line: 1, column: 43 }
                 }
             },
