@@ -2247,11 +2247,7 @@ parseStatement: true, parseSourceElement: true */
 
         token = lookahead();
         if (token.type === Token.Identifier) {
-            lex();
-            label = {
-                type: Syntax.Identifier,
-                name: token.value
-            };
+            label = parseVariableIdentifier();
         }
 
         consumeSemicolon();
@@ -2287,11 +2283,7 @@ parseStatement: true, parseSourceElement: true */
 
         token = lookahead();
         if (token.type === Token.Identifier) {
-            lex();
-            label = {
-                type: Syntax.Identifier,
-                name: token.value
-            };
+            label = parseVariableIdentifier();
         }
 
         consumeSemicolon();

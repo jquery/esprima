@@ -10149,7 +10149,12 @@ data = {
             type: 'ContinueStatement',
             label: {
                 type: 'Identifier',
-                name: 'done'
+                name: 'done',
+                range: [9, 12],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 13 }
+                }
             },
             range: [0, 12],
             loc: {
@@ -10162,7 +10167,12 @@ data = {
             type: 'ContinueStatement',
             label: {
                 type: 'Identifier',
-                name: 'done'
+                name: 'done',
+                range: [9, 12],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 13 }
+                }
             },
             range: [0, 13],
             loc: {
@@ -10189,7 +10199,12 @@ data = {
             type: 'BreakStatement',
             label: {
                 type: 'Identifier',
-                name: 'done'
+                name: 'done',
+                range: [6, 9],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 10 }
+                }
             },
             range: [0, 9],
             loc: {
@@ -10202,7 +10217,12 @@ data = {
             type: 'BreakStatement',
             label: {
                 type: 'Identifier',
-                name: 'done'
+                name: 'done',
+                range: [6, 9],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 10 }
+                }
             },
             range: [0, 10],
             loc: {
@@ -10663,7 +10683,12 @@ data = {
                     type: 'BreakStatement',
                     label: {
                         type: 'Identifier',
-                        name: 'start'
+                        name: 'start',
+                        range: [22, 26],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 27 }
+                        }
                     },
                     range: [16, 26],
                     loc: {
@@ -10711,7 +10736,12 @@ data = {
                     type: 'BreakStatement',
                     label: {
                         type: 'Identifier',
-                        name: 'start'
+                        name: 'start',
+                        range: [26, 30],
+                        loc: {
+                            start: { line: 1, column: 26 },
+                            end: { line: 1, column: 31 }
+                        }
                     },
                     range: [20, 30],
                     loc: {
