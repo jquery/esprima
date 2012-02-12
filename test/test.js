@@ -18399,24 +18399,6 @@ data = {
     }
 };
 
-
-function hasComment(syntax) {
-    'use strict';
-    return typeof syntax.comments !== 'undefined';
-}
-
-function hasTokens(syntax) {
-    'use strict';
-    var result = false;
-    JSON.stringify(syntax, function (key, value) {
-        if (key === 'tokens') {
-            result = true;
-        }
-        return value;
-    });
-    return result;
-}
-
 // Special handling for regular expression literal since we need to
 // convert it to a string literal, otherwise it will be decoded
 // as object "{}" and the regular expression would be lost.
@@ -18448,15 +18430,12 @@ function testParse(code, syntax) {
     StringObject = String;
 
     options = {
-        comment: false,
+        comment: (typeof syntax.comments !== 'undefined'),
         range: true,
         loc: true,
-        tokens: false,
+        tokens: (typeof syntax.tokens !== 'undefined'),
         raw: true
     };
-
-    options.comment = hasComment(syntax);
-    options.tokens = hasTokens(syntax);
 
     expected = JSON.stringify(syntax, null, 4);
     try {
