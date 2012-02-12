@@ -8596,7 +8596,12 @@ data = {
                 type: 'FunctionDeclaration',
                 id: {
                     type: 'Identifier',
-                    name: 'a'
+                    name: 'a',
+                    range: [22, 22],
+                    loc: {
+                        start: { line: 1, column: 22 },
+                        end: { line: 1, column: 23 }
+                    }
                 },
                 params: [],
                 body: {
@@ -11325,7 +11330,12 @@ data = {
             type: 'FunctionDeclaration',
             id: {
                 type: 'Identifier',
-                name: 'hello'
+                name: 'hello',
+                range: [9, 13],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 14 }
+                }
             },
             params: [],
             body: {
@@ -11373,11 +11383,21 @@ data = {
             type: 'FunctionDeclaration',
             id: {
                 type: 'Identifier',
-                name: 'hello'
+                name: 'hello',
+                range: [9, 13],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 14 }
+                }
             },
             params: [{
                 type: 'Identifier',
-                name: 'a'
+                name: 'a',
+                range: [15, 15],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 16 }
+                }
             }],
             body: {
                 type: 'BlockStatement',
@@ -11424,14 +11444,29 @@ data = {
             type: 'FunctionDeclaration',
             id: {
                 type: 'Identifier',
-                name: 'hello'
+                name: 'hello',
+                range: [9, 13],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 14 }
+                }
             },
             params: [{
                 type: 'Identifier',
-                name: 'a'
+                name: 'a',
+                range: [15, 15],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 16 }
+                }
             }, {
                 type: 'Identifier',
-                name: 'b'
+                name: 'b',
+                range: [18, 18],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 19 }
+                }
             }],
             body: {
                 type: 'BlockStatement',
@@ -11562,7 +11597,12 @@ data = {
                     type: 'FunctionExpression',
                     id: {
                         type: 'Identifier',
-                        name: 'hi'
+                        name: 'hi',
+                        range: [21, 22],
+                        loc: {
+                            start: { line: 1, column: 21 },
+                            end: { line: 1, column: 23 }
+                        }
                     },
                     params: [],
                     body: {

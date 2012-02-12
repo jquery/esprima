@@ -2635,31 +2635,16 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseFunctionDeclaration() {
-        var token, id = null, params = [], body, previousStrict;
+        var id, params = [], body, previousStrict;
 
         expectKeyword('function');
-
-        token = lex();
-        if (token.type !== Token.Identifier) {
-            throwUnexpected(token);
-        }
-        id = {
-            type: Syntax.Identifier,
-            name: token.value
-        };
+        id = parseVariableIdentifier();
 
         expect('(');
 
         if (!match(')')) {
             while (index < length) {
-                token = lex();
-                if (token.type !== Token.Identifier) {
-                    throwUnexpected(token);
-                }
-                params.push({
-                    type: Syntax.Identifier,
-                    name: token.value
-                });
+                params.push(parseVariableIdentifier());
                 if (match(')')) {
                     break;
                 }
@@ -2688,28 +2673,14 @@ parseStatement: true, parseSourceElement: true */
         expectKeyword('function');
 
         if (!match('(')) {
-            token = lex();
-            if (token.type !== Token.Identifier) {
-                throwUnexpected(token);
-            }
-            id = {
-                type: Syntax.Identifier,
-                name: token.value
-            };
+            id = parseVariableIdentifier();
         }
 
         expect('(');
 
         if (!match(')')) {
             while (index < length) {
-                token = lex();
-                if (token.type !== Token.Identifier) {
-                    throwUnexpected(token);
-                }
-                params.push({
-                    type: Syntax.Identifier,
-                    name: token.value
-                });
+                params.push(parseVariableIdentifier());
                 if (match(')')) {
                     break;
                 }
