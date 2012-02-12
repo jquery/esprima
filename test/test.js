@@ -3338,7 +3338,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [4, 4],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -3395,7 +3400,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [4, 4],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -3452,7 +3462,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [4, 4],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -3509,7 +3524,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [4, 4],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -3566,7 +3586,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [4, 4],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -3623,7 +3648,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [4, 4],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -7674,7 +7704,12 @@ data = {
                 type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [4, 4],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 init: null,
                 range: [4, 4],
@@ -7697,7 +7732,12 @@ data = {
                 type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [4, 4],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 init: null,
                 range: [4, 4],
@@ -7709,7 +7749,12 @@ data = {
                 type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
-                    name: 'y'
+                    name: 'y',
+                    range: [7, 7],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 8 }
+                    }
                 },
                 init: null,
                 range: [7, 7],
@@ -7732,7 +7777,12 @@ data = {
                 type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [4, 4],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 init: {
                     type: 'Literal',
@@ -7764,7 +7814,12 @@ data = {
                 type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [4, 4],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 init: {
                     type: 'Literal',
@@ -7785,7 +7840,12 @@ data = {
                 type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
-                    name: 'y'
+                    name: 'y',
+                    range: [12, 12],
+                    loc: {
+                        start: { line: 1, column: 12 },
+                        end: { line: 1, column: 13 }
+                    }
                 },
                 init: {
                     type: 'Literal',
@@ -7806,7 +7866,12 @@ data = {
                 type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
-                    name: 'z'
+                    name: 'z',
+                    range: [19, 19],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 20 }
+                    }
                 },
                 init: {
                     type: 'Literal',
@@ -7842,7 +7907,12 @@ data = {
                 type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [4, 4],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
                 },
                 init: null,
                 range: [4, 4],
@@ -7867,7 +7937,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [6, 6],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 7 }
+                        }
                     },
                     init: null,
                     range: [6, 6],
@@ -7898,7 +7973,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [6, 6],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 7 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -7938,7 +8018,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [6, 6],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 7 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -7959,7 +8044,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'y'
+                        name: 'y',
+                        range: [14, 14],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 15 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -7980,7 +8070,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'z'
+                        name: 'z',
+                        range: [21, 21],
+                        loc: {
+                            start: { line: 1, column: 21 },
+                            end: { line: 1, column: 22 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -8022,7 +8117,12 @@ data = {
                 type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
-                    name: 'x'
+                    name: 'x',
+                    range: [6, 6],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 7 }
+                    }
                 },
                 init: {
                     type: 'Literal',
@@ -8056,7 +8156,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [8, 8],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 9 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -8096,7 +8201,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [8, 8],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 9 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -8117,7 +8227,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'y'
+                        name: 'y',
+                        range: [16, 16],
+                        loc: {
+                            start: { line: 1, column: 16 },
+                            end: { line: 1, column: 17 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -8138,7 +8253,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'z'
+                        name: 'z',
+                        range: [23, 23],
+                        loc: {
+                            start: { line: 1, column: 23 },
+                            end: { line: 1, column: 24 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -8423,7 +8543,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [17, 17],
+                        loc: {
+                            start: { line: 1, column: 17 },
+                            end: { line: 1, column: 18 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -9006,7 +9131,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [8, 8],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 9 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -9056,7 +9186,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [8, 8],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 9 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -9106,7 +9241,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [8, 8],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 9 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -9127,7 +9267,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'y'
+                        name: 'y',
+                        range: [15, 15],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 16 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -9523,7 +9668,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [9, 9],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
                     },
                     init: null,
                     range: [9, 9],
@@ -9598,7 +9748,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [9, 9],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -9682,7 +9837,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [9, 9],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
                     },
                     init: null,
                     range: [9, 9],
@@ -9757,7 +9917,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [9, 9],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -9841,7 +10006,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'i'
+                        name: 'i',
+                        range: [9, 9],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
                     },
                     init: {
                         type: 'FunctionExpression',
@@ -11280,7 +11450,12 @@ data = {
                 type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
-                    name: 'hi'
+                    name: 'hi',
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 6 }
+                    }
                 },
                 init: {
                     type: 'FunctionExpression',
@@ -11346,7 +11521,12 @@ data = {
                 type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
-                    name: 'hello'
+                    name: 'hello',
+                    range: [4, 8],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 9 }
+                    }
                 },
                 init: {
                     type: 'FunctionExpression',
@@ -11553,7 +11733,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'x'
+                        name: 'x',
+                        range: [6, 6],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 7 }
+                        }
                     },
                     init: {
                         type: 'Literal',
@@ -11574,7 +11759,12 @@ data = {
                     type: 'VariableDeclarator',
                     id: {
                         type: 'Identifier',
-                        name: 'y'
+                        name: 'y',
+                        range: [14, 14],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 15 }
+                        }
                     },
                     init: {
                         type: 'Literal',

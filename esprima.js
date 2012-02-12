@@ -1951,20 +1951,23 @@ parseStatement: true, parseSourceElement: true */
 
     // 12.2 Variable Statement
 
-    function parseVariableDeclaration(kind) {
-        var token, id, init;
+    function parseVariableIdentifier() {
+        var token = lex();
 
-        token = lex();
         if (token.type !== Token.Identifier) {
             throwUnexpected(token);
         }
 
-        id = {
+        return {
             type: Syntax.Identifier,
             name: token.value
         };
+    }
 
-        init = null;
+    function parseVariableDeclaration(kind) {
+        var id = parseVariableIdentifier(),
+            init = null;
+
         if (kind === 'const') {
             expect('=');
             init = parseAssignmentExpression();
@@ -3121,6 +3124,7 @@ parseStatement: true, parseSourceElement: true */
             extra.parseSwitchCase = parseSwitchCase;
             extra.parseUnaryExpression = parseUnaryExpression;
             extra.parseVariableDeclaration = parseVariableDeclaration;
+            extra.parseVariableIdentifier = parseVariableIdentifier;
 
             parseAdditiveExpression = wrapTracking(extra.parseAdditiveExpression);
             parseAssignmentExpression = wrapTracking(extra.parseAssignmentExpression);
@@ -3157,6 +3161,7 @@ parseStatement: true, parseSourceElement: true */
             parseSwitchCase = wrapTracking(extra.parseSwitchCase);
             parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);
             parseVariableDeclaration = wrapTracking(extra.parseVariableDeclaration);
+            parseVariableIdentifier = wrapTracking(extra.parseVariableIdentifier);
         }
 
         if (typeof extra.tokens !== 'undefined') {
@@ -3213,6 +3218,7 @@ parseStatement: true, parseSourceElement: true */
             parseSwitchCase = extra.parseSwitchCase;
             parseUnaryExpression = extra.parseUnaryExpression;
             parseVariableDeclaration = extra.parseVariableDeclaration;
+            parseVariableIdentifier = extra.parseVariableIdentifier;
         }
 
         if (typeof extra.lex === 'function') {
