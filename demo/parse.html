@@ -89,8 +89,11 @@ var answer = 6 * 7;</textarea></p>
 <p id="codemirror" align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
 <p><label><input type="checkbox" id="raw"> Preserve raw value of literals</label></p>
 <p><label><input type="checkbox" id="comment"> Include comments</label></p>
-<p><label><input type="checkbox" id="range"> Syntax node range (start, end)</label> <b>Experimental</b>: see <a href="http://code.google.com/p/esprima/issues/detail?id=6">issue #6</a>.</p>
-<p><label><input type="checkbox" id="loc"> Syntax node line + column location (start, end)</label> <b>Experimental</b>: see <a href="http://code.google.com/p/esprima/issues/detail?id=6">issue #6</a>.</p>
+<p>  Syntax node location info (start, end)</p>
+<div style="margin-left: 20px;">
+<p><label><input type="checkbox" id="range">Index-based range</label></p>
+<p><label><input type="checkbox" id="loc">Line and column-based</label></p>
+</div>
 <div class="tabs">
     <ul>
     <li id="tab_syntax" class="active">
