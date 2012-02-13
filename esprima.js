@@ -332,6 +332,48 @@ parseStatement: true, parseSourceElement: true */
     function nextChar() {
         return source[index++];
     }
+    
+    function isNewlineOrSemicolon(ch) {
+      return ch===';' || ch==='\n';
+    }
+    
+    function rewind() {
+        // extra.recovery
+        var ch = '\x00',
+            idx = index;
+        if (extra.mark && extra.mark!==-1) {
+             while (idx>extra.mark && !isNewlineOrSemicolon(source[idx])) {
+	          idx--;
+	        }
+	        // If we simply managed to recover to where we failed, that is no use as we'll just fail again
+	        // so let's not move at all
+	        if (idx>=extra.mark) {
+		        index = idx;
+		        buffer = null;
+	        }
+        } else {
+	        while (idx>0 && !isNewlineOrSemicolon(source[idx])) {
+	          idx--;
+	        }
+	        index = idx;
+	        buffer = null;
+        }
+    }
+    
+    function fastForward() {
+        // extra.mark
+        var ch = '\x00',idx;
+        if (extra.mark && extra.mark!==-1) {
+            idx = extra.mark;
+            var slen = source.length;
+            while (idx<source.length && !isNewlineOrSemicolon(source[idx])) {
+	          idx++;
+	        }
+	        index = idx+1;
+	        buffer = null;
+        }
+    }
+
 
     // 7.4 Comments
 
@@ -1285,7 +1327,8 @@ parseStatement: true, parseSourceElement: true */
         }
 
         token = lookahead();
-        if (token.type !== Token.EOF && !match('}')) {
+        if (token.type !== Token.EOF && !match('}')) {        
+            rewind();
             throwUnexpected(token);
         }
         return;
@@ -2761,8 +2804,13 @@ parseStatement: true, parseSourceElement: true */
                 body: labeledBody
             };
         }
+        
+        try {
+            consumeSemicolon();
+        } catch (e) {
+            extra.errors.push(e);
+        }
 
-        consumeSemicolon();
 
         return {
             type: Syntax.ExpressionStatement,
@@ -3317,12 +3365,14 @@ parseStatement: true, parseSourceElement: true */
 
         function wrapThrow(parseFunction) {
             return function () {
+                var pos = index;
                 try {
                     return parseFunction.apply(null, arguments);
                 } catch (e) {
+                    extra.mark = pos;
                     extra.errors.push(e);
                 }
-            }
+            };
         }
 
         if (extra.comments) {
