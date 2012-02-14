@@ -840,6 +840,11 @@ parseStatement: true, parseSourceElement: true */
                         str += ch;
                         break;
                     }
+                } else {
+                    lineNumber += 1;
+                    if (ch ===  '\r' && source[index] === '\n') {
+                        nextChar();
+                    }
                 }
             } else if (isLineTerminator(ch)) {
                 break;

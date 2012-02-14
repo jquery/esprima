@@ -3324,6 +3324,44 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 14 }
             }
+        },
+
+        '"Hello\\\nworld"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'Helloworld',
+                raw: '"Hello\\\nworld"',
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 14 }
+                }
+            },
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 2, column: 14 }
+            }
+        },
+
+        '"Hello\\\r\nworld"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'Helloworld',
+                raw: '"Hello\\\r\nworld"',
+                range: [0, 14],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 15 }
+                }
+            },
+            range: [0, 14],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 2, column: 15 }
+            }
         }
 
     },
