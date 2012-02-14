@@ -3075,6 +3075,25 @@ data = {
             }
         },
 
+        '0e+100': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0,
+                raw: '0e+100',
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 6 }
+                }
+            },
+            range: [0, 5],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 6 }
+            }
+        },
+
         '0xabc': {
             type: 'ExpressionStatement',
             expression: {
@@ -3176,6 +3195,63 @@ data = {
                 type: 'Literal',
                 value: 0X04,
                 raw: '0X04',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
+            },
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 4 }
+            }
+        },
+
+        '02': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 2,
+                raw: '02',
+                range: [0, 1],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 2 }
+                }
+            },
+            range: [0, 1],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 2 }
+            }
+        },
+
+        '012': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 10,
+                raw: '012',
+                range: [0, 2],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            },
+            range: [0, 2],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            }
+        },
+
+        '0012': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 10,
+                raw: '0012',
                 range: [0, 3],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -17934,6 +18010,13 @@ data = {
             index: 2,
             lineNumber: 1,
             column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '09': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 

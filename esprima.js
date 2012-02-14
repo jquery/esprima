@@ -191,6 +191,10 @@ parseStatement: true, parseSourceElement: true */
         return '0123456789abcdefABCDEF'.indexOf(ch) >= 0;
     }
 
+    function isOctalDigit(ch) {
+        return '01234567'.indexOf(ch) >= 0;
+    }
+
 
     // 7.2 White Space
 
@@ -695,34 +699,65 @@ parseStatement: true, parseSourceElement: true */
             ch = source[index];
 
             // Hex number starts with '0x'.
-            if (number === '0' && (ch === 'x' || ch === 'X')) {
-                number += nextChar();
-                while (index < length) {
-                    ch = source[index];
-                    if (!isHexDigit(ch)) {
-                        break;
-                    }
+            // Octal number starts with '0'.
+            if (number === '0') {
+                if (ch === 'x' || ch === 'X') {
                     number += nextChar();
-                }
+                    while (index < length) {
+                        ch = source[index];
+                        if (!isHexDigit(ch)) {
+                            break;
+                        }
+                        number += nextChar();
+                    }
 
-                if (number.length <= 2) {
-                    // only 0x
-                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                }
-
-                if (index < length) {
-                    ch = source[index];
-                    if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
+                    if (number.length <= 2) {
+                        // only 0x
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
+
+                    if (index < length) {
+                        ch = source[index];
+                        if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
+                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                        }
+                    }
+                    return {
+                        type: Token.NumericLiteral,
+                        value: parseInt(number, 16),
+                        lineNumber: lineNumber,
+                        lineStart: lineStart,
+                        range: [start, index]
+                    };
+                } else if (isOctalDigit(ch)) {
+                    number += nextChar();
+                    while (index < length) {
+                        ch = source[index];
+                        if (!isOctalDigit(ch)) {
+                            break;
+                        }
+                        number += nextChar();
+                    }
+
+                    if (index < length) {
+                        ch = source[index];
+                        if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
+                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                        }
+                    }
+                    return {
+                        type: Token.NumericLiteral,
+                        value: parseInt(number, 8),
+                        lineNumber: lineNumber,
+                        lineStart: lineStart,
+                        range: [start, index]
+                    };
                 }
-                return {
-                    type: Token.NumericLiteral,
-                    value: parseInt(number, 16),
-                    lineNumber: lineNumber,
-                    lineStart: lineStart,
-                    range: [start, index]
-                };
+
+                // decimal number starts with '0' such as '09' is illegal.
+                if (isDecimalDigit(ch)) {
+                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                }
             }
 
             while (index < length) {
