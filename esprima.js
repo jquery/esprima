@@ -820,7 +820,7 @@ parseStatement: true, parseSourceElement: true */
     // 7.8.4 String Literals
 
     function scanStringLiteral() {
-        var str = '', quote, start, ch, unescaped, restore;
+        var str = '', quote, start, ch, code, unescaped, restore, octal = false;
 
         quote = source[index];
         if (quote !== '\'' && quote !== '"') {
@@ -868,11 +868,32 @@ parseStatement: true, parseSourceElement: true */
                     case 'v':
                         str += '\v';
                         break;
-                    case '0':
-                        str += '\u0000';
-                        break;
+
                     default:
-                        str += ch;
+                        if (isOctalDigit(ch)) {
+                            code = '01234567'.indexOf(ch);
+
+                            // \0 is not octal escape sequence
+                            if (code !== 0) {
+                                octal = true;
+                            }
+
+                            if (index < length && isOctalDigit(source[index])) {
+                                octal = true;
+                                code = code * 8 + '01234567'.indexOf(nextChar());
+
+                                // 3 digits are only allowed when string starts
+                                // with 0, 1, 2, 3
+                                if ('0123'.indexOf(ch) >= 0 &&
+                                        index < length &&
+                                        isOctalDigit(source[index])) {
+                                    code = code * 8 + '01234567'.indexOf(nextChar());
+                                }
+                            }
+                            str += String.fromCharCode(code);
+                        } else {
+                            str += ch;
+                        }
                         break;
                     }
                 } else {

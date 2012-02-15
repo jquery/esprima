@@ -3421,6 +3421,177 @@ data = {
             }
         },
 
+        '"Hello\\02World"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'Hello\u0002World',
+                raw: '"Hello\\02World"',
+                range: [0, 14],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            range: [0, 14],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 15 }
+            }
+        },
+
+        '"Hello\\012World"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'Hello\u000AWorld',
+                raw: '"Hello\\012World"',
+                range: [0, 15],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            },
+            range: [0, 15],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
+        },
+
+        '"Hello\\122World"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: '"Hello\\122World"',
+                raw: '"Hello\\122World"',
+                range: [0, 15],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            },
+            range: [0, 15],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
+        },
+
+        '"Hello\\0122World"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'Hello\u000A2World',
+                raw: '"Hello\\0122World"',
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            }
+        },
+
+        '"Hello\\312World"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'Hello\u00CAWorld',
+                raw: '"Hello\\312World"',
+                range: [0, 15],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            },
+            range: [0, 15],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
+        },
+
+        '"Hello\\412World"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: '"Hello\\412World"',
+                raw: '"Hello\\412World"',
+                range: [0, 15],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            },
+            range: [0, 15],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
+        },
+
+        '"Hello\\812World"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'Hello812World',
+                raw: '"Hello\\812World"',
+                range: [0, 15],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            },
+            range: [0, 15],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
+        },
+
+        '"Hello\\712World"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: '"Hello\\712World"',
+                raw: '"Hello\\712World"',
+                range: [0, 15],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            },
+            range: [0, 15],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
+        },
+
+        '"Hello\\0World"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'Hello\u0000World',
+                raw: '"Hello\\0World"',
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 14 }
+                }
+            },
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 14 }
+            }
+        },
+
         '"Hello\\\r\nworld"': {
             type: 'ExpressionStatement',
             expression: {
@@ -3438,8 +3609,26 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 15 }
             }
-        }
+        },
 
+        '"Hello\\1World"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 'Hello\u0001World',
+                raw: '"Hello\\1World"',
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 14 }
+                }
+            },
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 14 }
+            }
+        }
     },
 
     'Regular Expression Literals': {
