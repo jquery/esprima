@@ -3463,7 +3463,7 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: '"Hello\\122World"',
+                value: 'Hello\122World',
                 raw: '"Hello\\122World"',
                 range: [0, 15],
                 loc: {
@@ -3520,7 +3520,7 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: '"Hello\\412World"',
+                value: 'Hello\412World',
                 raw: '"Hello\\412World"',
                 range: [0, 15],
                 loc: {
@@ -3558,7 +3558,7 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: '"Hello\\712World"',
+                value: 'Hello\712World',
                 raw: '"Hello\\712World"',
                 range: [0, 15],
                 loc: {
