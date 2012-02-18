@@ -591,7 +591,116 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 7 }
             }
+        },
+
+        'T\u200C = []': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'T\u200C',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 2 }
+                    }
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [],
+                    range: [5, 6],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 7 }
+                    }
+                },
+                range: [0, 6],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            range: [0, 6],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 7 }
+            }
+        },
+
+        'T\u200D = []': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'T\u200D',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 2 }
+                    }
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [],
+                    range: [5, 6],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 7 }
+                    }
+                },
+                range: [0, 6],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            range: [0, 6],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 7 }
+            }
+        },
+
+        '\u2163\u2161 = []': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: '\u2163\u2161',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 2 }
+                    }
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [],
+                    range: [5, 6],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 7 }
+                    }
+                },
+                range: [0, 6],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            range: [0, 6],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 7 }
+            }
         }
+
 
     },
 
@@ -18622,6 +18731,7 @@ data = {
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
+
         '\\x': {
             index: 1,
             lineNumber: 1,
@@ -18633,6 +18743,20 @@ data = {
             index: 6,
             lineNumber: 1,
             column: 7,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '\u200C = []': {
+            index: 0,
+            lineNumber: 1,
+            column: 1,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '\u200D = []': {
+            index: 0,
+            lineNumber: 1,
+            column: 1,
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
