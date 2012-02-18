@@ -4186,7 +4186,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     // Sync with package.json.
-    exports.version = '0.9.8';
+    exports.version = '0.9.9-dev';
 
     exports.parse = parse;
 
