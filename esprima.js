@@ -33,6 +33,7 @@
 throwError: true, createLiteral: true, generateStatement: true,
 parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
+parseFunctionSourceElements: true, parseVariableIdentifier: true,
 parseLeftHandSideExpression: true,
 parseStatement: true, parseSourceElement: true */
 
@@ -128,15 +129,18 @@ parseStatement: true, parseSourceElement: true */
         NewlineAfterThrow:  'Illegal newline after throw',
         InvalidRegExp: 'Invalid regular expression',
         UnterminatedRegExp:  'Invalid regular expression: missing /',
-        InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
-        InvalidLHSInForIn:  'Invalid left-hand side in for-in',
-        InvalidLHSInPostfixOp:  'Invalid left-hand side expression in postfix operation',
-        InvalidLHSInPrefixOp:  'Invalid left-hand side expression in prefix operation',
         NoCatchOrFinally:  'Missing catch or finally after try',
+        StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',
+        StrictVarName:  'Variable name may not be eval or arguments in strict mode',
+        StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
+        StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
         StrictDelete:  'Delete of an unqualified identifier in strict mode.',
         StrictDuplicateProperty:  'Duplicate data property in object literal not allowed in strict mode',
         StrictAccessorDataProperty:  'Object literal may not have data and accessor property with the same name',
-        StrictAccessorGetSet:  'Object literal may not have multiple get/set accessors with the same name'
+        StrictAccessorGetSet:  'Object literal may not have multiple get/set accessors with the same name',
+        StrictLHSAssignment:  'Assignment to eval or arguments is not allowed in strict mode',
+        StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',
+        StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode'
     };
 
     Precedence = {
@@ -1226,16 +1230,9 @@ parseStatement: true, parseSourceElement: true */
             op === '|=';
     }
 
-
-    // Return true if expr is left hand side expression
-
-    function isLeftHandSide(expr) {
-        return expr.type === Syntax.Identifier ||
-            expr.type === Syntax.MemberExpression ||
-            expr.type === Syntax.CallExpression ||
-            expr.type === Syntax.NewExpression;
+    function isRestricted(expr) {
+        return expr.type === Syntax.Identifier && (expr.name === 'eval' || expr.name === 'arguments');
     }
-
 
     function consumeSemicolon() {
         var token, line;
@@ -1301,12 +1298,21 @@ parseStatement: true, parseSourceElement: true */
 
     // 11.1.5 Object Initialiser
 
-    function parsePropertyFunction(param) {
+    function parsePropertyFunction(param, first) {
+        var previousStrict, body;
+
+        previousStrict = strict;
+        body = parseFunctionSourceElements();
+        if (first && strict && isRestricted(param[0])) {
+            throwError(first, Messages.StrictParamName);
+        }
+        strict = previousStrict;
+
         return {
             type: Syntax.FunctionExpression,
             id: null,
             params: param,
-            body: parseBlock()
+            body: body
         };
     }
 
@@ -1367,12 +1373,12 @@ parseStatement: true, parseSourceElement: true */
                 if (token.type !== Token.Identifier) {
                     throwUnexpected(lex());
                 }
-                param = [ parseObjectPropertyKey() ];
+                param = [ parseVariableIdentifier() ];
                 expect(')');
                 property = {
                     type: Syntax.Property,
                     key: key,
-                    value: parsePropertyFunction(param),
+                    value: parsePropertyFunction(param, token),
                     kind: 'set'
                 };
             } else {
@@ -1660,8 +1666,9 @@ parseStatement: true, parseSourceElement: true */
         var expr = parseLeftHandSideExpressionAllowCall();
 
         if ((match('++') || match('--')) && !peekLineTerminator()) {
-            if (!isLeftHandSide(expr)) {
-                throwError(lookahead(), Messages.InvalidLHSInPostfixOp);
+            // 11.3.1, 11.3.2
+            if (strict && isRestricted(expr)) {
+                throwError({}, Messages.StrictLHSPostfix);
             }
             expr = {
                 type: Syntax.UpdateExpression,
@@ -1682,8 +1689,9 @@ parseStatement: true, parseSourceElement: true */
         if (match('++') || match('--')) {
             token = lex();
             expr = parseUnaryExpression();
-            if (!isLeftHandSide(expr)) {
-                throwError(token.value, Messages.InvalidLHSInPrefixOp);
+            // 11.4.4, 11.4.5
+            if (strict && isRestricted(expr)) {
+                throwError({}, Messages.StrictLHSPrefix);
             }
             expr = {
                 type: Syntax.UpdateExpression,
@@ -1709,7 +1717,7 @@ parseStatement: true, parseSourceElement: true */
                 operator: lex().value,
                 argument: parseUnaryExpression()
             };
-            if (strict && expr.operator === 'delete' && expr.argument.type === 'Identifier') {
+            if (strict && expr.operator === 'delete' && expr.argument.type === Syntax.Identifier) {
                 throwError({}, Messages.StrictDelete);
             }
             return expr;
@@ -1941,9 +1949,11 @@ parseStatement: true, parseSourceElement: true */
         expr = parseConditionalExpression();
 
         if (matchAssign()) {
-            if (!isLeftHandSide(expr)) {
-                throwError({}, Messages.InvalidLHSInAssignment);
+            // 11.13.1
+            if (strict && isRestricted(expr)) {
+                throwError({}, Messages.StrictLHSAssignment);
             }
+
             expr = {
                 type: Syntax.AssignmentExpression,
                 operator: lex().value,
@@ -2031,6 +2041,11 @@ parseStatement: true, parseSourceElement: true */
     function parseVariableDeclaration(kind) {
         var id = parseVariableIdentifier(),
             init = null;
+
+        // 12.2.1
+        if (strict && isRestricted(id)) {
+            throwError({}, Messages.StrictVarName);
+        }
 
         if (kind === 'const') {
             expect('=');
@@ -2241,9 +2256,6 @@ parseStatement: true, parseSourceElement: true */
                     left = init;
                     right = parseExpression();
                     init = null;
-                    if (!isLeftHandSide(left)) {
-                        throwError({}, Messages.InvalidLHSInForIn);
-                    }
                 }
             }
 
@@ -2526,6 +2538,10 @@ parseStatement: true, parseSourceElement: true */
         expect('(');
         if (!match(')')) {
             param = parseExpression();
+            // 12.14.1
+            if (strict && isRestricted(param)) {
+                throwError({}, Messages.StrictCatchVariable);
+            }
         }
         expect(')');
 
@@ -2700,16 +2716,35 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseFunctionDeclaration() {
-        var id, params = [], body, previousStrict;
+        var id, param, params = [], body, token, firstRestricted, message, previousStrict;
 
         expectKeyword('function');
+        token = lookahead();
         id = parseVariableIdentifier();
+        if (isRestricted(id)) {
+            if (strict) {
+                throwError(token, Messages.StrictFunctionName);
+            } else {
+                firstRestricted = token;
+                message = Messages.StrictFunctionName;
+            }
+        }
 
         expect('(');
 
         if (!match(')')) {
             while (index < length) {
-                params.push(parseVariableIdentifier());
+                token = lookahead();
+                param = parseVariableIdentifier();
+                if (strict) {
+                    if (isRestricted(param)) {
+                        throwError(token, Messages.StrictParamName);
+                    }
+                } else if (!firstRestricted && isRestricted(param)) {
+                    firstRestricted = token;
+                    message = Messages.StrictParamName;
+                }
+                params.push(param);
                 if (match(')')) {
                     break;
                 }
@@ -2720,8 +2755,10 @@ parseStatement: true, parseSourceElement: true */
         expect(')');
 
         previousStrict = strict;
-        strict = false;
         body = parseFunctionSourceElements();
+        if (strict && firstRestricted) {
+            throwError(firstRestricted, message);
+        }
         strict = previousStrict;
 
         return {
@@ -2733,19 +2770,38 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseFunctionExpression() {
-        var token, id = null, params = [], body, previousStrict;
+        var token, id = null, firstRestricted, message, param, params = [], body, previousStrict;
 
         expectKeyword('function');
 
         if (!match('(')) {
+            token = lookahead();
             id = parseVariableIdentifier();
+            if (isRestricted(id)) {
+                if (strict) {
+                    throwError(token, Messages.StrictFunctionName);
+                } else {
+                    firstRestricted = token;
+                    message = Messages.StrictFunctionName;
+                }
+            }
         }
 
         expect('(');
 
         if (!match(')')) {
             while (index < length) {
-                params.push(parseVariableIdentifier());
+                token = lookahead();
+                param = parseVariableIdentifier();
+                if (strict) {
+                    if (isRestricted(param)) {
+                        throwError(token, Messages.StrictParamName);
+                    }
+                } else if (!firstRestricted && isRestricted(param)) {
+                    firstRestricted = token;
+                    message = Messages.StrictParamName;
+                }
+                params.push(param);
                 if (match(')')) {
                     break;
                 }
@@ -2756,8 +2812,10 @@ parseStatement: true, parseSourceElement: true */
         expect(')');
 
         previousStrict = strict;
-        strict = false;
         body = parseFunctionSourceElements();
+        if (strict && firstRestricted) {
+            throwError(firstRestricted, message);
+        }
         strict = previousStrict;
 
         return {
@@ -2825,14 +2883,12 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseProgram() {
-        var program, previousStrict;
-        previousStrict = strict;
+        var program;
         strict = false;
         program = {
             type: Syntax.Program,
             body: parseSourceElements()
         };
-        strict = previousStrict;
         return program;
     }
 
@@ -4138,48 +4194,48 @@ parseStatement: true, parseSourceElement: true */
         }
 
         switch (node.type) {
-        case Syntax.BlockStatement: 
-        case Syntax.BreakStatement: 
-        case Syntax.CatchClause: 
-        case Syntax.ContinueStatement: 
-        case Syntax.DoWhileStatement: 
-        case Syntax.DebuggerStatement: 
-        case Syntax.EmptyStatement: 
-        case Syntax.ExpressionStatement: 
-        case Syntax.ForStatement: 
-        case Syntax.ForInStatement: 
-        case Syntax.FunctionDeclaration: 
-        case Syntax.IfStatement: 
-        case Syntax.LabeledStatement: 
-        case Syntax.Program: 
-        case Syntax.ReturnStatement: 
-        case Syntax.SwitchStatement: 
-        case Syntax.SwitchCase: 
-        case Syntax.ThrowStatement: 
-        case Syntax.TryStatement: 
-        case Syntax.VariableDeclaration: 
-        case Syntax.VariableDeclarator: 
-        case Syntax.WhileStatement: 
+        case Syntax.BlockStatement:
+        case Syntax.BreakStatement:
+        case Syntax.CatchClause:
+        case Syntax.ContinueStatement:
+        case Syntax.DoWhileStatement:
+        case Syntax.DebuggerStatement:
+        case Syntax.EmptyStatement:
+        case Syntax.ExpressionStatement:
+        case Syntax.ForStatement:
+        case Syntax.ForInStatement:
+        case Syntax.FunctionDeclaration:
+        case Syntax.IfStatement:
+        case Syntax.LabeledStatement:
+        case Syntax.Program:
+        case Syntax.ReturnStatement:
+        case Syntax.SwitchStatement:
+        case Syntax.SwitchCase:
+        case Syntax.ThrowStatement:
+        case Syntax.TryStatement:
+        case Syntax.VariableDeclaration:
+        case Syntax.VariableDeclarator:
+        case Syntax.WhileStatement:
         case Syntax.WithStatement:
             return generateStatement(node);
 
-        case Syntax.AssignmentExpression: 
-        case Syntax.ArrayExpression: 
-        case Syntax.BinaryExpression: 
-        case Syntax.CallExpression: 
-        case Syntax.ConditionalExpression: 
-        case Syntax.FunctionExpression: 
-        case Syntax.Identifier: 
-        case Syntax.Literal: 
-        case Syntax.LogicalExpression: 
-        case Syntax.MemberExpression: 
-        case Syntax.NewExpression: 
-        case Syntax.ObjectExpression: 
-        case Syntax.Property: 
-        case Syntax.SequenceExpression: 
-        case Syntax.ThisExpression: 
-        case Syntax.UnaryExpression: 
-        case Syntax.UpdateExpression: 
+        case Syntax.AssignmentExpression:
+        case Syntax.ArrayExpression:
+        case Syntax.BinaryExpression:
+        case Syntax.CallExpression:
+        case Syntax.ConditionalExpression:
+        case Syntax.FunctionExpression:
+        case Syntax.Identifier:
+        case Syntax.Literal:
+        case Syntax.LogicalExpression:
+        case Syntax.MemberExpression:
+        case Syntax.NewExpression:
+        case Syntax.ObjectExpression:
+        case Syntax.Property:
+        case Syntax.SequenceExpression:
+        case Syntax.ThisExpression:
+        case Syntax.UnaryExpression:
+        case Syntax.UpdateExpression:
             return generateExpression(node);
 
         default:
