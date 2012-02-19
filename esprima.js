@@ -2459,7 +2459,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseSwitchStatement() {
-        var discriminant, cases, test, consequent, statement;
+        var discriminant, cases, test;
 
         expectKeyword('switch');
 
@@ -2554,7 +2554,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseTryStatement() {
-        var block, handlers = [], param, finalizer = null;
+        var block, handlers = [], finalizer = null;
 
         expectKeyword('try');
 
@@ -3440,7 +3440,7 @@ parseStatement: true, parseSourceElement: true */
 
             functionList = [];
             traverse(tree, function (node, path) {
-                var parent, name;
+                var parent;
                 if (node.type === Syntax.FunctionDeclaration) {
                     functionList.push({
                         name: node.id.name,
