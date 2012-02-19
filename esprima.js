@@ -749,6 +749,7 @@ parseStatement: true, parseSourceElement: true */
                     return {
                         type: Token.NumericLiteral,
                         value: parseInt(number, 8),
+                        octal: true,
                         lineNumber: lineNumber,
                         lineStart: lineStart,
                         range: [start, index]
@@ -917,6 +918,7 @@ parseStatement: true, parseSourceElement: true */
         return {
             type: Token.StringLiteral,
             value: str,
+            octal: octal,
             lineNumber: lineNumber,
             lineStart: lineStart,
             range: [start, index]
