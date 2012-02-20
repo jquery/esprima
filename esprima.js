@@ -134,6 +134,7 @@ parseStatement: true, parseSourceElement: true */
         StrictVarName:  'Variable name may not be eval or arguments in strict mode',
         StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
         StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
+        StrictOctalLiteral:  'Octal literals are not allowed in strict mode.',
         StrictDelete:  'Delete of an unqualified identifier in strict mode.',
         StrictDuplicateProperty:  'Duplicate data property in object literal not allowed in strict mode',
         StrictAccessorDataProperty:  'Object literal may not have data and accessor property with the same name',
@@ -1324,6 +1325,9 @@ parseStatement: true, parseSourceElement: true */
 
         case Token.StringLiteral:
         case Token.NumericLiteral:
+            if (strict && token.octal) {
+                throwError(token, Messages.StrictOctalLiteral);
+            }
             key = createLiteral(token);
             break;
 
@@ -1485,6 +1489,9 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (type === Token.StringLiteral || type === Token.NumericLiteral) {
+            if (strict && token.octal) {
+                throwError(token, Messages.StrictOctalLiteral);
+            }
             return createLiteral(lex());
         }
 
@@ -2674,7 +2681,7 @@ parseStatement: true, parseSourceElement: true */
     // 13 Function Definition
 
     function parseFunctionSourceElements() {
-        var sourceElement, sourceElements = [], token, directive;
+        var sourceElement, sourceElements = [], token, directive, firstRestricted;
 
         expect('{');
 
@@ -2693,6 +2700,13 @@ parseStatement: true, parseSourceElement: true */
             directive = sliceSource(token.range[0] + 1, token.range[1] - 1);
             if (directive === 'use strict') {
                 strict = true;
+                if (firstRestricted) {
+                    throwError(firstRestricted, Messages.StrictOctalLiteral);
+                }
+            } else {
+                if (!firstRestricted && token.octal) {
+                    firstRestricted = token;
+                }
             }
         }
 
@@ -2852,7 +2866,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseSourceElements() {
-        var sourceElement, sourceElements = [], token, directive;
+        var sourceElement, sourceElements = [], token, directive, firstRestricted;
 
         while (index < length) {
             token = lookahead();
@@ -2869,6 +2883,13 @@ parseStatement: true, parseSourceElement: true */
             directive = sliceSource(token.range[0] + 1, token.range[1] - 1);
             if (directive === 'use strict') {
                 strict = true;
+                if (firstRestricted) {
+                    throwError(firstRestricted, Messages.StrictOctalLiteral);
+                }
+            } else {
+                if (!firstRestricted && token.octal) {
+                    firstRestricted = token;
+                }
             }
         }
 

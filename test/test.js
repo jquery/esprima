@@ -19698,6 +19698,55 @@ data = {
             lineNumber: 1,
             column: 49,
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        'function hello() { \'use strict\'; "\\1"; }': {
+            index: 33,
+            lineNumber: 1,
+            column: 34,
+            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+        },
+
+        'function hello() { \'use strict\'; 021; }': {
+            index: 33,
+            lineNumber: 1,
+            column: 34,
+            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+        },
+
+        'function hello() { \'use strict\'; ({ "\\1": 42 }); }': {
+            index: 36,
+            lineNumber: 1,
+            column: 37,
+            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+        },
+
+        'function hello() { \'use strict\'; ({ 021: 42 }); }': {
+            index: 36,
+            lineNumber: 1,
+            column: 37,
+            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+        },
+
+        'function hello() { "octal directive\\1"; "use strict"; }': {
+            index: 19,
+            lineNumber: 1,
+            column: 20,
+            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+        },
+
+        'function hello() { "octal directive\\1"; "octal directive\\2"; "use strict"; }': {
+            index: 19,
+            lineNumber: 1,
+            column: 20,
+            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+        },
+
+        'function hello() { "use strict"; function inner() { "octal directive\\1"; } }': {
+            index: 52,
+            lineNumber: 1,
+            column: 53,
+            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
         }
 
     }
