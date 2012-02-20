@@ -1515,7 +1515,9 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (type === Token.NullLiteral) {
-            return createLiteral(lex());
+            lex();
+            token.value = null;
+            return createLiteral(token);
         }
 
         if (match('[')) {
