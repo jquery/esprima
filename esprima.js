@@ -341,23 +341,42 @@ parseStatement: true, parseSourceElement: true */
         // extra.recovery
         var ch = '\x00',
             idx = index;
-        if (extra.mark && extra.mark!==-1) {
-             while (idx>extra.mark && !isNewlineOrSemicolon(source[idx])) {
+//        if (extra.mark && extra.mark!==-1) {
+             while (idx>0 && !isNewlineOrSemicolon(source[idx])) {
 	          idx--;
 	        }
-	        // If we simply managed to recover to where we failed, that is no use as we'll just fail again
-	        // so let's not move at all
-	        if (idx>=extra.mark) {
+	        if (idx===extra.statementStart) {
+	        	return;
+	        }
+	        var rewind = false;
+	        if (extra.lastRewindLocation) {
+	          rewind = true;
+	        } else {
+	          var v = extra.lastRewindLocation;
+	          if (v!==idx) {
+	            rewind=true;
+	          }
+	          
+	        }	        
+	        if (rewind) {
 		        index = idx;
 		        buffer = null;
+		        extra.lastRewindLocation = index;
 	        }
-        } else {
-	        while (idx>0 && !isNewlineOrSemicolon(source[idx])) {
-	          idx--;
-	        }
-	        index = idx;
-	        buffer = null;
-        }
+	        
+	        // If we simply managed to recover to where we failed, that is no use as we'll just fail again
+	        // so let's not move at all
+//	        if (idx>extra.mark) {
+//		        index = idx;
+//		        buffer = null;
+//	        }
+//        } else {
+//	        while (idx>0 && !isNewlineOrSemicolon(source[idx])) {
+//	          idx--;
+//	        }
+//	        index = idx;
+//	        buffer = null;
+//        }
     }
     
     function fastForward() {
@@ -1619,12 +1638,24 @@ parseStatement: true, parseSourceElement: true */
       // token type = 7 for ) and for &&
       if (token.value && token.type===Token.Punctuator) {
         var idx = index-token.value.length-1;
-        while (isWhiteSpace(source[idx])) {
+        var ch = source[idx];
+        var lineChange = false; // indicates we moved across a line boundary
+        while (ch==='\n' || isWhiteSpace(ch)) {
+          if (ch==='\n') {
+            lineChange = true;
+          }
           idx--;
+          ch = source[idx];
         }
-        if (source[idx]==='.') {
-          index = idx+1;
-          buffer=null;
+        // Some special cases.
+        // 1. "foo.\n(foo())\n" - don't want that to parse as "foo(foo())"
+        if (ch==='.' && lineChange && token.value==='(') {
+          // do not recover in this case
+        } else {
+	        if (source[idx]==='.') {
+	          index = idx+1;
+	          buffer=null;
+	        }
         }
       }
     }
@@ -2225,6 +2256,20 @@ parseStatement: true, parseSourceElement: true */
             expression: expr
         };
     }
+    
+    /**
+     * add the error if not already reported.
+     */
+    function pushError(error) {
+        var len = extra.errors.length;
+        for (var e=0; e < len; e++) {
+            var existingError = extra.errors[e];
+            if (existingError.index === error.index && existingError.message === error.message) {
+                return; // do not add duplicate
+            }
+        }
+        extra.errors.push(error);
+    }
 
     // 12.5 If statement
 
@@ -2235,17 +2280,33 @@ parseStatement: true, parseSourceElement: true */
 
         expect('(');
 
+try {
         test = parseExpression();
+} catch (e) {
+  pushError(e);
+//  test = null;
+}
 
-        expect(')');
+        try {
+            expect(')');
+        } catch (e) {
+            pushError(e);
+            var ch = source[e.index];
+            if (ch==='{') {
+              index=e.index;
+              buffer=null;
+            } else {
+              rewind();
+            }    
+        }
 
         consequent = parseStatement();
 
         if (matchKeyword('else')) {
             lex();
             alternate = parseStatement();
-        } else {
-            alternate = null;
+//        } else {
+//            alternate = null;
         }
 
         return {
@@ -2813,7 +2874,7 @@ parseStatement: true, parseSourceElement: true */
         expr = parseExpression();
 
         // 12.12 Labelled Statements
-        if ((expr.type === Syntax.Identifier) && match(':')) {
+        if (expr && (expr.type === Syntax.Identifier) && match(':')) {
             lex();
 
             if (Object.prototype.hasOwnProperty.call(state.labelSet, expr.name)) {
@@ -3387,12 +3448,21 @@ parseStatement: true, parseSourceElement: true */
 
         function wrapThrow(parseFunction) {
             return function () {
-                var pos = index;
                 try {
                     return parseFunction.apply(null, arguments);
                 } catch (e) {
-                    extra.mark = pos;
-                    extra.errors.push(e);
+					pushError(e);
+                }
+            };
+        }
+        
+        function wrapParseStatement(parseFunction) {
+            return function () {
+                extra.statementStart = index;
+                try {
+                    return parseFunction.apply(null, arguments);
+                } catch (e) {
+					pushError(e);
                 }
             };
         }
@@ -3488,6 +3558,7 @@ parseStatement: true, parseSourceElement: true */
         }
         
         if (extra.errors) {
+        /*
             parseAdditiveExpression = wrapThrow(parseAdditiveExpression);
             parseAssignmentExpression = wrapThrow(parseAssignmentExpression);
             parseBitwiseANDExpression = wrapThrow(parseBitwiseANDExpression);
@@ -3510,7 +3581,10 @@ parseStatement: true, parseSourceElement: true */
             parseMultiplicativeExpression = wrapThrow(parseMultiplicativeExpression);
             parseNewExpression = wrapThrow(parseNewExpression);
             parseNonComputedMember = wrapThrow(parseNonComputedMember);
+            */   
+            // this enables 'foo.<EOF>' to return something
             parseNonComputedProperty = wrapThrow(parseNonComputedProperty);
+            /*
             parseObjectProperty = wrapThrow(parseObjectProperty);
             parseObjectPropertyKey = wrapThrow(parseObjectPropertyKey);
             parsePrimaryExpression = wrapThrow(parsePrimaryExpression);
@@ -3518,12 +3592,16 @@ parseStatement: true, parseSourceElement: true */
             parseProgram = wrapThrow(parseProgram);
             parsePropertyFunction = wrapThrow(parsePropertyFunction);
             parseRelationalExpression = wrapThrow(parseRelationalExpression);
-            parseStatement = wrapThrow(parseStatement);
+            */
+            parseStatement = wrapParseStatement(parseStatement);
+            /*
             parseShiftExpression = wrapThrow(parseShiftExpression);
             parseSwitchCase = wrapThrow(parseSwitchCase);
             parseUnaryExpression = wrapThrow(parseUnaryExpression);
             parseVariableDeclaration = wrapThrow(parseVariableDeclaration);
             parseVariableIdentifier = wrapThrow(parseVariableIdentifier);
+            */
+            // wrapping this means we try to continue if it looks like a missing semicolon
             consumeSemicolon = wrapThrow(consumeSemicolon);
         }
 

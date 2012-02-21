@@ -102,7 +102,7 @@ function assertNoErrors(ast) {
 function assertErrors(ast,expectedErrors) {
   var expectedErrorList = (expectedErrors instanceof Array ? expectedErrors: [expectedErrors]);
   var correctNumberOfErrors = ast.errors!==null && ast.errors.length===expectedErrorList.length;
-  ok(correctNumberOfErrors,'errors: '+ast.errors.length+'\n'+ast.errors);
+  ok(correctNumberOfErrors,'checking number of errors (expecting '+expectedErrorList.length+')\nErrors:'+ast.errors.length+'\n'+ast.errors);
   if (correctNumberOfErrors) {
 	  for (var e=0;e<expectedErrors.length;e++) {
 	    var expectedError = expectedErrorList[e];
@@ -132,10 +132,20 @@ $(document).ready(function() {
       equal(stringify(parsedProgram),"{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo}}}");
 	});
 	
+	test("test - dot used in function (so followed by end curly)",function() {
+	  var parsedProgram = parse("var foo = { ooo:8 }\nfunction f() {\n  foo.\n}");
+      assertErrors(parsedProgram,message(4,'Unexpected token }'));
+      equal(stringify(parsedProgram),"[{type:VariableDeclaration,declarations:[{type:VariableDeclarator,id:{type:Identifier,name:foo},init:{type:ObjectExpression,properties:[{type:Property,key:{type:Identifier,name:ooo},value:{type:Literal,value:8},kind:init}]}}],kind:var},{type:FunctionDeclaration,id:{type:Identifier,name:f},params:[],body:{type:BlockStatement,body:[{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo}}}]}}]");
+    });
+	
     // Notice that node for member expression represents 'foo.var' - so it had a go at parsing that then failed, recovered to the start of the line and continued
 	test("recovery - dot followed by newline then var",function() {	  
 	  var parsedProgram = parse("foo.\nvar x = 4;");
       assertErrors(parsedProgram,message(2,'Unexpected identifier'));
+      // this is with no 'rewind' so the two pieces are 'foo.var' and 'x=4' 
+//      equal(stringify(parsedProgram),"[{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo},property:{type:Identifier,name:var}}},{type:ExpressionStatement,expression:{type:AssignmentExpression,operator:=,left:{type:Identifier,name:x},right:{type:Literal,value:4}}}]");
+      
+      // this is with rewind:
       equal(stringify(parsedProgram),"[{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo},property:{type:Identifier,name:var}}},{type:VariableDeclaration,declarations:[{type:VariableDeclarator,id:{type:Identifier,name:x},init:{type:Literal,value:4}}],kind:var}]");
 	});
     
@@ -143,7 +153,7 @@ $(document).ready(function() {
 	test("recovery - dot followed by newline then if",function() {
 	  var parsedProgram = parse("foo.\nif (3===4) {}\n");
       assertErrors(parsedProgram,message(2,'Unexpected token {'));
-      equal(stringify(parsedProgram), "[{type:ExpressionStatement,expression:{type:CallExpression,callee:{type:MemberExpression,object:{type:Identifier,name:foo},property:{type:Identifier,name:if}},arguments:[{type:BinaryExpression,operator:===,left:{type:Literal,value:3},right:{type:Literal,value:4}}]}},{type:IfStatement,test:{type:BinaryExpression,operator:===,left:{type:Literal,value:3},right:{type:Literal,value:4}},consequent:{type:BlockStatement,body:[]},alternate:null}]");
+      equal(stringify(parsedProgram), "[{type:ExpressionStatement,expression:{type:CallExpression,callee:{type:MemberExpression,object:{type:Identifier,name:foo},property:{type:Identifier,name:if}},arguments:[{type:BinaryExpression,operator:===,left:{type:Literal,value:3},right:{type:Literal,value:4}}]}},{type:IfStatement,test:{type:BinaryExpression,operator:===,left:{type:Literal,value:3},right:{type:Literal,value:4}},consequent:{type:BlockStatement,body:[]}}]");
 	});
 	
 	test("recovery - dot followed by newlines then eof",function() {
@@ -177,7 +187,7 @@ $(document).ready(function() {
       assertErrors(parsedProgram,message(1,'Unexpected token ;'));
       equal(stringify(parsedProgram),"{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo}}}");
 	});
-	
+
 	test("recovery - dotted expression in parentheses",function() {
 	  var parsedProgram = parse("(foo.);");
       assertErrors(parsedProgram,[message(1,'Unexpected token )')]);
@@ -209,5 +219,41 @@ $(document).ready(function() {
       assertErrors(parsedProgram,message(1,'Unexpected token ||'));
       equal(stringify(parsedProgram),"{type:ExpressionStatement,expression:{type:LogicalExpression,operator:||,left:{type:MemberExpression,object:{type:MemberExpression,object:{type:Identifier,name:foo},property:{type:Identifier,name:bar}}},right:{type:Literal,value:true}}}");
 	});
+	
+	// if statements
+	
+	test("recovery - if statements 1",function() {
+		var parsedProgram = parse("if (");
+		assertErrors(parsedProgram,message(1,'Unexpected end of input'));
+		equal(stringify(parsedProgram),	"{type:IfStatement}");
+	});
+	
+	// two errors occur here, effectively the same thing twice.  
+	// First we run out of input parsing the bit after the '.'
+	// then we run out of input parsing the closing ')'
+	test("recovery - if statements with incomplete property ref",function() {
+		var parsedProgram = parse("if (foo.");
+		assertErrors(parsedProgram,message(1,'Unexpected end of input'));
+		equal(stringify(parsedProgram),"{type:IfStatement,test:{type:MemberExpression,object:{type:Identifier,name:foo}}}");
+	});
+	
+	// More observations around recovery here.
+	// In order for the previous test to pass we need to introduce 'rewind()' into the parseIfStatment
+	// function for when it goes wrong.  If we do this without further change it will rewind to the beginning of 
+	
+	test("recovery - if statements with incomplete property ref and stuff following ",function() {
+		var parsedProgram = parse("if (foo.\nvar x = 4;");
+		assertErrors(parsedProgram,message(1,'Unexpected end of input'));
+		equal(stringify(parsedProgram),	
+          "{type:IfStatement,test:{type:MemberExpression,object:{type:Identifier,name:foo},property:{type:Identifier,name:var}},consequent:{type:VariableDeclaration,declarations:[{type:VariableDeclarator,id:{type:Identifier,name:x},init:{type:Literal,value:4}}],kind:var}}");
+	});
+	
+	test("test if 4 - if statements missing closing paren",function() {
+		var parsedProgram = parse("if (true {\nvar x = 1; var y = 2;\n}");
+		assertErrors(parsedProgram,message(1,'Unexpected end of input'));
+		equal(stringify(parsedProgram),	"{type:IfStatement,test:{type:Literal,value:true},consequent:{type:BlockStatement,body:[{type:VariableDeclaration,declarations:[{type:VariableDeclarator,id:{type:Identifier,name:x},init:{type:Literal,value:1}}],kind:var},{type:VariableDeclaration,declarations:[{type:VariableDeclarator,id:{type:Identifier,name:y},init:{type:Literal,value:2}}],kind:var}]}}");
+	});
+	
+	
 
 });
