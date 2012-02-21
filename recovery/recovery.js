@@ -120,26 +120,26 @@ $(document).ready(function() {
 	module("Recovery module - dots");
 	
 	// parse a simple string, flatten the ast and confirm the result
-	test("test 1 - sanity test",function() {
+	test("test 1 - sanity test - 'foo.bar'",function() {
 	  var parsedProgram = parse("foo.bar");
       assertNoErrors(parsedProgram);
 	  equal(stringify(parsedProgram),"{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo},property:{type:Identifier,name:bar}}}");
 	});
 	
-	test("test 2 - dot followed by EOF",function() {
+	test("test 2 - dot followed by EOF - 'foo.'",function() {
 	  var parsedProgram = parse("foo.");
       assertErrors(parsedProgram,message(1,'Unexpected end of input'));
       equal(stringify(parsedProgram),"{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo},property:null}}");
 	});
 	
-	test("test 3 - dot used in function (so followed by end curly)",function() {
+	test("test 3 - dot used in function (so followed by end curly) - 'var foo = { ooo:8 }\\nfunction f() {\\n  foo.\\n}'",function() {
 	  var parsedProgram = parse("var foo = { ooo:8 }\nfunction f() {\n  foo.\n}");
       assertErrors(parsedProgram,message(4,'Unexpected token }'));
       equal(stringify(parsedProgram),"[{type:VariableDeclaration,declarations:[{type:VariableDeclarator,id:{type:Identifier,name:foo},init:{type:ObjectExpression,properties:[{type:Property,key:{type:Identifier,name:ooo},value:{type:Literal,value:8},kind:init}]}}],kind:var},{type:FunctionDeclaration,id:{type:Identifier,name:f},params:[],body:{type:BlockStatement,body:[{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo},property:null}}]}}]");
     });
 	
     // Notice that node for member expression represents 'foo.var' - so it had a go at parsing that then failed, recovered to the start of the line and continued
-	test("test 4 - dot followed by newline then var",function() {	  
+	test("test 4 - dot followed by newline then var - 'foo.\\nvar x = 4;'",function() {	  
 	  var parsedProgram = parse("foo.\nvar x = 4;");
       assertErrors(parsedProgram,message(2,'Unexpected identifier'));
       // this is with no 'rewind' so the two pieces are 'foo.var' and 'x=4' 
@@ -150,51 +150,51 @@ $(document).ready(function() {
 	});
     
     // Parsed as a call expression 'foo.if(3==4)' then fails on the curly bracket
-	test("test 5 - dot followed by newline then if",function() {
+	test("test 5 - dot followed by newline then if - 'foo.\\nif (3===4) {}\\n'",function() {
 	  var parsedProgram = parse("foo.\nif (3===4) {}\n");
       assertErrors(parsedProgram,message(2,'Unexpected token {'));
       equal(stringify(parsedProgram), "[{type:ExpressionStatement,expression:{type:CallExpression,callee:{type:MemberExpression,object:{type:Identifier,name:foo},property:{type:Identifier,name:if}},arguments:[{type:BinaryExpression,operator:===,left:{type:Literal,value:3},right:{type:Literal,value:4}}]}},{type:IfStatement,test:{type:BinaryExpression,operator:===,left:{type:Literal,value:3},right:{type:Literal,value:4}},consequent:{type:BlockStatement,body:[]},alternate:null}]");
 	});
 	
-	test("test 6 - dot followed by newlines then eof",function() {
+	test("test 6 - dot followed by newlines then eof - 'foo.\\n\\n'",function() {
 	  var parsedProgram = parse("foo.\n\n");
       assertErrors(parsedProgram,[message(3,'Unexpected end of input')]);
       equal(stringify(parsedProgram),"{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo},property:null}}");
 	});
 	
 	// TODO why two errors: 2 Error: Line 2: Unexpected token (,Error: Line 2: Unexpected identifier
-	test("test 7 - dot followed by newline then a non identifier (just a parenthesized expression)",function() {
+	test("test 7 - dot followed by newline then a non identifier (just a parenthesized expression) - 'foo.\\n(foo())\\n'",function() {
 	  var parsedProgram = parse("foo.\n(foo())\n");
       assertErrors(parsedProgram,[message(2,'Unexpected token ('),message(2,'Unexpected identifier')]);
       equal(stringify(parsedProgram),"[{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo},property:null}},{type:ExpressionStatement,expression:{type:CallExpression,callee:{type:Identifier,name:foo},arguments:[]}}]");
 	});
 	
 	// Similar to other cases of an identifier following a 'blah.' - just creates a funny looking member expression then recovers
-	test("test 8 - dot followed by function",function() {
+	test("test 8 - dot followed by function - 'foo.\\nfunction f() {}\\n'",function() {
 	  var parsedProgram = parse("foo.\nfunction f() {}\n");
       assertErrors(parsedProgram,message(2,'Unexpected identifier'));
       equal(stringify(parsedProgram),"[{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo},property:{type:Identifier,name:function}}},{type:FunctionDeclaration,id:{type:Identifier,name:f},params:[],body:{type:BlockStatement,body:[]}}]");
 	});
 	
-	test("test 9 - dot then whitespace before newline and var",function() {
+	test("test 9 - dot then whitespace before newline and var - 'foo.    \\nvar x= 4\\n'",function() {
 	  var parsedProgram = parse("foo.    \nvar x= 4\n");
       assertErrors(parsedProgram,message(2,'Unexpected end of input'));
       equal(stringify(parsedProgram),"[{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo},property:{type:Identifier,name:var}}},{type:VariableDeclaration,declarations:[{type:VariableDeclarator,id:{type:Identifier,name:x},init:{type:Literal,value:4}}],kind:var}]");
 	});
 	
-	test("test 10 - dot then semicolon",function() {
+	test("test 10 - dot then semicolon - 'foo.;'",function() {
 	  var parsedProgram = parse("foo.;");
       assertErrors(parsedProgram,message(1,'Unexpected token ;'));
       equal(stringify(parsedProgram),"{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo},property:null}}");
 	});
 
-	test("test 11 - dot expression in parentheses",function() {
+	test("test 11 - dot expression in parentheses - '(foo.);'",function() {
 	  var parsedProgram = parse("(foo.);");
       assertErrors(parsedProgram,[message(1,'Unexpected token )')]);
       equal(stringify(parsedProgram),"{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo},property:null}}");
 	});
 	
-	test("test 12 - dot expression in nested parentheses",function() {
+	test("test 12 - dot expression in nested parentheses - '((foo.))'",function() {
 	  var parsedProgram = parse("((foo.));");
       assertErrors(parsedProgram,[message(1,'Unexpected token )')]);
       equal(stringify(parsedProgram),"{type:ExpressionStatement,expression:{type:MemberExpression,object:{type:Identifier,name:foo},property:null}}");
@@ -202,19 +202,19 @@ $(document).ready(function() {
 
     // this will recover on hitting the && following the . - it reverses one 'token' so that the && is seen again and then parsing
     // continues as expected
-	test("test 13 - dot expression followed by ampersand",function() {
+	test("test 13 - dot expression followed by ampersand - 'foo. && true;'",function() {
 	  var parsedProgram = parse("foo. && true;");
       assertErrors(parsedProgram,message(1,'Unexpected token &&'));
       equal(stringify(parsedProgram),"{type:ExpressionStatement,expression:{type:LogicalExpression,operator:&&,left:{type:MemberExpression,object:{type:Identifier,name:foo},property:null},right:{type:Literal,value:true}}}");
 	});
 	
-	test("test 14 - dot expression sequence followed by or",function() {
+	test("test 14 - dot expression sequence followed by or - 'foo.bar. || true;'",function() {
 	  var parsedProgram = parse("foo.bar. || true;");
       assertErrors(parsedProgram,message(1,'Unexpected token ||'));
       equal(stringify(parsedProgram),"{type:ExpressionStatement,expression:{type:LogicalExpression,operator:||,left:{type:MemberExpression,object:{type:MemberExpression,object:{type:Identifier,name:foo},property:{type:Identifier,name:bar}},property:null},right:{type:Literal,value:true}}}");
 	});
 	
-	test("test 15 - dot expression sequence parenthesized expression followed by or",function() {
+	test("test 15 - dot expression sequence parenthesized expression followed by or - '(foo.bar. || true);'",function() {
 	  var parsedProgram = parse("(foo.bar. || true);");
       assertErrors(parsedProgram,message(1,'Unexpected token ||'));
       equal(stringify(parsedProgram),"{type:ExpressionStatement,expression:{type:LogicalExpression,operator:||,left:{type:MemberExpression,object:{type:MemberExpression,object:{type:Identifier,name:foo},property:{type:Identifier,name:bar}},property:null},right:{type:Literal,value:true}}}");
@@ -222,7 +222,7 @@ $(document).ready(function() {
 		
 	module("Recovery module - ifs");
 	
-	test("test 16 - if statements 1",function() {
+	test("test 16 - 'if ('",function() {
 		var parsedProgram = parse("if (");
 		assertErrors(parsedProgram,message(1,'Unexpected end of input'));
 		equal(stringify(parsedProgram),	"{type:IfStatement,test:null,consequent:null,alternate:null}");
@@ -231,7 +231,7 @@ $(document).ready(function() {
 	// two errors occur here, effectively the same thing twice.  
 	// First we run out of input parsing the bit after the '.'
 	// then we run out of input parsing the closing ')'
-	test("test 17 - if statements with incomplete property ref",function() {
+	test("test 17 - incomplete property ref - 'if (foo.'",function() {
 		var parsedProgram = parse("if (foo.");
 		assertErrors(parsedProgram,message(1,'Unexpected end of input'));
 		equal(stringify(parsedProgram),"{type:IfStatement,test:{type:MemberExpression,object:{type:Identifier,name:foo},property:null},consequent:null,alternate:null}");
@@ -241,14 +241,14 @@ $(document).ready(function() {
 	// In order for the previous test to pass we need to introduce 'rewind()' into the parseIfStatment
 	// function for when it goes wrong.  If we do this without further change it will rewind to the beginning of 
 	
-	test("test 18 - if statements with incomplete property ref and stuff following ",function() {
+	test("test 18 - incomplete property ref and stuff following - 'if (foo.\\nvar x = 4;'",function() {
 		var parsedProgram = parse("if (foo.\nvar x = 4;");
 		assertErrors(parsedProgram,[message(2,'Unexpected identifier'),message(2,'Unexpected token ='),message(2,'Unexpected number')]);
 		equal(stringify(parsedProgram),	
             "[{type:IfStatement,test:{type:MemberExpression,object:{type:Identifier,name:foo},property:{type:Identifier,name:var}},consequent:{type:ExpressionStatement,expression:null},alternate:null},{type:VariableDeclaration,declarations:[{type:VariableDeclarator,id:{type:Identifier,name:x},init:{type:Literal,value:4}}],kind:var}]");
 	});
 	
-	test("test 19 - if statements missing closing paren",function() {
+	test("test 19 - missing closing paren - 'if (true {\\nvar x = 1; var y = 2;\\n}'",function() {
 		var parsedProgram = parse("if (true {\nvar x = 1; var y = 2;\n}");
 		assertErrors(parsedProgram,message(1,'Unexpected end of input'));
 		equal(stringify(parsedProgram),	"{type:IfStatement,test:{type:Literal,value:true},consequent:{type:BlockStatement,body:[{type:VariableDeclaration,declarations:[{type:VariableDeclarator,id:{type:Identifier,name:x},init:{type:Literal,value:1}}],kind:var},{type:VariableDeclaration,declarations:[{type:VariableDeclarator,id:{type:Identifier,name:y},init:{type:Literal,value:2}}],kind:var}]},alternate:null}");
