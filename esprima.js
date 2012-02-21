@@ -333,66 +333,41 @@ parseStatement: true, parseSourceElement: true */
         return source[index++];
     }
     
+    
     function isNewlineOrSemicolon(ch) {
       return ch===';' || ch==='\n';
     }
     
+    /**
+     * rewind the lex position to the most recent newline or semicolon.  If that turns out
+     * to be the same position as the most recent parsing of a statement was attempted at, 
+     * don't rewind (because it will fail in the same way).  If it turns out to be the same
+     * position as where we last rewound to, don't do it.  Clears the buffer and sets the
+     * index in order to continue lexing from the new position.
+     */
     function rewind() {
-        // extra.recovery
-        var ch = '\x00',
-            idx = index;
-//        if (extra.mark && extra.mark!==-1) {
-             while (idx>0 && !isNewlineOrSemicolon(source[idx])) {
-	          idx--;
-	        }
-	        if (idx===extra.statementStart) {
-	        	return;
-	        }
-	        var rewind = false;
-	        if (extra.lastRewindLocation) {
-	          rewind = true;
-	        } else {
-	          var v = extra.lastRewindLocation;
-	          if (v!==idx) {
-	            rewind=true;
-	          }
-	          
-	        }	        
-	        if (rewind) {
-		        index = idx;
-		        buffer = null;
-		        extra.lastRewindLocation = index;
-	        }
-	        
-	        // If we simply managed to recover to where we failed, that is no use as we'll just fail again
-	        // so let's not move at all
-//	        if (idx>extra.mark) {
-//		        index = idx;
-//		        buffer = null;
-//	        }
-//        } else {
-//	        while (idx>0 && !isNewlineOrSemicolon(source[idx])) {
-//	          idx--;
-//	        }
-//	        index = idx;
-//	        buffer = null;
-//        }
-    }
-    
-    function fastForward() {
-        // extra.mark
-        var ch = '\x00',idx;
-        if (extra.mark && extra.mark!==-1) {
-            idx = extra.mark;
-            var slen = source.length;
-            while (idx<source.length && !isNewlineOrSemicolon(source[idx])) {
-	          idx++;
-	        }
-	        index = idx+1;
+        var idx = index;
+        while (idx>0 && !isNewlineOrSemicolon(source[idx])) {
+            idx--;
+        }
+        if (idx===extra.statementStart) {
+            return;
+        }
+        var doRewind = false;
+        if (extra.lastRewindLocation) {
+            doRewind = true;
+        } else {
+            var v = extra.lastRewindLocation;
+            if (v!==idx) {
+              doRewind=true;
+            }
+        }	        
+        if (doRewind) {
+	        index = idx;
 	        buffer = null;
+	        extra.lastRewindLocation = index;
         }
     }
-
 
     // 7.4 Comments
 
@@ -1627,37 +1602,37 @@ parseStatement: true, parseSourceElement: true */
     }
     
     /**
-     * Attempt to reposition the scanner to continue processing.
-     * Example: '(foo.)' we will hit the ')' instead of discovering a property, basically rewind if we
-     * were expecting a property which will allow the next rule to succeed (and match the ')')
+     * When a problem occurs in parseNonComputedProperty, attempt to reposition 
+     * the lexer to continue processing.
+     * Example: '(foo.)' we will hit the ')' instead of discovering a property and consuming the ')'
+     * will cause the parse of the paretheses to fail, so 'unconsume' it.
+     * Basically rewind by one token if punctuation (type 7) is hit and the char before it was
+     * a dot.  This will enable the enclosing parse rule to consume the punctuation.
      */
     function attemptRecoveryNonComputedProperty(token) {
-      if (!extra.errors) {
-          return;
-      }
-      // token type = 7 for ) and for &&
-      if (token.value && token.type===Token.Punctuator) {
-        var idx = index-token.value.length-1;
-        var ch = source[idx];
-        var lineChange = false; // indicates we moved across a line boundary
-        while (ch==='\n' || isWhiteSpace(ch)) {
-          if (ch==='\n') {
-            lineChange = true;
-          }
-          idx--;
-          ch = source[idx];
+        if (token.value && token.type===Token.Punctuator) {
+            var idx = index-token.value.length-1;
+            var ch = source[idx];
+            var lineChange = false; // indicates a line boundary was crossed
+            while (ch==='\n' || isWhiteSpace(ch)) {
+                if (ch==='\n') {
+                    lineChange = true;
+                }
+                idx--;
+                ch = source[idx];
+            }
+            // Check if worth rewinding
+            // Special case: 
+            // "foo.\n(foo())\n" - don't really want that to parse as "foo(foo())"
+            if (ch==='.' && lineChange && token.value==='(') {
+              // do not recover in this case
+            } else {
+	            if (source[idx]==='.') {
+	                index = idx+1;
+	                buffer=null;
+	            }
+            }
         }
-        // Some special cases.
-        // 1. "foo.\n(foo())\n" - don't want that to parse as "foo(foo())"
-        if (ch==='.' && lineChange && token.value==='(') {
-          // do not recover in this case
-        } else {
-	        if (source[idx]==='.') {
-	          index = idx+1;
-	          buffer=null;
-	        }
-        }
-      }
     }
 
 
@@ -1665,7 +1640,9 @@ parseStatement: true, parseSourceElement: true */
         var token = lex();
 
         if (!isIdentifierName(token)) {
-            attemptRecoveryNonComputedProperty(token);
+            if (extra.errors) {
+                attemptRecoveryNonComputedProperty(token);
+            }
             throwUnexpected(token);
         }
 
@@ -2280,33 +2257,40 @@ parseStatement: true, parseSourceElement: true */
 
         expect('(');
 
-try {
         test = parseExpression();
-} catch (e) {
-  pushError(e);
-//  test = null;
-}
 
+        // needs generalizing to a 'expect A but don't consume if you hit B or C'
         try {
             expect(')');
         } catch (e) {
-            pushError(e);
-            var ch = source[e.index];
-            if (ch==='{') {
-              index=e.index;
-              buffer=null;
+            if (extra.errors) {
+	            pushError(e);
+	            // If a { was hit instead of a ) then don't consume it, let us assume a ')' was 
+	            // missed and the consequent block is OK
+	            if (source[e.index] === '{') {
+	              index=e.index;
+	              buffer=null;
+	            // activating this block will mean the following statement is parsed as a consequent.
+	            // without it the statement is considered not at all part of the if at all
+	//            } else {
+	//              rewind();
+	            }
             } else {
-              rewind();
-            }    
+                throw e;
+            }
         }
 
         consequent = parseStatement();
+        // required because of the check in wrapTracking that returns nothing if node is undefined
+        if (!consequent) {
+            consequent = null;
+        }
 
         if (matchKeyword('else')) {
             lex();
             alternate = parseStatement();
-//        } else {
-//            alternate = null;
+        } else {
+            alternate = null;
         }
 
         return {
@@ -3452,17 +3436,19 @@ try {
                     return parseFunction.apply(null, arguments);
                 } catch (e) {
 					pushError(e);
+					return null;
                 }
             };
         }
         
-        function wrapParseStatement(parseFunction) {
+        function wrapThrowParseStatement(parseFunction) {
             return function () {
-                extra.statementStart = index;
+                extra.statementStart = index; // record where attempting to parse statement from
                 try {
                     return parseFunction.apply(null, arguments);
                 } catch (e) {
 					pushError(e);
+					return null;
                 }
             };
         }
@@ -3558,50 +3544,10 @@ try {
         }
         
         if (extra.errors) {
-        /*
-            parseAdditiveExpression = wrapThrow(parseAdditiveExpression);
-            parseAssignmentExpression = wrapThrow(parseAssignmentExpression);
-            parseBitwiseANDExpression = wrapThrow(parseBitwiseANDExpression);
-            parseBitwiseORExpression = wrapThrow(parseBitwiseORExpression);
-            parseBitwiseXORExpression = wrapThrow(parseBitwiseXORExpression);
-            parseBlock = wrapThrow(parseBlock);
-            parseFunctionSourceElements = wrapThrow(parseFunctionSourceElements);
-            parseCallMember = wrapThrow(parseCallMember);
-            parseCatchClause = wrapThrow(parseCatchClause);
-            parseComputedMember = wrapThrow(parseComputedMember);
-            parseConditionalExpression = wrapThrow(parseConditionalExpression);
-            parseConstLetDeclaration = wrapThrow(parseConstLetDeclaration);
-            parseEqualityExpression = wrapThrow(parseEqualityExpression);
+            parseStatement = wrapThrowParseStatement(parseStatement);
             parseExpression = wrapThrow(parseExpression);
-            parseForVariableDeclaration = wrapThrow(parseForVariableDeclaration);
-            parseFunctionDeclaration = wrapThrow(parseFunctionDeclaration);
-            parseFunctionExpression = wrapThrow(parseFunctionExpression);
-            parseLogicalANDExpression = wrapThrow(parseLogicalANDExpression);
-            parseLogicalORExpression = wrapThrow(parseLogicalORExpression);
-            parseMultiplicativeExpression = wrapThrow(parseMultiplicativeExpression);
-            parseNewExpression = wrapThrow(parseNewExpression);
-            parseNonComputedMember = wrapThrow(parseNonComputedMember);
-            */   
             // this enables 'foo.<EOF>' to return something
             parseNonComputedProperty = wrapThrow(parseNonComputedProperty);
-            /*
-            parseObjectProperty = wrapThrow(parseObjectProperty);
-            parseObjectPropertyKey = wrapThrow(parseObjectPropertyKey);
-            parsePrimaryExpression = wrapThrow(parsePrimaryExpression);
-            parsePostfixExpression = wrapThrow(parsePostfixExpression);
-            parseProgram = wrapThrow(parseProgram);
-            parsePropertyFunction = wrapThrow(parsePropertyFunction);
-            parseRelationalExpression = wrapThrow(parseRelationalExpression);
-            */
-            parseStatement = wrapParseStatement(parseStatement);
-            /*
-            parseShiftExpression = wrapThrow(parseShiftExpression);
-            parseSwitchCase = wrapThrow(parseSwitchCase);
-            parseUnaryExpression = wrapThrow(parseUnaryExpression);
-            parseVariableDeclaration = wrapThrow(parseVariableDeclaration);
-            parseVariableIdentifier = wrapThrow(parseVariableIdentifier);
-            */
-            // wrapping this means we try to continue if it looks like a missing semicolon
             consumeSemicolon = wrapThrow(consumeSemicolon);
         }
 
