@@ -350,7 +350,7 @@ parseStatement: true, parseSourceElement: true */
         while (idx>0 && !isNewlineOrSemicolon(source[idx])) {
             idx--;
         }
-        if (idx===extra.statementStart) {
+        if (idx<=extra.statementStart) {
             return;
         }
         var doRewind = false;
@@ -3488,7 +3488,7 @@ parseStatement: true, parseSourceElement: true */
                     return parseFunction.apply(null, arguments);
                 } catch (e) {
 					pushError(e);
-					return null;
+//					return null;
                 }
             };
         }
