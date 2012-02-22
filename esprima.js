@@ -1601,6 +1601,55 @@ parseStatement: true, parseSourceElement: true */
         return args;
     }
     
+    // TODO refactor
+    /**
+     * From a position 'idx' in the source this function moves back through the source until
+     * it finds a non-whitespace (including newlines) character.  It will jump over block comments.
+     * Returns an object with properties: index - the index it rewound to.  lineChange - boolean indicating
+     * if a line was crossed during rewind.
+     */
+    function rewindToInterestingChar(idx) {
+        var done = false;
+        var lineChange=false;
+        var ch;
+        while (!done) {
+          ch = source[idx];
+          if (ch==='/') {
+            // possibly rewind over a block comment
+            if (idx>2 && source[idx-1]==='*') {
+                // it is, let's reverse over it
+                idx = idx - 2;
+                var skippedComment = false;
+                while (!skippedComment) {
+                    ch = source[idx];
+                    if (ch === '*') {
+                        if (idx>0 && source[idx-1]==='/') {
+                            skippedComment=true;
+                        }
+                    } else if (ch==='\n') {
+                        lineChange=true;
+                    }
+                    if (idx === 0) {
+                        skippedComment = true; // error scenario, hit front of array before finding /*
+                    }
+                    idx--;                
+                }
+            } else {
+              done=true;
+            }
+          } else 
+          if (ch==='\n') {
+              lineChange=true;
+          } else if (!isWhiteSpace(ch)) {
+              done=true;
+          }
+          if (!done) {
+              idx--;
+          }
+        }
+        return {"index":idx,"lineChange":lineChange};
+    }
+    
     /**
      * When a problem occurs in parseNonComputedProperty, attempt to reposition 
      * the lexer to continue processing.
@@ -1611,26 +1660,17 @@ parseStatement: true, parseSourceElement: true */
      */
     function attemptRecoveryNonComputedProperty(token) {
         if (token.value && token.type===Token.Punctuator) {
-            var idx = index-token.value.length-1;
-            var ch = source[idx];
-            var lineChange = false; // indicates a line boundary was crossed
-            while (ch==='\n' || isWhiteSpace(ch)) {
-                if (ch==='\n') {
-                    lineChange = true;
-                }
-                idx--;
-                ch = source[idx];
-            }
+            var rewindInfo = rewindToInterestingChar(index-token.value.length-1);
+            var idx = rewindInfo.index;
+            var ch= source[idx];
             // Check if worth rewinding
-            // Special case: 
+            // Special case:
             // "foo.\n(foo())\n" - don't really want that to parse as "foo(foo())"
-            if (ch==='.' && lineChange && token.value==='(') {
-              // do not recover in this case
-            } else {
-	            if (source[idx]==='.') {
-	                index = idx+1;
-	                buffer=null;
-	            }
+            if (ch==='.' && rewindInfo.lineChange && token.value==='(') {
+                // do not recover in this case
+            } else if (ch==='.') {
+	            index = idx+1;
+	            buffer=null;
             }
         }
     }
