@@ -3713,7 +3713,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (suffix) {
-            return result + addIndent('\n');
+            return result + '\n' + addIndent('');
         }
         return result;
     }
