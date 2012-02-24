@@ -17197,6 +17197,46 @@ data = {
             }
         },
 
+        'if (morning)\n    if (afternoon)\n        goodDay();\n    else\n        goodEvening();': {
+            from: {
+                type: 'IfStatement',
+                test: {
+                    type: 'Identifier',
+                    name: 'morning'
+                },
+                consequent: {
+                    type: 'IfStatement',
+                    test: {
+                        type: 'Identifier',
+                        name: 'afternoon'
+                    },
+                    consequent: {
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'goodDay'
+                            },
+                            'arguments': []
+                        }
+                    },
+                    alternate: {
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'goodEvening'
+                            },
+                            'arguments': []
+                        }
+                    }
+                },
+                alternate: null
+            }
+        },
+
         'do\n    keep();\nwhile (true);': {
             from: {
                 type: 'DoWhileStatement',
