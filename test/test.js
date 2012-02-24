@@ -8700,6 +8700,147 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 27 }
             }
+        },
+
+        'var implements, interface, package': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'implements',
+                    range: [4, 13],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                init: null,
+                range: [4, 13],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 14 }
+                }
+            }, {
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'interface',
+                    range: [16, 24],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                init: null,
+                range: [16, 24],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 25 }
+                }
+            }, {
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'package',
+                    range: [27, 33],
+                    loc: {
+                        start: { line: 1, column: 27 },
+                        end: { line: 1, column: 34 }
+                    }
+                },
+                init: null,
+                range: [27, 33],
+                loc: {
+                    start: { line: 1, column: 27 },
+                    end: { line: 1, column: 34 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 33],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 34 }
+            }
+        },
+
+        'var private, protected, public, static': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'private',
+                    range: [4, 10],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 11 }
+                    }
+                },
+                init: null,
+                range: [4, 10],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 11 }
+                }
+            }, {
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'protected',
+                    range: [13, 21],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                init: null,
+                range: [13, 21],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 22 }
+                }
+            }, {
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'public',
+                    range: [24, 29],
+                    loc: {
+                        start: { line: 1, column: 24 },
+                        end: { line: 1, column: 30 }
+                    }
+                },
+                init: null,
+                range: [24, 29],
+                loc: {
+                    start: { line: 1, column: 24 },
+                    end: { line: 1, column: 30 }
+                }
+            }, {
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'static',
+                    range: [32, 37],
+                    loc: {
+                        start: { line: 1, column: 32 },
+                        end: { line: 1, column: 38 }
+                    }
+                },
+                init: null,
+                range: [32, 37],
+                loc: {
+                    start: { line: 1, column: 32 },
+                    end: { line: 1, column: 38 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 37],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            }
         }
 
     },
@@ -19779,6 +19920,104 @@ data = {
             lineNumber: 1,
             column: 53,
             message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+        },
+
+        'function hello() { "use strict"; var implements; }': {
+            index: 37,
+            lineNumber: 1,
+            column: 38,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function hello() { "use strict"; var interface; }': {
+            index: 37,
+            lineNumber: 1,
+            column: 38,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function hello() { "use strict"; var package; }': {
+            index: 37,
+            lineNumber: 1,
+            column: 38,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function hello() { "use strict"; var private; }': {
+            index: 37,
+            lineNumber: 1,
+            column: 38,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function hello() { "use strict"; var protected; }': {
+            index: 37,
+            lineNumber: 1,
+            column: 38,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function hello() { "use strict"; var public; }': {
+            index: 37,
+            lineNumber: 1,
+            column: 38,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function hello() { "use strict"; var static; }': {
+            index: 37,
+            lineNumber: 1,
+            column: 38,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function hello() { "use strict"; var yield; }': {
+            index: 37,
+            lineNumber: 1,
+            column: 38,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function hello() { "use strict"; var let; }': {
+            index: 37,
+            lineNumber: 1,
+            column: 38,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function hello(static) { "use strict"; }': {
+            index: 15,
+            lineNumber: 1,
+            column: 16,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function static() { "use strict"; }': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'var yield': {
+            index: 4,
+            lineNumber: 1,
+            column: 5,
+            message: 'Error: Line 1: Unexpected token yield'
+        },
+
+        'var let': {
+            index: 4,
+            lineNumber: 1,
+            column: 5,
+            message: 'Error: Line 1: Unexpected token let'
+        },
+
+        '"use strict"; function static() { }': {
+            index: 23,
+            lineNumber: 1,
+            column: 24,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
         }
 
     }
