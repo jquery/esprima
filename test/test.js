@@ -19668,6 +19668,13 @@ data = {
             message: 'Error: Line 1: Duplicate data property in object literal not allowed in strict mode'
         },
 
+        'function hello() {\'use strict\'; ({ hasOwnProperty: 42, hasOwnProperty: 42 }) }': {
+            index: 73,
+            lineNumber: 1,
+            column: 74,
+            message: 'Error: Line 1: Duplicate data property in object literal not allowed in strict mode'
+        },
+
         'function hello() {\'use strict\'; ({ get i() { }, i: 42 }) }': {
             index: 53,
             lineNumber: 1,

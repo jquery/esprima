@@ -1460,7 +1460,7 @@ parseStatement: true, parseSourceElement: true */
                     name = toString(property.key.value);
                 }
                 kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
-                if (map.hasOwnProperty(name)) {
+                if (Object.prototype.hasOwnProperty.call(map, name)) {
                     if (map[name] === PropertyKind.Data) {
                         if (kind === PropertyKind.Data) {
                             throwError({}, Messages.StrictDuplicateProperty);
