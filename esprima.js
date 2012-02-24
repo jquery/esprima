@@ -141,7 +141,8 @@ parseStatement: true, parseSourceElement: true */
         StrictAccessorGetSet:  'Object literal may not have multiple get/set accessors with the same name',
         StrictLHSAssignment:  'Assignment to eval or arguments is not allowed in strict mode',
         StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',
-        StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode'
+        StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
+        StrictReservedWord:  'Use of future reserved word in strict mode'
     };
 
     Precedence = {
@@ -249,6 +250,29 @@ parseStatement: true, parseSourceElement: true */
         return false;
     }
 
+    function isStrictModeReservedWord(id) {
+        switch (id) {
+
+        // Strict Mode reserved words.
+        case 'implements':
+        case 'interface':
+        case 'package':
+        case 'private':
+        case 'protected':
+        case 'public':
+        case 'static':
+        case 'yield':
+        case 'let':
+            return true;
+        }
+
+        return false;
+    }
+
+    function isRestrictedWord(id) {
+        return id === 'eval' || id === 'arguments';
+    }
+
     // 7.6.1.1 Keywords
 
     function isKeyword(id) {
@@ -288,16 +312,13 @@ parseStatement: true, parseSourceElement: true */
         case 'const':
             return true;
 
-        // strict mode
-        case 'implements':
-        case 'interface':
-        case 'let':
-        case 'package':
-        case 'private':
-        case 'protected':
-        case 'public':
-        case 'static':
+        // For compatiblity to SpiderMonkey and ES.next
         case 'yield':
+        case 'let':
+            return true;
+        }
+
+        if (strict && isStrictModeReservedWord(id)) {
             return true;
         }
 
@@ -1163,8 +1184,12 @@ parseStatement: true, parseSourceElement: true */
             throwError(token, Messages.UnexpectedIdentifier);
         }
 
-        if (token.type === Token.Keyword && isFutureReservedWord(token.value)) {
-            throwError(token, Messages.UnexpectedReserved);
+        if (token.type === Token.Keyword) {
+            if (isFutureReservedWord(token.value)) {
+                throwError(token, Messages.UnexpectedReserved);
+            } else if (strict && isStrictModeReservedWord(token.value)) {
+                throwError(token, Messages.StrictReservedWord);
+            }
         }
 
         s = token.value;
@@ -1229,10 +1254,6 @@ parseStatement: true, parseSourceElement: true */
             op === '&=' ||
             op === '^=' ||
             op === '|=';
-    }
-
-    function isRestricted(expr) {
-        return expr.type === Syntax.Identifier && (expr.name === 'eval' || expr.name === 'arguments');
     }
 
     function consumeSemicolon() {
@@ -1304,7 +1325,7 @@ parseStatement: true, parseSourceElement: true */
 
         previousStrict = strict;
         body = parseFunctionSourceElements();
-        if (first && strict && isRestricted(param[0])) {
+        if (first && strict && isRestrictedWord(param[0].name)) {
             throwError(first, Messages.StrictParamName);
         }
         strict = previousStrict;
@@ -1676,7 +1697,7 @@ parseStatement: true, parseSourceElement: true */
 
         if ((match('++') || match('--')) && !peekLineTerminator()) {
             // 11.3.1, 11.3.2
-            if (strict && isRestricted(expr)) {
+            if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwError({}, Messages.StrictLHSPostfix);
             }
             expr = {
@@ -1699,7 +1720,7 @@ parseStatement: true, parseSourceElement: true */
             token = lex();
             expr = parseUnaryExpression();
             // 11.4.4, 11.4.5
-            if (strict && isRestricted(expr)) {
+            if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwError({}, Messages.StrictLHSPrefix);
             }
             expr = {
@@ -1959,7 +1980,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (matchAssign()) {
             // 11.13.1
-            if (strict && isRestricted(expr)) {
+            if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwError({}, Messages.StrictLHSAssignment);
             }
 
@@ -2052,7 +2073,7 @@ parseStatement: true, parseSourceElement: true */
             init = null;
 
         // 12.2.1
-        if (strict && isRestricted(id)) {
+        if (strict && isRestrictedWord(id.name)) {
             throwError({}, Messages.StrictVarName);
         }
 
@@ -2548,7 +2569,7 @@ parseStatement: true, parseSourceElement: true */
         if (!match(')')) {
             param = parseExpression();
             // 12.14.1
-            if (strict && isRestricted(param)) {
+            if (strict && param.type === Syntax.Identifier && isRestrictedWord(param.name)) {
                 throwError({}, Messages.StrictCatchVariable);
             }
         }
@@ -2737,12 +2758,17 @@ parseStatement: true, parseSourceElement: true */
         expectKeyword('function');
         token = lookahead();
         id = parseVariableIdentifier();
-        if (isRestricted(id)) {
-            if (strict) {
+        if (strict) {
+            if (isRestrictedWord(token.value)) {
                 throwError(token, Messages.StrictFunctionName);
-            } else {
+            }
+        } else {
+            if (isRestrictedWord(token.value)) {
                 firstRestricted = token;
                 message = Messages.StrictFunctionName;
+            } else if (isStrictModeReservedWord(token.value)) {
+                firstRestricted = token;
+                message = Messages.StrictReservedWord;
             }
         }
 
@@ -2753,12 +2779,17 @@ parseStatement: true, parseSourceElement: true */
                 token = lookahead();
                 param = parseVariableIdentifier();
                 if (strict) {
-                    if (isRestricted(param)) {
+                    if (isRestrictedWord(token.value)) {
                         throwError(token, Messages.StrictParamName);
                     }
-                } else if (!firstRestricted && isRestricted(param)) {
-                    firstRestricted = token;
-                    message = Messages.StrictParamName;
+                } else if (!firstRestricted) {
+                    if (isRestrictedWord(token.value)) {
+                        firstRestricted = token;
+                        message = Messages.StrictParamName;
+                    } else if (isStrictModeReservedWord(token.value)) {
+                        firstRestricted = token;
+                        message = Messages.StrictReservedWord;
+                    }
                 }
                 params.push(param);
                 if (match(')')) {
@@ -2793,12 +2824,17 @@ parseStatement: true, parseSourceElement: true */
         if (!match('(')) {
             token = lookahead();
             id = parseVariableIdentifier();
-            if (isRestricted(id)) {
-                if (strict) {
+            if (strict) {
+                if (isRestrictedWord(token.value)) {
                     throwError(token, Messages.StrictFunctionName);
-                } else {
+                }
+            } else {
+                if (isRestrictedWord(token.value)) {
                     firstRestricted = token;
                     message = Messages.StrictFunctionName;
+                } else if (isStrictModeReservedWord(token.value)) {
+                    firstRestricted = token;
+                    message = Messages.StrictReservedWord;
                 }
             }
         }
@@ -2810,12 +2846,17 @@ parseStatement: true, parseSourceElement: true */
                 token = lookahead();
                 param = parseVariableIdentifier();
                 if (strict) {
-                    if (isRestricted(param)) {
+                    if (isRestrictedWord(token.value)) {
                         throwError(token, Messages.StrictParamName);
                     }
-                } else if (!firstRestricted && isRestricted(param)) {
-                    firstRestricted = token;
-                    message = Messages.StrictParamName;
+                } else if (!firstRestricted) {
+                    if (isRestrictedWord(token.value)) {
+                        firstRestricted = token;
+                        message = Messages.StrictParamName;
+                    } else if (isStrictModeReservedWord(token.value)) {
+                        firstRestricted = token;
+                        message = Messages.StrictReservedWord;
+                    }
                 }
                 params.push(param);
                 if (match(')')) {
