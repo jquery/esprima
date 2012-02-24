@@ -3967,7 +3967,7 @@ parseStatement: true, parseSourceElement: true */
             break;
         }
 
-        if (!result) {
+        if (result === undefined) {
             throw new Error('Unknown expression type: ' + expr.type);
         }
         return result;
@@ -4242,7 +4242,7 @@ parseStatement: true, parseSourceElement: true */
             break;
         }
 
-        if (!result) {
+        if (result === undefined) {
             throw new Error('Unknown statement type: ' + stmt.type);
         }
         return result;

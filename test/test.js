@@ -19164,6 +19164,13 @@ data = {
                     }
                 }
             }
+        },
+
+        '': {
+            from: {
+                type: 'Program',
+                body: []
+            }
         }
 
     },
