@@ -19661,6 +19661,13 @@ data = {
             message: 'Error: Line 1: Delete of an unqualified identifier in strict mode.'
         },
 
+        '(function () { \'use strict\'; with (i); }())': {
+            index: 28,
+            lineNumber: 1,
+            column: 29,
+            message: 'Error: Line 1: Strict mode code may not include a with statement'
+        },
+
         'function hello() {\'use strict\'; ({ i: 42, i: 42 }) }': {
             index: 47,
             lineNumber: 1,
