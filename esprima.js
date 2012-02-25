@@ -1208,21 +1208,6 @@ parseStatement: true, parseSourceElement: true */
         return token.type === Token.Punctuator && token.value === value;
     }
 
-    // Return true if the next token matches one of the the specified punctuators.
-
-    function matchOneOf() {
-        var token = lookahead(), i, il;
-        if (token.type === Token.Punctuator) {
-            il = arguments.length;
-            for (i = 0; i < il; i++) {
-                if (token.value === arguments[i]) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     // Return true if the next token matches the specified keyword
 
     function matchKeyword(keyword) {
@@ -1553,7 +1538,7 @@ parseStatement: true, parseSourceElement: true */
             return expr;
         }
 
-        if (matchOneOf('/', '/=')) {
+        if (match('/') || match('/=')) {
             return createLiteral(scanRegExp());
         }
 
@@ -1692,7 +1677,7 @@ parseStatement: true, parseSourceElement: true */
     function parsePostfixExpression() {
         var expr = parseLeftHandSideExpressionAllowCall();
 
-        if ((matchOneOf('++', '--')) && !peekLineTerminator()) {
+        if ((match('++') || match('--')) && !peekLineTerminator()) {
             // 11.3.1, 11.3.2
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwError({}, Messages.StrictLHSPostfix);
@@ -1713,7 +1698,7 @@ parseStatement: true, parseSourceElement: true */
     function parseUnaryExpression() {
         var token, expr;
 
-        if (matchOneOf('++', '--')) {
+        if (match('++') || match('--')) {
             token = lex();
             expr = parseUnaryExpression();
             // 11.4.4, 11.4.5
@@ -1729,7 +1714,7 @@ parseStatement: true, parseSourceElement: true */
             return expr;
         }
 
-        if (matchOneOf('+', '-', '~', '!')) {
+        if (match('+') || match('-') || match('~') || match('!')) {
             expr = {
                 type: Syntax.UnaryExpression,
                 operator: lex().value,
@@ -1758,7 +1743,7 @@ parseStatement: true, parseSourceElement: true */
     function parseMultiplicativeExpression() {
         var expr = parseUnaryExpression();
 
-        while (matchOneOf('*', '/', '%')) {
+        while (match('*') || match('/') || match('%')) {
             expr = {
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
@@ -1775,7 +1760,7 @@ parseStatement: true, parseSourceElement: true */
     function parseAdditiveExpression() {
         var expr = parseMultiplicativeExpression();
 
-        while (matchOneOf('+', '-')) {
+        while (match('+') || match('-')) {
             expr = {
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
@@ -1792,7 +1777,7 @@ parseStatement: true, parseSourceElement: true */
     function parseShiftExpression() {
         var expr = parseAdditiveExpression();
 
-        while (matchOneOf('<<', '>>', '>>>')) {
+        while (match('<<') || match('>>') || match('>>>')) {
             expr = {
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
@@ -1813,7 +1798,7 @@ parseStatement: true, parseSourceElement: true */
         expr = parseShiftExpression();
         allowIn = previousAllowIn;
 
-        if (matchOneOf('<', '>', '<=', '>=')) {
+        if (match('<') || match('>') || match('<=') || match('>=')) {
             expr = {
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
@@ -1846,7 +1831,7 @@ parseStatement: true, parseSourceElement: true */
     function parseEqualityExpression() {
         var expr = parseRelationalExpression();
 
-        while (matchOneOf('==', '!=', '===', '!==')) {
+        while (match('==') || match('!=') || match('===') || match('!==')) {
             expr = {
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
