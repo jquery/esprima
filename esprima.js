@@ -277,45 +277,21 @@ parseStatement: true, parseSourceElement: true */
     // 7.6.1.1 Keywords
 
     function isKeyword(id) {
-        switch (id) {
-
-        // Keywords.
-        case 'break':
-        case 'case':
-        case 'catch':
-        case 'continue':
-        case 'debugger':
-        case 'default':
-        case 'delete':
-        case 'do':
-        case 'else':
-        case 'finally':
-        case 'for':
-        case 'function':
-        case 'if':
-        case 'in':
-        case 'instanceof':
-        case 'new':
-        case 'return':
-        case 'switch':
-        case 'this':
-        case 'throw':
-        case 'try':
-        case 'typeof':
-        case 'var':
-        case 'void':
-        case 'while':
-        case 'with':
-            return true;
-
-        // Future reserved words.
-        // 'const' is specialized as Keyword in V8.
-        case 'const':
-            return true;
-
-        // For compatiblity to SpiderMonkey and ES.next
-        case 'yield':
-        case 'let':
+        var cc = id.charCodeAt(0), l = id.length;
+        if ((cc === 0x62 && l === 5 && id === 'break') ||
+                (cc === 0x63 && l >= 4 && (id === 'case' || id === 'catch' || id === 'continue' || id === 'const')) ||
+                (cc === 0x64 && l >= 2 && (id === 'default' || id === 'delete' || id === 'do' || id === 'debugger')) ||
+                (cc === 0x65 && l === 4 && id === 'else') ||
+                (cc === 0x66 && l >= 3 && (id === 'for' || id === 'function' || id === 'finally')) ||
+                (cc === 0x69 && l >= 2 && (id === 'if' || id === 'in' || id === 'instanceof')) ||
+                (cc === 0x6C && l === 3 && id === 'let') ||
+                (cc === 0x6E && l === 3 && id === 'new') ||
+                (cc === 0x72 && l === 6 && id === 'return') ||
+                (cc === 0x73 && l === 6 && id === 'switch') ||
+                (cc === 0x74 && l >= 3 && (id === 'this' || id === 'try' || id === 'typeof' || id === 'throw')) ||
+                (cc === 0x76 && l >= 3 && (id === 'var' || id === 'void')) ||
+                (cc === 0x77 && l >= 4 && (id === 'while' || id === 'with')) ||
+                (cc === 0x79 && l === 5 && id === 'yield')) {
             return true;
         }
 
