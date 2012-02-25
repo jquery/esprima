@@ -130,6 +130,7 @@ parseStatement: true, parseSourceElement: true */
         InvalidRegExp: 'Invalid regular expression',
         UnterminatedRegExp:  'Invalid regular expression: missing /',
         NoCatchOrFinally:  'Missing catch or finally after try',
+        StrictModeWith:  'Strict mode code may not include a with statement',
         StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',
         StrictVarName:  'Variable name may not be eval or arguments in strict mode',
         StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
@@ -2446,6 +2447,10 @@ parseStatement: true, parseSourceElement: true */
 
     function parseWithStatement() {
         var object, body;
+
+        if (strict) {
+            throwError({}, Messages.StrictModeWith);
+        }
 
         expectKeyword('with');
 
