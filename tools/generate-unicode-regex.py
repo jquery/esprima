@@ -46,6 +46,8 @@ class RegExpGenerator(object):
       else:
         if start == end:
           buf.append("\\u%04X" % start)
+        elif end == start + 1:
+          buf.append("\\u%04X\\u%04X" % (start, end))
         else:
           buf.append("\\u%04X-\\u%04X" % (start, end))
         start = code
@@ -150,8 +152,8 @@ def analyze(source):
 
 def main(source):
   generator = analyze(source)
-  print '/' + generator.generate_non_ascii_identifier_start() + '/'
-  print '/' + generator.generate_non_ascii_identifier_part() + '/'
+  print generator.generate_non_ascii_identifier_start()
+  print generator.generate_non_ascii_identifier_part()
 
 if __name__ == '__main__':
   main(sys.argv[1])
