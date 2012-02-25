@@ -226,10 +226,11 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function isIdentifierPart(ch) {
-        return (ch === '$') || (ch === '_') || (ch === '\\') ||
-            (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
-            ((ch >= '0') && (ch <= '9')) ||
-            ((ch.charCodeAt(0) >= 0x80) && Regex.NonAsciiIdentifierPart.test(ch));
+        var cc = ch.charCodeAt(0);
+        return (cc >= 0x61 && cc <= 0x7A) || (cc >= 0x41 && cc <= 0x5A) || // a-z A-Z
+            (cc <= 0x39 && cc >= 0x30) || // 9-0
+            (cc === 0x24) || (cc === 0x5F) || (cc === 0x5C) || // $ _ \
+            (cc >= 0x80 && Regex.NonAsciiIdentifierPart.test(ch));
     }
 
     // 7.6.1.2 Future Reserved Words
