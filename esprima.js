@@ -191,7 +191,12 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function isDecimalDigit(ch) {
-        return '0123456789'.indexOf(ch) >= 0;
+        var cc;
+        if (typeof ch === 'string') {
+            cc = ch.charCodeAt(0);
+            return cc <= 0x39 && cc >= 0x30;
+        }
+        return false;
     }
 
     function isHexDigit(ch) {
