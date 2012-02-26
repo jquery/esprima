@@ -6318,6 +6318,78 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 7 }
             }
+        },
+
+        'x is y': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: 'is',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 0],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y',
+                    range: [5, 5],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 6 }
+                    }
+                },
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 6 }
+                }
+            },
+            range: [0, 5],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 6 }
+            }
+        },
+
+        'x isnt y': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: 'isnt',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 0],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'y',
+                    range: [7, 7],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 8 }
+                    }
+                },
+                range: [0, 7],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 8 }
+                }
+            },
+            range: [0, 7],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 8 }
+            }
         }
 
     },
@@ -19370,6 +19442,20 @@ data = {
             lineNumber: 1,
             column: 6,
             message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'x \n is y': {
+            index: 4,
+            lineNumber: 2,
+            column: 2,
+            message: 'Error: Line 2: Unexpected token is'
+        },
+
+        'x \n isnt y': {
+            index: 4,
+            lineNumber: 2,
+            column: 2,
+            message: 'Error: Line 2: Unexpected token isnt'
         },
 
         '\n\n\n{': {
