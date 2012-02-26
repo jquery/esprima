@@ -296,6 +296,8 @@ parseStatement: true, parseSourceElement: true */
         case 'if':
         case 'in':
         case 'instanceof':
+        case 'is':
+        case 'isnt':
         case 'new':
         case 'return':
         case 'switch':
@@ -1862,7 +1864,7 @@ parseStatement: true, parseSourceElement: true */
     function parseEqualityExpression() {
         var expr = parseRelationalExpression();
 
-        while (match('==') || match('!=') || match('===') || match('!==')) {
+        while ((!peekLineTerminator() && (matchKeyword('is') || matchKeyword('isnt'))) || match('==') || match('!=') || match('===') || match('!==')) {
             expr = {
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
@@ -3709,6 +3711,8 @@ parseStatement: true, parseSourceElement: true */
         '!=': Precedence.Equality,
         '===': Precedence.Equality,
         '!==': Precedence.Equality,
+        'is': Precedence.Equality,
+        'isnt': Precedence.Equality,
         '<': Precedence.Relational,
         '>': Precedence.Relational,
         '<=': Precedence.Relational,
