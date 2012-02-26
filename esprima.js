@@ -361,6 +361,9 @@ parseStatement: true, parseSourceElement: true */
                 }
             } else if (blockComment) {
                 nextChar();
+                if (index >= length) {
+                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                }
                 if (ch === '*') {
                     ch = source[index];
                     if (ch === '/') {
@@ -384,6 +387,9 @@ parseStatement: true, parseSourceElement: true */
                     nextChar();
                     nextChar();
                     blockComment = true;
+                    if (index >= length) {
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    }
                 } else {
                     break;
                 }
@@ -3013,6 +3019,9 @@ parseStatement: true, parseSourceElement: true */
             } else if (blockComment) {
                 ch = nextChar();
                 comment += ch;
+                if (index >= length) {
+                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                }
                 if (ch === '*') {
                     ch = source[index];
                     if (ch === '/') {
@@ -3041,6 +3050,9 @@ parseStatement: true, parseSourceElement: true */
                     nextChar();
                     nextChar();
                     blockComment = true;
+                    if (index >= length) {
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    }
                 } else {
                     break;
                 }

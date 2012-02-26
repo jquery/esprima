@@ -19527,6 +19527,48 @@ data = {
             message: 'Error: Line 1: Unexpected token const'
         },
 
+        '/*': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '/*\n\n\n': {
+            index: 5,
+            lineNumber: 3,
+            column: 2,
+            message: 'Error: Line 3: Unexpected token ILLEGAL'
+        },
+
+        '/**': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '/*\n\n*': {
+            index: 5,
+            lineNumber: 3,
+            column: 2,
+            message: 'Error: Line 3: Unexpected token ILLEGAL'
+        },
+
+        '/*hello': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '/*hello  *': {
+            index: 10,
+            lineNumber: 1,
+            column: 11,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
         '\n]': {
             index: 1,
             lineNumber: 2,
