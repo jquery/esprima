@@ -94,6 +94,7 @@ parseStatement: true, parseSourceElement: true */
         LabeledStatement: 'LabeledStatement',
         LogicalExpression: 'LogicalExpression',
         MemberExpression: 'MemberExpression',
+        ModuleDeclaration: 'ModuleDeclaration',
         NewExpression: 'NewExpression',
         ObjectExpression: 'ObjectExpression',
         Program: 'Program',
@@ -320,6 +321,11 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (strict && isStrictModeReservedWord(id)) {
+            return true;
+        }
+
+        // Harmony
+        if (id === 'module') {
             return true;
         }
 
@@ -2143,6 +2149,22 @@ parseStatement: true, parseSourceElement: true */
         };
     }
 
+    // http://wiki.ecmascript.org/doku.php?id=harmony:modules
+
+    function parseModuleStatement() {
+        var id;
+
+        expectKeyword('module');
+
+        id = parseVariableIdentifier();
+
+        return {
+            type: Syntax.ModuleDeclaration,
+            id: id,
+            body: parseBlock()
+        };
+    }
+
     // 12.3 Empty Statement
 
     function parseEmptyStatement() {
@@ -2667,6 +2689,8 @@ parseStatement: true, parseSourceElement: true */
                 return parseFunctionDeclaration();
             case 'if':
                 return parseIfStatement();
+            case 'module':
+                return parseModuleStatement();
             case 'return':
                 return parseReturnStatement();
             case 'switch':

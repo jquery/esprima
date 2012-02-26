@@ -13589,6 +13589,89 @@ data = {
 
     },
 
+    'Harmony Module': {
+
+        'module Universe {}': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'Universe',
+                range: [7, 14],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [16, 17],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
+        'module Universe { module MilkyWay {} }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'Universe',
+                range: [7, 14],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ModuleDeclaration',
+                    id: {
+                        type: 'Identifier',
+                        name: 'MilkyWay',
+                        range: [25, 32],
+                        loc: {
+                            start: { line: 1, column: 25 },
+                            end: { line: 1, column: 33 }
+                        }
+                    },
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [34, 35],
+                        loc: {
+                            start: { line: 1, column: 34 },
+                            end: { line: 1, column: 36 }
+                        }
+                    },
+                    range: [18, 35],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 36 }
+                    }
+                }],
+                range: [16, 37],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 38 }
+                }
+            },
+            range: [0, 37],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            }
+        }
+
+    },
+
     'Trace Function Entrance': {
 
         'function hello() {}': {
