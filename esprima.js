@@ -329,10 +329,9 @@ parseStatement: true, parseSourceElement: true */
     // Return the next character and move forward.
 
     function nextChar() {
-        var ch = '\x00',
-            idx = index;
-        if (idx < length) {
-            ch = source[idx];
+        var ch;
+        if (index < length) {
+            ch = source[index];
             index += 1;
         }
         return ch;
