@@ -349,29 +349,29 @@ parseStatement: true, parseSourceElement: true */
             ch = source[index];
 
             if (lineComment) {
-                nextChar();
+                index += 1;
                 if (isLineTerminator(ch)) {
                     lineComment = false;
                     if (ch ===  '\r' && source[index] === '\n') {
-                        nextChar();
+                        index += 1;
                     }
                     lineNumber += 1;
                     lineStart = index;
                 }
             } else if (blockComment) {
-                nextChar();
+                index += 1;
                 if (index >= length) {
                     throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                 }
                 if (ch === '*') {
                     ch = source[index];
                     if (ch === '/') {
-                        nextChar();
+                        index += 1;
                         blockComment = false;
                     }
                 } else if (isLineTerminator(ch)) {
                     if (ch ===  '\r' && source[index] === '\n') {
-                        nextChar();
+                        index += 1;
                     }
                     lineNumber += 1;
                     lineStart = index;
@@ -379,12 +379,10 @@ parseStatement: true, parseSourceElement: true */
             } else if (ch === '/') {
                 ch = source[index + 1];
                 if (ch === '/') {
-                    nextChar();
-                    nextChar();
+                    index += 2;
                     lineComment = true;
                 } else if (ch === '*') {
-                    nextChar();
-                    nextChar();
+                    index += 2;
                     blockComment = true;
                     if (index >= length) {
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
@@ -393,11 +391,11 @@ parseStatement: true, parseSourceElement: true */
                     break;
                 }
             } else if (isWhiteSpace(ch)) {
-                nextChar();
+                index += 1;
             } else if (isLineTerminator(ch)) {
-                nextChar();
+                index += 1;
                 if (ch ===  '\r' && source[index] === '\n') {
-                    nextChar();
+                    index += 1;
                 }
                 lineNumber += 1;
                 lineStart = index;
@@ -432,11 +430,11 @@ parseStatement: true, parseSourceElement: true */
 
         start = index;
         if (ch === '\\') {
-            nextChar();
+            index += 1;
             if (source[index] !== 'u') {
                 return;
             }
-            nextChar();
+            index += 1;
             restore = index;
             ch = scanHexEscape('u');
             if (ch) {
@@ -458,11 +456,11 @@ parseStatement: true, parseSourceElement: true */
                 break;
             }
             if (ch === '\\') {
-                nextChar();
+                index += 1;
                 if (source[index] !== 'u') {
                     return;
                 }
-                nextChar();
+                index += 1;
                 restore = index;
                 ch = scanHexEscape('u');
                 if (ch) {
@@ -546,7 +544,7 @@ parseStatement: true, parseSourceElement: true */
         // Check for most common single-character punctuators.
 
         if (ch1 === ';' || ch1 === '{' || ch1 === '}') {
-            nextChar();
+            index += 1;
             return {
                 type: Token.Punctuator,
                 value: ch1,
@@ -557,7 +555,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (ch1 === ',' || ch1 === '(' || ch1 === ')') {
-            nextChar();
+            index += 1;
             return {
                 type: Token.Punctuator,
                 value: ch1,
@@ -590,10 +588,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (ch1 === '>' && ch2 === '>' && ch3 === '>') {
             if (ch4 === '=') {
-                nextChar();
-                nextChar();
-                nextChar();
-                nextChar();
+                index += 4;
                 return {
                     type: Token.Punctuator,
                     value: '>>>=',
@@ -607,9 +602,7 @@ parseStatement: true, parseSourceElement: true */
         // 3-character punctuators: === !== >>> <<= >>=
 
         if (ch1 === '=' && ch2 === '=' && ch3 === '=') {
-            nextChar();
-            nextChar();
-            nextChar();
+            index += 3;
             return {
                 type: Token.Punctuator,
                 value: '===',
@@ -620,9 +613,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (ch1 === '!' && ch2 === '=' && ch3 === '=') {
-            nextChar();
-            nextChar();
-            nextChar();
+            index += 3;
             return {
                 type: Token.Punctuator,
                 value: '!==',
@@ -633,9 +624,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (ch1 === '>' && ch2 === '>' && ch3 === '>') {
-            nextChar();
-            nextChar();
-            nextChar();
+            index += 3;
             return {
                 type: Token.Punctuator,
                 value: '>>>',
@@ -646,9 +635,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (ch1 === '<' && ch2 === '<' && ch3 === '=') {
-            nextChar();
-            nextChar();
-            nextChar();
+            index += 3;
             return {
                 type: Token.Punctuator,
                 value: '<<=',
@@ -659,9 +646,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (ch1 === '>' && ch2 === '>' && ch3 === '=') {
-            nextChar();
-            nextChar();
-            nextChar();
+            index += 3;
             return {
                 type: Token.Punctuator,
                 value: '>>=',
@@ -676,8 +661,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (ch2 === '=') {
             if ('<>=!+-*%&|^/'.indexOf(ch1) >= 0) {
-                nextChar();
-                nextChar();
+                index += 2;
                 return {
                     type: Token.Punctuator,
                     value: ch1 + ch2,
@@ -690,8 +674,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (ch1 === ch2 && ('+-<>&|'.indexOf(ch1) >= 0)) {
             if ('+-<>&|'.indexOf(ch2) >= 0) {
-                nextChar();
-                nextChar();
+                index += 2;
                 return {
                     type: Token.Punctuator,
                     value: ch1 + ch2,
@@ -861,7 +844,7 @@ parseStatement: true, parseSourceElement: true */
             return;
         }
         start = index;
-        nextChar();
+        index += 1;
 
         while (index < length) {
             ch = nextChar();
@@ -933,7 +916,7 @@ parseStatement: true, parseSourceElement: true */
                 } else {
                     lineNumber += 1;
                     if (ch ===  '\r' && source[index] === '\n') {
-                        nextChar();
+                        index += 1;
                     }
                 }
             } else if (isLineTerminator(ch)) {
@@ -1007,11 +990,11 @@ parseStatement: true, parseSourceElement: true */
                 break;
             }
 
-            nextChar();
+            index += 1;
             if (ch === '\\' && index < length) {
                 ch = source[index];
                 if (ch === 'u') {
-                    nextChar();
+                    index += 1;
                     restore = index;
                     ch = scanHexEscape('u');
                     if (ch) {
@@ -3007,7 +2990,7 @@ parseStatement: true, parseSourceElement: true */
                     lineComment = false;
                     addComment(start, index - 1, 'Line', comment);
                     if (ch ===  '\r' && source[index] === '\n') {
-                        nextChar();
+                        index += 1;
                     }
                     lineNumber += 1;
                     lineStart = index + 1;
@@ -3026,13 +3009,13 @@ parseStatement: true, parseSourceElement: true */
                     if (ch === '/') {
                         comment = comment.substr(0, comment.length - 1);
                         blockComment = false;
-                        nextChar();
+                        index += 1;
                         addComment(start, index - 1, 'Block', comment);
                         comment = '';
                     }
                 } else if (isLineTerminator(ch)) {
                     if (ch ===  '\r' && source[index] === '\n') {
-                        nextChar();
+                        index += 1;
                     }
                     lineNumber += 1;
                     lineStart = index + 1;
@@ -3041,13 +3024,11 @@ parseStatement: true, parseSourceElement: true */
                 ch = source[index + 1];
                 if (ch === '/') {
                     start = index;
-                    nextChar();
-                    nextChar();
+                    index += 2;
                     lineComment = true;
                 } else if (ch === '*') {
                     start = index;
-                    nextChar();
-                    nextChar();
+                    index += 2;
                     blockComment = true;
                     if (index >= length) {
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
@@ -3056,11 +3037,11 @@ parseStatement: true, parseSourceElement: true */
                     break;
                 }
             } else if (isWhiteSpace(ch)) {
-                nextChar();
+                index += 1;
             } else if (isLineTerminator(ch)) {
-                nextChar();
+                index += 1;
                 if (ch ===  '\r' && source[index] === '\n') {
-                    nextChar();
+                    index += 1;
                 }
                 lineNumber += 1;
                 lineStart = index + 1;
