@@ -27,7 +27,7 @@
 function sourceRewrite() {
     'use strict';
 
-    var code, syntax;
+    var code, syntax, indent;
 
     function setText(id, str) {
         var el = document.getElementById(id);
@@ -47,9 +47,18 @@ function sourceRewrite() {
         code = document.getElementById('code').value;
     }
 
+    indent = '';
+    if (document.getElementById('onetab').checked) {
+        indent = '\t';
+    } else if (document.getElementById('twospaces').checked) {
+        indent = '  ';
+    } else if (document.getElementById('fourspaces').checked) {
+        indent = '    ';
+    }
+
     try {
         syntax = window.esprima.parse(code, { raw: true });
-        code = window.esprima.generate(syntax);
+        code = window.esprima.generate(syntax, { indent: indent });
     } catch (e) {
         setText('error', e.toString());
     } finally {
