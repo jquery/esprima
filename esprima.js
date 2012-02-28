@@ -296,8 +296,6 @@ parseStatement: true, parseSourceElement: true */
         case 'if':
         case 'in':
         case 'instanceof':
-        case 'is':
-        case 'isnt':
         case 'new':
         case 'return':
         case 'switch':
@@ -1247,6 +1245,14 @@ parseStatement: true, parseSourceElement: true */
         return token.type === Token.Keyword && token.value === keyword;
     }
 
+
+    // Return true if the next token matches the specified contextual keyword
+
+    function matchContextualKeyword(keyword) {
+        var token = lookahead();
+        return token.type === Token.Identifier && token.value === keyword;
+    }
+
     // Return true if the next token is an assignment operator
 
     function matchAssign() {
@@ -1863,7 +1869,7 @@ parseStatement: true, parseSourceElement: true */
     function parseEqualityExpression() {
         var expr = parseRelationalExpression();
 
-        while ((!peekLineTerminator() && (matchKeyword('is') || matchKeyword('isnt'))) || match('==') || match('!=') || match('===') || match('!==')) {
+        while ((!peekLineTerminator() && (matchContextualKeyword('is') || matchContextualKeyword('isnt'))) || match('==') || match('!=') || match('===') || match('!==')) {
             expr = {
                 type: Syntax.BinaryExpression,
                 operator: lex().value,
