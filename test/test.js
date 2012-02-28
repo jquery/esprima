@@ -16524,6 +16524,98 @@ data = {
                     name: 'toString'
                 }
             }
+        },
+
+        '-(-1);': {
+            from: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UnaryExpression',
+                    operator: '-',
+                    argument: {
+                        type: 'UnaryExpression',
+                        operator: '-',
+                        argument: {
+                            type: 'Literal',
+                            value: 1
+                        }
+                    }
+                }
+            }
+        },
+
+        '+-+-1;': {
+            from: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UnaryExpression',
+                    operator: '+',
+                    argument: {
+                        type: 'UnaryExpression',
+                        operator: '-',
+                        argument: {
+                            type: 'UnaryExpression',
+                            operator: '+',
+                            argument: {
+                                type: 'UnaryExpression',
+                                operator: '-',
+                                argument: {
+                                    type: 'Literal',
+                                    value: 1
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        '1 + +(+1);': {
+            from: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'BinaryExpression',
+                    operator: '+',
+                    left: {
+                        type: 'Literal',
+                        value: 1
+                    },
+                    right: {
+                        type: 'UnaryExpression',
+                        operator: '+',
+                        argument: {
+                            type: 'UnaryExpression',
+                            operator: '+',
+                            argument: {
+                                type: 'Literal',
+                                value: 1
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        'typeof typeof -1;': {
+            from: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UnaryExpression',
+                    operator: 'typeof',
+                    argument: {
+                        type: 'UnaryExpression',
+                        operator: 'typeof',
+                        argument: {
+                            type: 'UnaryExpression',
+                            operator: '-',
+                            argument: {
+                                type: 'Literal',
+                                value: 1
+                            }
+                        }
+                    }
+                }
+            }
         }
 
     },

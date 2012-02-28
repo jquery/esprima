@@ -3838,7 +3838,13 @@ parseStatement: true, parseSourceElement: true */
                 result += ' ';
             }
             result = parenthesize(
-                result + generateExpression(expr.argument, Precedence.Unary),
+                result + generateExpression(expr.argument, Precedence.Unary +
+                    (
+                        expr.argument.type === Syntax.UnaryExpression &&
+                        expr.operator.length < 3 &&
+                        expr.argument.operator === expr.operator ? 1 : 0
+                    )
+                    ),
                 Precedence.Unary,
                 precedence
             );
