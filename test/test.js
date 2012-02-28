@@ -14375,6 +14375,114 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 38 }
             }
+        },
+
+        'module MilkyWay at "Universe/MilkyWay"': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'MilkyWay',
+                range: [7, 14],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            at: {
+                type: 'Literal',
+                value: 'Universe/MilkyWay',
+                raw: '"Universe/MilkyWay"',
+                range: [19, 37],
+                loc: {
+                    start: { line: 1, column: 19 },
+                    end: { line: 1, column: 38 }
+                }
+            },
+            range: [0, 37],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            }
+        },
+
+        'module System is SolarSystem from Universe.MilkyWay': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'System',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            is: {
+                type: 'Identifier',
+                name: 'SolarSystem',
+                range: [17, 27],
+                loc: {
+                    start: { line: 1, column: 17 },
+                    end: { line: 1, column: 28 }
+                }
+            },
+            from: {
+                type: 'Path',
+                body: [{
+                    type: 'Identifier',
+                    name: 'Universe',
+                    range: [34, 41],
+                    loc: {
+                        start: { line: 1, column: 34 },
+                        end: { line: 1, column: 42 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 'MilkyWay',
+                    range: [43, 50],
+                    loc: {
+                        start: { line: 1, column: 43 },
+                        end: { line: 1, column: 51 }
+                    }
+                }],
+                range: [34, 50],
+                loc: {
+                    start: { line: 1, column: 34 },
+                    end: { line: 1, column: 51 }
+                }
+            },
+            range: [0, 50],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 51 }
+            }
+        },
+
+        'module System is SolarSystem': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'System',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            is: {
+                type: 'Identifier',
+                name: 'SolarSystem',
+                range: [17, 27],
+                loc: {
+                    start: { line: 1, column: 17 },
+                    end: { line: 1, column: 28 }
+                }
+            },
+            from: null,
+            range: [0, 27],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
+            }
         }
 
     },
@@ -14486,20 +14594,20 @@ data = {
 
     'Generate Expression': {
         'this': {
-            from: {
+            generateFrom: {
                 type: 'ThisExpression'
             }
         },
 
         '42': {
-            from: {
+            generateFrom: {
                 type: 'Literal',
                 value: 42
             }
         },
 
         '(1 + 2) * 3': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '*',
                 left: {
@@ -14522,7 +14630,7 @@ data = {
         },
 
         'x = []': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14537,7 +14645,7 @@ data = {
         },
 
         'x = [\n    42\n]': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14555,7 +14663,7 @@ data = {
         },
 
         'x = [\n    ,\n    ,\n    42\n]': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14577,7 +14685,7 @@ data = {
         },
 
         'x = [\n    1,\n    2,\n    3\n]': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14601,7 +14709,7 @@ data = {
         },
 
         'x = [\n    1,\n    2,\n    ,\n    3\n]': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14625,7 +14733,7 @@ data = {
         },
 
         'x = [\n    ,\n]': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14640,7 +14748,7 @@ data = {
         },
 
         'x = [\n    20,\n    ,\n]': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14658,7 +14766,7 @@ data = {
         },
 
         '日本語 = []': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14673,7 +14781,7 @@ data = {
         },
 
         'T\u203F = []': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14688,7 +14796,7 @@ data = {
         },
 
         'x = {}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14703,7 +14811,7 @@ data = {
         },
 
         'x = {\n    answer: 42\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14729,7 +14837,7 @@ data = {
         },
 
         'x = {\n    if: 42\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14755,7 +14863,7 @@ data = {
         },
 
         'x = {\n    true: 42\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14781,7 +14889,7 @@ data = {
         },
 
         'x = {\n    false: 42\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14807,7 +14915,7 @@ data = {
         },
 
         'x = {\n    null: 42\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14833,7 +14941,7 @@ data = {
         },
 
         'x = {\n    \'answer\': 42\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14859,7 +14967,7 @@ data = {
         },
 
         'x = {\n    get width() {\n        return m_width;\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14897,7 +15005,7 @@ data = {
         },
 
         'x = {\n    get undef() {\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14928,7 +15036,7 @@ data = {
         },
 
         'x = {\n    get if() {\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14959,7 +15067,7 @@ data = {
         },
 
         'x = {\n    get true() {\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -14990,7 +15098,7 @@ data = {
         },
 
         'x = {\n    get false() {\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -15021,7 +15129,7 @@ data = {
         },
 
         'x = {\n    get null() {\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -15052,7 +15160,7 @@ data = {
         },
 
         'x = {\n    get "undef"() {\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -15084,7 +15192,7 @@ data = {
         },
 
         'x = {\n    get 10() {\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -15116,7 +15224,7 @@ data = {
         },
 
         'x = {\n    set width(w) {\n        m_width = w;\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -15164,7 +15272,7 @@ data = {
         },
 
         'x = {\n    set if(w) {\n        m_if = w;\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -15212,7 +15320,7 @@ data = {
         },
 
         'x = {\n    set true(w) {\n        m_true = w;\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -15260,7 +15368,7 @@ data = {
         },
 
         'x = {\n    set false(w) {\n        m_false = w;\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -15308,7 +15416,7 @@ data = {
         },
 
         'x = {\n    set null(w) {\n        m_null = w;\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -15356,7 +15464,7 @@ data = {
         },
 
         'x = {\n    set "null"(w) {\n        m_null = w;\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -15405,7 +15513,7 @@ data = {
         },
 
         'x = {\n    set 10(w) {\n        m_null = w;\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -15454,7 +15562,7 @@ data = {
         },
 
         'x = {\n    get: 42\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -15480,7 +15588,7 @@ data = {
         },
 
         'x = {\n    set: 43\n}': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -15506,56 +15614,56 @@ data = {
         },
 
         '0': {
-            from: {
+            generateFrom: {
                 type: 'Literal',
                 value: 0
             }
         },
 
         '0.14': {
-            from: {
+            generateFrom: {
                 type: 'Literal',
                 value: 0.14
             }
         },
 
         '\'Hello\'': {
-            from: {
+            generateFrom: {
                 type: 'Literal',
                 value: 'Hello'
             }
         },
 
         '\'\\n\\r\\b\\f\\\\\\\'"\\u0000\'': {
-            from: {
+            generateFrom: {
                 type: 'Literal',
                 value: '\n\r\b\f\\\'"\x00'
             }
         },
 
         '\'0\'': {
-            from: {
+            generateFrom: {
                 type: 'Literal',
                 value: '0'
             }
         },
 
         '\'Hello\\nworld\'': {
-            from: {
+            generateFrom: {
                 type: 'Literal',
                 value: 'Hello\nworld'
             }
         },
 
         '/a/': {
-            from: {
+            generateFrom: {
                 type: 'Literal',
                 value: /a/
             }
         },
 
         'new Button()': {
-            from: {
+            generateFrom: {
                 type: 'NewExpression',
                 callee: {
                     type: 'Identifier',
@@ -15566,7 +15674,7 @@ data = {
         },
 
         'new new foo(0)()': {
-            from: {
+            generateFrom: {
                 type: 'NewExpression',
                 callee: {
                     type: 'NewExpression',
@@ -15584,7 +15692,7 @@ data = {
         },
 
         'new new foo()(0)': {
-            from: {
+            generateFrom: {
                 type: 'NewExpression',
                 callee: {
                     type: 'NewExpression',
@@ -15602,7 +15710,7 @@ data = {
         },
 
         'new foo().bar()': {
-            from: {
+            generateFrom: {
                 type: 'CallExpression',
                 callee: {
                     type: 'MemberExpression',
@@ -15625,7 +15733,7 @@ data = {
         },
 
         'new foo.bar()': {
-            from: {
+            generateFrom: {
                 type: 'NewExpression',
                 callee: {
                     type: 'MemberExpression',
@@ -15644,7 +15752,7 @@ data = {
         },
 
         'foo(bar, baz)': {
-            from: {
+            generateFrom: {
                 type: 'CallExpression',
                 callee: {
                     type: 'Identifier',
@@ -15661,7 +15769,7 @@ data = {
         },
 
         'universe.milkyway': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -15676,7 +15784,7 @@ data = {
         },
 
         'universe.milkyway.solarsystem': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -15699,7 +15807,7 @@ data = {
         },
 
         'universe.milkyway.solarsystem.Earth': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -15730,7 +15838,7 @@ data = {
         },
 
         'universe[galaxyName, otherUselessName]': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: true,
                 object: {
@@ -15751,7 +15859,7 @@ data = {
         },
 
         'universe[galaxyName]': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: true,
                 object: {
@@ -15766,7 +15874,7 @@ data = {
         },
 
         'universe[42].galaxies': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -15789,7 +15897,7 @@ data = {
         },
 
         'universe(42).galaxies': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -15811,7 +15919,7 @@ data = {
         },
 
         'universe(42).galaxies(14, 3, 77).milkyway': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -15854,7 +15962,7 @@ data = {
         },
 
         'earth.asia.Indonesia.prepareForElection(2014)': {
-            from: {
+            generateFrom: {
                 type: 'CallExpression',
                 callee: {
                     type: 'MemberExpression',
@@ -15892,7 +16000,7 @@ data = {
         },
 
         'universe.if': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -15907,7 +16015,7 @@ data = {
         },
 
         'universe.true': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -15922,7 +16030,7 @@ data = {
         },
 
         'universe.false': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -15937,7 +16045,7 @@ data = {
         },
 
         'universe.null': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -15952,7 +16060,7 @@ data = {
         },
 
         '\'string\'.toString': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -15967,7 +16075,7 @@ data = {
         },
 
         '42..toString': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -15982,7 +16090,7 @@ data = {
         },
 
         '1e+1000.toString': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -15997,7 +16105,7 @@ data = {
         },
 
         '1e+100.toString': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -16012,7 +16120,7 @@ data = {
         },
 
         'x++': {
-            from: {
+            generateFrom: {
                 type: 'UpdateExpression',
                 operator: '++',
                 argument: {
@@ -16024,7 +16132,7 @@ data = {
         },
 
         'x--': {
-            from: {
+            generateFrom: {
                 type: 'UpdateExpression',
                 operator: '--',
                 argument: {
@@ -16036,7 +16144,7 @@ data = {
         },
 
         '++x': {
-            from: {
+            generateFrom: {
                 type: 'UpdateExpression',
                 operator: '++',
                 argument: {
@@ -16048,7 +16156,7 @@ data = {
         },
 
         '--x': {
-            from: {
+            generateFrom: {
                 type: 'UpdateExpression',
                 operator: '--',
                 argument: {
@@ -16060,7 +16168,7 @@ data = {
         },
 
         '+x': {
-            from: {
+            generateFrom: {
                 type: 'UnaryExpression',
                 operator: '+',
                 argument: {
@@ -16071,7 +16179,7 @@ data = {
         },
 
         '-x': {
-            from: {
+            generateFrom: {
                 type: 'UnaryExpression',
                 operator: '-',
                 argument: {
@@ -16082,7 +16190,7 @@ data = {
         },
 
         '~x': {
-            from: {
+            generateFrom: {
                 type: 'UnaryExpression',
                 operator: '~',
                 argument: {
@@ -16093,7 +16201,7 @@ data = {
         },
 
         '!x': {
-            from: {
+            generateFrom: {
                 type: 'UnaryExpression',
                 operator: '!',
                 argument: {
@@ -16104,7 +16212,7 @@ data = {
         },
 
         'void x': {
-            from: {
+            generateFrom: {
                 type: 'UnaryExpression',
                 operator: 'void',
                 argument: {
@@ -16115,7 +16223,7 @@ data = {
         },
 
         'delete x': {
-            from: {
+            generateFrom: {
                 type: 'UnaryExpression',
                 operator: 'delete',
                 argument: {
@@ -16126,7 +16234,7 @@ data = {
         },
 
         'typeof x': {
-            from: {
+            generateFrom: {
                 type: 'UnaryExpression',
                 operator: 'typeof',
                 argument: {
@@ -16137,7 +16245,7 @@ data = {
         },
 
         'x * y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '*',
                 left: {
@@ -16152,7 +16260,7 @@ data = {
         },
 
         'x / y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '/',
                 left: {
@@ -16167,7 +16275,7 @@ data = {
         },
 
         'x % y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '%',
                 left: {
@@ -16182,7 +16290,7 @@ data = {
         },
 
         'x + y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '+',
                 left: {
@@ -16197,7 +16305,7 @@ data = {
         },
 
         'x - y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '-',
                 left: {
@@ -16212,7 +16320,7 @@ data = {
         },
 
         'x << y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '<<',
                 left: {
@@ -16227,7 +16335,7 @@ data = {
         },
 
         'x >> y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '>>',
                 left: {
@@ -16242,7 +16350,7 @@ data = {
         },
 
         'x >>> y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '>>>',
                 left: {
@@ -16257,7 +16365,7 @@ data = {
         },
 
         'x < y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '<',
                 left: {
@@ -16272,7 +16380,7 @@ data = {
         },
 
         'x > y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '>',
                 left: {
@@ -16287,7 +16395,7 @@ data = {
         },
 
         'x <= y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '<=',
                 left: {
@@ -16302,7 +16410,7 @@ data = {
         },
 
         'x >= y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '>=',
                 left: {
@@ -16317,7 +16425,7 @@ data = {
         },
 
         '(x in y)': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: 'in',
                 left: {
@@ -16332,7 +16440,7 @@ data = {
         },
 
         'x instanceof y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: 'instanceof',
                 left: {
@@ -16347,7 +16455,7 @@ data = {
         },
 
         'x == y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '==',
                 left: {
@@ -16362,7 +16470,7 @@ data = {
         },
 
         'x != y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '!=',
                 left: {
@@ -16377,7 +16485,7 @@ data = {
         },
 
         'x === y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '===',
                 left: {
@@ -16392,7 +16500,7 @@ data = {
         },
 
         'x !== y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '!==',
                 left: {
@@ -16407,7 +16515,7 @@ data = {
         },
 
         'x & y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '&',
                 left: {
@@ -16422,7 +16530,7 @@ data = {
         },
 
         'x ^ y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '^',
                 left: {
@@ -16437,7 +16545,7 @@ data = {
         },
 
         'x | y': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '|',
                 left: {
@@ -16452,7 +16560,7 @@ data = {
         },
 
         'x + y + z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '+',
                 left: {
@@ -16475,7 +16583,7 @@ data = {
         },
 
         'x - y + z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '+',
                 left: {
@@ -16498,7 +16606,7 @@ data = {
         },
 
         'x + y - z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '-',
                 left: {
@@ -16521,7 +16629,7 @@ data = {
         },
 
         'x - y - z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '-',
                 left: {
@@ -16544,7 +16652,7 @@ data = {
         },
 
         'x + y * z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '+',
                 left: {
@@ -16567,7 +16675,7 @@ data = {
         },
 
         'x + y / z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '+',
                 left: {
@@ -16590,7 +16698,7 @@ data = {
         },
 
         'x - y % z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '-',
                 left: {
@@ -16613,7 +16721,7 @@ data = {
         },
 
         'x * y * z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '*',
                 left: {
@@ -16636,7 +16744,7 @@ data = {
         },
 
         'x * y / z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '/',
                 left: {
@@ -16659,7 +16767,7 @@ data = {
         },
 
         'x * y % z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '%',
                 left: {
@@ -16682,7 +16790,7 @@ data = {
         },
 
         'x % y * z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '*',
                 left: {
@@ -16706,7 +16814,7 @@ data = {
 
         'x << y << z': {
             type: 'ExpressionStatement',
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '<<',
                 left: {
@@ -16729,7 +16837,7 @@ data = {
         },
 
         'x | y | z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '|',
                 left: {
@@ -16752,7 +16860,7 @@ data = {
         },
 
         'x & y & z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '&',
                 left: {
@@ -16775,7 +16883,7 @@ data = {
         },
 
         'x ^ y ^ z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '^',
                 left: {
@@ -16798,7 +16906,7 @@ data = {
         },
 
         'x & y | z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '|',
                 left: {
@@ -16821,7 +16929,7 @@ data = {
         },
 
         'x | y ^ z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '^',
                 left: {
@@ -16844,7 +16952,7 @@ data = {
         },
 
         'x | y & z': {
-            from: {
+            generateFrom: {
                 type: 'BinaryExpression',
                 operator: '|',
                 left: {
@@ -16867,7 +16975,7 @@ data = {
         },
 
         'x || y': {
-            from: {
+            generateFrom: {
                 type: 'LogicalExpression',
                 operator: '||',
                 left: {
@@ -16882,7 +16990,7 @@ data = {
         },
 
         'x && y': {
-            from: {
+            generateFrom: {
                 type: 'LogicalExpression',
                 operator: '&&',
                 left: {
@@ -16897,7 +17005,7 @@ data = {
         },
 
         'x || y || z': {
-            from: {
+            generateFrom: {
                 type: 'LogicalExpression',
                 operator: '||',
                 left: {
@@ -16920,7 +17028,7 @@ data = {
         },
 
         'x && y && z': {
-            from: {
+            generateFrom: {
                 type: 'LogicalExpression',
                 operator: '&&',
                 left: {
@@ -16943,7 +17051,7 @@ data = {
         },
 
         'x || y && z': {
-            from: {
+            generateFrom: {
                 type: 'LogicalExpression',
                 operator: '||',
                 left: {
@@ -16966,7 +17074,7 @@ data = {
         },
 
         'x || y ^ z': {
-            from: {
+            generateFrom: {
                 type: 'LogicalExpression',
                 operator: '||',
                 left: {
@@ -16989,7 +17097,7 @@ data = {
         },
 
         'y ? 1 : 2': {
-            from: {
+            generateFrom: {
                 type: 'ConditionalExpression',
                 test: {
                     type: 'Identifier',
@@ -17007,7 +17115,7 @@ data = {
         },
 
         'x && y ? 1 : 2': {
-            from: {
+            generateFrom: {
                 type: 'ConditionalExpression',
                 test: {
                     type: 'LogicalExpression',
@@ -17033,7 +17141,7 @@ data = {
         },
 
         'x = 42': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '=',
                 left: {
@@ -17048,7 +17156,7 @@ data = {
         },
 
         'x *= 42': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '*=',
                 left: {
@@ -17063,7 +17171,7 @@ data = {
         },
 
         'x /= 42': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '/=',
                 left: {
@@ -17078,7 +17186,7 @@ data = {
         },
 
         'x %= 42': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '%=',
                 left: {
@@ -17093,7 +17201,7 @@ data = {
         },
 
         'x += 42': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '+=',
                 left: {
@@ -17108,7 +17216,7 @@ data = {
         },
 
         'x -= 42': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '-=',
                 left: {
@@ -17123,7 +17231,7 @@ data = {
         },
 
         'x <<= 42': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '<<=',
                 left: {
@@ -17138,7 +17246,7 @@ data = {
         },
 
         'x >>= 42': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '>>=',
                 left: {
@@ -17153,7 +17261,7 @@ data = {
         },
 
         'x >>>= 42': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '>>>=',
                 left: {
@@ -17168,7 +17276,7 @@ data = {
         },
 
         'x &= 42': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '&=',
                 left: {
@@ -17183,7 +17291,7 @@ data = {
         },
 
         'x ^= 42': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '^=',
                 left: {
@@ -17198,7 +17306,7 @@ data = {
         },
 
         'x |= 42': {
-            from: {
+            generateFrom: {
                 type: 'AssignmentExpression',
                 operator: '|=',
                 left: {
@@ -17213,7 +17321,7 @@ data = {
         },
 
         '0x20.toString': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -17229,7 +17337,7 @@ data = {
         },
 
         '0..toString': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -17245,7 +17353,7 @@ data = {
         },
 
         '1e2.toString': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -17261,7 +17369,7 @@ data = {
         },
 
         '"TEST"': {
-            from: {
+            generateFrom: {
                 type: 'Literal',
                 value: 'TEST',
                 raw: '"TEST"'
@@ -17269,7 +17377,7 @@ data = {
         },
 
         '1..toString': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -17285,7 +17393,7 @@ data = {
         },
 
         '2..toString': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -17301,7 +17409,7 @@ data = {
         },
 
         '3..toString': {
-            from: {
+            generateFrom: {
                 type: 'MemberExpression',
                 computed: false,
                 object: {
@@ -17317,7 +17425,7 @@ data = {
         },
 
         '-(-1);': {
-            from: {
+            generateFrom: {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'UnaryExpression',
@@ -17335,7 +17443,7 @@ data = {
         },
 
         '+-+-1;': {
-            from: {
+            generateFrom: {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'UnaryExpression',
@@ -17361,7 +17469,7 @@ data = {
         },
 
         '1 + +(+1);': {
-            from: {
+            generateFrom: {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'BinaryExpression',
@@ -17387,7 +17495,7 @@ data = {
         },
 
         'typeof typeof -1;': {
-            from: {
+            generateFrom: {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'UnaryExpression',
@@ -17413,7 +17521,7 @@ data = {
     'Generate Statement': {
 
         '{\n    foo;\n}': {
-            from: {
+            generateFrom: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'ExpressionStatement',
@@ -17426,7 +17534,7 @@ data = {
         },
 
         '{\n    doThis();\n    doThat();\n}': {
-            from: {
+            generateFrom: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'ExpressionStatement',
@@ -17453,14 +17561,14 @@ data = {
         },
 
         '{\n}': {
-            from: {
+            generateFrom: {
                 type: 'BlockStatement',
                 body: []
             }
         },
 
         'var x;': {
-            from: {
+            generateFrom: {
                 type: 'VariableDeclaration',
                 declarations: [{
                     type: 'VariableDeclarator',
@@ -17475,7 +17583,7 @@ data = {
         },
 
         'var x, y;': {
-            from: {
+            generateFrom: {
                 type: 'VariableDeclaration',
                 declarations: [{
                     type: 'VariableDeclarator',
@@ -17497,7 +17605,7 @@ data = {
         },
 
         'var x = 42;': {
-            from: {
+            generateFrom: {
                 type: 'VariableDeclaration',
                 declarations: [{
                     type: 'VariableDeclarator',
@@ -17516,7 +17624,7 @@ data = {
         },
 
         'var x = (42, 43);': {
-            from: {
+            generateFrom: {
                 type: 'VariableDeclaration',
                 declarations: [{
                     type: 'VariableDeclarator',
@@ -17540,7 +17648,7 @@ data = {
         },
 
         'var x = 14, y = 3, z = 1977;': {
-            from: {
+            generateFrom: {
                 type: 'VariableDeclaration',
                 declarations: [{
                     type: 'VariableDeclarator',
@@ -17581,7 +17689,7 @@ data = {
         },
 
         'var x = function () {\n};': {
-            from: {
+            generateFrom: {
                 type: 'VariableDeclaration',
                 declarations: [{
                     type: 'VariableDeclarator',
@@ -17604,7 +17712,7 @@ data = {
         },
 
         'let x;': {
-            from: {
+            generateFrom: {
                 type: 'VariableDeclaration',
                 declarations: [{
                     type: 'VariableDeclarator',
@@ -17619,7 +17727,7 @@ data = {
         },
 
         '{\n    let x;\n}': {
-            from: {
+            generateFrom: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'VariableDeclaration',
@@ -17637,7 +17745,7 @@ data = {
         },
 
         '{\n    let x = 42;\n}': {
-            from: {
+            generateFrom: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'VariableDeclaration',
@@ -17659,7 +17767,7 @@ data = {
         },
 
         '{\n    let x = 14, y = 3, z = 1977;\n}': {
-            from: {
+            generateFrom: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'VariableDeclaration',
@@ -17703,7 +17811,7 @@ data = {
         },
 
         'const x = 42;': {
-            from: {
+            generateFrom: {
                 type: 'VariableDeclaration',
                 declarations: [{
                     type: 'VariableDeclarator',
@@ -17722,7 +17830,7 @@ data = {
         },
 
         '{\n    const x = 42;\n}': {
-            from: {
+            generateFrom: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'VariableDeclaration',
@@ -17744,7 +17852,7 @@ data = {
         },
 
         '{\n    const x = 14, y = 3, z = 1977;\n}': {
-            from: {
+            generateFrom: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'VariableDeclaration',
@@ -17788,13 +17896,13 @@ data = {
         },
 
         ';': {
-            from: {
+            generateFrom: {
                 type: 'EmptyStatement'
             }
         },
 
         'x;': {
-            from: {
+            generateFrom: {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
@@ -17804,7 +17912,7 @@ data = {
         },
 
         'x, y;': {
-            from: {
+            generateFrom: {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'SequenceExpression',
@@ -17820,7 +17928,7 @@ data = {
         },
 
         'a;': {
-            from: {
+            generateFrom: {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
@@ -17830,7 +17938,7 @@ data = {
         },
 
         'aa;': {
-            from: {
+            generateFrom: {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'Identifier',
@@ -17840,7 +17948,7 @@ data = {
         },
 
         'if (morning)\n    goodMorning();': {
-            from: {
+            generateFrom: {
                 type: 'IfStatement',
                 test: {
                     type: 'Identifier',
@@ -17862,7 +17970,7 @@ data = {
         },
 
         'if ({\n        morning: true\n    })\n    goodMorning();': {
-            from: {
+            generateFrom: {
                 type: 'IfStatement',
                 test: {
                     type: 'ObjectExpression',
@@ -17895,7 +18003,7 @@ data = {
         },
 
         'if (morning)\n    (function () {\n    });': {
-            from: {
+            generateFrom: {
                 type: 'IfStatement',
                 test: {
                     type: 'Identifier',
@@ -17918,7 +18026,7 @@ data = {
         },
 
         'if (morning)\n    var x = 0;': {
-            from: {
+            generateFrom: {
                 type: 'IfStatement',
                 test: {
                     type: 'Identifier',
@@ -17945,7 +18053,7 @@ data = {
         },
 
         'if (morning) {\n    var x = 0;\n}': {
-            from: {
+            generateFrom: {
                 type: 'IfStatement',
                 test: {
                     type: 'Identifier',
@@ -17975,7 +18083,7 @@ data = {
         },
 
         'if (morning)\n    goodMorning();\nelse\n    goodDay();': {
-            from: {
+            generateFrom: {
                 type: 'IfStatement',
                 test: {
                     type: 'Identifier',
@@ -18007,7 +18115,7 @@ data = {
         },
 
         'if (morning) {\n    goodMorning();\n} else {\n    goodDay();\n}': {
-            from: {
+            generateFrom: {
                 type: 'IfStatement',
                 test: {
                     type: 'Identifier',
@@ -18045,7 +18153,7 @@ data = {
         },
 
         'if (morning) {\n    goodMorning();\n} else if (afternoon) {\n    goodDay();\n} else {\n    goodEvening();\n}': {
-            from: {
+            generateFrom: {
                 type: 'IfStatement',
                 test: {
                     type: 'Identifier',
@@ -18104,7 +18212,7 @@ data = {
         },
 
         'if (morning)\n    if (afternoon)\n        goodDay();\n    else\n        goodEvening();': {
-            from: {
+            generateFrom: {
                 type: 'IfStatement',
                 test: {
                     type: 'Identifier',
@@ -18144,7 +18252,7 @@ data = {
         },
 
         'do\n    keep();\nwhile (true);': {
-            from: {
+            generateFrom: {
                 type: 'DoWhileStatement',
                 body: {
                     type: 'ExpressionStatement',
@@ -18167,7 +18275,7 @@ data = {
 
 
         'do\n    keep();\nwhile ({\n    morning: true\n});': {
-            from: {
+            generateFrom: {
                 type: 'DoWhileStatement',
                 body: {
                     type: 'ExpressionStatement',
@@ -18199,7 +18307,7 @@ data = {
         },
 
         'do {\n    x++;\n    y--;\n} while (x < 10);': {
-            from: {
+            generateFrom: {
                 type: 'DoWhileStatement',
                 body: {
                     type: 'BlockStatement',
@@ -18244,7 +18352,7 @@ data = {
         },
 
         '{\n    do {\n    } while (false);\n    false;\n}': {
-            from: {
+            generateFrom: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'DoWhileStatement',
@@ -18269,7 +18377,7 @@ data = {
         },
 
         'while (true)\n    doSomething();': {
-            from: {
+            generateFrom: {
                 type: 'WhileStatement',
                 test: {
                     type: 'Literal',
@@ -18292,7 +18400,7 @@ data = {
 
 
         'while ({\n        morning: true\n    })\n    doSomething();': {
-            from: {
+            generateFrom: {
                 type: 'WhileStatement',
                 test: {
                     type: 'ObjectExpression',
@@ -18324,7 +18432,7 @@ data = {
         },
 
         'while (x < 10) {\n    x++;\n    y--;\n}': {
-            from: {
+            generateFrom: {
                 type: 'WhileStatement',
                 test: {
                     type: 'BinaryExpression',
@@ -18369,7 +18477,7 @@ data = {
         },
 
         'for (;;);': {
-            from: {
+            generateFrom: {
                 type: 'ForStatement',
                 init: null,
                 test: null,
@@ -18381,7 +18489,7 @@ data = {
         },
 
         'for (;;) {\n}': {
-            from: {
+            generateFrom: {
                 type: 'ForStatement',
                 init: null,
                 test: null,
@@ -18394,7 +18502,7 @@ data = {
         },
 
         'for (x = 0;;);': {
-            from: {
+            generateFrom: {
                 type: 'ForStatement',
                 init: {
                     type: 'AssignmentExpression',
@@ -18419,7 +18527,7 @@ data = {
 
 
         'for (x = {\n        morning: true\n    }; {\n        afternoon: true\n    }; {\n        evening: true\n    });': {
-            from: {
+            generateFrom: {
                 type: 'ForStatement',
                 init: {
                     type: 'AssignmentExpression',
@@ -18481,7 +18589,7 @@ data = {
         },
 
         'for (var x = 0;;);': {
-            from: {
+            generateFrom: {
                 type: 'ForStatement',
                 init: {
                     type: 'VariableDeclaration',
@@ -18508,7 +18616,7 @@ data = {
         },
 
         'for (var x = {\n            morning: true\n        };;);': {
-            from: {
+            generateFrom: {
                 type: 'ForStatement',
                 init: {
                     type: 'VariableDeclaration',
@@ -18545,7 +18653,7 @@ data = {
         },
 
         'for (let x = 0;;);': {
-            from: {
+            generateFrom: {
                 type: 'ForStatement',
                 init: {
                     type: 'VariableDeclaration',
@@ -18572,7 +18680,7 @@ data = {
         },
 
         'for (var x = 0, y = 1;;);': {
-            from: {
+            generateFrom: {
                 type: 'ForStatement',
                 init: {
                     type: 'VariableDeclaration',
@@ -18610,7 +18718,7 @@ data = {
         },
 
         'for (x = 0; x < 42;);': {
-            from: {
+            generateFrom: {
                 type: 'ForStatement',
                 init: {
                     type: 'AssignmentExpression',
@@ -18646,7 +18754,7 @@ data = {
         },
 
         'for (x = 0; x < 42; x++);': {
-            from: {
+            generateFrom: {
                 type: 'ForStatement',
                 init: {
                     type: 'AssignmentExpression',
@@ -18690,7 +18798,7 @@ data = {
         },
 
         'for (x = 0; x < 42; x++)\n    process(x);': {
-            from: {
+            generateFrom: {
                 type: 'ForStatement',
                 init: {
                     type: 'AssignmentExpression',
@@ -18745,7 +18853,7 @@ data = {
         },
 
         'for (x in list)\n    process(x);': {
-            from: {
+            generateFrom: {
                 type: 'ForInStatement',
                 left: {
                     type: 'Identifier',
@@ -18774,7 +18882,7 @@ data = {
         },
 
         'for (x in {\n        morning: true\n    })\n    process(x);': {
-            from: {
+            generateFrom: {
                 type: 'ForInStatement',
                 left: {
                     type: 'Identifier',
@@ -18814,7 +18922,7 @@ data = {
         },
 
         'for (var x in list)\n    process(x);': {
-            from: {
+            generateFrom: {
                 type: 'ForInStatement',
                 left: {
                     type: 'VariableDeclaration',
@@ -18851,7 +18959,7 @@ data = {
         },
 
         'for (var x in {\n        morning: true\n    })\n    process(x);': {
-            from: {
+            generateFrom: {
                 type: 'ForInStatement',
                 left: {
                     type: 'VariableDeclaration',
@@ -18899,7 +19007,7 @@ data = {
         },
 
         'for (var x = 42 in list)\n    process(x);': {
-            from: {
+            generateFrom: {
                 type: 'ForInStatement',
                 left: {
                     type: 'VariableDeclaration',
@@ -18940,7 +19048,7 @@ data = {
         },
 
         'for (var x = {\n            morning: true\n        } in list)\n    process(x);': {
-            from: {
+            generateFrom: {
                 type: 'ForInStatement',
                 left: {
                     type: 'VariableDeclaration',
@@ -18991,7 +19099,7 @@ data = {
         },
 
         'for (let x in list)\n    process(x);': {
-            from: {
+            generateFrom: {
                 type: 'ForInStatement',
                 left: {
                     type: 'VariableDeclaration',
@@ -19028,7 +19136,7 @@ data = {
         },
 
         'for (let x = 42 in list)\n    process(x);': {
-            from: {
+            generateFrom: {
                 type: 'ForInStatement',
                 left: {
                     type: 'VariableDeclaration',
@@ -19069,7 +19177,7 @@ data = {
         },
 
         'for (var i = function () {\n            return (10 in []);\n        } in list)\n    process(x);': {
-            from: {
+            generateFrom: {
                 type: 'ForInStatement',
                 left: {
                     type: 'VariableDeclaration',
@@ -19129,7 +19237,7 @@ data = {
         },
 
         'for (var x = (42 in arr) in list)\n    process(x);': {
-            from: {
+            generateFrom: {
                 type: 'ForInStatement',
                 left: {
                     type: 'VariableDeclaration',
@@ -19178,7 +19286,7 @@ data = {
         },
 
         'for (var x = 42 in (arr in list))\n    process(x);': {
-            from: {
+            generateFrom: {
                 type: 'ForInStatement',
                 left: {
                     type: 'VariableDeclaration',
@@ -19227,14 +19335,14 @@ data = {
         },
 
         'continue;': {
-            from: {
+            generateFrom: {
                 type: 'ContinueStatement',
                 label: null
             }
         },
 
         'continue done;': {
-            from: {
+            generateFrom: {
                 type: 'ContinueStatement',
                 label: {
                     type: 'Identifier',
@@ -19244,14 +19352,14 @@ data = {
         },
 
         'break;': {
-            from: {
+            generateFrom: {
                 type: 'BreakStatement',
                 label: null
             }
         },
 
         'break done;': {
-            from: {
+            generateFrom: {
                 type: 'BreakStatement',
                 label: {
                     type: 'Identifier',
@@ -19261,14 +19369,14 @@ data = {
         },
 
         'return;': {
-            from: {
+            generateFrom: {
                 type: 'ReturnStatement',
                 argument: null
             }
         },
 
         'return x;': {
-            from: {
+            generateFrom: {
                 type: 'ReturnStatement',
                 argument: {
                     type: 'Identifier',
@@ -19278,7 +19386,7 @@ data = {
         },
 
         'return x * y;': {
-            from: {
+            generateFrom: {
                 type: 'ReturnStatement',
                 argument: {
                     type: 'BinaryExpression',
@@ -19296,7 +19404,7 @@ data = {
         },
 
         'return {\n    morning: true\n};': {
-            from: {
+            generateFrom: {
                 type: 'ReturnStatement',
                 argument: {
                     type: 'ObjectExpression',
@@ -19317,7 +19425,7 @@ data = {
         },
 
         'with (x)\n    foo = bar;': {
-            from: {
+            generateFrom: {
                 type: 'WithStatement',
                 object: {
                     type: 'Identifier',
@@ -19342,7 +19450,7 @@ data = {
         },
 
         'with ({\n        morning: true\n    })\n    foo = bar;': {
-            from: {
+            generateFrom: {
                 type: 'WithStatement',
                 object: {
                     type: 'ObjectExpression',
@@ -19378,7 +19486,7 @@ data = {
         },
 
         'with (x) {\n    foo = bar;\n}': {
-            from: {
+            generateFrom: {
                 type: 'WithStatement',
                 object: {
                     type: 'Identifier',
@@ -19406,7 +19514,7 @@ data = {
         },
 
         'switch (x) {\n}': {
-            from: {
+            generateFrom: {
                 type: 'SwitchStatement',
                 discriminant: {
                     type: 'Identifier',
@@ -19416,7 +19524,7 @@ data = {
         },
 
         'switch ({\n        morning: true\n    }) {\n}': {
-            from: {
+            generateFrom: {
                 type: 'SwitchStatement',
                 discriminant: {
                     type: 'ObjectExpression',
@@ -19437,7 +19545,7 @@ data = {
         },
 
         'switch (answer) {\ncase 42:\n    hi();\n    break;\n}': {
-            from: {
+            generateFrom: {
                 type: 'SwitchStatement',
                 discriminant: {
                     type: 'Identifier',
@@ -19469,7 +19577,7 @@ data = {
         },
 
         'switch (answer) {\ncase {\n        morning: true\n    }:\n    hi();\n    break;\n}': {
-            from: {
+            generateFrom: {
                 type: 'SwitchStatement',
                 discriminant: {
                     type: 'Identifier',
@@ -19511,7 +19619,7 @@ data = {
         },
 
         'switch (answer) {\ncase 42: {\n        hi();\n        break;\n    }\n}': {
-            from: {
+            generateFrom: {
                 type: 'SwitchStatement',
                 discriminant: {
                     type: 'Identifier',
@@ -19546,7 +19654,7 @@ data = {
         },
 
         'switch (answer) {\ncase 42:\n    hi();\n    break;\ndefault:\n    break;\n}': {
-            from: {
+            generateFrom: {
                 type: 'SwitchStatement',
                 discriminant: {
                     type: 'Identifier',
@@ -19585,7 +19693,7 @@ data = {
         },
 
         'start:\n    for (;;)\n        break start;': {
-            from: {
+            generateFrom: {
                 type: 'LabeledStatement',
                 label: {
                     type: 'Identifier',
@@ -19608,7 +19716,7 @@ data = {
         },
 
         'start:\n    while (true)\n        break start;': {
-            from: {
+            generateFrom: {
                 type: 'LabeledStatement',
                 label: {
                     type: 'Identifier',
@@ -19633,7 +19741,7 @@ data = {
         },
 
         'throw x;': {
-            from: {
+            generateFrom: {
                 type: 'ThrowStatement',
                 argument: {
                     type: 'Identifier',
@@ -19643,7 +19751,7 @@ data = {
         },
 
         'throw x * y;': {
-            from: {
+            generateFrom: {
                 type: 'ThrowStatement',
                 argument: {
                     type: 'BinaryExpression',
@@ -19661,7 +19769,7 @@ data = {
         },
 
         'throw {\n    morning: true\n};': {
-            from: {
+            generateFrom: {
                 type: 'ThrowStatement',
                 argument: {
                     type: 'ObjectExpression',
@@ -19682,7 +19790,7 @@ data = {
         },
 
         'throw {\n    message: "Error"\n};': {
-            from: {
+            generateFrom: {
                 type: 'ThrowStatement',
                 argument: {
                     type: 'ObjectExpression',
@@ -19704,7 +19812,7 @@ data = {
         },
 
         'try {\n} catch (e) {\n}': {
-            from: {
+            generateFrom: {
                 type: 'TryStatement',
                 block: {
                     type: 'BlockStatement',
@@ -19727,7 +19835,7 @@ data = {
         },
 
         'try {\n} catch (e) {\n    say(e);\n}': {
-            from: {
+            generateFrom: {
                 type: 'TryStatement',
                 block: {
                     type: 'BlockStatement',
@@ -19763,7 +19871,7 @@ data = {
         },
 
         'try {\n} finally {\n    cleanup(stuff);\n}': {
-            from: {
+            generateFrom: {
                 type: 'TryStatement',
                 block: {
                     type: 'BlockStatement',
@@ -19791,7 +19899,7 @@ data = {
         },
 
         'try {\n    doThat();\n} catch (e) {\n    say(e);\n}': {
-            from: {
+            generateFrom: {
                 type: 'TryStatement',
                 block: {
                     type: 'BlockStatement',
@@ -19837,7 +19945,7 @@ data = {
         },
 
         'try {\n    doThat();\n} catch (e) {\n    say(e);\n} finally {\n    cleanup(stuff);\n}': {
-            from: {
+            generateFrom: {
                 type: 'TryStatement',
                 block: {
                     type: 'BlockStatement',
@@ -19899,13 +20007,13 @@ data = {
         },
 
         'debugger;': {
-            from: {
+            generateFrom: {
                 type: 'DebuggerStatement'
             }
         },
 
         'function hello() {\n    sayHi();\n}': {
-            from: {
+            generateFrom: {
                 type: 'FunctionDeclaration',
                 id: {
                     type: 'Identifier',
@@ -19930,7 +20038,7 @@ data = {
         },
 
         'function hello(a) {\n    sayHi();\n}': {
-            from: {
+            generateFrom: {
                 type: 'FunctionDeclaration',
                 id: {
                     type: 'Identifier',
@@ -19958,7 +20066,7 @@ data = {
         },
 
         'function hello(a, b) {\n    sayHi();\n}': {
-            from: {
+            generateFrom: {
                 type: 'FunctionDeclaration',
                 id: {
                     type: 'Identifier',
@@ -19989,7 +20097,7 @@ data = {
         },
 
         'var hi = function () {\n    sayHi();\n};': {
-            from: {
+            generateFrom: {
                 type: 'VariableDeclaration',
                 declarations: [{
                     type: 'VariableDeclarator',
@@ -20022,7 +20130,7 @@ data = {
         },
 
         'var hello = function hi() {\n    sayHi();\n};': {
-            from: {
+            generateFrom: {
                 type: 'VariableDeclaration',
                 declarations: [{
                     type: 'VariableDeclarator',
@@ -20058,7 +20166,7 @@ data = {
         },
 
         '(function () {\n});': {
-            from: {
+            generateFrom: {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'FunctionExpression',
@@ -20073,7 +20181,7 @@ data = {
         },
 
         '': {
-            from: {
+            generateFrom: {
                 type: 'Program',
                 body: []
             }
@@ -21311,7 +21419,7 @@ function testGenerate(expected, result) {
     var actual;
 
     try {
-        actual = esprima.generate(result.from, { indent: '    ' });
+        actual = esprima.generate(result.generateFrom, { indent: '    ' });
     } catch (e) {
         throw new NotMatchingError(expected, e.toString());
     }
@@ -21342,7 +21450,7 @@ function runTest(code, result) {
         testError(code, result);
     } else if (result.hasOwnProperty('modifiers')) {
         testModify(code, result);
-    } else if (result.hasOwnProperty('from')) {
+    } else if (result.hasOwnProperty('generateFrom')) {
         testGenerate(code, result);
     } else if (result.hasOwnProperty('result')) {
         testAPI(code, result);
