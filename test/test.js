@@ -19445,17 +19445,17 @@ data = {
         },
 
         'x \n is y': {
-            index: 4,
+            index: 7,
             lineNumber: 2,
-            column: 2,
-            message: 'Error: Line 2: Unexpected token is'
+            column: 5,
+            message: 'Error: Line 2: Unexpected identifier'
         },
 
         'x \n isnt y': {
-            index: 4,
+            index: 9,
             lineNumber: 2,
-            column: 2,
-            message: 'Error: Line 2: Unexpected token isnt'
+            column: 7,
+            message: 'Error: Line 2: Unexpected identifier'
         },
 
         '\n\n\n{': {
