@@ -3406,7 +3406,12 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parse(code, options) {
-        var program;
+        var program, toString;
+
+        toString = String;
+        if (typeof code !== 'string' && !(code instanceof String)) {
+            code = toString(code);
+        }
 
         source = code;
         index = 0;

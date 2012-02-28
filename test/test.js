@@ -20123,6 +20123,129 @@ data = {
             message: 'Error: Line 1: Use of future reserved word in strict mode'
         }
 
+    },
+
+    'API': {
+        'parse()': {
+            call: 'parse',
+            args: [],
+            result: {
+                type: 'Program',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'undefined'
+                    }
+                }]
+            }
+        },
+
+        'parse(null)': {
+            call: 'parse',
+            args: [null],
+            result: {
+                type: 'Program',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: null
+                    }
+                }]
+            }
+        },
+
+        'parse(42)': {
+            call: 'parse',
+            args: [42],
+            result: {
+                type: 'Program',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: 42
+                    }
+                }]
+            }
+        },
+
+        'parse(true)': {
+            call: 'parse',
+            args: [true],
+            result: {
+                type: 'Program',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: true
+                    }
+                }]
+            }
+        },
+
+        'parse(undefined)': {
+            call: 'parse',
+            args: [void 0],
+            result: {
+                type: 'Program',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'undefined'
+                    }
+                }]
+            }
+        },
+
+        'parse(new String("test"))': {
+            call: 'parse',
+            args: [new String('test')],
+            result: {
+                type: 'Program',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'test'
+                    }
+                }]
+            }
+        },
+
+        'parse(new Number(42))': {
+            call: 'parse',
+            args: [new Number(42)],
+            result: {
+                type: 'Program',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: 42
+                    }
+                }]
+            }
+        },
+
+        'parse(new Boolean(true))': {
+            call: 'parse',
+            args: [new Boolean(true)],
+            result: {
+                type: 'Program',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: true
+                    }
+                }]
+            }
+        }
+
     }
 };
 
@@ -20277,6 +20400,22 @@ function testGenerate(expected, result) {
     }
 }
 
+function testAPI(code, result) {
+    'use strict';
+    var expected, res, actual;
+
+    expected = JSON.stringify(result.result, null, 4);
+    try {
+        res = esprima[result.call].apply(esprima, result.args);
+        actual = JSON.stringify(res, adjustRegexLiteral, 4);
+    } catch (e) {
+        throw new NotMatchingError(expected, e.toString());
+    }
+    if (expected !== actual) {
+        throw new NotMatchingError(expected, actual);
+    }
+}
+
 function runTest(code, result) {
     'use strict';
     if (result.hasOwnProperty('lineNumber')) {
@@ -20285,6 +20424,8 @@ function runTest(code, result) {
         testModify(code, result);
     } else if (result.hasOwnProperty('from')) {
         testGenerate(code, result);
+    } else if (result.hasOwnProperty('result')) {
+        testAPI(code, result);
     } else {
         testParse(code, result);
     }
