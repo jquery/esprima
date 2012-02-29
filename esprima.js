@@ -86,6 +86,7 @@ parseStatement: true, parseSourceElement: true */
         ExpressionStatement: 'ExpressionStatement',
         ForStatement: 'ForStatement',
         ForInStatement: 'ForInStatement',
+        ForOfStatement: 'ForOfStatement',
         FunctionDeclaration: 'FunctionDeclaration',
         FunctionExpression: 'FunctionExpression',
         Identifier: 'Identifier',
@@ -2290,7 +2291,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseForStatement() {
-        var init, test, update, left, right, body;
+        var init, test, update, left, right, body, operator;
 
         init = test = update = null;
 
@@ -2306,19 +2307,21 @@ parseStatement: true, parseSourceElement: true */
                 init = parseForVariableDeclaration();
                 allowIn = true;
 
-                if (init.declarations.length === 1 && matchKeyword('in')) {
-                    lex();
-                    left = init;
-                    right = parseExpression();
-                    init = null;
+                if (init.declarations.length === 1) {
+                    if (matchKeyword('in') || matchContextualKeyword('of')) {
+                        operator = lex();
+                        left = init;
+                        right = parseExpression();
+                        init = null;
+                    }
                 }
             } else {
                 allowIn = false;
                 init = parseExpression();
                 allowIn = true;
 
-                if (matchKeyword('in')) {
-                    lex();
+                if (matchKeyword('in') || matchContextualKeyword('of')) {
+                    operator = lex();
                     left = init;
                     right = parseExpression();
                     init = null;
@@ -2356,13 +2359,23 @@ parseStatement: true, parseSourceElement: true */
             };
         }
 
-        return {
-            type: Syntax.ForInStatement,
-            left: left,
-            right: right,
-            body: body,
-            each: false
-        };
+        if (operator.value === 'in') {
+            return {
+                type: Syntax.ForInStatement,
+                left: left,
+                right: right,
+                body: body,
+                each: false
+            };
+        } else {
+            return {
+                type: Syntax.ForOfStatement,
+                left: left,
+                right: right,
+                body: body,
+                each: false
+            };
+        }
     }
 
     // 12.7 The continue statement
