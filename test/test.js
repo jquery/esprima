@@ -11152,6 +11152,539 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 64 }
             }
+        },
+
+        'for(x of list) process(x);': {
+            type: 'ForOfStatement',
+            left: {
+                type: 'Identifier',
+                name: 'x',
+                range: [4, 4],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
+            },
+            right: {
+                type: 'Identifier',
+                name: 'list',
+                range: [9, 12],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'process',
+                        range: [15, 21],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 22 }
+                        }
+                    },
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [23, 23],
+                        loc: {
+                            start: { line: 1, column: 23 },
+                            end: { line: 1, column: 24 }
+                        }
+                    }],
+                    range: [15, 24],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                range: [15, 25],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 26 }
+                }
+            },
+            each: false,
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 26 }
+            }
+        },
+
+        'for (var x of list) process(x);': {
+            type: 'ForOfStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [9, 9],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    init: null,
+                    range: [9, 9],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 10 }
+                    }
+                }],
+                kind: 'var',
+                range: [5, 9],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            right: {
+                type: 'Identifier',
+                name: 'list',
+                range: [14, 17],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'process',
+                        range: [20, 26],
+                        loc: {
+                            start: { line: 1, column: 20 },
+                            end: { line: 1, column: 27 }
+                        }
+                    },
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [28, 28],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 29 }
+                        }
+                    }],
+                    range: [20, 29],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 30 }
+                    }
+                },
+                range: [20, 30],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 31 }
+                }
+            },
+            each: false,
+            range: [0, 30],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 31 }
+            }
+        },
+
+        'for (var x = 42 of list) process(x);': {
+            type: 'ForOfStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [9, 9],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42',
+                        range: [13, 14],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 15 }
+                        }
+                    },
+                    range: [9, 14],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 15 }
+                    }
+                }],
+                kind: 'var',
+                range: [5, 14],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            right: {
+                type: 'Identifier',
+                name: 'list',
+                range: [19, 22],
+                loc: {
+                    start: { line: 1, column: 19 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'process',
+                        range: [25, 31],
+                        loc: {
+                            start: { line: 1, column: 25 },
+                            end: { line: 1, column: 32 }
+                        }
+                    },
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [33, 33],
+                        loc: {
+                            start: { line: 1, column: 33 },
+                            end: { line: 1, column: 34 }
+                        }
+                    }],
+                    range: [25, 34],
+                    loc: {
+                        start: { line: 1, column: 25 },
+                        end: { line: 1, column: 35 }
+                    }
+                },
+                range: [25, 35],
+                loc: {
+                    start: { line: 1, column: 25 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            each: false,
+            range: [0, 35],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            }
+        },
+
+        'for (let x of list) process(x);': {
+            type: 'ForOfStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [9, 9],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    init: null,
+                    range: [9, 9],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 10 }
+                    }
+                }],
+                kind: 'let',
+                range: [5, 9],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            right: {
+                type: 'Identifier',
+                name: 'list',
+                range: [14, 17],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'process',
+                        range: [20, 26],
+                        loc: {
+                            start: { line: 1, column: 20 },
+                            end: { line: 1, column: 27 }
+                        }
+                    },
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [28, 28],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 29 }
+                        }
+                    }],
+                    range: [20, 29],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 30 }
+                    }
+                },
+                range: [20, 30],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 31 }
+                }
+            },
+            each: false,
+            range: [0, 30],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 31 }
+            }
+        },
+
+        'for (let x = 42 of list) process(x);': {
+            type: 'ForOfStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [9, 9],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42',
+                        range: [13, 14],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 15 }
+                        }
+                    },
+                    range: [9, 14],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 15 }
+                    }
+                }],
+                kind: 'let',
+                range: [5, 14],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            right: {
+                type: 'Identifier',
+                name: 'list',
+                range: [19, 22],
+                loc: {
+                    start: { line: 1, column: 19 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'process',
+                        range: [25, 31],
+                        loc: {
+                            start: { line: 1, column: 25 },
+                            end: { line: 1, column: 32 }
+                        }
+                    },
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [33, 33],
+                        loc: {
+                            start: { line: 1, column: 33 },
+                            end: { line: 1, column: 34 }
+                        }
+                    }],
+                    range: [25, 34],
+                    loc: {
+                        start: { line: 1, column: 25 },
+                        end: { line: 1, column: 35 }
+                    }
+                },
+                range: [25, 35],
+                loc: {
+                    start: { line: 1, column: 25 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            each: false,
+            range: [0, 35],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            }
+        },
+
+        'for (var i = function() { return 10 in [] } of list) process(x);': {
+            type: 'ForOfStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'i',
+                        range: [9, 9],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    init: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [{
+                                type: 'ReturnStatement',
+                                argument: {
+                                    type: 'BinaryExpression',
+                                    operator: 'in',
+                                    left: {
+                                        type: 'Literal',
+                                        value: 10,
+                                        raw: '10',
+                                        range: [33, 34],
+                                        loc: {
+                                            start: { line: 1, column: 33 },
+                                            end: { line: 1, column: 35 }
+                                        }
+                                    },
+                                    right: {
+                                        type: 'ArrayExpression',
+                                        elements: [],
+                                        range: [39, 40],
+                                        loc: {
+                                            start: { line: 1, column: 39 },
+                                            end: { line: 1, column: 41 }
+                                        }
+                                    },
+                                    range: [33, 40],
+                                    loc: {
+                                        start: { line: 1, column: 33 },
+                                        end: { line: 1, column: 41 }
+                                    }
+                                },
+                                range: [26, 41],
+                                loc: {
+                                    start: { line: 1, column: 26 },
+                                    end: { line: 1, column: 42 }
+                                }
+                            }],
+                            range: [24, 42],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 43 }
+                            }
+                        },
+                        range: [13, 42],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 43 }
+                        }
+                    },
+                    range: [9, 42],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 43 }
+                    }
+                }],
+                kind: 'var',
+                range: [5, 42],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 43 }
+                }
+            },
+            right: {
+                type: 'Identifier',
+                name: 'list',
+                range: [47, 50],
+                loc: {
+                    start: { line: 1, column: 47 },
+                    end: { line: 1, column: 51 }
+                }
+            },
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'process',
+                        range: [53, 59],
+                        loc: {
+                            start: { line: 1, column: 53 },
+                            end: { line: 1, column: 60 }
+                        }
+                    },
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [61, 61],
+                        loc: {
+                            start: { line: 1, column: 61 },
+                            end: { line: 1, column: 62 }
+                        }
+                    }],
+                    range: [53, 62],
+                    loc: {
+                        start: { line: 1, column: 53 },
+                        end: { line: 1, column: 63 }
+                    }
+                },
+                range: [53, 63],
+                loc: {
+                    start: { line: 1, column: 53 },
+                    end: { line: 1, column: 64 }
+                }
+            },
+            each: false,
+            range: [0, 63],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 64 }
+            }
         }
 
     },
