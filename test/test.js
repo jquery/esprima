@@ -16633,6 +16633,30 @@ data = {
             }
         },
 
+        'var x = (42, 43);': {
+            from: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'SequenceExpression',
+                        expressions: [{
+                            type: 'Literal',
+                            value: 42
+                        }, {
+                            type: 'Literal',
+                            value: 43
+                        }]
+                    }
+                }],
+                kind: 'var'
+            }
+        },
+
         'var x = 14, y = 3, z = 1977;': {
             from: {
                 type: 'VariableDeclaration',
