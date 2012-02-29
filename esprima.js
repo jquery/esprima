@@ -3736,7 +3736,7 @@ parseStatement: true, parseSourceElement: true */
         var result, currentPrecedence, previousBase, i, len, raw;
 
         if (!precedence) {
-            precedence = Precedence.SequenceExpression;
+            precedence = Precedence.Sequence;
         }
 
         switch (expr.type) {
@@ -4047,7 +4047,7 @@ parseStatement: true, parseSourceElement: true */
 
         case Syntax.VariableDeclarator:
             if (stmt.init) {
-                result = stmt.id.name + ' = ' + generateExpression(stmt.init, Precedence.AssignmentExpression);
+                result = stmt.id.name + ' = ' + generateExpression(stmt.init, Precedence.Assignment);
             } else {
                 result = stmt.id.name;
             }
