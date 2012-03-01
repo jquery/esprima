@@ -20420,6 +20420,34 @@ function testParse(code, syntax) {
     }
 }
 
+function testIdentity(code, syntax) {
+    'use strict';
+    var expected, tree, actual, options, StringObject;
+
+    // alias, so that JSLint does not complain.
+    StringObject = String;
+
+    options = {
+        comment: false,
+        range: false,
+        loc: false,
+        tokens: false,
+        raw: false
+    };
+
+    try {
+        tree = esprima.parse(code, options);
+        expected = JSON.stringify(tree, adjustRegexLiteral, 4);
+        tree = esprima.parse(esprima.generate(tree), options);
+        actual = JSON.stringify(tree, adjustRegexLiteral, 4);
+    } catch (e) {
+        throw new NotMatchingError(expected, e.toString());
+    }
+    if (expected !== actual) {
+        throw new NotMatchingError(expected, actual);
+    }
+}
+
 function testError(code, exception) {
     'use strict';
     var expected, msg, actual;
@@ -20532,6 +20560,14 @@ function testAPI(code, result) {
     }
 }
 
+function isGeneratorIdentityFixture(result) {
+    'use strict';
+    return !result.hasOwnProperty('lineNumber') &&
+        !result.hasOwnProperty('modifiers') &&
+        !result.hasOwnProperty('from') &&
+        !result.hasOwnProperty('result');
+}
+
 function runTest(code, result) {
     'use strict';
     if (result.hasOwnProperty('lineNumber')) {
@@ -20557,7 +20593,11 @@ if (typeof window !== 'undefined') {
             fixture,
             source,
             tick,
-            expected;
+            expected,
+            fixtures,
+            fixture,
+            index,
+            len;
 
         function setText(el, str) {
             if (typeof el.innerText === 'string') {
@@ -20620,6 +20660,7 @@ if (typeof window !== 'undefined') {
         setText(document.getElementById('version'), esprima.version);
 
         tick = new Date();
+        fixtures = [];
         for (category in data) {
             if (data.hasOwnProperty(category)) {
                 startCategory(category);
@@ -20628,6 +20669,12 @@ if (typeof window !== 'undefined') {
                     if (fixture.hasOwnProperty(source)) {
                         expected = fixture[source];
                         total += 1;
+                        if (isGeneratorIdentityFixture(expected)) {
+                            fixtures.push({
+                                source: source,
+                                expected: expected
+                            });
+                        }
                         try {
                             runTest(source, expected);
                             reportSuccess(source, JSON.stringify(expected, null, 4));
@@ -20639,6 +20686,20 @@ if (typeof window !== 'undefined') {
                 }
             }
         }
+
+        startCategory('Generateor Identity');
+        for (index = 0, len = fixtures.length; index < len; index += 1) {
+            total += 1;
+            try {
+                fixture = fixtures[index];
+                testIdentity(fixture.source, fixture.expected);
+                reportSuccess(fixture.source, JSON.stringify(fixture.expected, null, 4));
+            } catch (e) {
+                failures += 1;
+                reportFailure(fixture.source, e.expected, e.actual);
+            }
+        }
+
         tick = (new Date()) - tick;
 
         if (failures > 0) {
@@ -20657,12 +20718,20 @@ if (typeof window !== 'undefined') {
             failures = [],
             tick = new Date(),
             expected,
-            header;
+            header,
+            fixtures;
 
+        fixtures = [];
         Object.keys(data).forEach(function (category) {
             Object.keys(data[category]).forEach(function (source) {
                 total += 1;
                 expected = data[category][source];
+                if (isGeneratorIdentityFixture(expected)) {
+                    fixtures.push({
+                        source: source,
+                        expected: expected
+                    });
+                }
                 try {
                     runTest(source, expected);
                 } catch (e) {
@@ -20670,6 +20739,15 @@ if (typeof window !== 'undefined') {
                     failures.push(e);
                 }
             });
+        });
+        fixtures.forEach(function (fixture) {
+            total += 1;
+            try {
+                testIdentity(fixture.source, fixture.expected);
+            } catch (e) {
+                e.source = fixture.source;
+                failures.push(e);
+            }
         });
         tick = (new Date()) - tick;
 
