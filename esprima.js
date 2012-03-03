@@ -2407,7 +2407,7 @@ parseStatement: true, parseSourceElement: true */
         if (token.type === Token.Identifier) {
             label = parseVariableIdentifier();
 
-            if (labelSet.indexOf(label.name) === -1) {
+            if (!Object.prototype.hasOwnProperty.call(labelSet, label.name)) {
                 throwError({}, Messages.LabelNotFound, label.name);
             }
         }
@@ -2460,7 +2460,7 @@ parseStatement: true, parseSourceElement: true */
         if (token.type === Token.Identifier) {
             label = parseVariableIdentifier();
 
-            if (labelSet.indexOf(label.name) === -1) {
+            if (!Object.prototype.hasOwnProperty.call(labelSet, label.name)) {
                 throwError({}, Messages.LabelNotFound, label.name);
             }
         }
@@ -2773,13 +2773,13 @@ parseStatement: true, parseSourceElement: true */
         if ((expr.type === Syntax.Identifier) && match(':')) {
             lex();
 
-            if (labelSet.indexOf(expr.name) !== -1) {
+            if (Object.prototype.hasOwnProperty.call(labelSet, expr.name)) {
                 throwError({}, Messages.DuplicateLabel, expr.name);
             }
 
-            labelSet.push(expr.name);
+            labelSet[expr.name] = true;
             labeledBody = parseStatement();
-            labelSet.pop();
+            delete labelSet[expr.name];
 
             return {
                 type: Syntax.LabeledStatement,
@@ -2832,7 +2832,7 @@ parseStatement: true, parseSourceElement: true */
         oldInIteration = inIteration;
         oldInSwitch = inSwitch;
 
-        labelSet = [];
+        labelSet = {};
         inIteration = false;
         inSwitch = false;
 
@@ -3515,7 +3515,7 @@ parseStatement: true, parseSourceElement: true */
         length = source.length;
         buffer = null;
         allowIn = true;
-        labelSet = [];
+        labelSet = {};
         inSwitch = false;
         inIteration = false;
 
