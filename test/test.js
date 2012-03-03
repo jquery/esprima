@@ -11086,49 +11086,167 @@ data = {
 
     'continue statement': {
 
-        'continue': {
-            type: 'ContinueStatement',
-            label: null,
-            range: [0, 7],
+        'while (true) { continue }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
+                }
+            },
+            body: {
+                type: 'BlockStatement',
+                body: [
+                    {
+                        type: 'ContinueStatement',
+                        label: null,
+                        range: [15, 23],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 24 }
+                        }
+                    }
+                ],
+                range: [13, 24],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 24],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 8 }
+                end: { line: 1, column: 25 }
             }
         },
 
-        'continue done': {
-            type: 'ContinueStatement',
+        'done: while (true) { continue done }': {
+            type: 'LabeledStatement',
             label: {
                 type: 'Identifier',
                 name: 'done',
-                range: [9, 12],
+                range: [0, 3],
                 loc: {
-                    start: { line: 1, column: 9 },
-                    end: { line: 1, column: 13 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
                 }
             },
-            range: [0, 12],
+            body: {
+                type: 'WhileStatement',
+                test: {
+                    type: 'Literal',
+                    value: true,
+                    raw: 'true',
+                    range: [13, 16],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ContinueStatement',
+                            label: {
+                                type: 'Identifier',
+                                name: 'done',
+                                range: [30, 33],
+                                loc: {
+                                    start: { line: 1, column: 30 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            range: [21, 34],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 35 }
+                            }
+                        }
+                    ],
+                    range: [19, 35],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 36 }
+                    }
+                },
+                range: [6, 35],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            range: [0, 35],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 13 }
+                end: { line: 1, column: 36 }
             }
         },
 
-        'continue done;': {
-            type: 'ContinueStatement',
+        'done: while (true) { continue done; }': {
+            type: 'LabeledStatement',
             label: {
                 type: 'Identifier',
                 name: 'done',
-                range: [9, 12],
+                range: [0, 3],
                 loc: {
-                    start: { line: 1, column: 9 },
-                    end: { line: 1, column: 13 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
                 }
             },
-            range: [0, 13],
+            body: {
+                type: 'WhileStatement',
+                test: {
+                    type: 'Literal',
+                    value: true,
+                    raw: 'true',
+                    range: [13, 16],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ContinueStatement',
+                            label: {
+                                type: 'Identifier',
+                                name: 'done',
+                                range: [30, 33],
+                                loc: {
+                                    start: { line: 1, column: 30 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            range: [21, 34],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 35 }
+                            }
+                        }
+                    ],
+                    range: [19, 36],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 37 }
+                    }
+                },
+                range: [6, 36],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 37 }
+                }
+            },
+            range: [0, 36],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 14 }
+                end: { line: 1, column: 37 }
             }
         }
 
@@ -11136,49 +11254,167 @@ data = {
 
     'break statement': {
 
-        'break': {
-            type: 'BreakStatement',
-            label: null,
-            range: [0, 4],
+        'while (true) { break }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
+                }
+            },
+            body: {
+                type: 'BlockStatement',
+                body: [
+                    {
+                        type: 'BreakStatement',
+                        label: null,
+                        range: [15, 20],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 21 }
+                        }
+                    }
+                ],
+                range: [13, 21],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            range: [0, 21],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 5 }
+                end: { line: 1, column: 22 }
             }
         },
 
-        'break done': {
-            type: 'BreakStatement',
+        'done: while (true) { break done }': {
+            type: 'LabeledStatement',
             label: {
                 type: 'Identifier',
                 name: 'done',
-                range: [6, 9],
+                range: [0, 3],
                 loc: {
-                    start: { line: 1, column: 6 },
-                    end: { line: 1, column: 10 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
                 }
             },
-            range: [0, 9],
+            body: {
+                type: 'WhileStatement',
+                test: {
+                    type: 'Literal',
+                    value: true,
+                    raw: 'true',
+                    range: [13, 16],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'BreakStatement',
+                            label: {
+                                type: 'Identifier',
+                                name: 'done',
+                                range: [27, 30],
+                                loc: {
+                                    start: { line: 1, column: 27 },
+                                    end: { line: 1, column: 31 }
+                                }
+                            },
+                            range: [21, 31],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 32 }
+                            }
+                        }
+                    ],
+                    range: [19, 32],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 33 }
+                    }
+                },
+                range: [6, 32],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 33 }
+                }
+            },
+            range: [0, 32],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 10 }
+                end: { line: 1, column: 33 }
             }
         },
 
-        'break done;': {
-            type: 'BreakStatement',
+        'done: while (true) { break done; }': {
+            type: 'LabeledStatement',
             label: {
                 type: 'Identifier',
                 name: 'done',
-                range: [6, 9],
+                range: [0, 3],
                 loc: {
-                    start: { line: 1, column: 6 },
-                    end: { line: 1, column: 10 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
                 }
             },
-            range: [0, 10],
+            body: {
+                type: 'WhileStatement',
+                test: {
+                    type: 'Literal',
+                    value: true,
+                    raw: 'true',
+                    range: [13, 16],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'BreakStatement',
+                            label: {
+                                type: 'Identifier',
+                                name: 'done',
+                                range: [27, 30],
+                                loc: {
+                                    start: { line: 1, column: 27 },
+                                    end: { line: 1, column: 31 }
+                                }
+                            },
+                            range: [21, 31],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 32 }
+                            }
+                        }
+                    ],
+                    range: [19, 33],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 34 }
+                    }
+                },
+                range: [6, 33],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 34 }
+                }
+            },
+            range: [0, 33],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 11 }
+                end: { line: 1, column: 34 }
             }
         }
 
@@ -13155,209 +13391,317 @@ data = {
             }
         },
 
-        '{ continue\nthere; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'ContinueStatement',
-                label: null,
-                range: [2, 9],
+        'while (true) { continue\nthere; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
                 loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 10 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
                 }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'there',
-                    range: [11, 15],
+            },
+            body: {            
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ContinueStatement',
+                    label: null,
+                    range: [15, 22],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 23 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'there',
+                        range: [24, 28],
+                        loc: {
+                            start: { line: 2, column: 0 },
+                            end: { line: 2, column: 5 }
+                        }
+                    },
+                    range: [24, 29],
                     loc: {
                         start: { line: 2, column: 0 },
-                        end: { line: 2, column: 5 }
+                        end: { line: 2, column: 6 }
                     }
-                },
-                range: [11, 16],
+                }],
+                range: [13, 31],
                 loc: {
-                    start: { line: 2, column: 0 },
-                    end: { line: 2, column: 6 }
+                    start: { line: 1, column: 13 },
+                    end: { line: 2, column: 8 }
                 }
-            }],
-            range: [0, 18],
+            },
+            range: [0, 31],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 8 }
             }
         },
 
-        '{ continue // Comment\nthere; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'ContinueStatement',
-                label: null,
-                range: [2, 9],
+        'while (true) { continue // Comment\nthere; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
                 loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 10 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
                 }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'there',
-                    range: [22, 26],
+            },
+            body: {            
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ContinueStatement',
+                    label: null,
+                    range: [15, 22],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 23 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'there',
+                        range: [35, 39],
+                        loc: {
+                            start: { line: 2, column: 0 },
+                            end: { line: 2, column: 5 }
+                        }
+                    },
+                    range: [35, 40],
                     loc: {
                         start: { line: 2, column: 0 },
-                        end: { line: 2, column: 5 }
+                        end: { line: 2, column: 6 }
                     }
-                },
-                range: [22, 27],
+                }],
+                range: [13, 42],
                 loc: {
-                    start: { line: 2, column: 0 },
-                    end: { line: 2, column: 6 }
+                    start: { line: 1, column: 13 },
+                    end: { line: 2, column: 8 }
                 }
-            }],
-            range: [0, 29],
+            },
+            range: [0, 42],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 8 }
             }
         },
 
-        '{ continue /* Multiline\nComment */there; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'ContinueStatement',
-                label: null,
-                range: [2, 9],
+        'while (true) { continue /* Multiline\nComment */there; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
                 loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 10 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
                 }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'there',
-                    range: [34, 38],
+            },
+            body: {            
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ContinueStatement',
+                    label: null,
+                    range: [15, 22],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 23 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'there',
+                        range: [47, 51],
+                        loc: {
+                            start: { line: 2, column: 10 },
+                            end: { line: 2, column: 15 }
+                        }
+                    },
+                    range: [47, 52],
                     loc: {
                         start: { line: 2, column: 10 },
-                        end: { line: 2, column: 15 }
+                        end: { line: 2, column: 16 }
                     }
-                },
-                range: [34, 39],
+                }],
+                range: [13, 54],
                 loc: {
-                    start: { line: 2, column: 10 },
-                    end: { line: 2, column: 16 }
+                    start: { line: 1, column: 13 },
+                    end: { line: 2, column: 18 }
                 }
-            }],
-            range: [0, 41],
+            },
+            range: [0, 54],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 18 }
             }
         },
 
-        '{ break\nthere; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'BreakStatement',
-                label: null,
-                range: [2, 6],
+        'while (true) { break\nthere; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
                 loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 7 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
                 }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'there',
-                    range: [8, 12],
+            },
+            body: {            
+                type: 'BlockStatement',
+                body: [{
+                    type: 'BreakStatement',
+                    label: null,
+                    range: [15, 19],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 20 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'there',
+                        range: [21, 25],
+                        loc: {
+                            start: { line: 2, column: 0 },
+                            end: { line: 2, column: 5 }
+                        }
+                    },
+                    range: [21, 26],
                     loc: {
                         start: { line: 2, column: 0 },
-                        end: { line: 2, column: 5 }
+                        end: { line: 2, column: 6 }
                     }
-                },
-                range: [8, 13],
+                }],
+                range: [13, 28],
                 loc: {
-                    start: { line: 2, column: 0 },
-                    end: { line: 2, column: 6 }
+                    start: { line: 1, column: 13 },
+                    end: { line: 2, column: 8 }
                 }
-            }],
-            range: [0, 15],
+            },
+            range: [0, 28],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 8 }
             }
         },
 
-        '{ break // Comment\nthere; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'BreakStatement',
-                label: null,
-                range: [2, 6],
+        'while (true) { break // Comment\nthere; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
                 loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 7 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
                 }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'there',
-                    range: [19, 23],
+            },
+            body: {            
+                type: 'BlockStatement',
+                body: [{
+                    type: 'BreakStatement',
+                    label: null,
+                    range: [15, 19],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 20 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'there',
+                        range: [32, 36],
+                        loc: {
+                            start: { line: 2, column: 0 },
+                            end: { line: 2, column: 5 }
+                        }
+                    },
+                    range: [32, 37],
                     loc: {
                         start: { line: 2, column: 0 },
-                        end: { line: 2, column: 5 }
+                        end: { line: 2, column: 6 }
                     }
-                },
-                range: [19, 24],
+                }],
+                range: [13, 39],
                 loc: {
-                    start: { line: 2, column: 0 },
-                    end: { line: 2, column: 6 }
+                    start: { line: 1, column: 13 },
+                    end: { line: 2, column: 8 }
                 }
-            }],
-            range: [0, 26],
+            },
+            range: [0, 39],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 8 }
             }
         },
 
-        '{ break /* Multiline\nComment */there; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'BreakStatement',
-                label: null,
-                range: [2, 6],
+        'while (true) { break /* Multiline\nComment */there; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
                 loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 7 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
                 }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'there',
-                    range: [31, 35],
+            },
+            body: {            
+                type: 'BlockStatement',
+                body: [{
+                    type: 'BreakStatement',
+                    label: null,
+                    range: [15, 19],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 20 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'there',
+                        range: [44, 48],
+                        loc: {
+                            start: { line: 2, column: 10 },
+                            end: { line: 2, column: 15 }
+                        }
+                    },
+                    range: [44, 49],
                     loc: {
                         start: { line: 2, column: 10 },
-                        end: { line: 2, column: 15 }
+                        end: { line: 2, column: 16 }
                     }
-                },
-                range: [31, 36],
+                }],
+                range: [13, 51],
                 loc: {
-                    start: { line: 2, column: 10 },
-                    end: { line: 2, column: 16 }
+                    start: { line: 1, column: 13 },
+                    end: { line: 2, column: 18 }
                 }
-            }],
-            range: [0, 38],
+            },
+            range: [0, 51],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 18 }
             }
-        },
+        },        
 
         '{ return\nx; }': {
             type: 'BlockStatement',
@@ -19810,6 +20154,76 @@ data = {
             lineNumber: 1,
             column: 4,
             message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        'break': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Unlabeled break must be inside loop or switch'
+        },
+
+        'continue': {
+            index: 8,
+            lineNumber: 1,
+            column: 9,
+            message: 'Error: Line 1: Continue must be inside loop'
+        },
+
+        'switch (x) { default: continue; }': {
+            index: 31,
+            lineNumber: 1,
+            column: 32,
+            message: 'Error: Line 1: Continue must be inside loop'
+        },
+
+        'while (true) { break x; }': {
+            index: 22,
+            lineNumber: 1,
+            column: 23,
+            message: 'Error: Line 1: Label \'x\' not found'
+        },
+
+        'while (true) { continue x; }': {
+            index: 25,
+            lineNumber: 1,
+            column: 26,
+            message: 'Error: Line 1: Label \'x\' not found'
+        },
+
+        'x: while (true) { (function () { break x; }); }': {
+            index: 40,
+            lineNumber: 1,
+            column: 41,
+            message: 'Error: Line 1: Label \'x\' not found'
+        },
+
+        'x: while (true) { (function () { continue x; }); }': {
+            index: 43,
+            lineNumber: 1,
+            column: 44,
+            message: 'Error: Line 1: Label \'x\' not found'
+        },
+
+        'x: while (true) { (function () { break; }); }': {
+            index: 39,
+            lineNumber: 1,
+            column: 40,
+            message: 'Error: Line 1: Unlabeled break must be inside loop or switch'
+        },
+
+        'x: while (true) { (function () { continue; }); }': {
+            index: 42,
+            lineNumber: 1,
+            column: 43,
+            message: 'Error: Line 1: Continue must be inside loop'
+        },
+
+        'x: while (true) { x: while (true) { } }': {
+            index: 20,
+            lineNumber: 1,
+            column: 21,
+            message: 'Error: Line 1: Duplicate label \'x\''
         },
 
         '(function () { \'use strict\'; delete i; }())': {
