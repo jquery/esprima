@@ -55,7 +55,7 @@ function parse(delay) {
             document.getElementById('tokens').value = JSON.stringify(esprima.parse(code,
                 { tokens : true }).tokens, adjustRegexLiteral, 4);
         } catch (e) {
-            str = e.toString();
+            str = e.name + ': ' + e.message;
         }
 
         el = document.getElementById('syntax');
