@@ -57,7 +57,10 @@ parseStatement: true, parseSourceElement: true */
         buffer,
         base,
         indent,
-        extra;
+        extra,
+        labelSet,
+        inIteration,
+        inSwitch;
 
     Token = {
         BooleanLiteral: 1,
@@ -130,6 +133,10 @@ parseStatement: true, parseSourceElement: true */
         InvalidRegExp: 'Invalid regular expression',
         UnterminatedRegExp:  'Invalid regular expression: missing /',
         NoCatchOrFinally:  'Missing catch or finally after try',
+        LabelNotFound: 'Label \'%0\' not found',
+        DuplicateLabel: 'Duplicate label \'%0\'',
+        NotInIteration: 'Continue must be inside loop',
+        NotInIterationOrSwitch: 'Unlabeled break must be inside loop or switch',
         StrictModeWith:  'Strict mode code may not include a with statement',
         StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',
         StrictVarName:  'Variable name may not be eval or arguments in strict mode',
@@ -2218,11 +2225,16 @@ parseStatement: true, parseSourceElement: true */
     // 12.6 Iteration Statements
 
     function parseDoWhileStatement() {
-        var body, test;
+        var body, test, oldInIteration;
 
         expectKeyword('do');
 
+        oldInIteration = inIteration;
+        inIteration = true;
+
         body = parseStatement();
+
+        inIteration = oldInIteration;
 
         expectKeyword('while');
 
@@ -2244,7 +2256,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseWhileStatement() {
-        var test, body;
+        var test, body, oldInIteration;
 
         expectKeyword('while');
 
@@ -2254,7 +2266,12 @@ parseStatement: true, parseSourceElement: true */
 
         expect(')');
 
+        oldInIteration = inIteration;
+        inIteration = true;
+
         body = parseStatement();
+
+        inIteration = oldInIteration;
 
         return {
             type: Syntax.WhileStatement,
@@ -2274,7 +2291,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseForStatement() {
-        var init, test, update, left, right, body;
+        var init, test, update, left, right, body, oldInIteration;
 
         init = test = update = null;
 
@@ -2328,7 +2345,12 @@ parseStatement: true, parseSourceElement: true */
 
         expect(')');
 
+        oldInIteration = inIteration;
+        inIteration = true;
+
         body = parseStatement();
+
+        inIteration = oldInIteration;
 
         if (typeof left === 'undefined') {
             return {
@@ -2359,6 +2381,11 @@ parseStatement: true, parseSourceElement: true */
         // Optimize the most common form: 'continue;'.
         if (source[index] === ';') {
             lex();
+            
+            if (!inIteration) {
+                throwError({}, Messages.NotInIteration);
+            }
+
             return {
                 type: Syntax.ContinueStatement,
                 label: null
@@ -2366,6 +2393,10 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (peekLineTerminator()) {
+            if (!inIteration) {
+                throwError({}, Messages.NotInIteration);
+            }
+
             return {
                 type: Syntax.ContinueStatement,
                 label: null
@@ -2375,9 +2406,17 @@ parseStatement: true, parseSourceElement: true */
         token = lookahead();
         if (token.type === Token.Identifier) {
             label = parseVariableIdentifier();
+
+            if (labelSet.indexOf(label.name) === -1) {
+                throwError({}, Messages.LabelNotFound, label.name);
+            }
         }
 
         consumeSemicolon();
+
+        if (label === null && !inIteration) {
+            throwError({}, Messages.NotInIteration);
+        }
 
         return {
             type: Syntax.ContinueStatement,
@@ -2395,6 +2434,11 @@ parseStatement: true, parseSourceElement: true */
         // Optimize the most common form: 'break;'.
         if (source[index] === ';') {
             lex();
+            
+            if (!(inIteration || inSwitch)) {
+                throwError({}, Messages.NotInIterationOrSwitch);
+            }
+
             return {
                 type: Syntax.BreakStatement,
                 label: null
@@ -2402,6 +2446,10 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (peekLineTerminator()) {
+            if (!(inIteration || inSwitch)) {
+                throwError({}, Messages.NotInIterationOrSwitch);
+            }
+
             return {
                 type: Syntax.BreakStatement,
                 label: null
@@ -2411,9 +2459,17 @@ parseStatement: true, parseSourceElement: true */
         token = lookahead();
         if (token.type === Token.Identifier) {
             label = parseVariableIdentifier();
+
+            if (labelSet.indexOf(label.name) === -1) {
+                throwError({}, Messages.LabelNotFound, label.name);
+            }
         }
 
         consumeSemicolon();
+
+        if (label === null && !(inIteration || inSwitch)) {
+            throwError({}, Messages.NotInIterationOrSwitch);
+        }
 
         return {
             type: Syntax.BreakStatement,
@@ -2513,7 +2569,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseSwitchStatement() {
-        var discriminant, cases, test;
+        var discriminant, cases, test, oldInSwitch;
 
         expectKeyword('switch');
 
@@ -2535,6 +2591,9 @@ parseStatement: true, parseSourceElement: true */
 
         cases = [];
 
+        oldInSwitch = inSwitch;
+        inSwitch = true;
+
         while (index < length) {
             if (match('}')) {
                 break;
@@ -2551,6 +2610,8 @@ parseStatement: true, parseSourceElement: true */
 
             cases.push(parseSwitchCase(test));
         }
+
+        inSwitch = oldInSwitch;
 
         expect('}');
 
@@ -2651,7 +2712,8 @@ parseStatement: true, parseSourceElement: true */
 
     function parseStatement() {
         var token = lookahead(),
-            expr;
+            expr,
+            labeledBody;
 
         if (token.type === Token.EOF) {
             return;
@@ -2710,10 +2772,19 @@ parseStatement: true, parseSourceElement: true */
         // 12.12 Labelled Statements
         if ((expr.type === Syntax.Identifier) && match(':')) {
             lex();
+
+            if (labelSet.indexOf(expr.name) !== -1) {
+                throwError({}, Messages.DuplicateLabel, expr.name);
+            }
+
+            labelSet.push(expr.name);
+            labeledBody = parseStatement();
+            labelSet.pop();
+
             return {
                 type: Syntax.LabeledStatement,
                 label: expr,
-                body: parseStatement()
+                body: labeledBody
             };
         }
 
@@ -2728,7 +2799,7 @@ parseStatement: true, parseSourceElement: true */
     // 13 Function Definition
 
     function parseFunctionSourceElements() {
-        var sourceElement, sourceElements = [], token, directive, firstRestricted;
+        var sourceElement, sourceElements = [], token, directive, firstRestricted, oldLabelSet, oldInIteration, oldInSwitch;
 
         expect('{');
 
@@ -2757,6 +2828,14 @@ parseStatement: true, parseSourceElement: true */
             }
         }
 
+        oldLabelSet = labelSet;
+        oldInIteration = inIteration;
+        oldInSwitch = inSwitch;
+
+        labelSet = [];
+        inIteration = false;
+        inSwitch = false;
+
         while (index < length) {
             if (match('}')) {
                 break;
@@ -2769,6 +2848,10 @@ parseStatement: true, parseSourceElement: true */
         }
 
         expect('}');
+
+        labelSet = oldLabelSet;
+        inIteration = oldInIteration;
+        inSwitch = oldInSwitch;
 
         return {
             type: Syntax.BlockStatement,
@@ -3432,6 +3515,9 @@ parseStatement: true, parseSourceElement: true */
         length = source.length;
         buffer = null;
         allowIn = true;
+        labelSet = [];
+        inSwitch = false;
+        inIteration = false;
 
         extra = {};
         if (typeof options !== 'undefined') {
