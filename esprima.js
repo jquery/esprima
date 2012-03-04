@@ -134,11 +134,11 @@ parseStatement: true, parseSourceElement: true */
         InvalidRegExp: 'Invalid regular expression',
         UnterminatedRegExp:  'Invalid regular expression: missing /',
         NoCatchOrFinally:  'Missing catch or finally after try',
-        LabelNotFound: 'Label \'%0\' not found',
-        DuplicateLabel: 'Duplicate label \'%0\'',
-        NotInIteration: 'Continue must be inside loop',
-        NotInIterationOrSwitch: 'Unlabeled break must be inside loop or switch',
-        InvalidReturn: 'Return statement must be inside function body',
+        UnknownLabel: 'Undefined label \'%0\'',
+        Redeclaration: '%0 \'%1\' has already been declared',
+        IllegalContinue: 'Illegal continue statement',
+        IllegalBreak: 'Illegal break statement',
+        IllegalReturn: 'Illegal return statement',
         StrictModeWith:  'Strict mode code may not include a with statement',
         StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',
         StrictVarName:  'Variable name may not be eval or arguments in strict mode',
@@ -2385,7 +2385,7 @@ parseStatement: true, parseSourceElement: true */
             lex();
             
             if (!inIteration) {
-                throwError({}, Messages.NotInIteration);
+                throwError({}, Messages.IllegalContinue);
             }
 
             return {
@@ -2396,7 +2396,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (peekLineTerminator()) {
             if (!inIteration) {
-                throwError({}, Messages.NotInIteration);
+                throwError({}, Messages.IllegalContinue);
             }
 
             return {
@@ -2410,14 +2410,14 @@ parseStatement: true, parseSourceElement: true */
             label = parseVariableIdentifier();
 
             if (!Object.prototype.hasOwnProperty.call(labelSet, label.name)) {
-                throwError({}, Messages.LabelNotFound, label.name);
+                throwError({}, Messages.UnknownLabel, label.name);
             }
         }
 
         consumeSemicolon();
 
         if (label === null && !inIteration) {
-            throwError({}, Messages.NotInIteration);
+            throwError({}, Messages.IllegalContinue);
         }
 
         return {
@@ -2438,7 +2438,7 @@ parseStatement: true, parseSourceElement: true */
             lex();
             
             if (!(inIteration || inSwitch)) {
-                throwError({}, Messages.NotInIterationOrSwitch);
+                throwError({}, Messages.IllegalBreak);
             }
 
             return {
@@ -2449,7 +2449,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (peekLineTerminator()) {
             if (!(inIteration || inSwitch)) {
-                throwError({}, Messages.NotInIterationOrSwitch);
+                throwError({}, Messages.IllegalBreak);
             }
 
             return {
@@ -2463,14 +2463,14 @@ parseStatement: true, parseSourceElement: true */
             label = parseVariableIdentifier();
 
             if (!Object.prototype.hasOwnProperty.call(labelSet, label.name)) {
-                throwError({}, Messages.LabelNotFound, label.name);
+                throwError({}, Messages.UnknownLabel, label.name);
             }
         }
 
         consumeSemicolon();
 
         if (label === null && !(inIteration || inSwitch)) {
-            throwError({}, Messages.NotInIterationOrSwitch);
+            throwError({}, Messages.IllegalBreak);
         }
 
         return {
@@ -2487,7 +2487,7 @@ parseStatement: true, parseSourceElement: true */
         expectKeyword('return');
 
         if (!inFunctionBody) {
-            throwError({}, Messages.InvalidReturn);
+            throwError({}, Messages.IllegalReturn);
         }
 
         // 'return' followed by a space and an identifier is very common.
@@ -2780,7 +2780,7 @@ parseStatement: true, parseSourceElement: true */
             lex();
 
             if (Object.prototype.hasOwnProperty.call(labelSet, expr.name)) {
-                throwError({}, Messages.DuplicateLabel, expr.name);
+                throwError({}, Messages.Redeclaration, 'Label', expr.name);
             }
 
             labelSet[expr.name] = true;

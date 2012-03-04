@@ -20334,77 +20334,77 @@ data = {
             index: 6,
             lineNumber: 1,
             column: 7,
-            message: 'Error: Line 1: Return statement must be inside function body'
+            message: 'Error: Line 1: Illegal return statement'
         },
 
         'break': {
             index: 5,
             lineNumber: 1,
             column: 6,
-            message: 'Error: Line 1: Unlabeled break must be inside loop or switch'
+            message: 'Error: Line 1: Illegal break statement'
         },
 
         'continue': {
             index: 8,
             lineNumber: 1,
             column: 9,
-            message: 'Error: Line 1: Continue must be inside loop'
+            message: 'Error: Line 1: Illegal continue statement'
         },
 
         'switch (x) { default: continue; }': {
             index: 31,
             lineNumber: 1,
             column: 32,
-            message: 'Error: Line 1: Continue must be inside loop'
+            message: 'Error: Line 1: Illegal continue statement'
         },
 
         'while (true) { break x; }': {
             index: 22,
             lineNumber: 1,
             column: 23,
-            message: 'Error: Line 1: Label \'x\' not found'
+            message: 'Error: Line 1: Undefined label \'x\''
         },
 
         'while (true) { continue x; }': {
             index: 25,
             lineNumber: 1,
             column: 26,
-            message: 'Error: Line 1: Label \'x\' not found'
+            message: 'Error: Line 1: Undefined label \'x\''
         },
 
         'x: while (true) { (function () { break x; }); }': {
             index: 40,
             lineNumber: 1,
             column: 41,
-            message: 'Error: Line 1: Label \'x\' not found'
+            message: 'Error: Line 1: Undefined label \'x\''
         },
 
         'x: while (true) { (function () { continue x; }); }': {
             index: 43,
             lineNumber: 1,
             column: 44,
-            message: 'Error: Line 1: Label \'x\' not found'
+            message: 'Error: Line 1: Undefined label \'x\''
         },
 
         'x: while (true) { (function () { break; }); }': {
             index: 39,
             lineNumber: 1,
             column: 40,
-            message: 'Error: Line 1: Unlabeled break must be inside loop or switch'
+            message: 'Error: Line 1: Illegal break statement'
         },
 
         'x: while (true) { (function () { continue; }); }': {
             index: 42,
             lineNumber: 1,
             column: 43,
-            message: 'Error: Line 1: Continue must be inside loop'
+            message: 'Error: Line 1: Illegal continue statement'
         },
 
         'x: while (true) { x: while (true) { } }': {
             index: 20,
             lineNumber: 1,
             column: 21,
-            message: 'Error: Line 1: Duplicate label \'x\''
+            message: 'Error: Line 1: Label \'x\' has already been declared'
         },
 
         '(function () { \'use strict\'; delete i; }())': {
