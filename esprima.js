@@ -2752,7 +2752,7 @@ parseStatement: true, parseSourceElement: true */
             labeledBody;
 
         if (token.type === Token.EOF) {
-            return;
+            throwUnexpected(token);
         }
 
         if (token.type === Token.Punctuator) {

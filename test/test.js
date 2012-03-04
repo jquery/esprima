@@ -20352,6 +20352,48 @@ data = {
             message: 'Error: Line 1: Invalid left-hand side in for-in'
         },
 
+        'if(false)': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'if(false) doThis(); else': {
+            index: 24,
+            lineNumber: 1,
+            column: 25,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'do': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'while(false)': {
+            index: 12,
+            lineNumber: 1,
+            column: 13,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'for(;;)': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'with(x)': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
         'try { }': {
             index: 7,
             lineNumber: 1,
