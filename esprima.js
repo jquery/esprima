@@ -49,6 +49,7 @@ parseStatement: true, parseSourceElement: true */
         BinaryPrecedence,
         source,
         allowIn,
+        lastParenthesized,
         strict,
         index,
         lineNumber,
@@ -132,6 +133,8 @@ parseStatement: true, parseSourceElement: true */
         NewlineAfterThrow:  'Illegal newline after throw',
         InvalidRegExp: 'Invalid regular expression',
         UnterminatedRegExp:  'Invalid regular expression: missing /',
+        InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
+        InvalidLHSInForIn:  'Invalid left-hand side in for-in',
         NoCatchOrFinally:  'Missing catch or finally after try',
         LabelNotFound: 'Label \'%0\' not found',
         DuplicateLabel: 'Duplicate label \'%0\'',
@@ -1310,6 +1313,22 @@ parseStatement: true, parseSourceElement: true */
         return;
     }
 
+    // Return true if provided expression is LeftHandSideExpression
+
+    function isLeftHandSide(expr) {
+        switch (expr.type) {
+        case 'AssignmentExpression':
+        case 'BinaryExpression':
+        case 'ConditionalExpression':
+        case 'LogicalExpression':
+        case 'SequenceExpression':
+        case 'UnaryExpression':
+        case 'UpdateExpression':
+            return false;
+        }
+        return true;
+    }
+
     // 11.1.4 Array Initialiser
 
     function parseArrayInitialiser() {
@@ -1578,7 +1597,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (match('(')) {
             lex();
-            expr = parseExpression();
+            lastParenthesized = expr = parseExpression();
             expect(')');
             return expr;
         }
@@ -2006,6 +2025,11 @@ parseStatement: true, parseSourceElement: true */
         expr = parseConditionalExpression();
 
         if (matchAssign()) {
+            // LeftHandSideExpression
+            if (lastParenthesized !== expr && !isLeftHandSide(expr)) {
+                throwError({}, Messages.InvalidLHSInAssignment);
+            }
+
             // 11.13.1
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwError({}, Messages.StrictLHSAssignment);
@@ -2319,6 +2343,10 @@ parseStatement: true, parseSourceElement: true */
                 allowIn = true;
 
                 if (matchKeyword('in')) {
+                    // LeftHandSideExpression
+                    if (matchKeyword('in') && (lastParenthesized !== init && !isLeftHandSide(init))) {
+                        throwError({}, Messages.InvalidLHSInForIn);
+                    }
                     lex();
                     left = init;
                     right = parseExpression();
@@ -3518,6 +3546,7 @@ parseStatement: true, parseSourceElement: true */
         labelSet = {};
         inSwitch = false;
         inIteration = false;
+        lastParenthesized = null;
 
         extra = {};
         if (typeof options !== 'undefined') {
@@ -3844,7 +3873,7 @@ parseStatement: true, parseSourceElement: true */
 
         case Syntax.AssignmentExpression:
             result = parenthesize(
-                generateExpression(expr.left) + ' ' + expr.operator + ' ' +
+                generateExpression(expr.left, Precedence.Call) + ' ' + expr.operator + ' ' +
                     generateExpression(expr.right, Precedence.Assignment),
                 Precedence.Assignment,
                 precedence
@@ -4280,7 +4309,7 @@ parseStatement: true, parseSourceElement: true */
             } else {
                 previousBase = base;
                 base += indent;
-                result += generateExpression(stmt.left);
+                result += generateExpression(stmt.left, Precedence.Call);
                 base = previousBase;
             }
 
