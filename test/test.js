@@ -11422,80 +11422,191 @@ data = {
 
     'return statement': {
 
-        'return': {
-            type: 'ReturnStatement',
-            argument: null,
-            range: [0, 5],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 6 }
-            }
-        },
-
-        'return;': {
-            type: 'ReturnStatement',
-            argument: null,
-            range: [0, 6],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 7 }
-            }
-        },
-
-        'return x;': {
-            type: 'ReturnStatement',
-            argument: {
-                type: 'Identifier',
-                name: 'x',
-                range: [7, 7],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 8 }
-                }
-            },
-            range: [0, 8],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 9 }
-            }
-        },
-
-        'return x * y': {
-            type: 'ReturnStatement',
-            argument: {
-                type: 'BinaryExpression',
-                operator: '*',
-                left: {
-                    type: 'Identifier',
-                    name: 'x',
-                    range: [7, 7],
-                    loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 8 }
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y',
-                    range: [11, 11],
+        '(function(){ return })': {
+           type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: null,
+                            range: [13, 19],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 20 }
+                            }
+                        }
+                    ],
+                    range: [11, 20],
                     loc: {
                         start: { line: 1, column: 11 },
-                        end: { line: 1, column: 12 }
+                        end: { line: 1, column: 21 }
                     }
                 },
-                range: [7, 11],
+                range: [0, 21],
                 loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 12 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 22 }
                 }
             },
-            range: [0, 11],
+            range: [0, 21],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 12 }
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        '(function(){ return; })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: null,
+                            range: [13, 19],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 20 }
+                            }
+                        }
+                    ],
+                    range: [11, 21],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                range: [0, 22],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
+        },
+
+        '(function(){ return x; })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [20, 20],
+                                loc: {
+                                    start: { line: 1, column: 20 },
+                                    end: { line: 1, column: 21 }
+                                }
+                            },
+                            range: [13, 21],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 22 }
+                            }
+                        }
+                    ],
+                    range: [11, 23],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                range: [0, 24],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        '(function(){ return x * y })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: {
+                                type: 'BinaryExpression',
+                                operator: '*',
+                                left: {
+                                    type: 'Identifier',
+                                    name: 'x',
+                                    range: [20, 20],
+                                    loc: {
+                                        start: { line: 1, column: 20 },
+                                        end: { line: 1, column: 21 }
+                                    }
+                                },
+                                right: {
+                                    type: 'Identifier',
+                                    name: 'y',
+                                    range: [24, 24],
+                                    loc: {
+                                        start: { line: 1, column: 24 },
+                                        end: { line: 1, column: 25 }
+                                    }
+                                },
+                                range: [20, 24],
+                                loc: {
+                                    start: { line: 1, column: 20 },
+                                    end: { line: 1, column: 25 }
+                                }
+                            },
+                            range: [13, 25],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 26 }
+                            }
+                        }
+                    ],
+                    range: [11, 26],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                range: [0, 27],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 28 }
+                }
+            },
+            range: [0, 27],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
             }
         }
-
     },
 
     'with statement': {
@@ -13703,105 +13814,168 @@ data = {
             }
         },        
 
-        '{ return\nx; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'ReturnStatement',
-                argument: null,
-                range: [2, 7],
-                loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 8 }
-                }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'x',
-                    range: [9, 9],
+        '(function(){ return\nx; })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: null,
+                            range: [13, 18],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 19 }
+                            }
+                        },
+                        {
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [20, 20],
+                                loc: {
+                                    start: { line: 2, column: 0 },
+                                    end: { line: 2, column: 1 }
+                                }
+                            },
+                            range: [20, 21],
+                            loc: {
+                                start: { line: 2, column: 0 },
+                                end: { line: 2, column: 2 }
+                            }
+                        }
+                    ],
+                    range: [11, 23],
                     loc: {
-                        start: { line: 2, column: 0 },
-                        end: { line: 2, column: 1 }
+                        start: { line: 1, column: 11 },
+                        end: { line: 2, column: 4 }
                     }
                 },
-                range: [9, 10],
+                range: [0, 24],
                 loc: {
-                    start: { line: 2, column: 0 },
-                    end: { line: 2, column: 2 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 5 }
                 }
-            }],
-            range: [0, 12],
+            },
+            range: [0, 24],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 2, column: 4 }
+                end: { line: 2, column: 5 }
             }
         },
 
-        '{ return // Comment\nx; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'ReturnStatement',
-                argument: null,
-                range: [2, 7],
-                loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 8 }
-                }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'x',
-                    range: [20, 20],
+        '(function(){ return // Comment\nx; })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: null,
+                            range: [13, 18],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 19 }
+                            }
+                        },
+                        {
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [31, 31],
+                                loc: {
+                                    start: { line: 2, column: 0 },
+                                    end: { line: 2, column: 1 }
+                                }
+                            },
+                            range: [31, 32],
+                            loc: {
+                                start: { line: 2, column: 0 },
+                                end: { line: 2, column: 2 }
+                            }
+                        }
+                    ],
+                    range: [11, 34],
                     loc: {
-                        start: { line: 2, column: 0 },
-                        end: { line: 2, column: 1 }
+                        start: { line: 1, column: 11 },
+                        end: { line: 2, column: 4 }
                     }
                 },
-                range: [20, 21],
+                range: [0, 35],
                 loc: {
-                    start: { line: 2, column: 0 },
-                    end: { line: 2, column: 2 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 5 }
                 }
-            }],
-            range: [0, 23],
+            },
+            range: [0, 35],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 2, column: 4 }
+                end: { line: 2, column: 5 }
             }
         },
 
-        '{ return/* Multiline\nComment */x; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'ReturnStatement',
-                argument: null,
-                range: [2, 7],
-                loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 8 }
-                }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'x',
-                    range: [31, 31],
+        '(function(){ return/* Multiline\nComment */x; })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: null,
+                            range: [13, 18],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 19 }
+                            }
+                        },
+                        {
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [42, 42],
+                                loc: {
+                                    start: { line: 2, column: 10 },
+                                    end: { line: 2, column: 11 }
+                                }
+                            },
+                            range: [42, 43],
+                            loc: {
+                                start: { line: 2, column: 10 },
+                                end: { line: 2, column: 12 }
+                            }
+                        }
+                    ],
+                    range: [11, 45],
                     loc: {
-                        start: { line: 2, column: 10 },
-                        end: { line: 2, column: 11 }
+                        start: { line: 1, column: 11 },
+                        end: { line: 2, column: 14 }
                     }
                 },
-                range: [31, 32],
+                range: [0, 46],
                 loc: {
-                    start: { line: 2, column: 10 },
-                    end: { line: 2, column: 12 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 15 }
                 }
-            }],
-            range: [0, 34],
+            },
+            range: [0, 46],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 2, column: 14 }
+                end: { line: 2, column: 15 }
             }
         },
 
@@ -20154,6 +20328,13 @@ data = {
             lineNumber: 1,
             column: 4,
             message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        'return': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Return statement must be inside function body'
         },
 
         'break': {

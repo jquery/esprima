@@ -60,7 +60,8 @@ parseStatement: true, parseSourceElement: true */
         extra,
         labelSet,
         inIteration,
-        inSwitch;
+        inSwitch,
+        inFunctionBody;
 
     Token = {
         BooleanLiteral: 1,
@@ -137,6 +138,7 @@ parseStatement: true, parseSourceElement: true */
         DuplicateLabel: 'Duplicate label \'%0\'',
         NotInIteration: 'Continue must be inside loop',
         NotInIterationOrSwitch: 'Unlabeled break must be inside loop or switch',
+        InvalidReturn: 'Return statement must be inside function body',
         StrictModeWith:  'Strict mode code may not include a with statement',
         StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',
         StrictVarName:  'Variable name may not be eval or arguments in strict mode',
@@ -2484,6 +2486,10 @@ parseStatement: true, parseSourceElement: true */
 
         expectKeyword('return');
 
+        if (!inFunctionBody) {
+            throwError({}, Messages.InvalidReturn);
+        }
+
         // 'return' followed by a space and an identifier is very common.
         if (source[index] === ' ') {
             if (isIdentifierStart(source[index + 1])) {
@@ -2799,7 +2805,7 @@ parseStatement: true, parseSourceElement: true */
     // 13 Function Definition
 
     function parseFunctionSourceElements() {
-        var sourceElement, sourceElements = [], token, directive, firstRestricted, oldLabelSet, oldInIteration, oldInSwitch;
+        var sourceElement, sourceElements = [], token, directive, firstRestricted, oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody;
 
         expect('{');
 
@@ -2831,10 +2837,12 @@ parseStatement: true, parseSourceElement: true */
         oldLabelSet = labelSet;
         oldInIteration = inIteration;
         oldInSwitch = inSwitch;
+        oldInFunctionBody = inFunctionBody;
 
         labelSet = {};
         inIteration = false;
         inSwitch = false;
+        inFunctionBody = true;
 
         while (index < length) {
             if (match('}')) {
@@ -2852,6 +2860,7 @@ parseStatement: true, parseSourceElement: true */
         labelSet = oldLabelSet;
         inIteration = oldInIteration;
         inSwitch = oldInSwitch;
+        inFunctionBody = oldInFunctionBody;
 
         return {
             type: Syntax.BlockStatement,
@@ -3518,6 +3527,7 @@ parseStatement: true, parseSourceElement: true */
         labelSet = {};
         inSwitch = false;
         inIteration = false;
+        inFunctionBody = false;
 
         extra = {};
         if (typeof options !== 'undefined') {
