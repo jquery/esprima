@@ -3,6 +3,12 @@ Esprima ([esprima.org](http://esprima.org)) is an educational
 (also popularly known as [JavaScript](http://en.wikipedia.org/wiki/JavaScript>JavaScript))
 parsing infrastructure for multipurpose analysis. It is also written in ECMAScript.
 
+Esprima serves as a good basis for various tools such as coverage analyzer
+([node-cover](https://github.com/itay/node-cover) and
+[coveraje](https://github.com/coveraje/coveraje)),
+syntax formatter ([Code Painter](https://github.com/fawek/codepainter)),
+and code generator ([escodegen](https://github.com/Constellation/escodegen)).
+
 Esprima can be used in a web browser:
 
     <script src="esprima.js"></script>
