@@ -124,6 +124,7 @@ parseStatement: true, parseSourceElement: true */
         Set: 4
     };
 
+    // Error messages should be identical to V8.
     Messages = {
         UnexpectedToken:  'Unexpected token %0',
         UnexpectedNumber:  'Unexpected number',
