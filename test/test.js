@@ -14319,6 +14319,20 @@ data = {
 
     },
 
+    'Source elements': {
+
+        '': {
+            type: 'Program',
+            body: [],
+            range: [0, -1],
+            loc: {
+                start: { line: 0, column: 0 },
+                end: { line: 0, column: 0 }
+            },
+            tokens: []
+        }
+    },
+
     'Trace Function Entrance': {
 
         'function hello() {}': {
