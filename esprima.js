@@ -61,7 +61,8 @@ parseStatement: true, parseSourceElement: true */
         extra,
         labelSet,
         inIteration,
-        inSwitch;
+        inSwitch,
+        inFunctionBody;
 
     Token = {
         BooleanLiteral: 1,
@@ -136,10 +137,11 @@ parseStatement: true, parseSourceElement: true */
         InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
         InvalidLHSInForIn:  'Invalid left-hand side in for-in',
         NoCatchOrFinally:  'Missing catch or finally after try',
-        LabelNotFound: 'Label \'%0\' not found',
-        DuplicateLabel: 'Duplicate label \'%0\'',
-        NotInIteration: 'Continue must be inside loop',
-        NotInIterationOrSwitch: 'Unlabeled break must be inside loop or switch',
+        UnknownLabel: 'Undefined label \'%0\'',
+        Redeclaration: '%0 \'%1\' has already been declared',
+        IllegalContinue: 'Illegal continue statement',
+        IllegalBreak: 'Illegal break statement',
+        IllegalReturn: 'Illegal return statement',
         StrictModeWith:  'Strict mode code may not include a with statement',
         StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',
         StrictVarName:  'Variable name may not be eval or arguments in strict mode',
@@ -2411,7 +2413,7 @@ parseStatement: true, parseSourceElement: true */
             lex();
             
             if (!inIteration) {
-                throwError({}, Messages.NotInIteration);
+                throwError({}, Messages.IllegalContinue);
             }
 
             return {
@@ -2422,7 +2424,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (peekLineTerminator()) {
             if (!inIteration) {
-                throwError({}, Messages.NotInIteration);
+                throwError({}, Messages.IllegalContinue);
             }
 
             return {
@@ -2436,14 +2438,14 @@ parseStatement: true, parseSourceElement: true */
             label = parseVariableIdentifier();
 
             if (!Object.prototype.hasOwnProperty.call(labelSet, label.name)) {
-                throwError({}, Messages.LabelNotFound, label.name);
+                throwError({}, Messages.UnknownLabel, label.name);
             }
         }
 
         consumeSemicolon();
 
         if (label === null && !inIteration) {
-            throwError({}, Messages.NotInIteration);
+            throwError({}, Messages.IllegalContinue);
         }
 
         return {
@@ -2464,7 +2466,7 @@ parseStatement: true, parseSourceElement: true */
             lex();
             
             if (!(inIteration || inSwitch)) {
-                throwError({}, Messages.NotInIterationOrSwitch);
+                throwError({}, Messages.IllegalBreak);
             }
 
             return {
@@ -2475,7 +2477,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (peekLineTerminator()) {
             if (!(inIteration || inSwitch)) {
-                throwError({}, Messages.NotInIterationOrSwitch);
+                throwError({}, Messages.IllegalBreak);
             }
 
             return {
@@ -2489,14 +2491,14 @@ parseStatement: true, parseSourceElement: true */
             label = parseVariableIdentifier();
 
             if (!Object.prototype.hasOwnProperty.call(labelSet, label.name)) {
-                throwError({}, Messages.LabelNotFound, label.name);
+                throwError({}, Messages.UnknownLabel, label.name);
             }
         }
 
         consumeSemicolon();
 
         if (label === null && !(inIteration || inSwitch)) {
-            throwError({}, Messages.NotInIterationOrSwitch);
+            throwError({}, Messages.IllegalBreak);
         }
 
         return {
@@ -2511,6 +2513,10 @@ parseStatement: true, parseSourceElement: true */
         var token, argument = null;
 
         expectKeyword('return');
+
+        if (!inFunctionBody) {
+            throwError({}, Messages.IllegalReturn);
+        }
 
         // 'return' followed by a space and an identifier is very common.
         if (source[index] === ' ') {
@@ -2802,7 +2808,7 @@ parseStatement: true, parseSourceElement: true */
             lex();
 
             if (Object.prototype.hasOwnProperty.call(labelSet, expr.name)) {
-                throwError({}, Messages.DuplicateLabel, expr.name);
+                throwError({}, Messages.Redeclaration, 'Label', expr.name);
             }
 
             labelSet[expr.name] = true;
@@ -2827,7 +2833,7 @@ parseStatement: true, parseSourceElement: true */
     // 13 Function Definition
 
     function parseFunctionSourceElements() {
-        var sourceElement, sourceElements = [], token, directive, firstRestricted, oldLabelSet, oldInIteration, oldInSwitch;
+        var sourceElement, sourceElements = [], token, directive, firstRestricted, oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody;
 
         expect('{');
 
@@ -2859,10 +2865,12 @@ parseStatement: true, parseSourceElement: true */
         oldLabelSet = labelSet;
         oldInIteration = inIteration;
         oldInSwitch = inSwitch;
+        oldInFunctionBody = inFunctionBody;
 
         labelSet = {};
         inIteration = false;
         inSwitch = false;
+        inFunctionBody = true;
 
         while (index < length) {
             if (match('}')) {
@@ -2880,6 +2888,7 @@ parseStatement: true, parseSourceElement: true */
         labelSet = oldLabelSet;
         inIteration = oldInIteration;
         inSwitch = oldInSwitch;
+        inFunctionBody = oldInFunctionBody;
 
         return {
             type: Syntax.BlockStatement,
@@ -3547,6 +3556,7 @@ parseStatement: true, parseSourceElement: true */
         inSwitch = false;
         inIteration = false;
         lastParenthesized = null;
+        inFunctionBody = false;
 
         extra = {};
         if (typeof options !== 'undefined') {
