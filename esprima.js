@@ -3519,10 +3519,6 @@ parseStatement: true, parseSourceElement: true */
             parseVariableIdentifier = extra.parseVariableIdentifier;
         }
 
-        if (typeof extra.lex === 'function') {
-            lex = extra.lex;
-        }
-
         if (typeof extra.scanRegExp === 'function') {
             advance = extra.advance;
             scanRegExp = extra.scanRegExp;
