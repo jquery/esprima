@@ -731,8 +731,43 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 7 }
             }
-        }
+        },
 
+        '\u2163\u2161\u200A=\u2009[]': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: '\u2163\u2161',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 2 }
+                    }
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [],
+                    range: [5, 6],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 7 }
+                    }
+                },
+                range: [0, 6],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            range: [0, 6],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 7 }
+            }
+        }
 
     },
 

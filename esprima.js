@@ -249,9 +249,10 @@ parseStatement: true, parseSourceElement: true */
     // 7.2 White Space
 
     function isWhiteSpace(ch) {
-        // TODO Unicode "space separator"
         return (ch === ' ') || (ch === '\u0009') || (ch === '\u000B') ||
-            (ch === '\u000C') || (ch === '\u00A0') || (ch === '\uFEFF');
+            (ch === '\u000C') || (ch === '\u00A0') ||
+            (ch.charCodeAt(0) >= 0x1680 &&
+             '\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\uFEFF'.indexOf(ch) >= 0);
     }
 
     // 7.3 Line Terminators
