@@ -1353,26 +1353,20 @@ parseStatement: true, parseSourceElement: true */
 
         expect('[');
 
-        while (index < length) {
-            if (match(']')) {
-                lex();
-                break;
-            }
-
+        while (!match(']')) {
             if (match(',')) {
                 lex();
                 elements.push(undef);
             } else {
                 elements.push(parseAssignmentExpression());
 
-                if (match(']')) {
-                    lex();
-                    break;
+                if (!match(']')) {
+                    expect(',');
                 }
-
-                expect(',');
             }
         }
+
+        expect(']');
 
         return {
             type: Syntax.ArrayExpression,
@@ -1506,14 +1500,7 @@ parseStatement: true, parseSourceElement: true */
 
         expect('{');
 
-        while (index < length) {
-
-            token = lookahead();
-            if (token.type === Token.Punctuator && token.value === '}') {
-                lex();
-                break;
-            }
-
+        while (!match('}')) {
             property = parseObjectProperty();
             if (strict) {
                 if (property.key.type === Syntax.Identifier) {
@@ -1543,13 +1530,12 @@ parseStatement: true, parseSourceElement: true */
             }
             properties.push(property);
 
-            token = lookahead();
-            if (token.type === Token.Punctuator && token.value === '}') {
-                lex();
-                break;
+            if (!match('}')) {
+                expect(',');
             }
-            expect(',');
         }
+
+        expect('}');
 
         return {
             type: Syntax.ObjectExpression,
