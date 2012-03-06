@@ -28,7 +28,7 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint bitwise:true */
+/*jslint bitwise:true plusplus:true */
 /*global esprima:true, exports:true,
 throwError: true, createLiteral: true, generateStatement: true,
 parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
@@ -344,12 +344,7 @@ parseStatement: true, parseSourceElement: true */
     // Return the next character and move forward.
 
     function nextChar() {
-        var ch;
-        if (index < length) {
-            ch = source[index];
-            index += 1;
-        }
-        return ch;
+        return source[index++];
     }
 
     // 7.4 Comments
