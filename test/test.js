@@ -20093,6 +20093,27 @@ data = {
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
+        'x\\': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        'x\\u005c': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        'x\\u002a': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
         'var x = /(s/g': {
             index: 13,
             lineNumber: 1,
