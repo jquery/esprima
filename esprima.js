@@ -41,6 +41,7 @@ parseStatement: true, parseSourceElement: true */
     'use strict';
 
     var Token,
+        TokenName,
         Syntax,
         PropertyKind,
         Messages,
@@ -74,6 +75,16 @@ parseStatement: true, parseSourceElement: true */
         Punctuator: 7,
         StringLiteral: 8
     };
+
+    TokenName = {};
+    TokenName[Token.BooleanLiteral] = 'Boolean';
+    TokenName[Token.EOF] = '<end>';
+    TokenName[Token.Identifier] = 'Identifier';
+    TokenName[Token.Keyword] = 'Keyword';
+    TokenName[Token.NullLiteral] = 'Null';
+    TokenName[Token.NumericLiteral] = 'Numeric';
+    TokenName[Token.Punctuator] = 'Punctuator';
+    TokenName[Token.StringLiteral] = 'String';
 
     Syntax = {
         AssignmentExpression: 'AssignmentExpression',
@@ -215,6 +226,7 @@ parseStatement: true, parseSourceElement: true */
 
     if (typeof Object.freeze === 'function') {
         Object.freeze(Token);
+        Object.freeze(TokenName);
         Object.freeze(Syntax);
         Object.freeze(PropertyKind);
         Object.freeze(Messages);
@@ -3206,20 +3218,6 @@ parseStatement: true, parseSourceElement: true */
         addComment(start, index, (blockComment) ? 'Block' : 'Line', comment);
     }
 
-    function tokenTypeAsString(type) {
-        switch (type) {
-        case Token.BooleanLiteral: return 'Boolean';
-        case Token.Identifier: return 'Identifier';
-        case Token.Keyword: return 'Keyword';
-        case Token.NullLiteral: return 'Null';
-        case Token.NumericLiteral: return 'Numeric';
-        case Token.Punctuator: return 'Punctuator';
-        case Token.StringLiteral: return 'String';
-        default:
-            throw new Error('Unknown token type');
-        }
-    }
-
     function collectToken() {
         var token = extra.advance(),
             range,
@@ -3229,7 +3227,7 @@ parseStatement: true, parseSourceElement: true */
             range = [token.range[0], token.range[1] - 1];
             value = sliceSource(token.range[0], token.range[1]);
             extra.tokens.push({
-                type: tokenTypeAsString(token.type),
+                type: TokenName[token.type],
                 value: value,
                 range: range
             });
