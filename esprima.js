@@ -235,6 +235,17 @@ parseStatement: true, parseSourceElement: true */
         Object.freeze(BinaryPrecedence);
     }
 
+    // Ensure the condition is true, otherwise throw an error.
+    // This is only to have a better contract semantic, i.e. another safety net
+    // to catch a logic error. The condition shall be fulfilled in normal case.
+    // Do NOT use this to enforce a certain condition on any user input.
+
+    function assert(condition, message) {
+        if (!condition) {
+            throw new Error('ASSERT: ' + message);
+        }
+    }
+
     function sliceSource(from, to) {
         return source.slice(from, to);
     }
@@ -761,9 +772,8 @@ parseStatement: true, parseSourceElement: true */
         var number, start, ch;
 
         ch = source[index];
-        if (!isDecimalDigit(ch) && (ch !== '.')) {
-            return;
-        }
+        assert(isDecimalDigit(ch) || (ch === '.'),
+            'Numeric literal must start with a decimal digit or a decimal point');
 
         start = index;
         number = '';
@@ -903,9 +913,9 @@ parseStatement: true, parseSourceElement: true */
         var str = '', quote, start, ch, code, unescaped, restore, octal = false;
 
         quote = source[index];
-        if (quote !== '\'' && quote !== '"') {
-            return;
-        }
+        assert((quote === '\'' || quote === '"'),
+            'String literal must starts with a quote');
+
         start = index;
         index += 1;
 
@@ -1011,9 +1021,7 @@ parseStatement: true, parseSourceElement: true */
 
         start = index;
         ch = source[index];
-        if (ch !== '/') {
-            return;
-        }
+        assert(ch === '/', 'Regular expression literal must start with a slash');
         str = nextChar();
 
         while (index < length) {
