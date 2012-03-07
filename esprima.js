@@ -791,7 +791,7 @@ parseStatement: true, parseSourceElement: true */
 
                     if (index < length) {
                         ch = source[index];
-                        if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
+                        if (isIdentifierStart(ch)) {
                             throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                         }
                     }
@@ -856,8 +856,14 @@ parseStatement: true, parseSourceElement: true */
 
         if (ch === 'e' || ch === 'E') {
             number += nextChar();
+
             ch = source[index];
-            if (ch === '+' || ch === '-' || isDecimalDigit(ch)) {
+            if (ch === '+' || ch === '-') {
+                number += nextChar();
+            }
+
+            ch = source[index];
+            if (isDecimalDigit(ch)) {
                 number += nextChar();
                 while (index < length) {
                     ch = source[index];
@@ -877,7 +883,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (index < length) {
             ch = source[index];
-            if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
+            if (isIdentifierStart(ch)) {
                 throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
             }
         }
