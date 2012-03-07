@@ -1224,6 +1224,99 @@ data = {
             }
         },
 
+        'x = { x: 1, x: 2 }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 0],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [
+                        {
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [6, 6],
+                                loc: {
+                                    start: { line: 1, column: 6 },
+                                    end: { line: 1, column: 7 }
+                                }
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 1,
+                                raw: '1',
+                                range: [9, 9],
+                                loc: {
+                                    start: { line: 1, column: 9 },
+                                    end: { line: 1, column: 10 }
+                                }
+                            },
+                            kind: 'init',
+                            range: [6, 9],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 10 }
+                            }
+                        },
+                        {
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [12, 12],
+                                loc: {
+                                    start: { line: 1, column: 12 },
+                                    end: { line: 1, column: 13 }
+                                }
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 2,
+                                raw: '2',
+                                range: [15, 15],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 16 }
+                                }
+                            },
+                            kind: 'init',
+                            range: [12, 15],
+                            loc: {
+                                start: { line: 1, column: 12 },
+                                end: { line: 1, column: 16 }
+                            }
+                        }
+                    ],
+                    range: [4, 17],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
         'x = { get width() { return m_width } }': {
             type: 'ExpressionStatement',
             expression: {
@@ -20352,6 +20445,48 @@ data = {
             message: 'Error: Line 1: Unexpected token {'
         },
 
+        '({ get i() { }, i: 42 })': {
+            index: 21,
+            lineNumber: 1,
+            column: 22,
+            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        '({ i: 42, get i() { } })': {
+            index: 21,
+            lineNumber: 1,
+            column: 22,
+            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        '({ set i(x) { }, i: 42 })': {
+            index: 22,
+            lineNumber: 1,
+            column: 23,
+            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        '({ i: 42, set i(x) { } })': {
+            index: 22,
+            lineNumber: 1,
+            column: 23,
+            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        '({ get i() { }, get i() { } })': {
+            index: 27,
+            lineNumber: 1,
+            column: 28,
+            message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
+        },
+
+        '({ set i(x) { }, set i(x) { } })': {
+            index: 29,
+            lineNumber: 1,
+            column: 30,
+            message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
+        },
+
         'function t(if) { }': {
             index: 11,
             lineNumber: 1,
@@ -20876,48 +21011,6 @@ data = {
             lineNumber: 1,
             column: 74,
             message: 'Error: Line 1: Duplicate data property in object literal not allowed in strict mode'
-        },
-
-        'function hello() {\'use strict\'; ({ get i() { }, i: 42 }) }': {
-            index: 53,
-            lineNumber: 1,
-            column: 54,
-            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
-        },
-
-        'function hello() {\'use strict\'; ({ i: 42, get i() { } }) }': {
-            index: 53,
-            lineNumber: 1,
-            column: 54,
-            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
-        },
-
-        'function hello() {\'use strict\'; ({ set i(x) { }, i: 42 }) }': {
-            index: 54,
-            lineNumber: 1,
-            column: 55,
-            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
-        },
-
-        'function hello() {\'use strict\'; ({ i: 42, set i(x) { } }) }': {
-            index: 54,
-            lineNumber: 1,
-            column: 55,
-            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
-        },
-
-        'function hello() {\'use strict\'; ({ get i() { }, get i() { } }) }': {
-            index: 59,
-            lineNumber: 1,
-            column: 60,
-            message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
-        },
-
-        'function hello() {\'use strict\'; ({ set i(x) { }, set i(x) { } }) }': {
-            index: 61,
-            lineNumber: 1,
-            column: 62,
-            message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
         },
 
         'function hello() {\'use strict\'; var eval = 10; }': {
