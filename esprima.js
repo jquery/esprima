@@ -162,8 +162,8 @@ parseStatement: true, parseSourceElement: true */
         StrictOctalLiteral:  'Octal literals are not allowed in strict mode.',
         StrictDelete:  'Delete of an unqualified identifier in strict mode.',
         StrictDuplicateProperty:  'Duplicate data property in object literal not allowed in strict mode',
-        StrictAccessorDataProperty:  'Object literal may not have data and accessor property with the same name',
-        StrictAccessorGetSet:  'Object literal may not have multiple get/set accessors with the same name',
+        AccessorDataProperty:  'Object literal may not have data and accessor property with the same name',
+        AccessorGetSet:  'Object literal may not have multiple get/set accessors with the same name',
         StrictLHSAssignment:  'Assignment to eval or arguments is not allowed in strict mode',
         StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',
         StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
@@ -1516,32 +1516,32 @@ parseStatement: true, parseSourceElement: true */
 
         while (!match('}')) {
             property = parseObjectProperty();
-            if (strict) {
-                if (property.key.type === Syntax.Identifier) {
-                    name = property.key.name;
-                } else {
-                    name = toString(property.key.value);
-                }
-                kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
-                if (Object.prototype.hasOwnProperty.call(map, name)) {
-                    if (map[name] === PropertyKind.Data) {
-                        if (kind === PropertyKind.Data) {
-                            throwError({}, Messages.StrictDuplicateProperty);
-                        } else {
-                            throwError({}, Messages.StrictAccessorDataProperty);
-                        }
-                    } else {
-                        if (kind === PropertyKind.Data) {
-                            throwError({}, Messages.StrictAccessorDataProperty);
-                        } else if (map[name] & kind) {
-                            throwError({}, Messages.StrictAccessorGetSet);
-                        }
-                    }
-                    map[name] |= kind;
-                } else {
-                    map[name] = kind;
-                }
+
+            if (property.key.type === Syntax.Identifier) {
+                name = property.key.name;
+            } else {
+                name = toString(property.key.value);
             }
+            kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
+            if (Object.prototype.hasOwnProperty.call(map, name)) {
+                if (map[name] === PropertyKind.Data) {
+                    if (strict && kind === PropertyKind.Data) {
+                        throwError({}, Messages.StrictDuplicateProperty);
+                    } else if (kind !== PropertyKind.Data) {
+                        throwError({}, Messages.AccessorDataProperty);
+                    }
+                } else {
+                    if (kind === PropertyKind.Data) {
+                        throwError({}, Messages.AccessorDataProperty);
+                    } else if (map[name] & kind) {
+                        throwError({}, Messages.AccessorGetSet);
+                    }
+                }
+                map[name] |= kind;
+            } else {
+                map[name] = kind;
+            }
+
             properties.push(property);
 
             if (!match('}')) {
