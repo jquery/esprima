@@ -20142,6 +20142,20 @@ data = {
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
+        '018': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '01a': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
         '3in[]': {
             index: 1,
             lineNumber: 1,
