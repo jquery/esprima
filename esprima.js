@@ -162,8 +162,8 @@ parseStatement: true, parseSourceElement: true */
         StrictOctalLiteral:  'Octal literals are not allowed in strict mode.',
         StrictDelete:  'Delete of an unqualified identifier in strict mode.',
         StrictDuplicateProperty:  'Duplicate data property in object literal not allowed in strict mode',
-        StrictAccessorDataProperty:  'Object literal may not have data and accessor property with the same name',
-        StrictAccessorGetSet:  'Object literal may not have multiple get/set accessors with the same name',
+        AccessorDataProperty:  'Object literal may not have data and accessor property with the same name',
+        AccessorGetSet:  'Object literal may not have multiple get/set accessors with the same name',
         StrictLHSAssignment:  'Assignment to eval or arguments is not allowed in strict mode',
         StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',
         StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
@@ -1528,13 +1528,13 @@ parseStatement: true, parseSourceElement: true */
                         if (kind === PropertyKind.Data) {
                             throwError({}, Messages.StrictDuplicateProperty);
                         } else {
-                            throwError({}, Messages.StrictAccessorDataProperty);
+                            throwError({}, Messages.AccessorDataProperty);
                         }
                     } else {
                         if (kind === PropertyKind.Data) {
-                            throwError({}, Messages.StrictAccessorDataProperty);
+                            throwError({}, Messages.AccessorDataProperty);
                         } else if (map[name] & kind) {
-                            throwError({}, Messages.StrictAccessorGetSet);
+                            throwError({}, Messages.AccessorGetSet);
                         }
                     }
                     map[name] |= kind;
