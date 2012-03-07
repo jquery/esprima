@@ -20387,11 +20387,25 @@ data = {
             message: 'Error: Line 1: Unexpected reserved word'
         },
 
+        'break\n': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Illegal break statement'
+        },
+
         'break 1;': {
             index: 6,
             lineNumber: 1,
             column: 7,
             message: 'Error: Line 1: Unexpected number'
+        },
+
+        'continue\n': {
+            index: 8,
+            lineNumber: 1,
+            column: 9,
+            message: 'Error: Line 1: Illegal continue statement'
         },
 
         'continue 2;': {
