@@ -3464,22 +3464,22 @@ data = {
             }
         },
 
-        '"\\n\\r\\b\\f\\\\\\\'\\"\\0"': {
+        '"\\n\\r\\t\\v\\b\\f\\\\\\\'\\"\\0"': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: '\n\r\b\f\\\'"\x00',
-                raw: '"\\n\\r\\b\\f\\\\\\\'\\"\\0"',
-                range: [0, 17],
+                value: '\n\r\t\v\b\f\\\'"\x00',
+                raw: '"\\n\\r\\t\\v\\b\\f\\\\\\\'\\"\\0"',
+                range: [0, 21],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 1, column: 18 }
+                    end: { line: 1, column: 22 }
                 }
             },
-            range: [0, 17],
+            range: [0, 21],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 18 }
+                end: { line: 1, column: 22 }
             }
         },
 
