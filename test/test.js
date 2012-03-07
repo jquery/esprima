@@ -20282,6 +20282,13 @@ data = {
             message: 'Error: Line 1: Unexpected token if'
         },
 
+        '({ set s(.) { } })': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token .'
+        },
+
         '({ set: s() { } })': {
             index: 12,
             lineNumber: 1,
