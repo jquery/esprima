@@ -20739,6 +20739,13 @@ data = {
             message: 'Error: Line 1: Unexpected token const'
         },
 
+        'new X()."s"': {
+            index: 8,
+            lineNumber: 1,
+            column: 9,
+            message: 'Error: Line 1: Unexpected string'
+        },
+
         '/*': {
             index: 2,
             lineNumber: 1,
