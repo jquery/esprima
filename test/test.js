@@ -21046,6 +21046,13 @@ data = {
             message: 'Error: Line 1: Illegal continue statement'
         },
 
+        'do { x } *': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token *'
+        },
+
         'while (true) { break x; }': {
             index: 22,
             lineNumber: 1,
