@@ -13125,6 +13125,102 @@ data = {
             }
         },
 
+        'function test(t, t) { }': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'test',
+                range: [9, 12],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            params: [{
+                type: 'Identifier',
+                name: 't',
+                range: [14, 14],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 15 }
+                }
+            }, {
+                type: 'Identifier',
+                name: 't',
+                range: [17, 17],
+                loc: {
+                    start: { line: 1, column: 17 },
+                    end: { line: 1, column: 18 }
+                }
+            }],
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [20, 22],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
+        },
+
+        '(function test(t, t) { })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: {
+                    type: 'Identifier',
+                    name: 'test',
+                    range: [10, 13],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                params: [{
+                    type: 'Identifier',
+                    name: 't',
+                    range: [15, 15],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 16 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 't',
+                    range: [18, 18],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 19 }
+                    }
+                }],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [21, 23],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                range: [0, 24],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
         'function eval() { function inner() { "use strict" } }': {
             type: 'FunctionDeclaration',
             id: {
@@ -21375,6 +21471,34 @@ data = {
             lineNumber: 1,
             column: 24,
             message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function a(t, t) { "use strict"; }': {
+            index: 14,
+            lineNumber: 1,
+            column: 15,
+            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+        },
+
+        'function a() { "use strict"; function b(t, t) { }; }': {
+            index: 43,
+            lineNumber: 1,
+            column: 44,
+            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+        },
+
+        '(function a(t, t) { "use strict"; })': {
+            index: 15,
+            lineNumber: 1,
+            column: 16,
+            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+        },
+
+        'function a() { "use strict"; (function b(t, t) { }); }': {
+            index: 44,
+            lineNumber: 1,
+            column: 45,
+            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
         }
 
     },
