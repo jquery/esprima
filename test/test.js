@@ -21230,6 +21230,13 @@ data = {
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
+        ' "\\1"; \'use strict\';': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+        },
+
         'function hello() { \'use strict\'; "\\1"; }': {
             index: 33,
             lineNumber: 1,
