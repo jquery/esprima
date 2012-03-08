@@ -20401,6 +20401,13 @@ data = {
             message: 'Error: Line 1: Invalid regular expression: missing /'
         },
 
+        'var x = /[a-z]/\\ux': {
+            index: 18,
+            lineNumber: 1,
+            column: 19,
+            message: 'Error: Line 1: Invalid regular expression'
+        },
+
         '[': {
             index: 1,
             lineNumber: 1,
