@@ -1432,7 +1432,8 @@ parseStatement: true, parseSourceElement: true */
             break;
 
         default:
-            throwUnexpected(token);
+            // Unreachable, since parseObjectProperty() will not call this
+            // function with any other type of token.
         }
 
         return key;
