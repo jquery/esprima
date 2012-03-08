@@ -98,6 +98,7 @@ parseStatement: true, parseSourceElement: true */
         ModuleDeclaration: 'ModuleDeclaration',
         NewExpression: 'NewExpression',
         ObjectExpression: 'ObjectExpression',
+        Path:  'Path',
         Program: 'Program',
         Property: 'Property',
         ReturnStatement: 'ReturnStatement',
@@ -2200,18 +2201,76 @@ parseStatement: true, parseSourceElement: true */
 
     // http://wiki.ecmascript.org/doku.php?id=harmony:modules
 
-    function parseModuleStatement() {
-        var id;
+    function parsePath() {
+        var result, id;
+
+        result = {
+            type: Syntax.Path,
+            body: []
+        };
+
+        while (true) {
+            id = parseVariableIdentifier();
+            result.body.push(id);
+            if (!match('.')) {
+                break;
+            }
+            lex();
+        }
+
+        return result;
+    }
+
+    function parseModuleDeclaration() {
+        var id, token, declaration;
 
         expectKeyword('module');
 
         id = parseVariableIdentifier();
 
-        return {
-            type: Syntax.ModuleDeclaration,
-            id: id,
-            body: parseBlock()
-        };
+        if (match('{')) {
+            return {
+                type: Syntax.ModuleDeclaration,
+                id: id,
+                body: parseBlock()
+            };
+        }
+
+        if (matchContextualKeyword('at')) {
+            lex();
+            token = lookahead();
+            if (token.type !== Token.StringLiteral) {
+                return throwUnexpected(token);
+            }
+            declaration = {
+                type: Syntax.ModuleDeclaration,
+                id: id,
+                at: parsePrimaryExpression()
+            };
+        } else if (matchContextualKeyword('is')) {
+            lex();
+            declaration = {
+                type: Syntax.ModuleDeclaration,
+                id: id,
+                is: parseVariableIdentifier(),
+                from: null
+            };
+            if (matchContextualKeyword('from')) {
+                lex();
+                token = lookahead();
+                if (token.type === Token.StringLiteral) {
+                    declaration.from = parsePrimaryExpression();
+                } else {
+                    declaration.from = parsePath();
+                }
+            }
+        } else {
+            throwUnexpected(lex());
+        }
+
+        consumeSemicolon();
+
+        return declaration;
     }
 
     // 12.3 Empty Statement
@@ -2750,8 +2809,6 @@ parseStatement: true, parseSourceElement: true */
                 return parseFunctionDeclaration();
             case 'if':
                 return parseIfStatement();
-            case 'module':
-                return parseModuleStatement();
             case 'return':
                 return parseReturnStatement();
             case 'switch':
@@ -2990,6 +3047,8 @@ parseStatement: true, parseSourceElement: true */
                 return parseConstLetDeclaration(token.value);
             case 'function':
                 return parseFunctionDeclaration();
+            case 'module':
+                return parseModuleDeclaration();
             default:
                 break;
             }
@@ -3351,11 +3410,13 @@ parseStatement: true, parseSourceElement: true */
             extra.parseLogicalANDExpression = parseLogicalANDExpression;
             extra.parseLogicalORExpression = parseLogicalORExpression;
             extra.parseMultiplicativeExpression = parseMultiplicativeExpression;
+            extra.parseModuleDeclaration = parseModuleDeclaration;
             extra.parseNewExpression = parseNewExpression;
             extra.parseNonComputedMember = parseNonComputedMember;
             extra.parseNonComputedProperty = parseNonComputedProperty;
             extra.parseObjectProperty = parseObjectProperty;
             extra.parseObjectPropertyKey = parseObjectPropertyKey;
+            extra.parsePath = parsePath;
             extra.parsePostfixExpression = parsePostfixExpression;
             extra.parsePrimaryExpression = parsePrimaryExpression;
             extra.parseProgram = parseProgram;
@@ -3388,11 +3449,13 @@ parseStatement: true, parseSourceElement: true */
             parseLogicalANDExpression = wrapTracking(extra.parseLogicalANDExpression);
             parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);
             parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);
+            parseModuleDeclaration = wrapTracking(extra.parseModuleDeclaration);
             parseNewExpression = wrapTracking(extra.parseNewExpression);
             parseNonComputedMember = wrapTracking(extra.parseNonComputedMember);
             parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
             parseObjectProperty = wrapTracking(extra.parseObjectProperty);
             parseObjectPropertyKey = wrapTracking(extra.parseObjectPropertyKey);
+            parsePath = wrapTracking(extra.parsePath);
             parsePostfixExpression = wrapTracking(extra.parsePostfixExpression);
             parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
             parseProgram = wrapTracking(extra.parseProgram);
