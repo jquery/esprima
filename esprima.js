@@ -1251,13 +1251,11 @@ parseStatement: true, parseSourceElement: true */
             } else if (strict && isStrictModeReservedWord(token.value)) {
                 throwError(token, Messages.StrictReservedWord);
             }
+            throwError(token, Messages.UnexpectedToken, token.value);
         }
 
-        s = token.value;
-        if (s.length > 10) {
-            s = s.substr(0, 10) + '...';
-        }
-        throwError(token, Messages.UnexpectedToken, s);
+        // BooleanLiteral, NullLiteral, or Punctuator.
+        throwError(token, Messages.UnexpectedToken, token.value);
     }
 
     // Expect the next token to match the specified punctuator.
