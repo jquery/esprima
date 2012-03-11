@@ -3060,12 +3060,7 @@ parseStatement: true, parseSourceElement: true */
     // 14 Program
 
     function parseSourceElement() {
-        var token;
-
-        token = lookahead();
-        if (token.type === Token.EOF) {
-            return;
-        }
+        var token = lookahead();
 
         if (token.type === Token.Keyword) {
             switch (token.value) {
@@ -3075,11 +3070,13 @@ parseStatement: true, parseSourceElement: true */
             case 'function':
                 return parseFunctionDeclaration();
             default:
-                break;
+                return parseStatement();
             }
         }
 
-        return parseStatement();
+        if (token.type !== Token.EOF) {
+            return parseStatement();
+        }
     }
 
     function parseSourceElements() {
