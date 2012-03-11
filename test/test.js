@@ -11437,6 +11437,44 @@ data = {
 
     'continue statement': {
 
+        'while (true) { continue; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
+                }
+            },
+            body: {
+                type: 'BlockStatement',
+                body: [
+                    {
+                        type: 'ContinueStatement',
+                        label: null,
+                        range: [15, 23],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 24 }
+                        }
+                    }
+                ],
+                range: [13, 25],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 26 }
+                }
+            },
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 26 }
+            }
+        },
+
         'while (true) { continue }': {
             type: 'WhileStatement',
             test: {
