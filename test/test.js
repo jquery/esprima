@@ -21337,6 +21337,13 @@ data = {
             message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
         },
 
+        '(function package() {\'use strict\'; })()': {
+            index: 10,
+            lineNumber: 1,
+            column: 11,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
         'function hello() {\'use strict\'; ({ i: 10, set s(eval) { } }); }': {
             index: 48,
             lineNumber: 1,
