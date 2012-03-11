@@ -733,35 +733,26 @@ data = {
             }
         },
 
-        'x = #[]': {
-            type: 'Program',
-            body: [{
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'AssignmentExpression',
-                    operator: '=',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x',
-                        range: [0, 0],
-                        loc: {
-                            start: { line: 1, column: 0 },
-                            end: { line: 1, column: 1 }
-                        }
-                    },
-                    right: {
-                        type: 'ArrayExpression',
-                        elements: [],
-                        sealed: true,
-                        range: [4, 6],
-                        loc: {
-                            start: { line: 1, column: 4 },
-                            end: { line: 1, column: 7 }
-                        }
-                    },
-                    range: [0, 6],
+        '\u2163\u2161\u200A=\u2009[]': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: '\u2163\u2161',
+                    range: [0, 1],
                     loc: {
                         start: { line: 1, column: 0 },
+                        end: { line: 1, column: 2 }
+                    }
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [],
+                    range: [5, 6],
+                    loc: {
+                        start: { line: 1, column: 5 },
                         end: { line: 1, column: 7 }
                     }
                 },
@@ -770,33 +761,12 @@ data = {
                     start: { line: 1, column: 0 },
                     end: { line: 1, column: 7 }
                 }
-            }],
+            },
             range: [0, 6],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 7 }
-            },
-            tokens: [{
-                type: 'Identifier',
-                value: 'x',
-                range: [0, 0]
-            }, {
-                type: 'Punctuator',
-                value: '=',
-                range: [2, 2]
-            }, {
-                type: 'Punctuator',
-                value: '#',
-                range: [4, 4]
-            }, {
-                type: 'Punctuator',
-                value: '[',
-                range: [5, 5]
-            }, {
-                type: 'Punctuator',
-                value: ']',
-                range: [6, 6]
-            }]
+            }
         }
 
     },
@@ -1251,6 +1221,99 @@ data = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 20 }
+            }
+        },
+
+        'x = { x: 1, x: 2 }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 0],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [
+                        {
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [6, 6],
+                                loc: {
+                                    start: { line: 1, column: 6 },
+                                    end: { line: 1, column: 7 }
+                                }
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 1,
+                                raw: '1',
+                                range: [9, 9],
+                                loc: {
+                                    start: { line: 1, column: 9 },
+                                    end: { line: 1, column: 10 }
+                                }
+                            },
+                            kind: 'init',
+                            range: [6, 9],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 10 }
+                            }
+                        },
+                        {
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [12, 12],
+                                loc: {
+                                    start: { line: 1, column: 12 },
+                                    end: { line: 1, column: 13 }
+                                }
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 2,
+                                raw: '2',
+                                range: [15, 15],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 16 }
+                                }
+                            },
+                            kind: 'init',
+                            range: [12, 15],
+                            loc: {
+                                start: { line: 1, column: 12 },
+                                end: { line: 1, column: 16 }
+                            }
+                        }
+                    ],
+                    range: [4, 17],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
             }
         },
 
@@ -2772,43 +2835,6 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 15 }
             }
-        },
-
-        'x = #{}': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x',
-                    range: [0, 0],
-                    loc: {
-                        start: { line: 1, column: 0 },
-                        end: { line: 1, column: 1 }
-                    }
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [],
-                    sealed: true,
-                    range: [4, 6],
-                    loc: {
-                        start: { line: 1, column: 4 },
-                        end: { line: 1, column: 7 }
-                    }
-                },
-                range: [0, 6],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 7 }
-                }
-            },
-            range: [0, 6],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 7 }
-            }
         }
 
     },
@@ -3531,22 +3557,22 @@ data = {
             }
         },
 
-        '"\\n\\r\\b\\f\\\\\\\'\\"\\0"': {
+        '"\\n\\r\\t\\v\\b\\f\\\\\\\'\\"\\0"': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: '\n\r\b\f\\\'"\x00',
-                raw: '"\\n\\r\\b\\f\\\\\\\'\\"\\0"',
-                range: [0, 17],
+                value: '\n\r\t\v\b\f\\\'"\x00',
+                raw: '"\\n\\r\\t\\v\\b\\f\\\\\\\'\\"\\0"',
+                range: [0, 21],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 1, column: 18 }
+                    end: { line: 1, column: 22 }
                 }
             },
-            range: [0, 17],
+            range: [0, 21],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 18 }
+                end: { line: 1, column: 22 }
             }
         },
 
@@ -4431,6 +4457,52 @@ data = {
                 end: { line: 1, column: 15 }
             }
         },
+
+        'new foo[bar]': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'NewExpression',
+                callee: {
+                    type: 'MemberExpression',
+                    computed: true,
+                    object: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [4, 6],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 7 }
+                        }
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'bar',
+                        range: [8, 10],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 11 }
+                        }
+                    },
+                    range: [4, 11],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                'arguments': [],
+                range: [0, 11],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            range: [0, 11],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        },
+
 
         'new foo.bar()': {
             type: 'ExpressionStatement',
@@ -8508,6 +8580,101 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 7 }
             }
+        },
+
+        '1 = 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Literal',
+                    value: 1,
+                    raw: '1',
+                    range: [0, 0],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 6 }
+                    }
+                },
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 6 }
+                }
+            },
+            range: [0, 5],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 6 }
+            }
+        },
+
+        '(1 + 1) = 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '+',
+                    left: {
+                        type: 'Literal',
+                        value: 1,
+                        raw: '1',
+                        range: [1, 1],
+                        loc: {
+                            start: { line: 1, column: 1 },
+                            end: { line: 1, column: 2 }
+                        }
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 1,
+                        raw: '1',
+                        range: [5, 5],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 6 }
+                        }
+                    },
+                    range: [0, 6],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 7 }
+                    }
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [10, 11],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 11],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            range: [0, 11],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
         }
 
     },
@@ -9866,6 +10033,51 @@ data = {
             }
         },
 
+        'do keep(); while (true);': {
+            type: 'DoWhileStatement',
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'keep',
+                        range: [3, 6],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 7 }
+                        }
+                    },
+                    'arguments': [],
+                    range: [3, 8],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 9 }
+                    }
+                },
+                range: [3, 9],
+                loc: {
+                    start: { line: 1, column: 3 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [18, 21],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 24 }
+            }
+        },
+
         'do { x++; y--; } while (x < 10)': {
             type: 'DoWhileStatement',
             body: {
@@ -10723,7 +10935,7 @@ data = {
             }
         },
 
-        'for(x in list) process(x);': {
+       'for(x in list) process(x);': {
             type: 'ForInStatement',
             left: {
                 type: 'Identifier',
@@ -11793,49 +12005,205 @@ data = {
 
     'continue statement': {
 
-        'continue': {
-            type: 'ContinueStatement',
-            label: null,
-            range: [0, 7],
+        'while (true) { continue; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
+                }
+            },
+            body: {
+                type: 'BlockStatement',
+                body: [
+                    {
+                        type: 'ContinueStatement',
+                        label: null,
+                        range: [15, 23],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 24 }
+                        }
+                    }
+                ],
+                range: [13, 25],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 26 }
+                }
+            },
+            range: [0, 25],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 8 }
+                end: { line: 1, column: 26 }
             }
         },
 
-        'continue done': {
-            type: 'ContinueStatement',
-            label: {
-                type: 'Identifier',
-                name: 'done',
-                range: [9, 12],
+        'while (true) { continue }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
                 loc: {
-                    start: { line: 1, column: 9 },
-                    end: { line: 1, column: 13 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
                 }
             },
-            range: [0, 12],
+            body: {
+                type: 'BlockStatement',
+                body: [
+                    {
+                        type: 'ContinueStatement',
+                        label: null,
+                        range: [15, 23],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 24 }
+                        }
+                    }
+                ],
+                range: [13, 24],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 24],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 13 }
+                end: { line: 1, column: 25 }
             }
         },
 
-        'continue done;': {
-            type: 'ContinueStatement',
+        'done: while (true) { continue done }': {
+            type: 'LabeledStatement',
             label: {
                 type: 'Identifier',
                 name: 'done',
-                range: [9, 12],
+                range: [0, 3],
                 loc: {
-                    start: { line: 1, column: 9 },
-                    end: { line: 1, column: 13 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
                 }
             },
-            range: [0, 13],
+            body: {
+                type: 'WhileStatement',
+                test: {
+                    type: 'Literal',
+                    value: true,
+                    raw: 'true',
+                    range: [13, 16],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ContinueStatement',
+                            label: {
+                                type: 'Identifier',
+                                name: 'done',
+                                range: [30, 33],
+                                loc: {
+                                    start: { line: 1, column: 30 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            range: [21, 34],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 35 }
+                            }
+                        }
+                    ],
+                    range: [19, 35],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 36 }
+                    }
+                },
+                range: [6, 35],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            range: [0, 35],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 14 }
+                end: { line: 1, column: 36 }
+            }
+        },
+
+        'done: while (true) { continue done; }': {
+            type: 'LabeledStatement',
+            label: {
+                type: 'Identifier',
+                name: 'done',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
+            },
+            body: {
+                type: 'WhileStatement',
+                test: {
+                    type: 'Literal',
+                    value: true,
+                    raw: 'true',
+                    range: [13, 16],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ContinueStatement',
+                            label: {
+                                type: 'Identifier',
+                                name: 'done',
+                                range: [30, 33],
+                                loc: {
+                                    start: { line: 1, column: 30 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            range: [21, 34],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 35 }
+                            }
+                        }
+                    ],
+                    range: [19, 36],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 37 }
+                    }
+                },
+                range: [6, 36],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 37 }
+                }
+            },
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 37 }
             }
         }
 
@@ -11843,49 +12211,167 @@ data = {
 
     'break statement': {
 
-        'break': {
-            type: 'BreakStatement',
-            label: null,
-            range: [0, 4],
+        'while (true) { break }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
+                }
+            },
+            body: {
+                type: 'BlockStatement',
+                body: [
+                    {
+                        type: 'BreakStatement',
+                        label: null,
+                        range: [15, 20],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 21 }
+                        }
+                    }
+                ],
+                range: [13, 21],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            range: [0, 21],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 5 }
+                end: { line: 1, column: 22 }
             }
         },
 
-        'break done': {
-            type: 'BreakStatement',
+        'done: while (true) { break done }': {
+            type: 'LabeledStatement',
             label: {
                 type: 'Identifier',
                 name: 'done',
-                range: [6, 9],
+                range: [0, 3],
                 loc: {
-                    start: { line: 1, column: 6 },
-                    end: { line: 1, column: 10 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
                 }
             },
-            range: [0, 9],
+            body: {
+                type: 'WhileStatement',
+                test: {
+                    type: 'Literal',
+                    value: true,
+                    raw: 'true',
+                    range: [13, 16],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'BreakStatement',
+                            label: {
+                                type: 'Identifier',
+                                name: 'done',
+                                range: [27, 30],
+                                loc: {
+                                    start: { line: 1, column: 27 },
+                                    end: { line: 1, column: 31 }
+                                }
+                            },
+                            range: [21, 31],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 32 }
+                            }
+                        }
+                    ],
+                    range: [19, 32],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 33 }
+                    }
+                },
+                range: [6, 32],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 33 }
+                }
+            },
+            range: [0, 32],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 10 }
+                end: { line: 1, column: 33 }
             }
         },
 
-        'break done;': {
-            type: 'BreakStatement',
+        'done: while (true) { break done; }': {
+            type: 'LabeledStatement',
             label: {
                 type: 'Identifier',
                 name: 'done',
-                range: [6, 9],
+                range: [0, 3],
                 loc: {
-                    start: { line: 1, column: 6 },
-                    end: { line: 1, column: 10 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
                 }
             },
-            range: [0, 10],
+            body: {
+                type: 'WhileStatement',
+                test: {
+                    type: 'Literal',
+                    value: true,
+                    raw: 'true',
+                    range: [13, 16],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'BreakStatement',
+                            label: {
+                                type: 'Identifier',
+                                name: 'done',
+                                range: [27, 30],
+                                loc: {
+                                    start: { line: 1, column: 27 },
+                                    end: { line: 1, column: 31 }
+                                }
+                            },
+                            range: [21, 31],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 32 }
+                            }
+                        }
+                    ],
+                    range: [19, 33],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 34 }
+                    }
+                },
+                range: [6, 33],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 34 }
+                }
+            },
+            range: [0, 33],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 11 }
+                end: { line: 1, column: 34 }
             }
         }
 
@@ -11893,80 +12379,191 @@ data = {
 
     'return statement': {
 
-        'return': {
-            type: 'ReturnStatement',
-            argument: null,
-            range: [0, 5],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 6 }
-            }
-        },
-
-        'return;': {
-            type: 'ReturnStatement',
-            argument: null,
-            range: [0, 6],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 7 }
-            }
-        },
-
-        'return x;': {
-            type: 'ReturnStatement',
-            argument: {
-                type: 'Identifier',
-                name: 'x',
-                range: [7, 7],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 8 }
-                }
-            },
-            range: [0, 8],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 9 }
-            }
-        },
-
-        'return x * y': {
-            type: 'ReturnStatement',
-            argument: {
-                type: 'BinaryExpression',
-                operator: '*',
-                left: {
-                    type: 'Identifier',
-                    name: 'x',
-                    range: [7, 7],
-                    loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 8 }
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y',
-                    range: [11, 11],
+        '(function(){ return })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: null,
+                            range: [13, 19],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 20 }
+                            }
+                        }
+                    ],
+                    range: [11, 20],
                     loc: {
                         start: { line: 1, column: 11 },
-                        end: { line: 1, column: 12 }
+                        end: { line: 1, column: 21 }
                     }
                 },
-                range: [7, 11],
+                range: [0, 21],
                 loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 12 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 22 }
                 }
             },
-            range: [0, 11],
+            range: [0, 21],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 12 }
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        '(function(){ return; })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: null,
+                            range: [13, 19],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 20 }
+                            }
+                        }
+                    ],
+                    range: [11, 21],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                range: [0, 22],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
+        },
+
+        '(function(){ return x; })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [20, 20],
+                                loc: {
+                                    start: { line: 1, column: 20 },
+                                    end: { line: 1, column: 21 }
+                                }
+                            },
+                            range: [13, 21],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 22 }
+                            }
+                        }
+                    ],
+                    range: [11, 23],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                range: [0, 24],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        '(function(){ return x * y })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: {
+                                type: 'BinaryExpression',
+                                operator: '*',
+                                left: {
+                                    type: 'Identifier',
+                                    name: 'x',
+                                    range: [20, 20],
+                                    loc: {
+                                        start: { line: 1, column: 20 },
+                                        end: { line: 1, column: 21 }
+                                    }
+                                },
+                                right: {
+                                    type: 'Identifier',
+                                    name: 'y',
+                                    range: [24, 24],
+                                    loc: {
+                                        start: { line: 1, column: 24 },
+                                        end: { line: 1, column: 25 }
+                                    }
+                                },
+                                range: [20, 24],
+                                loc: {
+                                    start: { line: 1, column: 20 },
+                                    end: { line: 1, column: 25 }
+                                }
+                            },
+                            range: [13, 25],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 26 }
+                            }
+                        }
+                    ],
+                    range: [11, 26],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                range: [0, 27],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 28 }
+                }
+            },
+            range: [0, 27],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
             }
         }
-
     },
 
     'with statement': {
@@ -13180,6 +13777,102 @@ data = {
             }
         },
 
+        'function test(t, t) { }': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'test',
+                range: [9, 12],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            params: [{
+                type: 'Identifier',
+                name: 't',
+                range: [14, 14],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 15 }
+                }
+            }, {
+                type: 'Identifier',
+                name: 't',
+                range: [17, 17],
+                loc: {
+                    start: { line: 1, column: 17 },
+                    end: { line: 1, column: 18 }
+                }
+            }],
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [20, 22],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
+        },
+
+        '(function test(t, t) { })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: {
+                    type: 'Identifier',
+                    name: 'test',
+                    range: [10, 13],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                params: [{
+                    type: 'Identifier',
+                    name: 't',
+                    range: [15, 15],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 16 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 't',
+                    range: [18, 18],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 19 }
+                    }
+                }],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [21, 23],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                range: [0, 24],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
         'function eval() { function inner() { "use strict" } }': {
             type: 'FunctionDeclaration',
             id: {
@@ -13775,6 +14468,34 @@ data = {
             }
         },
 
+        'var x /* comment */;': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [4, 4],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                init: null,
+                range: [4, 4],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 20 }
+            }
+        },
+
         '{ var x = 14, y = 3\nz; }': {
             type: 'BlockStatement',
             body: [{
@@ -13862,309 +14583,480 @@ data = {
             }
         },
 
-        '{ continue\nthere; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'ContinueStatement',
-                label: null,
-                range: [2, 9],
+        'while (true) { continue\nthere; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
                 loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 10 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
                 }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'there',
-                    range: [11, 15],
+            },
+            body: {            
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ContinueStatement',
+                    label: null,
+                    range: [15, 22],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 23 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'there',
+                        range: [24, 28],
+                        loc: {
+                            start: { line: 2, column: 0 },
+                            end: { line: 2, column: 5 }
+                        }
+                    },
+                    range: [24, 29],
                     loc: {
                         start: { line: 2, column: 0 },
-                        end: { line: 2, column: 5 }
+                        end: { line: 2, column: 6 }
                     }
-                },
-                range: [11, 16],
+                }],
+                range: [13, 31],
                 loc: {
-                    start: { line: 2, column: 0 },
-                    end: { line: 2, column: 6 }
+                    start: { line: 1, column: 13 },
+                    end: { line: 2, column: 8 }
                 }
-            }],
-            range: [0, 18],
+            },
+            range: [0, 31],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 8 }
             }
         },
 
-        '{ continue // Comment\nthere; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'ContinueStatement',
-                label: null,
-                range: [2, 9],
+        'while (true) { continue // Comment\nthere; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
                 loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 10 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
                 }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'there',
-                    range: [22, 26],
+            },
+            body: {            
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ContinueStatement',
+                    label: null,
+                    range: [15, 22],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 23 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'there',
+                        range: [35, 39],
+                        loc: {
+                            start: { line: 2, column: 0 },
+                            end: { line: 2, column: 5 }
+                        }
+                    },
+                    range: [35, 40],
                     loc: {
                         start: { line: 2, column: 0 },
-                        end: { line: 2, column: 5 }
+                        end: { line: 2, column: 6 }
                     }
-                },
-                range: [22, 27],
+                }],
+                range: [13, 42],
                 loc: {
-                    start: { line: 2, column: 0 },
-                    end: { line: 2, column: 6 }
+                    start: { line: 1, column: 13 },
+                    end: { line: 2, column: 8 }
                 }
-            }],
-            range: [0, 29],
+            },
+            range: [0, 42],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 8 }
             }
         },
 
-        '{ continue /* Multiline\nComment */there; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'ContinueStatement',
-                label: null,
-                range: [2, 9],
+        'while (true) { continue /* Multiline\nComment */there; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
                 loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 10 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
                 }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'there',
-                    range: [34, 38],
+            },
+            body: {            
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ContinueStatement',
+                    label: null,
+                    range: [15, 22],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 23 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'there',
+                        range: [47, 51],
+                        loc: {
+                            start: { line: 2, column: 10 },
+                            end: { line: 2, column: 15 }
+                        }
+                    },
+                    range: [47, 52],
                     loc: {
                         start: { line: 2, column: 10 },
-                        end: { line: 2, column: 15 }
+                        end: { line: 2, column: 16 }
                     }
-                },
-                range: [34, 39],
+                }],
+                range: [13, 54],
                 loc: {
-                    start: { line: 2, column: 10 },
-                    end: { line: 2, column: 16 }
+                    start: { line: 1, column: 13 },
+                    end: { line: 2, column: 18 }
                 }
-            }],
-            range: [0, 41],
+            },
+            range: [0, 54],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 18 }
             }
         },
 
-        '{ break\nthere; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'BreakStatement',
-                label: null,
-                range: [2, 6],
+        'while (true) { break\nthere; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
                 loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 7 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
                 }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'there',
-                    range: [8, 12],
+            },
+            body: {            
+                type: 'BlockStatement',
+                body: [{
+                    type: 'BreakStatement',
+                    label: null,
+                    range: [15, 19],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 20 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'there',
+                        range: [21, 25],
+                        loc: {
+                            start: { line: 2, column: 0 },
+                            end: { line: 2, column: 5 }
+                        }
+                    },
+                    range: [21, 26],
                     loc: {
                         start: { line: 2, column: 0 },
-                        end: { line: 2, column: 5 }
+                        end: { line: 2, column: 6 }
                     }
-                },
-                range: [8, 13],
+                }],
+                range: [13, 28],
                 loc: {
-                    start: { line: 2, column: 0 },
-                    end: { line: 2, column: 6 }
+                    start: { line: 1, column: 13 },
+                    end: { line: 2, column: 8 }
                 }
-            }],
-            range: [0, 15],
+            },
+            range: [0, 28],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 8 }
             }
         },
 
-        '{ break // Comment\nthere; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'BreakStatement',
-                label: null,
-                range: [2, 6],
+        'while (true) { break // Comment\nthere; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
                 loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 7 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
                 }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'there',
-                    range: [19, 23],
+            },
+            body: {            
+                type: 'BlockStatement',
+                body: [{
+                    type: 'BreakStatement',
+                    label: null,
+                    range: [15, 19],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 20 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'there',
+                        range: [32, 36],
+                        loc: {
+                            start: { line: 2, column: 0 },
+                            end: { line: 2, column: 5 }
+                        }
+                    },
+                    range: [32, 37],
                     loc: {
                         start: { line: 2, column: 0 },
-                        end: { line: 2, column: 5 }
+                        end: { line: 2, column: 6 }
                     }
-                },
-                range: [19, 24],
+                }],
+                range: [13, 39],
                 loc: {
-                    start: { line: 2, column: 0 },
-                    end: { line: 2, column: 6 }
+                    start: { line: 1, column: 13 },
+                    end: { line: 2, column: 8 }
                 }
-            }],
-            range: [0, 26],
+            },
+            range: [0, 39],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 8 }
             }
         },
 
-        '{ break /* Multiline\nComment */there; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'BreakStatement',
-                label: null,
-                range: [2, 6],
+        'while (true) { break /* Multiline\nComment */there; }': {
+            type: 'WhileStatement',
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [7, 10],
                 loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 7 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 11 }
                 }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'there',
-                    range: [31, 35],
+            },
+            body: {            
+                type: 'BlockStatement',
+                body: [{
+                    type: 'BreakStatement',
+                    label: null,
+                    range: [15, 19],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 20 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Identifier',
+                        name: 'there',
+                        range: [44, 48],
+                        loc: {
+                            start: { line: 2, column: 10 },
+                            end: { line: 2, column: 15 }
+                        }
+                    },
+                    range: [44, 49],
                     loc: {
                         start: { line: 2, column: 10 },
-                        end: { line: 2, column: 15 }
+                        end: { line: 2, column: 16 }
                     }
-                },
-                range: [31, 36],
+                }],
+                range: [13, 51],
                 loc: {
-                    start: { line: 2, column: 10 },
-                    end: { line: 2, column: 16 }
+                    start: { line: 1, column: 13 },
+                    end: { line: 2, column: 18 }
                 }
-            }],
-            range: [0, 38],
+            },
+            range: [0, 51],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 18 }
             }
-        },
+        },        
 
-        '{ return\nx; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'ReturnStatement',
-                argument: null,
-                range: [2, 7],
-                loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 8 }
-                }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'x',
-                    range: [9, 9],
+        '(function(){ return\nx; })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: null,
+                            range: [13, 18],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 19 }
+                            }
+                        },
+                        {
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [20, 20],
+                                loc: {
+                                    start: { line: 2, column: 0 },
+                                    end: { line: 2, column: 1 }
+                                }
+                            },
+                            range: [20, 21],
+                            loc: {
+                                start: { line: 2, column: 0 },
+                                end: { line: 2, column: 2 }
+                            }
+                        }
+                    ],
+                    range: [11, 23],
                     loc: {
-                        start: { line: 2, column: 0 },
-                        end: { line: 2, column: 1 }
+                        start: { line: 1, column: 11 },
+                        end: { line: 2, column: 4 }
                     }
                 },
-                range: [9, 10],
+                range: [0, 24],
                 loc: {
-                    start: { line: 2, column: 0 },
-                    end: { line: 2, column: 2 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 5 }
                 }
-            }],
-            range: [0, 12],
+            },
+            range: [0, 24],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 2, column: 4 }
+                end: { line: 2, column: 5 }
             }
         },
 
-        '{ return // Comment\nx; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'ReturnStatement',
-                argument: null,
-                range: [2, 7],
-                loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 8 }
-                }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'x',
-                    range: [20, 20],
+        '(function(){ return // Comment\nx; })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: null,
+                            range: [13, 18],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 19 }
+                            }
+                        },
+                        {
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [31, 31],
+                                loc: {
+                                    start: { line: 2, column: 0 },
+                                    end: { line: 2, column: 1 }
+                                }
+                            },
+                            range: [31, 32],
+                            loc: {
+                                start: { line: 2, column: 0 },
+                                end: { line: 2, column: 2 }
+                            }
+                        }
+                    ],
+                    range: [11, 34],
                     loc: {
-                        start: { line: 2, column: 0 },
-                        end: { line: 2, column: 1 }
+                        start: { line: 1, column: 11 },
+                        end: { line: 2, column: 4 }
                     }
                 },
-                range: [20, 21],
+                range: [0, 35],
                 loc: {
-                    start: { line: 2, column: 0 },
-                    end: { line: 2, column: 2 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 5 }
                 }
-            }],
-            range: [0, 23],
+            },
+            range: [0, 35],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 2, column: 4 }
+                end: { line: 2, column: 5 }
             }
         },
 
-        '{ return/* Multiline\nComment */x; }': {
-            type: 'BlockStatement',
-            body: [{
-                type: 'ReturnStatement',
-                argument: null,
-                range: [2, 7],
-                loc: {
-                    start: { line: 1, column: 2 },
-                    end: { line: 1, column: 8 }
-                }
-            }, {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'x',
-                    range: [31, 31],
+        '(function(){ return/* Multiline\nComment */x; })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [
+                        {
+                            type: 'ReturnStatement',
+                            argument: null,
+                            range: [13, 18],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 19 }
+                            }
+                        },
+                        {
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [42, 42],
+                                loc: {
+                                    start: { line: 2, column: 10 },
+                                    end: { line: 2, column: 11 }
+                                }
+                            },
+                            range: [42, 43],
+                            loc: {
+                                start: { line: 2, column: 10 },
+                                end: { line: 2, column: 12 }
+                            }
+                        }
+                    ],
+                    range: [11, 45],
                     loc: {
-                        start: { line: 2, column: 10 },
-                        end: { line: 2, column: 11 }
+                        start: { line: 1, column: 11 },
+                        end: { line: 2, column: 14 }
                     }
                 },
-                range: [31, 32],
+                range: [0, 46],
                 loc: {
-                    start: { line: 2, column: 10 },
-                    end: { line: 2, column: 12 }
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 15 }
                 }
-            }],
-            range: [0, 34],
+            },
+            range: [0, 46],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 2, column: 14 }
+                end: { line: 2, column: 15 }
             }
         },
 
@@ -14294,6 +15186,20 @@ data = {
             }
         }
 
+    },
+
+    'Source elements': {
+
+        '': {
+            type: 'Program',
+            body: [],
+            range: [0, -1],
+            loc: {
+                start: { line: 0, column: 0 },
+                end: { line: 0, column: 0 }
+            },
+            tokens: []
+        }
     },
 
     'Harmony Module': {
@@ -14592,5603 +15498,6 @@ data = {
 
     },
 
-    'Generate Expression': {
-        'this': {
-            generateFrom: {
-                type: 'ThisExpression'
-            }
-        },
-
-        '42': {
-            generateFrom: {
-                type: 'Literal',
-                value: 42
-            }
-        },
-
-        '(1 + 2) * 3': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '*',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '+',
-                    left: {
-                        type: 'Literal',
-                        value: 1
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 2
-                    }
-                },
-                right: {
-                    type: 'Literal',
-                    value: 3
-                }
-            }
-        },
-
-        'x = []': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ArrayExpression',
-                    elements: []
-                }
-            }
-        },
-
-        'x = [\n    42\n]': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ArrayExpression',
-                    elements: [{
-                        type: 'Literal',
-                        value: 42
-                    }]
-                }
-            }
-        },
-
-        'x = [\n    ,\n    ,\n    42\n]': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x',
-                    range: [0, 0]
-                },
-                right: {
-                    type: 'ArrayExpression',
-                    elements: [
-                        null,
-                        null,
-                        {
-                            type: 'Literal',
-                            value: 42
-                        }]
-                }
-            }
-        },
-
-        'x = [\n    1,\n    2,\n    3\n]': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ArrayExpression',
-                    elements: [{
-                        type: 'Literal',
-                        value: 1
-                    }, {
-                        type: 'Literal',
-                        value: 2
-                    }, {
-                        type: 'Literal',
-                        value: 3
-                    }]
-                }
-            }
-        },
-
-        'x = [\n    1,\n    2,\n    ,\n    3\n]': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ArrayExpression',
-                    elements: [{
-                        type: 'Literal',
-                        value: 1
-                    }, {
-                        type: 'Literal',
-                        value: 2
-                    }, null, {
-                        type: 'Literal',
-                        value: 3
-                    }]
-                }
-            }
-        },
-
-        'x = [\n    ,\n]': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ArrayExpression',
-                    elements: [ null ]
-                }
-            }
-        },
-
-        'x = [\n    20,\n    ,\n]': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ArrayExpression',
-                    elements: [{
-                        type: 'Literal',
-                        value: 20
-                    }, null ]
-                }
-            }
-        },
-
-        '日本語 = []': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: '日本語'
-                },
-                right: {
-                    type: 'ArrayExpression',
-                    elements: []
-                }
-            }
-        },
-
-        'T\u203F = []': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'T\u203F'
-                },
-                right: {
-                    type: 'ArrayExpression',
-                    elements: []
-                }
-            }
-        },
-
-        'x = {}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: []
-                }
-            }
-        },
-
-        'x = {\n    answer: 42\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'answer'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: 42
-                        },
-                        kind: 'init'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    if: 42\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'if'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: 42
-                        },
-                        kind: 'init'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    true: 42\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'true'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: 42
-                        },
-                        kind: 'init'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    false: 42\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'false'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: 42
-                        },
-                        kind: 'init'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    null: 42\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'null'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: 42
-                        },
-                        kind: 'init'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    \'answer\': 42\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Literal',
-                            value: 'answer'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: 42
-                        },
-                        kind: 'init'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    get width() {\n        return m_width;\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x',
-                    range: [0, 0]
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'width'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [],
-                            body: {
-                                type: 'BlockStatement',
-                                body: [{
-                                    type: 'ReturnStatement',
-                                    argument: {
-                                        type: 'Identifier',
-                                        name: 'm_width'
-                                    }
-                                }]
-                            }
-                        },
-                        kind: 'get'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    get undef() {\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'undef'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [],
-                            body: {
-                                type: 'BlockStatement',
-                                body: []
-                            }
-                        },
-                        kind: 'get'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    get if() {\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'if'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [],
-                            body: {
-                                type: 'BlockStatement',
-                                body: []
-                            }
-                        },
-                        kind: 'get'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    get true() {\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'true'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [],
-                            body: {
-                                type: 'BlockStatement',
-                                body: []
-                            }
-                        },
-                        kind: 'get'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    get false() {\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'false'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [],
-                            body: {
-                                type: 'BlockStatement',
-                                body: []
-                            }
-                        },
-                        kind: 'get'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    get null() {\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'null'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [],
-                            body: {
-                                type: 'BlockStatement',
-                                body: []
-                            }
-                        },
-                        kind: 'get'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    get "undef"() {\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Literal',
-                            value: 'undef',
-                            raw: '"undef"'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [],
-                            body: {
-                                type: 'BlockStatement',
-                                body: []
-                            }
-                        },
-                        kind: 'get'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    get 10() {\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Literal',
-                            value: 10,
-                            raw: '10'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [],
-                            body: {
-                                type: 'BlockStatement',
-                                body: []
-                            }
-                        },
-                        kind: 'get'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    set width(w) {\n        m_width = w;\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'width'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [{
-                                type: 'Identifier',
-                                name: 'w'
-                            }],
-                            body: {
-                                type: 'BlockStatement',
-                                body: [{
-                                    type: 'ExpressionStatement',
-                                    expression: {
-                                        type: 'AssignmentExpression',
-                                        operator: '=',
-                                        left: {
-                                            type: 'Identifier',
-                                            name: 'm_width'
-                                        },
-                                        right: {
-                                            type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
-                            }
-                        },
-                        kind: 'set'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    set if(w) {\n        m_if = w;\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'if'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [{
-                                type: 'Identifier',
-                                name: 'w'
-                            }],
-                            body: {
-                                type: 'BlockStatement',
-                                body: [{
-                                    type: 'ExpressionStatement',
-                                    expression: {
-                                        type: 'AssignmentExpression',
-                                        operator: '=',
-                                        left: {
-                                            type: 'Identifier',
-                                            name: 'm_if'
-                                        },
-                                        right: {
-                                            type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
-                            }
-                        },
-                        kind: 'set'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    set true(w) {\n        m_true = w;\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'true'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [{
-                                type: 'Identifier',
-                                name: 'w'
-                            }],
-                            body: {
-                                type: 'BlockStatement',
-                                body: [{
-                                    type: 'ExpressionStatement',
-                                    expression: {
-                                        type: 'AssignmentExpression',
-                                        operator: '=',
-                                        left: {
-                                            type: 'Identifier',
-                                            name: 'm_true'
-                                        },
-                                        right: {
-                                            type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
-                            }
-                        },
-                        kind: 'set'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    set false(w) {\n        m_false = w;\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'false'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [{
-                                type: 'Identifier',
-                                name: 'w'
-                            }],
-                            body: {
-                                type: 'BlockStatement',
-                                body: [{
-                                    type: 'ExpressionStatement',
-                                    expression: {
-                                        type: 'AssignmentExpression',
-                                        operator: '=',
-                                        left: {
-                                            type: 'Identifier',
-                                            name: 'm_false'
-                                        },
-                                        right: {
-                                            type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
-                            }
-                        },
-                        kind: 'set'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    set null(w) {\n        m_null = w;\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'null'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [{
-                                type: 'Identifier',
-                                name: 'w'
-                            }],
-                            body: {
-                                type: 'BlockStatement',
-                                body: [{
-                                    type: 'ExpressionStatement',
-                                    expression: {
-                                        type: 'AssignmentExpression',
-                                        operator: '=',
-                                        left: {
-                                            type: 'Identifier',
-                                            name: 'm_null'
-                                        },
-                                        right: {
-                                            type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
-                            }
-                        },
-                        kind: 'set'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    set "null"(w) {\n        m_null = w;\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Literal',
-                            value: 'null',
-                            raw: '"null"'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [{
-                                type: 'Identifier',
-                                name: 'w'
-                            }],
-                            body: {
-                                type: 'BlockStatement',
-                                body: [{
-                                    type: 'ExpressionStatement',
-                                    expression: {
-                                        type: 'AssignmentExpression',
-                                        operator: '=',
-                                        left: {
-                                            type: 'Identifier',
-                                            name: 'm_null'
-                                        },
-                                        right: {
-                                            type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
-                            }
-                        },
-                        kind: 'set'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    set 10(w) {\n        m_null = w;\n    }\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Literal',
-                            value: 10,
-                            raw: '10'
-                        },
-                        value: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [{
-                                type: 'Identifier',
-                                name: 'w'
-                            }],
-                            body: {
-                                type: 'BlockStatement',
-                                body: [{
-                                    type: 'ExpressionStatement',
-                                    expression: {
-                                        type: 'AssignmentExpression',
-                                        operator: '=',
-                                        left: {
-                                            type: 'Identifier',
-                                            name: 'm_null'
-                                        },
-                                        right: {
-                                            type: 'Identifier',
-                                            name: 'w'
-                                        }
-                                    }
-                                }]
-                            }
-                        },
-                        kind: 'set'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    get: 42\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'get'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: 42
-                        },
-                        kind: 'init'
-                    }]
-                }
-            }
-        },
-
-        'x = {\n    set: 43\n}': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'set'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: 43
-                        },
-                        kind: 'init'
-                    }]
-                }
-            }
-        },
-
-        '0': {
-            generateFrom: {
-                type: 'Literal',
-                value: 0
-            }
-        },
-
-        '0.14': {
-            generateFrom: {
-                type: 'Literal',
-                value: 0.14
-            }
-        },
-
-        '\'Hello\'': {
-            generateFrom: {
-                type: 'Literal',
-                value: 'Hello'
-            }
-        },
-
-        '\'\\n\\r\\b\\f\\\\\\\'"\\u0000\'': {
-            generateFrom: {
-                type: 'Literal',
-                value: '\n\r\b\f\\\'"\x00'
-            }
-        },
-
-        '\'0\'': {
-            generateFrom: {
-                type: 'Literal',
-                value: '0'
-            }
-        },
-
-        '\'Hello\\nworld\'': {
-            generateFrom: {
-                type: 'Literal',
-                value: 'Hello\nworld'
-            }
-        },
-
-        '/a/': {
-            generateFrom: {
-                type: 'Literal',
-                value: /a/
-            }
-        },
-
-        'new Button()': {
-            generateFrom: {
-                type: 'NewExpression',
-                callee: {
-                    type: 'Identifier',
-                    name: 'Button'
-                },
-                'arguments': []
-            }
-        },
-
-        'new new foo(0)()': {
-            generateFrom: {
-                type: 'NewExpression',
-                callee: {
-                    type: 'NewExpression',
-                    callee: {
-                        type: 'Identifier',
-                        name: 'foo'
-                    },
-                    'arguments': [{
-                        type: 'Literal',
-                        value: 0
-                    }]
-                },
-                'arguments': []
-            }
-        },
-
-        'new new foo()(0)': {
-            generateFrom: {
-                type: 'NewExpression',
-                callee: {
-                    type: 'NewExpression',
-                    callee: {
-                        type: 'Identifier',
-                        name: 'foo'
-                    },
-                    'arguments': []
-                },
-                'arguments': [{
-                    type: 'Literal',
-                    value: 0
-                }]
-            }
-        },
-
-        'new foo().bar()': {
-            generateFrom: {
-                type: 'CallExpression',
-                callee: {
-                    type: 'MemberExpression',
-                    computed: false,
-                    object: {
-                        type: 'NewExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'foo'
-                        },
-                        'arguments': []
-                    },
-                    property: {
-                        type: 'Identifier',
-                        name: 'bar'
-                    }
-                },
-                'arguments': []
-            }
-        },
-
-        'new foo.bar()': {
-            generateFrom: {
-                type: 'NewExpression',
-                callee: {
-                    type: 'MemberExpression',
-                    computed: false,
-                    object: {
-                        type: 'Identifier',
-                        name: 'foo'
-                    },
-                    property: {
-                        type: 'Identifier',
-                        name: 'bar'
-                    }
-                },
-                'arguments': []
-            }
-        },
-
-        'foo(bar, baz)': {
-            generateFrom: {
-                type: 'CallExpression',
-                callee: {
-                    type: 'Identifier',
-                    name: 'foo'
-                },
-                'arguments': [{
-                    type: 'Identifier',
-                    name: 'bar'
-                }, {
-                    type: 'Identifier',
-                    name: 'baz'
-                }]
-            }
-        },
-
-        'universe.milkyway': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Identifier',
-                    name: 'universe'
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'milkyway'
-                }
-            }
-        },
-
-        'universe.milkyway.solarsystem': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'MemberExpression',
-                    computed: false,
-                    object: {
-                        type: 'Identifier',
-                        name: 'universe'
-                    },
-                    property: {
-                        type: 'Identifier',
-                        name: 'milkyway'
-                    }
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'solarsystem'
-                }
-            }
-        },
-
-        'universe.milkyway.solarsystem.Earth': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'MemberExpression',
-                    computed: false,
-                    object: {
-                        type: 'MemberExpression',
-                        computed: false,
-                        object: {
-                            type: 'Identifier',
-                            name: 'universe'
-                        },
-                        property: {
-                            type: 'Identifier',
-                            name: 'milkyway'
-                        }
-                    },
-                    property: {
-                        type: 'Identifier',
-                        name: 'solarsystem'
-                    }
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'Earth'
-                }
-            }
-        },
-
-        'universe[galaxyName, otherUselessName]': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: true,
-                object: {
-                    type: 'Identifier',
-                    name: 'universe'
-                },
-                property: {
-                    type: 'SequenceExpression',
-                    expressions: [{
-                        type: 'Identifier',
-                        name: 'galaxyName'
-                    }, {
-                        type: 'Identifier',
-                        name: 'otherUselessName'
-                    }]
-                }
-            }
-        },
-
-        'universe[galaxyName]': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: true,
-                object: {
-                    type: 'Identifier',
-                    name: 'universe'
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'galaxyName'
-                }
-            }
-        },
-
-        'universe[42].galaxies': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'MemberExpression',
-                    computed: true,
-                    object: {
-                        type: 'Identifier',
-                        name: 'universe'
-                    },
-                    property: {
-                        type: 'Literal',
-                        value: 42
-                    }
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'galaxies'
-                }
-            }
-        },
-
-        'universe(42).galaxies': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'CallExpression',
-                    callee: {
-                        type: 'Identifier',
-                        name: 'universe'
-                    },
-                    'arguments': [{
-                        type: 'Literal',
-                        value: 42
-                    }]
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'galaxies'
-                }
-            }
-        },
-
-        'universe(42).galaxies(14, 3, 77).milkyway': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'CallExpression',
-                    callee: {
-                        type: 'MemberExpression',
-                        computed: false,
-                        object: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'universe'
-                            },
-                            'arguments': [{
-                                type: 'Literal',
-                                value: 42
-                            }]
-                        },
-                        property: {
-                            type: 'Identifier',
-                            name: 'galaxies'
-                        }
-                    },
-                    'arguments': [{
-                        type: 'Literal',
-                        value: 14
-                    }, {
-                        type: 'Literal',
-                        value: 3
-                    }, {
-                        type: 'Literal',
-                        value: 77
-                    }]
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'milkyway'
-                }
-            }
-        },
-
-        'earth.asia.Indonesia.prepareForElection(2014)': {
-            generateFrom: {
-                type: 'CallExpression',
-                callee: {
-                    type: 'MemberExpression',
-                    computed: false,
-                    object: {
-                        type: 'MemberExpression',
-                        computed: false,
-                        object: {
-                            type: 'MemberExpression',
-                            computed: false,
-                            object: {
-                                type: 'Identifier',
-                                name: 'earth'
-                            },
-                            property: {
-                                type: 'Identifier',
-                                name: 'asia'
-                            }
-                        },
-                        property: {
-                            type: 'Identifier',
-                            name: 'Indonesia'
-                        }
-                    },
-                    property: {
-                        type: 'Identifier',
-                        name: 'prepareForElection'
-                    }
-                },
-                'arguments': [{
-                    type: 'Literal',
-                    value: 2014
-                }]
-            }
-        },
-
-        'universe.if': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Identifier',
-                    name: 'universe'
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'if'
-                }
-            }
-        },
-
-        'universe.true': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Identifier',
-                    name: 'universe'
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'true'
-                }
-            }
-        },
-
-        'universe.false': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Identifier',
-                    name: 'universe'
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'false'
-                }
-            }
-        },
-
-        'universe.null': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Identifier',
-                    name: 'universe'
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'null'
-                }
-            }
-        },
-
-        '\'string\'.toString': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Literal',
-                    value: 'string'
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'toString'
-                }
-            }
-        },
-
-        '42..toString': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Literal',
-                    value: 42
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'toString'
-                }
-            }
-        },
-
-        '1e+1000.toString': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Literal',
-                    value: Infinity
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'toString'
-                }
-            }
-        },
-
-        '1e+100.toString': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Literal',
-                    value: 1e100
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'toString'
-                }
-            }
-        },
-
-        'x++': {
-            generateFrom: {
-                type: 'UpdateExpression',
-                operator: '++',
-                argument: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                prefix: false
-            }
-        },
-
-        'x--': {
-            generateFrom: {
-                type: 'UpdateExpression',
-                operator: '--',
-                argument: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                prefix: false
-            }
-        },
-
-        '++x': {
-            generateFrom: {
-                type: 'UpdateExpression',
-                operator: '++',
-                argument: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                prefix: true
-            }
-        },
-
-        '--x': {
-            generateFrom: {
-                type: 'UpdateExpression',
-                operator: '--',
-                argument: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                prefix: true
-            }
-        },
-
-        '+x': {
-            generateFrom: {
-                type: 'UnaryExpression',
-                operator: '+',
-                argument: {
-                    type: 'Identifier',
-                    name: 'x'
-                }
-            }
-        },
-
-        '-x': {
-            generateFrom: {
-                type: 'UnaryExpression',
-                operator: '-',
-                argument: {
-                    type: 'Identifier',
-                    name: 'x'
-                }
-            }
-        },
-
-        '~x': {
-            generateFrom: {
-                type: 'UnaryExpression',
-                operator: '~',
-                argument: {
-                    type: 'Identifier',
-                    name: 'x'
-                }
-            }
-        },
-
-        '!x': {
-            generateFrom: {
-                type: 'UnaryExpression',
-                operator: '!',
-                argument: {
-                    type: 'Identifier',
-                    name: 'x'
-                }
-            }
-        },
-
-        'void x': {
-            generateFrom: {
-                type: 'UnaryExpression',
-                operator: 'void',
-                argument: {
-                    type: 'Identifier',
-                    name: 'x'
-                }
-            }
-        },
-
-        'delete x': {
-            generateFrom: {
-                type: 'UnaryExpression',
-                operator: 'delete',
-                argument: {
-                    type: 'Identifier',
-                    name: 'x'
-                }
-            }
-        },
-
-        'typeof x': {
-            generateFrom: {
-                type: 'UnaryExpression',
-                operator: 'typeof',
-                argument: {
-                    type: 'Identifier',
-                    name: 'x'
-                }
-            }
-        },
-
-        'x * y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '*',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x / y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '/',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x % y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '%',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x + y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '+',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x - y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '-',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x << y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '<<',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x >> y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '>>',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x >>> y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '>>>',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x < y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '<',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x > y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '>',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x <= y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '<=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x >= y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '>=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        '(x in y)': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: 'in',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x instanceof y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: 'instanceof',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x == y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '==',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x != y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '!=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x === y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '===',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x !== y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '!==',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x & y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '&',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x ^ y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '^',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x | y': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '|',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x + y + z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '+',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '+',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x - y + z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '+',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '-',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x + y - z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '-',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '+',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x - y - z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '-',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '-',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x + y * z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '+',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'BinaryExpression',
-                    operator: '*',
-                    left: {
-                        type: 'Identifier',
-                        name: 'y'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'z'
-                    }
-                }
-            }
-        },
-
-        'x + y / z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '+',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'BinaryExpression',
-                    operator: '/',
-                    left: {
-                        type: 'Identifier',
-                        name: 'y'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'z'
-                    }
-                }
-            }
-        },
-
-        'x - y % z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '-',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'BinaryExpression',
-                    operator: '%',
-                    left: {
-                        type: 'Identifier',
-                        name: 'y'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'z'
-                    }
-                }
-            }
-        },
-
-        'x * y * z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '*',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '*',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x * y / z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '/',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '*',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x * y % z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '%',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '*',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x % y * z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '*',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '%',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x << y << z': {
-            type: 'ExpressionStatement',
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '<<',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '<<',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x | y | z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '|',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '|',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x & y & z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '&',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '&',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x ^ y ^ z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '^',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '^',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x & y | z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '|',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '&',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x | y ^ z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '^',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '|',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x | y & z': {
-            generateFrom: {
-                type: 'BinaryExpression',
-                operator: '|',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'BinaryExpression',
-                    operator: '&',
-                    left: {
-                        type: 'Identifier',
-                        name: 'y'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'z'
-                    }
-                }
-            }
-        },
-
-        'x || y': {
-            generateFrom: {
-                type: 'LogicalExpression',
-                operator: '||',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x && y': {
-            generateFrom: {
-                type: 'LogicalExpression',
-                operator: '&&',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'y'
-                }
-            }
-        },
-
-        'x || y || z': {
-            generateFrom: {
-                type: 'LogicalExpression',
-                operator: '||',
-                left: {
-                    type: 'LogicalExpression',
-                    operator: '||',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x && y && z': {
-            generateFrom: {
-                type: 'LogicalExpression',
-                operator: '&&',
-                left: {
-                    type: 'LogicalExpression',
-                    operator: '&&',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z'
-                }
-            }
-        },
-
-        'x || y && z': {
-            generateFrom: {
-                type: 'LogicalExpression',
-                operator: '||',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'LogicalExpression',
-                    operator: '&&',
-                    left: {
-                        type: 'Identifier',
-                        name: 'y'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'z'
-                    }
-                }
-            }
-        },
-
-        'x || y ^ z': {
-            generateFrom: {
-                type: 'LogicalExpression',
-                operator: '||',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'BinaryExpression',
-                    operator: '^',
-                    left: {
-                        type: 'Identifier',
-                        name: 'y'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'z'
-                    }
-                }
-            }
-        },
-
-        'y ? 1 : 2': {
-            generateFrom: {
-                type: 'ConditionalExpression',
-                test: {
-                    type: 'Identifier',
-                    name: 'y'
-                },
-                consequent: {
-                    type: 'Literal',
-                    value: 1
-                },
-                alternate: {
-                    type: 'Literal',
-                    value: 2
-                }
-            }
-        },
-
-        'x && y ? 1 : 2': {
-            generateFrom: {
-                type: 'ConditionalExpression',
-                test: {
-                    type: 'LogicalExpression',
-                    operator: '&&',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                },
-                consequent: {
-                    type: 'Literal',
-                    value: 1
-                },
-                alternate: {
-                    type: 'Literal',
-                    value: 2
-                }
-            }
-        },
-
-        'x = 42': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42
-                }
-            }
-        },
-
-        'x *= 42': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '*=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42
-                }
-            }
-        },
-
-        'x /= 42': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '/=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42
-                }
-            }
-        },
-
-        'x %= 42': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '%=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42
-                }
-            }
-        },
-
-        'x += 42': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '+=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42
-                }
-            }
-        },
-
-        'x -= 42': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '-=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42
-                }
-            }
-        },
-
-        'x <<= 42': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '<<=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42
-                }
-            }
-        },
-
-        'x >>= 42': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '>>=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42
-                }
-            }
-        },
-
-        'x >>>= 42': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '>>>=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42
-                }
-            }
-        },
-
-        'x &= 42': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '&=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42
-                }
-            }
-        },
-
-        'x ^= 42': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '^=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42
-                }
-            }
-        },
-
-        'x |= 42': {
-            generateFrom: {
-                type: 'AssignmentExpression',
-                operator: '|=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42
-                }
-            }
-        },
-
-        '0x20.toString': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Literal',
-                    value: 0x20,
-                    raw: '0x20'
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'toString'
-                }
-            }
-        },
-
-        '0..toString': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Literal',
-                    value: 0,
-                    raw: '0.'
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'toString'
-                }
-            }
-        },
-
-        '1e2.toString': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Literal',
-                    value: 100,
-                    raw: '1e2'
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'toString'
-                }
-            }
-        },
-
-        '"TEST"': {
-            generateFrom: {
-                type: 'Literal',
-                value: 'TEST',
-                raw: '"TEST"'
-            }
-        },
-
-        '1..toString': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Literal',
-                    value: 1,
-                    raw: '20'
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'toString'
-                }
-            }
-        },
-
-        '2..toString': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Literal',
-                    value: 2,
-                    raw: '"TEST"'
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'toString'
-                }
-            }
-        },
-
-        '3..toString': {
-            generateFrom: {
-                type: 'MemberExpression',
-                computed: false,
-                object: {
-                    type: 'Literal',
-                    value: 3,
-                    raw: null
-                },
-                property: {
-                    type: 'Identifier',
-                    name: 'toString'
-                }
-            }
-        },
-
-        '-(-1);': {
-            generateFrom: {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'UnaryExpression',
-                    operator: '-',
-                    argument: {
-                        type: 'UnaryExpression',
-                        operator: '-',
-                        argument: {
-                            type: 'Literal',
-                            value: 1
-                        }
-                    }
-                }
-            }
-        },
-
-        '+-+-1;': {
-            generateFrom: {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'UnaryExpression',
-                    operator: '+',
-                    argument: {
-                        type: 'UnaryExpression',
-                        operator: '-',
-                        argument: {
-                            type: 'UnaryExpression',
-                            operator: '+',
-                            argument: {
-                                type: 'UnaryExpression',
-                                operator: '-',
-                                argument: {
-                                    type: 'Literal',
-                                    value: 1
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-
-        '1 + +(+1);': {
-            generateFrom: {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'BinaryExpression',
-                    operator: '+',
-                    left: {
-                        type: 'Literal',
-                        value: 1
-                    },
-                    right: {
-                        type: 'UnaryExpression',
-                        operator: '+',
-                        argument: {
-                            type: 'UnaryExpression',
-                            operator: '+',
-                            argument: {
-                                type: 'Literal',
-                                value: 1
-                            }
-                        }
-                    }
-                }
-            }
-        },
-
-        'typeof typeof -1;': {
-            generateFrom: {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'UnaryExpression',
-                    operator: 'typeof',
-                    argument: {
-                        type: 'UnaryExpression',
-                        operator: 'typeof',
-                        argument: {
-                            type: 'UnaryExpression',
-                            operator: '-',
-                            argument: {
-                                type: 'Literal',
-                                value: 1
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-    },
-
-    'Generate Statement': {
-
-        '{\n    foo;\n}': {
-            generateFrom: {
-                type: 'BlockStatement',
-                body: [{
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'Identifier',
-                        name: 'foo'
-                    }
-                }]
-            }
-        },
-
-        '{\n    doThis();\n    doThat();\n}': {
-            generateFrom: {
-                type: 'BlockStatement',
-                body: [{
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'doThis'
-                        },
-                        'arguments': []
-                    }
-                }, {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'doThat'
-                        },
-                        'arguments': []
-                    }
-                }]
-            }
-        },
-
-        '{\n}': {
-            generateFrom: {
-                type: 'BlockStatement',
-                body: []
-            }
-        },
-
-        'var x;': {
-            generateFrom: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    init: null
-                }],
-                kind: 'var'
-            }
-        },
-
-        'var x, y;': {
-            generateFrom: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    init: null
-                }, {
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'y'
-                    },
-                    init: null
-                }],
-                kind: 'var'
-            }
-        },
-
-        'var x = 42;': {
-            generateFrom: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    init: {
-                        type: 'Literal',
-                        value: 42,
-                        raw: '42'
-                    }
-                }],
-                kind: 'var'
-            }
-        },
-
-        'var x = (42, 43);': {
-            generateFrom: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    init: {
-                        type: 'SequenceExpression',
-                        expressions: [{
-                            type: 'Literal',
-                            value: 42
-                        }, {
-                            type: 'Literal',
-                            value: 43
-                        }]
-                    }
-                }],
-                kind: 'var'
-            }
-        },
-
-        'var x = 14, y = 3, z = 1977;': {
-            generateFrom: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    init: {
-                        type: 'Literal',
-                        value: 14,
-                        raw: '14'
-                    }
-                }, {
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'y'
-                    },
-                    init: {
-                        type: 'Literal',
-                        value: 3,
-                        raw: '3'
-                    }
-                }, {
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'z'
-                    },
-                    init: {
-                        type: 'Literal',
-                        value: 1977,
-                        raw: '1977'
-                    }
-                }],
-                kind: 'var'
-            }
-        },
-
-        'var x = function () {\n};': {
-            generateFrom: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    init: {
-                        type: 'FunctionExpression',
-                        id: null,
-                        params: [],
-                        body: {
-                            type: 'BlockStatement',
-                            body: []
-                        }
-                    }
-                }],
-                kind: 'var'
-            }
-        },
-
-        'let x;': {
-            generateFrom: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    init: null
-                }],
-                kind: 'let'
-            }
-        },
-
-        '{\n    let x;\n}': {
-            generateFrom: {
-                type: 'BlockStatement',
-                body: [{
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: null
-                    }],
-                    kind: 'let'
-                }]
-            }
-        },
-
-        '{\n    let x = 42;\n}': {
-            generateFrom: {
-                type: 'BlockStatement',
-                body: [{
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 42,
-                            raw: '42'
-                        }
-                    }],
-                    kind: 'let'
-                }]
-            }
-        },
-
-        '{\n    let x = 14, y = 3, z = 1977;\n}': {
-            generateFrom: {
-                type: 'BlockStatement',
-                body: [{
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 14,
-                            raw: '14'
-                        }
-                    }, {
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'y'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 3,
-                            raw: '3'
-                        }
-                    }, {
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'z'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 1977,
-                            raw: '1977'
-                        }
-                    }],
-                    kind: 'let'
-                }]
-            }
-        },
-
-        'const x = 42;': {
-            generateFrom: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    init: {
-                        type: 'Literal',
-                        value: 42,
-                        raw: '42'
-                    }
-                }],
-                kind: 'const'
-            }
-        },
-
-        '{\n    const x = 42;\n}': {
-            generateFrom: {
-                type: 'BlockStatement',
-                body: [{
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 42,
-                            raw: '42'
-                        }
-                    }],
-                    kind: 'const'
-                }]
-            }
-        },
-
-        '{\n    const x = 14, y = 3, z = 1977;\n}': {
-            generateFrom: {
-                type: 'BlockStatement',
-                body: [{
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 14,
-                            raw: '14'
-                        }
-                    }, {
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'y'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 3,
-                            raw: '3'
-                        }
-                    }, {
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'z'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 1977,
-                            raw: '1977'
-                        }
-                    }],
-                    kind: 'const'
-                }]
-            }
-        },
-
-        ';': {
-            generateFrom: {
-                type: 'EmptyStatement'
-            }
-        },
-
-        'x;': {
-            generateFrom: {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'x'
-                }
-            }
-        },
-
-        'x, y;': {
-            generateFrom: {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'SequenceExpression',
-                    expressions: [{
-                        type: 'Identifier',
-                        name: 'x'
-                    }, {
-                        type: 'Identifier',
-                        name: 'y'
-                    }]
-                }
-            }
-        },
-
-        'a;': {
-            generateFrom: {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'a'
-                }
-            }
-        },
-
-        'aa;': {
-            generateFrom: {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'Identifier',
-                    name: 'aa'
-                }
-            }
-        },
-
-        'if (morning)\n    goodMorning();': {
-            generateFrom: {
-                type: 'IfStatement',
-                test: {
-                    type: 'Identifier',
-                    name: 'morning'
-                },
-                consequent: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'goodMorning'
-                        },
-                        'arguments': []
-                    }
-                },
-                alternate: null
-            }
-        },
-
-        'if ({\n        morning: true\n    })\n    goodMorning();': {
-            generateFrom: {
-                type: 'IfStatement',
-                test: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'morning'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: true
-                        },
-                        kind: 'init'
-                    }]
-                },
-                consequent: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'goodMorning'
-                        },
-                        'arguments': []
-                    }
-                },
-                alternate: null
-            }
-        },
-
-        'if (morning)\n    (function () {\n    });': {
-            generateFrom: {
-                type: 'IfStatement',
-                test: {
-                    type: 'Identifier',
-                    name: 'morning'
-                },
-                consequent: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'FunctionExpression',
-                        id: null,
-                        params: [],
-                        body: {
-                            type: 'BlockStatement',
-                            body: []
-                        }
-                    }
-                },
-                alternate: null
-            }
-        },
-
-        'if (morning)\n    var x = 0;': {
-            generateFrom: {
-                type: 'IfStatement',
-                test: {
-                    type: 'Identifier',
-                    name: 'morning'
-                },
-                consequent: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 0,
-                            raw: '0'
-                        }
-                    }],
-                    kind: 'var'
-                },
-                alternate: null
-            }
-        },
-
-        'if (morning) {\n    var x = 0;\n}': {
-            generateFrom: {
-                type: 'IfStatement',
-                test: {
-                    type: 'Identifier',
-                    name: 'morning'
-                },
-                consequent: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'VariableDeclaration',
-                        declarations: [{
-                            type: 'VariableDeclarator',
-                            id: {
-                                type: 'Identifier',
-                                name: 'x'
-                            },
-                            init: {
-                                type: 'Literal',
-                                value: 0,
-                                raw: '0'
-                            }
-                        }],
-                        kind: 'var'
-                    }]
-                },
-                alternate: null
-            }
-        },
-
-        'if (morning)\n    goodMorning();\nelse\n    goodDay();': {
-            generateFrom: {
-                type: 'IfStatement',
-                test: {
-                    type: 'Identifier',
-                    name: 'morning'
-                },
-                consequent: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'goodMorning'
-                        },
-                        'arguments': []
-                    }
-                },
-                alternate: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'goodDay'
-                        },
-                        'arguments': []
-                    }
-                }
-            }
-        },
-
-        'if (morning) {\n    goodMorning();\n} else {\n    goodDay();\n}': {
-            generateFrom: {
-                type: 'IfStatement',
-                test: {
-                    type: 'Identifier',
-                    name: 'morning'
-                },
-                consequent: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'goodMorning'
-                            },
-                            'arguments': []
-                        }
-                    }]
-                },
-                alternate: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'goodDay'
-                            },
-                            'arguments': []
-                        }
-                    }]
-                }
-            }
-        },
-
-        'if (morning) {\n    goodMorning();\n} else if (afternoon) {\n    goodDay();\n} else {\n    goodEvening();\n}': {
-            generateFrom: {
-                type: 'IfStatement',
-                test: {
-                    type: 'Identifier',
-                    name: 'morning'
-                },
-                consequent: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'goodMorning'
-                            },
-                            'arguments': []
-                        }
-                    }]
-                },
-                alternate: {
-                    type: 'IfStatement',
-                    test: {
-                        type: 'Identifier',
-                        name: 'afternoon'
-                    },
-                    consequent: {
-                        type: 'BlockStatement',
-                        body: [{
-                            type: 'ExpressionStatement',
-                            expression: {
-                                type: 'CallExpression',
-                                callee: {
-                                    type: 'Identifier',
-                                    name: 'goodDay'
-                                },
-                                'arguments': []
-                            }
-                        }]
-                    },
-                    alternate: {
-                        type: 'BlockStatement',
-                        body: [{
-                            type: 'ExpressionStatement',
-                            expression: {
-                                type: 'CallExpression',
-                                callee: {
-                                    type: 'Identifier',
-                                    name: 'goodEvening'
-                                },
-                                'arguments': []
-                            }
-                        }]
-                    }
-                }
-            }
-        },
-
-        'if (morning)\n    if (afternoon)\n        goodDay();\n    else\n        goodEvening();': {
-            generateFrom: {
-                type: 'IfStatement',
-                test: {
-                    type: 'Identifier',
-                    name: 'morning'
-                },
-                consequent: {
-                    type: 'IfStatement',
-                    test: {
-                        type: 'Identifier',
-                        name: 'afternoon'
-                    },
-                    consequent: {
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'goodDay'
-                            },
-                            'arguments': []
-                        }
-                    },
-                    alternate: {
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'goodEvening'
-                            },
-                            'arguments': []
-                        }
-                    }
-                },
-                alternate: null
-            }
-        },
-
-        'do\n    keep();\nwhile (true);': {
-            generateFrom: {
-                type: 'DoWhileStatement',
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'keep'
-                        },
-                        'arguments': []
-                    }
-                },
-                test: {
-                    type: 'Literal',
-                    value: true,
-                    raw: 'true'
-                }
-            }
-        },
-
-
-        'do\n    keep();\nwhile ({\n    morning: true\n});': {
-            generateFrom: {
-                type: 'DoWhileStatement',
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'keep'
-                        },
-                        'arguments': []
-                    }
-                },
-                test: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'morning'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: true
-                        },
-                        kind: 'init'
-                    }]
-                }
-            }
-        },
-
-        'do {\n    x++;\n    y--;\n} while (x < 10);': {
-            generateFrom: {
-                type: 'DoWhileStatement',
-                body: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'UpdateExpression',
-                            operator: '++',
-                            argument: {
-                                type: 'Identifier',
-                                name: 'x'
-                            },
-                            prefix: false
-                        }
-                    }, {
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'UpdateExpression',
-                            operator: '--',
-                            argument: {
-                                type: 'Identifier',
-                                name: 'y'
-                            },
-                            prefix: false
-                        }
-                    }]
-                },
-                test: {
-                    type: 'BinaryExpression',
-                    operator: '<',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 10,
-                        raw: '10'
-                    }
-                }
-            }
-        },
-
-        '{\n    do {\n    } while (false);\n    false;\n}': {
-            generateFrom: {
-                type: 'BlockStatement',
-                body: [{
-                    type: 'DoWhileStatement',
-                    body: {
-                        type: 'BlockStatement',
-                        body: []
-                    },
-                    test: {
-                        type: 'Literal',
-                        value: false,
-                        raw: 'false'
-                    }
-                }, {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'Literal',
-                        value: false,
-                        raw: 'false'
-                    }
-                }]
-            }
-        },
-
-        'while (true)\n    doSomething();': {
-            generateFrom: {
-                type: 'WhileStatement',
-                test: {
-                    type: 'Literal',
-                    value: true,
-                    raw: 'true'
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'doSomething'
-                        },
-                        'arguments': []
-                    }
-                }
-            }
-        },
-
-
-        'while ({\n        morning: true\n    })\n    doSomething();': {
-            generateFrom: {
-                type: 'WhileStatement',
-                test: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'morning'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: true
-                        },
-                        kind: 'init'
-                    }]
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'doSomething'
-                        },
-                        'arguments': []
-                    }
-                }
-            }
-        },
-
-        'while (x < 10) {\n    x++;\n    y--;\n}': {
-            generateFrom: {
-                type: 'WhileStatement',
-                test: {
-                    type: 'BinaryExpression',
-                    operator: '<',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 10,
-                        raw: '10'
-                    }
-                },
-                body: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'UpdateExpression',
-                            operator: '++',
-                            argument: {
-                                type: 'Identifier',
-                                name: 'x'
-                            },
-                            prefix: false
-                        }
-                    }, {
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'UpdateExpression',
-                            operator: '--',
-                            argument: {
-                                type: 'Identifier',
-                                name: 'y'
-                            },
-                            prefix: false
-                        }
-                    }]
-                }
-            }
-        },
-
-        'for (;;);': {
-            generateFrom: {
-                type: 'ForStatement',
-                init: null,
-                test: null,
-                update: null,
-                body: {
-                    type: 'EmptyStatement'
-                }
-            }
-        },
-
-        'for (;;) {\n}': {
-            generateFrom: {
-                type: 'ForStatement',
-                init: null,
-                test: null,
-                update: null,
-                body: {
-                    type: 'BlockStatement',
-                    body: []
-                }
-            }
-        },
-
-        'for (x = 0;;);': {
-            generateFrom: {
-                type: 'ForStatement',
-                init: {
-                    type: 'AssignmentExpression',
-                    operator: '=',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 0,
-                        raw: '0'
-                    }
-                },
-                test: null,
-                update: null,
-                body: {
-                    type: 'EmptyStatement'
-                }
-            }
-        },
-
-
-        'for (x = {\n        morning: true\n    }; {\n        afternoon: true\n    }; {\n        evening: true\n    });': {
-            generateFrom: {
-                type: 'ForStatement',
-                init: {
-                    type: 'AssignmentExpression',
-                    operator: '=',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'ObjectExpression',
-                        properties: [{
-                            type: 'Property',
-                            key: {
-                                type: 'Identifier',
-                                name: 'morning'
-                            },
-                            value: {
-                                type: 'Literal',
-                                value: true
-                            },
-                            kind: 'init'
-                        }]
-                    }
-                },
-                test: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'afternoon'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: true
-                        },
-                        kind: 'init'
-                    }]
-                },
-                update: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'evening'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: true
-                        },
-                        kind: 'init'
-                    }]
-                },
-                body: {
-                    type: 'EmptyStatement'
-                }
-            }
-        },
-
-        'for (var x = 0;;);': {
-            generateFrom: {
-                type: 'ForStatement',
-                init: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 0,
-                            raw: '0'
-                        }
-                    }],
-                    kind: 'var'
-                },
-                test: null,
-                update: null,
-                body: {
-                    type: 'EmptyStatement'
-                }
-            }
-        },
-
-        'for (var x = {\n            morning: true\n        };;);': {
-            generateFrom: {
-                type: 'ForStatement',
-                init: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'ObjectExpression',
-                            properties: [{
-                                type: 'Property',
-                                key: {
-                                    type: 'Identifier',
-                                    name: 'morning'
-                                },
-                                value: {
-                                    type: 'Literal',
-                                    value: true
-                                },
-                                kind: 'init'
-                            }]
-                        }
-                    }],
-                    kind: 'var'
-                },
-                test: null,
-                update: null,
-                body: {
-                    type: 'EmptyStatement'
-                }
-            }
-        },
-
-        'for (let x = 0;;);': {
-            generateFrom: {
-                type: 'ForStatement',
-                init: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 0,
-                            raw: '0'
-                        }
-                    }],
-                    kind: 'let'
-                },
-                test: null,
-                update: null,
-                body: {
-                    type: 'EmptyStatement'
-                }
-            }
-        },
-
-        'for (var x = 0, y = 1;;);': {
-            generateFrom: {
-                type: 'ForStatement',
-                init: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 0,
-                            raw: '0'
-                        }
-                    }, {
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'y'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 1,
-                            raw: '1'
-                        }
-                    }],
-                    kind: 'var'
-                },
-                test: null,
-                update: null,
-                body: {
-                    type: 'EmptyStatement'
-                }
-            }
-        },
-
-        'for (x = 0; x < 42;);': {
-            generateFrom: {
-                type: 'ForStatement',
-                init: {
-                    type: 'AssignmentExpression',
-                    operator: '=',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 0,
-                        raw: '0'
-                    }
-                },
-                test: {
-                    type: 'BinaryExpression',
-                    operator: '<',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 42,
-                        raw: '42'
-                    }
-                },
-                update: null,
-                body: {
-                    type: 'EmptyStatement'
-                }
-            }
-        },
-
-        'for (x = 0; x < 42; x++);': {
-            generateFrom: {
-                type: 'ForStatement',
-                init: {
-                    type: 'AssignmentExpression',
-                    operator: '=',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 0,
-                        raw: '0'
-                    }
-                },
-                test: {
-                    type: 'BinaryExpression',
-                    operator: '<',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 42,
-                        raw: '42'
-                    }
-                },
-                update: {
-                    type: 'UpdateExpression',
-                    operator: '++',
-                    argument: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    prefix: false
-                },
-                body: {
-                    type: 'EmptyStatement'
-                }
-            }
-        },
-
-        'for (x = 0; x < 42; x++)\n    process(x);': {
-            generateFrom: {
-                type: 'ForStatement',
-                init: {
-                    type: 'AssignmentExpression',
-                    operator: '=',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 0,
-                        raw: '0'
-                    }
-                },
-                test: {
-                    type: 'BinaryExpression',
-                    operator: '<',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 42,
-                        raw: '42'
-                    }
-                },
-                update: {
-                    type: 'UpdateExpression',
-                    operator: '++',
-                    argument: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    prefix: false
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'process'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'x'
-                        }]
-                    }
-                }
-            }
-        },
-
-        'for (x in list)\n    process(x);': {
-            generateFrom: {
-                type: 'ForInStatement',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'list'
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'process'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'x'
-                        }]
-                    }
-                },
-                each: false
-            }
-        },
-
-        'for (x in {\n        morning: true\n    })\n    process(x);': {
-            generateFrom: {
-                type: 'ForInStatement',
-                left: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'morning'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: true
-                        },
-                        kind: 'init'
-                    }]
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'process'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'x'
-                        }]
-                    }
-                },
-                each: false
-            }
-        },
-
-        'for (var x in list)\n    process(x);': {
-            generateFrom: {
-                type: 'ForInStatement',
-                left: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: null
-                    }],
-                    kind: 'var'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'list'
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'process'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'x'
-                        }]
-                    }
-                },
-                each: false
-            }
-        },
-
-        'for (var x in {\n        morning: true\n    })\n    process(x);': {
-            generateFrom: {
-                type: 'ForInStatement',
-                left: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: null
-                    }],
-                    kind: 'var'
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'morning'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: true
-                        },
-                        kind: 'init'
-                    }]
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'process'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'x'
-                        }]
-                    }
-                },
-                each: false
-            }
-        },
-
-        'for (var x = 42 in list)\n    process(x);': {
-            generateFrom: {
-                type: 'ForInStatement',
-                left: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 42,
-                            raw: '42'
-                        }
-                    }],
-                    kind: 'var'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'list'
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'process'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'x'
-                        }]
-                    }
-                },
-                each: false
-            }
-        },
-
-        'for (var x = {\n            morning: true\n        } in list)\n    process(x);': {
-            generateFrom: {
-                type: 'ForInStatement',
-                left: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'ObjectExpression',
-                            properties: [{
-                                type: 'Property',
-                                key: {
-                                    type: 'Identifier',
-                                    name: 'morning'
-                                },
-                                value: {
-                                    type: 'Literal',
-                                    value: true
-                                },
-                                kind: 'init'
-                            }]
-                        }
-                    }],
-                    kind: 'var'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'list'
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'process'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'x'
-                        }]
-                    }
-                },
-                each: false
-            }
-        },
-
-        'for (let x in list)\n    process(x);': {
-            generateFrom: {
-                type: 'ForInStatement',
-                left: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: null
-                    }],
-                    kind: 'let'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'list'
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'process'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'x'
-                        }]
-                    }
-                },
-                each: false
-            }
-        },
-
-        'for (let x = 42 in list)\n    process(x);': {
-            generateFrom: {
-                type: 'ForInStatement',
-                left: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 42,
-                            raw: '42'
-                        }
-                    }],
-                    kind: 'let'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'list'
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'process'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'x'
-                        }]
-                    }
-                },
-                each: false
-            }
-        },
-
-        'for (var i = function () {\n            return (10 in []);\n        } in list)\n    process(x);': {
-            generateFrom: {
-                type: 'ForInStatement',
-                left: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'i'
-                        },
-                        init: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [],
-                            body: {
-                                type: 'BlockStatement',
-                                body: [{
-                                    type: 'ReturnStatement',
-                                    argument: {
-                                        type: 'BinaryExpression',
-                                        operator: 'in',
-                                        left: {
-                                            type: 'Literal',
-                                            value: 10,
-                                            raw: '10'
-                                        },
-                                        right: {
-                                            type: 'ArrayExpression',
-                                            elements: []
-                                        }
-                                    }
-                                }]
-                            }
-                        }
-                    }],
-                    kind: 'var'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'list'
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'process'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'x'
-                        }]
-                    }
-                },
-                each: false
-            }
-        },
-
-        'for (var x = (42 in arr) in list)\n    process(x);': {
-            generateFrom: {
-                type: 'ForInStatement',
-                left: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'BinaryExpression',
-                            operator: 'in',
-                            left: {
-                                type: 'Literal',
-                                value: 42,
-                                raw: '42'
-                            },
-                            right: {
-                                type: 'Identifier',
-                                name: 'arr'
-                            }
-                        }
-                    }],
-                    kind: 'var'
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'list'
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'process'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'x'
-                        }]
-                    }
-                },
-                each: false
-            }
-        },
-
-        'for (var x = 42 in (arr in list))\n    process(x);': {
-            generateFrom: {
-                type: 'ForInStatement',
-                left: {
-                    type: 'VariableDeclaration',
-                    declarations: [{
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x'
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 42,
-                            raw: '42'
-                        }
-                    }],
-                    kind: 'var'
-                },
-                right: {
-                    type: 'BinaryExpression',
-                    operator: 'in',
-                    left: {
-                        type: 'Identifier',
-                        name: 'arr'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'list'
-                    }
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: {
-                            type: 'Identifier',
-                            name: 'process'
-                        },
-                        'arguments': [{
-                            type: 'Identifier',
-                            name: 'x'
-                        }]
-                    }
-                },
-                each: false
-            }
-        },
-
-        'continue;': {
-            generateFrom: {
-                type: 'ContinueStatement',
-                label: null
-            }
-        },
-
-        'continue done;': {
-            generateFrom: {
-                type: 'ContinueStatement',
-                label: {
-                    type: 'Identifier',
-                    name: 'done'
-                }
-            }
-        },
-
-        'break;': {
-            generateFrom: {
-                type: 'BreakStatement',
-                label: null
-            }
-        },
-
-        'break done;': {
-            generateFrom: {
-                type: 'BreakStatement',
-                label: {
-                    type: 'Identifier',
-                    name: 'done'
-                }
-            }
-        },
-
-        'return;': {
-            generateFrom: {
-                type: 'ReturnStatement',
-                argument: null
-            }
-        },
-
-        'return x;': {
-            generateFrom: {
-                type: 'ReturnStatement',
-                argument: {
-                    type: 'Identifier',
-                    name: 'x'
-                }
-            }
-        },
-
-        'return x * y;': {
-            generateFrom: {
-                type: 'ReturnStatement',
-                argument: {
-                    type: 'BinaryExpression',
-                    operator: '*',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                }
-            }
-        },
-
-        'return {\n    morning: true\n};': {
-            generateFrom: {
-                type: 'ReturnStatement',
-                argument: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'morning'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: true
-                        },
-                        kind: 'init'
-                    }]
-                }
-            }
-        },
-
-        'with (x)\n    foo = bar;': {
-            generateFrom: {
-                type: 'WithStatement',
-                object: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'AssignmentExpression',
-                        operator: '=',
-                        left: {
-                            type: 'Identifier',
-                            name: 'foo'
-                        },
-                        right: {
-                            type: 'Identifier',
-                            name: 'bar'
-                        }
-                    }
-                }
-            }
-        },
-
-        'with ({\n        morning: true\n    })\n    foo = bar;': {
-            generateFrom: {
-                type: 'WithStatement',
-                object: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'morning'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: true
-                        },
-                        kind: 'init'
-                    }]
-                },
-                body: {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'AssignmentExpression',
-                        operator: '=',
-                        left: {
-                            type: 'Identifier',
-                            name: 'foo'
-                        },
-                        right: {
-                            type: 'Identifier',
-                            name: 'bar'
-                        }
-                    }
-                }
-            }
-        },
-
-        'with (x) {\n    foo = bar;\n}': {
-            generateFrom: {
-                type: 'WithStatement',
-                object: {
-                    type: 'Identifier',
-                    name: 'x'
-                },
-                body: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'AssignmentExpression',
-                            operator: '=',
-                            left: {
-                                type: 'Identifier',
-                                name: 'foo'
-                            },
-                            right: {
-                                type: 'Identifier',
-                                name: 'bar'
-                            }
-                        }
-                    }]
-                }
-            }
-        },
-
-        'switch (x) {\n}': {
-            generateFrom: {
-                type: 'SwitchStatement',
-                discriminant: {
-                    type: 'Identifier',
-                    name: 'x'
-                }
-            }
-        },
-
-        'switch ({\n        morning: true\n    }) {\n}': {
-            generateFrom: {
-                type: 'SwitchStatement',
-                discriminant: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'morning'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: true
-                        },
-                        kind: 'init'
-                    }]
-                }
-            }
-        },
-
-        'switch (answer) {\ncase 42:\n    hi();\n    break;\n}': {
-            generateFrom: {
-                type: 'SwitchStatement',
-                discriminant: {
-                    type: 'Identifier',
-                    name: 'answer'
-                },
-                cases: [{
-                    type: 'SwitchCase',
-                    test: {
-                        type: 'Literal',
-                        value: 42,
-                        raw: '42'
-                    },
-                    consequent: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'hi'
-                            },
-                            'arguments': []
-                        }
-                    }, {
-                        type: 'BreakStatement',
-                        label: null
-                    }]
-                }]
-            }
-        },
-
-        'switch (answer) {\ncase {\n        morning: true\n    }:\n    hi();\n    break;\n}': {
-            generateFrom: {
-                type: 'SwitchStatement',
-                discriminant: {
-                    type: 'Identifier',
-                    name: 'answer'
-                },
-                cases: [{
-                    type: 'SwitchCase',
-                    test: {
-                        type: 'ObjectExpression',
-                        properties: [{
-                            type: 'Property',
-                            key: {
-                                type: 'Identifier',
-                                name: 'morning'
-                            },
-                            value: {
-                                type: 'Literal',
-                                value: true
-                            },
-                            kind: 'init'
-                        }]
-                    },
-                    consequent: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'hi'
-                            },
-                            'arguments': []
-                        }
-                    }, {
-                        type: 'BreakStatement',
-                        label: null
-                    }]
-                }]
-            }
-        },
-
-        'switch (answer) {\ncase 42: {\n        hi();\n        break;\n    }\n}': {
-            generateFrom: {
-                type: 'SwitchStatement',
-                discriminant: {
-                    type: 'Identifier',
-                    name: 'answer'
-                },
-                cases: [{
-                    type: 'SwitchCase',
-                    test: {
-                        type: 'Literal',
-                        value: 42,
-                        raw: '42'
-                    },
-                    consequent: [{
-                        type: 'BlockStatement',
-                        body: [{
-                            type: 'ExpressionStatement',
-                            expression: {
-                                type: 'CallExpression',
-                                callee: {
-                                    type: 'Identifier',
-                                    name: 'hi'
-                                },
-                                'arguments': []
-                            }
-                        }, {
-                            type: 'BreakStatement',
-                            label: null
-                        }]
-                    }]
-                }]
-            }
-        },
-
-        'switch (answer) {\ncase 42:\n    hi();\n    break;\ndefault:\n    break;\n}': {
-            generateFrom: {
-                type: 'SwitchStatement',
-                discriminant: {
-                    type: 'Identifier',
-                    name: 'answer'
-                },
-                cases: [{
-                    type: 'SwitchCase',
-                    test: {
-                        type: 'Literal',
-                        value: 42,
-                        raw: '42'
-                    },
-                    consequent: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'hi'
-                            },
-                            'arguments': []
-                        }
-                    }, {
-                        type: 'BreakStatement',
-                        label: null
-                    }]
-                }, {
-                    type: 'SwitchCase',
-                    test: null,
-                    consequent: [{
-                        type: 'BreakStatement',
-                        label: null
-                    }]
-                }]
-            }
-        },
-
-        'start:\n    for (;;)\n        break start;': {
-            generateFrom: {
-                type: 'LabeledStatement',
-                label: {
-                    type: 'Identifier',
-                    name: 'start'
-                },
-                body: {
-                    type: 'ForStatement',
-                    init: null,
-                    test: null,
-                    update: null,
-                    body: {
-                        type: 'BreakStatement',
-                        label: {
-                            type: 'Identifier',
-                            name: 'start'
-                        }
-                    }
-                }
-            }
-        },
-
-        'start:\n    while (true)\n        break start;': {
-            generateFrom: {
-                type: 'LabeledStatement',
-                label: {
-                    type: 'Identifier',
-                    name: 'start'
-                },
-                body: {
-                    type: 'WhileStatement',
-                    test: {
-                        type: 'Literal',
-                        value: true,
-                        raw: 'true'
-                    },
-                    body: {
-                        type: 'BreakStatement',
-                        label: {
-                            type: 'Identifier',
-                            name: 'start'
-                        }
-                    }
-                }
-            }
-        },
-
-        'throw x;': {
-            generateFrom: {
-                type: 'ThrowStatement',
-                argument: {
-                    type: 'Identifier',
-                    name: 'x'
-                }
-            }
-        },
-
-        'throw x * y;': {
-            generateFrom: {
-                type: 'ThrowStatement',
-                argument: {
-                    type: 'BinaryExpression',
-                    operator: '*',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x'
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y'
-                    }
-                }
-            }
-        },
-
-        'throw {\n    morning: true\n};': {
-            generateFrom: {
-                type: 'ThrowStatement',
-                argument: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'morning'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: true
-                        },
-                        kind: 'init'
-                    }]
-                }
-            }
-        },
-
-        'throw {\n    message: "Error"\n};': {
-            generateFrom: {
-                type: 'ThrowStatement',
-                argument: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Identifier',
-                            name: 'message'
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: 'Error',
-                            raw: '"Error"'
-                        },
-                        kind: 'init'
-                    }]
-                }
-            }
-        },
-
-        'try {\n} catch (e) {\n}': {
-            generateFrom: {
-                type: 'TryStatement',
-                block: {
-                    type: 'BlockStatement',
-                    body: []
-                },
-                handlers: [{
-                    type: 'CatchClause',
-                    param: {
-                        type: 'Identifier',
-                        name: 'e'
-                    },
-                    guard: null,
-                    body: {
-                        type: 'BlockStatement',
-                        body: []
-                    }
-                }],
-                finalizer: null
-            }
-        },
-
-        'try {\n} catch (e) {\n    say(e);\n}': {
-            generateFrom: {
-                type: 'TryStatement',
-                block: {
-                    type: 'BlockStatement',
-                    body: []
-                },
-                handlers: [{
-                    type: 'CatchClause',
-                    param: {
-                        type: 'Identifier',
-                        name: 'e'
-                    },
-                    guard: null,
-                    body: {
-                        type: 'BlockStatement',
-                        body: [{
-                            type: 'ExpressionStatement',
-                            expression: {
-                                type: 'CallExpression',
-                                callee: {
-                                    type: 'Identifier',
-                                    name: 'say'
-                                },
-                                'arguments': [{
-                                    type: 'Identifier',
-                                    name: 'e'
-                                }]
-                            }
-                        }]
-                    }
-                }],
-                finalizer: null
-            }
-        },
-
-        'try {\n} finally {\n    cleanup(stuff);\n}': {
-            generateFrom: {
-                type: 'TryStatement',
-                block: {
-                    type: 'BlockStatement',
-                    body: []
-                },
-                handlers: [],
-                finalizer: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'cleanup'
-                            },
-                            'arguments': [{
-                                type: 'Identifier',
-                                name: 'stuff'
-                            }]
-                        }
-                    }]
-                }
-            }
-        },
-
-        'try {\n    doThat();\n} catch (e) {\n    say(e);\n}': {
-            generateFrom: {
-                type: 'TryStatement',
-                block: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'doThat'
-                            },
-                            'arguments': []
-                        }
-                    }]
-                },
-                handlers: [{
-                    type: 'CatchClause',
-                    param: {
-                        type: 'Identifier',
-                        name: 'e'
-                    },
-                    guard: null,
-                    body: {
-                        type: 'BlockStatement',
-                        body: [{
-                            type: 'ExpressionStatement',
-                            expression: {
-                                type: 'CallExpression',
-                                callee: {
-                                    type: 'Identifier',
-                                    name: 'say'
-                                },
-                                'arguments': [{
-                                    type: 'Identifier',
-                                    name: 'e'
-                                }]
-                            }
-                        }]
-                    }
-                }],
-                finalizer: null
-            }
-        },
-
-        'try {\n    doThat();\n} catch (e) {\n    say(e);\n} finally {\n    cleanup(stuff);\n}': {
-            generateFrom: {
-                type: 'TryStatement',
-                block: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'doThat'
-                            },
-                            'arguments': []
-                        }
-                    }]
-                },
-                handlers: [{
-                    type: 'CatchClause',
-                    param: {
-                        type: 'Identifier',
-                        name: 'e'
-                    },
-                    guard: null,
-                    body: {
-                        type: 'BlockStatement',
-                        body: [{
-                            type: 'ExpressionStatement',
-                            expression: {
-                                type: 'CallExpression',
-                                callee: {
-                                    type: 'Identifier',
-                                    name: 'say'
-                                },
-                                'arguments': [{
-                                    type: 'Identifier',
-                                    name: 'e'
-                                }]
-                            }
-                        }]
-                    }
-                }],
-                finalizer: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'cleanup'
-                            },
-                            'arguments': [{
-                                type: 'Identifier',
-                                name: 'stuff'
-                            }]
-                        }
-                    }]
-                }
-            }
-        },
-
-        'debugger;': {
-            generateFrom: {
-                type: 'DebuggerStatement'
-            }
-        },
-
-        'function hello() {\n    sayHi();\n}': {
-            generateFrom: {
-                type: 'FunctionDeclaration',
-                id: {
-                    type: 'Identifier',
-                    name: 'hello'
-                },
-                params: [],
-                body: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'sayHi'
-                            },
-                            'arguments': []
-                        }
-                    }]
-                }
-            }
-        },
-
-        'function hello(a) {\n    sayHi();\n}': {
-            generateFrom: {
-                type: 'FunctionDeclaration',
-                id: {
-                    type: 'Identifier',
-                    name: 'hello'
-                },
-                params: [{
-                    type: 'Identifier',
-                    name: 'a'
-                }],
-                body: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'sayHi'
-                            },
-                            'arguments': []
-                        }
-                    }]
-                }
-            }
-        },
-
-        'function hello(a, b) {\n    sayHi();\n}': {
-            generateFrom: {
-                type: 'FunctionDeclaration',
-                id: {
-                    type: 'Identifier',
-                    name: 'hello'
-                },
-                params: [{
-                    type: 'Identifier',
-                    name: 'a'
-                }, {
-                    type: 'Identifier',
-                    name: 'b'
-                }],
-                body: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'CallExpression',
-                            callee: {
-                                type: 'Identifier',
-                                name: 'sayHi'
-                            },
-                            'arguments': []
-                        }
-                    }]
-                }
-            }
-        },
-
-        'var hi = function () {\n    sayHi();\n};': {
-            generateFrom: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'hi'
-                    },
-                    init: {
-                        type: 'FunctionExpression',
-                        id: null,
-                        params: [],
-                        body: {
-                            type: 'BlockStatement',
-                            body: [{
-                                type: 'ExpressionStatement',
-                                expression: {
-                                    type: 'CallExpression',
-                                    callee: {
-                                        type: 'Identifier',
-                                        name: 'sayHi'
-                                    },
-                                    'arguments': []
-                                }
-                            }]
-                        }
-                    }
-                }],
-                kind: 'var'
-            }
-        },
-
-        'var hello = function hi() {\n    sayHi();\n};': {
-            generateFrom: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'hello'
-                    },
-                    init: {
-                        type: 'FunctionExpression',
-                        id: {
-                            type: 'Identifier',
-                            name: 'hi'
-                        },
-                        params: [],
-                        body: {
-                            type: 'BlockStatement',
-                            body: [{
-                                type: 'ExpressionStatement',
-                                expression: {
-                                    type: 'CallExpression',
-                                    callee: {
-                                        type: 'Identifier',
-                                        name: 'sayHi'
-                                    },
-                                    'arguments': []
-                                }
-                            }]
-                        }
-                    }
-                }],
-                kind: 'var'
-            }
-        },
-
-        '(function () {\n});': {
-            generateFrom: {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'FunctionExpression',
-                    id: null,
-                    params: [],
-                    body: {
-                        type: 'BlockStatement',
-                        body: []
-                    }
-                }
-            }
-        },
-
-        '': {
-            generateFrom: {
-                type: 'Program',
-                body: []
-            }
-        }
-
-    },
-
     'Invalid syntax': {
 
         '{': {
@@ -20209,6 +15518,34 @@ data = {
             index: 2,
             lineNumber: 1,
             column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '3in []': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '3e': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '3e+': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '3e-': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
@@ -20240,6 +15577,20 @@ data = {
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
+        '018': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '01a': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
         '3in[]': {
             index: 1,
             lineNumber: 1,
@@ -20261,6 +15612,27 @@ data = {
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
+        'x\\': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        'x\\u005c': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        'x\\u002a': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
         'var x = /(s/g': {
             index: 13,
             lineNumber: 1,
@@ -20273,6 +15645,48 @@ data = {
             lineNumber: 1,
             column: 2,
             message: 'Error: Line 1: Invalid regular expression: missing /'
+        },
+
+        'var x = /[a-z]/\\ux': {
+            index: 18,
+            lineNumber: 1,
+            column: 19,
+            message: 'Error: Line 1: Invalid regular expression'
+        },
+
+        '[': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        '[,': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        '1 + {': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        '1 + { t:t ': {
+            index: 10,
+            lineNumber: 1,
+            column: 11,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        '1 + { t:t,': {
+            index: 10,
+            lineNumber: 1,
+            column: 11,
+            message: 'Error: Line 1: Unexpected end of input'
         },
 
         'var x = /\n/': {
@@ -20296,6 +15710,20 @@ data = {
             message: 'Error: Line 1: Unexpected token if'
         },
 
+        'i + 2 = 42': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '+i = 42': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
         '1 + (': {
             index: 5,
             lineNumber: 1,
@@ -20316,6 +15744,7 @@ data = {
             column: 7,
             message: 'Error: Line 2: Unexpected identifier'
         },
+
 
         '\n\n\n{': {
             index: 4,
@@ -20352,6 +15781,13 @@ data = {
             message: 'Error: Line 1: Unexpected token if'
         },
 
+        '({ set s(.) { } })': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token .'
+        },
+
         '({ set: s() { } })': {
             index: 12,
             lineNumber: 1,
@@ -20371,6 +15807,48 @@ data = {
             lineNumber: 1,
             column: 14,
             message: 'Error: Line 1: Unexpected token {'
+        },
+
+        '({ get i() { }, i: 42 })': {
+            index: 21,
+            lineNumber: 1,
+            column: 22,
+            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        '({ i: 42, get i() { } })': {
+            index: 21,
+            lineNumber: 1,
+            column: 22,
+            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        '({ set i(x) { }, i: 42 })': {
+            index: 22,
+            lineNumber: 1,
+            column: 23,
+            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        '({ i: 42, set i(x) { } })': {
+            index: 22,
+            lineNumber: 1,
+            column: 23,
+            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        '({ get i() { }, get i() { } })': {
+            index: 27,
+            lineNumber: 1,
+            column: 28,
+            message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
+        },
+
+        '({ set i(x) { }, set i(x) { } })': {
+            index: 29,
+            lineNumber: 1,
+            column: 30,
+            message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
         },
 
         'function t(if) { }': {
@@ -20457,11 +15935,25 @@ data = {
             message: 'Error: Line 1: Unexpected reserved word'
         },
 
+        'break\n': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Illegal break statement'
+        },
+
         'break 1;': {
             index: 6,
             lineNumber: 1,
             column: 7,
             message: 'Error: Line 1: Unexpected number'
+        },
+
+        'continue\n': {
+            index: 8,
+            lineNumber: 1,
+            column: 9,
+            message: 'Error: Line 1: Illegal continue statement'
         },
 
         'continue 2;': {
@@ -20504,6 +15996,62 @@ data = {
             lineNumber: 1,
             column: 15,
             message: 'Error: Line 1: Unexpected token )'
+        },
+
+        'for (i + 1 in {});': {
+            index: 10,
+            lineNumber: 1,
+            column: 11,
+            message: 'Error: Line 1: Invalid left-hand side in for-in'
+        },
+
+        'for (+i in {});': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Invalid left-hand side in for-in'
+        },
+
+        'if(false)': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'if(false) doThis(); else': {
+            index: 24,
+            lineNumber: 1,
+            column: 25,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'do': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'while(false)': {
+            index: 12,
+            lineNumber: 1,
+            column: 13,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'for(;;)': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'with(x)': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected end of input'
         },
 
         'try { }': {
@@ -20553,6 +16101,13 @@ data = {
             lineNumber: 1,
             column: 10,
             message: 'Error: Line 1: Unexpected token const'
+        },
+
+        'new X()."s"': {
+            index: 8,
+            lineNumber: 1,
+            column: 9,
+            message: 'Error: Line 1: Unexpected string'
         },
 
         '/*': {
@@ -20724,6 +16279,90 @@ data = {
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
+        'return': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Illegal return statement'
+        },
+
+        'break': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Illegal break statement'
+        },
+
+        'continue': {
+            index: 8,
+            lineNumber: 1,
+            column: 9,
+            message: 'Error: Line 1: Illegal continue statement'
+        },
+
+        'switch (x) { default: continue; }': {
+            index: 31,
+            lineNumber: 1,
+            column: 32,
+            message: 'Error: Line 1: Illegal continue statement'
+        },
+
+        'do { x } *': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token *'
+        },
+
+        'while (true) { break x; }': {
+            index: 22,
+            lineNumber: 1,
+            column: 23,
+            message: 'Error: Line 1: Undefined label \'x\''
+        },
+
+        'while (true) { continue x; }': {
+            index: 25,
+            lineNumber: 1,
+            column: 26,
+            message: 'Error: Line 1: Undefined label \'x\''
+        },
+
+        'x: while (true) { (function () { break x; }); }': {
+            index: 40,
+            lineNumber: 1,
+            column: 41,
+            message: 'Error: Line 1: Undefined label \'x\''
+        },
+
+        'x: while (true) { (function () { continue x; }); }': {
+            index: 43,
+            lineNumber: 1,
+            column: 44,
+            message: 'Error: Line 1: Undefined label \'x\''
+        },
+
+        'x: while (true) { (function () { break; }); }': {
+            index: 39,
+            lineNumber: 1,
+            column: 40,
+            message: 'Error: Line 1: Illegal break statement'
+        },
+
+        'x: while (true) { (function () { continue; }); }': {
+            index: 42,
+            lineNumber: 1,
+            column: 43,
+            message: 'Error: Line 1: Illegal continue statement'
+        },
+
+        'x: while (true) { x: while (true) { } }': {
+            index: 20,
+            lineNumber: 1,
+            column: 21,
+            message: 'Error: Line 1: Label \'x\' has already been declared'
+        },
+
         '(function () { \'use strict\'; delete i; }())': {
             index: 37,
             lineNumber: 1,
@@ -20750,48 +16389,6 @@ data = {
             lineNumber: 1,
             column: 74,
             message: 'Error: Line 1: Duplicate data property in object literal not allowed in strict mode'
-        },
-
-        'function hello() {\'use strict\'; ({ get i() { }, i: 42 }) }': {
-            index: 53,
-            lineNumber: 1,
-            column: 54,
-            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
-        },
-
-        'function hello() {\'use strict\'; ({ i: 42, get i() { } }) }': {
-            index: 53,
-            lineNumber: 1,
-            column: 54,
-            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
-        },
-
-        'function hello() {\'use strict\'; ({ set i(x) { }, i: 42 }) }': {
-            index: 54,
-            lineNumber: 1,
-            column: 55,
-            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
-        },
-
-        'function hello() {\'use strict\'; ({ i: 42, set i(x) { } }) }': {
-            index: 54,
-            lineNumber: 1,
-            column: 55,
-            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
-        },
-
-        'function hello() {\'use strict\'; ({ get i() { }, get i() { } }) }': {
-            index: 59,
-            lineNumber: 1,
-            column: 60,
-            message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
-        },
-
-        'function hello() {\'use strict\'; ({ set i(x) { }, set i(x) { } }) }': {
-            index: 61,
-            lineNumber: 1,
-            column: 62,
-            message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
         },
 
         'function hello() {\'use strict\'; var eval = 10; }': {
@@ -20955,6 +16552,13 @@ data = {
             message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
         },
 
+        '(function package() {\'use strict\'; })()': {
+            index: 10,
+            lineNumber: 1,
+            column: 11,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
         'function hello() {\'use strict\'; ({ i: 10, set s(eval) { } }); }': {
             index: 48,
             lineNumber: 1,
@@ -21002,6 +16606,13 @@ data = {
             lineNumber: 1,
             column: 49,
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        ' "\\1"; \'use strict\';': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
         },
 
         'function hello() { \'use strict\'; "\\1"; }': {
@@ -21148,6 +16759,62 @@ data = {
             index: 23,
             lineNumber: 1,
             column: 24,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function a(t, t) { "use strict"; }': {
+            index: 14,
+            lineNumber: 1,
+            column: 15,
+            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+        },
+
+        'function a(eval) { "use strict"; }': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        'function a(package) { "use strict"; }': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function a() { "use strict"; function b(t, t) { }; }': {
+            index: 43,
+            lineNumber: 1,
+            column: 44,
+            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+        },
+
+        '(function a(t, t) { "use strict"; })': {
+            index: 15,
+            lineNumber: 1,
+            column: 16,
+            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+        },
+
+        'function a() { "use strict"; (function b(t, t) { }); }': {
+            index: 44,
+            lineNumber: 1,
+            column: 45,
+            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+        },
+
+        '(function a(eval) { "use strict"; })': {
+            index: 12,
+            lineNumber: 1,
+            column: 13,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        '(function a(package) { "use strict"; })': {
+            index: 12,
+            lineNumber: 1,
+            column: 13,
             message: 'Error: Line 1: Use of future reserved word in strict mode'
         }
 
@@ -21414,20 +17081,6 @@ function testModify(code, result) {
     }
 }
 
-function testGenerate(expected, result) {
-    'use strict';
-    var actual;
-
-    try {
-        actual = esprima.generate(result.generateFrom, { indent: '    ' });
-    } catch (e) {
-        throw new NotMatchingError(expected, e.toString());
-    }
-    if (expected !== actual) {
-        throw new NotMatchingError(expected, actual);
-    }
-}
-
 function testAPI(code, result) {
     'use strict';
     var expected, res, actual;
@@ -21450,8 +17103,6 @@ function runTest(code, result) {
         testError(code, result);
     } else if (result.hasOwnProperty('modifiers')) {
         testModify(code, result);
-    } else if (result.hasOwnProperty('generateFrom')) {
-        testGenerate(code, result);
     } else if (result.hasOwnProperty('result')) {
         testAPI(code, result);
     } else {
@@ -21469,7 +17120,9 @@ if (typeof window !== 'undefined') {
             fixture,
             source,
             tick,
-            expected;
+            expected,
+            index,
+            len;
 
         function setText(el, str) {
             if (typeof el.innerText === 'string') {

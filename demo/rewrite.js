@@ -58,7 +58,7 @@ function sourceRewrite() {
 
     try {
         syntax = window.esprima.parse(code, { raw: true });
-        code = window.esprima.generate(syntax, { indent: indent });
+        code = window.escodegen.generate(syntax, { indent: indent });
     } catch (e) {
         setText('error', e.toString());
     } finally {
