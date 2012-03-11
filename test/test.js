@@ -9961,6 +9961,51 @@ data = {
             }
         },
 
+        'do keep(); while (true);': {
+            type: 'DoWhileStatement',
+            body: {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'keep',
+                        range: [3, 6],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 7 }
+                        }
+                    },
+                    'arguments': [],
+                    range: [3, 8],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 9 }
+                    }
+                },
+                range: [3, 9],
+                loc: {
+                    start: { line: 1, column: 3 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            test: {
+                type: 'Literal',
+                value: true,
+                raw: 'true',
+                range: [18, 21],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 24 }
+            }
+        },
+
         'do { x++; y--; } while (x < 10)': {
             type: 'DoWhileStatement',
             body: {
