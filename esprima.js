@@ -3291,36 +3291,35 @@ parseStatement: true, parseSourceElement: true */
                 };
 
                 node = parseFunction.apply(null, arguments);
-                if (typeof node === 'undefined') {
-                    return;
-                }
+                if (typeof node !== 'undefined') {
 
-                if (range) {
-                    rangeInfo[1] = index - 1;
-                    node.range = rangeInfo;
-                }
-
-                if (loc) {
-                    locInfo.end = {
-                        line: lineNumber,
-                        column: index - lineStart
-                    };
-                    node.loc = locInfo;
-                }
-
-                if (isBinary(node)) {
-                    visit(node);
-                }
-
-                if (node.type === Syntax.MemberExpression) {
-                    if (typeof node.object.range !== 'undefined') {
-                        node.range[0] = node.object.range[0];
+                    if (range) {
+                        rangeInfo[1] = index - 1;
+                        node.range = rangeInfo;
                     }
-                    if (typeof node.object.loc !== 'undefined') {
-                        node.loc.start = node.object.loc.start;
+
+                    if (loc) {
+                        locInfo.end = {
+                            line: lineNumber,
+                            column: index - lineStart
+                        };
+                        node.loc = locInfo;
                     }
+
+                    if (isBinary(node)) {
+                        visit(node);
+                    }
+
+                    if (node.type === Syntax.MemberExpression) {
+                        if (typeof node.object.range !== 'undefined') {
+                            node.range[0] = node.object.range[0];
+                        }
+                        if (typeof node.object.loc !== 'undefined') {
+                            node.loc.start = node.object.loc.start;
+                        }
+                    }
+                    return node;
                 }
-                return node;
             };
 
         };
