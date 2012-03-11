@@ -21554,6 +21554,20 @@ data = {
             message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
         },
 
+        'function a(eval) { "use strict"; }': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        'function a(package) { "use strict"; }': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
         'function a() { "use strict"; function b(t, t) { }; }': {
             index: 43,
             lineNumber: 1,
@@ -21573,6 +21587,20 @@ data = {
             lineNumber: 1,
             column: 45,
             message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+        },
+
+        '(function a(eval) { "use strict"; })': {
+            index: 12,
+            lineNumber: 1,
+            column: 13,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        '(function a(package) { "use strict"; })': {
+            index: 12,
+            lineNumber: 1,
+            column: 13,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
         }
 
     },
