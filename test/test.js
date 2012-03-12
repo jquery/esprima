@@ -2944,20 +2944,20 @@ data = {
                     raw: '42',
                     range: [17, 18],
                     loc: {
-                        start: { line: 2, column: -1 },
-                        end: { line: 2, column: 1 }
+                        start: { line: 2, column: 0 },
+                        end: { line: 2, column: 2 }
                     }
                 },
                 range: [17, 18],
                 loc: {
-                    start: { line: 2, column: -1 },
-                    end: { line: 2, column: 1 }
+                    start: { line: 2, column: 0 },
+                    end: { line: 2, column: 2 }
                 }
             }],
             range: [17, 18],
             loc: {
-                start: { line: 2, column: -1 },
-                end: { line: 2, column: 1 }
+                start: { line: 2, column: 0 },
+                end: { line: 2, column: 2 }
             },
             comments: [{
                 range: [0, 16],
@@ -2976,20 +2976,20 @@ data = {
                     raw: '42',
                     range: [3, 4],
                     loc: {
-                        start: { line: 2, column: -1 },
-                        end: { line: 2, column: 1 }
+                        start: { line: 2, column: 0 },
+                        end: { line: 2, column: 2 }
                     }
                 },
                 range: [3, 4],
                 loc: {
-                    start: { line: 2, column: -1 },
-                    end: { line: 2, column: 1 }
+                    start: { line: 2, column: 0 },
+                    end: { line: 2, column: 2 }
                 }
             }],
             range: [3, 4],
             loc: {
-                start: { line: 2, column: -1 },
-                end: { line: 2, column: 1 }
+                start: { line: 2, column: 0 },
+                end: { line: 2, column: 2 }
             },
             comments: [{
                 range: [0, 2],
@@ -3040,20 +3040,20 @@ data = {
                     raw: '42',
                     range: [37, 38],
                     loc: {
-                        start: { line: 4, column: -1 },
-                        end: { line: 4, column: 1 }
+                        start: { line: 4, column: 0 },
+                        end: { line: 4, column: 2 }
                     }
                 },
                 range: [37, 38],
                 loc: {
-                    start: { line: 4, column: -1 },
-                    end: { line: 4, column: 1 }
+                    start: { line: 4, column: 0 },
+                    end: { line: 4, column: 2 }
                 }
             }],
             range: [37, 38],
             loc: {
-                start: { line: 4, column: -1 },
-                end: { line: 4, column: 1 }
+                start: { line: 4, column: 0 },
+                end: { line: 4, column: 2 }
             },
             comments: [{
                 range: [0, 16],
@@ -3090,40 +3090,40 @@ data = {
                                 name: 'doThat',
                                 range: [25, 30],
                                 loc: {
-                                    start: { line: 2, column: -1 },
-                                    end: { line: 2, column: 5 }
+                                    start: { line: 2, column: 0 },
+                                    end: { line: 2, column: 6 }
                                 }
                             },
                             'arguments': [],
                             range: [25, 32],
                             loc: {
-                                start: { line: 2, column: -1 },
-                                end: { line: 2, column: 7 }
+                                start: { line: 2, column: 0 },
+                                end: { line: 2, column: 8 }
                             }
                         },
                         range: [25, 33],
                         loc: {
-                            start: { line: 2, column: -1 },
-                            end: { line: 2, column: 8 }
+                            start: { line: 2, column: 0 },
+                            end: { line: 2, column: 9 }
                         }
                     }],
                     range: [7, 35],
                     loc: {
                         start: { line: 1, column: 7 },
-                        end: { line: 2, column: 10 }
+                        end: { line: 2, column: 11 }
                     }
                 },
                 alternate: null,
                 range: [0, 35],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 2, column: 10 }
+                    end: { line: 2, column: 11 }
                 }
             }],
             range: [0, 35],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 2, column: 10 }
+                end: { line: 2, column: 11 }
             },
             comments: [{
                 range: [9, 24],
@@ -14072,7 +14072,7 @@ data = {
                     end: { line: 1, column: 11 }
                 }
             },
-            body: {            
+            body: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'ContinueStatement',
@@ -14124,7 +14124,7 @@ data = {
                     end: { line: 1, column: 11 }
                 }
             },
-            body: {            
+            body: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'ContinueStatement',
@@ -14176,7 +14176,7 @@ data = {
                     end: { line: 1, column: 11 }
                 }
             },
-            body: {            
+            body: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'ContinueStatement',
@@ -14228,7 +14228,7 @@ data = {
                     end: { line: 1, column: 11 }
                 }
             },
-            body: {            
+            body: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'BreakStatement',
@@ -14280,7 +14280,7 @@ data = {
                     end: { line: 1, column: 11 }
                 }
             },
-            body: {            
+            body: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'BreakStatement',
@@ -14332,7 +14332,7 @@ data = {
                     end: { line: 1, column: 11 }
                 }
             },
-            body: {            
+            body: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'BreakStatement',
@@ -14370,7 +14370,7 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 18 }
             }
-        },        
+        },
 
         '(function(){ return\nx; })': {
             type: 'ExpressionStatement',
@@ -15390,9 +15390,9 @@ data = {
 
         '/*\n\n\n': {
             index: 5,
-            lineNumber: 3,
-            column: 2,
-            message: 'Error: Line 3: Unexpected token ILLEGAL'
+            lineNumber: 4,
+            column: 1,
+            message: 'Error: Line 4: Unexpected token ILLEGAL'
         },
 
         '/**': {
