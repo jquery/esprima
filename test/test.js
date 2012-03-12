@@ -16272,34 +16272,46 @@ function testParse(code, syntax) {
 
 function testError(code, exception) {
     'use strict';
-    var expected, msg, actual;
+    var options, expected, msg, actual;
+
+    // Different parsing options should give the same error.
+    options = [
+        {},
+        { comment: true },
+        { raw: true },
+        { raw: true, comment: true }
+    ];
 
     expected = JSON.stringify(exception);
 
-    try {
-        esprima.parse(code);
-    } catch (e) {
-        msg = e.toString();
+    options.forEach(function (option) {
 
-        // Opera 9.64 produces an non-standard string in toString().
-        if (msg.substr(0, 6) !== 'Error:') {
-            if (typeof e.message === 'string') {
-                msg = 'Error: ' + e.message;
+        try {
+            esprima.parse(code, option);
+        } catch (e) {
+            msg = e.toString();
+
+            // Opera 9.64 produces an non-standard string in toString().
+            if (msg.substr(0, 6) !== 'Error:') {
+                if (typeof e.message === 'string') {
+                    msg = 'Error: ' + e.message;
+                }
             }
+
+            actual = JSON.stringify({
+                index: e.index,
+                lineNumber: e.lineNumber,
+                column: e.column,
+                message: msg
+            });
+
         }
 
-        actual = JSON.stringify({
-            index: e.index,
-            lineNumber: e.lineNumber,
-            column: e.column,
-            message: msg
-        });
+        if (expected !== actual) {
+            throw new NotMatchingError(expected, actual);
+        }
 
-    }
-
-    if (expected !== actual) {
-        throw new NotMatchingError(expected, actual);
-    }
+    });
 }
 
 function testModify(code, result) {
