@@ -3083,9 +3083,7 @@ parseStatement: true, parseSourceElement: true */
     // the comments is active.
 
     function addComment(start, end, type, value) {
-        if (typeof start !== 'number') {
-            return;
-        }
+        assert(typeof start === 'number', 'Comment must have valid position');
 
         // Because the way the actual token is scanned, often the comments
         // (if any) are skipped twice during the lexical analysis.
@@ -3185,8 +3183,6 @@ parseStatement: true, parseSourceElement: true */
                 break;
             }
         }
-
-        addComment(start, index, (blockComment) ? 'Block' : 'Line', comment);
     }
 
     function collectToken() {
@@ -3259,34 +3255,21 @@ parseStatement: true, parseSourceElement: true */
             }
 
             function visit(node) {
-                if (range) {
-                    if (isBinary(node.left) && (typeof node.left.range === 'undefined')) {
-                        visit(node.left);
-                    }
-                    if (isBinary(node.right) && (typeof node.right.range === 'undefined')) {
-                        visit(node.right);
-                    }
-
-                    // Expression enclosed in brackets () already has the correct range.
-                    if (typeof node.range === 'undefined') {
-                        node.range = [node.left.range[0], node.right.range[1]];
-                    }
+                if (isBinary(node.left)) {
+                    visit(node.left);
+                }
+                if (isBinary(node.right)) {
+                    visit(node.right);
                 }
 
-                if (loc) {
-                    if (isBinary(node.left) && (typeof node.left.loc === 'undefined')) {
-                        visit(node.left);
-                    }
-                    if (isBinary(node.right) && (typeof node.right.loc === 'undefined')) {
-                        visit(node.right);
-                    }
-
-                    if (typeof node.loc === 'undefined') {
-                        node.loc = {
-                            start: node.left.loc.start,
-                            end: node.right.loc.end
-                        };
-                    }
+                if (range && typeof node.range === 'undefined') {
+                    node.range = [node.left.range[0], node.right.range[1]];
+                }
+                if (loc && typeof node.loc === 'undefined') {
+                    node.loc = {
+                        start: node.left.loc.start,
+                        end: node.right.loc.end
+                    };
                 }
             }
 
