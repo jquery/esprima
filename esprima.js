@@ -372,32 +372,38 @@ parseStatement: true, parseSourceElement: true */
             ch = source[index];
 
             if (lineComment) {
-                index += 1;
+                ch = nextChar();
                 if (isLineTerminator(ch)) {
                     lineComment = false;
-                    if (ch ===  '\r' && source[index] === '\n') {
+                    if (ch === '\r' && source[index] === '\n') {
                         index += 1;
                     }
                     lineNumber += 1;
                     lineStart = index;
                 }
             } else if (blockComment) {
-                index += 1;
-                if (index >= length) {
-                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                }
-                if (ch === '*') {
-                    ch = source[index];
-                    if (ch === '/') {
-                        index += 1;
-                        blockComment = false;
-                    }
-                } else if (isLineTerminator(ch)) {
-                    if (ch ===  '\r' && source[index] === '\n') {
+                if (isLineTerminator(ch)) {
+                    if (ch === '\r' && source[index + 1] === '\n') {
                         index += 1;
                     }
                     lineNumber += 1;
+                    index += 1;
                     lineStart = index;
+                    if (index >= length) {
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    }
+                } else {
+                    ch = nextChar();
+                    if (index >= length) {
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    }
+                    if (ch === '*') {
+                        ch = source[index];
+                        if (ch === '/') {
+                            index += 1;
+                            blockComment = false;
+                        }
+                    }
                 }
             } else if (ch === '/') {
                 ch = source[index + 1];
@@ -3245,36 +3251,42 @@ parseStatement: true, parseSourceElement: true */
                 if (isLineTerminator(ch)) {
                     lineComment = false;
                     addComment(start, index - 1, 'Line', comment);
-                    if (ch ===  '\r' && source[index] === '\n') {
+                    if (ch === '\r' && source[index] === '\n') {
                         index += 1;
                     }
                     lineNumber += 1;
-                    lineStart = index + 1;
+                    lineStart = index;
                     comment = '';
                 } else {
                     comment += ch;
                 }
             } else if (blockComment) {
-                ch = nextChar();
-                comment += ch;
-                if (index >= length) {
-                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                }
-                if (ch === '*') {
-                    ch = source[index];
-                    if (ch === '/') {
-                        comment = comment.substr(0, comment.length - 1);
-                        blockComment = false;
-                        index += 1;
-                        addComment(start, index - 1, 'Block', comment);
-                        comment = '';
-                    }
-                } else if (isLineTerminator(ch)) {
-                    if (ch ===  '\r' && source[index] === '\n') {
+                if (isLineTerminator(ch)) {
+                    if (ch === '\r' && source[index + 1] === '\n') {
                         index += 1;
                     }
                     lineNumber += 1;
-                    lineStart = index + 1;
+                    index += 1;
+                    lineStart = index;
+                    if (index >= length) {
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    }
+                } else {
+                    ch = nextChar();
+                    if (index >= length) {
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    }
+                    comment += ch;
+                    if (ch === '*') {
+                        ch = source[index];
+                        if (ch === '/') {
+                            comment = comment.substr(0, comment.length - 1);
+                            blockComment = false;
+                            index += 1;
+                            addComment(start, index - 1, 'Block', comment);
+                            comment = '';
+                        }
+                    }
                 }
             } else if (ch === '/') {
                 ch = source[index + 1];
@@ -3300,7 +3312,7 @@ parseStatement: true, parseSourceElement: true */
                     index += 1;
                 }
                 lineNumber += 1;
-                lineStart = index + 1;
+                lineStart = index;
             } else {
                 break;
             }

@@ -2944,20 +2944,20 @@ data = {
                     raw: '42',
                     range: [17, 18],
                     loc: {
-                        start: { line: 2, column: -1 },
-                        end: { line: 2, column: 1 }
+                        start: { line: 2, column: 0 },
+                        end: { line: 2, column: 2 }
                     }
                 },
                 range: [17, 18],
                 loc: {
-                    start: { line: 2, column: -1 },
-                    end: { line: 2, column: 1 }
+                    start: { line: 2, column: 0 },
+                    end: { line: 2, column: 2 }
                 }
             }],
             range: [17, 18],
             loc: {
-                start: { line: 2, column: -1 },
-                end: { line: 2, column: 1 }
+                start: { line: 2, column: 0 },
+                end: { line: 2, column: 2 }
             },
             comments: [{
                 range: [0, 16],
@@ -2976,20 +2976,20 @@ data = {
                     raw: '42',
                     range: [3, 4],
                     loc: {
-                        start: { line: 2, column: -1 },
-                        end: { line: 2, column: 1 }
+                        start: { line: 2, column: 0 },
+                        end: { line: 2, column: 2 }
                     }
                 },
                 range: [3, 4],
                 loc: {
-                    start: { line: 2, column: -1 },
-                    end: { line: 2, column: 1 }
+                    start: { line: 2, column: 0 },
+                    end: { line: 2, column: 2 }
                 }
             }],
             range: [3, 4],
             loc: {
-                start: { line: 2, column: -1 },
-                end: { line: 2, column: 1 }
+                start: { line: 2, column: 0 },
+                end: { line: 2, column: 2 }
             },
             comments: [{
                 range: [0, 2],
@@ -3040,20 +3040,20 @@ data = {
                     raw: '42',
                     range: [37, 38],
                     loc: {
-                        start: { line: 4, column: -1 },
-                        end: { line: 4, column: 1 }
+                        start: { line: 4, column: 0 },
+                        end: { line: 4, column: 2 }
                     }
                 },
                 range: [37, 38],
                 loc: {
-                    start: { line: 4, column: -1 },
-                    end: { line: 4, column: 1 }
+                    start: { line: 4, column: 0 },
+                    end: { line: 4, column: 2 }
                 }
             }],
             range: [37, 38],
             loc: {
-                start: { line: 4, column: -1 },
-                end: { line: 4, column: 1 }
+                start: { line: 4, column: 0 },
+                end: { line: 4, column: 2 }
             },
             comments: [{
                 range: [0, 16],
@@ -3090,40 +3090,40 @@ data = {
                                 name: 'doThat',
                                 range: [25, 30],
                                 loc: {
-                                    start: { line: 2, column: -1 },
-                                    end: { line: 2, column: 5 }
+                                    start: { line: 2, column: 0 },
+                                    end: { line: 2, column: 6 }
                                 }
                             },
                             'arguments': [],
                             range: [25, 32],
                             loc: {
-                                start: { line: 2, column: -1 },
-                                end: { line: 2, column: 7 }
+                                start: { line: 2, column: 0 },
+                                end: { line: 2, column: 8 }
                             }
                         },
                         range: [25, 33],
                         loc: {
-                            start: { line: 2, column: -1 },
-                            end: { line: 2, column: 8 }
+                            start: { line: 2, column: 0 },
+                            end: { line: 2, column: 9 }
                         }
                     }],
                     range: [7, 35],
                     loc: {
                         start: { line: 1, column: 7 },
-                        end: { line: 2, column: 10 }
+                        end: { line: 2, column: 11 }
                     }
                 },
                 alternate: null,
                 range: [0, 35],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 2, column: 10 }
+                    end: { line: 2, column: 11 }
                 }
             }],
             range: [0, 35],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 2, column: 10 }
+                end: { line: 2, column: 11 }
             },
             comments: [{
                 range: [9, 24],
@@ -14595,7 +14595,7 @@ data = {
                     end: { line: 1, column: 11 }
                 }
             },
-            body: {            
+            body: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'ContinueStatement',
@@ -14647,7 +14647,7 @@ data = {
                     end: { line: 1, column: 11 }
                 }
             },
-            body: {            
+            body: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'ContinueStatement',
@@ -14699,7 +14699,7 @@ data = {
                     end: { line: 1, column: 11 }
                 }
             },
-            body: {            
+            body: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'ContinueStatement',
@@ -14751,7 +14751,7 @@ data = {
                     end: { line: 1, column: 11 }
                 }
             },
-            body: {            
+            body: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'BreakStatement',
@@ -14803,7 +14803,7 @@ data = {
                     end: { line: 1, column: 11 }
                 }
             },
-            body: {            
+            body: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'BreakStatement',
@@ -14855,7 +14855,7 @@ data = {
                     end: { line: 1, column: 11 }
                 }
             },
-            body: {            
+            body: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'BreakStatement',
@@ -14893,7 +14893,7 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 2, column: 18 }
             }
-        },        
+        },
 
         '(function(){ return\nx; })': {
             type: 'ExpressionStatement',
@@ -16119,9 +16119,9 @@ data = {
 
         '/*\n\n\n': {
             index: 5,
-            lineNumber: 3,
-            column: 2,
-            message: 'Error: Line 3: Unexpected token ILLEGAL'
+            lineNumber: 4,
+            column: 1,
+            message: 'Error: Line 4: Unexpected token ILLEGAL'
         },
 
         '/**': {
@@ -17001,34 +17001,46 @@ function testParse(code, syntax) {
 
 function testError(code, exception) {
     'use strict';
-    var expected, msg, actual;
+    var options, expected, msg, actual;
+
+    // Different parsing options should give the same error.
+    options = [
+        {},
+        { comment: true },
+        { raw: true },
+        { raw: true, comment: true }
+    ];
 
     expected = JSON.stringify(exception);
 
-    try {
-        esprima.parse(code);
-    } catch (e) {
-        msg = e.toString();
+    options.forEach(function (option) {
 
-        // Opera 9.64 produces an non-standard string in toString().
-        if (msg.substr(0, 6) !== 'Error:') {
-            if (typeof e.message === 'string') {
-                msg = 'Error: ' + e.message;
+        try {
+            esprima.parse(code, option);
+        } catch (e) {
+            msg = e.toString();
+
+            // Opera 9.64 produces an non-standard string in toString().
+            if (msg.substr(0, 6) !== 'Error:') {
+                if (typeof e.message === 'string') {
+                    msg = 'Error: ' + e.message;
+                }
             }
+
+            actual = JSON.stringify({
+                index: e.index,
+                lineNumber: e.lineNumber,
+                column: e.column,
+                message: msg
+            });
+
         }
 
-        actual = JSON.stringify({
-            index: e.index,
-            lineNumber: e.lineNumber,
-            column: e.column,
-            message: msg
-        });
+        if (expected !== actual) {
+            throw new NotMatchingError(expected, actual);
+        }
 
-    }
-
-    if (expected !== actual) {
-        throw new NotMatchingError(expected, actual);
-    }
+    });
 }
 
 function testModify(code, result) {
