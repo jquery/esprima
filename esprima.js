@@ -1176,6 +1176,20 @@ parseStatement: true, parseSourceElement: true */
         throw error;
     }
 
+    function throwErrorTolerant() {
+        var error;
+        try {
+            throwError.apply(null, arguments);
+        } catch (e) {
+            if (extra.errors) {
+                extra.errors.push(e);
+            } else {
+                throw e;
+            }
+        }
+    }
+
+
     // Throw an exception because of the token.
 
     function throwUnexpected(token) {
@@ -2481,7 +2495,7 @@ parseStatement: true, parseSourceElement: true */
         expectKeyword('return');
 
         if (!inFunctionBody) {
-            throwError({}, Messages.IllegalReturn);
+            throwErrorTolerant({}, Messages.IllegalReturn);
         }
 
         // 'return' followed by a space and an identifier is very common.
@@ -3535,6 +3549,9 @@ parseStatement: true, parseSourceElement: true */
             if (typeof options.comment === 'boolean' && options.comment) {
                 extra.comments = [];
             }
+            if (typeof options.tolerant === 'boolean' && options.tolerant) {
+                extra.errors = [];
+            }
         }
 
         if (length > 0) {
@@ -3561,6 +3578,9 @@ parseStatement: true, parseSourceElement: true */
             }
             if (typeof extra.tokens !== 'undefined') {
                 program.tokens = extra.tokens;
+            }
+            if (typeof extra.errors !== 'undefined') {
+                program.errors = extra.errors;
             }
         } catch (e) {
             throw e;
