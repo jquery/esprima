@@ -14679,111 +14679,6 @@ data = {
         }
     },
 
-    'Trace Function Entrance': {
-
-        'function hello() {}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'EnterFunction'
-            },
-            result: 'function hello() {\nEnterFunction({ name: \'hello\', lineNumber: 1, range: [0, 18] });}'
-        },
-
-        'hello = function() {}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'Enter'
-            },
-            result: 'hello = function() {\nEnter({ name: \'hello\', lineNumber: 1, range: [8, 20] });}'
-        },
-
-        'hi = function() {}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'customTracer'
-            },
-            result: 'hi = function() {\n// function "hi" at line 1\n}'
-        },
-
-        'var hello = function() {}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'TRACE'
-            },
-            result: 'var hello = function() {\nTRACE({ name: \'hello\', lineNumber: 1, range: [12, 24] });}'
-        },
-
-        'var hello = function say() {}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'TRACE'
-            },
-            result: 'var hello = function say() {\nTRACE({ name: \'hello\', lineNumber: 1, range: [12, 28] });}'
-        },
-
-        'hello = function () {}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'EnterFunction'
-            },
-            result: 'hello = function () {\nEnterFunction({ name: \'hello\', lineNumber: 1, range: [8, 21] });}'
-        },
-
-        '\n\nfunction say(name) { print(name);}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'EnterFunction'
-            },
-            result: '\n\nfunction say(name) {\nEnterFunction({ name: \'say\', lineNumber: 3, range: [2, 35] }); print(name);}'
-        },
-
-        '(function(){}())': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'EnterFunction'
-            },
-            result: '(function(){\nEnterFunction({ name: \'[Anonymous]\', lineNumber: 1, range: [1, 12] });}())'
-        },
-
-        '(function(){})()': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'EnterFunction'
-            },
-            result: '(function(){\nEnterFunction({ name: \'[Anonymous]\', lineNumber: 1, range: [0, 13] });})()'
-        },
-
-        '[14, 3].forEach(function(x) { alert(x) })': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'TR'
-            },
-            result: '[14, 3].forEach(function(x) {\nTR({ name: \'[Anonymous]\', lineNumber: 1, range: [16, 39] }); alert(x) })'
-        },
-
-        'var x = { y: function(z) {} }': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'TR'
-            },
-            result: 'var x = { y: function(z) {\nTR({ name: \'y\', lineNumber: 1, range: [13, 26] });} }'
-        },
-
-        'p = function() {\n}': {
-            modifiers: [{
-                name: 'Tracer.FunctionEntrance',
-                config: 'X'
-            }, {
-                name: 'Tracer.FunctionEntrance',
-                config: 'Y'
-            }],
-            result: 'p = function() {\n' +
-                'Y({ name: \'p\', lineNumber: 1, range: [4, 66] });\n' +
-                'X({ name: \'p\', lineNumber: 1, range: [4, 17] });\n}'
-        }
-
-    },
-
     'Invalid syntax': {
 
         '{': {
@@ -16314,56 +16209,6 @@ function testError(code, exception) {
     });
 }
 
-function testModify(code, result) {
-    'use strict';
-    var actual, expected, i, modifier, config, modifiers;
-
-    function findModifier(name) {
-        var properties = name.split('.'),
-            object = esprima,
-            i;
-        for (i = 0; i < properties.length; i += 1) {
-            object = object[properties[i]];
-        }
-        return object;
-    }
-
-    function customTracerFunction(functionInfo) {
-        var name = functionInfo.name,
-            lineNumber = functionInfo.loc.start.line;
-        return '// function "' + name + '" at line ' + lineNumber + '\n';
-    }
-
-    if (Object.prototype.toString.call(result.modifiers) === '[object Array]') {
-        modifiers = [];
-        for (i = 0; i < result.modifiers.length; i += 1) {
-            modifier = result.modifiers[i];
-            config = modifier.config;
-            if (config === 'customTracer') {
-                config = customTracerFunction;
-            }
-            modifiers.push(findModifier(modifier.name).call(null, config));
-        }
-    } else {
-        modifier = result.modifiers;
-        config = modifier.config;
-        if (config === 'customTracer') {
-            config = customTracerFunction;
-        }
-        modifiers = findModifier(modifier.name).call(null, config);
-    }
-
-    expected = result.result;
-    try {
-        actual = esprima.modify(code, modifiers);
-    } catch (e) {
-        throw new NotMatchingError(expected, e.toString());
-    }
-    if (expected !== actual) {
-        throw new NotMatchingError(expected, actual);
-    }
-}
-
 function testAPI(code, result) {
     'use strict';
     var expected, res, actual;
@@ -16384,8 +16229,6 @@ function runTest(code, result) {
     'use strict';
     if (result.hasOwnProperty('lineNumber')) {
         testError(code, result);
-    } else if (result.hasOwnProperty('modifiers')) {
-        testModify(code, result);
     } else if (result.hasOwnProperty('result')) {
         testAPI(code, result);
     } else {
