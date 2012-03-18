@@ -16132,7 +16132,100 @@ data = {
                 column: 7,
                 message: 'Error: Line 1: Illegal return statement'
             }]
+        },
+
+        '(function () { \'use strict\'; with (i); }())': {
+            type: 'Program',
+            body: [{
+                  type: 'ExpressionStatement',
+                  expression: {
+                      type: 'CallExpression',
+                      callee: {
+                          type: 'FunctionExpression',
+                          id: null,
+                          params: [],
+                          body: {
+                              type: 'BlockStatement',
+                              body: [{
+                                  type: 'ExpressionStatement',
+                                  expression: {
+                                      type: 'Literal',
+                                      value: 'use strict',
+                                      raw: '\'use strict\'',
+                                      range: [15, 26],
+                                      loc: {
+                                          start: { line: 1, column: 15 },
+                                          end: { line: 1, column: 27 }
+                                      }
+                                  },
+                                  range: [15, 27],
+                                  loc: {
+                                      start: { line: 1, column: 15 },
+                                      end: { line: 1, column: 28 }
+                                  }
+                              }, {
+                                  type: 'WithStatement',
+                                  object: {
+                                      type: 'Identifier',
+                                      name: 'i',
+                                      range: [35, 35],
+                                      loc: {
+                                          start: { line: 1, column: 35 },
+                                          end: { line: 1, column: 36 }
+                                      }
+                                  },
+                                  body: {
+                                      type: 'EmptyStatement',
+                                      range: [37, 37],
+                                      loc: {
+                                          start: { line: 1, column: 37 },
+                                          end: { line: 1, column: 38 }
+                                      }
+                                  },
+                                  range: [29, 37],
+                                  loc: {
+                                      start: { line: 1, column: 29 },
+                                      end: { line: 1, column: 38 }
+                                  }
+                              }],
+                              range: [13, 39],
+                              loc: {
+                                  start: { line: 1, column: 13 },
+                                  end: { line: 1, column: 40 }
+                              }
+                          },
+                          range: [1, 39],
+                          loc: {
+                              start: { line: 1, column: 1 },
+                              end: { line: 1, column: 40 }
+                          }
+                      },
+                      'arguments': [],
+                      range: [0, 42],
+                      loc: {
+                          start: { line: 1, column: 0 },
+                          end: { line: 1, column: 43 }
+                      }
+                  },
+                  range: [0, 42],
+                  loc: {
+                      start: { line: 1, column: 0 },
+                      end: { line: 1, column: 43 }
+                  }
+            }],
+            range: [0, 42],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 43 }
+            },
+            errors: [{
+                index: 29,
+                lineNumber: 1,
+                column: 30,
+                message: 'Error: Line 1: Strict mode code may not include a with statement'
+            }]
         }
+
     }
 };
 
