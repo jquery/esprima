@@ -2524,7 +2524,7 @@ parseStatement: true, parseSourceElement: true */
         var object, body;
 
         if (strict) {
-            throwError({}, Messages.StrictModeWith);
+            throwErrorTolerant({}, Messages.StrictModeWith);
         }
 
         expectKeyword('with');
