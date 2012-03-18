@@ -15393,111 +15393,6 @@ data = {
 
     },
 
-    'Trace Function Entrance': {
-
-        'function hello() {}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'EnterFunction'
-            },
-            result: 'function hello() {\nEnterFunction({ name: \'hello\', lineNumber: 1, range: [0, 18] });}'
-        },
-
-        'hello = function() {}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'Enter'
-            },
-            result: 'hello = function() {\nEnter({ name: \'hello\', lineNumber: 1, range: [8, 20] });}'
-        },
-
-        'hi = function() {}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'customTracer'
-            },
-            result: 'hi = function() {\n// function "hi" at line 1\n}'
-        },
-
-        'var hello = function() {}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'TRACE'
-            },
-            result: 'var hello = function() {\nTRACE({ name: \'hello\', lineNumber: 1, range: [12, 24] });}'
-        },
-
-        'var hello = function say() {}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'TRACE'
-            },
-            result: 'var hello = function say() {\nTRACE({ name: \'hello\', lineNumber: 1, range: [12, 28] });}'
-        },
-
-        'hello = function () {}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'EnterFunction'
-            },
-            result: 'hello = function () {\nEnterFunction({ name: \'hello\', lineNumber: 1, range: [8, 21] });}'
-        },
-
-        '\n\nfunction say(name) { print(name);}': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'EnterFunction'
-            },
-            result: '\n\nfunction say(name) {\nEnterFunction({ name: \'say\', lineNumber: 3, range: [2, 35] }); print(name);}'
-        },
-
-        '(function(){}())': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'EnterFunction'
-            },
-            result: '(function(){\nEnterFunction({ name: \'[Anonymous]\', lineNumber: 1, range: [1, 12] });}())'
-        },
-
-        '(function(){})()': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'EnterFunction'
-            },
-            result: '(function(){\nEnterFunction({ name: \'[Anonymous]\', lineNumber: 1, range: [0, 13] });})()'
-        },
-
-        '[14, 3].forEach(function(x) { alert(x) })': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'TR'
-            },
-            result: '[14, 3].forEach(function(x) {\nTR({ name: \'[Anonymous]\', lineNumber: 1, range: [16, 39] }); alert(x) })'
-        },
-
-        'var x = { y: function(z) {} }': {
-            modifiers: {
-                name: 'Tracer.FunctionEntrance',
-                config: 'TR'
-            },
-            result: 'var x = { y: function(z) {\nTR({ name: \'y\', lineNumber: 1, range: [13, 26] });} }'
-        },
-
-        'p = function() {\n}': {
-            modifiers: [{
-                name: 'Tracer.FunctionEntrance',
-                config: 'X'
-            }, {
-                name: 'Tracer.FunctionEntrance',
-                config: 'Y'
-            }],
-            result: 'p = function() {\n' +
-                'Y({ name: \'p\', lineNumber: 1, range: [4, 66] });\n' +
-                'X({ name: \'p\', lineNumber: 1, range: [4, 17] });\n}'
-        }
-
-    },
-
     'Invalid syntax': {
 
         '{': {
@@ -16266,9 +16161,9 @@ data = {
         },
 
         '"\\': {
-            index: 2,
+            index: 3,
             lineNumber: 1,
-            column: 3,
+            column: 4,
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
@@ -16941,6 +16836,32 @@ data = {
             }
         }
 
+    },
+
+    'Tolerant parse': {
+        'return': {
+            type: 'Program',
+            body: [{
+                type: 'ReturnStatement',
+                'argument': null,
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 6 }
+                }
+            }],
+            range: [0, 5],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 6 }
+            },
+            errors: [{
+                index: 6,
+                lineNumber: 1,
+                column: 7,
+                message: 'Error: Line 1: Illegal return statement'
+            }]
+        }
     }
 };
 
@@ -16967,9 +16888,28 @@ function NotMatchingError(expected, actual) {
 }
 NotMatchingError.prototype = new Error();
 
+function errorToObject(e) {
+    'use strict';
+    var msg = e.toString();
+
+    // Opera 9.64 produces an non-standard string in toString().
+    if (msg.substr(0, 6) !== 'Error:') {
+        if (typeof e.message === 'string') {
+            msg = 'Error: ' + e.message;
+        }
+    }
+
+    return {
+        index: e.index,
+        lineNumber: e.lineNumber,
+        column: e.column,
+        message: msg
+    };
+}
+
 function testParse(code, syntax) {
     'use strict';
-    var expected, tree, actual, options, StringObject;
+    var expected, tree, actual, options, StringObject, i, len, err;
 
     // alias, so that JSLint does not complain.
     StringObject = String;
@@ -16979,13 +16919,21 @@ function testParse(code, syntax) {
         range: true,
         loc: true,
         tokens: (typeof syntax.tokens !== 'undefined'),
-        raw: true
+        raw: true,
+        tolerant: (typeof syntax.errors !== 'undefined')
     };
 
     expected = JSON.stringify(syntax, null, 4);
     try {
         tree = esprima.parse(code, options);
-        tree = (options.comment || options.tokens) ? tree : tree.body[0];
+        tree = (options.comment || options.tokens || options.tolerant) ? tree : tree.body[0];
+
+        if (options.tolerant) {
+            for (i = 0, len = tree.errors.length; i < len; i += 1) {
+                tree.errors[i] = errorToObject(tree.errors[i]);
+            }
+        }
+
         actual = JSON.stringify(tree, adjustRegexLiteral, 4);
 
         // Only to ensure that there is no error when using string object.
@@ -17001,7 +16949,7 @@ function testParse(code, syntax) {
 
 function testError(code, exception) {
     'use strict';
-    var options, expected, msg, actual;
+    var options, expected, actual;
 
     // Different parsing options should give the same error.
     options = [
@@ -17018,22 +16966,7 @@ function testError(code, exception) {
         try {
             esprima.parse(code, option);
         } catch (e) {
-            msg = e.toString();
-
-            // Opera 9.64 produces an non-standard string in toString().
-            if (msg.substr(0, 6) !== 'Error:') {
-                if (typeof e.message === 'string') {
-                    msg = 'Error: ' + e.message;
-                }
-            }
-
-            actual = JSON.stringify({
-                index: e.index,
-                lineNumber: e.lineNumber,
-                column: e.column,
-                message: msg
-            });
-
+            actual = JSON.stringify(errorToObject(e));
         }
 
         if (expected !== actual) {
@@ -17041,56 +16974,6 @@ function testError(code, exception) {
         }
 
     });
-}
-
-function testModify(code, result) {
-    'use strict';
-    var actual, expected, i, modifier, config, modifiers;
-
-    function findModifier(name) {
-        var properties = name.split('.'),
-            object = esprima,
-            i;
-        for (i = 0; i < properties.length; i += 1) {
-            object = object[properties[i]];
-        }
-        return object;
-    }
-
-    function customTracerFunction(functionInfo) {
-        var name = functionInfo.name,
-            lineNumber = functionInfo.loc.start.line;
-        return '// function "' + name + '" at line ' + lineNumber + '\n';
-    }
-
-    if (Object.prototype.toString.call(result.modifiers) === '[object Array]') {
-        modifiers = [];
-        for (i = 0; i < result.modifiers.length; i += 1) {
-            modifier = result.modifiers[i];
-            config = modifier.config;
-            if (config === 'customTracer') {
-                config = customTracerFunction;
-            }
-            modifiers.push(findModifier(modifier.name).call(null, config));
-        }
-    } else {
-        modifier = result.modifiers;
-        config = modifier.config;
-        if (config === 'customTracer') {
-            config = customTracerFunction;
-        }
-        modifiers = findModifier(modifier.name).call(null, config);
-    }
-
-    expected = result.result;
-    try {
-        actual = esprima.modify(code, modifiers);
-    } catch (e) {
-        throw new NotMatchingError(expected, e.toString());
-    }
-    if (expected !== actual) {
-        throw new NotMatchingError(expected, actual);
-    }
 }
 
 function testAPI(code, result) {
@@ -17113,8 +16996,6 @@ function runTest(code, result) {
     'use strict';
     if (result.hasOwnProperty('lineNumber')) {
         testError(code, result);
-    } else if (result.hasOwnProperty('modifiers')) {
-        testModify(code, result);
     } else if (result.hasOwnProperty('result')) {
         testAPI(code, result);
     } else {
