@@ -2915,6 +2915,102 @@ data = {
             }
         },
 
+        '/*a\r\nb*/ 42': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [9, 10],
+                    loc: {
+                        start: { line: 2, column: 4 },
+                        end: { line: 2, column: 6 }
+                    }
+                },
+                range: [9, 10],
+                loc: {
+                    start: { line: 2, column: 4 },
+                    end: { line: 2, column: 6 }
+                }
+            }],
+            range: [9, 10],
+            loc: {
+                start: { line: 2, column: 4 },
+                end: { line: 2, column: 6 }
+            },
+            comments: [{
+                range: [0, 7],
+                type: 'Block',
+                value: 'a\r\nb'
+            }]
+        },
+
+        '/*a\rb*/ 42': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [8, 9],
+                    loc: {
+                        start: { line: 2, column: 4 },
+                        end: { line: 2, column: 6 }
+                    }
+                },
+                range: [8, 9],
+                loc: {
+                    start: { line: 2, column: 4 },
+                    end: { line: 2, column: 6 }
+                }
+            }],
+            range: [8, 9],
+            loc: {
+                start: { line: 2, column: 4 },
+                end: { line: 2, column: 6 }
+            },
+            comments: [{
+                range: [0, 6],
+                type: 'Block',
+                value: 'a\rb'
+            }]
+        },
+
+        '/*a\nb*/ 42': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [8, 9],
+                    loc: {
+                        start: { line: 2, column: 4 },
+                        end: { line: 2, column: 6 }
+                    }
+                },
+                range: [8, 9],
+                loc: {
+                    start: { line: 2, column: 4 },
+                    end: { line: 2, column: 6 }
+                }
+            }],
+            range: [8, 9],
+            loc: {
+                start: { line: 2, column: 4 },
+                end: { line: 2, column: 6 }
+            },
+            comments: [{
+                range: [0, 6],
+                type: 'Block',
+                value: 'a\nb'
+            }]
+        },
+
         '// line comment\n42': {
             type: 'ExpressionStatement',
             expression: {
