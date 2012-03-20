@@ -3130,6 +3130,9 @@ parseStatement: true, parseSourceElement: true */
                 if (isLineTerminator(ch)) {
                     if (ch === '\r' && source[index + 1] === '\n') {
                         index += 1;
+                        comment += '\r\n';
+                    } else {
+                        comment += ch;
                     }
                     lineNumber += 1;
                     index += 1;
