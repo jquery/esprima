@@ -2915,6 +2915,102 @@ data = {
             }
         },
 
+        '/*a\r\nb*/ 42': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [9, 10],
+                    loc: {
+                        start: { line: 2, column: 4 },
+                        end: { line: 2, column: 6 }
+                    }
+                },
+                range: [9, 10],
+                loc: {
+                    start: { line: 2, column: 4 },
+                    end: { line: 2, column: 6 }
+                }
+            }],
+            range: [9, 10],
+            loc: {
+                start: { line: 2, column: 4 },
+                end: { line: 2, column: 6 }
+            },
+            comments: [{
+                range: [0, 7],
+                type: 'Block',
+                value: 'a\r\nb'
+            }]
+        },
+
+        '/*a\rb*/ 42': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [8, 9],
+                    loc: {
+                        start: { line: 2, column: 4 },
+                        end: { line: 2, column: 6 }
+                    }
+                },
+                range: [8, 9],
+                loc: {
+                    start: { line: 2, column: 4 },
+                    end: { line: 2, column: 6 }
+                }
+            }],
+            range: [8, 9],
+            loc: {
+                start: { line: 2, column: 4 },
+                end: { line: 2, column: 6 }
+            },
+            comments: [{
+                range: [0, 6],
+                type: 'Block',
+                value: 'a\rb'
+            }]
+        },
+
+        '/*a\nb*/ 42': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [8, 9],
+                    loc: {
+                        start: { line: 2, column: 4 },
+                        end: { line: 2, column: 6 }
+                    }
+                },
+                range: [8, 9],
+                loc: {
+                    start: { line: 2, column: 4 },
+                    end: { line: 2, column: 6 }
+                }
+            }],
+            range: [8, 9],
+            loc: {
+                start: { line: 2, column: 4 },
+                end: { line: 2, column: 6 }
+            },
+            comments: [{
+                range: [0, 6],
+                type: 'Block',
+                value: 'a\nb'
+            }]
+        },
+
         '// line comment\n42': {
             type: 'ExpressionStatement',
             expression: {
@@ -16861,7 +16957,100 @@ data = {
                 column: 7,
                 message: 'Error: Line 1: Illegal return statement'
             }]
+        },
+
+        '(function () { \'use strict\'; with (i); }())': {
+            type: 'Program',
+            body: [{
+                  type: 'ExpressionStatement',
+                  expression: {
+                      type: 'CallExpression',
+                      callee: {
+                          type: 'FunctionExpression',
+                          id: null,
+                          params: [],
+                          body: {
+                              type: 'BlockStatement',
+                              body: [{
+                                  type: 'ExpressionStatement',
+                                  expression: {
+                                      type: 'Literal',
+                                      value: 'use strict',
+                                      raw: '\'use strict\'',
+                                      range: [15, 26],
+                                      loc: {
+                                          start: { line: 1, column: 15 },
+                                          end: { line: 1, column: 27 }
+                                      }
+                                  },
+                                  range: [15, 27],
+                                  loc: {
+                                      start: { line: 1, column: 15 },
+                                      end: { line: 1, column: 28 }
+                                  }
+                              }, {
+                                  type: 'WithStatement',
+                                  object: {
+                                      type: 'Identifier',
+                                      name: 'i',
+                                      range: [35, 35],
+                                      loc: {
+                                          start: { line: 1, column: 35 },
+                                          end: { line: 1, column: 36 }
+                                      }
+                                  },
+                                  body: {
+                                      type: 'EmptyStatement',
+                                      range: [37, 37],
+                                      loc: {
+                                          start: { line: 1, column: 37 },
+                                          end: { line: 1, column: 38 }
+                                      }
+                                  },
+                                  range: [29, 37],
+                                  loc: {
+                                      start: { line: 1, column: 29 },
+                                      end: { line: 1, column: 38 }
+                                  }
+                              }],
+                              range: [13, 39],
+                              loc: {
+                                  start: { line: 1, column: 13 },
+                                  end: { line: 1, column: 40 }
+                              }
+                          },
+                          range: [1, 39],
+                          loc: {
+                              start: { line: 1, column: 1 },
+                              end: { line: 1, column: 40 }
+                          }
+                      },
+                      'arguments': [],
+                      range: [0, 42],
+                      loc: {
+                          start: { line: 1, column: 0 },
+                          end: { line: 1, column: 43 }
+                      }
+                  },
+                  range: [0, 42],
+                  loc: {
+                      start: { line: 1, column: 0 },
+                      end: { line: 1, column: 43 }
+                  }
+            }],
+            range: [0, 42],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 43 }
+            },
+            errors: [{
+                index: 29,
+                lineNumber: 1,
+                column: 30,
+                message: 'Error: Line 1: Strict mode code may not include a with statement'
+            }]
         }
+
     }
 };
 
@@ -16949,7 +17138,7 @@ function testParse(code, syntax) {
 
 function testError(code, exception) {
     'use strict';
-    var options, expected, actual;
+    var i, options, expected, actual, handleInvalidRegexFlag;
 
     // Different parsing options should give the same error.
     options = [
@@ -16959,21 +17148,39 @@ function testError(code, exception) {
         { raw: true, comment: true }
     ];
 
+    // If handleInvalidRegexFlag is true, an invalid flag in a regular expression
+    // will throw an exception. In some old version V8, this is not the case
+    // and hence handleInvalidRegexFlag is false.
+    handleInvalidRegexFlag = false;
+    try {
+        'test'.match(new RegExp('[a-z]', 'x'));
+    } catch (e) {
+        handleInvalidRegexFlag = true;
+    }
+
     expected = JSON.stringify(exception);
 
-    options.forEach(function (option) {
+    for (i = 0; i < options.length; i += 1) {
 
         try {
-            esprima.parse(code, option);
+            esprima.parse(code, options[i]);
         } catch (e) {
             actual = JSON.stringify(errorToObject(e));
         }
 
         if (expected !== actual) {
+
+            // Compensate for old V8 which does not handle invalid flag.
+            if (exception.message.indexOf('Invalid regular expression') > 0) {
+                if (typeof actual === 'undefined' && !handleInvalidRegexFlag) {
+                    return;
+                }
+            }
+
             throw new NotMatchingError(expected, actual);
         }
 
-    });
+    }
 }
 
 function testAPI(code, result) {
