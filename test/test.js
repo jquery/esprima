@@ -16409,7 +16409,7 @@ function testParse(code, syntax) {
 
 function testError(code, exception) {
     'use strict';
-    var options, expected, actual, handleInvalidRegexFlag;
+    var i, options, expected, actual, handleInvalidRegexFlag;
 
     // Different parsing options should give the same error.
     options = [
@@ -16431,10 +16431,10 @@ function testError(code, exception) {
 
     expected = JSON.stringify(exception);
 
-    options.forEach(function (option) {
+    for (i = 0; i < options.length; i += 1) {
 
         try {
-            esprima.parse(code, option);
+            esprima.parse(code, options[i]);
         } catch (e) {
             actual = JSON.stringify(errorToObject(e));
         }
@@ -16451,7 +16451,7 @@ function testError(code, exception) {
             throw new NotMatchingError(expected, actual);
         }
 
-    });
+    }
 }
 
 function testAPI(code, result) {
