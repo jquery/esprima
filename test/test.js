@@ -16409,7 +16409,7 @@ function testParse(code, syntax) {
 
 function testError(code, exception) {
     'use strict';
-    var options, expected, actual;
+    var options, expected, actual, handleInvalidRegexFlag;
 
     // Different parsing options should give the same error.
     options = [
@@ -16418,6 +16418,16 @@ function testError(code, exception) {
         { raw: true },
         { raw: true, comment: true }
     ];
+
+    // If handleInvalidRegexFlag is true, an invalid flag in a regular expression
+    // will throw an exception. In some old version V8, this is not the case
+    // and hence handleInvalidRegexFlag is false.
+    handleInvalidRegexFlag = false;
+    try {
+        'test'.match(new RegExp('[a-z]', 'x'));
+    } catch (e) {
+        handleInvalidRegexFlag = true;
+    }
 
     expected = JSON.stringify(exception);
 
@@ -16430,6 +16440,14 @@ function testError(code, exception) {
         }
 
         if (expected !== actual) {
+
+            // Compensate for old V8 which does not handle invalid flag.
+            if (exception.message.indexOf('Invalid regular expression') > 0) {
+                if (typeof actual === 'undefined' && !handleInvalidRegexFlag) {
+                    return;
+                }
+            }
+
             throw new NotMatchingError(expected, actual);
         }
 
