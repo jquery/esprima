@@ -354,18 +354,18 @@ parseStatement: true, parseSourceElement: true */
                 if (isLineTerminator(ch)) {
                     lineComment = false;
                     if (ch === '\r' && source[index] === '\n') {
-                        index += 1;
+                        ++index;
                     }
-                    lineNumber += 1;
+                    ++lineNumber;
                     lineStart = index;
                 }
             } else if (blockComment) {
                 if (isLineTerminator(ch)) {
                     if (ch === '\r' && source[index + 1] === '\n') {
-                        index += 1;
+                        ++index;
                     }
-                    lineNumber += 1;
-                    index += 1;
+                    ++lineNumber;
+                    ++index;
                     lineStart = index;
                     if (index >= length) {
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
@@ -378,7 +378,7 @@ parseStatement: true, parseSourceElement: true */
                     if (ch === '*') {
                         ch = source[index];
                         if (ch === '/') {
-                            index += 1;
+                            ++index;
                             blockComment = false;
                         }
                     }
@@ -398,13 +398,13 @@ parseStatement: true, parseSourceElement: true */
                     break;
                 }
             } else if (isWhiteSpace(ch)) {
-                index += 1;
+                ++index;
             } else if (isLineTerminator(ch)) {
-                index += 1;
+                ++index;
                 if (ch ===  '\r' && source[index] === '\n') {
-                    index += 1;
+                    ++index;
                 }
-                lineNumber += 1;
+                ++lineNumber;
                 lineStart = index;
             } else {
                 break;
@@ -3118,9 +3118,9 @@ parseStatement: true, parseSourceElement: true */
                     lineComment = false;
                     addComment(start, index - 1, 'Line', comment);
                     if (ch === '\r' && source[index] === '\n') {
-                        index += 1;
+                        ++index;
                     }
-                    lineNumber += 1;
+                    ++lineNumber;
                     lineStart = index;
                     comment = '';
                 } else {
@@ -3129,13 +3129,13 @@ parseStatement: true, parseSourceElement: true */
             } else if (blockComment) {
                 if (isLineTerminator(ch)) {
                     if (ch === '\r' && source[index + 1] === '\n') {
-                        index += 1;
+                        ++index;
                         comment += '\r\n';
                     } else {
                         comment += ch;
                     }
-                    lineNumber += 1;
-                    index += 1;
+                    ++lineNumber;
+                    ++index;
                     lineStart = index;
                     if (index >= length) {
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
@@ -3151,7 +3151,7 @@ parseStatement: true, parseSourceElement: true */
                         if (ch === '/') {
                             comment = comment.substr(0, comment.length - 1);
                             blockComment = false;
-                            index += 1;
+                            ++index;
                             addComment(start, index - 1, 'Block', comment);
                             comment = '';
                         }
@@ -3174,13 +3174,13 @@ parseStatement: true, parseSourceElement: true */
                     break;
                 }
             } else if (isWhiteSpace(ch)) {
-                index += 1;
+                ++index;
             } else if (isLineTerminator(ch)) {
-                index += 1;
+                ++index;
                 if (ch ===  '\r' && source[index] === '\n') {
-                    index += 1;
+                    ++index;
                 }
-                lineNumber += 1;
+                ++lineNumber;
                 lineStart = index;
             } else {
                 break;
