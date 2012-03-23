@@ -362,18 +362,18 @@ parseStatement: true, parseSourceElement: true */
                 if (isLineTerminator(ch)) {
                     lineComment = false;
                     if (ch === '\r' && source[index] === '\n') {
-                        index += 1;
+                        ++index;
                     }
-                    lineNumber += 1;
+                    ++lineNumber;
                     lineStart = index;
                 }
             } else if (blockComment) {
                 if (isLineTerminator(ch)) {
                     if (ch === '\r' && source[index + 1] === '\n') {
-                        index += 1;
+                        ++index;
                     }
-                    lineNumber += 1;
-                    index += 1;
+                    ++lineNumber;
+                    ++index;
                     lineStart = index;
                     if (index >= length) {
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
@@ -386,7 +386,7 @@ parseStatement: true, parseSourceElement: true */
                     if (ch === '*') {
                         ch = source[index];
                         if (ch === '/') {
-                            index += 1;
+                            ++index;
                             blockComment = false;
                         }
                     }
@@ -406,13 +406,13 @@ parseStatement: true, parseSourceElement: true */
                     break;
                 }
             } else if (isWhiteSpace(ch)) {
-                index += 1;
+                ++index;
             } else if (isLineTerminator(ch)) {
-                index += 1;
+                ++index;
                 if (ch ===  '\r' && source[index] === '\n') {
-                    index += 1;
+                    ++index;
                 }
-                lineNumber += 1;
+                ++lineNumber;
                 lineStart = index;
             } else {
                 break;
@@ -424,7 +424,7 @@ parseStatement: true, parseSourceElement: true */
         var i, len, ch, code = 0;
 
         len = (prefix === 'u') ? 4 : 2;
-        for (i = 0; i < len; i += 1) {
+        for (i = 0; i < len; ++i) {
             if (index < length && isHexDigit(source[index])) {
                 ch = nextChar();
                 code = code * 16 + '0123456789abcdef'.indexOf(ch.toLowerCase());
@@ -445,11 +445,11 @@ parseStatement: true, parseSourceElement: true */
 
         start = index;
         if (ch === '\\') {
-            index += 1;
+            ++index;
             if (source[index] !== 'u') {
                 return;
             }
-            index += 1;
+            ++index;
             restore = index;
             ch = scanHexEscape('u');
             if (ch) {
@@ -471,11 +471,11 @@ parseStatement: true, parseSourceElement: true */
                 break;
             }
             if (ch === '\\') {
-                index += 1;
+                ++index;
                 if (source[index] !== 'u') {
                     return;
                 }
-                index += 1;
+                ++index;
                 restore = index;
                 ch = scanHexEscape('u');
                 if (ch) {
@@ -559,7 +559,7 @@ parseStatement: true, parseSourceElement: true */
         // Check for most common single-character punctuators.
 
         if (ch1 === ';' || ch1 === '{' || ch1 === '}') {
-            index += 1;
+            ++index;
             return {
                 type: Token.Punctuator,
                 value: ch1,
@@ -570,7 +570,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (ch1 === ',' || ch1 === '(' || ch1 === ')') {
-            index += 1;
+            ++index;
             return {
                 type: Token.Punctuator,
                 value: ch1,
@@ -864,7 +864,7 @@ parseStatement: true, parseSourceElement: true */
             'String literal must starts with a quote');
 
         start = index;
-        index += 1;
+        ++index;
 
         while (index < length) {
             ch = nextChar();
@@ -934,9 +934,9 @@ parseStatement: true, parseSourceElement: true */
                         break;
                     }
                 } else {
-                    lineNumber += 1;
+                    ++lineNumber;
                     if (ch ===  '\r' && source[index] === '\n') {
-                        index += 1;
+                        ++index;
                     }
                 }
             } else if (isLineTerminator(ch)) {
@@ -1008,17 +1008,17 @@ parseStatement: true, parseSourceElement: true */
                 break;
             }
 
-            index += 1;
+            ++index;
             if (ch === '\\' && index < length) {
                 ch = source[index];
                 if (ch === 'u') {
-                    index += 1;
+                    ++index;
                     restore = index;
                     ch = scanHexEscape('u');
                     if (ch) {
                         flags += ch;
                         str += '\\u';
-                        for (; restore < index; restore += 1) {
+                        for (; restore < index; ++restore) {
                             str += source[restore];
                         }
                     } else {
@@ -3250,9 +3250,9 @@ parseStatement: true, parseSourceElement: true */
                     lineComment = false;
                     addComment(start, index - 1, 'Line', comment);
                     if (ch === '\r' && source[index] === '\n') {
-                        index += 1;
+                        ++index;
                     }
-                    lineNumber += 1;
+                    ++lineNumber;
                     lineStart = index;
                     comment = '';
                 } else {
@@ -3261,13 +3261,13 @@ parseStatement: true, parseSourceElement: true */
             } else if (blockComment) {
                 if (isLineTerminator(ch)) {
                     if (ch === '\r' && source[index + 1] === '\n') {
-                        index += 1;
+                        ++index;
                         comment += '\r\n';
                     } else {
                         comment += ch;
                     }
-                    lineNumber += 1;
-                    index += 1;
+                    ++lineNumber;
+                    ++index;
                     lineStart = index;
                     if (index >= length) {
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
@@ -3283,7 +3283,7 @@ parseStatement: true, parseSourceElement: true */
                         if (ch === '/') {
                             comment = comment.substr(0, comment.length - 1);
                             blockComment = false;
-                            index += 1;
+                            ++index;
                             addComment(start, index - 1, 'Block', comment);
                             comment = '';
                         }
@@ -3306,13 +3306,13 @@ parseStatement: true, parseSourceElement: true */
                     break;
                 }
             } else if (isWhiteSpace(ch)) {
-                index += 1;
+                ++index;
             } else if (isLineTerminator(ch)) {
-                index += 1;
+                ++index;
                 if (ch ===  '\r' && source[index] === '\n') {
-                    index += 1;
+                    ++index;
                 }
-                lineNumber += 1;
+                ++lineNumber;
                 lineStart = index;
             } else {
                 break;
@@ -3619,7 +3619,7 @@ parseStatement: true, parseSourceElement: true */
         var length = str.length,
             result = [],
             i;
-        for (i = 0; i < length; i += 1) {
+        for (i = 0; i < length; ++i) {
             result[i] = str.charAt(i);
         }
         return result;
