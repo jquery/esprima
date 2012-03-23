@@ -2396,7 +2396,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseForStatement() {
-        var init, test, update, left, right, body, operator, oldInIteration;
+        var init, test, update, left, right, body, operator, oldInIteration, i, len;
 
         init = test = update = null;
 
@@ -2407,17 +2407,20 @@ parseStatement: true, parseSourceElement: true */
         if (match(';')) {
             lex();
         } else {
-            if (matchKeyword('var') || matchKeyword('let')) {
+            if (matchKeyword('var') || matchKeyword('let') || matchKeyword('const')) {
                 allowIn = false;
                 init = parseForVariableDeclaration();
                 allowIn = true;
 
                 if (init.declarations.length === 1) {
                     if (matchKeyword('in') || matchContextualKeyword('of')) {
-                        operator = lex();
-                        left = init;
-                        right = parseExpression();
-                        init = null;
+                        operator = lookahead();
+                        if (!((operator.value === 'in' || init.kind !== 'var') && init.declarations[0].init)) {
+                            lex();
+                            left = init;
+                            right = parseExpression();
+                            init = null;
+                        }
                     }
                 }
             } else {
