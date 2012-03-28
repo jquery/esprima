@@ -3249,7 +3249,11 @@ parseStatement: true, parseSourceElement: true */
 
             if (lineComment) {
                 ch = nextChar();
-                if (isLineTerminator(ch)) {
+                if (index >= length) {
+                    lineComment = false;
+                    comment += ch;
+                    addComment(start, index - 1, 'Line', comment);
+                } else if (isLineTerminator(ch)) {
                     lineComment = false;
                     addComment(start, index - 1, 'Line', comment);
                     if (ch === '\r' && source[index] === '\n') {

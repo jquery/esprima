@@ -3030,6 +3030,38 @@ data = {
             }
         },
 
+        '42 // line comment': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 2 }
+                    }
+                },
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 18 }
+                }
+            }],
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            },
+            comments: [{
+                range: [3, 17],
+                type: 'Line',
+                value: ' line comment'
+            }]
+        },
+
         '// Hello, world!\n42': {
             type: 'Program',
             body: [{
