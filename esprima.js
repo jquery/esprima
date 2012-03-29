@@ -85,6 +85,7 @@ parseStatement: true, parseSourceElement: true */
     Syntax = {
         AssignmentExpression: 'AssignmentExpression',
         ArrayExpression: 'ArrayExpression',
+        ArrayPattern: 'ArrayPattern',
         BlockStatement: 'BlockStatement',
         BinaryExpression: 'BinaryExpression',
         BreakStatement: 'BreakStatement',
@@ -110,6 +111,7 @@ parseStatement: true, parseSourceElement: true */
         ModuleDeclaration: 'ModuleDeclaration',
         NewExpression: 'NewExpression',
         ObjectExpression: 'ObjectExpression',
+        ObjectPattern: 'ObjectPattern',
         Path:  'Path',
         Program: 'Program',
         Property: 'Property',
@@ -2026,6 +2028,41 @@ parseStatement: true, parseSourceElement: true */
 
     // 11.13 Assignment Operators
 
+    function reinterpretAsAssignmentBindingPattern(expr) {
+        var i, len, property, element;
+
+        if (expr.sealed) {
+            throwError({}, Messages.InvalidLHSInAssignment);
+        }
+
+        if (expr.type === Syntax.ObjectExpression) {
+            expr.type = Syntax.ObjectPattern;
+            for (i = 0, len = expr.properties.length; i < len; i += 1) {
+                property = expr.properties[i];
+                if (property.kind !== 'init') {
+                    throwError({}, Messages.InvalidLHSInAssignment);
+                }
+                reinterpretAsAssignmentBindingPattern(property.value);
+            }
+        } else if (expr.type === Syntax.ArrayExpression) {
+            expr.type = Syntax.ArrayPattern;
+            for (i = 0, len = expr.elements.length; i < len; i += 1) {
+                element = expr.elements[i];
+                if (element) {
+                    reinterpretAsAssignmentBindingPattern(element);
+                }
+            }
+        } else if (expr.type === Syntax.Identifier) {
+            if (expr.name === 'super') {
+                throwError({}, Messages.InvalidLHSInAssignment);
+            }
+        } else {
+            if (expr.type !== Syntax.MemberExpression && expr.type !== Syntax.CallExpression && expr.type !== Syntax.NewExpression) {
+                throwError({}, Messages.InvalidLHSInAssignment);
+            }
+        }
+    }
+
     function parseAssignmentExpression() {
         var expr;
 
@@ -2040,6 +2077,11 @@ parseStatement: true, parseSourceElement: true */
             // 11.13.1
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwError({}, Messages.StrictLHSAssignment);
+            }
+
+            // ES.next draf 11.13 Runtime Semantics step 1
+            if (expr.type === Syntax.ObjectExpression || expr.type === Syntax.ArrayExpression) {
+                reinterpretAsAssignmentBindingPattern(expr);
             }
 
             expr = {
