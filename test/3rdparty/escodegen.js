@@ -133,10 +133,19 @@
         '/': Precedence.Multiplicative
     };
 
-    if (typeof Object.freeze === 'function') {
-        Object.freeze(Syntax);
-        Object.freeze(Precedence);
-        Object.freeze(BinaryPrecedence);
+    function getDefaultOptions() {
+        // default options
+        return {
+            indent: null,
+            base: null,
+            parse: null,
+            format: {
+                indent: {
+                    style: '    ',
+                    base: 0
+                }
+            }
+        };
     }
 
     function unicodeEscape(ch) {
@@ -156,6 +165,42 @@
             result[i] = str.charAt(i);
         }
         return result;
+    }
+
+    function stringRepeat(str, num) {
+        var result = '';
+
+        for (num |= 0; num > 0; num >>>= 1, str += str) {
+            if (num & 1) {
+                result += str;
+            }
+        }
+
+        return result;
+    }
+
+    function updateDeeply(target, override) {
+        var key, val;
+
+        function isHashObject(target) {
+            return typeof target === 'object' && target instanceof Object && !(target instanceof RegExp);
+        }
+
+        for (key in override) {
+            if (override.hasOwnProperty(key)) {
+                val = override[key];
+                if (isHashObject(val)) {
+                    if (isHashObject(target[key])) {
+                        updateDeeply(target[key], val);
+                    } else {
+                        target[key] = updateDeeply({}, val);
+                    }
+                } else {
+                    target[key] = val;
+                }
+            }
+        }
+        return target;
     }
 
     function escapeString(str) {
@@ -773,14 +818,32 @@
     }
 
     function generate(node, options) {
+        var defaultOptions = getDefaultOptions();
+
         if (typeof options !== 'undefined') {
-            base = options.base || '';
-            indent = options.indent || '    ';
+            // Obsolete options
+            //
+            //   `options.indent`
+            //   `options.base`
+            //
+            // Instead of them, we can use `option.format.indent`.
+            if (typeof options.indent === 'string') {
+                defaultOptions.format.style = options.indent;
+            }
+
+            options = updateDeeply(defaultOptions, options);
+            indent = options.format.style;
+            if (typeof options.base === 'string') {
+                base = options.base;
+            } else {
+                base = stringRepeat(indent, options.format.base);
+            }
             parse = options.parse;
         } else {
-            base = '';
-            indent = '    ';
-            parse = null;
+            options = defaultOptions;
+            indent = options.format.style;
+            base = stringRepeat(indent, options.format.base);
+            parse = options.parse;
         }
 
         switch (node.type) {
