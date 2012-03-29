@@ -8803,7 +8803,138 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 12 }
             }
+        },
+
+        '[a, b] = [b, a]': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'ArrayPattern',
+                    elements: [{
+                        type: 'Identifier',
+                        name: 'a',
+                        range: [1, 1],
+                        loc: {
+                            start: { line: 1, column: 1 },
+                            end: { line: 1, column: 2 }
+                        }
+                    }, {
+                        type: 'Identifier',
+                        name: 'b',
+                        range: [4, 4],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    }],
+                    range: [0, 5],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 6 }
+                    }
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [{
+                        type: 'Identifier',
+                        name: 'b',
+                        range: [10, 10],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 11 }
+                        }
+                    }, {
+                        type: 'Identifier',
+                        name: 'a',
+                        range: [13, 13],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 14 }
+                        }
+                    }],
+                    range: [9, 14],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 15 }
+                    }
+                },
+                range: [0, 14],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            range: [0, 14],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 15 }
+            }
+        },
+
+        '({ responseText: text }) = res': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'ObjectPattern',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'responseText',
+                            range: [3, 14],
+                            loc: {
+                                start: { line: 1, column: 3 },
+                                end: { line: 1, column: 15 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'text',
+                            range: [17, 20],
+                            loc: {
+                                start: { line: 1, column: 17 },
+                                end: { line: 1, column: 21 }
+                            }
+                        },
+                        kind: 'init',
+                        range: [3, 20],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 21 }
+                        }
+                    }],
+                    range: [0, 23],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'res',
+                    range: [27, 29],
+                    loc: {
+                        start: { line: 1, column: 27 },
+                        end: { line: 1, column: 30 }
+                    }
+                },
+                range: [0, 29],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 30 }
+                }
+            },
+            range: [0, 29],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 30 }
+            }
         }
+
 
     },
 
@@ -15344,6 +15475,20 @@ data = {
             index: 2,
             lineNumber: 1,
             column: 3,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '[2] = 42': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '({ obj:20 }) = 42': {
+            index: 12,
+            lineNumber: 1,
+            column: 13,
             message: 'Error: Line 1: Invalid left-hand side in assignment'
         },
 
