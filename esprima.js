@@ -1360,45 +1360,31 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseObjectPropertyKey() {
-        var token = lex(),
-            key;
+        var token = lex();
 
-        switch (token.type) {
+        // Note: This function is called only from parseObjectProperty(), where
+        // EOF and Punctuator tokens are already filtered out.
 
-        case Token.StringLiteral:
-        case Token.NumericLiteral:
+        if (token.type === Token.StringLiteral || token.type === Token.NumericLiteral) {
             if (strict && token.octal) {
                 throwError(token, Messages.StrictOctalLiteral);
             }
-            key = createLiteral(token);
-            break;
-
-        case Token.Identifier:
-        case Token.Keyword:
-        case Token.BooleanLiteral:
-        case Token.NullLiteral:
-            key = {
-                type: Syntax.Identifier,
-                name: token.value
-            };
-            break;
-
-        default:
-            // Unreachable, since parseObjectProperty() will not call this
-            // function with any other type of token.
+            return createLiteral(token);
         }
 
-        return key;
+        return {
+            type: Syntax.Identifier,
+            name: token.value
+        };
     }
 
     function parseObjectProperty() {
-        var token, property, key, id, param;
+        var token, key, id, param;
 
         token = lookahead();
 
-        switch (token.type) {
+        if (token.type === Token.Identifier) {
 
-        case Token.Identifier:
             id = parseObjectPropertyKey();
 
             // Property Assignment: Getter and Setter.
@@ -1407,7 +1393,7 @@ parseStatement: true, parseSourceElement: true */
                 key = parseObjectPropertyKey();
                 expect('(');
                 expect(')');
-                property = {
+                return {
                     type: Syntax.Property,
                     key: key,
                     value: parsePropertyFunction([]),
@@ -1422,7 +1408,7 @@ parseStatement: true, parseSourceElement: true */
                 }
                 param = [ parseVariableIdentifier() ];
                 expect(')');
-                property = {
+                return {
                     type: Syntax.Property,
                     key: key,
                     value: parsePropertyFunction(param, token),
@@ -1430,35 +1416,25 @@ parseStatement: true, parseSourceElement: true */
                 };
             } else {
                 expect(':');
-                property = {
+                return {
                     type: Syntax.Property,
                     key: id,
                     value: parseAssignmentExpression(),
                     kind: 'init'
                 };
             }
-            break;
-
-        case Token.Keyword:
-        case Token.BooleanLiteral:
-        case Token.NullLiteral:
-        case Token.StringLiteral:
-        case Token.NumericLiteral:
+        } else if (token.type === Token.EOF || token.type === Token.Punctuator) {
+            throwUnexpected(token);
+        } else {
             key = parseObjectPropertyKey();
             expect(':');
-            property = {
+            return {
                 type: Syntax.Property,
                 key: key,
                 value: parseAssignmentExpression(),
                 kind: 'init'
             };
-            break;
-
-        default:
-            throwUnexpected(token);
         }
-
-        return property;
     }
 
     function parseObjectInitialiser() {
