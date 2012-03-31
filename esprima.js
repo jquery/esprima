@@ -47,19 +47,14 @@ parseStatement: true, parseSourceElement: true */
         Messages,
         Regex,
         source,
-        allowIn,
-        lastParenthesized,
         strict,
         index,
         lineNumber,
         lineStart,
         length,
         buffer,
-        extra,
-        labelSet,
-        inIteration,
-        inSwitch,
-        inFunctionBody;
+        state,
+        extra;
 
     Token = {
         BooleanLiteral: 1,
@@ -1541,7 +1536,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (match('(')) {
             lex();
-            lastParenthesized = expr = parseExpression();
+            state.lastParenthesized = expr = parseExpression();
             expect(')');
             return expr;
         }
@@ -1801,10 +1796,10 @@ parseStatement: true, parseSourceElement: true */
     function parseRelationalExpression() {
         var expr, previousAllowIn;
 
-        previousAllowIn = allowIn;
-        allowIn = true;
+        previousAllowIn = state.allowIn;
+        state.allowIn = true;
         expr = parseShiftExpression();
-        allowIn = previousAllowIn;
+        state.allowIn = previousAllowIn;
 
         if (match('<') || match('>') || match('<=') || match('>=')) {
             expr = {
@@ -1813,7 +1808,7 @@ parseStatement: true, parseSourceElement: true */
                 left: expr,
                 right: parseRelationalExpression()
             };
-        } else if (allowIn && matchKeyword('in')) {
+        } else if (state.allowIn && matchKeyword('in')) {
             lex();
             expr = {
                 type: Syntax.BinaryExpression,
@@ -1944,10 +1939,10 @@ parseStatement: true, parseSourceElement: true */
 
         if (match('?')) {
             lex();
-            previousAllowIn = allowIn;
-            allowIn = true;
+            previousAllowIn = state.allowIn;
+            state.allowIn = true;
             consequent = parseAssignmentExpression();
-            allowIn = previousAllowIn;
+            state.allowIn = previousAllowIn;
             expect(':');
 
             expr = {
@@ -1970,7 +1965,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (matchAssign()) {
             // LeftHandSideExpression
-            if (lastParenthesized !== expr && !isLeftHandSide(expr)) {
+            if (state.lastParenthesized !== expr && !isLeftHandSide(expr)) {
                 throwError({}, Messages.InvalidLHSInAssignment);
             }
 
@@ -2197,12 +2192,12 @@ parseStatement: true, parseSourceElement: true */
 
         expectKeyword('do');
 
-        oldInIteration = inIteration;
-        inIteration = true;
+        oldInIteration = state.inIteration;
+        state.inIteration = true;
 
         body = parseStatement();
 
-        inIteration = oldInIteration;
+        state.inIteration = oldInIteration;
 
         expectKeyword('while');
 
@@ -2234,12 +2229,12 @@ parseStatement: true, parseSourceElement: true */
 
         expect(')');
 
-        oldInIteration = inIteration;
-        inIteration = true;
+        oldInIteration = state.inIteration;
+        state.inIteration = true;
 
         body = parseStatement();
 
-        inIteration = oldInIteration;
+        state.inIteration = oldInIteration;
 
         return {
             type: Syntax.WhileStatement,
@@ -2271,9 +2266,9 @@ parseStatement: true, parseSourceElement: true */
             lex();
         } else {
             if (matchKeyword('var') || matchKeyword('let')) {
-                allowIn = false;
+                state.allowIn = false;
                 init = parseForVariableDeclaration();
-                allowIn = true;
+                state.allowIn = true;
 
                 if (init.declarations.length === 1 && matchKeyword('in')) {
                     lex();
@@ -2282,13 +2277,13 @@ parseStatement: true, parseSourceElement: true */
                     init = null;
                 }
             } else {
-                allowIn = false;
+                state.allowIn = false;
                 init = parseExpression();
-                allowIn = true;
+                state.allowIn = true;
 
                 if (matchKeyword('in')) {
                     // LeftHandSideExpression
-                    if (matchKeyword('in') && (lastParenthesized !== init && !isLeftHandSide(init))) {
+                    if (matchKeyword('in') && (state.lastParenthesized !== init && !isLeftHandSide(init))) {
                         throwError({}, Messages.InvalidLHSInForIn);
                     }
                     lex();
@@ -2317,12 +2312,12 @@ parseStatement: true, parseSourceElement: true */
 
         expect(')');
 
-        oldInIteration = inIteration;
-        inIteration = true;
+        oldInIteration = state.inIteration;
+        state.inIteration = true;
 
         body = parseStatement();
 
-        inIteration = oldInIteration;
+        state.inIteration = oldInIteration;
 
         if (typeof left === 'undefined') {
             return {
@@ -2353,8 +2348,8 @@ parseStatement: true, parseSourceElement: true */
         // Optimize the most common form: 'continue;'.
         if (source[index] === ';') {
             lex();
-            
-            if (!inIteration) {
+
+            if (!state.inIteration) {
                 throwError({}, Messages.IllegalContinue);
             }
 
@@ -2365,7 +2360,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (peekLineTerminator()) {
-            if (!inIteration) {
+            if (!state.inIteration) {
                 throwError({}, Messages.IllegalContinue);
             }
 
@@ -2379,14 +2374,14 @@ parseStatement: true, parseSourceElement: true */
         if (token.type === Token.Identifier) {
             label = parseVariableIdentifier();
 
-            if (!Object.prototype.hasOwnProperty.call(labelSet, label.name)) {
+            if (!Object.prototype.hasOwnProperty.call(state.labelSet, label.name)) {
                 throwError({}, Messages.UnknownLabel, label.name);
             }
         }
 
         consumeSemicolon();
 
-        if (label === null && !inIteration) {
+        if (label === null && !state.inIteration) {
             throwError({}, Messages.IllegalContinue);
         }
 
@@ -2406,8 +2401,8 @@ parseStatement: true, parseSourceElement: true */
         // Optimize the most common form: 'break;'.
         if (source[index] === ';') {
             lex();
-            
-            if (!(inIteration || inSwitch)) {
+
+            if (!(state.inIteration || state.inSwitch)) {
                 throwError({}, Messages.IllegalBreak);
             }
 
@@ -2418,7 +2413,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (peekLineTerminator()) {
-            if (!(inIteration || inSwitch)) {
+            if (!(state.inIteration || state.inSwitch)) {
                 throwError({}, Messages.IllegalBreak);
             }
 
@@ -2432,14 +2427,14 @@ parseStatement: true, parseSourceElement: true */
         if (token.type === Token.Identifier) {
             label = parseVariableIdentifier();
 
-            if (!Object.prototype.hasOwnProperty.call(labelSet, label.name)) {
+            if (!Object.prototype.hasOwnProperty.call(state.labelSet, label.name)) {
                 throwError({}, Messages.UnknownLabel, label.name);
             }
         }
 
         consumeSemicolon();
 
-        if (label === null && !(inIteration || inSwitch)) {
+        if (label === null && !(state.inIteration || state.inSwitch)) {
             throwError({}, Messages.IllegalBreak);
         }
 
@@ -2456,7 +2451,7 @@ parseStatement: true, parseSourceElement: true */
 
         expectKeyword('return');
 
-        if (!inFunctionBody) {
+        if (!state.inFunctionBody) {
             throwErrorTolerant({}, Messages.IllegalReturn);
         }
 
@@ -2567,8 +2562,8 @@ parseStatement: true, parseSourceElement: true */
 
         cases = [];
 
-        oldInSwitch = inSwitch;
-        inSwitch = true;
+        oldInSwitch = state.inSwitch;
+        state.inSwitch = true;
 
         while (index < length) {
             if (match('}')) {
@@ -2587,7 +2582,7 @@ parseStatement: true, parseSourceElement: true */
             cases.push(parseSwitchCase(test));
         }
 
-        inSwitch = oldInSwitch;
+        state.inSwitch = oldInSwitch;
 
         expect('}');
 
@@ -2749,13 +2744,13 @@ parseStatement: true, parseSourceElement: true */
         if ((expr.type === Syntax.Identifier) && match(':')) {
             lex();
 
-            if (Object.prototype.hasOwnProperty.call(labelSet, expr.name)) {
+            if (Object.prototype.hasOwnProperty.call(state.labelSet, expr.name)) {
                 throwError({}, Messages.Redeclaration, 'Label', expr.name);
             }
 
-            labelSet[expr.name] = true;
+            state.labelSet[expr.name] = true;
             labeledBody = parseStatement();
-            delete labelSet[expr.name];
+            delete state.labelSet[expr.name];
 
             return {
                 type: Syntax.LabeledStatement,
@@ -2775,7 +2770,8 @@ parseStatement: true, parseSourceElement: true */
     // 13 Function Definition
 
     function parseFunctionSourceElements() {
-        var sourceElement, sourceElements = [], token, directive, firstRestricted, oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody;
+        var sourceElement, sourceElements = [], token, directive, firstRestricted,
+            oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody;
 
         expect('{');
 
@@ -2804,15 +2800,15 @@ parseStatement: true, parseSourceElement: true */
             }
         }
 
-        oldLabelSet = labelSet;
-        oldInIteration = inIteration;
-        oldInSwitch = inSwitch;
-        oldInFunctionBody = inFunctionBody;
+        oldLabelSet = state.labelSet;
+        oldInIteration = state.inIteration;
+        oldInSwitch = state.inSwitch;
+        oldInFunctionBody = state.inFunctionBody;
 
-        labelSet = {};
-        inIteration = false;
-        inSwitch = false;
-        inFunctionBody = true;
+        state.labelSet = {};
+        state.inIteration = false;
+        state.inSwitch = false;
+        state.inFunctionBody = true;
 
         while (index < length) {
             if (match('}')) {
@@ -2827,10 +2823,10 @@ parseStatement: true, parseSourceElement: true */
 
         expect('}');
 
-        labelSet = oldLabelSet;
-        inIteration = oldInIteration;
-        inSwitch = oldInSwitch;
-        inFunctionBody = oldInFunctionBody;
+        state.labelSet = oldLabelSet;
+        state.inIteration = oldInIteration;
+        state.inSwitch = oldInSwitch;
+        state.inFunctionBody = oldInFunctionBody;
 
         return {
             type: Syntax.BlockStatement,
@@ -3483,12 +3479,14 @@ parseStatement: true, parseSourceElement: true */
         lineStart = 0;
         length = source.length;
         buffer = null;
-        allowIn = true;
-        labelSet = {};
-        inSwitch = false;
-        inIteration = false;
-        lastParenthesized = null;
-        inFunctionBody = false;
+        state = {
+            allowIn: true,
+            labelSet: {},
+            lastParenthesized: null,
+            inFunctionBody: false,
+            inIteration: false,
+            inSwitch: false
+        };
 
         extra = {};
         if (typeof options !== 'undefined') {
