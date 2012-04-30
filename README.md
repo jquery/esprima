@@ -4,9 +4,11 @@ Esprima ([esprima.org](http://esprima.org)) is an educational
 parsing infrastructure for multipurpose analysis. It is also written in ECMAScript.
 
 Esprima serves as a good basis for various tools such as source
-modification ([Esmorph](https://github.com/ariya/esmorph)), coverage analyzer
-([node-cover](https://github.com/itay/node-cover) and
-[coveraje](https://github.com/coveraje/coveraje)),
+modification ([Esmorph](https://github.com/ariya/esmorph),
+[node-falafel](https://github.com/substack/node-falafel)), coverage analyzer
+([node-cover](https://github.com/itay/node-cover),
+[coveraje](https://github.com/coveraje/coveraje),
+[CoverJS](https://github.com/arian/CoverJS)),
 source-to-source compiler ([Marv](https://github.com/Yoric/Marv-the-Tinker)),
 syntax formatter ([Code Painter](https://github.com/fawek/codepainter)),
 and code generator ([escodegen](https://github.com/Constellation/escodegen)).
