@@ -3089,10 +3089,10 @@ parseStatement: true, parseSourceElement: true */
                 if (index >= length) {
                     lineComment = false;
                     comment += ch;
-                    addComment(start, index - 1, 'Line', comment);
+                    addComment(start, index, 'Line', comment);
                 } else if (isLineTerminator(ch)) {
                     lineComment = false;
-                    addComment(start, index - 1, 'Line', comment);
+                    addComment(start, index, 'Line', comment);
                     if (ch === '\r' && source[index] === '\n') {
                         ++index;
                     }
@@ -3128,7 +3128,7 @@ parseStatement: true, parseSourceElement: true */
                             comment = comment.substr(0, comment.length - 1);
                             blockComment = false;
                             ++index;
-                            addComment(start, index - 1, 'Block', comment);
+                            addComment(start, index, 'Block', comment);
                             comment = '';
                         }
                     }
@@ -3170,7 +3170,7 @@ parseStatement: true, parseSourceElement: true */
             value;
 
         if (token.type !== Token.EOF) {
-            range = [token.range[0], token.range[1] - 1];
+            range = [token.range[0], token.range[1]];
             value = sliceSource(token.range[0], token.range[1]);
             extra.tokens.push({
                 type: TokenName[token.type],
@@ -3203,7 +3203,7 @@ parseStatement: true, parseSourceElement: true */
         extra.tokens.push({
             type: 'RegularExpression',
             value: regex.literal,
-            range: [pos, index - 1]
+            range: [pos, index]
         });
 
         return regex;
@@ -3268,7 +3268,7 @@ parseStatement: true, parseSourceElement: true */
                 if (typeof node !== 'undefined') {
 
                     if (range) {
-                        rangeInfo[1] = index - 1;
+                        rangeInfo[1] = index;
                         node.range = rangeInfo;
                     }
 
