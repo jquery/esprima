@@ -2517,9 +2517,19 @@ parseStatement: true, parseSourceElement: true */
 
     // 12.10 The swith statement
 
-    function parseSwitchCase(test) {
-        var consequent = [],
+    function parseSwitchCase() {
+        var test,
+            consequent = [],
             statement;
+
+        if (matchKeyword('default')) {
+            lex();
+            test = null;
+        } else {
+            expectKeyword('case');
+            test = parseExpression();
+        }
+        expect(':');
 
         while (index < length) {
             if (match('}') || matchKeyword('default') || matchKeyword('case')) {
@@ -2540,7 +2550,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseSwitchStatement() {
-        var discriminant, cases, test, oldInSwitch;
+        var discriminant, cases, oldInSwitch;
 
         expectKeyword('switch');
 
@@ -2569,17 +2579,7 @@ parseStatement: true, parseSourceElement: true */
             if (match('}')) {
                 break;
             }
-
-            if (matchKeyword('default')) {
-                lex();
-                test = null;
-            } else {
-                expectKeyword('case');
-                test = parseExpression();
-            }
-            expect(':');
-
-            cases.push(parseSwitchCase(test));
+            cases.push(parseSwitchCase());
         }
 
         state.inSwitch = oldInSwitch;
