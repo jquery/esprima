@@ -6630,7 +6630,7 @@ data = {
                 left: {
                     type: 'Identifier',
                     name: 'x',
-                    range: [0, 0],
+                    range: [0, 1],
                     loc: {
                         start: { line: 1, column: 0 },
                         end: { line: 1, column: 1 }
@@ -6639,19 +6639,19 @@ data = {
                 right: {
                     type: 'Identifier',
                     name: 'y',
-                    range: [5, 5],
+                    range: [5, 6],
                     loc: {
                         start: { line: 1, column: 5 },
                         end: { line: 1, column: 6 }
                     }
                 },
-                range: [0, 5],
+                range: [0, 6],
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 1, column: 6 }
                 }
             },
-            range: [0, 5],
+            range: [0, 6],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 6 }
@@ -6666,7 +6666,7 @@ data = {
                 left: {
                     type: 'Identifier',
                     name: 'x',
-                    range: [0, 0],
+                    range: [0, 1],
                     loc: {
                         start: { line: 1, column: 0 },
                         end: { line: 1, column: 1 }
@@ -6675,19 +6675,19 @@ data = {
                 right: {
                     type: 'Identifier',
                     name: 'y',
-                    range: [7, 7],
+                    range: [7, 8],
                     loc: {
                         start: { line: 1, column: 7 },
                         end: { line: 1, column: 8 }
                     }
                 },
-                range: [0, 7],
+                range: [0, 8],
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 1, column: 8 }
                 }
             },
-            range: [0, 7],
+            range: [0, 8],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 8 }
@@ -8815,7 +8815,7 @@ data = {
                     elements: [{
                         type: 'Identifier',
                         name: 'a',
-                        range: [1, 1],
+                        range: [1, 2],
                         loc: {
                             start: { line: 1, column: 1 },
                             end: { line: 1, column: 2 }
@@ -8823,13 +8823,13 @@ data = {
                     }, {
                         type: 'Identifier',
                         name: 'b',
-                        range: [4, 4],
+                        range: [4, 5],
                         loc: {
                             start: { line: 1, column: 4 },
                             end: { line: 1, column: 5 }
                         }
                     }],
-                    range: [0, 5],
+                    range: [0, 6],
                     loc: {
                         start: { line: 1, column: 0 },
                         end: { line: 1, column: 6 }
@@ -8840,7 +8840,7 @@ data = {
                     elements: [{
                         type: 'Identifier',
                         name: 'b',
-                        range: [10, 10],
+                        range: [10, 11],
                         loc: {
                             start: { line: 1, column: 10 },
                             end: { line: 1, column: 11 }
@@ -8848,25 +8848,25 @@ data = {
                     }, {
                         type: 'Identifier',
                         name: 'a',
-                        range: [13, 13],
+                        range: [13, 14],
                         loc: {
                             start: { line: 1, column: 13 },
                             end: { line: 1, column: 14 }
                         }
                     }],
-                    range: [9, 14],
+                    range: [9, 15],
                     loc: {
                         start: { line: 1, column: 9 },
                         end: { line: 1, column: 15 }
                     }
                 },
-                range: [0, 14],
+                range: [0, 15],
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 1, column: 15 }
                 }
             },
-            range: [0, 14],
+            range: [0, 15],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 15 }
@@ -8885,7 +8885,7 @@ data = {
                         key: {
                             type: 'Identifier',
                             name: 'responseText',
-                            range: [3, 14],
+                            range: [3, 15],
                             loc: {
                                 start: { line: 1, column: 3 },
                                 end: { line: 1, column: 15 }
@@ -8894,20 +8894,20 @@ data = {
                         value: {
                             type: 'Identifier',
                             name: 'text',
-                            range: [17, 20],
+                            range: [17, 21],
                             loc: {
                                 start: { line: 1, column: 17 },
                                 end: { line: 1, column: 21 }
                             }
                         },
                         kind: 'init',
-                        range: [3, 20],
+                        range: [3, 21],
                         loc: {
                             start: { line: 1, column: 3 },
                             end: { line: 1, column: 21 }
                         }
                     }],
-                    range: [0, 23],
+                    range: [0, 24],
                     loc: {
                         start: { line: 1, column: 0 },
                         end: { line: 1, column: 24 }
@@ -8916,25 +8916,24 @@ data = {
                 right: {
                     type: 'Identifier',
                     name: 'res',
-                    range: [27, 29],
+                    range: [27, 30],
                     loc: {
                         start: { line: 1, column: 27 },
                         end: { line: 1, column: 30 }
                     }
                 },
-                range: [0, 29],
+                range: [0, 30],
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 1, column: 30 }
                 }
             },
-            range: [0, 29],
+            range: [0, 30],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 30 }
             }
         }
-
 
     },
 
@@ -11265,21 +11264,21 @@ data = {
                     id: {
                         type: 'Identifier',
                         name: 'x',
-                        range: [9, 9],
+                        range: [9, 10],
                         loc: {
                             start: { line: 1, column: 9 },
                             end: { line: 1, column: 10 }
                         }
                     },
                     init: null,
-                    range: [9, 9],
+                    range: [9, 10],
                     loc: {
                         start: { line: 1, column: 9 },
                         end: { line: 1, column: 10 }
                     }
                 }],
                 kind: 'var',
-                range: [4, 11],
+                range: [5, 10],
                 loc: {
                     start: { line: 1, column: 5 },
                     end: { line: 1, column: 10 }
@@ -11288,7 +11287,7 @@ data = {
             right: {
                 type: 'Identifier',
                 name: 'list',
-                range: [15, 19],
+                range: [14, 18],
                 loc: {
                     start: { line: 1, column: 14 },
                     end: { line: 1, column: 18 }
@@ -11301,7 +11300,7 @@ data = {
                     callee: {
                         type: 'Identifier',
                         name: 'process',
-                        range: [21, 28],
+                        range: [20, 27],
                         loc: {
                             start: { line: 1, column: 20 },
                             end: { line: 1, column: 27 }
@@ -11310,26 +11309,26 @@ data = {
                     'arguments': [{
                         type: 'Identifier',
                         name: 'x',
-                        range: [29, 30],
+                        range: [28, 29],
                         loc: {
                             start: { line: 1, column: 28 },
                             end: { line: 1, column: 29 }
                         }
                     }],
-                    range: [21, 31],
+                    range: [20, 30],
                     loc: {
                         start: { line: 1, column: 20 },
                         end: { line: 1, column: 30 }
                     }
                 },
-                range: [21, 32],
+                range: [20, 31],
                 loc: {
                     start: { line: 1, column: 20 },
                     end: { line: 1, column: 31 }
                 }
             },
             each: false,
-            range: [0, 32],
+            range: [0, 31],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 31 }
@@ -11421,7 +11420,7 @@ data = {
             left: {
                 type: 'Identifier',
                 name: 'x',
-                range: [4, 4],
+                range: [4, 5],
                 loc: {
                     start: { line: 1, column: 4 },
                     end: { line: 1, column: 5 }
@@ -11430,7 +11429,7 @@ data = {
             right: {
                 type: 'Identifier',
                 name: 'list',
-                range: [19, 23],
+                range: [9, 13],
                 loc: {
                     start: { line: 1, column: 9 },
                     end: { line: 1, column: 13 }
@@ -11443,7 +11442,7 @@ data = {
                     callee: {
                         type: 'Identifier',
                         name: 'process',
-                        range: [25, 32],
+                        range: [15, 22],
                         loc: {
                             start: { line: 1, column: 15 },
                             end: { line: 1, column: 22 }
@@ -11452,26 +11451,26 @@ data = {
                     'arguments': [{
                         type: 'Identifier',
                         name: 'x',
-                        range: [33, 34],
+                        range: [23, 24],
                         loc: {
                             start: { line: 1, column: 23 },
                             end: { line: 1, column: 24 }
                         }
                     }],
-                    range: [25, 35],
+                    range: [15, 25],
                     loc: {
                         start: { line: 1, column: 15 },
                         end: { line: 1, column: 25 }
                     }
                 },
-                range: [25, 36],
+                range: [15, 26],
                 loc: {
                     start: { line: 1, column: 15 },
                     end: { line: 1, column: 26 }
                 }
             },
             each: false,
-            range: [0, 36],
+            range: [0, 26],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 26 }
@@ -11567,7 +11566,7 @@ data = {
                     id: {
                         type: 'Identifier',
                         name: 'x',
-                        range: [9, 9],
+                        range: [9, 10],
                         loc: {
                             start: { line: 1, column: 9 },
                             end: { line: 1, column: 10 }
@@ -11577,20 +11576,20 @@ data = {
                         type: 'Literal',
                         value: 42,
                         raw: '42',
-                        range: [13, 14],
+                        range: [13, 15],
                         loc: {
                             start: { line: 1, column: 13 },
                             end: { line: 1, column: 15 }
                         }
                     },
-                    range: [9, 14],
+                    range: [9, 15],
                     loc: {
                         start: { line: 1, column: 9 },
                         end: { line: 1, column: 15 }
                     }
                 }],
                 kind: 'var',
-                range: [5, 14],
+                range: [5, 15],
                 loc: {
                     start: { line: 1, column: 5 },
                     end: { line: 1, column: 15 }
@@ -11599,7 +11598,7 @@ data = {
             right: {
                 type: 'Identifier',
                 name: 'list',
-                range: [19, 22],
+                range: [19, 23],
                 loc: {
                     start: { line: 1, column: 19 },
                     end: { line: 1, column: 23 }
@@ -11612,7 +11611,7 @@ data = {
                     callee: {
                         type: 'Identifier',
                         name: 'process',
-                        range: [25, 31],
+                        range: [25, 32],
                         loc: {
                             start: { line: 1, column: 25 },
                             end: { line: 1, column: 32 }
@@ -11621,26 +11620,26 @@ data = {
                     'arguments': [{
                         type: 'Identifier',
                         name: 'x',
-                        range: [33, 33],
+                        range: [33, 34],
                         loc: {
                             start: { line: 1, column: 33 },
                             end: { line: 1, column: 34 }
                         }
                     }],
-                    range: [25, 34],
+                    range: [25, 35],
                     loc: {
                         start: { line: 1, column: 25 },
                         end: { line: 1, column: 35 }
                     }
                 },
-                range: [25, 35],
+                range: [25, 36],
                 loc: {
                     start: { line: 1, column: 25 },
                     end: { line: 1, column: 36 }
                 }
             },
             each: false,
-            range: [0, 35],
+            range: [0, 36],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 36 }
@@ -11663,14 +11662,14 @@ data = {
                         }
                     },
                     init: null,
-                    range: [9, 9],
+                    range: [9, 10],
                     loc: {
                         start: { line: 1, column: 9 },
                         end: { line: 1, column: 10 }
                     }
                 }],
                 kind: 'let',
-                range: [5, 15],
+                range: [5, 10],
                 loc: {
                     start: { line: 1, column: 5 },
                     end: { line: 1, column: 10 }
@@ -11679,7 +11678,7 @@ data = {
             right: {
                 type: 'Identifier',
                 name: 'list',
-                range: [19, 23],
+                range: [14, 18],
                 loc: {
                     start: { line: 1, column: 14 },
                     end: { line: 1, column: 18 }
@@ -11692,7 +11691,7 @@ data = {
                     callee: {
                         type: 'Identifier',
                         name: 'process',
-                        range: [25, 32],
+                        range: [20, 27],
                         loc: {
                             start: { line: 1, column: 20 },
                             end: { line: 1, column: 27 }
@@ -11701,26 +11700,26 @@ data = {
                     'arguments': [{
                         type: 'Identifier',
                         name: 'x',
-                        range: [33, 34],
+                        range: [28, 29],
                         loc: {
                             start: { line: 1, column: 28 },
                             end: { line: 1, column: 29 }
                         }
                     }],
-                    range: [25, 35],
+                    range: [20, 30],
                     loc: {
                         start: { line: 1, column: 20 },
                         end: { line: 1, column: 30 }
                     }
                 },
-                range: [25, 36],
+                range: [20, 31],
                 loc: {
                     start: { line: 1, column: 20 },
                     end: { line: 1, column: 31 }
                 }
             },
             each: false,
-            range: [0, 36],
+            range: [0, 31],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 31 }
@@ -15068,7 +15067,7 @@ data = {
             id: {
                 type: 'Identifier',
                 name: 'Universe',
-                range: [7, 14],
+                range: [7, 15],
                 loc: {
                     start: { line: 1, column: 7 },
                     end: { line: 1, column: 15 }
@@ -15077,13 +15076,13 @@ data = {
             body: {
                 type: 'BlockStatement',
                 body: [],
-                range: [16, 17],
+                range: [16, 18],
                 loc: {
                     start: { line: 1, column: 16 },
                     end: { line: 1, column: 18 }
                 }
             },
-            range: [0, 17],
+            range: [0, 18],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 18 }
@@ -15095,7 +15094,7 @@ data = {
             id: {
                 type: 'Identifier',
                 name: 'Universe',
-                range: [7, 14],
+                range: [7, 15],
                 loc: {
                     start: { line: 1, column: 7 },
                     end: { line: 1, column: 15 }
@@ -15108,7 +15107,7 @@ data = {
                     id: {
                         type: 'Identifier',
                         name: 'MilkyWay',
-                        range: [25, 32],
+                        range: [25, 33],
                         loc: {
                             start: { line: 1, column: 25 },
                             end: { line: 1, column: 33 }
@@ -15117,25 +15116,25 @@ data = {
                     body: {
                         type: 'BlockStatement',
                         body: [],
-                        range: [34, 35],
+                        range: [34, 36],
                         loc: {
                             start: { line: 1, column: 34 },
                             end: { line: 1, column: 36 }
                         }
                     },
-                    range: [18, 35],
+                    range: [18, 36],
                     loc: {
                         start: { line: 1, column: 18 },
                         end: { line: 1, column: 36 }
                     }
                 }],
-                range: [16, 37],
+                range: [16, 38],
                 loc: {
                     start: { line: 1, column: 16 },
                     end: { line: 1, column: 38 }
                 }
             },
-            range: [0, 37],
+            range: [0, 38],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 38 }
@@ -15147,7 +15146,7 @@ data = {
             id: {
                 type: 'Identifier',
                 name: 'MilkyWay',
-                range: [7, 14],
+                range: [7, 15],
                 loc: {
                     start: { line: 1, column: 7 },
                     end: { line: 1, column: 15 }
@@ -15157,13 +15156,13 @@ data = {
                 type: 'Literal',
                 value: 'Universe/MilkyWay',
                 raw: '"Universe/MilkyWay"',
-                range: [19, 37],
+                range: [19, 38],
                 loc: {
                     start: { line: 1, column: 19 },
                     end: { line: 1, column: 38 }
                 }
             },
-            range: [0, 37],
+            range: [0, 38],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 38 }
@@ -15175,7 +15174,7 @@ data = {
             id: {
                 type: 'Identifier',
                 name: 'System',
-                range: [7, 12],
+                range: [7, 13],
                 loc: {
                     start: { line: 1, column: 7 },
                     end: { line: 1, column: 13 }
@@ -15184,7 +15183,7 @@ data = {
             is: {
                 type: 'Identifier',
                 name: 'SolarSystem',
-                range: [17, 27],
+                range: [17, 28],
                 loc: {
                     start: { line: 1, column: 17 },
                     end: { line: 1, column: 28 }
@@ -15195,7 +15194,7 @@ data = {
                 body: [{
                     type: 'Identifier',
                     name: 'Universe',
-                    range: [34, 41],
+                    range: [34, 42],
                     loc: {
                         start: { line: 1, column: 34 },
                         end: { line: 1, column: 42 }
@@ -15203,19 +15202,19 @@ data = {
                 }, {
                     type: 'Identifier',
                     name: 'MilkyWay',
-                    range: [43, 50],
+                    range: [43, 51],
                     loc: {
                         start: { line: 1, column: 43 },
                         end: { line: 1, column: 51 }
                     }
                 }],
-                range: [34, 50],
+                range: [34, 51],
                 loc: {
                     start: { line: 1, column: 34 },
                     end: { line: 1, column: 51 }
                 }
             },
-            range: [0, 50],
+            range: [0, 51],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 51 }
@@ -15227,7 +15226,7 @@ data = {
             id: {
                 type: 'Identifier',
                 name: 'System',
-                range: [7, 12],
+                range: [7, 13],
                 loc: {
                     start: { line: 1, column: 7 },
                     end: { line: 1, column: 13 }
@@ -15236,14 +15235,14 @@ data = {
             is: {
                 type: 'Identifier',
                 name: 'SolarSystem',
-                range: [17, 27],
+                range: [17, 28],
                 loc: {
                     start: { line: 1, column: 17 },
                     end: { line: 1, column: 28 }
                 }
             },
             from: null,
-            range: [0, 27],
+            range: [0, 28],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 28 }
@@ -16760,81 +16759,81 @@ data = {
         '(function () { \'use strict\'; with (i); }())': {
             type: 'Program',
             body: [{
-                  type: 'ExpressionStatement',
-                  expression: {
-                      type: 'CallExpression',
-                      callee: {
-                          type: 'FunctionExpression',
-                          id: null,
-                          params: [],
-                          body: {
-                              type: 'BlockStatement',
-                              body: [{
-                                  type: 'ExpressionStatement',
-                                  expression: {
-                                      type: 'Literal',
-                                      value: 'use strict',
-                                      raw: '\'use strict\'',
-                                      range: [15, 27],
-                                      loc: {
-                                          start: { line: 1, column: 15 },
-                                          end: { line: 1, column: 27 }
-                                      }
-                                  },
-                                  range: [15, 28],
-                                  loc: {
-                                      start: { line: 1, column: 15 },
-                                      end: { line: 1, column: 28 }
-                                  }
-                              }, {
-                                  type: 'WithStatement',
-                                  object: {
-                                      type: 'Identifier',
-                                      name: 'i',
-                                      range: [35, 36],
-                                      loc: {
-                                          start: { line: 1, column: 35 },
-                                          end: { line: 1, column: 36 }
-                                      }
-                                  },
-                                  body: {
-                                      type: 'EmptyStatement',
-                                      range: [37, 38],
-                                      loc: {
-                                          start: { line: 1, column: 37 },
-                                          end: { line: 1, column: 38 }
-                                      }
-                                  },
-                                  range: [29, 38],
-                                  loc: {
-                                      start: { line: 1, column: 29 },
-                                      end: { line: 1, column: 38 }
-                                  }
-                              }],
-                              range: [13, 40],
-                              loc: {
-                                  start: { line: 1, column: 13 },
-                                  end: { line: 1, column: 40 }
-                              }
-                          },
-                          range: [1, 40],
-                          loc: {
-                              start: { line: 1, column: 1 },
-                              end: { line: 1, column: 40 }
-                          }
-                      },
-                      'arguments': [],
-                      range: [0, 43],
-                      loc: {
-                          start: { line: 1, column: 0 },
-                          end: { line: 1, column: 43 }
-                      }
-                  },
-                  range: [0, 43],
-                  loc: {
-                      start: { line: 1, column: 0 },
-                      end: { line: 1, column: 43 }
-                  }
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [{
+                                type: 'ExpressionStatement',
+                                expression: {
+                                    type: 'Literal',
+                                    value: 'use strict',
+                                    raw: '\'use strict\'',
+                                    range: [15, 27],
+                                    loc: {
+                                        start: { line: 1, column: 15 },
+                                        end: { line: 1, column: 27 }
+                                    }
+                                },
+                                range: [15, 28],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 28 }
+                                }
+                            }, {
+                                type: 'WithStatement',
+                                object: {
+                                    type: 'Identifier',
+                                    name: 'i',
+                                    range: [35, 36],
+                                    loc: {
+                                        start: { line: 1, column: 35 },
+                                        end: { line: 1, column: 36 }
+                                    }
+                                },
+                                body: {
+                                    type: 'EmptyStatement',
+                                    range: [37, 38],
+                                    loc: {
+                                        start: { line: 1, column: 37 },
+                                        end: { line: 1, column: 38 }
+                                    }
+                                },
+                                range: [29, 38],
+                                loc: {
+                                    start: { line: 1, column: 29 },
+                                    end: { line: 1, column: 38 }
+                                }
+                            }],
+                            range: [13, 40],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 40 }
+                            }
+                        },
+                        range: [1, 40],
+                        loc: {
+                            start: { line: 1, column: 1 },
+                            end: { line: 1, column: 40 }
+                        }
+                    },
+                    'arguments': [],
+                    range: [0, 43],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 43 }
+                    }
+                },
+                range: [0, 43],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 43 }
+                }
             }],
             range: [0, 43],
             loc: {
