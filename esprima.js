@@ -1496,7 +1496,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (type === Token.StringLiteral || type === Token.NumericLiteral) {
             if (strict && token.octal) {
-                throwError(token, Messages.StrictOctalLiteral);
+                throwErrorTolerant(token, Messages.StrictOctalLiteral);
             }
             return createLiteral(lex());
         }

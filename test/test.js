@@ -16352,6 +16352,91 @@ data = {
                 column: 30,
                 message: 'Error: Line 1: Strict mode code may not include a with statement'
             }]
+        },
+
+        '(function () { \'use strict\'; 021 }())': {
+            type: 'Program',
+            body: [{
+                  type: 'ExpressionStatement',
+                  expression: {
+                      type: 'CallExpression',
+                      callee: {
+                          type: 'FunctionExpression',
+                          id: null,
+                          params: [],
+                          body: {
+                              type: 'BlockStatement',
+                              body: [{
+                                  type: 'ExpressionStatement',
+                                  expression: {
+                                      type: 'Literal',
+                                      value: 'use strict',
+                                      raw: '\'use strict\'',
+                                      range: [15, 27],
+                                      loc: {
+                                          start: { line: 1, column: 15 },
+                                          end: { line: 1, column: 27 }
+                                      }
+                                  },
+                                  range: [15, 28],
+                                  loc: {
+                                      start: { line: 1, column: 15 },
+                                      end: { line: 1, column: 28 }
+                                  }
+                              }, {
+                                  type: 'ExpressionStatement',
+                                  expression: {
+                                      type: 'Literal',
+                                      value: 17,
+                                      raw: "021",
+                                      range: [29, 32],
+                                      loc: {
+                                          start: { line: 1, column: 29 },
+                                          end: { line: 1, column: 32 }
+                                      }
+                                  },
+                                  range: [29, 33],
+                                  loc: {
+                                      start: { line: 1, column: 29 },
+                                      end: { line: 1, column: 33 }
+                                  }
+                              }],
+                              range: [13, 34],
+                              loc: {
+                                  start: { line: 1, column: 13 },
+                                  end: { line: 1, column: 34 }
+                              }
+                          },
+                          range: [1, 34],
+                          loc: {
+                              start: { line: 1, column: 1 },
+                              end: { line: 1, column: 34 }
+                          }
+                      },
+                      'arguments': [],
+                      range: [0, 37],
+                      loc: {
+                          start: { line: 1, column: 0 },
+                          end: { line: 1, column: 37 }
+                      }
+                  },
+                  range: [0, 37],
+                  loc: {
+                      start: { line: 1, column: 0 },
+                      end: { line: 1, column: 37 }
+                  }
+            }],
+            range: [0, 37],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 37 }
+            },
+            errors: [{
+                index: 29,
+                lineNumber: 1,
+                column: 30,
+                message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            }]
         }
 
     }
