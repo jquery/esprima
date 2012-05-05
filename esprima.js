@@ -2064,7 +2064,7 @@ parseStatement: true, parseSourceElement: true */
 
         // 12.2.1
         if (strict && isRestrictedWord(id.name)) {
-            throwError({}, Messages.StrictVarName);
+            throwErrorTolerant({}, Messages.StrictVarName);
         }
 
         if (kind === 'const') {

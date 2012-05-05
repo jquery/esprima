@@ -16495,6 +16495,124 @@ data = {
                 column: 23,
                 message: 'Error: Line 1: Delete of an unqualified identifier in strict mode.'
             }]
+        },
+
+        '"use strict"; var eval;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'eval',
+                        range: [18, 22],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 22 }
+                        }
+                    },
+                    init: null,
+                    range: [18, 22],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 22 }
+                    }
+                }],
+                kind: 'var',
+                range: [14, 23],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 23 }
+                }
+            }],
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            },
+            errors: [{
+                index: 22,
+                lineNumber: 1,
+                column: 23,
+                message: 'Error: Line 1: Variable name may not be eval or arguments in strict mode'
+            }]
+        },
+
+        '"use strict"; var arguments;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'arguments',
+                        range: [18, 27],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 27 }
+                        }
+                    },
+                    init: null,
+                    range: [18, 27],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 27 }
+                    }
+                }],
+                kind: 'var',
+                range: [14, 28],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 28 }
+                }
+            }],
+            range: [0, 28],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
+            },
+            errors: [{
+                index: 27,
+                lineNumber: 1,
+                column: 28,
+                message: 'Error: Line 1: Variable name may not be eval or arguments in strict mode'
+            }]
         }
 
     }
