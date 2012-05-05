@@ -1733,7 +1733,7 @@ parseStatement: true, parseSourceElement: true */
                 argument: parseUnaryExpression()
             };
             if (strict && expr.operator === 'delete' && expr.argument.type === Syntax.Identifier) {
-                throwError({}, Messages.StrictDelete);
+                throwErrorTolerant({}, Messages.StrictDelete);
             }
             return expr;
         }
