@@ -50,6 +50,76 @@
         return (ch === '\n' || ch === '\r' || ch === '\u2028' || ch === '\u2029');
     }
 
+    // Remove all previous tracing.
+    function untrace(code) {
+
+        var i, trace, traces = [];
+
+        // Executes visitor on the object and its children (recursively).
+        function traverse(object, visitor, master) {
+            var key, child, parent, path;
+
+            parent = (typeof master === 'undefined') ? [] : master;
+
+            if (visitor.call(null, object, parent) === false) {
+                return;
+            }
+            for (key in object) {
+                if (object.hasOwnProperty(key)) {
+                    child = object[key];
+                    path = [ object ];
+                    path.push(parent);
+                    if (typeof child === 'object' && child !== null) {
+                        traverse(child, visitor, path);
+                    }
+                }
+            }
+        }
+
+        // In order to remove all previous tracing, we need to find the syntax
+        // nodes associated with the tracing.
+        traverse(global.esprima.parse(code, { range: true }), function (node, parent) {
+            var n = node;
+
+            if (n.type !== 'CallExpression') {
+                return;
+            }
+            n = n.callee;
+
+            if (!n || n.type !== 'MemberExpression') {
+                return;
+            }
+            if (n.property.type !== 'Identifier' || n.property.name !== 'enterFunction') {
+                return;
+            }
+
+            n = n.object;
+            if (!n || n.type !== 'MemberExpression') {
+                return;
+            }
+            if (n.object.type !== 'Identifier' || n.object.name !== 'window') {
+                return;
+            }
+            if (n.property.type !== 'Identifier' || n.property.name !== 'TRACE') {
+                return;
+            }
+
+            traces.push({ start: parent[0].range[0], end: parent[0].range[1] });
+        });
+
+        // Remove the farther trace first, this is to avoid changing the range
+        // info for each trace node.
+        for (i = traces.length - 1; i >= 0; i -= 1) {
+            trace = traces[i];
+            if (code[trace.end] === '\n') {
+                trace.end = trace.end + 1;
+            }
+            code = code.slice(0, trace.start) + code.slice(trace.end, code.length);
+        }
+
+        return code;
+    }
+
     global.traceInstrument = function () {
         var tracer, code, i, functionList, signature, pos;
 
@@ -59,7 +129,7 @@
             code = window.editor.getValue();
         }
 
-        // TODO: remove all existing instrumentation
+        code = untrace(code);
 
         tracer = window.esmorph.Tracer.FunctionEntrance(function (fn) {
             signature = 'window.TRACE.enterFunction({ ';
