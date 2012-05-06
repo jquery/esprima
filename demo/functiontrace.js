@@ -62,11 +62,11 @@
         // TODO: remove all existing instrumentation
 
         tracer = window.esmorph.Tracer.FunctionEntrance(function (fn) {
-            signature = 'window.TRACE({ ';
+            signature = 'window.TRACE.enterFunction({ ';
             signature += 'name: "' + fn.name + '", ';
             signature += 'lineNumber: ' + fn.loc.start.line + ', ';
             signature += 'range: [' + fn.range[0] + ',' + fn.range[1] + ']';
-            signature += ' })';
+            signature += ' });';
             return signature;
         });
 
