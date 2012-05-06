@@ -24,9 +24,7 @@
 
 /*jslint browser:true evil:true */
 
-var timerId;
-
-function traceRun() {
+(function (global) {
     'use strict';
 
     var lookup;
@@ -52,7 +50,7 @@ function traceRun() {
         return (ch === '\n' || ch === '\r' || ch === '\u2028' || ch === '\u2029');
     }
 
-    function insertTracer() {
+    global.traceInstrument = function () {
         var tracer, code, i, functionList, signature, pos;
 
         if (typeof window.editor === 'undefined') {
@@ -61,14 +59,30 @@ function traceRun() {
             code = window.editor.getValue();
         }
 
-        tracer = window.esmorph.Tracer.FunctionEntrance('window.TRACE.enterFunction');
+        // TODO: remove all existing instrumentation
+
+        tracer = window.esmorph.Tracer.FunctionEntrance(function (fn) {
+            signature = 'window.TRACE({ ';
+            signature += 'name: "' + fn.name + '", ';
+            signature += 'lineNumber: ' + fn.loc.start.line + ', ';
+            signature += 'range: [' + fn.range[0] + ',' + fn.range[1] + ']';
+            signature += ' })';
+            return signature;
+        });
+
         code = window.esmorph.modify(code, tracer);
+
+        if (typeof window.editor === 'undefined') {
+            document.getElementById('code').value = code;
+        } else {
+            window.editor.setValue(code);
+        }
 
         // Enclose in IIFE.
         code = '(function() {\n' + code + '\n}())';
 
         return code;
-    }
+    };
 
     function showResult() {
         var i, str, histogram, entry;
@@ -88,36 +102,43 @@ function traceRun() {
         id('result').innerHTML = str;
     }
 
-    window.TRACE = {
-        hits: {},
-        enterFunction: function (info) {
-            var key = info.name + ' at line ' + info.lineNumber;
-            if (this.hits.hasOwnProperty(key)) {
-                this.hits[key] = this.hits[key] + 1;
-            } else {
-                this.hits[key] = 1;
-            }
-        },
-        getHistogram: function () {
-            var entry,
-                sorted = [];
-            for (entry in this.hits) {
-                if (this.hits.hasOwnProperty(entry)) {
-                    sorted.push({ name: entry, count: this.hits[entry]});
+    function createTraceCollector() {
+        global.TRACE = {
+            hits: {},
+            enterFunction: function (info) {
+                var key = info.name + ' at line ' + info.lineNumber;
+                if (this.hits.hasOwnProperty(key)) {
+                    this.hits[key] = this.hits[key] + 1;
+                } else {
+                    this.hits[key] = 1;
                 }
+            },
+            getHistogram: function () {
+                var entry,
+                    sorted = [];
+                for (entry in this.hits) {
+                    if (this.hits.hasOwnProperty(entry)) {
+                        sorted.push({ name: entry, count: this.hits[entry]});
+                    }
+                }
+                sorted.sort(function (a, b) {
+                    return b.count - a.count;
+                });
+                return sorted;
             }
-            sorted.sort(function (a, b) {
-                return b.count - a.count;
-            });
-            return sorted;
+        };
+    }
+
+    global.traceRun = function () {
+        var code;
+        try {
+            code = global.traceInstrument();
+            createTraceCollector();
+            eval(code);
+            showResult();
+        } catch (e) {
+            id('result').innerText = e.toString();
         }
     };
-
-    try {
-        eval(insertTracer());
-        showResult();
-    } catch (e) {
-        id('result').innerText = e.toString();
-    }
-}
+}(window));
 /* vim: set sw=4 ts=4 et tw=80 : */
