@@ -35,10 +35,10 @@ background: #FFA;
 The analysis is <a href="http://code.google.com/p/esprima/wiki/Testing#Code_coverage_test">performed</a> offline
 (using <a href="https://github.com/itay/node-cover">node-cover</a>).<br>
 
-Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a29</a>
- (dated 24 Mar 2012).</p>
+Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab236d</a>
+ (dated 6 May 2012 ).</p>
 <pre>
-<span class='covered'>/*
+<span class='covered'>/*</span>
 <span class='covered'>    Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com></span>
 <span class='covered'>    Copyright (C) 2012 Mathias Bynens <mathias@qiwi.be></span>
 <span class='covered'>    Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl></span>
@@ -87,19 +87,14 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>          Messages,</span>
 <span class='covered'>          Regex,</span>
 <span class='covered'>          source,</span>
-<span class='covered'>          allowIn,</span>
-<span class='covered'>          lastParenthesized,</span>
 <span class='covered'>          strict,</span>
 <span class='covered'>          index,</span>
 <span class='covered'>          lineNumber,</span>
 <span class='covered'>          lineStart,</span>
 <span class='covered'>          length,</span>
 <span class='covered'>          buffer,</span>
-<span class='covered'>          extra,</span>
-<span class='covered'>          labelSet,</span>
-<span class='covered'>          inIteration,</span>
-<span class='covered'>          inSwitch,</span>
-<span class='covered'>          inFunctionBody;</span>
+<span class='covered'>          state,</span>
+<span class='covered'>          extra;</span>
 <span class='covered'>  </span>
 <span class='covered'>      Token = {</span>
 <span class='covered'>          BooleanLiteral: 1,</span>
@@ -1400,45 +1395,31 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseObjectPropertyKey() {</span>
-<span class='covered'>          var token = lex(),</span>
-<span class='covered'>              key;</span>
+<span class='covered'>          var token = lex();</span>
 <span class='covered'>  </span>
-<span class='covered'>          switch (token.type) {</span>
+<span class='covered'>          // Note: This function is called only from parseObjectProperty(), where</span>
+<span class='covered'>          // EOF and Punctuator tokens are already filtered out.</span>
 <span class='covered'>  </span>
-<span class='covered'>          case Token.StringLiteral:</span>
-<span class='covered'>          case Token.NumericLiteral:</span>
+<span class='covered'>          if (token.type === Token.StringLiteral || token.type === Token.NumericLiteral) {</span>
 <span class='covered'>              if (strict && token.octal) {</span>
 <span class='covered'>                  throwError(token, Messages.StrictOctalLiteral);</span>
 <span class='covered'>              }</span>
-<span class='covered'>              key = createLiteral(token);</span>
-<span class='covered'>              break;</span>
-<span class='covered'>  </span>
-<span class='covered'>          case Token.Identifier:</span>
-<span class='covered'>          case Token.Keyword:</span>
-<span class='covered'>          case Token.BooleanLiteral:</span>
-<span class='covered'>          case Token.NullLiteral:</span>
-<span class='covered'>              key = {</span>
-<span class='covered'>                  type: Syntax.Identifier,</span>
-<span class='covered'>                  name: token.value</span>
-<span class='covered'>              };</span>
-<span class='covered'>              break;</span>
-<span class='covered'>  </span>
-<span class='covered'>          default:</span>
-<span class='covered'>              // Unreachable, since parseObjectProperty() will not call this</span>
-<span class='covered'>              // function with any other type of token.</span>
+<span class='covered'>              return createLiteral(token);</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
-<span class='covered'>          return key;</span>
+<span class='covered'>          return {</span>
+<span class='covered'>              type: Syntax.Identifier,</span>
+<span class='covered'>              name: token.value</span>
+<span class='covered'>          };</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseObjectProperty() {</span>
-<span class='covered'>          var token, property, key, id, param;</span>
+<span class='covered'>          var token, key, id, param;</span>
 <span class='covered'>  </span>
 <span class='covered'>          token = lookahead();</span>
 <span class='covered'>  </span>
-<span class='covered'>          switch (token.type) {</span>
+<span class='covered'>          if (token.type === Token.Identifier) {</span>
 <span class='covered'>  </span>
-<span class='covered'>          case Token.Identifier:</span>
 <span class='covered'>              id = parseObjectPropertyKey();</span>
 <span class='covered'>  </span>
 <span class='covered'>              // Property Assignment: Getter and Setter.</span>
@@ -1447,7 +1428,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>                  key = parseObjectPropertyKey();</span>
 <span class='covered'>                  expect('(');</span>
 <span class='covered'>                  expect(')');</span>
-<span class='covered'>                  property = {</span>
+<span class='covered'>                  return {</span>
 <span class='covered'>                      type: Syntax.Property,</span>
 <span class='covered'>                      key: key,</span>
 <span class='covered'>                      value: parsePropertyFunction([]),</span>
@@ -1462,7 +1443,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>                  }</span>
 <span class='covered'>                  param = [ parseVariableIdentifier() ];</span>
 <span class='covered'>                  expect(')');</span>
-<span class='covered'>                  property = {</span>
+<span class='covered'>                  return {</span>
 <span class='covered'>                      type: Syntax.Property,</span>
 <span class='covered'>                      key: key,</span>
 <span class='covered'>                      value: parsePropertyFunction(param, token),</span>
@@ -1470,35 +1451,25 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>                  };</span>
 <span class='covered'>              } else {</span>
 <span class='covered'>                  expect(':');</span>
-<span class='covered'>                  property = {</span>
+<span class='covered'>                  return {</span>
 <span class='covered'>                      type: Syntax.Property,</span>
 <span class='covered'>                      key: id,</span>
 <span class='covered'>                      value: parseAssignmentExpression(),</span>
 <span class='covered'>                      kind: 'init'</span>
 <span class='covered'>                  };</span>
 <span class='covered'>              }</span>
-<span class='covered'>              break;</span>
-<span class='covered'>  </span>
-<span class='covered'>          case Token.Keyword:</span>
-<span class='covered'>          case Token.BooleanLiteral:</span>
-<span class='covered'>          case Token.NullLiteral:</span>
-<span class='covered'>          case Token.StringLiteral:</span>
-<span class='covered'>          case Token.NumericLiteral:</span>
+<span class='covered'>          } else if (token.type === Token.EOF || token.type === Token.Punctuator) {</span>
+<span class='covered'>              throwUnexpected(token);</span>
+<span class='covered'>          } else {</span>
 <span class='covered'>              key = parseObjectPropertyKey();</span>
 <span class='covered'>              expect(':');</span>
-<span class='covered'>              property = {</span>
+<span class='covered'>              return {</span>
 <span class='covered'>                  type: Syntax.Property,</span>
 <span class='covered'>                  key: key,</span>
 <span class='covered'>                  value: parseAssignmentExpression(),</span>
 <span class='covered'>                  kind: 'init'</span>
 <span class='covered'>              };</span>
-<span class='covered'>              break;</span>
-<span class='covered'>  </span>
-<span class='covered'>          default:</span>
-<span class='covered'>              throwUnexpected(token);</span>
 <span class='covered'>          }</span>
-<span class='covered'>  </span>
-<span class='covered'>          return property;</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseObjectInitialiser() {</span>
@@ -1565,7 +1536,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>  </span>
 <span class='covered'>          if (type === Token.StringLiteral || type === Token.NumericLiteral) {</span>
 <span class='covered'>              if (strict && token.octal) {</span>
-<span class='covered'>                  throwError(token, Messages.StrictOctalLiteral);</span>
+<span class='covered'>                  throwErrorTolerant(token, Messages.StrictOctalLiteral);</span>
 <span class='covered'>              }</span>
 <span class='covered'>              return createLiteral(lex());</span>
 <span class='covered'>          }</span>
@@ -1605,7 +1576,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>  </span>
 <span class='covered'>          if (match('(')) {</span>
 <span class='covered'>              lex();</span>
-<span class='covered'>              lastParenthesized = expr = parseExpression();</span>
+<span class='covered'>              state.lastParenthesized = expr = parseExpression();</span>
 <span class='covered'>              expect(')');</span>
 <span class='covered'>              return expr;</span>
 <span class='covered'>          }</span>
@@ -1802,7 +1773,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>                  argument: parseUnaryExpression()</span>
 <span class='covered'>              };</span>
 <span class='covered'>              if (strict && expr.operator === 'delete' && expr.argument.type === Syntax.Identifier) {</span>
-<span class='covered'>                  throwError({}, Messages.StrictDelete);</span>
+<span class='covered'>                  throwErrorTolerant({}, Messages.StrictDelete);</span>
 <span class='covered'>              }</span>
 <span class='covered'>              return expr;</span>
 <span class='covered'>          }</span>
@@ -1865,10 +1836,10 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>      function parseRelationalExpression() {</span>
 <span class='covered'>          var expr, previousAllowIn;</span>
 <span class='covered'>  </span>
-<span class='covered'>          previousAllowIn = allowIn;</span>
-<span class='covered'>          allowIn = true;</span>
+<span class='covered'>          previousAllowIn = state.allowIn;</span>
+<span class='covered'>          state.allowIn = true;</span>
 <span class='covered'>          expr = parseShiftExpression();</span>
-<span class='covered'>          allowIn = previousAllowIn;</span>
+<span class='covered'>          state.allowIn = previousAllowIn;</span>
 <span class='covered'>  </span>
 <span class='covered'>          if (match('<') || match('>') || match('<=') || match('>=')) {</span>
 <span class='covered'>              expr = {</span>
@@ -1877,7 +1848,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>                  left: expr,</span>
 <span class='covered'>                  right: parseRelationalExpression()</span>
 <span class='covered'>              };</span>
-<span class='covered'>          } else if (allowIn && matchKeyword('in')) {</span>
+<span class='covered'>          } else if (state.allowIn && matchKeyword('in')) {</span>
 <span class='covered'>              lex();</span>
 <span class='covered'>              expr = {</span>
 <span class='covered'>                  type: Syntax.BinaryExpression,</span>
@@ -2008,10 +1979,10 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>  </span>
 <span class='covered'>          if (match('?')) {</span>
 <span class='covered'>              lex();</span>
-<span class='covered'>              previousAllowIn = allowIn;</span>
-<span class='covered'>              allowIn = true;</span>
+<span class='covered'>              previousAllowIn = state.allowIn;</span>
+<span class='covered'>              state.allowIn = true;</span>
 <span class='covered'>              consequent = parseAssignmentExpression();</span>
-<span class='covered'>              allowIn = previousAllowIn;</span>
+<span class='covered'>              state.allowIn = previousAllowIn;</span>
 <span class='covered'>              expect(':');</span>
 <span class='covered'>  </span>
 <span class='covered'>              expr = {</span>
@@ -2034,7 +2005,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>  </span>
 <span class='covered'>          if (matchAssign()) {</span>
 <span class='covered'>              // LeftHandSideExpression</span>
-<span class='covered'>              if (lastParenthesized !== expr && !isLeftHandSide(expr)) {</span>
+<span class='covered'>              if (state.lastParenthesized !== expr && !isLeftHandSide(expr)) {</span>
 <span class='covered'>                  throwError({}, Messages.InvalidLHSInAssignment);</span>
 <span class='covered'>              }</span>
 <span class='covered'>  </span>
@@ -2133,7 +2104,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>  </span>
 <span class='covered'>          // 12.2.1</span>
 <span class='covered'>          if (strict && isRestrictedWord(id.name)) {</span>
-<span class='covered'>              throwError({}, Messages.StrictVarName);</span>
+<span class='covered'>              throwErrorTolerant({}, Messages.StrictVarName);</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
 <span class='covered'>          if (kind === 'const') {</span>
@@ -2261,12 +2232,12 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>  </span>
 <span class='covered'>          expectKeyword('do');</span>
 <span class='covered'>  </span>
-<span class='covered'>          oldInIteration = inIteration;</span>
-<span class='covered'>          inIteration = true;</span>
+<span class='covered'>          oldInIteration = state.inIteration;</span>
+<span class='covered'>          state.inIteration = true;</span>
 <span class='covered'>  </span>
 <span class='covered'>          body = parseStatement();</span>
 <span class='covered'>  </span>
-<span class='covered'>          inIteration = oldInIteration;</span>
+<span class='covered'>          state.inIteration = oldInIteration;</span>
 <span class='covered'>  </span>
 <span class='covered'>          expectKeyword('while');</span>
 <span class='covered'>  </span>
@@ -2298,12 +2269,12 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>  </span>
 <span class='covered'>          expect(')');</span>
 <span class='covered'>  </span>
-<span class='covered'>          oldInIteration = inIteration;</span>
-<span class='covered'>          inIteration = true;</span>
+<span class='covered'>          oldInIteration = state.inIteration;</span>
+<span class='covered'>          state.inIteration = true;</span>
 <span class='covered'>  </span>
 <span class='covered'>          body = parseStatement();</span>
 <span class='covered'>  </span>
-<span class='covered'>          inIteration = oldInIteration;</span>
+<span class='covered'>          state.inIteration = oldInIteration;</span>
 <span class='covered'>  </span>
 <span class='covered'>          return {</span>
 <span class='covered'>              type: Syntax.WhileStatement,</span>
@@ -2335,9 +2306,9 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>              lex();</span>
 <span class='covered'>          } else {</span>
 <span class='covered'>              if (matchKeyword('var') || matchKeyword('let')) {</span>
-<span class='covered'>                  allowIn = false;</span>
+<span class='covered'>                  state.allowIn = false;</span>
 <span class='covered'>                  init = parseForVariableDeclaration();</span>
-<span class='covered'>                  allowIn = true;</span>
+<span class='covered'>                  state.allowIn = true;</span>
 <span class='covered'>  </span>
 <span class='covered'>                  if (init.declarations.length === 1 && matchKeyword('in')) {</span>
 <span class='covered'>                      lex();</span>
@@ -2346,13 +2317,13 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>                      init = null;</span>
 <span class='covered'>                  }</span>
 <span class='covered'>              } else {</span>
-<span class='covered'>                  allowIn = false;</span>
+<span class='covered'>                  state.allowIn = false;</span>
 <span class='covered'>                  init = parseExpression();</span>
-<span class='covered'>                  allowIn = true;</span>
+<span class='covered'>                  state.allowIn = true;</span>
 <span class='covered'>  </span>
 <span class='covered'>                  if (matchKeyword('in')) {</span>
 <span class='covered'>                      // LeftHandSideExpression</span>
-<span class='covered'>                      if (matchKeyword('in') && (lastParenthesized !== init && !isLeftHandSide(init))) {</span>
+<span class='covered'>                      if (matchKeyword('in') && (state.lastParenthesized !== init && !isLeftHandSide(init))) {</span>
 <span class='covered'>                          throwError({}, Messages.InvalidLHSInForIn);</span>
 <span class='covered'>                      }</span>
 <span class='covered'>                      lex();</span>
@@ -2381,12 +2352,12 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>  </span>
 <span class='covered'>          expect(')');</span>
 <span class='covered'>  </span>
-<span class='covered'>          oldInIteration = inIteration;</span>
-<span class='covered'>          inIteration = true;</span>
+<span class='covered'>          oldInIteration = state.inIteration;</span>
+<span class='covered'>          state.inIteration = true;</span>
 <span class='covered'>  </span>
 <span class='covered'>          body = parseStatement();</span>
 <span class='covered'>  </span>
-<span class='covered'>          inIteration = oldInIteration;</span>
+<span class='covered'>          state.inIteration = oldInIteration;</span>
 <span class='covered'>  </span>
 <span class='covered'>          if (typeof left === 'undefined') {</span>
 <span class='covered'>              return {</span>
@@ -2417,8 +2388,8 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>          // Optimize the most common form: 'continue;'.</span>
 <span class='covered'>          if (source[index] === ';') {</span>
 <span class='covered'>              lex();</span>
-<span class='covered'>              </span>
-<span class='covered'>              if (!inIteration) {</span>
+<span class='covered'>  </span>
+<span class='covered'>              if (!state.inIteration) {</span>
 <span class='covered'>                  throwError({}, Messages.IllegalContinue);</span>
 <span class='covered'>              }</span>
 <span class='covered'>  </span>
@@ -2429,7 +2400,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
 <span class='covered'>          if (peekLineTerminator()) {</span>
-<span class='covered'>              if (!inIteration) {</span>
+<span class='covered'>              if (!state.inIteration) {</span>
 <span class='covered'>                  throwError({}, Messages.IllegalContinue);</span>
 <span class='covered'>              }</span>
 <span class='covered'>  </span>
@@ -2443,14 +2414,14 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>          if (token.type === Token.Identifier) {</span>
 <span class='covered'>              label = parseVariableIdentifier();</span>
 <span class='covered'>  </span>
-<span class='covered'>              if (!Object.prototype.hasOwnProperty.call(labelSet, label.name)) {</span>
+<span class='covered'>              if (!Object.prototype.hasOwnProperty.call(state.labelSet, label.name)) {</span>
 <span class='covered'>                  throwError({}, Messages.UnknownLabel, label.name);</span>
 <span class='covered'>              }</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
 <span class='covered'>          consumeSemicolon();</span>
 <span class='covered'>  </span>
-<span class='covered'>          if (label === null && !inIteration) {</span>
+<span class='covered'>          if (label === null && !state.inIteration) {</span>
 <span class='covered'>              throwError({}, Messages.IllegalContinue);</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
@@ -2470,8 +2441,8 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>          // Optimize the most common form: 'break;'.</span>
 <span class='covered'>          if (source[index] === ';') {</span>
 <span class='covered'>              lex();</span>
-<span class='covered'>              </span>
-<span class='covered'>              if (!(inIteration || inSwitch)) {</span>
+<span class='covered'>  </span>
+<span class='covered'>              if (!(state.inIteration || state.inSwitch)) {</span>
 <span class='covered'>                  throwError({}, Messages.IllegalBreak);</span>
 <span class='covered'>              }</span>
 <span class='covered'>  </span>
@@ -2482,7 +2453,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
 <span class='covered'>          if (peekLineTerminator()) {</span>
-<span class='covered'>              if (!(inIteration || inSwitch)) {</span>
+<span class='covered'>              if (!(state.inIteration || state.inSwitch)) {</span>
 <span class='covered'>                  throwError({}, Messages.IllegalBreak);</span>
 <span class='covered'>              }</span>
 <span class='covered'>  </span>
@@ -2496,14 +2467,14 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>          if (token.type === Token.Identifier) {</span>
 <span class='covered'>              label = parseVariableIdentifier();</span>
 <span class='covered'>  </span>
-<span class='covered'>              if (!Object.prototype.hasOwnProperty.call(labelSet, label.name)) {</span>
+<span class='covered'>              if (!Object.prototype.hasOwnProperty.call(state.labelSet, label.name)) {</span>
 <span class='covered'>                  throwError({}, Messages.UnknownLabel, label.name);</span>
 <span class='covered'>              }</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
 <span class='covered'>          consumeSemicolon();</span>
 <span class='covered'>  </span>
-<span class='covered'>          if (label === null && !(inIteration || inSwitch)) {</span>
+<span class='covered'>          if (label === null && !(state.inIteration || state.inSwitch)) {</span>
 <span class='covered'>              throwError({}, Messages.IllegalBreak);</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
@@ -2520,7 +2491,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>  </span>
 <span class='covered'>          expectKeyword('return');</span>
 <span class='covered'>  </span>
-<span class='covered'>          if (!inFunctionBody) {</span>
+<span class='covered'>          if (!state.inFunctionBody) {</span>
 <span class='covered'>              throwErrorTolerant({}, Messages.IllegalReturn);</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
@@ -2586,9 +2557,19 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>  </span>
 <span class='covered'>      // 12.10 The swith statement</span>
 <span class='covered'>  </span>
-<span class='covered'>      function parseSwitchCase(test) {</span>
-<span class='covered'>          var consequent = [],</span>
+<span class='covered'>      function parseSwitchCase() {</span>
+<span class='covered'>          var test,</span>
+<span class='covered'>              consequent = [],</span>
 <span class='covered'>              statement;</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (matchKeyword('default')) {</span>
+<span class='covered'>              lex();</span>
+<span class='covered'>              test = null;</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>              expectKeyword('case');</span>
+<span class='covered'>              test = parseExpression();</span>
+<span class='covered'>          }</span>
+<span class='covered'>          expect(':');</span>
 <span class='covered'>  </span>
 <span class='covered'>          while (index < length) {</span>
 <span class='covered'>              if (match('}') || matchKeyword('default') || matchKeyword('case')) {</span>
@@ -2609,7 +2590,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseSwitchStatement() {</span>
-<span class='covered'>          var discriminant, cases, test, oldInSwitch;</span>
+<span class='covered'>          var discriminant, cases, oldInSwitch;</span>
 <span class='covered'>  </span>
 <span class='covered'>          expectKeyword('switch');</span>
 <span class='covered'>  </span>
@@ -2631,27 +2612,17 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>  </span>
 <span class='covered'>          cases = [];</span>
 <span class='covered'>  </span>
-<span class='covered'>          oldInSwitch = inSwitch;</span>
-<span class='covered'>          inSwitch = true;</span>
+<span class='covered'>          oldInSwitch = state.inSwitch;</span>
+<span class='covered'>          state.inSwitch = true;</span>
 <span class='covered'>  </span>
 <span class='covered'>          while (index < length) {</span>
 <span class='covered'>              if (match('}')) {</span>
 <span class='covered'>                  break;</span>
 <span class='covered'>              }</span>
-<span class='covered'>  </span>
-<span class='covered'>              if (matchKeyword('default')) {</span>
-<span class='covered'>                  lex();</span>
-<span class='covered'>                  test = null;</span>
-<span class='covered'>              } else {</span>
-<span class='covered'>                  expectKeyword('case');</span>
-<span class='covered'>                  test = parseExpression();</span>
-<span class='covered'>              }</span>
-<span class='covered'>              expect(':');</span>
-<span class='covered'>  </span>
-<span class='covered'>              cases.push(parseSwitchCase(test));</span>
+<span class='covered'>              cases.push(parseSwitchCase());</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
-<span class='covered'>          inSwitch = oldInSwitch;</span>
+<span class='covered'>          state.inSwitch = oldInSwitch;</span>
 <span class='covered'>  </span>
 <span class='covered'>          expect('}');</span>
 <span class='covered'>  </span>
@@ -2813,13 +2784,13 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>          if ((expr.type === Syntax.Identifier) && match(':')) {</span>
 <span class='covered'>              lex();</span>
 <span class='covered'>  </span>
-<span class='covered'>              if (Object.prototype.hasOwnProperty.call(labelSet, expr.name)) {</span>
+<span class='covered'>              if (Object.prototype.hasOwnProperty.call(state.labelSet, expr.name)) {</span>
 <span class='covered'>                  throwError({}, Messages.Redeclaration, 'Label', expr.name);</span>
 <span class='covered'>              }</span>
 <span class='covered'>  </span>
-<span class='covered'>              labelSet[expr.name] = true;</span>
+<span class='covered'>              state.labelSet[expr.name] = true;</span>
 <span class='covered'>              labeledBody = parseStatement();</span>
-<span class='covered'>              delete labelSet[expr.name];</span>
+<span class='covered'>              delete state.labelSet[expr.name];</span>
 <span class='covered'>  </span>
 <span class='covered'>              return {</span>
 <span class='covered'>                  type: Syntax.LabeledStatement,</span>
@@ -2839,7 +2810,8 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>      // 13 Function Definition</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseFunctionSourceElements() {</span>
-<span class='covered'>          var sourceElement, sourceElements = [], token, directive, firstRestricted, oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody;</span>
+<span class='covered'>          var sourceElement, sourceElements = [], token, directive, firstRestricted,</span>
+<span class='covered'>              oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody;</span>
 <span class='covered'>  </span>
 <span class='covered'>          expect('{');</span>
 <span class='covered'>  </span>
@@ -2868,15 +2840,15 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>              }</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
-<span class='covered'>          oldLabelSet = labelSet;</span>
-<span class='covered'>          oldInIteration = inIteration;</span>
-<span class='covered'>          oldInSwitch = inSwitch;</span>
-<span class='covered'>          oldInFunctionBody = inFunctionBody;</span>
+<span class='covered'>          oldLabelSet = state.labelSet;</span>
+<span class='covered'>          oldInIteration = state.inIteration;</span>
+<span class='covered'>          oldInSwitch = state.inSwitch;</span>
+<span class='covered'>          oldInFunctionBody = state.inFunctionBody;</span>
 <span class='covered'>  </span>
-<span class='covered'>          labelSet = {};</span>
-<span class='covered'>          inIteration = false;</span>
-<span class='covered'>          inSwitch = false;</span>
-<span class='covered'>          inFunctionBody = true;</span>
+<span class='covered'>          state.labelSet = {};</span>
+<span class='covered'>          state.inIteration = false;</span>
+<span class='covered'>          state.inSwitch = false;</span>
+<span class='covered'>          state.inFunctionBody = true;</span>
 <span class='covered'>  </span>
 <span class='covered'>          while (index < length) {</span>
 <span class='covered'>              if (match('}')) {</span>
@@ -2891,10 +2863,10 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>  </span>
 <span class='covered'>          expect('}');</span>
 <span class='covered'>  </span>
-<span class='covered'>          labelSet = oldLabelSet;</span>
-<span class='covered'>          inIteration = oldInIteration;</span>
-<span class='covered'>          inSwitch = oldInSwitch;</span>
-<span class='covered'>          inFunctionBody = oldInFunctionBody;</span>
+<span class='covered'>          state.labelSet = oldLabelSet;</span>
+<span class='covered'>          state.inIteration = oldInIteration;</span>
+<span class='covered'>          state.inSwitch = oldInSwitch;</span>
+<span class='covered'>          state.inFunctionBody = oldInFunctionBody;</span>
 <span class='covered'>  </span>
 <span class='covered'>          return {</span>
 <span class='covered'>              type: Syntax.BlockStatement,</span>
@@ -3154,9 +3126,13 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>  </span>
 <span class='covered'>              if (lineComment) {</span>
 <span class='covered'>                  ch = nextChar();</span>
-<span class='covered'>                  if (isLineTerminator(ch)) {</span>
+<span class='covered'>                  if (index >= length) {</span>
 <span class='covered'>                      lineComment = false;</span>
-<span class='covered'>                      addComment(start, index - 1, 'Line', comment);</span>
+<span class='covered'>                      comment += ch;</span>
+<span class='covered'>                      addComment(start, index, 'Line', comment);</span>
+<span class='covered'>                  } else if (isLineTerminator(ch)) {</span>
+<span class='covered'>                      lineComment = false;</span>
+<span class='covered'>                      addComment(start, index, 'Line', comment);</span>
 <span class='covered'>                      if (ch === '\r' && source[index] === '\n') {</span>
 <span class='covered'>                          ++index;</span>
 <span class='covered'>                      }</span>
@@ -3192,7 +3168,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>                              comment = comment.substr(0, comment.length - 1);</span>
 <span class='covered'>                              blockComment = false;</span>
 <span class='covered'>                              ++index;</span>
-<span class='covered'>                              addComment(start, index - 1, 'Block', comment);</span>
+<span class='covered'>                              addComment(start, index, 'Block', comment);</span>
 <span class='covered'>                              comment = '';</span>
 <span class='covered'>                          }</span>
 <span class='covered'>                      }</span>
@@ -3234,7 +3210,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>              value;</span>
 <span class='covered'>  </span>
 <span class='covered'>          if (token.type !== Token.EOF) {</span>
-<span class='covered'>              range = [token.range[0], token.range[1] - 1];</span>
+<span class='covered'>              range = [token.range[0], token.range[1]];</span>
 <span class='covered'>              value = sliceSource(token.range[0], token.range[1]);</span>
 <span class='covered'>              extra.tokens.push({</span>
 <span class='covered'>                  type: TokenName[token.type],</span>
@@ -3267,7 +3243,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>          extra.tokens.push({</span>
 <span class='covered'>              type: 'RegularExpression',</span>
 <span class='covered'>              value: regex.literal,</span>
-<span class='covered'>              range: [pos, index - 1]</span>
+<span class='covered'>              range: [pos, index]</span>
 <span class='covered'>          });</span>
 <span class='covered'>  </span>
 <span class='covered'>          return regex;</span>
@@ -3332,7 +3308,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>                  if (typeof node !== 'undefined') {</span>
 <span class='covered'>  </span>
 <span class='covered'>                      if (range) {</span>
-<span class='covered'>                          rangeInfo[1] = index - 1;</span>
+<span class='covered'>                          rangeInfo[1] = index;</span>
 <span class='covered'>                          node.range = rangeInfo;</span>
 <span class='covered'>                      }</span>
 <span class='covered'>  </span>
@@ -3543,12 +3519,14 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>          lineStart = 0;</span>
 <span class='covered'>          length = source.length;</span>
 <span class='covered'>          buffer = null;</span>
-<span class='covered'>          allowIn = true;</span>
-<span class='covered'>          labelSet = {};</span>
-<span class='covered'>          inSwitch = false;</span>
-<span class='covered'>          inIteration = false;</span>
-<span class='covered'>          lastParenthesized = null;</span>
-<span class='covered'>          inFunctionBody = false;</span>
+<span class='covered'>          state = {</span>
+<span class='covered'>              allowIn: true,</span>
+<span class='covered'>              labelSet: {},</span>
+<span class='covered'>              lastParenthesized: null,</span>
+<span class='covered'>              inFunctionBody: false,</span>
+<span class='covered'>              inIteration: false,</span>
+<span class='covered'>              inSwitch: false</span>
+<span class='covered'>          };</span>
 <span class='covered'>  </span>
 <span class='covered'>          extra = {};</span>
 <span class='covered'>          if (typeof options !== 'undefined') {</span>
@@ -3605,7 +3583,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/ab71a29'>ab71a
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      // Sync with package.json.</span>
-<span class='covered'>      exports.version = '0.9.9-dev';</span>
+<span class='covered'>      exports.version = '1.0.0-dev';</span>
 <span class='covered'>  </span>
 <span class='covered'>      exports.parse = parse;</span>
 <span class='covered'>  </span>
