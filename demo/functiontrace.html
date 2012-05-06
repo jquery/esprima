@@ -14,7 +14,7 @@
 <link rel="stylesheet" type="text/css" href="../assets/style.css"/>
 <style>
 .CodeMirror-scroll {
-    height: 300px;
+    height: 320px;
 }
 </style>
 </head>
@@ -58,7 +58,11 @@ bubbleSort(data);
 </textarea></p>
 <p id="codemirror" align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
 
-<p><input type="button" value="Run" id="run"></p>
+<p><input type="button" value="Insert tracing" id="instrument">
+<span style="margin-left: 50px;">&nbsp;</span>
+<input type="button" value="Run" id="run"></p>
+
+<p>Instrumentation for each function will be added with the <i>Insert tracing</i> button. Pressing the <i>Run</i> button will execute the code (using JavaScript <code>eval</code>) with the instrumentation, and then call counts for each function will be displayed (sorted by the number of calls). <b>Warning</b>: do not run untrusted code!</p>
 
 <div id="result"><p>No result yet.</p></div>
 
@@ -71,7 +75,7 @@ bubbleSort(data);
 </div>
 <script>
 /*jslint sloppy:true browser:true */
-/*global traceRun:true, CodeMirror:true */
+/*global traceInstrument: true, traceRun:true, CodeMirror:true */
 window.onload = function () {
     var el;
 
@@ -82,6 +86,7 @@ window.onload = function () {
         el.textContent = window.esprima.version;
     }
 
+    document.getElementById('instrument').onclick = traceInstrument;
     document.getElementById('run').onclick = traceRun;
 };
 
