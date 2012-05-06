@@ -3311,9 +3311,9 @@ data = {
                             end: { line: 1, column: 49 }
                         }
                     }],
-                    range: [41, 49],
+                    range: [18, 49],
                     loc: {
-                        start: { line: 1, column: 41 },
+                        start: { line: 1, column: 18 },
                         end: { line: 1, column: 49 }
                     }
                 }],
@@ -12672,9 +12672,9 @@ data = {
                         end: { line: 1, column: 39 }
                     }
                 }],
-                range: [27, 39],
+                range: [18, 39],
                 loc: {
-                    start: { line: 1, column: 27 },
+                    start: { line: 1, column: 18 },
                     end: { line: 1, column: 39 }
                 }
             }],
@@ -12742,9 +12742,9 @@ data = {
                         end: { line: 1, column: 39 }
                     }
                 }],
-                range: [27, 39],
+                range: [18, 39],
                 loc: {
-                    start: { line: 1, column: 27 },
+                    start: { line: 1, column: 18 },
                     end: { line: 1, column: 39 }
                 }
             }, {
@@ -12759,9 +12759,9 @@ data = {
                         end: { line: 1, column: 55 }
                     }
                 }],
-                range: [49, 55],
+                range: [40, 55],
                 loc: {
-                    start: { line: 1, column: 49 },
+                    start: { line: 1, column: 40 },
                     end: { line: 1, column: 55 }
                 }
             }],
@@ -16845,6 +16845,267 @@ data = {
                 lineNumber: 1,
                 column: 30,
                 message: 'Error: Line 1: Strict mode code may not include a with statement'
+            }]
+        },
+
+        '(function () { \'use strict\'; 021 }())': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [{
+                                type: 'ExpressionStatement',
+                                expression: {
+                                    type: 'Literal',
+                                    value: 'use strict',
+                                    raw: '\'use strict\'',
+                                    range: [15, 27],
+                                    loc: {
+                                        start: { line: 1, column: 15 },
+                                        end: { line: 1, column: 27 }
+                                    }
+                                },
+                                range: [15, 28],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 28 }
+                                }
+                            }, {
+                                type: 'ExpressionStatement',
+                                expression: {
+                                    type: 'Literal',
+                                    value: 17,
+                                    raw: "021",
+                                    range: [29, 32],
+                                    loc: {
+                                        start: { line: 1, column: 29 },
+                                        end: { line: 1, column: 32 }
+                                    }
+                                },
+                                range: [29, 33],
+                                loc: {
+                                    start: { line: 1, column: 29 },
+                                    end: { line: 1, column: 33 }
+                                }
+                            }],
+                            range: [13, 34],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 34 }
+                            }
+                        },
+                        range: [1, 34],
+                        loc: {
+                            start: { line: 1, column: 1 },
+                            end: { line: 1, column: 34 }
+                        }
+                    },
+                    'arguments': [],
+                    range: [0, 37],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 37 }
+                    }
+                },
+                range: [0, 37],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 37 }
+                }
+            }],
+            range: [0, 37],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 37 }
+            },
+            errors: [{
+                index: 29,
+                lineNumber: 1,
+                column: 30,
+                message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            }]
+        },
+
+        '"use strict"; delete x': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UnaryExpression',
+                    operator: 'delete',
+                    argument: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [21, 22],
+                        loc: {
+                            start: { line: 1, column: 21 },
+                            end: { line: 1, column: 22 }
+                        }
+                    },
+                    range: [14, 22],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                range: [14, 22],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 22 }
+                }
+            }],
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            },
+            errors: [{
+                index: 22,
+                lineNumber: 1,
+                column: 23,
+                message: 'Error: Line 1: Delete of an unqualified identifier in strict mode.'
+            }]
+        },
+
+        '"use strict"; var eval;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'eval',
+                        range: [18, 22],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 22 }
+                        }
+                    },
+                    init: null,
+                    range: [18, 22],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 22 }
+                    }
+                }],
+                kind: 'var',
+                range: [14, 23],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 23 }
+                }
+            }],
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            },
+            errors: [{
+                index: 22,
+                lineNumber: 1,
+                column: 23,
+                message: 'Error: Line 1: Variable name may not be eval or arguments in strict mode'
+            }]
+        },
+
+        '"use strict"; var arguments;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'arguments',
+                        range: [18, 27],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 27 }
+                        }
+                    },
+                    init: null,
+                    range: [18, 27],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 27 }
+                    }
+                }],
+                kind: 'var',
+                range: [14, 28],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 28 }
+                }
+            }],
+            range: [0, 28],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
+            },
+            errors: [{
+                index: 27,
+                lineNumber: 1,
+                column: 28,
+                message: 'Error: Line 1: Variable name may not be eval or arguments in strict mode'
             }]
         }
 
