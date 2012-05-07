@@ -16727,6 +16727,52 @@ data = {
                     }
                 }]
             }
+        },
+
+        'Syntax': {
+            property: 'Syntax',
+            result: {
+                AssignmentExpression: 'AssignmentExpression',
+                ArrayExpression: 'ArrayExpression',
+                BlockStatement: 'BlockStatement',
+                BinaryExpression: 'BinaryExpression',
+                BreakStatement: 'BreakStatement',
+                CallExpression: 'CallExpression',
+                CatchClause: 'CatchClause',
+                ConditionalExpression: 'ConditionalExpression',
+                ContinueStatement: 'ContinueStatement',
+                DoWhileStatement: 'DoWhileStatement',
+                DebuggerStatement: 'DebuggerStatement',
+                EmptyStatement: 'EmptyStatement',
+                ExpressionStatement: 'ExpressionStatement',
+                ForStatement: 'ForStatement',
+                ForInStatement: 'ForInStatement',
+                FunctionDeclaration: 'FunctionDeclaration',
+                FunctionExpression: 'FunctionExpression',
+                Identifier: 'Identifier',
+                IfStatement: 'IfStatement',
+                Literal: 'Literal',
+                LabeledStatement: 'LabeledStatement',
+                LogicalExpression: 'LogicalExpression',
+                MemberExpression: 'MemberExpression',
+                NewExpression: 'NewExpression',
+                ObjectExpression: 'ObjectExpression',
+                Program: 'Program',
+                Property: 'Property',
+                ReturnStatement: 'ReturnStatement',
+                SequenceExpression: 'SequenceExpression',
+                SwitchStatement: 'SwitchStatement',
+                SwitchCase: 'SwitchCase',
+                ThisExpression: 'ThisExpression',
+                ThrowStatement: 'ThrowStatement',
+                TryStatement: 'TryStatement',
+                UnaryExpression: 'UnaryExpression',
+                UpdateExpression: 'UpdateExpression',
+                VariableDeclaration: 'VariableDeclaration',
+                VariableDeclarator: 'VariableDeclarator',
+                WhileStatement: 'WhileStatement',
+                WithStatement: 'WithStatement'
+            }
         }
 
     },
@@ -17247,7 +17293,11 @@ function testAPI(code, result) {
 
     expected = JSON.stringify(result.result, null, 4);
     try {
-        res = esprima[result.call].apply(esprima, result.args);
+        if (typeof result.property !== 'undefined') {
+            res = esprima[result.property];
+        } else {
+            res = esprima[result.call].apply(esprima, result.args);
+        }
         actual = JSON.stringify(res, adjustRegexLiteral, 4);
     } catch (e) {
         throw new NotMatchingError(expected, e.toString());
