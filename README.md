@@ -40,7 +40,7 @@ Since it is not comprehensive nor complete, refer to the
 [known problems](http://code.google.com/p/esprima/issues/list?q=Defect)
 and [future plans](http://code.google.com/p/esprima/issues/list?q=Enhancement).
 Esprima is supported on [many browsers](http://code.google.com/p/esprima/wiki/BrowserCompatibility):
-IE 6+, Firefox 1+, Safari 3+, Chrome 1+, and Opera 8+.
+IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror 4.6+, and Opera 8+.
 
 Feedback and contribution are welcomed! Please join the
 [mailing list](http://groups.google.com/group/esprima) and read the
