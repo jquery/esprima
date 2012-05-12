@@ -767,6 +767,72 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 7 }
             }
+        },
+
+        'x = #[]': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [0, 1],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 1 }
+                        }
+                    },
+                    right: {
+                        type: 'ArrayExpression',
+                        elements: [],
+                        sealed: true,
+                        range: [4, 7],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 7 }
+                        }
+                    },
+                    range: [0, 7],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 7 }
+                    }
+                },
+                range: [0, 7],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 7 }
+                }
+            }],
+            range: [0, 7],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 7 }
+            },
+            tokens: [{
+                type: 'Identifier',
+                value: 'x',
+                range: [0, 1]
+            }, {
+                type: 'Punctuator',
+                value: '=',
+                range: [2, 3]
+            }, {
+                type: 'Punctuator',
+                value: '#',
+                range: [4, 5]
+            }, {
+                type: 'Punctuator',
+                value: '[',
+                range: [5, 6]
+            }, {
+                type: 'Punctuator',
+                value: ']',
+                range: [6, 7]
+            }]
         }
 
     },
@@ -2835,7 +2901,45 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 15 }
             }
+        },
+
+        'x = #{}': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [],
+                    sealed: true,
+                    range: [4, 7],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 7 }
+                    }
+                },
+                range: [0, 7],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            range: [0, 7],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 7 }
+            }
         }
+
 
     },
 
