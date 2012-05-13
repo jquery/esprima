@@ -15595,6 +15595,20 @@ data = {
             message: 'Error: Line 1: Invalid left-hand side in assignment'
         },
 
+        '( #{ x:y } ) = 42': {
+            index: 12,
+            lineNumber: 1,
+            column: 13,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '( { get x() {} } ) = 0': {
+            index: 18,
+            lineNumber: 1,
+            column: 19,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
         '1 + (': {
             index: 5,
             lineNumber: 1,
