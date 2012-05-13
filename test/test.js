@@ -15325,6 +15325,43 @@ data = {
             }
         },
 
+        'module System is SolarSystem from "Universe"': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'System',
+                range: [7, 13],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            is: {
+                type: 'Identifier',
+                name: 'SolarSystem',
+                range: [17, 28],
+                loc: {
+                    start: { line: 1, column: 17 },
+                    end: { line: 1, column: 28 }
+                }
+            },
+            from: {
+                type: 'Literal',
+                value: 'Universe',
+                raw: '"Universe"',
+                range: [34, 44],
+                loc: {
+                    start: { line: 1, column: 34 },
+                    end: { line: 1, column: 44 }
+                }
+            },
+            range: [0, 44],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 44 }
+            }
+        },
+
         'module System is SolarSystem': {
             type: 'ModuleDeclaration',
             id: {
@@ -16721,6 +16758,20 @@ data = {
             index: 16,
             lineNumber: 1,
             column: 17,
+            message: 'Error: Line 1: Unexpected identifier'
+        },
+
+        'module X 0': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected number'
+        },
+
+        'module X at Y': {
+            index: 12,
+            lineNumber: 1,
+            column: 13,
             message: 'Error: Line 1: Unexpected identifier'
         }
 
