@@ -2025,7 +2025,7 @@ parseStatement: true, parseSourceElement: true */
                 }
             }
         } else if (expr.type === Syntax.Identifier) {
-            if (expr.name === 'super') {
+            if (isRestrictedWord(expr.name)) {
                 throwError({}, Messages.InvalidLHSInAssignment);
             }
         } else {

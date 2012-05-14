@@ -16646,6 +16646,27 @@ data = {
             message: 'Error: Line 1: Unexpected token let'
         },
 
+        'var super': {
+            index: 4,
+            lineNumber: 1,
+            column: 5,
+            message: 'Error: Line 1: Unexpected reserved word'
+        },
+
+        '({ v: eval }) = obj': {
+            index: 13,
+            lineNumber: 1,
+            column: 14,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '({ v: arguments }) = obj': {
+            index: 18,
+            lineNumber: 1,
+            column: 19,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
         '"use strict"; function static() { }': {
             index: 23,
             lineNumber: 1,
