@@ -1449,7 +1449,7 @@ parseStatement: true, parseSourceElement: true */
             if (Object.prototype.hasOwnProperty.call(map, name)) {
                 if (map[name] === PropertyKind.Data) {
                     if (strict && kind === PropertyKind.Data) {
-                        throwError({}, Messages.StrictDuplicateProperty);
+                        throwErrorTolerant({}, Messages.StrictDuplicateProperty);
                     } else if (kind !== PropertyKind.Data) {
                         throwError({}, Messages.AccessorDataProperty);
                     }

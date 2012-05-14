@@ -16813,6 +16813,127 @@ data = {
                 column: 28,
                 message: 'Error: Line 1: Variable name may not be eval or arguments in strict mode'
             }]
+        },
+
+        '"use strict";x={y:1,y:1}': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [13, 14],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    right: {
+                        type: 'ObjectExpression',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'y',
+                                range: [16, 17],
+                                loc: {
+                                    start: { line: 1, column: 16 },
+                                    end: { line: 1, column: 17 }
+                                }
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 1,
+                                raw: '1',
+                                range: [18, 19],
+                                loc: {
+                                    start: { line: 1, column: 18 },
+                                    end: { line: 1, column: 19 }
+                                }
+                            },
+                            kind: 'init',
+                            range: [16, 19],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 19 }
+                            }
+                        }, {
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'y',
+                                range: [20, 21],
+                                loc: {
+                                    start: { line: 1, column: 20 },
+                                    end: { line: 1, column: 21 }
+                                }
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 1,
+                                raw: '1',
+                                range: [22, 23],
+                                loc: {
+                                    start: { line: 1, column: 22 },
+                                    end: { line: 1, column: 23 }
+                                }
+                            },
+                            kind: 'init',
+                            range: [20, 23],
+                            loc: {
+                                start: { line: 1, column: 20 },
+                                end: { line: 1, column: 23 }
+                            }
+                        }],
+                        range: [15, 24],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 24 }
+                        }
+                    },
+                    range: [13, 24],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                range: [13, 24],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 24 }
+                }
+            }],
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 24 }
+            },
+            errors: [{
+                index: 23,
+                lineNumber: 1,
+                column: 24,
+                message: 'Error: Line 1: Duplicate data property in object literal not allowed in strict mode'
+            }]
         }
 
     }
