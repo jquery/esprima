@@ -15245,7 +15245,7 @@ data = {
             }
         },
 
-        'module MilkyWay at "Universe/MilkyWay"': {
+        'module MilkyWay = "Universe/MilkyWay"': {
             type: 'ModuleDeclaration',
             id: {
                 type: 'Identifier',
@@ -15256,24 +15256,24 @@ data = {
                     end: { line: 1, column: 15 }
                 }
             },
-            at: {
+            from: {
                 type: 'Literal',
                 value: 'Universe/MilkyWay',
                 raw: '"Universe/MilkyWay"',
-                range: [19, 38],
+                range: [18, 37],
                 loc: {
-                    start: { line: 1, column: 19 },
-                    end: { line: 1, column: 38 }
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 37 }
                 }
             },
-            range: [0, 38],
+            range: [0, 37],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 38 }
+                end: { line: 1, column: 37 }
             }
         },
 
-        'module System is SolarSystem from Universe.MilkyWay': {
+        'module System = Universe.MilkyWay.SolarSystem': {
             type: 'ModuleDeclaration',
             id: {
                 type: 'Identifier',
@@ -15282,15 +15282,6 @@ data = {
                 loc: {
                     start: { line: 1, column: 7 },
                     end: { line: 1, column: 13 }
-                }
-            },
-            is: {
-                type: 'Identifier',
-                name: 'SolarSystem',
-                range: [17, 28],
-                loc: {
-                    start: { line: 1, column: 17 },
-                    end: { line: 1, column: 28 }
                 }
             },
             from: {
@@ -15298,34 +15289,42 @@ data = {
                 body: [{
                     type: 'Identifier',
                     name: 'Universe',
-                    range: [34, 42],
+                    range: [16, 24],
                     loc: {
-                        start: { line: 1, column: 34 },
-                        end: { line: 1, column: 42 }
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 24 }
                     }
                 }, {
                     type: 'Identifier',
                     name: 'MilkyWay',
-                    range: [43, 51],
+                    range: [25, 33],
                     loc: {
-                        start: { line: 1, column: 43 },
-                        end: { line: 1, column: 51 }
+                        start: { line: 1, column: 25 },
+                        end: { line: 1, column: 33 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 'SolarSystem',
+                    range: [34, 45],
+                    loc: {
+                        start: { line: 1, column: 34 },
+                        end: { line: 1, column: 45 }
                     }
                 }],
-                range: [34, 51],
+                range: [16, 45],
                 loc: {
-                    start: { line: 1, column: 34 },
-                    end: { line: 1, column: 51 }
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 45 }
                 }
             },
-            range: [0, 51],
+            range: [0, 45],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 51 }
+                end: { line: 1, column: 45 }
             }
         },
 
-        'module System is SolarSystem from "Universe"': {
+        'module System = SolarSystem': {
             type: 'ModuleDeclaration',
             id: {
                 type: 'Identifier',
@@ -15334,59 +15333,29 @@ data = {
                 loc: {
                     start: { line: 1, column: 7 },
                     end: { line: 1, column: 13 }
-                }
-            },
-            is: {
-                type: 'Identifier',
-                name: 'SolarSystem',
-                range: [17, 28],
-                loc: {
-                    start: { line: 1, column: 17 },
-                    end: { line: 1, column: 28 }
                 }
             },
             from: {
-                type: 'Literal',
-                value: 'Universe',
-                raw: '"Universe"',
-                range: [34, 44],
+                type: 'Path',
+                body: [{
+                    type: 'Identifier',
+                    name: 'SolarSystem',
+                    range: [16, 27],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 27 }
+                    }
+                }],
+                range: [16, 27],
                 loc: {
-                    start: { line: 1, column: 34 },
-                    end: { line: 1, column: 44 }
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 27 }
                 }
             },
-            range: [0, 44],
+            range: [0, 27],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 44 }
-            }
-        },
-
-        'module System is SolarSystem': {
-            type: 'ModuleDeclaration',
-            id: {
-                type: 'Identifier',
-                name: 'System',
-                range: [7, 13],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 13 }
-                }
-            },
-            is: {
-                type: 'Identifier',
-                name: 'SolarSystem',
-                range: [17, 28],
-                loc: {
-                    start: { line: 1, column: 17 },
-                    end: { line: 1, column: 28 }
-                }
-            },
-            from: null,
-            range: [0, 28],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 28 }
+                end: { line: 1, column: 27 }
             }
         }
 
@@ -16769,10 +16738,24 @@ data = {
         },
 
         'module X at Y': {
-            index: 12,
+            index: 9,
             lineNumber: 1,
-            column: 13,
+            column: 10,
             message: 'Error: Line 1: Unexpected identifier'
+        },
+
+        'module\n X = Y': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Illegal newline after module'
+        },
+
+        'module\n X = "Y"': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Illegal newline after module'
         }
 
     },

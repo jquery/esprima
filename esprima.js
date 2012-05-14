@@ -140,6 +140,7 @@ parseStatement: true, parseSourceElement: true */
         UnexpectedReserved:  'Unexpected reserved word',
         UnexpectedEOS:  'Unexpected end of input',
         NewlineAfterThrow:  'Illegal newline after throw',
+        NewlineAfterModule:  'Illegal newline after module',
         InvalidRegExp: 'Invalid regular expression',
         UnterminatedRegExp:  'Invalid regular expression: missing /',
         InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
@@ -2240,6 +2241,10 @@ parseStatement: true, parseSourceElement: true */
 
         expectKeyword('module');
 
+        if (peekLineTerminator()) {
+            throwError({}, Messages.NewlineAfterModule);
+        }
+
         id = parseVariableIdentifier();
 
         if (match('{')) {
@@ -2250,36 +2255,21 @@ parseStatement: true, parseSourceElement: true */
             };
         }
 
-        if (matchContextualKeyword('at')) {
-            lex();
-            token = lookahead();
-            if (token.type !== Token.StringLiteral) {
-                return throwUnexpected(token);
-            }
+        expect('=');
+
+        token = lookahead();
+        if (token.type === Token.StringLiteral) {
             declaration = {
                 type: Syntax.ModuleDeclaration,
                 id: id,
-                at: parsePrimaryExpression()
+                from: parsePrimaryExpression()
             };
-        } else if (matchContextualKeyword('is')) {
-            lex();
-            declaration = {
-                type: Syntax.ModuleDeclaration,
-                id: id,
-                is: parseVariableIdentifier(),
-                from: null
-            };
-            if (matchContextualKeyword('from')) {
-                lex();
-                token = lookahead();
-                if (token.type === Token.StringLiteral) {
-                    declaration.from = parsePrimaryExpression();
-                } else {
-                    declaration.from = parsePath();
-                }
-            }
         } else {
-            throwUnexpected(lex());
+            declaration = {
+                type: Syntax.ModuleDeclaration,
+                id: id,
+                from: parsePath()
+            };
         }
 
         consumeSemicolon();
