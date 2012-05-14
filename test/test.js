@@ -16543,6 +16543,160 @@ data = {
             }]
         },
 
+        '"use strict"; try {} catch (eval) {}': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'TryStatement',
+                block: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [18, 20],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 20 }
+                    }
+                },
+                handlers: [{
+                    type: 'CatchClause',
+                    param: {
+                        type: 'Identifier',
+                        name: 'eval',
+                        range: [28, 32],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 32 }
+                        }
+                    },
+                    guard: null,
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [34, 36],
+                        loc: {
+                            start: { line: 1, column: 34 },
+                            end: { line: 1, column: 36 }
+                        }
+                    },
+                    range: [21, 36],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 36 }
+                    }
+                }],
+                finalizer: null,
+                range: [14, 36],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 36 }
+                }
+            }],
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            },
+            errors: [{
+                index: 32,
+                lineNumber: 1,
+                column: 33,
+                message: 'Error: Line 1: Catch variable may not be eval or arguments in strict mode'
+            }]
+        },
+
+        '"use strict"; try {} catch (arguments) {}': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'TryStatement',
+                block: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [18, 20],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 20 }
+                    }
+                },
+                handlers: [{
+                    type: 'CatchClause',
+                    param: {
+                        type: 'Identifier',
+                        name: 'arguments',
+                        range: [28, 37],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 37 }
+                        }
+                    },
+                    guard: null,
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [39, 41],
+                        loc: {
+                            start: { line: 1, column: 39 },
+                            end: { line: 1, column: 41 }
+                        }
+                    },
+                    range: [21, 41],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 41 }
+                    }
+                }],
+                finalizer: null,
+                range: [14, 41],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 41 }
+                }
+            }],
+            range: [0, 41],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 41 }
+            },
+            errors: [{
+                index: 37,
+                lineNumber: 1,
+                column: 38,
+                message: 'Error: Line 1: Catch variable may not be eval or arguments in strict mode'
+            }]
+        },
+
         '"use strict"; var eval;': {
             type: 'Program',
             body: [{
