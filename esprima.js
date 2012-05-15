@@ -1435,25 +1435,45 @@ parseStatement: true, parseSourceElement: true */
                     kind: 'set'
                 };
             } else {
-                expect(':');
-                return {
-                    type: Syntax.Property,
-                    key: id,
-                    value: parseAssignmentExpression(),
-                    kind: 'init'
-                };
+                if (match(':')) {
+                    lex();
+                    return {
+                        type: Syntax.Property,
+                        key: id,
+                        value: parseAssignmentExpression(),
+                        kind: 'init'
+                    };
+                } else {
+                    return {
+                        type: Syntax.Property,
+                        key: id,
+                        value: id,
+                        kind: 'init',
+                        shorthand: true
+                    };
+                }
             }
         } else if (token.type === Token.EOF || token.type === Token.Punctuator) {
             throwUnexpected(token);
         } else {
             key = parseObjectPropertyKey();
-            expect(':');
-            return {
-                type: Syntax.Property,
-                key: key,
-                value: parseAssignmentExpression(),
-                kind: 'init'
-            };
+            if (match(':')) {
+                lex();
+                return {
+                    type: Syntax.Property,
+                    key: key,
+                    value: parseAssignmentExpression(),
+                    kind: 'init'
+                };
+            } else {
+                return {
+                    type: Syntax.Property,
+                    key: key,
+                    value: key,
+                    kind: 'init',
+                    shorthand: true
+                };
+            }
         }
     }
 
