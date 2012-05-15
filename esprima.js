@@ -967,15 +967,20 @@ parseStatement: true, parseSourceElement: true */
                 }
             } else {
                 if (ch === '\\') {
-                    str += nextChar();
+                    ch = nextChar();
+                    // ECMA-262 7.8.5
+                    if (isLineTerminator(ch)) {
+                        throwError({}, Messages.UnterminatedRegExp);
+                    }
+                    str += ch;
                 }
-                if (ch === '/') {
+                else if (ch === '/') {
                     break;
                 }
-                if (ch === '[') {
+                else if (ch === '[') {
                     classMarker = true;
                 }
-                if (isLineTerminator(ch)) {
+                else if (isLineTerminator(ch)) {
                     throwError({}, Messages.UnterminatedRegExp);
                 }
             }

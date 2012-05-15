@@ -15488,6 +15488,13 @@ data = {
             message: 'Error: Line 3: Unexpected token ]'
         },
 
+        '/a\\\n/': {
+            index: 4,
+            lineNumber: 1,
+            column: 5,
+            message: 'Error: Line 1: Invalid regular expression: missing /'
+        },
+        
         '//\r \n]': {
             index: 5,
             lineNumber: 3,
