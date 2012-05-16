@@ -10,36 +10,36 @@ Esprima is created and maintained by [Ariya Hidayat](http://ariya.ofilabs.com/ab
 ### Features
 
 - Supports [ECMAScript 5.1](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
-with an experimental branch for ES.Next/Harmony.
+with an experimental branch for ES.Next/Harmony
 - Sensible format for the abstract syntax tree (AST), compatible with Mozilla
-[Parser API](https://developer.mozilla.org/en/SpiderMonkey/Parser_API).
-- Heavily tested (> 500 [unit tests](http://esprima.org/test/) with solid 100% code coverage).
-- Optional tracking of syntax node location (index-based and line-column).
+[Parser API](https://developer.mozilla.org/en/SpiderMonkey/Parser_API)
+- Heavily tested (> 500 [unit tests](http://esprima.org/test/) with solid 100% code coverage)
+- Optional tracking of syntax node location (index-based and line-column)
 - [Blazing fast](http://esprima.org/test/benchmarks.html), up to 2.5x faster than
-UglifyJS `parse-js` ([speed comparison](http://esprima.org/test/compare.html)).
+UglifyJS `parse-js` ([speed comparison](http://esprima.org/test/compare.html))
 
 Esprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror 4.6+, Opera 8+) as well as
 [Node.js](http://nodejs.org).
 
 ### Use-cases
 
-- Smart editing: [outline view](https://github.com/aclement/esprima-outline), [content assist](http://contraptionsforprogramming.blogspot.com/2012/02/better-javascript-content-assist-in.html).
+- Smart editing: [outline view](https://github.com/aclement/esprima-outline), [content assist](http://contraptionsforprogramming.blogspot.com/2012/02/better-javascript-content-assist-in.html)
 - Source code modification: [Esmorph](https://github.com/ariya/esmorph), [Code Painter](https://github.com/fawek/codepainter),
-  [node-falafel](https://github.com/substack/node-falafel).
+  [node-falafel](https://github.com/substack/node-falafel)
 - Code coverage analysis: [node-cover](https://github.com/itay/node-cover),
 [coveraje](https://github.com/coveraje/coveraje),
-[CoverJS](https://github.com/arian/CoverJS).
-- Code generation: [escodegen](https://github.com/Constellation/escodegen).
+[CoverJS](https://github.com/arian/CoverJS)
+- Code generation: [escodegen](https://github.com/Constellation/escodegen)
 - Source-to-source compilation: [Marv](https://github.com/Yoric/Marv-the-Tinker),
-[LLJS](http://mbebenita.github.com/LLJS/).
+[LLJS](http://mbebenita.github.com/LLJS/)
 
 
 ### Questions?
-- [Documentation (wiki)](http://wiki.esprima.org).
+- [Documentation (wiki)](http://wiki.esprima.org)
 - [Issue tracker](http://issues.esprima.org): [known problems](http://code.google.com/p/esprima/issues/list?q=Defect)
-and [future plans](http://code.google.com/p/esprima/issues/list?q=Enhancement).
-- [Mailing list](http://groups.google.com/group/esprima).
-- [Contribution guide](http://code.google.com/p/esprima/wiki/ContributionGuide).
+and [future plans](http://code.google.com/p/esprima/issues/list?q=Enhancement)
+- [Mailing list](http://groups.google.com/group/esprima)
+- [Contribution guide](http://code.google.com/p/esprima/wiki/ContributionGuide)
 
 Feedback and contribution are welcomed!
 
