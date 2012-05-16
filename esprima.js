@@ -967,15 +967,20 @@ parseStatement: true, parseSourceElement: true */
                 }
             } else {
                 if (ch === '\\') {
-                    str += nextChar();
+                    ch = nextChar();
+                    // ECMA-262 7.8.5
+                    if (isLineTerminator(ch)) {
+                        throwError({}, Messages.UnterminatedRegExp);
+                    }
+                    str += ch;
                 }
-                if (ch === '/') {
+                else if (ch === '/') {
                     break;
                 }
-                if (ch === '[') {
+                else if (ch === '[') {
                     classMarker = true;
                 }
-                if (isLineTerminator(ch)) {
+                else if (isLineTerminator(ch)) {
                     throwError({}, Messages.UnterminatedRegExp);
                 }
             }
@@ -1449,7 +1454,7 @@ parseStatement: true, parseSourceElement: true */
             if (Object.prototype.hasOwnProperty.call(map, name)) {
                 if (map[name] === PropertyKind.Data) {
                     if (strict && kind === PropertyKind.Data) {
-                        throwError({}, Messages.StrictDuplicateProperty);
+                        throwErrorTolerant({}, Messages.StrictDuplicateProperty);
                     } else if (kind !== PropertyKind.Data) {
                         throwError({}, Messages.AccessorDataProperty);
                     }
@@ -2626,7 +2631,7 @@ parseStatement: true, parseSourceElement: true */
             param = parseExpression();
             // 12.14.1
             if (strict && param.type === Syntax.Identifier && isRestrictedWord(param.name)) {
-                throwError({}, Messages.StrictCatchVariable);
+                throwErrorTolerant({}, Messages.StrictCatchVariable);
             }
         }
         expect(')');
@@ -3546,6 +3551,27 @@ parseStatement: true, parseSourceElement: true */
     exports.version = '1.0.0-dev';
 
     exports.parse = parse;
+
+    // Deep copy.
+    exports.Syntax = (function () {
+        var name, types = {};
+
+        if (typeof Object.create === 'function') {
+            types = Object.create(null);
+        }
+
+        for (name in Syntax) {
+            if (Syntax.hasOwnProperty(name)) {
+                types[name] = Syntax[name];
+            }
+        }
+
+        if (typeof Object.freeze === 'function') {
+            Object.freeze(types);
+        }
+
+        return types;
+    }());
 
 }(typeof exports === 'undefined' ? (esprima = {}) : exports));
 /* vim: set sw=4 ts=4 et tw=80 : */

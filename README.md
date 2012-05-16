@@ -3,55 +3,50 @@ Esprima ([esprima.org](http://esprima.org)) is an educational
 (also popularly known as [JavaScript](http://en.wikipedia.org/wiki/JavaScript>JavaScript))
 parsing infrastructure for multipurpose analysis. It is also written in ECMAScript.
 
-Esprima serves as a good basis for various tools such as source
-modification ([Esmorph](https://github.com/ariya/esmorph),
-[node-falafel](https://github.com/substack/node-falafel)), coverage analyzer
-([node-cover](https://github.com/itay/node-cover),
+Esprima is created and maintained by [Ariya Hidayat](http://ariya.ofilabs.com/about)
+(Twitter: [@ariyahidayat](http://twitter.com/ariyahidayat)), with the help of
+[many contributors](https://github.com/ariya/esprima/contributors).
+
+### Features
+
+- Supports [ECMAScript 5.1](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
+with an experimental branch for ES.Next/Harmony
+- Sensible format for the abstract syntax tree (AST), compatible with Mozilla
+[Parser API](https://developer.mozilla.org/en/SpiderMonkey/Parser_API)
+- Heavily tested (> 500 [unit tests](http://esprima.org/test/) with solid 100% code coverage)
+- Optional tracking of syntax node location (index-based and line-column)
+- [Blazing fast](http://esprima.org/test/benchmarks.html), up to 2.5x faster than
+UglifyJS `parse-js` ([speed comparison](http://esprima.org/test/compare.html))
+
+Esprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror 4.6+, Opera 8+) as well as
+[Node.js](http://nodejs.org).
+
+### Use-cases
+
+- Smart editing: [outline view](https://github.com/aclement/esprima-outline), [content assist](http://contraptionsforprogramming.blogspot.com/2012/02/better-javascript-content-assist-in.html)
+- Source code modification: [Esmorph](https://github.com/ariya/esmorph), [Code Painter](https://github.com/fawek/codepainter),
+  [node-falafel](https://github.com/substack/node-falafel)
+- Code coverage analysis: [node-cover](https://github.com/itay/node-cover),
 [coveraje](https://github.com/coveraje/coveraje),
-[CoverJS](https://github.com/arian/CoverJS)),
-source-to-source compiler ([Marv](https://github.com/Yoric/Marv-the-Tinker)),
-syntax formatter ([Code Painter](https://github.com/fawek/codepainter)),
-and code generator ([escodegen](https://github.com/Constellation/escodegen)).
+[CoverJS](https://github.com/arian/CoverJS)
+- Code generation: [escodegen](https://github.com/Constellation/escodegen)
+- Source-to-source compilation: [Marv](https://github.com/Yoric/Marv-the-Tinker),
+[LLJS](http://mbebenita.github.com/LLJS/)
 
-Esprima can be used in a web browser:
 
-    <script src="esprima.js"></script>
+### Questions?
+- [Documentation (wiki)](http://wiki.esprima.org)
+- [Issue tracker](http://issues.esprima.org): [known problems](http://code.google.com/p/esprima/issues/list?q=Defect)
+and [future plans](http://code.google.com/p/esprima/issues/list?q=Enhancement)
+- [Mailing list](http://groups.google.com/group/esprima)
+- [Contribution guide](http://code.google.com/p/esprima/wiki/ContributionGuide)
 
-or in a Node.js application via the package manager:
-
-    npm install esprima
-
-Esprima parser output is compatible with Mozilla (SpiderMonkey)
-[Parser API](https://developer.mozilla.org/en/SpiderMonkey/Parser_API).
-
-A very simple example:
-
-    esprima.parse('var answer=42').body[0].declarations[0].init
-
-produces the following object:
-
-    { type: 'Literal', value: 42 }
-
-Esprima is still in the development, for now please check
-[the wiki documentation](http://wiki.esprima.org).
-
-Since it is not comprehensive nor complete, refer to the
-[issue tracker](http://issues.esprima.org) for
-[known problems](http://code.google.com/p/esprima/issues/list?q=Defect)
-and [future plans](http://code.google.com/p/esprima/issues/list?q=Enhancement).
-Esprima is supported on [many browsers](http://code.google.com/p/esprima/wiki/BrowserCompatibility):
-IE 6+, Firefox 1+, Safari 3+, Chrome 1+, and Opera 8+.
-
-Feedback and contribution are welcomed! Please join the
-[mailing list](http://groups.google.com/group/esprima) and read the
-[contribution guide](http://code.google.com/p/esprima/wiki/ContributionGuide)
-for further info.
-
+Feedback and contribution are welcomed!
 
 ### License
 
 Copyright (C) 2012, 2011 [Ariya Hidayat](http://ariya.ofilabs.com/about)
- (twitter: [@ariyahidayat](http://twitter.com/ariyahidayat)) and other contributors.
+ and other contributors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
