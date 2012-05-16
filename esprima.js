@@ -978,15 +978,20 @@ parseStatement: true, parseSourceElement: true */
                 }
             } else {
                 if (ch === '\\') {
-                    str += nextChar();
+                    ch = nextChar();
+                    // ECMA-262 7.8.5
+                    if (isLineTerminator(ch)) {
+                        throwError({}, Messages.UnterminatedRegExp);
+                    }
+                    str += ch;
                 }
-                if (ch === '/') {
+                else if (ch === '/') {
                     break;
                 }
-                if (ch === '[') {
+                else if (ch === '[') {
                     classMarker = true;
                 }
-                if (isLineTerminator(ch)) {
+                else if (isLineTerminator(ch)) {
                     throwError({}, Messages.UnterminatedRegExp);
                 }
             }
@@ -1494,7 +1499,7 @@ parseStatement: true, parseSourceElement: true */
             if (Object.prototype.hasOwnProperty.call(map, name)) {
                 if (map[name] === PropertyKind.Data) {
                     if (strict && kind === PropertyKind.Data) {
-                        throwError({}, Messages.StrictDuplicateProperty);
+                        throwErrorTolerant({}, Messages.StrictDuplicateProperty);
                     } else if (kind !== PropertyKind.Data) {
                         throwError({}, Messages.AccessorDataProperty);
                     }
@@ -2811,7 +2816,7 @@ parseStatement: true, parseSourceElement: true */
             param = parseExpression();
             // 12.14.1
             if (strict && param.type === Syntax.Identifier && isRestrictedWord(param.name)) {
-                throwError({}, Messages.StrictCatchVariable);
+                throwErrorTolerant({}, Messages.StrictCatchVariable);
             }
         }
         expect(')');
