@@ -35,11 +35,11 @@ Esprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror
 
 
 ### Questions?
-- [Documentation (wiki)](http://wiki.esprima.org)
+- [Documentation](http://esprima.org/doc)
 - [Issue tracker](http://issues.esprima.org): [known problems](http://code.google.com/p/esprima/issues/list?q=Defect)
 and [future plans](http://code.google.com/p/esprima/issues/list?q=Enhancement)
 - [Mailing list](http://groups.google.com/group/esprima)
-- [Contribution guide](http://code.google.com/p/esprima/wiki/ContributionGuide)
+- [Contribution guide](http://esprima.org/doc/index.html#contribution)
 
 Feedback and contribution are welcomed!
 
