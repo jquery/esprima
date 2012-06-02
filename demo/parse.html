@@ -23,6 +23,11 @@
     background-color: #eee;
 }
 
+label {
+    margin-left: 5px;
+    margin-right: 15px;
+}
+
 table th, table td {
     text-align: left;
     background-color: white;
@@ -231,13 +236,11 @@ function parse(delay) {
 // Life, Universe, and Everything
 var answer = 6 * 7;</textarea></p>
 <p id="codemirror" align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
-<p><label><input type="checkbox" id="raw"> Preserve raw value of literals</label></p>
-<p><label><input type="checkbox" id="comment"> Include comments</label></p>
-<p>  Syntax node location info (start, end)</p>
-<div style="margin-left: 20px;">
-<p><label><input type="checkbox" id="range">Index-based range</label></p>
-<p><label><input type="checkbox" id="loc">Line and column-based</label></p>
-</div>
+<p><label><input type="checkbox" id="raw"> Preserve raw value of literals</label>
+<label><input type="checkbox" id="comment"> Include comments</label></p>
+<p>Syntax node location info (start, end):
+<label><input type="checkbox" id="range">Index-based range</label>
+<label><input type="checkbox" id="loc">Line and column-based</label></p>
 <div class="tabs">
     <ul>
     <li id="tab_syntax" class="active">
