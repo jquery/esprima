@@ -732,6 +732,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
 
             // Hex number starts with '0x'.
             // Octal number starts with '0'.
+            // Octal number in ES6 starts with '0o'.
             if (number === '0') {
                 if (ch === 'x' || ch === 'X') {
                     number += nextChar();
@@ -761,14 +762,25 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                         lineStart: lineStart,
                         range: [start, index]
                     };
-                } else if (isOctalDigit(ch)) {
-                    number += nextChar();
+                } else if (ch === 'o' || ch === 'O' || isOctalDigit(ch)) {
+                    if (isOctalDigit(ch)) {
+                        number = nextChar();
+                    } else {
+                        nextChar();
+                        number = '';
+                    }
+
                     while (index < length) {
                         ch = source[index];
                         if (!isOctalDigit(ch)) {
                             break;
                         }
                         number += nextChar();
+                    }
+
+                    if (number.length === 0) {
+                        // only 0x
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
 
                     if (index < length) {
