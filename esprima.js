@@ -34,6 +34,7 @@ throwError: true, createLiteral: true, generateStatement: true,
 parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
 parseFunctionSourceElements: true, parseVariableIdentifier: true,
+parseImportSpecifier: true,
 parseLeftHandSideExpression: true,
 parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
 
