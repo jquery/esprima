@@ -718,7 +718,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
     // 7.8.3 Numeric Literals
 
     function scanNumericLiteral() {
-        var number, start, ch;
+        var number, start, ch, octal;
 
         ch = source[index];
         assert(isDecimalDigit(ch) || (ch === '.'),
@@ -732,6 +732,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
 
             // Hex number starts with '0x'.
             // Octal number starts with '0'.
+            // Octal number in ES6 starts with '0o'.
+            // Binary number in ES6 starts with '0b'.
             if (number === '0') {
                 if (ch === 'x' || ch === 'X') {
                     number += nextChar();
@@ -761,14 +763,21 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                         lineStart: lineStart,
                         range: [start, index]
                     };
-                } else if (isOctalDigit(ch)) {
-                    number += nextChar();
+                } else if (ch === 'b' || ch === 'B') {
+                    nextChar();
+                    number = '';
+
                     while (index < length) {
                         ch = source[index];
-                        if (!isOctalDigit(ch)) {
+                        if (ch !== '0' && ch !== '1') {
                             break;
                         }
                         number += nextChar();
+                    }
+
+                    if (number.length === 0) {
+                        // only 0b or 0B
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
 
                     if (index < length) {
@@ -779,8 +788,45 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                     }
                     return {
                         type: Token.NumericLiteral,
+                        value: parseInt(number, 2),
+                        lineNumber: lineNumber,
+                        lineStart: lineStart,
+                        range: [start, index]
+                    };
+                } else if (ch === 'o' || ch === 'O' || isOctalDigit(ch)) {
+                    if (isOctalDigit(ch)) {
+                        octal = true;
+                        number = nextChar();
+                    } else {
+                        octal = false;
+                        nextChar();
+                        number = '';
+                    }
+
+                    while (index < length) {
+                        ch = source[index];
+                        if (!isOctalDigit(ch)) {
+                            break;
+                        }
+                        number += nextChar();
+                    }
+
+                    if (number.length === 0) {
+                        // only 0o or 0O
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    }
+
+                    if (index < length) {
+                        ch = source[index];
+                        if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
+                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                        }
+                    }
+
+                    return {
+                        type: Token.NumericLiteral,
                         value: parseInt(number, 8),
-                        octal: true,
+                        octal: octal,
                         lineNumber: lineNumber,
                         lineStart: lineStart,
                         range: [start, index]
