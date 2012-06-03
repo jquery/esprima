@@ -1582,7 +1582,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             } else if (match('(')) {
                 return {
                     type: Syntax.Property,
-                    key: id,
+                    key: key,
                     value: parsePropertyMethodFunction(),
                     kind: 'init',
                     method: true
