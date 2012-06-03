@@ -4042,6 +4042,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             parseFunctionDeclaration = extra.parseFunctionDeclaration;
             parseFunctionExpression = extra.parseFunctionExpression;
             parseGlob = extra.parseGlob;
+            parseImportDeclaration = extra.parseImportDeclaration;
+            parseImportSpecifier = extra.parseImportSpecifier;
             parseLogicalANDExpression = extra.parseLogicalANDExpression;
             parseLogicalORExpression = extra.parseLogicalORExpression;
             parseMultiplicativeExpression = extra.parseMultiplicativeExpression;
