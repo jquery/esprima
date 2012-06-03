@@ -3461,6 +3461,250 @@ data = {
             }
         },
 
+        'x = { method() 42 }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'method',
+                            range: [6, 12],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 12 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'Literal',
+                                value: 42,
+                                raw: '42',
+                                range: [15, 17],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 17 }
+                                }
+                            },
+                            range: [15, 17],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 17 }
+                            }
+                        },
+                        kind: 'init',
+                        method: true,
+                        range: [6, 17],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 17 }
+                        }
+                    }],
+                    range: [4, 19],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 19 }
+                    }
+                },
+                range: [0, 19],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 19 }
+                }
+            },
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        },
+
+        'x = { get method() 42 }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'method',
+                            range: [10, 16],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 16 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'Literal',
+                                value: 42,
+                                raw: '42',
+                                range: [19, 21],
+                                loc: {
+                                    start: { line: 1, column: 19 },
+                                    end: { line: 1, column: 21 }
+                                }
+                            },
+                            range: [19, 21],
+                            loc: {
+                                start: { line: 1, column: 19 },
+                                end: { line: 1, column: 21 }
+                            }
+                        },
+                        kind: 'get',
+                        range: [6, 21],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 21 }
+                        }
+                    }],
+                    range: [4, 23],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 23 }
+                    }
+                },
+                range: [0, 23],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
+        },
+
+        'x = { set method(val) v = val }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'method',
+                            range: [10, 16],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 16 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'val',
+                                range: [17, 20],
+                                loc: {
+                                    start: { line: 1, column: 17 },
+                                    end: { line: 1, column: 20 }
+                                }
+                            }],
+                            body: {
+                                type: 'AssignmentExpression',
+                                operator: '=',
+                                left: {
+                                    type: 'Identifier',
+                                    name: 'v',
+                                    range: [22, 23],
+                                    loc: {
+                                        start: { line: 1, column: 22 },
+                                        end: { line: 1, column: 23 }
+                                    }
+                                },
+                                right: {
+                                    type: 'Identifier',
+                                    name: 'val',
+                                    range: [26, 29],
+                                    loc: {
+                                        start: { line: 1, column: 26 },
+                                        end: { line: 1, column: 29 }
+                                    }
+                                },
+                                range: [22, 29],
+                                loc: {
+                                    start: { line: 1, column: 22 },
+                                    end: { line: 1, column: 29 }
+                                }
+                            },
+                            range: [22, 29],
+                            loc: {
+                                start: { line: 1, column: 22 },
+                                end: { line: 1, column: 29 }
+                            }
+                        },
+                        kind: 'set',
+                        range: [6, 29],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 29 }
+                        }
+                    }],
+                    range: [4, 31],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 31 }
+                    }
+                },
+                range: [0, 31],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 31 }
+                }
+            },
+            range: [0, 31],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 31 }
+            }
+        },
 
         'x = #{}': {
             type: 'ExpressionStatement',

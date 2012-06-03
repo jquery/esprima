@@ -36,7 +36,7 @@ parseFunctionDeclaration: true, parseFunctionExpression: true,
 parseFunctionSourceElements: true, parseVariableIdentifier: true,
 parseImportSpecifier: true,
 parseLeftHandSideExpression: true,
-parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
+parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseConciseBody: true */
 
 (function (exports) {
     'use strict';
@@ -1433,7 +1433,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
         var previousStrict, body;
 
         previousStrict = strict;
-        body = parseFunctionSourceElements();
+        body = parseConciseBody();
         if (first && strict && isRestrictedWord(param[0].name)) {
             throwError(first, Messages.StrictParamName);
         }
@@ -3302,6 +3302,14 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
     }
 
     // 13 Function Definition
+
+    function parseConciseBody() {
+        if (match('{')) {
+            return parseFunctionSourceElements();
+        } else {
+            return parseAssignmentExpression();
+        }
+    }
 
     function parseFunctionSourceElements() {
         var sourceElement, sourceElements = [], token, directive, firstRestricted,
