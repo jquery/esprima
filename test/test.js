@@ -15541,8 +15541,555 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 27 }
             }
-        }
+        },
 
+        'export var document': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'document',
+                        range: [ 11, 19 ],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: null,
+                    range: [ 11, 19 ],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 19 }
+                    }
+                }],
+                kind: 'var',
+                range: [ 7, 19 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 19 }
+                }
+            },
+            range: [ 0, 19 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        },
+
+        'export var document = { }': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'document',
+                        range: [ 11, 19 ],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: {
+                        type: 'ObjectExpression',
+                        properties: [],
+                        range: [ 22, 25 ],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    range: [ 11, 25 ],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 25 }
+                    }
+                }],
+                kind: 'var',
+                range: [ 7, 25 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [ 0, 25 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'export let document': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'document',
+                        range: [ 11, 19 ],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: null,
+                    range: [ 11, 19 ],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 19 }
+                    }
+                }],
+                kind: 'let',
+                range: [ 7, 19 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 19 }
+                }
+            },
+            range: [ 0, 19 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        },
+
+        'export let document = { }': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'document',
+                        range: [ 11, 19 ],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: {
+                        type: 'ObjectExpression',
+                        properties: [],
+                        range: [ 22, 25 ],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    range: [ 11, 25 ],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 25 }
+                    }
+                }],
+                kind: 'let',
+                range: [ 7, 25 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [ 0, 25 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'export const document = { }': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'document',
+                        range: [ 13, 21 ],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 21 }
+                        }
+                    },
+                    init: {
+                        type: 'ObjectExpression',
+                        properties: [],
+                        range: [ 24, 27 ],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 27 }
+                        }
+                    },
+                    range: [ 13, 27 ],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 27 }
+                    }
+                }],
+                kind: 'const',
+                range: [ 7, 27 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 27 }
+                }
+            },
+            range: [ 0, 27 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
+            }
+        },
+
+        'export function parse() { }': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'parse',
+                    range: [ 16, 21 ],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 21 }
+                    }
+                },
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [ 24, 27 ],
+                    loc: {
+                        start: { line: 1, column: 24 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                range: [ 7, 27 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 27 }
+                }
+            },
+            range: [ 0, 27 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
+            }
+        },
+
+        'export module System = SolarSystem': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'ModuleDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'System',
+                    range: [14, 20],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 20 }
+                    }
+                },
+                from: {
+                    type: 'Path',
+                    body: [{
+                        type: 'Identifier',
+                        name: 'SolarSystem',
+                        range: [23, 34],
+                        loc: {
+                            start: { line: 1, column: 23 },
+                            end: { line: 1, column: 34 }
+                        }
+                    }],
+                    range: [23, 34],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 34 }
+                    }
+                },
+                range: [7, 34],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 34 }
+                }
+            },
+            range: [ 0, 34 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 34 }
+            }
+        },
+
+        'export SolarSystem': {
+            type: 'ExportDeclaration',
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'SolarSystem',
+                    range: [7, 18],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                from: null,
+                range: [7, 18],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 18 }
+                }
+            }],
+            range: [ 0, 18 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
+        'export Mercury, Venus, Earth': {
+            type: 'ExportDeclaration',
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'Mercury',
+                    range: [7, 14],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                from: null,
+                range: [7, 14],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 14 }
+                }
+            }, {
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'Venus',
+                    range: [16, 21],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 21 }
+                    }
+                },
+                from: null,
+                range: [16, 21],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 21 }
+                }
+            }, {
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'Earth',
+                    range: [23, 28],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 28 }
+                    }
+                },
+                from: null,
+                range: [23, 28],
+                loc: {
+                    start: { line: 1, column: 23 },
+                    end: { line: 1, column: 28 }
+                }
+            }],
+            range: [ 0, 28 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
+            }
+        },
+
+        'export *': {
+            type: 'ExportDeclaration',
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Glob',
+                    range: [7, 8],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 8 }
+                    }
+                },
+                from: null,
+                range: [7, 8],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 8 }
+                }
+            }],
+            range: [ 0, 8 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 8 }
+            }
+        },
+
+        'export * from SolarSystem': {
+            type: 'ExportDeclaration',
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Glob',
+                    range: [7, 8],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 8 }
+                    }
+                },
+                from: {
+                    type: 'Path',
+                    body: [{
+                        type: 'Identifier',
+                        name: 'SolarSystem',
+                        range: [ 14, 25 ],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 25 }
+                        }
+                    }],
+                    range: [ 14, 25 ],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                range: [ 7, 25 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 25 }
+                }
+            }],
+            range: [ 0, 25 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'export { Mercury: SolarSystem.Mercury, Earth: SolarSystem.Earth }': {
+            type: 'ExportDeclaration',
+            specifiers: [{
+                type: 'ExportSpecifierSet',
+                specifiers: [
+                    {
+                        type: 'ExportSpecifier',
+                        id: {
+                            type: 'Identifier',
+                            name: 'Mercury',
+                            range: [ 9, 16 ],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 16 }
+                            }
+                        },
+                        from: {
+                            type: 'Path',
+                            body: [
+                                {
+                                    type: 'Identifier',
+                                    name: 'SolarSystem',
+                                    range: [ 18, 29 ],
+                                    loc: {
+                                        start: { line: 1, column: 18 },
+                                        end: { line: 1, column: 29 }
+                                    }
+                                },
+                                {
+                                    type: 'Identifier',
+                                    name: 'Mercury',
+                                    range: [ 30, 37 ],
+                                    loc: {
+                                        start: { line: 1, column: 30 },
+                                        end: { line: 1, column: 37 }
+                                    }
+                                }
+                            ],
+                            range: [ 18, 37 ],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 37 }
+                            }
+                        },
+                        range: [ 9, 37 ],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 37 }
+                        }
+                    },
+                    {
+                        type: 'ExportSpecifier',
+                        id: {
+                            type: 'Identifier',
+                            name: 'Earth',
+                            range: [ 39, 44 ],
+                            loc: {
+                                start: { line: 1, column: 39 },
+                                end: { line: 1, column: 44 }
+                            }
+                        },
+                        from: {
+                            type: 'Path',
+                            body: [
+                                {
+                                    type: 'Identifier',
+                                    name: 'SolarSystem',
+                                    range: [ 46, 57 ],
+                                    loc: {
+                                        start: { line: 1, column: 46 },
+                                        end: { line: 1, column: 57 }
+                                    }
+                                },
+                                {
+                                    type: 'Identifier',
+                                    name: 'Earth',
+                                    range: [ 58, 63 ],
+                                    loc: {
+                                        start: { line: 1, column: 58 },
+                                        end: { line: 1, column: 63 }
+                                    }
+                                }
+                            ],
+                            range: [ 46, 63 ],
+                            loc: {
+                                start: { line: 1, column: 46 },
+                                end: { line: 1, column: 63 }
+                            }
+                        },
+                        range: [ 39, 63 ],
+                        loc: {
+                            start: { line: 1, column: 39 },
+                            end: { line: 1, column: 63 }
+                        }
+                    }
+                ],
+                range: [7, 65],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 65 }
+                }
+            }],
+            range: [0, 65],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 65 }
+            }
+        }
     },
 
     'Invalid syntax': {
@@ -16968,6 +17515,13 @@ data = {
             lineNumber: 1,
             column: 7,
             message: 'Error: Line 1: Illegal newline after module'
+        },
+
+        'export for': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected token for'
         }
 
     },
@@ -17109,12 +17663,16 @@ data = {
                 DoWhileStatement: 'DoWhileStatement',
                 DebuggerStatement: 'DebuggerStatement',
                 EmptyStatement: 'EmptyStatement',
+                ExportSpecifier: 'ExportSpecifier',
+                ExportSpecifierSet: 'ExportSpecifierSet',
+                ExportDeclaration: 'ExportDeclaration',
                 ExpressionStatement: 'ExpressionStatement',
                 ForStatement: 'ForStatement',
                 ForInStatement: 'ForInStatement',
                 ForOfStatement: 'ForOfStatement',
                 FunctionDeclaration: 'FunctionDeclaration',
                 FunctionExpression: 'FunctionExpression',
+                Glob: 'Glob',
                 Identifier: 'Identifier',
                 IfStatement: 'IfStatement',
                 Literal: 'Literal',

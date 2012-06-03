@@ -91,12 +91,16 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
         DoWhileStatement: 'DoWhileStatement',
         DebuggerStatement: 'DebuggerStatement',
         EmptyStatement: 'EmptyStatement',
+        ExportSpecifier: 'ExportSpecifier',
+        ExportSpecifierSet: 'ExportSpecifierSet',
+        ExportDeclaration: 'ExportDeclaration',
         ExpressionStatement: 'ExpressionStatement',
         ForStatement: 'ForStatement',
         ForInStatement: 'ForInStatement',
         ForOfStatement: 'ForOfStatement',
         FunctionDeclaration: 'FunctionDeclaration',
         FunctionExpression: 'FunctionExpression',
+        Glob: 'Glob',
         Identifier: 'Identifier',
         IfStatement: 'IfStatement',
         Literal: 'Literal',
@@ -2261,6 +2265,13 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
         return result;
     }
 
+    function parseGlob() {
+        expect('*');
+        return {
+            type: Syntax.Glob
+        };
+    }
+
     function parseModuleDeclaration() {
         var id, token, declaration;
 
@@ -2300,6 +2311,116 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
         consumeSemicolon();
 
         return declaration;
+    }
+
+    function parseExportSpecifierSetProperty() {
+        var specifier;
+
+        specifier = {
+            type: Syntax.ExportSpecifier,
+            id: parseVariableIdentifier(),
+            from: null
+        };
+
+        if (match(':')) {
+            lex();
+            specifier.from = parsePath();
+        }
+
+        return specifier;
+    }
+
+    function parseExportSpecifier() {
+        var specifier, specifiers;
+
+        if (match('{')) {
+            lex();
+            specifiers = [];
+
+            do {
+                specifiers.push(parseExportSpecifierSetProperty());
+            } while (match(',') && lex());
+
+            expect('}');
+
+            return {
+                type: Syntax.ExportSpecifierSet,
+                specifiers: specifiers
+            };
+        }
+
+        if (match('*')) {
+            specifier = {
+                type: Syntax.ExportSpecifier,
+                id: parseGlob(),
+                from: null
+            };
+
+            if (matchContextualKeyword('from')) {
+                lex();
+                specifier.from = parsePath();
+            }
+        } else {
+            specifier = {
+                type: Syntax.ExportSpecifier,
+                id: parseVariableIdentifier(),
+                from: null
+            };
+        }
+        return specifier;
+    }
+
+    function parseExportDeclaration() {
+        var id, token, declaration, specifiers;
+
+        expectKeyword('export');
+
+        token = lookahead();
+
+        if (token.type === Token.Keyword) {
+            switch (token.value) {
+            case 'function':
+                return {
+                    type: Syntax.ExportDeclaration,
+                    declaration: parseFunctionDeclaration()
+                };
+            case 'module':
+                return {
+                    type: Syntax.ExportDeclaration,
+                    declaration: parseModuleDeclaration()
+                };
+            case 'let':
+            case 'const':
+                return {
+                    type: Syntax.ExportDeclaration,
+                    declaration: parseConstLetDeclaration(token.value)
+                };
+            case 'var':
+                return {
+                    type: Syntax.ExportDeclaration,
+                    declaration: parseStatement()
+                };
+            }
+            throwUnexpected(lex());
+        }
+
+        specifiers = [ parseExportSpecifier() ];
+        if (match(',')) {
+            while (index < length) {
+                if (!match(',')) {
+                    break;
+                }
+                lex();
+                specifiers.push(parseExportSpecifier());
+            }
+        }
+
+        consumeSemicolon();
+
+        return {
+            type: Syntax.ExportDeclaration,
+            specifiers: specifiers
+        };
     }
 
     // 12.3 Empty Statement
@@ -3200,6 +3321,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             switch (token.value) {
             case 'module':
                 return parseModuleDeclaration(token.value);
+            case 'export':
+                return parseExportDeclaration();
             }
         }
 
@@ -3570,10 +3693,14 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             extra.parseConditionalExpression = parseConditionalExpression;
             extra.parseConstLetDeclaration = parseConstLetDeclaration;
             extra.parseEqualityExpression = parseEqualityExpression;
+            extra.parseExportDeclaration = parseExportDeclaration;
+            extra.parseExportSpecifier = parseExportSpecifier;
+            extra.parseExportSpecifierSetProperty = parseExportSpecifierSetProperty;
             extra.parseExpression = parseExpression;
             extra.parseForVariableDeclaration = parseForVariableDeclaration;
             extra.parseFunctionDeclaration = parseFunctionDeclaration;
             extra.parseFunctionExpression = parseFunctionExpression;
+            extra.parseGlob = parseGlob;
             extra.parseLogicalANDExpression = parseLogicalANDExpression;
             extra.parseLogicalORExpression = parseLogicalORExpression;
             extra.parseMultiplicativeExpression = parseMultiplicativeExpression;
@@ -3609,11 +3736,15 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             parseComputedMember = wrapTracking(extra.parseComputedMember);
             parseConditionalExpression = wrapTracking(extra.parseConditionalExpression);
             parseConstLetDeclaration = wrapTracking(extra.parseConstLetDeclaration);
+            parseExportDeclaration = wrapTracking(parseExportDeclaration);
+            parseExportSpecifier = wrapTracking(parseExportSpecifier);
+            parseExportSpecifierSetProperty = wrapTracking(parseExportSpecifierSetProperty);
             parseEqualityExpression = wrapTracking(extra.parseEqualityExpression);
             parseExpression = wrapTracking(extra.parseExpression);
             parseForVariableDeclaration = wrapTracking(extra.parseForVariableDeclaration);
             parseFunctionDeclaration = wrapTracking(extra.parseFunctionDeclaration);
             parseFunctionExpression = wrapTracking(extra.parseFunctionExpression);
+            parseGlob = wrapTracking(extra.parseGlob);
             parseLogicalANDExpression = wrapTracking(extra.parseLogicalANDExpression);
             parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);
             parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);
