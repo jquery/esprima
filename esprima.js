@@ -103,6 +103,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
         Glob: 'Glob',
         Identifier: 'Identifier',
         IfStatement: 'IfStatement',
+        ImportDeclaration: 'ImportDeclaration',
+        ImportSpecifier: 'ImportSpecifier',
         Literal: 'Literal',
         LabeledStatement: 'LabeledStatement',
         LogicalExpression: 'LogicalExpression',
@@ -169,7 +171,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
         StrictLHSAssignment:  'Assignment to eval or arguments is not allowed in strict mode',
         StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',
         StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
-        StrictReservedWord:  'Use of future reserved word in strict mode'
+        StrictReservedWord:  'Use of future reserved word in strict mode',
+        NoFromAfterImport: 'Missing from after import'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -2420,6 +2423,64 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
         };
     }
 
+    function parseImportDeclaration() {
+        var specifiers, from;
+
+        expectKeyword('import');
+
+        if (match('*')) {
+            specifiers = [parseGlob()];
+        } else if (match('{')) {
+            lex();
+            specifiers = [];
+
+            do {
+                specifiers.push(parseImportSpecifier());
+            } while (match(',') && lex());
+
+            expect('}');
+        } else {
+            specifiers = [parseVariableIdentifier()];
+        }
+
+        if (!matchContextualKeyword('from')) {
+            throwError({}, Messages.NoFromAfterImport);
+        }
+
+        lex();
+
+        if (lookahead().type === Token.StringLiteral) {
+            from = parsePrimaryExpression();
+        } else {
+            from = parsePath();
+        }
+
+        consumeSemicolon();
+
+        return {
+            type: Syntax.ImportDeclaration,
+            specifiers: specifiers,
+            from: from
+        };
+    }
+
+    function parseImportSpecifier() {
+        var specifier;
+
+        specifier = {
+            type: Syntax.ImportSpecifier,
+            id: parseVariableIdentifier(),
+            from: null
+        };
+
+        if (match(':')) {
+            lex();
+            specifier.from = parsePath();
+        }
+
+        return specifier;
+    }
+
     // 12.3 Empty Statement
 
     function parseEmptyStatement() {
@@ -3320,6 +3381,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                 return parseModuleDeclaration(token.value);
             case 'export':
                 return parseExportDeclaration();
+            case 'import':
+                return parseImportDeclaration();
             }
         }
 
@@ -3698,6 +3761,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             extra.parseFunctionDeclaration = parseFunctionDeclaration;
             extra.parseFunctionExpression = parseFunctionExpression;
             extra.parseGlob = parseGlob;
+            extra.parseImportDeclaration = parseImportDeclaration;
+            extra.parseImportSpecifier = parseImportSpecifier;
             extra.parseLogicalANDExpression = parseLogicalANDExpression;
             extra.parseLogicalORExpression = parseLogicalORExpression;
             extra.parseMultiplicativeExpression = parseMultiplicativeExpression;
@@ -3742,6 +3807,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             parseFunctionDeclaration = wrapTracking(extra.parseFunctionDeclaration);
             parseFunctionExpression = wrapTracking(extra.parseFunctionExpression);
             parseGlob = wrapTracking(extra.parseGlob);
+            parseImportDeclaration = wrapTracking(extra.parseImportDeclaration);
+            parseImportSpecifier = wrapTracking(extra.parseImportSpecifier);
             parseLogicalANDExpression = wrapTracking(extra.parseLogicalANDExpression);
             parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);
             parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);
