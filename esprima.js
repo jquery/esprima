@@ -117,6 +117,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
         Path:  'Path',
         Program: 'Program',
         Property: 'Property',
+        ProtoExpression: 'ProtoExpression',
         ReturnStatement: 'ReturnStatement',
         SequenceExpression: 'SequenceExpression',
         SwitchStatement: 'SwitchStatement',
@@ -704,6 +705,17 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                     range: [start, index]
                 };
             }
+        }
+
+        if (ch1 === '<' && ch2 === '|') {
+            index += 2;
+            return {
+                type: Token.Punctuator,
+                value: '<|',
+                lineNumber: lineNumber,
+                lineStart: lineStart,
+                range: [start, index]
+            };
         }
 
         // The remaining 1-character punctuators.
@@ -1805,6 +1817,54 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
         return expr;
     }
 
+    function parseTriangleLiteral() {
+        var expr,
+            token = lookahead(),
+            type = token.type;
+
+        if (type === Token.StringLiteral || type === Token.NumericLiteral) {
+            if (strict && token.octal) {
+                throwErrorTolerant(token, Messages.StrictOctalLiteral);
+            }
+            return createLiteral(lex());
+        }
+
+        if (type === Token.Keyword) {
+            if (matchKeyword('function')) {
+                return parseFunctionExpression();
+            }
+        }
+
+        if (type === Token.BooleanLiteral) {
+            lex();
+            token.value = (token.value === 'true');
+            return createLiteral(token);
+        }
+
+        if (match('[')) {
+            return parseArrayInitialiser();
+        }
+
+        if (match('{')) {
+            return parseObjectInitialiser();
+        }
+
+        if (match('/') || match('/=')) {
+            return createLiteral(scanRegExp());
+        }
+
+        return throwUnexpected(lex());
+    }
+
+    function parseProtoExpression(proto) {
+        expect('<|');
+        return {
+            type: Syntax.ProtoExpression,
+            proto: proto,
+            literal: parseTriangleLiteral()
+        };
+    }
+
     function parseLeftHandSideExpressionAllowCall() {
         var useNew, expr;
 
@@ -1817,6 +1877,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                 expr = parseNonComputedMember(expr);
             } else if (match('[')) {
                 expr = parseComputedMember(expr);
+            } else if (match('<|')) {
+                expr = parseProtoExpression(expr);
             } else if (match('(')) {
                 expr = parseCallMember(expr);
             } else {
@@ -1839,6 +1901,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                 expr = parseNonComputedMember(expr);
             } else if (match('[')) {
                 expr = parseComputedMember(expr);
+            } else if (match('<|')) {
+                expr = parseProtoExpression(expr);
             } else {
                 break;
             }
@@ -3879,10 +3943,12 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             extra.parsePrimaryExpression = parsePrimaryExpression;
             extra.parseProgram = parseProgram;
             extra.parsePropertyFunction = parsePropertyFunction;
+            extra.parseProtoExpression = parseProtoExpression;
             extra.parseRelationalExpression = parseRelationalExpression;
             extra.parseStatement = parseStatement;
             extra.parseShiftExpression = parseShiftExpression;
             extra.parseSwitchCase = parseSwitchCase;
+            extra.parseTriangleLiteral = parseTriangleLiteral;
             extra.parseUnaryExpression = parseUnaryExpression;
             extra.parseVariableDeclaration = parseVariableDeclaration;
             extra.parseVariableIdentifier = parseVariableIdentifier;
@@ -3925,10 +3991,12 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
             parseProgram = wrapTracking(extra.parseProgram);
             parsePropertyFunction = wrapTracking(extra.parsePropertyFunction);
+            parseProtoExpression = wrapTracking(parseProtoExpression);
             parseRelationalExpression = wrapTracking(extra.parseRelationalExpression);
             parseStatement = wrapTracking(extra.parseStatement);
             parseShiftExpression = wrapTracking(extra.parseShiftExpression);
             parseSwitchCase = wrapTracking(extra.parseSwitchCase);
+            parseTriangleLiteral = wrapTracking(extra.parseTriangleLiteral);
             parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);
             parseVariableDeclaration = wrapTracking(extra.parseVariableDeclaration);
             parseVariableIdentifier = wrapTracking(extra.parseVariableIdentifier);
@@ -3989,10 +4057,12 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             parsePrimaryExpression = extra.parsePrimaryExpression;
             parseProgram = extra.parseProgram;
             parsePropertyFunction = extra.parsePropertyFunction;
+            parseProtoExpression = extra.parseProtoExpression;
             parseRelationalExpression = extra.parseRelationalExpression;
             parseStatement = extra.parseStatement;
             parseShiftExpression = extra.parseShiftExpression;
             parseSwitchCase = extra.parseSwitchCase;
+            parseTriangleLiteral = extra.parseTriangleLiteral;
             parseUnaryExpression = extra.parseUnaryExpression;
             parseVariableDeclaration = extra.parseVariableDeclaration;
             parseVariableIdentifier = extra.parseVariableIdentifier;

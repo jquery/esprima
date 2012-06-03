@@ -6298,6 +6298,239 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 13 }
             }
+        },
+
+        'universe.null <| 10': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ProtoExpression',
+                proto: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'Identifier',
+                        name: 'universe',
+                        range: [0, 8],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 8 }
+                        }
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'null',
+                        range: [9, 13],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 13 }
+                        }
+                    },
+                    range: [0, 13],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 13 }
+                    }
+                },
+                literal: {
+                    type: 'Literal',
+                    value: 10,
+                    raw: '10',
+                    range: [17, 19],
+                    loc : {
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 19 }
+                    }
+                },
+                range: [0, 19],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 19 }
+                }
+            },
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        },
+
+        'universe.null <| \'string\'': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ProtoExpression',
+                proto: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'Identifier',
+                        name: 'universe',
+                        range: [0, 8],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 8 }
+                        }
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'null',
+                        range: [9, 13],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 13 }
+                        }
+                    },
+                    range: [0, 13],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 13 }
+                    }
+                },
+                literal: {
+                    type: 'Literal',
+                    value: 'string',
+                    raw: '\'string\'',
+                    range: [17, 25],
+                    loc : {
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                range: [0, 25],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'universe.null <| function Test() { }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ProtoExpression',
+                proto: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'Identifier',
+                        name: 'universe',
+                        range: [0, 8],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 8 }
+                        }
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'null',
+                        range: [9, 13],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 13 }
+                        }
+                    },
+                    range: [0, 13],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 13 }
+                    }
+                },
+                literal: {
+                    type: 'FunctionExpression',
+                    id: {
+                        type: 'Identifier',
+                        name: 'Test',
+                        range: [26, 30],
+                        loc: {
+                            start: { line: 1, column: 26 },
+                            end: { line: 1, column: 30 }
+                        }
+                    },
+                    params: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [33, 36],
+                        loc: {
+                            start: { line: 1, column: 33 },
+                            end: { line: 1, column: 36 }
+                        }
+                    },
+                    range: [17, 36],
+                    loc: {
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 36 }
+                    }
+                },
+                range: [0, 36],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            }
+        },
+
+        'universe.null <| /test/': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ProtoExpression',
+                proto: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'Identifier',
+                        name: 'universe',
+                        range: [0, 8],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 8 }
+                        }
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'null',
+                        range: [9, 13],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 13 }
+                        }
+                    },
+                    range: [0, 13],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 13 }
+                    }
+                },
+                literal: {
+                    type: 'Literal',
+                    value: '/test/',
+                    raw: '/test/',
+                    range: [17, 23],
+                    loc: {
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 23 }
+                    }
+                },
+                range: [0, 23],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
         }
 
     },
@@ -18612,6 +18845,7 @@ data = {
                 Path: 'Path',
                 Program: 'Program',
                 Property: 'Property',
+                ProtoExpression: 'ProtoExpression',
                 ReturnStatement: 'ReturnStatement',
                 SequenceExpression: 'SequenceExpression',
                 SwitchStatement: 'SwitchStatement',
