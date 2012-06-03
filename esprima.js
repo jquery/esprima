@@ -988,14 +988,11 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                         throwError({}, Messages.UnterminatedRegExp);
                     }
                     str += ch;
-                }
-                else if (ch === '/') {
+                } else if (ch === '/') {
                     break;
-                }
-                else if (ch === '[') {
+                } else if (ch === '[') {
                     classMarker = true;
-                }
-                else if (isLineTerminator(ch)) {
+                } else if (isLineTerminator(ch)) {
                     throwError({}, Messages.UnterminatedRegExp);
                 }
             }
