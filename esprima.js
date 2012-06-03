@@ -733,6 +733,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             // Hex number starts with '0x'.
             // Octal number starts with '0'.
             // Octal number in ES6 starts with '0o'.
+            // Binary number in ES6 starts with '0b'.
             if (number === '0') {
                 if (ch === 'x' || ch === 'X') {
                     number += nextChar();
@@ -762,6 +763,36 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                         lineStart: lineStart,
                         range: [start, index]
                     };
+                } else if (ch === 'b' || ch === 'B') {
+                    nextChar();
+                    number = '';
+
+                    while (index < length) {
+                        ch = source[index];
+                        if (ch !== '0' && ch !== '1') {
+                            break;
+                        }
+                        number += nextChar();
+                    }
+
+                    if (number.length === 0) {
+                        // only 0b or 0B
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    }
+
+                    if (index < length) {
+                        ch = source[index];
+                        if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
+                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                        }
+                    }
+                    return {
+                        type: Token.NumericLiteral,
+                        value: parseInt(number, 2),
+                        lineNumber: lineNumber,
+                        lineStart: lineStart,
+                        range: [start, index]
+                    };
                 } else if (ch === 'o' || ch === 'O' || isOctalDigit(ch)) {
                     if (isOctalDigit(ch)) {
                         number = nextChar();
@@ -779,7 +810,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                     }
 
                     if (number.length === 0) {
-                        // only 0x
+                        // only 0o or 0O
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
 
