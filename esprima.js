@@ -35,7 +35,7 @@ parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
 parseFunctionSourceElements: true, parseVariableIdentifier: true,
 parseLeftHandSideExpression: true,
-parseStatement: true, parseSourceElement: true */
+parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
 
 (function (exports) {
     'use strict';
@@ -2276,7 +2276,7 @@ parseStatement: true, parseSourceElement: true */
             return {
                 type: Syntax.ModuleDeclaration,
                 id: id,
-                body: parseBlock()
+                body: parseModuleBlock()
             };
         }
 
@@ -3183,8 +3183,6 @@ parseStatement: true, parseSourceElement: true */
                 return parseConstLetDeclaration(token.value);
             case 'function':
                 return parseFunctionDeclaration();
-            case 'module':
-                return parseModuleDeclaration();
             default:
                 return parseStatement();
             }
@@ -3195,7 +3193,20 @@ parseStatement: true, parseSourceElement: true */
         }
     }
 
-    function parseSourceElements() {
+    function parseProgramElement() {
+        var token = lookahead();
+
+        if (token.type === Token.Keyword) {
+            switch (token.value) {
+            case 'module':
+                return parseModuleDeclaration(token.value);
+            }
+        }
+
+        return parseSourceElement();
+    }
+
+    function parseProgramElements() {
         var sourceElement, sourceElements = [], token, directive, firstRestricted;
 
         while (index < length) {
@@ -3204,7 +3215,7 @@ parseStatement: true, parseSourceElement: true */
                 break;
             }
 
-            sourceElement = parseSourceElement();
+            sourceElement = parseProgramElement();
             sourceElements.push(sourceElement);
             if (sourceElement.expression.type !== Syntax.Literal) {
                 // this is not directive
@@ -3224,7 +3235,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         while (index < length) {
-            sourceElement = parseSourceElement();
+            sourceElement = parseProgramElement();
             if (typeof sourceElement === 'undefined') {
                 break;
             }
@@ -3233,12 +3244,49 @@ parseStatement: true, parseSourceElement: true */
         return sourceElements;
     }
 
+    function parseModuleElement() {
+        return parseProgramElement();
+    }
+
+    function parseModuleElements() {
+        var list = [],
+            statement;
+
+        while (index < length) {
+            if (match('}')) {
+                break;
+            }
+            statement = parseModuleElement();
+            if (typeof statement === 'undefined') {
+                break;
+            }
+            list.push(statement);
+        }
+
+        return list;
+    }
+
+    function parseModuleBlock() {
+        var block;
+
+        expect('{');
+
+        block = parseModuleElements();
+
+        expect('}');
+
+        return {
+            type: Syntax.BlockStatement,
+            body: block
+        };
+    }
+
     function parseProgram() {
         var program;
         strict = false;
         program = {
             type: Syntax.Program,
-            body: parseSourceElements()
+            body: parseProgramElements()
         };
         return program;
     }
@@ -3530,6 +3578,7 @@ parseStatement: true, parseSourceElement: true */
             extra.parseLogicalORExpression = parseLogicalORExpression;
             extra.parseMultiplicativeExpression = parseMultiplicativeExpression;
             extra.parseModuleDeclaration = parseModuleDeclaration;
+            extra.parseModuleBlock = parseModuleBlock;
             extra.parseNewExpression = parseNewExpression;
             extra.parseNonComputedMember = parseNonComputedMember;
             extra.parseNonComputedProperty = parseNonComputedProperty;
@@ -3569,6 +3618,7 @@ parseStatement: true, parseSourceElement: true */
             parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);
             parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);
             parseModuleDeclaration = wrapTracking(extra.parseModuleDeclaration);
+            parseModuleBlock = wrapTracking(extra.parseModuleBlock);
             parseNewExpression = wrapTracking(extra.parseNewExpression);
             parseNonComputedMember = wrapTracking(extra.parseNonComputedMember);
             parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
