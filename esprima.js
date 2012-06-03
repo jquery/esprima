@@ -718,7 +718,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
     // 7.8.3 Numeric Literals
 
     function scanNumericLiteral() {
-        var number, start, ch;
+        var number, start, ch, octal;
 
         ch = source[index];
         assert(isDecimalDigit(ch) || (ch === '.'),
@@ -795,8 +795,10 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                     };
                 } else if (ch === 'o' || ch === 'O' || isOctalDigit(ch)) {
                     if (isOctalDigit(ch)) {
+                        octal = true;
                         number = nextChar();
                     } else {
+                        octal = false;
                         nextChar();
                         number = '';
                     }
@@ -820,10 +822,11 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                             throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                         }
                     }
+
                     return {
                         type: Token.NumericLiteral,
                         value: parseInt(number, 8),
-                        octal: true,
+                        octal: octal,
                         lineNumber: lineNumber,
                         lineStart: lineStart,
                         range: [start, index]
