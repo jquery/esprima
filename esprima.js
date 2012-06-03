@@ -1388,6 +1388,44 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
         };
     }
 
+    function parsePropertyMethodFunction() {
+        var token, previousStrict, param, params, paramSet, method;
+
+        previousStrict = strict;
+        strict = true;
+        params = [];
+
+        expect('(');
+
+        if (!match(')')) {
+            paramSet = {};
+            while (index < length) {
+                token = lookahead();
+                param = parseVariableIdentifier();
+                if (isRestrictedWord(token.value)) {
+                    throwError(token, Messages.StrictParamName);
+                }
+                if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
+                    throwError(token, Messages.StrictParamDupe);
+                }
+                params.push(param);
+                paramSet[param.name] = true;
+                if (match(')')) {
+                    break;
+                }
+                expect(',');
+            }
+        }
+
+        expect(')');
+
+        method = parsePropertyFunction(params);
+
+        strict = previousStrict;
+
+        return method;
+    }
+
     function parseObjectPropertyKey() {
         var token = lex();
 
@@ -1418,7 +1456,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
 
             // Property Assignment: Getter and Setter.
 
-            if (token.value === 'get' && !match(':')) {
+            if (token.value === 'get' && !(match(':') || match('('))) {
                 key = parseObjectPropertyKey();
                 expect('(');
                 expect(')');
@@ -1428,7 +1466,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                     value: parsePropertyFunction([]),
                     kind: 'get'
                 };
-            } else if (token.value === 'set' && !match(':')) {
+            } else if (token.value === 'set' && !(match(':') || match('('))) {
                 key = parseObjectPropertyKey();
                 expect('(');
                 token = lookahead();
@@ -1452,6 +1490,14 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                         value: parseAssignmentExpression(),
                         kind: 'init'
                     };
+                } else if (match('(')) {
+                    return {
+                        type: Syntax.Property,
+                        key: id,
+                        value: parsePropertyMethodFunction(),
+                        kind: 'init',
+                        method: true
+                    };
                 } else {
                     return {
                         type: Syntax.Property,
@@ -1473,6 +1519,14 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                     key: key,
                     value: parseAssignmentExpression(),
                     kind: 'init'
+                };
+            } else if (match('(')) {
+                return {
+                    type: Syntax.Property,
+                    key: id,
+                    value: parsePropertyMethodFunction(),
+                    kind: 'init',
+                    method: true
                 };
             } else {
                 return {
