@@ -16089,7 +16089,214 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 65 }
             }
+        },
+
+        'import * from foo': {
+            type: 'ImportDeclaration',
+            specifiers: [{
+                type: 'Glob',
+                range: [7, 8],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 8 }
+                }
+            }],
+            from: {
+                type: 'Path',
+                body: [{
+                    type: 'Identifier',
+                    name: 'foo',
+                    range: [14, 17],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 17 }
+                    }
+                }],
+                range: [14, 17],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            }
+        },
+
+        'import foo from bar': {
+            type: 'ImportDeclaration',
+            specifiers: [{
+                type: 'Identifier',
+                name: 'foo',
+                range: [7, 10],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 10 }
+                }
+            }],
+            from: {
+                type: 'Path',
+                body: [{
+                    type: 'Identifier',
+                    name: 'bar',
+                    range: [16, 19],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 19 }
+                    }
+                }],
+                range: [16, 19],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 19 }
+                }
+            },
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        },
+
+        'import { foo } from bar': {
+            type: 'ImportDeclaration',
+            specifiers: [{
+                type: 'ImportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'foo',
+                    range: [9, 12],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                from: null,
+                range: [9, 12],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 12 }
+                }
+            }],
+            from: {
+                type: 'Path',
+                body: [{
+                    type: 'Identifier',
+                    name: 'bar',
+                    range: [20, 23],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 23 }
+                    }
+                }],
+                range: [20, 23],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
+        },
+
+        'import { foo: bar, baz: quux } from quuux': {
+            type: 'ImportDeclaration',
+            specifiers: [{
+                type: 'ImportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'foo',
+                    range: [9, 12],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                from: {
+                    type: 'Path',
+                    body: [{
+                        type: 'Identifier',
+                        name: 'bar',
+                        range: [14, 17],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 17 }
+                        }
+                    }],
+                    range: [14, 17],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                range: [9, 17],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 17 }
+                }
+            }, {
+                type: 'ImportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'baz',
+                    range: [19, 22],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                from: {
+                    type: 'Path',
+                    body: [{
+                        type: 'Identifier',
+                        name: 'quux',
+                        range: [24, 28],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 28 }
+                        }
+                    }],
+                    range: [24, 28],
+                    loc: {
+                        start: { line: 1, column: 24 },
+                        end: { line: 1, column: 28 }
+                    }
+                },
+                range: [19, 28],
+                loc: {
+                    start: { line: 1, column: 19 },
+                    end: { line: 1, column: 28 }
+                }                
+            }],
+            from: {
+                type: 'Path',
+                body: [{
+                    type: 'Identifier',
+                    name: 'quuux',
+                    range: [36, 41],
+                    loc: {
+                        start: { line: 1, column: 36 },
+                        end: { line: 1, column: 41 }
+                    }
+                }],
+                range: [36, 41],
+                loc: {
+                    start: { line: 1, column: 36 },
+                    end: { line: 1, column: 41 }
+                }
+            },
+            range: [0, 41],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 41 }
+            }
         }
+
     },
 
     'Invalid syntax': {
@@ -17522,6 +17729,13 @@ data = {
             lineNumber: 1,
             column: 8,
             message: 'Error: Line 1: Unexpected token for'
+        },
+
+        'import foo': {
+            index: 10,
+            lineNumber: 1,
+            column: 11,
+            message: 'Error: Line 1: Missing from after import'
         }
 
     },
@@ -17675,6 +17889,8 @@ data = {
                 Glob: 'Glob',
                 Identifier: 'Identifier',
                 IfStatement: 'IfStatement',
+                ImportDeclaration: 'ImportDeclaration',
+                ImportSpecifier: 'ImportSpecifier',
                 Literal: 'Literal',
                 LabeledStatement: 'LabeledStatement',
                 LogicalExpression: 'LogicalExpression',
