@@ -79,26 +79,30 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
     TokenName[Token.StringLiteral] = 'String';
 
     Syntax = {
-        AssignmentExpression: 'AssignmentExpression',
         ArrayExpression: 'ArrayExpression',
         ArrayPattern: 'ArrayPattern',
-        BlockStatement: 'BlockStatement',
+        AssignmentExpression: 'AssignmentExpression',
         BinaryExpression: 'BinaryExpression',
+        BlockStatement: 'BlockStatement',
         BreakStatement: 'BreakStatement',
         CallExpression: 'CallExpression',
         CatchClause: 'CatchClause',
+        ClassBody: 'ClassBody',
+        ClassDeclaration: 'ClassDeclaration',
+        ClassElement: 'ClassElement',
+        ClassHeritage: 'ClassHeritage',
         ConditionalExpression: 'ConditionalExpression',
         ContinueStatement: 'ContinueStatement',
-        DoWhileStatement: 'DoWhileStatement',
         DebuggerStatement: 'DebuggerStatement',
+        DoWhileStatement: 'DoWhileStatement',
         EmptyStatement: 'EmptyStatement',
+        ExportDeclaration: 'ExportDeclaration',
         ExportSpecifier: 'ExportSpecifier',
         ExportSpecifierSet: 'ExportSpecifierSet',
-        ExportDeclaration: 'ExportDeclaration',
         ExpressionStatement: 'ExpressionStatement',
-        ForStatement: 'ForStatement',
         ForInStatement: 'ForInStatement',
         ForOfStatement: 'ForOfStatement',
+        ForStatement: 'ForStatement',
         FunctionDeclaration: 'FunctionDeclaration',
         FunctionExpression: 'FunctionExpression',
         Glob: 'Glob',
@@ -106,8 +110,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         IfStatement: 'IfStatement',
         ImportDeclaration: 'ImportDeclaration',
         ImportSpecifier: 'ImportSpecifier',
-        Literal: 'Literal',
         LabeledStatement: 'LabeledStatement',
+        Literal: 'Literal',
         LogicalExpression: 'LogicalExpression',
         MemberExpression: 'MemberExpression',
         ModuleDeclaration: 'ModuleDeclaration',
@@ -120,8 +124,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         ProtoExpression: 'ProtoExpression',
         ReturnStatement: 'ReturnStatement',
         SequenceExpression: 'SequenceExpression',
-        SwitchStatement: 'SwitchStatement',
         SwitchCase: 'SwitchCase',
+        SwitchStatement: 'SwitchStatement',
         ThisExpression: 'ThisExpression',
         ThrowStatement: 'ThrowStatement',
         TryStatement: 'TryStatement',
@@ -165,6 +169,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
         StrictParamDupe: 'Strict mode function may not have duplicate parameter names',
         StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
+        StrictClassName:  'Class name may not be eval or arguments in strict mode',
         StrictOctalLiteral:  'Octal literals are not allowed in strict mode.',
         StrictDelete:  'Delete of an unqualified identifier in strict mode.',
         StrictDuplicateProperty:  'Duplicate data property in object literal not allowed in strict mode',
@@ -174,7 +179,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',
         StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
         StrictReservedWord:  'Use of future reserved word in strict mode',
-        NoFromAfterImport: 'Missing from after import'
+        StrictSuperOutsideClassElement: 'Super keyword is only allowed inside class elements',
+        NoFromAfterImport: 'Missing from after import',
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -1684,6 +1690,21 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
 
             if (matchKeyword('function')) {
                 return parseFunctionExpression();
+            }
+
+            if (matchKeyword('class')) {
+                return parseClassDeclaration();
+            }
+
+            if (matchKeyword('super')) {
+                if (strict && !state.inClassElement) {
+                    throwError(token, Messages.StrictSuperOutsideClassElement);
+                }
+                lex();
+                return {
+                    type: Syntax.Identifier,
+                    name: 'super'
+                };
             }
         }
 
@@ -3258,6 +3279,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
                 return parseForStatement();
             case 'function':
                 return parseFunctionDeclaration();
+            case 'class':
+                return parseClassDeclaration();
             case 'if':
                 return parseIfStatement();
             case 'return':
@@ -3456,7 +3479,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
     }
 
     function parseFunctionExpression() {
-        var token, id = null, firstRestricted, message, param, params = [], body, previousStrict, paramSet;
+        var token, id = null, firstRestricted, message, params = [], paramsResult, body, previousStrict, paramSet;
 
         expectKeyword('function');
 
@@ -3481,35 +3504,11 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         expect('(');
 
         if (!match(')')) {
-            paramSet = {};
-            while (index < length) {
-                token = lookahead();
-                param = parseVariableIdentifier();
-                if (strict) {
-                    if (isRestrictedWord(token.value)) {
-                        throwError(token, Messages.StrictParamName);
-                    }
-                    if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        throwError(token, Messages.StrictParamDupe);
-                    }
-                } else if (!firstRestricted) {
-                    if (isRestrictedWord(token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictParamName;
-                    } else if (isStrictModeReservedWord(token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictReservedWord;
-                    } else if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictParamDupe;
-                    }
-                }
-                params.push(param);
-                paramSet[param.name] = true;
-                if (match(')')) {
-                    break;
-                }
-                expect(',');
+            paramsResult = checkAndParseFormalParameterList();
+            params = paramsResult.params;
+            if (!firstRestricted) {
+                firstRestricted = paramsResult.firstRestricted;
+                message = paramsResult.message;
             }
         }
 
@@ -3530,7 +3529,197 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         };
     }
 
-    // 14 Program
+    function checkAndParseFormalParameterList() {
+        var token, param, params = [], paramSet = {}, firstRestricted, message;
+
+        while (index < length) {
+            token = lookahead();
+            param = parseVariableIdentifier();
+            if (strict) {
+                if (isRestrictedWord(token.value)) {
+                    throwError(token, Messages.StrictParamName);
+                }
+                if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
+                    throwError(token, Messages.StrictParamDupe);
+                }
+            } else if (!firstRestricted) {
+                if (isRestrictedWord(token.value)) {
+                    firstRestricted = token;
+                    message = Messages.StrictParamName;
+                } else if (isStrictModeReservedWord(token.value)) {
+                    firstRestricted = token;
+                    message = Messages.StrictReservedWord;
+                } else if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
+                    firstRestricted = token;
+                    message = Messages.StrictParamDupe;
+                }
+            }
+            params.push(param);
+            paramSet[param.name] = true;
+            if (match(')')) {
+                break;
+            }
+            expect(',');
+        }
+        return {
+            params: params,
+            firstRestricted: firstRestricted,
+            message: message
+        };
+    }
+
+    // 14 Classes
+
+    function parseClassMethodExpression(paramsResult) {
+        var previousStrict, body;
+
+        previousStrict = strict;
+        body = parseConciseBody();
+        if (strict && paramsResult && paramsResult.firstRestricted) {
+            throwError(firstRestricted, paramsResult.message);
+        }
+        strict = previousStrict;
+
+
+        return {
+            type: Syntax.FunctionExpression,
+            params: paramsResult ? paramsResult.params : [],
+            body: body,
+            id: null
+        }
+    }
+
+    function parseClassPropertyFunction(param, first) {
+        var previousStrict, body;
+
+        previousStrict = strict;
+        body = parseConciseBody();
+        if (first && strict && isRestrictedWord(param[0].name)) {
+            throwError(first, Messages.StrictParamName);
+        }
+        strict = previousStrict;
+
+        return {
+            type: Syntax.FunctionExpression,
+            id: null,
+            params: param,
+            body: body
+        };
+    }
+
+
+    function parseClassElement() {
+        var token, key, result, param, paramsResult, previousStrict, oldInClassElement;
+
+        token = lookahead();
+
+        oldInClassElement = state.inClassElement;
+        state.inClassElement = true;
+
+        if (token.value === ';') {
+            lex();
+        } else if (token.value === 'get') {
+            lex();
+            key = parseObjectPropertyKey();
+            expect('(');
+            expect(')');
+            result = {
+                type: Syntax.ClassElement,
+                key: key,
+                value: parseClassPropertyFunction([]),
+                kind: 'get'
+            };
+        } else if (token.value === 'set') {
+            lex();
+            key = parseObjectPropertyKey();
+            expect('(');
+            token = lookahead();
+            if (token.type !== Token.Identifier) {
+                throwUnexpected(lex());
+            }
+            param = [ parseVariableIdentifier() ];
+            expect(')');
+            result = {
+                type: Syntax.ClassElement,
+                key: key,
+                value: parseClassPropertyFunction(param, token),
+                kind: 'set'
+            };
+        } else {
+            key = parseObjectPropertyKey();
+            expect('(');
+            if (!match(')')) {
+                paramsResult = checkAndParseFormalParameterList();
+            }
+            expect(')');
+
+            result = {
+                type: Syntax.ClassElement,
+                key: key,
+                value: parseClassMethodExpression(paramsResult),
+                kind: ''
+            };
+        }
+
+        state.inClassElement = oldInClassElement;
+        return result;
+    }
+
+    function parseClassBody() {
+        var token, classElement, classElements = [];
+
+        expect('{');
+
+        while (index < length) {
+            if (match('}')) {
+                break;
+            }
+            classElement = parseClassElement();
+            if (typeof classElement !== 'undefined') {
+                classElements.push(classElement);
+            }
+        }
+
+        expect('}');
+
+        return {
+            type: Syntax.ClassBody,
+            body: classElements
+        };
+    }
+
+    function parseClassDeclaration() {
+        var token, id, body, subclassOf, elements;
+
+        expectKeyword('class');
+
+        token = lookahead();
+        id = parseVariableIdentifier();
+
+        if (strict) {
+            if (isRestrictedWord(token.value)) {
+                throwError(token, Messages.StrictClassName);
+            } else if (isStrictModeReservedWord(token.value)) {
+                throwError(token, Messages.StrictFunctionName);
+            }
+        }
+
+        token = lookahead();
+        if (token.value === 'extends') {
+            expectKeyword('extends');
+            subclassOf = parseAssignmentExpression();
+        }
+
+        body = parseClassBody();
+        return {
+            id: id,
+            type: Syntax.ClassDeclaration,
+            body: body,
+            subclassOf: subclassOf
+        };
+    }
+
+    // 15 Program
 
     function parseSourceElement() {
         var token = lookahead();
@@ -3967,6 +4156,10 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
             extra.parseUnaryExpression = parseUnaryExpression;
             extra.parseVariableDeclaration = parseVariableDeclaration;
             extra.parseVariableIdentifier = parseVariableIdentifier;
+            extra.parseClassElement = parseClassElement;
+            extra.parseClassDeclaration = parseClassDeclaration;
+            extra.parseClassBody = parseClassBody;
+            extra.parseClassMethodExpression = parseClassMethodExpression;
 
             parseAdditiveExpression = wrapTracking(extra.parseAdditiveExpression);
             parseAssignmentExpression = wrapTracking(extra.parseAssignmentExpression);
@@ -4015,6 +4208,10 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
             parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);
             parseVariableDeclaration = wrapTracking(extra.parseVariableDeclaration);
             parseVariableIdentifier = wrapTracking(extra.parseVariableIdentifier);
+            parseClassElement = wrapTracking(extra.parseClassElement);
+            parseClassDeclaration = wrapTracking(extra.parseClassDeclaration);
+            parseClassBody = wrapTracking(extra.parseClassBody);
+            parseClassMethodExpression = wrapTracking(extra.parseClassMethodExpression);
         }
 
         if (typeof extra.tokens !== 'undefined') {
@@ -4083,6 +4280,10 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
             parseUnaryExpression = extra.parseUnaryExpression;
             parseVariableDeclaration = extra.parseVariableDeclaration;
             parseVariableIdentifier = extra.parseVariableIdentifier;
+            parseClassElement = extra.parseClassElement;
+            parseClassDeclaration = extra.parseClassDeclaration;
+            parseClassBody = extra.parseClassBody;
+            parseClassMethodExpression = extra.parseClassMethodExpression;
         }
 
         if (typeof extra.scanRegExp === 'function') {
