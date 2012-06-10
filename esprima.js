@@ -1380,16 +1380,17 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
 
     function isLeftHandSide(expr) {
         switch (expr.type) {
-        case 'AssignmentExpression':
-        case 'BinaryExpression':
-        case 'ConditionalExpression':
-        case 'LogicalExpression':
-        case 'SequenceExpression':
-        case 'UnaryExpression':
-        case 'UpdateExpression':
-            return false;
+        case Syntax.Identifier:
+        case Syntax.MemberExpression:
+        case Syntax.CallExpression:
+        case Syntax.NewExpression:
+            return true;
         }
-        return true;
+        return false;
+    }
+
+    function isAssignableLeftHandSide(expr) {
+        return isLeftHandSide(expr) || expr.type === Syntax.ObjectPattern || expr.type === Syntax.ArrayPattern;
     }
 
     // 11.1.4 Array Initialiser
@@ -1921,6 +1922,11 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwError({}, Messages.StrictLHSPostfix);
             }
+
+            if (!isLeftHandSide(expr)) {
+                throwError({}, Messages.InvalidLHSInAssignment);
+            }
+
             expr = {
                 type: Syntax.UpdateExpression,
                 operator: lex().value,
@@ -1944,6 +1950,11 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwError({}, Messages.StrictLHSPrefix);
             }
+
+            if (!isLeftHandSide(expr)) {
+                throwError({}, Messages.InvalidLHSInAssignment);
+            }
+
             expr = {
                 type: Syntax.UpdateExpression,
                 operator: token.value,
@@ -2235,11 +2246,6 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
         expr = parseConditionalExpression();
 
         if (matchAssign()) {
-            // LeftHandSideExpression
-            if (state.lastParenthesized !== expr && !isLeftHandSide(expr)) {
-                throwError({}, Messages.InvalidLHSInAssignment);
-            }
-
             // 11.13.1
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwError({}, Messages.StrictLHSAssignment);
@@ -2248,6 +2254,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
             // ES.next draf 11.13 Runtime Semantics step 1
             if (expr.type === Syntax.ObjectExpression || expr.type === Syntax.ArrayExpression) {
                 reinterpretAsAssignmentBindingPattern(expr);
+            } else if (!isLeftHandSide(expr)) {
+                throwError({}, Messages.InvalidLHSInAssignment);
             }
 
             expr = {
@@ -2807,7 +2815,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
                     init = null;
                 } else if (matchKeyword('in')) {
                     // LeftHandSideExpression
-                    if (matchKeyword('in') && (state.lastParenthesized !== init && !isLeftHandSide(init))) {
+                    if (!isAssignableLeftHandSide(init)) {
                         throwError({}, Messages.InvalidLHSInForIn);
                     }
                     operator = lex();
