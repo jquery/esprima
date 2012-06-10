@@ -1295,16 +1295,13 @@ parseStatement: true, parseSourceElement: true */
 
     function isLeftHandSide(expr) {
         switch (expr.type) {
-        case 'AssignmentExpression':
-        case 'BinaryExpression':
-        case 'ConditionalExpression':
-        case 'LogicalExpression':
-        case 'SequenceExpression':
-        case 'UnaryExpression':
-        case 'UpdateExpression':
-            return false;
+        case Syntax.Identifier:
+        case Syntax.MemberExpression:
+        case Syntax.CallExpression:
+        case Syntax.NewExpression:
+            return true;
         }
-        return true;
+        return false;
     }
 
     // 11.1.4 Array Initialiser
@@ -1687,6 +1684,11 @@ parseStatement: true, parseSourceElement: true */
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwError({}, Messages.StrictLHSPostfix);
             }
+
+            if (!isLeftHandSide(expr)) {
+                throwError({}, Messages.InvalidLHSInAssignment);
+            }
+
             expr = {
                 type: Syntax.UpdateExpression,
                 operator: lex().value,
@@ -1710,6 +1712,11 @@ parseStatement: true, parseSourceElement: true */
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwError({}, Messages.StrictLHSPrefix);
             }
+
+            if (!isLeftHandSide(expr)) {
+                throwError({}, Messages.InvalidLHSInAssignment);
+            }
+
             expr = {
                 type: Syntax.UpdateExpression,
                 operator: token.value,
@@ -1967,7 +1974,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (matchAssign()) {
             // LeftHandSideExpression
-            if (state.lastParenthesized !== expr && !isLeftHandSide(expr)) {
+            if (!isLeftHandSide(expr)) {
                 throwError({}, Messages.InvalidLHSInAssignment);
             }
 
@@ -2285,9 +2292,10 @@ parseStatement: true, parseSourceElement: true */
 
                 if (matchKeyword('in')) {
                     // LeftHandSideExpression
-                    if (matchKeyword('in') && (state.lastParenthesized !== init && !isLeftHandSide(init))) {
+                    if (!isLeftHandSide(init)) {
                         throwError({}, Messages.InvalidLHSInForIn);
                     }
+
                     lex();
                     left = init;
                     right = parseExpression();
