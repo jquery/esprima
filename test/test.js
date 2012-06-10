@@ -8636,101 +8636,6 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 7 }
             }
-        },
-
-        '1 = 42': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Literal',
-                    value: 1,
-                    raw: '1',
-                    range: [0, 1],
-                    loc: {
-                        start: { line: 1, column: 0 },
-                        end: { line: 1, column: 1 }
-                    }
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42,
-                    raw: '42',
-                    range: [4, 6],
-                    loc: {
-                        start: { line: 1, column: 4 },
-                        end: { line: 1, column: 6 }
-                    }
-                },
-                range: [0, 6],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 6 }
-                }
-            },
-            range: [0, 6],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 6 }
-            }
-        },
-
-        '(1 + 1) = 42': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '+',
-                    left: {
-                        type: 'Literal',
-                        value: 1,
-                        raw: '1',
-                        range: [1, 2],
-                        loc: {
-                            start: { line: 1, column: 1 },
-                            end: { line: 1, column: 2 }
-                        }
-                    },
-                    right: {
-                        type: 'Literal',
-                        value: 1,
-                        raw: '1',
-                        range: [5, 6],
-                        loc: {
-                            start: { line: 1, column: 5 },
-                            end: { line: 1, column: 6 }
-                        }
-                    },
-                    range: [0, 7],
-                    loc: {
-                        start: { line: 1, column: 0 },
-                        end: { line: 1, column: 7 }
-                    }
-                },
-                right: {
-                    type: 'Literal',
-                    value: 42,
-                    raw: '42',
-                    range: [10, 12],
-                    loc: {
-                        start: { line: 1, column: 10 },
-                        end: { line: 1, column: 12 }
-                    }
-                },
-                range: [0, 12],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 12 }
-                }
-            },
-            range: [0, 12],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 12 }
-            }
         }
 
     },
@@ -11050,88 +10955,6 @@ data = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 26 }
-            }
-        },
-
-        'for((1 + 1) in list) process(x);': {
-            type: 'ForInStatement',
-            left: {
-                type: 'BinaryExpression',
-                operator: '+',
-                left: {
-                    type: 'Literal',
-                    value: 1,
-                    raw: '1',
-                    range: [5, 6],
-                    loc: {
-                        start: { line: 1, column: 5 },
-                        end: { line: 1, column: 6 }
-                    }
-                },
-                right: {
-                    type: 'Literal',
-                    value: 1,
-                    raw: '1',
-                    range: [9, 10],
-                    loc: {
-                        start: { line: 1, column: 9 },
-                        end: { line: 1, column: 10 }
-                    }
-                },
-                range: [4, 11],
-                loc: {
-                    start: { line: 1, column: 4 },
-                    end: { line: 1, column: 11 }
-                }
-            },
-            right: {
-                type: 'Identifier',
-                name: 'list',
-                range: [15, 19],
-                loc: {
-                    start: { line: 1, column: 15 },
-                    end: { line: 1, column: 19 }
-                }
-            },
-            body: {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'CallExpression',
-                    callee: {
-                        type: 'Identifier',
-                        name: 'process',
-                        range: [21, 28],
-                        loc: {
-                            start: { line: 1, column: 21 },
-                            end: { line: 1, column: 28 }
-                        }
-                    },
-                    'arguments': [{
-                        type: 'Identifier',
-                        name: 'x',
-                        range: [29, 30],
-                        loc: {
-                            start: { line: 1, column: 29 },
-                            end: { line: 1, column: 30 }
-                        }
-                    }],
-                    range: [21, 31],
-                    loc: {
-                        start: { line: 1, column: 21 },
-                        end: { line: 1, column: 31 }
-                    }
-                },
-                range: [21, 32],
-                loc: {
-                    start: { line: 1, column: 21 },
-                    end: { line: 1, column: 32 }
-                }
-            },
-            each: false,
-            range: [0, 32],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 32 }
             }
         },
 
@@ -14961,6 +14784,55 @@ data = {
             lineNumber: 1,
             column: 19,
             message: 'Error: Line 1: Invalid regular expression'
+        },
+
+        '3 = 4': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '(1 + 1) = 10': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '1++': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '1--': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '++1': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '--1': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        'for((1 + 1) in list) process(x);': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Invalid left-hand side in for-in'
         },
 
         '[': {
