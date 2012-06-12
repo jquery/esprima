@@ -5051,9 +5051,9 @@ data = {
                             end: { line: 1, column: 11 }
                         }
                     }],
-                    range: [8, 12],
+                    range: [0, 12],
                     loc: {
-                        start: { line: 1, column: 8 },
+                        start: { line: 1, column: 0 },
                         end: { line: 1, column: 12 }
                     }
                 },
@@ -5066,9 +5066,9 @@ data = {
                         end: { line: 1, column: 21 }
                     }
                 },
-                range: [8, 21],
+                range: [0, 21],
                 loc: {
-                    start: { line: 1, column: 8 },
+                    start: { line: 1, column: 0 },
                     end: { line: 1, column: 21 }
                 }
             },
@@ -5110,9 +5110,9 @@ data = {
                                     end: { line: 1, column: 11 }
                                 }
                             }],
-                            range: [8, 12],
+                            range: [0, 12],
                             loc: {
-                                start: { line: 1, column: 8 },
+                                start: { line: 1, column: 0 },
                                 end: { line: 1, column: 12 }
                             }
                         },
@@ -5125,9 +5125,9 @@ data = {
                                 end: { line: 1, column: 21 }
                             }
                         },
-                        range: [8, 21],
+                        range: [0, 21],
                         loc: {
-                            start: { line: 1, column: 8 },
+                            start: { line: 1, column: 0 },
                             end: { line: 1, column: 21 }
                         }
                     },
@@ -5159,9 +5159,9 @@ data = {
                             end: { line: 1, column: 31 }
                         }
                     }],
-                    range: [21, 32],
+                    range: [0, 32],
                     loc: {
-                        start: { line: 1, column: 21 },
+                        start: { line: 1, column: 0 },
                         end: { line: 1, column: 32 }
                     }
                 },
@@ -5174,9 +5174,9 @@ data = {
                         end: { line: 1, column: 41 }
                     }
                 },
-                range: [21, 41],
+                range: [0, 41],
                 loc: {
-                    start: { line: 1, column: 21 },
+                    start: { line: 1, column: 0 },
                     end: { line: 1, column: 41 }
                 }
             },
@@ -16261,9 +16261,9 @@ data = {
                         }
                     },
                     'arguments': [],
-                    range: [0, 43],
+                    range: [1, 43],
                     loc: {
-                        start: { line: 1, column: 0 },
+                        start: { line: 1, column: 1 },
                         end: { line: 1, column: 43 }
                     }
                 },
@@ -16346,9 +16346,9 @@ data = {
                         }
                     },
                     'arguments': [],
-                    range: [0, 37],
+                    range: [1, 37],
                     loc: {
-                        start: { line: 1, column: 0 },
+                        start: { line: 1, column: 1 },
                         end: { line: 1, column: 37 }
                     }
                 },
