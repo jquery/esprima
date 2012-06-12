@@ -1383,7 +1383,6 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true */
         case Syntax.Identifier:
         case Syntax.MemberExpression:
         case Syntax.CallExpression:
-        case Syntax.NewExpression:
             return true;
         }
         return false;
