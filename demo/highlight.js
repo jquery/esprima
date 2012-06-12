@@ -60,7 +60,7 @@ function triggerParse(delay) {
 function trackCursor(editor) {
     'use strict';
 
-    var pos, code, id;
+    var pos, code, node, id;
 
     markers.forEach(function (marker) {
         marker.clear();
@@ -113,11 +113,11 @@ function trackCursor(editor) {
                 ch: node.loc.end.column
             };
             markers.push(editor.markText(start, end, 'identifier'));
-            id = node.name;
+            id = node;
         }
     });
 
-    if (typeof id !== 'string') {
+    if (typeof id === 'undefined') {
         return;
     }
 
@@ -126,7 +126,7 @@ function trackCursor(editor) {
         if (node.type !== esprima.Syntax.Identifier) {
             return;
         }
-        if (node.name === id) {
+        if (node !== id && node.name === id.name) {
             start = {
                 line: node.loc.start.line - 1,
                 ch: node.loc.start.column
@@ -135,7 +135,7 @@ function trackCursor(editor) {
                 line: node.loc.end.line - 1,
                 ch: node.loc.end.column
             };
-            markers.push(editor.markText(start, end, 'identifier'));
+            markers.push(editor.markText(start, end, 'highlight'));
         }
     });
 }

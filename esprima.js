@@ -973,14 +973,11 @@ parseStatement: true, parseSourceElement: true */
                         throwError({}, Messages.UnterminatedRegExp);
                     }
                     str += ch;
-                }
-                else if (ch === '/') {
+                } else if (ch === '/') {
                     break;
-                }
-                else if (ch === '[') {
+                } else if (ch === '[') {
                     classMarker = true;
-                }
-                else if (isLineTerminator(ch)) {
+                } else if (isLineTerminator(ch)) {
                     throwError({}, Messages.UnterminatedRegExp);
                 }
             }
@@ -1298,16 +1295,12 @@ parseStatement: true, parseSourceElement: true */
 
     function isLeftHandSide(expr) {
         switch (expr.type) {
-        case 'AssignmentExpression':
-        case 'BinaryExpression':
-        case 'ConditionalExpression':
-        case 'LogicalExpression':
-        case 'SequenceExpression':
-        case 'UnaryExpression':
-        case 'UpdateExpression':
-            return false;
+        case Syntax.Identifier:
+        case Syntax.MemberExpression:
+        case Syntax.CallExpression:
+            return true;
         }
-        return true;
+        return false;
     }
 
     // 11.1.4 Array Initialiser
@@ -1690,6 +1683,11 @@ parseStatement: true, parseSourceElement: true */
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwError({}, Messages.StrictLHSPostfix);
             }
+
+            if (!isLeftHandSide(expr)) {
+                throwError({}, Messages.InvalidLHSInAssignment);
+            }
+
             expr = {
                 type: Syntax.UpdateExpression,
                 operator: lex().value,
@@ -1713,6 +1711,11 @@ parseStatement: true, parseSourceElement: true */
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwError({}, Messages.StrictLHSPrefix);
             }
+
+            if (!isLeftHandSide(expr)) {
+                throwError({}, Messages.InvalidLHSInAssignment);
+            }
+
             expr = {
                 type: Syntax.UpdateExpression,
                 operator: token.value,
@@ -1869,14 +1872,14 @@ parseStatement: true, parseSourceElement: true */
         return expr;
     }
 
-    function parseBitwiseORExpression() {
+    function parseBitwiseXORExpression() {
         var expr = parseBitwiseANDExpression();
 
-        while (match('|')) {
+        while (match('^')) {
             lex();
             expr = {
                 type: Syntax.BinaryExpression,
-                operator: '|',
+                operator: '^',
                 left: expr,
                 right: parseBitwiseANDExpression()
             };
@@ -1885,16 +1888,16 @@ parseStatement: true, parseSourceElement: true */
         return expr;
     }
 
-    function parseBitwiseXORExpression() {
-        var expr = parseBitwiseORExpression();
+    function parseBitwiseORExpression() {
+        var expr = parseBitwiseXORExpression();
 
-        while (match('^')) {
+        while (match('|')) {
             lex();
             expr = {
                 type: Syntax.BinaryExpression,
-                operator: '^',
+                operator: '|',
                 left: expr,
-                right: parseBitwiseORExpression()
+                right: parseBitwiseXORExpression()
             };
         }
 
@@ -1904,7 +1907,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.11 Binary Logical Operators
 
     function parseLogicalANDExpression() {
-        var expr = parseBitwiseXORExpression();
+        var expr = parseBitwiseORExpression();
 
         while (match('&&')) {
             lex();
@@ -1912,7 +1915,7 @@ parseStatement: true, parseSourceElement: true */
                 type: Syntax.LogicalExpression,
                 operator: '&&',
                 left: expr,
-                right: parseBitwiseXORExpression()
+                right: parseBitwiseORExpression()
             };
         }
 
@@ -1970,7 +1973,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (matchAssign()) {
             // LeftHandSideExpression
-            if (state.lastParenthesized !== expr && !isLeftHandSide(expr)) {
+            if (!isLeftHandSide(expr)) {
                 throwError({}, Messages.InvalidLHSInAssignment);
             }
 
@@ -2288,9 +2291,10 @@ parseStatement: true, parseSourceElement: true */
 
                 if (matchKeyword('in')) {
                     // LeftHandSideExpression
-                    if (matchKeyword('in') && (state.lastParenthesized !== init && !isLeftHandSide(init))) {
+                    if (!isLeftHandSide(init)) {
                         throwError({}, Messages.InvalidLHSInForIn);
                     }
+
                     lex();
                     left = init;
                     right = parseExpression();
