@@ -147,7 +147,6 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         UnexpectedReserved:  'Unexpected reserved word',
         UnexpectedEOS:  'Unexpected end of input',
         NewlineAfterThrow:  'Illegal newline after throw',
-        NewlineAfterModule:  'Illegal newline after module',
         InvalidRegExp: 'Invalid regular expression',
         UnterminatedRegExp:  'Invalid regular expression: missing /',
         InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
@@ -335,11 +334,6 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         }
 
         if (strict && isStrictModeReservedWord(id)) {
-            return true;
-        }
-
-        // Harmony
-        if (id === 'module') {
             return true;
         }
 
@@ -2349,14 +2343,32 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
 
     function parseModuleDeclaration() {
         var id, token, declaration;
+        var pos, line, start;
 
-        expectKeyword('module');
+        pos = index;
+        line = lineNumber;
+        start = lineStart;
 
-        if (peekLineTerminator()) {
-            throwError({}, Messages.NewlineAfterModule);
+        try {
+            token = lex();
+            if (token.value !== 'module') {
+                throwUnexpected(token);
+            }
+
+            if (peekLineTerminator()) {
+                index = pos;
+                lineNumber = line;
+                lineStart = start;
+                return parseStatement();
+            }
+
+            id = parseVariableIdentifier();
+        } catch(e) {
+            index = pos;
+            lineNumber = line;
+            lineStart = start;
+            return parseStatement();
         }
-
-        id = parseVariableIdentifier();
 
         if (match('{')) {
             return {
@@ -2452,7 +2464,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
 
         token = lookahead();
 
-        if (token.type === Token.Keyword) {
+        if (token.type === Token.Keyword || (token.type === Token.Identifier && token.value === 'module')) {
             switch (token.value) {
             case 'function':
                 return {
@@ -3458,7 +3470,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
     function parseProgramElement() {
         var token = lookahead();
 
-        if (token.type === Token.Keyword) {
+        if (token.type === Token.Keyword || (token.type === Token.Identifier && token.value === 'module')) {
             switch (token.value) {
             case 'module':
                 return parseModuleDeclaration(token.value);

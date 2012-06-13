@@ -17089,7 +17089,7 @@ data = {
                 loc: {
                     start: { line: 1, column: 19 },
                     end: { line: 1, column: 28 }
-                }                
+                }
             }],
             from: {
                 type: 'Path',
@@ -17113,8 +17113,79 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 41 }
             }
-        }
+        },
 
+        'module\n X = Y': {
+            type: "ExpressionStatement",
+            expression: {
+                type: "Identifier",
+                name: "module",
+                range: [0, 6],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 6 }
+                }
+            },
+            range: [0, 8],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 2, column: 1 }
+            }
+        },
+
+        'module.export = Foo': {
+            type: "ExpressionStatement",
+            expression: {
+                type: "AssignmentExpression",
+                operator: "=",
+                left: {
+                    type: "MemberExpression",
+                    computed: false,
+                    object: {
+                        type: "Identifier",
+                        name: "module",
+                        range: [0, 6],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 6 }
+                        }
+                    },
+                    property: {
+                        type: "Identifier",
+                        name: "export",
+                        range: [7, 13],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 13 }
+                        }
+                    },
+                    range: [0, 13],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 13 }
+                    }
+                },
+                right: {
+                    type: "Identifier",
+                    name: "Foo",
+                    range: [16, 19],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 19 }
+                    }
+                },
+                range: [0, 19],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 19 }
+                }
+            },
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        }
     },
 
     'Invalid syntax': {
@@ -18022,7 +18093,7 @@ data = {
             column: 5,
             message: 'Error: Line 1: Invalid regular expression: missing /'
         },
-        
+
         '//\r \n]': {
             index: 5,
             lineNumber: 3,
@@ -18715,20 +18786,6 @@ data = {
             lineNumber: 1,
             column: 10,
             message: 'Error: Line 1: Unexpected identifier'
-        },
-
-        'module\n X = Y': {
-            index: 6,
-            lineNumber: 1,
-            column: 7,
-            message: 'Error: Line 1: Illegal newline after module'
-        },
-
-        'module\n X = "Y"': {
-            index: 6,
-            lineNumber: 1,
-            column: 7,
-            message: 'Error: Line 1: Illegal newline after module'
         },
 
         'export for': {
