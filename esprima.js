@@ -148,7 +148,6 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         UnexpectedReserved:  'Unexpected reserved word',
         UnexpectedEOS:  'Unexpected end of input',
         NewlineAfterThrow:  'Illegal newline after throw',
-        NewlineAfterModule:  'Illegal newline after module',
         InvalidRegExp: 'Invalid regular expression',
         UnterminatedRegExp:  'Invalid regular expression: missing /',
         InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
@@ -1682,6 +1681,13 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
                 };
             }
 
+            if (matchKeyword('module')) {
+                return {
+                    type: Syntax.Identifier,
+                    name: lex().value
+                };
+            }
+
             if (matchKeyword('function')) {
                 return parseFunctionExpression();
             }
@@ -2439,14 +2445,29 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
 
     function parseModuleDeclaration() {
         var id, token, declaration;
+        var pos, line, start;
 
-        expectKeyword('module');
+        pos = index;
+        line = lineNumber;
+        start = lineStart;
 
-        if (peekLineTerminator()) {
-            throwError({}, Messages.NewlineAfterModule);
+        try {
+            expectKeyword('module');
+
+            if (peekLineTerminator()) {
+                index = pos;
+                lineNumber = line;
+                lineStart = start;
+                return parseStatement();
+            }
+
+            id = parseVariableIdentifier();
+        } catch(e) {
+            index = pos;
+            lineNumber = line;
+            lineStart = start;
+            return parseStatement();
         }
-
-        id = parseVariableIdentifier();
 
         if (match('{')) {
             return {
