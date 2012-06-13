@@ -98,7 +98,31 @@ esprima.parse(code, options);
 
 <h2 id="examples">Examples</h2>
 
-<p>To be written.</p>
+<h3 id="booleantrap">Find Possible Boolean Traps</h3>
+
+<p>The script <code>findbooleantrap.js</code> in the <code>examples/</code> subdirectory is using Esprima to detect some possible cases of Boolean trap, i.e. the use of Boolean literal which may lead to ambiguities and lack of readability. The script can be invoked from command-line with Node.js:</p>
+
+<pre class="prettyprint lang-bsh">
+node findbooleantrap.js /some/path
+</pre>
+
+It will search for all files (recursively) in the given path, try to parse each file, and then look for signs of Boolean traps:
+
+<ul>
+<li>Literal used with a non-setter function (assumption: setter starts with the &quot;set&quot; prefix):</li>
+<pre class="prettyprint lang-js">this.refresh(true);</pre>
+<li>Literal used with a function whose name may have a double-negative interpretation:</li>
+<pre class="prettyprint lang-js">item.setHidden(false);</pre>
+<li>Two different literals in a single function call:</li>
+<pre class="prettyprint lang-js">element.stop(true, false);</pre>
+<li>Multiple literals in a single function invocation:</li>
+<pre class="prettyprint lang-js">event.initKeyEvent("keypress", true, true, null, null,
+    false, false, false, false, 9, 0);</pre>
+<li>Ambiguous Boolean literal as the last argument:</li>
+<pre class="prettyprint lang-js">return getSomething(obj, false);</pre>
+</ul>
+
+For some more info, read also the blog post on <a href="http://ariya.ofilabs.com/2011/08/hall-of-api-shame-boolean-trap.html">Boolean trap</a>.
 
 <h2 id="ast">Syntax Tree Format</h2>
 
