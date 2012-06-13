@@ -1174,14 +1174,33 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         return buffer;
     }
 
-    // Return true if there is a line terminator before the next token.
-
-    function peekLineTerminator() {
-        var pos, line, start, found;
+    function lookahead2() {
+        var pos, line, start, result;
 
         pos = index;
         line = lineNumber;
         start = lineStart;
+        advance();
+        result = advance();
+        index = pos;
+        lineNumber = line;
+        lineStart = start;
+
+        return result;
+    }
+
+    // Return true if there is a line terminator before the next token.
+
+    function peekLineTerminator(skip) {
+        var pos, line, start, found;
+        skip = skip || 0;
+
+        pos = index;
+        line = lineNumber;
+        start = lineStart;
+        while (skip--) {
+            advance();
+        }
         skipComment();
         found = lineNumber !== line;
         index = pos;
@@ -2345,30 +2364,12 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         var id, token, declaration;
         var pos, line, start;
 
-        pos = index;
-        line = lineNumber;
-        start = lineStart;
-
-        try {
-            token = lex();
-            if (token.value !== 'module') {
-                throwUnexpected(token);
-            }
-
-            if (peekLineTerminator()) {
-                index = pos;
-                lineNumber = line;
-                lineStart = start;
-                return parseStatement();
-            }
-
-            id = parseVariableIdentifier();
-        } catch(e) {
-            index = pos;
-            lineNumber = line;
-            lineStart = start;
-            return parseStatement();
+        token = lex();
+        if (token.value !== 'module') {
+            throwUnexpected(token);
         }
+
+        id = parseVariableIdentifier();
 
         if (match('{')) {
             return {
@@ -3473,7 +3474,11 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         if (token.type === Token.Keyword || (token.type === Token.Identifier && token.value === 'module')) {
             switch (token.value) {
             case 'module':
-                return parseModuleDeclaration(token.value);
+                if (lookahead2().type === Token.Identifier && !peekLineTerminator(1)) {
+                    return parseModuleDeclaration(token.value);
+                } else {
+                    break;
+                }
             case 'export':
                 return parseExportDeclaration();
             case 'import':
