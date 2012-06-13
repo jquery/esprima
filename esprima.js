@@ -2362,7 +2362,6 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
 
     function parseModuleDeclaration() {
         var id, token, declaration;
-        var pos, line, start;
 
         token = lex();
         if (token.value !== 'module') {
