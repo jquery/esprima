@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <title>Esprima: Transpile Demo</title>
 <script src="../test/3rdparty/platform.js"></script>
-<script src="../test/3rdparty/escodegen.js"></script>
 <script src="checkenv.js"></script>
 <script src="transpile.js"></script>
 <script src="../esprima.js"></script>
+<script src="../test/3rdparty/harmonizr.js"></script>
 <script src="../assets/codemirror/codemirror.js"></script>
 <script src="../assets/codemirror/javascript.js"></script>
 <link rel="stylesheet" type="text/css" href="../assets/codemirror/codemirror.css"/>
@@ -42,17 +42,28 @@
 
 <h1>Transpile <small>from ES.Next back to ES.now</small></h1>
 
-<p>Type ECMAScript 6 code in the left box. The transpiled version will be shown in the right box.<br/>
-<b>Note</b>: This is work-in-progress. Only transpilation of
-<a href="http://wiki.ecmascript.org/doku.php?id=harmony:object_literals#object_literal_property_value_shorthand">object literal property value shorthand</a> is currently supported.</p>
+<p>Type ES Harmony code in the left box. The transpiled version will be shown in the right box.</p>
+
+<p><b>Note</b>: This is work-in-progress. Only transpilation of
+<a href="http://wiki.ecmascript.org/doku.php?id=harmony:object_literals#object_literal_property_value_shorthand">object literal property value shorthand</a>
+and <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules">module declaration</a> are currently supported.</p>
+
+<p><b>Credit</b>: Module transpilation is based on <a href="https://github.com/jdiamond/harmonizr">Harmonizr project</a>.</p>
 
 <p>&nbsp;</p>
 
 <div>
 <span id="codebox"><textarea id="code" autofocus="autofocus" cols="50" rows="25" spellcheck="false">
-// Object literal property shorthand.
-function Point(x, y) {
-    return { x, y };
+// Module declaration
+module LinearAlgebra {
+
+    export const CoordinateSystem = 'Cartesian';
+
+    // Object literal property shorthand.
+    export function Point(x, y) {
+        return { x, y };
+    }
+
 }
 </textarea></span>
 

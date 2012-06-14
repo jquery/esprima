@@ -83,6 +83,8 @@ function transpile(code) {
         result = result.slice(0, op.pos) + op.text + result.slice(op.pos, result.length);
     }
 
+    result = harmonizr.harmonize(result, { style: 'revealing' });
+
     return result;
 }
 
