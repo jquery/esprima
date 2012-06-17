@@ -1294,13 +1294,7 @@ parseStatement: true, parseSourceElement: true */
     // Return true if provided expression is LeftHandSideExpression
 
     function isLeftHandSide(expr) {
-        switch (expr.type) {
-        case Syntax.Identifier:
-        case Syntax.MemberExpression:
-        case Syntax.CallExpression:
-            return true;
-        }
-        return false;
+        return expr.type === Syntax.Identifier || expr.type === Syntax.MemberExpression;
     }
 
     // 11.1.4 Array Initialiser
