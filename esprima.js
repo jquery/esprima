@@ -720,7 +720,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
 
         // The remaining 1-character punctuators.
 
-        if ('[]<>+-*%&|^!~?:=#/'.indexOf(ch1) >= 0) {
+        if ('[]<>+-*%&|^!~?:=/'.indexOf(ch1) >= 0) {
             return {
                 type: Token.Punctuator,
                 value: nextChar(),
@@ -1421,12 +1421,6 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         };
     }
 
-    function parseSealedArrayInitialiser() {
-        var result = parseArrayInitialiser();
-        result.sealed = true;
-        return result;
-    }
-
     // 11.1.5 Object Initialiser
 
     function parsePropertyFunction(param, first) {
@@ -1647,12 +1641,6 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         };
     }
 
-    function parseSealedObjectInitialiser() {
-        var result = parseObjectInitialiser();
-        result.sealed = true;
-        return result;
-    }
-
     // 11.1 Primary Expressions
 
     function parsePrimaryExpression() {
@@ -1716,17 +1704,6 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
 
         if (match('/') || match('/=')) {
             return createLiteral(scanRegExp());
-        }
-
-        if (match('#')) {
-            lex();
-            if (match('[')) {
-                return parseSealedArrayInitialiser();
-            }
-
-            if (match('{')) {
-                return parseSealedObjectInitialiser();
-            }
         }
 
         return throwUnexpected(lex());
@@ -2206,10 +2183,6 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
 
     function reinterpretAsAssignmentBindingPattern(expr) {
         var i, len, property, element;
-
-        if (expr.sealed) {
-            throwError({}, Messages.InvalidLHSInAssignment);
-        }
 
         if (expr.type === Syntax.ObjectExpression) {
             expr.type = Syntax.ObjectPattern;
