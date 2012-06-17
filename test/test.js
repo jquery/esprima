@@ -17413,6 +17413,13 @@ data = {
             message: 'Error: Line 1: Invalid left-hand side in assignment'
         },
 
+        '[v] += ary': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
         '1++': {
             index: 1,
             lineNumber: 1,
