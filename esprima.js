@@ -2251,7 +2251,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
             }
 
             // ES.next draf 11.13 Runtime Semantics step 1
-            if (expr.type === Syntax.ObjectExpression || expr.type === Syntax.ArrayExpression) {
+            if (match('=') && (expr.type === Syntax.ObjectExpression || expr.type === Syntax.ArrayExpression)) {
                 reinterpretAsAssignmentBindingPattern(expr);
             } else if (!isLeftHandSide(expr)) {
                 throwError({}, Messages.InvalidLHSInAssignment);
