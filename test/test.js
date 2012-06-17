@@ -17399,6 +17399,13 @@ data = {
             message: 'Error: Line 1: Invalid left-hand side in assignment'
         },
 
+        'func() = 4': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
         '(1 + 1) = 10': {
             index: 7,
             lineNumber: 1,

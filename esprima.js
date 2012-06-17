@@ -1367,13 +1367,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
     // Return true if provided expression is LeftHandSideExpression
 
     function isLeftHandSide(expr) {
-        switch (expr.type) {
-        case Syntax.Identifier:
-        case Syntax.MemberExpression:
-        case Syntax.CallExpression:
-            return true;
-        }
-        return false;
+        return expr.type === Syntax.Identifier || expr.type === Syntax.MemberExpression;
     }
 
     function isAssignableLeftHandSide(expr) {
