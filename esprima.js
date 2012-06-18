@@ -3300,9 +3300,7 @@ parseStatement: true, parseSourceElement: true */
                         if (typeof node.object.loc !== 'undefined') {
                             node.loc.start = node.object.loc.start;
                         }
-                    }
-
-                    if (node.type === Syntax.CallExpression) {
+                    } else if (node.type === Syntax.CallExpression) {
                         if (typeof node.callee.range !== 'undefined') {
                             node.range[0] = node.callee.range[0];
                         }
