@@ -4,7 +4,91 @@ var parse = esprima.parse, Syntax = esprima.Syntax;
 
 function harmonize(src, options) {
     options = options || {};
+    src = processShorthands(src, options);
+    src = processMethods(src, options);
     return processModules(src, options, moduleStyles[options.style]);
+}
+
+function processShorthands(src, options) {
+    var ast = parse(src, { loc: true });
+
+    var shorthands = [];
+
+    traverse(ast, function(node) {
+        if (node.type === Syntax.Property && node.shorthand) {
+            shorthands.push(node);
+        }
+    });
+
+    var lines = src.split('\n');
+
+    for (var i = shorthands.length - 1; i >= 0; i--) {
+        var prop = shorthands[i];
+        var line = prop.value.loc.end.line - 1;
+        var col = prop.value.loc.end.column;
+
+        lines[line] = splice(
+            lines[line],
+            col,
+            0, // Delete nothing.
+            ': ' + prop.value.name);
+    }
+
+    return lines.join('\n');
+}
+
+function processMethods(src, options) {
+    var ast = parse(src, { loc: true });
+
+    var methods = [];
+
+    traverse(ast, function(node) {
+        if (node.type === Syntax.Property && node.method) {
+            methods.push(node);
+        }
+    });
+
+    var lines = src.split('\n');
+
+    for (var i = methods.length - 1; i >= 0; i--) {
+        var prop = methods[i];
+        var line = prop.key.loc.end.line - 1;
+        var col = prop.key.loc.end.column;
+
+        if (prop.value.body.type !== Syntax.BlockStatement) {
+            // It's a concise method definition.
+
+            // Add the end of the function body first.
+            var bodyEndLine = prop.value.loc.end.line - 1;
+            var bodyEndCol = prop.value.loc.end.column;
+            lines[bodyEndLine] = splice(
+                lines[bodyEndLine],
+                bodyEndCol,
+                0,
+                '; }');
+
+            // Now add the beginning.
+            var prefix = '{ ';
+            if (prop.value.body.type !== Syntax.AssignmentExpression) {
+                prefix += 'return ';
+            }
+            var bodyStartLine = prop.value.loc.start.line - 1;
+            var bodyStartCol = prop.value.loc.start.column;
+            lines[bodyStartLine] = splice(
+                lines[bodyStartLine],
+                bodyStartCol,
+                0,
+                prefix);
+        }
+
+        lines[line] = splice(
+            lines[line],
+            col,
+            0, // Delete nothing.
+            ': function');
+    }
+
+    return lines.join('\n');
 }
 
 function processModules(src, options, style) {
@@ -250,19 +334,20 @@ function splice(str, index, howMany, insert) {
 }
 
 function detectIndent(mod, lines) {
-    var moduleBodyStartLine = mod.body.loc.start.line - 1;
-    var line = lines[moduleBodyStartLine + 1];
-    if (line) {
-        var m = line.match(/^(\s*)\S/);
+    var i = 0;
+    while (i < lines.length) {
+        var line = lines[i];
+        var m = line.match(/^(\s+)\S/);
         if (m) {
             return m[1];
         }
+        i++;
     }
     return '';
 }
 
-return {
-harmonize: harmonize,
-moduleStyles: moduleStyles
-};
+    return {
+        harmonize: harmonize,
+        moduleStyles: moduleStyles
+    };
 }();
