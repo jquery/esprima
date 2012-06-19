@@ -17918,6 +17918,71 @@ data = {
             }
         },
 
+        'class A {get() {}}': {
+            id: {
+                type: "Identifier",
+                name: "A",
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            type: "ClassDeclaration",
+            body: {
+                type: "ClassBody",
+                body: [
+                    {
+                        type: "MethodDefinition",
+                        key: {
+                            type: "Identifier",
+                            name: "get",
+                            range: [9, 12],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 12 }
+                            }
+                        },
+                        value: {
+                            type: "FunctionExpression",
+                            id: null,
+                            params: [],
+                            body: {
+                                type: "BlockStatement",
+                                body: [],
+                                range: [15, 17],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 17 }
+                                }
+                            },
+                            range: [15, 17],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 17 }
+                            }
+                        },
+                        kind: "",
+                        range: [9, 17],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 17 }
+                        }
+                    }
+                ],
+                range: [8, 18],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
         'class A extends B {get foo() {}}': {
             id: {
                 type: "Identifier",

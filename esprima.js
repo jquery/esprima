@@ -3555,8 +3555,9 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         var token, key, result, param;
 
         token = lookahead();
-        if (token.value === 'get') {
-            lex();
+        key = parseObjectPropertyKey();
+
+        if (token.value === 'get' && !match('(')) {
             key = parseObjectPropertyKey();
             expect('(');
             expect(')');
@@ -3566,7 +3567,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
                 value: parsePropertyFunction([]),
                 kind: 'get'
             };
-        } else if (token.value === 'set') {
+        } else if (token.value === 'set' && !match('(')) {
             key = parseObjectPropertyKey();
             expect('(');
             token = lookahead();
@@ -3582,8 +3583,6 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
                 kind: 'set'
             };
         } else {
-            key = parseObjectPropertyKey();
-
             return {
                 type: Syntax.MethodDefinition,
                 key: key,
