@@ -17775,7 +17775,7 @@ data = {
                 loc: {
                     start: { line: 1, column: 19 },
                     end: { line: 1, column: 28 }
-                }                
+                }
             }],
             from: {
                 type: 'Path',
@@ -17800,7 +17800,124 @@ data = {
                 end: { line: 1, column: 41 }
             }
         },
-        
+
+        'var A = class extends B {}': {
+            type: "VariableDeclaration",
+            declarations: [
+                {
+                    type: "VariableDeclarator",
+                    id: {
+                        type: "Identifier",
+                        name: "A",
+                        range: [4, 5],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    },
+                    init: {
+                        type: "ClassExpression",
+                        body: {
+                            type: "ClassBody",
+                            body: [],
+                            range: [24, 26],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 26 }
+                            }
+                        },
+                        subclassOf: {
+                            type: "Identifier",
+                            name: "B",
+                            range: [22, 23],
+                            loc: {
+                                start: { line: 1, column: 22 },
+                                end: { line: 1, column: 23 }
+                            }
+                        },
+                        range: [8, 26],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    range: [4, 26],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 26 }
+                    }
+                }
+            ],
+            kind: "var",
+            range: [0, 26],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 26 }
+            }
+        },
+
+        'class A extends class B extends C {} {}': {
+            id: {
+                type: "Identifier",
+                name: "A",
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            type: "ClassDeclaration",
+            body: {
+                type: "ClassBody",
+                body: [],
+                range: [37, 39],
+                loc: {
+                    start: { line: 1, column: 37 },
+                    end: { line: 1, column: 39 }
+                }
+            },
+            subclassOf: {
+                id: {
+                    type: "Identifier",
+                    name: "B",
+                    range: [22, 23],
+                    loc: {
+                        start: { line: 1, column: 22 },
+                        end: { line: 1, column: 23 }
+                    }
+                },
+                type: "ClassExpression",
+                body: {
+                    type: "ClassBody",
+                    body: [],
+                    range: [34, 36],
+                    loc: {
+                        start: { line: 1, column: 34 },
+                        end: { line: 1, column: 36 }
+                    }
+                },
+                subclassOf: {
+                    type: "Identifier",
+                    name: "C",
+                    range: [32, 33],
+                    loc: {
+                        start: { line: 1, column: 32 },
+                        end: { line: 1, column: 33 }
+                    }
+                },
+                range: [16, 36],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            range: [0, 39],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 39 }
+            }
+        },
+
         'class A extends B {get foo() {}}': {
             id: {
                 type: "Identifier",
@@ -17815,7 +17932,7 @@ data = {
             body: {
                 type: "ClassBody",
                 body: [{
-                    type: "ClassElement",
+                    type: "MethodDefinition",
                     key: {
                         type: "Identifier",
                         name: "foo",
@@ -17837,19 +17954,24 @@ data = {
                                 start: { line: 1, column: 29 },
                                 end: { line: 1, column: 31 }
                             }
+                        },
+                        range: [29, 31],
+                        loc: {
+                            start: { line: 1, column: 29 },
+                            end: { line: 1, column: 31 }
                         }
                     },
                     kind: "get",
                     range: [19, 31],
                     loc: {
-                      start: { line: 1, column: 19 },
-                      end: { line: 1, column: 31 }
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 31 }
                     }
                 }],
                 range: [18, 32],
                 loc: {
-                  start: { line: 1, column: 18 },
-                  end: { line: 1, column: 32 }
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 32 }
                 }
             },
             subclassOf: {
@@ -17867,7 +17989,7 @@ data = {
                 end: { line: 1, column: 32 }
             }
         },
-        
+
         '"use strict"; (class A {constructor() { super() }})': {
             type: "Program",
             body: [
@@ -17901,12 +18023,12 @@ data = {
                                 end: { line: 1, column: 22 }
                             }
                         },
-                        type: "ClassDeclaration",
+                        type: "ClassExpression",
                         body: {
                             type: "ClassBody",
                             body: [
                                 {
-                                    type: "ClassElement",
+                                    type: "MethodDefinition",
                                     key: {
                                         type: "Identifier",
                                         name: "constructor",
@@ -17918,6 +18040,7 @@ data = {
                                     },
                                     value: {
                                         type: "FunctionExpression",
+                                        id: null,
                                         params: [],
                                         body: {
                                             type: "BlockStatement",
@@ -17955,7 +18078,6 @@ data = {
                                                 end: { line: 1, column: 49 }
                                             }
                                         },
-                                        id: null,
                                         range: [38, 49],
                                         loc: {
                                             start: { line: 1, column: 38 },
@@ -17965,8 +18087,8 @@ data = {
                                     kind: "",
                                     range: [24, 49],
                                     loc: {
-                                      start: { line: 1, column: 24 },
-                                      end: { line: 1, column: 49 }
+                                        start: { line: 1, column: 24 },
+                                        end: { line: 1, column: 49 }
                                     }
                                 }
                             ],
@@ -17994,8 +18116,8 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 51 }
             },
-        	comments: []
-        },    
+            comments: []
+        }
 
     },
 
@@ -18897,7 +19019,7 @@ data = {
             column: 5,
             message: 'Error: Line 1: Invalid regular expression: missing /'
         },
-        
+
         '//\r \n]': {
             index: 5,
             lineNumber: 3,
@@ -19466,13 +19588,6 @@ data = {
             message: 'Error: Line 1: Use of future reserved word in strict mode'
         },
 
-        'function hello() { "use strict"; super }': {
-            index: 33,
-            lineNumber: 1,
-            column: 34,
-            message: 'Error: Line 1: Super keyword is only allowed inside class elements'
-        },
-
         'function static() { "use strict"; }': {
             index: 9,
             lineNumber: 1,
@@ -19770,7 +19885,7 @@ data = {
                 }]
             }
         },
-        
+
         'Syntax': {
             property: 'Syntax',
             result: {
@@ -19784,7 +19899,8 @@ data = {
                 CatchClause: 'CatchClause',
                 ClassBody: 'ClassBody',
                 ClassDeclaration: 'ClassDeclaration',
-                ClassElement: 'ClassElement',
+                ClassExpression: 'ClassExpression',
+                MethodDefinition: 'MethodDefinition',
                 ClassHeritage: 'ClassHeritage',
                 ConditionalExpression: 'ConditionalExpression',
                 ContinueStatement: 'ContinueStatement',
