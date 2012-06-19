@@ -17089,7 +17089,7 @@ data = {
                 loc: {
                     start: { line: 1, column: 19 },
                     end: { line: 1, column: 28 }
-                }                
+                }
             }],
             from: {
                 type: 'Path',
@@ -17113,6 +17113,389 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 41 }
             }
+        },
+
+        'var A = class extends B {}': {
+            type: "VariableDeclaration",
+            declarations: [
+                {
+                    type: "VariableDeclarator",
+                    id: {
+                        type: "Identifier",
+                        name: "A",
+                        range: [4, 5],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    },
+                    init: {
+                        type: "ClassExpression",
+                        body: {
+                            type: "ClassBody",
+                            body: [],
+                            range: [24, 26],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 26 }
+                            }
+                        },
+                        subclassOf: {
+                            type: "Identifier",
+                            name: "B",
+                            range: [22, 23],
+                            loc: {
+                                start: { line: 1, column: 22 },
+                                end: { line: 1, column: 23 }
+                            }
+                        },
+                        range: [8, 26],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    range: [4, 26],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 26 }
+                    }
+                }
+            ],
+            kind: "var",
+            range: [0, 26],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 26 }
+            }
+        },
+
+        'class A extends class B extends C {} {}': {
+            id: {
+                type: "Identifier",
+                name: "A",
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            type: "ClassDeclaration",
+            body: {
+                type: "ClassBody",
+                body: [],
+                range: [37, 39],
+                loc: {
+                    start: { line: 1, column: 37 },
+                    end: { line: 1, column: 39 }
+                }
+            },
+            subclassOf: {
+                id: {
+                    type: "Identifier",
+                    name: "B",
+                    range: [22, 23],
+                    loc: {
+                        start: { line: 1, column: 22 },
+                        end: { line: 1, column: 23 }
+                    }
+                },
+                type: "ClassExpression",
+                body: {
+                    type: "ClassBody",
+                    body: [],
+                    range: [34, 36],
+                    loc: {
+                        start: { line: 1, column: 34 },
+                        end: { line: 1, column: 36 }
+                    }
+                },
+                subclassOf: {
+                    type: "Identifier",
+                    name: "C",
+                    range: [32, 33],
+                    loc: {
+                        start: { line: 1, column: 32 },
+                        end: { line: 1, column: 33 }
+                    }
+                },
+                range: [16, 36],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            range: [0, 39],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 39 }
+            }
+        },
+
+        'class A {get() {}}': {
+            id: {
+                type: "Identifier",
+                name: "A",
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            type: "ClassDeclaration",
+            body: {
+                type: "ClassBody",
+                body: [
+                    {
+                        type: "MethodDefinition",
+                        key: {
+                            type: "Identifier",
+                            name: "get",
+                            range: [9, 12],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 12 }
+                            }
+                        },
+                        value: {
+                            type: "FunctionExpression",
+                            id: null,
+                            params: [],
+                            body: {
+                                type: "BlockStatement",
+                                body: [],
+                                range: [15, 17],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 17 }
+                                }
+                            },
+                            range: [15, 17],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 17 }
+                            }
+                        },
+                        kind: "",
+                        range: [9, 17],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 17 }
+                        }
+                    }
+                ],
+                range: [8, 18],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
+        'class A extends B {get foo() {}}': {
+            id: {
+                type: "Identifier",
+                name: "A",
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            type: "ClassDeclaration",
+            body: {
+                type: "ClassBody",
+                body: [{
+                    type: "MethodDefinition",
+                    key: {
+                        type: "Identifier",
+                        name: "foo",
+                        range: [23, 26],
+                        loc: {
+                            start: { line: 1, column: 23 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    value: {
+                        type: "FunctionExpression",
+                        id: null,
+                        params: [],
+                        body: {
+                            type: "BlockStatement",
+                            body: [],
+                            range: [29, 31],
+                            loc: {
+                                start: { line: 1, column: 29 },
+                                end: { line: 1, column: 31 }
+                            }
+                        },
+                        range: [29, 31],
+                        loc: {
+                            start: { line: 1, column: 29 },
+                            end: { line: 1, column: 31 }
+                        }
+                    },
+                    kind: "get",
+                    range: [19, 31],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 31 }
+                    }
+                }],
+                range: [18, 32],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 32 }
+                }
+            },
+            subclassOf: {
+                type: "Identifier",
+                name: "B",
+                range: [16, 17],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 32],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 32 }
+            }
+        },
+
+        '"use strict"; (class A {constructor() { super() }})': {
+            type: "Program",
+            body: [
+                {
+                    type: "ExpressionStatement",
+                    expression: {
+                        type: "Literal",
+                        value: "use strict",
+                        raw: "\"use strict\"",
+                        range: [0, 12],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 12 }
+                        }
+                    },
+                    range: [0, 13],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 13 }
+                    }
+                },
+                {
+                    type: "ExpressionStatement",
+                    expression: {
+                        id: {
+                            type: "Identifier",
+                            name: "A",
+                            range: [21, 22],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 22 }
+                            }
+                        },
+                        type: "ClassExpression",
+                        body: {
+                            type: "ClassBody",
+                            body: [
+                                {
+                                    type: "MethodDefinition",
+                                    key: {
+                                        type: "Identifier",
+                                        name: "constructor",
+                                        range: [24, 35],
+                                        loc: {
+                                            start: { line: 1, column: 24 },
+                                            end: { line: 1, column: 35 }
+                                        }
+                                    },
+                                    value: {
+                                        type: "FunctionExpression",
+                                        id: null,
+                                        params: [],
+                                        body: {
+                                            type: "BlockStatement",
+                                            body: [
+                                                {
+                                                    type: "ExpressionStatement",
+                                                    expression: {
+                                                        type: "CallExpression",
+                                                        callee: {
+                                                            type: "Identifier",
+                                                            name: "super",
+                                                            range: [40, 45],
+                                                            loc: {
+                                                                start: { line: 1, column: 40 },
+                                                                end: { line: 1, column: 45 }
+                                                            }
+                                                        },
+                                                        arguments: [],
+                                                        range: [40, 47],
+                                                        loc: {
+                                                            start: { line: 1, column: 40 },
+                                                            end: { line: 1, column: 47 }
+                                                        }
+                                                    },
+                                                    range: [40, 48],
+                                                    loc: {
+                                                        start: { line: 1, column: 40 },
+                                                        end: { line: 1, column: 48 }
+                                                    }
+                                                }
+                                            ],
+                                            range: [38, 49],
+                                            loc: {
+                                                start: { line: 1, column: 38 },
+                                                end: { line: 1, column: 49 }
+                                            }
+                                        },
+                                        range: [38, 49],
+                                        loc: {
+                                            start: { line: 1, column: 38 },
+                                            end: { line: 1, column: 49 }
+                                        }
+                                    },
+                                    kind: "",
+                                    range: [24, 49],
+                                    loc: {
+                                        start: { line: 1, column: 24 },
+                                        end: { line: 1, column: 49 }
+                                    }
+                                }
+                            ],
+                            range: [23, 50],
+                            loc: {
+                                start: { line: 1, column: 23 },
+                                end: { line: 1, column: 50 }
+                            }
+                        },
+                        range: [14, 51],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 51 }
+                        }
+                    },
+                    range: [14, 51],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 51 }
+                    }
+                }
+            ],
+            range: [0, 51],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 51 }
+            },
+            comments: []
         }
 
     },
@@ -18022,7 +18405,7 @@ data = {
             column: 5,
             message: 'Error: Line 1: Invalid regular expression: missing /'
         },
-        
+
         '//\r \n]': {
             index: 5,
             lineNumber: 3,
@@ -18871,26 +19254,31 @@ data = {
         'Syntax': {
             property: 'Syntax',
             result: {
-                AssignmentExpression: 'AssignmentExpression',
                 ArrayExpression: 'ArrayExpression',
                 ArrayPattern: 'ArrayPattern',
-                BlockStatement: 'BlockStatement',
+                AssignmentExpression: 'AssignmentExpression',
                 BinaryExpression: 'BinaryExpression',
+                BlockStatement: 'BlockStatement',
                 BreakStatement: 'BreakStatement',
                 CallExpression: 'CallExpression',
                 CatchClause: 'CatchClause',
+                ClassBody: 'ClassBody',
+                ClassDeclaration: 'ClassDeclaration',
+                ClassExpression: 'ClassExpression',
+                MethodDefinition: 'MethodDefinition',
+                ClassHeritage: 'ClassHeritage',
                 ConditionalExpression: 'ConditionalExpression',
                 ContinueStatement: 'ContinueStatement',
-                DoWhileStatement: 'DoWhileStatement',
                 DebuggerStatement: 'DebuggerStatement',
+                DoWhileStatement: 'DoWhileStatement',
                 EmptyStatement: 'EmptyStatement',
+                ExportDeclaration: 'ExportDeclaration',
                 ExportSpecifier: 'ExportSpecifier',
                 ExportSpecifierSet: 'ExportSpecifierSet',
-                ExportDeclaration: 'ExportDeclaration',
                 ExpressionStatement: 'ExpressionStatement',
-                ForStatement: 'ForStatement',
                 ForInStatement: 'ForInStatement',
                 ForOfStatement: 'ForOfStatement',
+                ForStatement: 'ForStatement',
                 FunctionDeclaration: 'FunctionDeclaration',
                 FunctionExpression: 'FunctionExpression',
                 Glob: 'Glob',
@@ -18898,21 +19286,21 @@ data = {
                 IfStatement: 'IfStatement',
                 ImportDeclaration: 'ImportDeclaration',
                 ImportSpecifier: 'ImportSpecifier',
-                Literal: 'Literal',
                 LabeledStatement: 'LabeledStatement',
+                Literal: 'Literal',
                 LogicalExpression: 'LogicalExpression',
                 MemberExpression: 'MemberExpression',
                 ModuleDeclaration: 'ModuleDeclaration',
                 NewExpression: 'NewExpression',
                 ObjectExpression: 'ObjectExpression',
                 ObjectPattern: 'ObjectPattern',
-                Path: 'Path',
+                Path:  'Path',
                 Program: 'Program',
                 Property: 'Property',
                 ReturnStatement: 'ReturnStatement',
                 SequenceExpression: 'SequenceExpression',
-                SwitchStatement: 'SwitchStatement',
                 SwitchCase: 'SwitchCase',
+                SwitchStatement: 'SwitchStatement',
                 ThisExpression: 'ThisExpression',
                 ThrowStatement: 'ThrowStatement',
                 TryStatement: 'TryStatement',
