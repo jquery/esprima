@@ -82,6 +82,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         AssignmentExpression: 'AssignmentExpression',
         ArrayExpression: 'ArrayExpression',
         ArrayPattern: 'ArrayPattern',
+        ArrowFunctionExpression: 'ArrowFunctionExpression',
         BlockStatement: 'BlockStatement',
         BinaryExpression: 'BinaryExpression',
         BreakStatement: 'BreakStatement',
@@ -698,6 +699,17 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
                     range: [start, index]
                 };
             }
+        }
+
+        if (ch1 === '=' && ch2 === '>') {
+            index += 2;
+            return {
+                type: Token.Punctuator,
+                value: '=>',
+                lineNumber: lineNumber,
+                lineStart: lineStart,
+                range: [start, index]
+            };
         }
 
         // The remaining 1-character punctuators.
@@ -1693,6 +1705,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         if (match('(')) {
             lex();
             state.lastParenthesized = expr = parseExpression();
+            state.parenthesizedCount += 1;
             expect(')');
             return expr;
         }
@@ -2155,10 +2168,69 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         }
     }
 
-    function parseAssignmentExpression() {
-        var expr;
+    function reinterpretAsCoverFormalsList(expr) {
+        var i, len, param, paramSet;
+        assert(expr.type === Syntax.SequenceExpression);
 
+        paramSet = {};
+
+        for (i = 0, len = expr.expressions.length; i < len; i += 1) {
+            param = expr.expressions[i];
+            if (param.type !== Syntax.Identifier) {
+                return null;
+            }
+            if (isRestrictedWord(param.name)) {
+                throwError({}, Messages.StrictParamName);
+            }
+            if (Object.prototype.hasOwnProperty.call(paramSet, param.name)) {
+                throwError({}, Messages.StrictParamDupe);
+            }
+            paramSet[param.name] = true;
+        }
+        return expr.expressions;
+    }
+
+    function parseArrowFunctionExpression(param) {
+        var previousStrict, body;
+
+        expect('=>');
+
+        previousStrict = strict;
+        strict = true;
+        body = parseConciseBody();
+        strict = previousStrict;
+
+        return {
+            type: Syntax.ArrowFunctionExpression,
+            id: null,
+            params: param,
+            body: body
+        };
+    }
+
+    function parseAssignmentExpression() {
+        var expr, oldParenthesizedCount, coverFormalsList;
+
+        oldParenthesizedCount = state.parenthesizedCount;
         expr = parseConditionalExpression();
+
+        if (match('=>')) {
+            if (expr.type === Syntax.Identifier) {
+                if (state.parenthesizedCount === oldParenthesizedCount || state.parenthesizedCount === (oldParenthesizedCount + 1)) {
+                    if (isRestrictedWord(expr.name)) {
+                        throwError({}, Messages.StrictParamName);
+                    }
+                    return parseArrowFunctionExpression([ expr ]);
+                }
+            } else if (expr.type === Syntax.SequenceExpression) {
+                if (state.parenthesizedCount === (oldParenthesizedCount + 1)) {
+                    coverFormalsList = reinterpretAsCoverFormalsList(expr);
+                    if (coverFormalsList) {
+                        return parseArrowFunctionExpression(coverFormalsList);
+                    }
+                }
+            }
+        }
 
         if (matchAssign()) {
             // 11.13.1
@@ -3235,7 +3307,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
 
     function parseFunctionSourceElements() {
         var sourceElement, sourceElements = [], token, directive, firstRestricted,
-            oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody;
+            oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody, oldParenthesizedCount;
 
         expect('{');
 
@@ -3268,11 +3340,13 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         oldInIteration = state.inIteration;
         oldInSwitch = state.inSwitch;
         oldInFunctionBody = state.inFunctionBody;
+        oldParenthesizedCount = state.parenthesizedCount;
 
         state.labelSet = {};
         state.inIteration = false;
         state.inSwitch = false;
         state.inFunctionBody = true;
+        state.parenthesizedCount = 0;
 
         while (index < length) {
             if (match('}')) {
@@ -3291,6 +3365,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         state.inIteration = oldInIteration;
         state.inSwitch = oldInSwitch;
         state.inFunctionBody = oldInFunctionBody;
+        state.parenthesizedCount = oldParenthesizedCount;
 
         return {
             type: Syntax.BlockStatement,
@@ -4031,6 +4106,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         state = {
             allowIn: true,
             labelSet: {},
+            parenthesizedCount: 0,
             lastParenthesized: null,
             inFunctionBody: false,
             inIteration: false,
