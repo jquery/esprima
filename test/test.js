@@ -17504,6 +17504,115 @@ data = {
         }
     },
 
+
+    'Yield Expression': {
+        '(function () { yield v })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'YieldExpression',
+                            argument: {
+                                type: 'Identifier',
+                                name: 'v',
+                                range: [21, 22],
+                                loc: {
+                                    start: { line: 1, column: 21 },
+                                    end: { line: 1, column: 22 }
+                                }
+                            },
+                            delegate: false,
+                            range: [15, 22],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 22 }
+                            }
+                        },
+                        range: [15, 23],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 23 }
+                        }
+                    }],
+                    range: [13, 24],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                range: [0, 25],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        '(function () { yield *v })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'YieldExpression',
+                            argument: {
+                                type: 'Identifier',
+                                name: 'v',
+                                range: [22, 23],
+                                loc: {
+                                    start: { line: 1, column: 22 },
+                                    end: { line: 1, column: 23 }
+                                }
+                            },
+                            delegate: true,
+                            range: [15, 23],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 23 }
+                            }
+                        },
+                        range: [15, 24],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 24 }
+                        }
+                    }],
+                    range: [13, 25],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                range: [0, 26],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 26 }
+                }
+            },
+            range: [0, 26],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 26 }
+            }
+        }
+    },
+
     'Invalid syntax': {
 
         '{': {
@@ -18516,6 +18625,13 @@ data = {
             message: 'Error: Line 1: Illegal continue statement'
         },
 
+        'yield v': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Illegal yield expression'
+        },
+
         'switch (x) { default: continue; }': {
             index: 31,
             lineNumber: 1,
@@ -19365,7 +19481,8 @@ data = {
                 VariableDeclaration: 'VariableDeclaration',
                 VariableDeclarator: 'VariableDeclarator',
                 WhileStatement: 'WhileStatement',
-                WithStatement: 'WithStatement'
+                WithStatement: 'WithStatement',
+                YieldExpression: 'YieldExpression'
             }
         }
 
