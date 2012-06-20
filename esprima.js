@@ -36,7 +36,9 @@ parseFunctionDeclaration: true, parseFunctionExpression: true,
 parseFunctionSourceElements: true, parseVariableIdentifier: true,
 parseImportSpecifier: true,
 parseLeftHandSideExpression: true,
-parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseConciseBody: true */
+parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseConciseBody: true,
+parseYieldExpression: true
+*/
 
 (function (exports) {
     'use strict';
@@ -130,7 +132,8 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         VariableDeclaration: 'VariableDeclaration',
         VariableDeclarator: 'VariableDeclarator',
         WhileStatement: 'WhileStatement',
-        WithStatement: 'WithStatement'
+        WithStatement: 'WithStatement',
+        YieldExpression: 'YieldExpression'
     };
 
     PropertyKind = {
@@ -158,6 +161,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
         IllegalContinue: 'Illegal continue statement',
         IllegalBreak: 'Illegal break statement',
         IllegalReturn: 'Illegal return statement',
+        IllegalYield: 'Illegal yield expression',
         StrictModeWith:  'Strict mode code may not include a with statement',
         StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',
         StrictVarName:  'Variable name may not be eval or arguments in strict mode',
@@ -2211,7 +2215,12 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
     function parseAssignmentExpression() {
         var expr, oldParenthesizedCount, coverFormalsList;
 
+        if (matchKeyword('yield')) {
+            return parseYieldExpression();
+        }
+
         oldParenthesizedCount = state.parenthesizedCount;
+
         expr = parseConditionalExpression();
 
         if (match('=>')) {
@@ -3517,6 +3526,28 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
             id: id,
             params: params,
             body: body
+        };
+    }
+
+    function parseYieldExpression() {
+        var delegate;
+
+        expectKeyword('yield');
+
+        if (!state.inFunctionBody) {
+            throwErrorTolerant({}, Messages.IllegalYield);
+        }
+
+        delegate = false;
+        if (match('*')) {
+            lex();
+            delegate = true;
+        }
+
+        return {
+            type: Syntax.YieldExpression,
+            argument: parseAssignmentExpression(),
+            delegate: delegate
         };
     }
 
