@@ -2979,7 +2979,7 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
             if (match('}') || matchKeyword('default') || matchKeyword('case')) {
                 break;
             }
-            statement = parseStatement();
+            statement = parseSourceElement();
             if (typeof statement === 'undefined') {
                 break;
             }
