@@ -17113,7 +17113,203 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 41 }
             }
-        }
+        },
+        
+        'class A extends B {get foo() {}}': {
+            id: {
+                type: "Identifier",
+                name: "A",
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            type: "ClassDeclaration",
+            body: {
+                type: "ClassBody",
+                body: [{
+                    type: "ClassElement",
+                    key: {
+                        type: "Identifier",
+                        name: "foo",
+                        range: [23, 26],
+                        loc: {
+                            start: { line: 1, column: 23 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    value: {
+                        type: "FunctionExpression",
+                        id: null,
+                        params: [],
+                        body: {
+                            type: "BlockStatement",
+                            body: [],
+                            range: [29, 31],
+                            loc: {
+                                start: { line: 1, column: 29 },
+                                end: { line: 1, column: 31 }
+                            }
+                        }
+                    },
+                    kind: "get",
+                    range: [19, 31],
+                    loc: {
+                      start: { line: 1, column: 19 },
+                      end: { line: 1, column: 31 }
+                    }
+                }],
+                range: [18, 32],
+                loc: {
+                  start: { line: 1, column: 18 },
+                  end: { line: 1, column: 32 }
+                }
+            },
+            subclassOf: {
+                type: "Identifier",
+                name: "B",
+                range: [16, 17],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 32],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 32 }
+            }
+        },
+        
+        '"use strict"; (class A {constructor() { super() }})': {
+            type: "Program",
+            body: [
+                {
+                    type: "ExpressionStatement",
+                    expression: {
+                        type: "Literal",
+                        value: "use strict",
+                        raw: "\"use strict\"",
+                        range: [0, 12],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 12 }
+                        }
+                    },
+                    range: [0, 13],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 13 }
+                    }
+                },
+                {
+                    type: "ExpressionStatement",
+                    expression: {
+                        id: {
+                            type: "Identifier",
+                            name: "A",
+                            range: [21, 22],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 22 }
+                            }
+                        },
+                        type: "ClassDeclaration",
+                        body: {
+                            type: "ClassBody",
+                            body: [
+                                {
+                                    type: "ClassElement",
+                                    key: {
+                                        type: "Identifier",
+                                        name: "constructor",
+                                        range: [24, 35],
+                                        loc: {
+                                            start: { line: 1, column: 24 },
+                                            end: { line: 1, column: 35 }
+                                        }
+                                    },
+                                    value: {
+                                        type: "FunctionExpression",
+                                        params: [],
+                                        body: {
+                                            type: "BlockStatement",
+                                            body: [
+                                                {
+                                                    type: "ExpressionStatement",
+                                                    expression: {
+                                                        type: "CallExpression",
+                                                        callee: {
+                                                            type: "Identifier",
+                                                            name: "super",
+                                                            range: [40, 45],
+                                                            loc: {
+                                                                start: { line: 1, column: 40 },
+                                                                end: { line: 1, column: 45 }
+                                                            }
+                                                        },
+                                                        arguments: [],
+                                                        range: [40, 47],
+                                                        loc: {
+                                                            start: { line: 1, column: 40 },
+                                                            end: { line: 1, column: 47 }
+                                                        }
+                                                    },
+                                                    range: [40, 48],
+                                                    loc: {
+                                                        start: { line: 1, column: 40 },
+                                                        end: { line: 1, column: 48 }
+                                                    }
+                                                }
+                                            ],
+                                            range: [38, 49],
+                                            loc: {
+                                                start: { line: 1, column: 38 },
+                                                end: { line: 1, column: 49 }
+                                            }
+                                        },
+                                        id: null,
+                                        range: [38, 49],
+                                        loc: {
+                                            start: { line: 1, column: 38 },
+                                            end: { line: 1, column: 49 }
+                                        }
+                                    },
+                                    kind: "",
+                                    range: [24, 49],
+                                    loc: {
+                                      start: { line: 1, column: 24 },
+                                      end: { line: 1, column: 49 }
+                                    }
+                                }
+                            ],
+                            range: [23, 50],
+                            loc: {
+                                start: { line: 1, column: 23 },
+                                end: { line: 1, column: 50 }
+                            }
+                        },
+                        range: [14, 51],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 51 }
+                        }
+                    },
+                    range: [14, 51],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 51 }
+                    }
+                }
+            ],
+            range: [0, 51],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 51 }
+            },
+        	comments: []
+        },    
 
     },
 
@@ -18570,6 +18766,13 @@ data = {
             message: 'Error: Line 1: Use of future reserved word in strict mode'
         },
 
+        'function hello() { "use strict"; super }': {
+            index: 33,
+            lineNumber: 1,
+            column: 34,
+            message: 'Error: Line 1: Super keyword is only allowed inside class elements'
+        },
+
         'function static() { "use strict"; }': {
             index: 9,
             lineNumber: 1,
@@ -18867,30 +19070,34 @@ data = {
                 }]
             }
         },
-
+        
         'Syntax': {
             property: 'Syntax',
             result: {
-                AssignmentExpression: 'AssignmentExpression',
                 ArrayExpression: 'ArrayExpression',
                 ArrayPattern: 'ArrayPattern',
-                BlockStatement: 'BlockStatement',
+                AssignmentExpression: 'AssignmentExpression',
                 BinaryExpression: 'BinaryExpression',
+                BlockStatement: 'BlockStatement',
                 BreakStatement: 'BreakStatement',
                 CallExpression: 'CallExpression',
                 CatchClause: 'CatchClause',
+                ClassBody: 'ClassBody',
+                ClassDeclaration: 'ClassDeclaration',
+                ClassElement: 'ClassElement',
+                ClassHeritage: 'ClassHeritage',
                 ConditionalExpression: 'ConditionalExpression',
                 ContinueStatement: 'ContinueStatement',
-                DoWhileStatement: 'DoWhileStatement',
                 DebuggerStatement: 'DebuggerStatement',
+                DoWhileStatement: 'DoWhileStatement',
                 EmptyStatement: 'EmptyStatement',
+                ExportDeclaration: 'ExportDeclaration',
                 ExportSpecifier: 'ExportSpecifier',
                 ExportSpecifierSet: 'ExportSpecifierSet',
-                ExportDeclaration: 'ExportDeclaration',
                 ExpressionStatement: 'ExpressionStatement',
-                ForStatement: 'ForStatement',
                 ForInStatement: 'ForInStatement',
                 ForOfStatement: 'ForOfStatement',
+                ForStatement: 'ForStatement',
                 FunctionDeclaration: 'FunctionDeclaration',
                 FunctionExpression: 'FunctionExpression',
                 Glob: 'Glob',
@@ -18898,21 +19105,21 @@ data = {
                 IfStatement: 'IfStatement',
                 ImportDeclaration: 'ImportDeclaration',
                 ImportSpecifier: 'ImportSpecifier',
-                Literal: 'Literal',
                 LabeledStatement: 'LabeledStatement',
+                Literal: 'Literal',
                 LogicalExpression: 'LogicalExpression',
                 MemberExpression: 'MemberExpression',
                 ModuleDeclaration: 'ModuleDeclaration',
                 NewExpression: 'NewExpression',
                 ObjectExpression: 'ObjectExpression',
                 ObjectPattern: 'ObjectPattern',
-                Path: 'Path',
+                Path:  'Path',
                 Program: 'Program',
                 Property: 'Property',
                 ReturnStatement: 'ReturnStatement',
                 SequenceExpression: 'SequenceExpression',
-                SwitchStatement: 'SwitchStatement',
                 SwitchCase: 'SwitchCase',
+                SwitchStatement: 'SwitchStatement',
                 ThisExpression: 'ThisExpression',
                 ThrowStatement: 'ThrowStatement',
                 TryStatement: 'TryStatement',
