@@ -17188,6 +17188,242 @@ data = {
         }
     },
 
+
+    'ES6 Arrow Function': {
+        'e => "test"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'e',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                }],
+                body: {
+                    type: 'Literal',
+                    value: 'test',
+                    raw: '"test"',
+                    range: [5, 11],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 11 }
+                    }
+                },
+                range: [0, 11],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 11 }
+                }
+            },
+            range: [0, 11],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 11 }
+            }
+        },
+
+        '(e) => "test"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'e',
+                    range: [0, 3],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 3 }
+                    }
+                }],
+                body: {
+                    type: 'Literal',
+                    value: 'test',
+                    raw: '"test"',
+                    range: [7, 13],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 13 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 13 }
+            }
+        },
+
+        '(a, b) => "test"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 'b',
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
+                }],
+                body: {
+                    type: 'Literal',
+                    value: 'test',
+                    raw: '"test"',
+                    range: [10, 16],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            },
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
+        },
+
+        'e => { 42; }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'e',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                }],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'Literal',
+                            value: 42,
+                            raw: '42',
+                            range: [7, 9],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 9 }
+                            }
+                        },
+                        range: [7, 10],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 10 }
+                        }
+                    }],
+                    range: [5, 12],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 12],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        },
+
+        '(a, b) => { 42; }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 'b',
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
+                }],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'Literal',
+                            value: 42,
+                            raw: '42',
+                            range: [12, 14],
+                            loc: {
+                                start: { line: 1, column: 12 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        range: [12, 15],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 15 }
+                        }
+                    }],
+                    range: [10, 17],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            }
+        }
+    },
+
     'Invalid syntax': {
 
         '{': {
@@ -18800,6 +19036,76 @@ data = {
             lineNumber: 1,
             column: 11,
             message: 'Error: Line 1: Missing from after import'
+        },
+
+        '((a)) => 42': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Unexpected token =>'
+        },
+
+        '(a, (b)) => 42': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token =>'
+        },
+
+        'eval => 42': {
+            index: 4,
+            lineNumber: 1,
+            column: 5,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        'arguments => 42': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        '(eval, a) => 42': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        '(arguments, a) => 42': {
+            index: 14,
+            lineNumber: 1,
+            column: 15,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        '(a, a) => 42': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+        },
+
+        '(a) => 00': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+        },
+
+        '(10) => 00': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Unexpected token =>'
+        },
+
+        '(10, 20) => 00': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token =>'
         }
 
     },
@@ -18931,6 +19237,7 @@ data = {
                 AssignmentExpression: 'AssignmentExpression',
                 ArrayExpression: 'ArrayExpression',
                 ArrayPattern: 'ArrayPattern',
+                ArrowFunctionExpression: 'ArrowFunctionExpression',
                 BlockStatement: 'BlockStatement',
                 BinaryExpression: 'BinaryExpression',
                 BreakStatement: 'BreakStatement',
