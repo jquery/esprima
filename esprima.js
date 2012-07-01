@@ -1294,13 +1294,7 @@ parseStatement: true, parseSourceElement: true */
     // Return true if provided expression is LeftHandSideExpression
 
     function isLeftHandSide(expr) {
-        switch (expr.type) {
-        case Syntax.Identifier:
-        case Syntax.MemberExpression:
-        case Syntax.CallExpression:
-            return true;
-        }
-        return false;
+        return expr.type === Syntax.Identifier || expr.type === Syntax.MemberExpression;
     }
 
     // 11.1.4 Array Initialiser
@@ -3299,6 +3293,15 @@ parseStatement: true, parseSourceElement: true */
                         }
                         if (typeof node.object.loc !== 'undefined') {
                             node.loc.start = node.object.loc.start;
+                        }
+                    }
+
+                    if (node.type === Syntax.CallExpression) {
+                        if (typeof node.callee.range !== 'undefined') {
+                            node.range[0] = node.callee.range[0];
+                        }
+                        if (typeof node.callee.loc !== 'undefined') {
+                            node.loc.start = node.callee.loc.start;
                         }
                     }
                     return node;
