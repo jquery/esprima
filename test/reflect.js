@@ -80,7 +80,7 @@ function logExpr(op, left, right) { return Pattern({ type: "LogicalExpression", 
 
 function condExpr(test, cons, alt) { return Pattern({ type: "ConditionalExpression", test: test, consequent: cons, alternate: alt }) }
 function seqExpr(exprs) { return Pattern({ type: "SequenceExpression", expressions: exprs }) }
-function newExpr(callee, args) { return Pattern({ type: "NewExpression", callee: callee, arguments: args }) }
+function newExpr(constructor, args) { return Pattern({ type: "NewExpression", constructor: constructor, arguments: args }) }
 function callExpr(callee, args) { return Pattern({ type: "CallExpression", callee: callee, arguments: args }) }
 function arrExpr(elts) { return Pattern({ type: "ArrayExpression", elements: elts }) }
 function objExpr(elts) { return Pattern({ type: "ObjectExpression", properties: elts }) }

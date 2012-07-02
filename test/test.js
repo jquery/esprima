@@ -4410,7 +4410,7 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'NewExpression',
-                callee: {
+                constructor: {
                     type: 'Identifier',
                     name: 'Button',
                     range: [4, 10],
@@ -4437,7 +4437,7 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'NewExpression',
-                callee: {
+                constructor: {
                     type: 'Identifier',
                     name: 'Button',
                     range: [4, 10],
@@ -4464,9 +4464,9 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'NewExpression',
-                callee: {
+                constructor: {
                     type: 'NewExpression',
-                    callee: {
+                    constructor: {
                         type: 'Identifier',
                         name: 'foo',
                         range: [8, 11],
@@ -4500,9 +4500,9 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'NewExpression',
-                callee: {
+                constructor: {
                     type: 'NewExpression',
-                    callee: {
+                    constructor: {
                         type: 'Identifier',
                         name: 'foo',
                         range: [8, 11],
@@ -4541,7 +4541,7 @@ data = {
                     computed: false,
                     object: {
                         type: 'NewExpression',
-                        callee: {
+                        constructor: {
                             type: 'Identifier',
                             name: 'foo',
                             range: [4, 7],
@@ -4590,7 +4590,7 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'NewExpression',
-                callee: {
+                constructor: {
                     type: 'MemberExpression',
                     computed: true,
                     object: {
@@ -4636,7 +4636,7 @@ data = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'NewExpression',
-                callee: {
+                constructor: {
                     type: 'MemberExpression',
                     computed: false,
                     object: {
