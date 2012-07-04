@@ -52,6 +52,7 @@ parseYieldExpression: true
         source,
         strict,
         yieldAllowed,
+        yieldFound,
         index,
         lineNumber,
         lineStart,
@@ -178,7 +179,8 @@ parseYieldExpression: true
         StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',
         StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
         StrictReservedWord:  'Use of future reserved word in strict mode',
-        NoFromAfterImport: 'Missing from after import'
+        NoFromAfterImport: 'Missing from after import',
+        NoYieldInGenerator: 'Missing yield in generator'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -1444,6 +1446,9 @@ parseYieldExpression: true
         body = parseConciseBody();
         if (options.name && strict && isRestrictedWord(param[0].name)) {
             throwError(options.name, Messages.StrictParamName);
+        }
+        if (yieldAllowed && !yieldFound) {
+            throwError({}, Messages.NoYieldInGenerator);
         }
         strict = previousStrict;
         yieldAllowed = previousYieldAllowed;
@@ -3479,6 +3484,9 @@ parseYieldExpression: true
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
         }
+        if (yieldAllowed && !yieldFound) {
+            throwError({}, Messages.NoYieldInGenerator);
+        }
         strict = previousStrict;
         yieldAllowed = previousYieldAllowed;
 
@@ -3565,8 +3573,12 @@ parseYieldExpression: true
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
         }
+        if (yieldAllowed && !yieldFound) {
+            throwError({}, Messages.NoYieldInGenerator);
+        }
         strict = previousStrict;
         yieldAllowed = previousYieldAllowed;
+
 
         return {
             type: Syntax.FunctionExpression,
@@ -3597,6 +3609,7 @@ parseYieldExpression: true
         yieldAllowed = false;
         expr = parseAssignmentExpression();
         yieldAllowed = previousYieldAllowed;
+        yieldFound = true;
 
         return {
             type: Syntax.YieldExpression,
@@ -3727,6 +3740,7 @@ parseYieldExpression: true
         var program;
         strict = false;
         yieldAllowed = false;
+        yieldFound = false;
         program = {
             type: Syntax.Program,
             body: parseProgramElements()
