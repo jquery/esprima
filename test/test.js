@@ -1373,6 +1373,7 @@ data = {
                                     end: { line: 1, column: 36 }
                                 }
                             },
+                            generator: false,
                             range: [18, 36],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -1445,6 +1446,7 @@ data = {
                                     end: { line: 1, column: 20 }
                                 }
                             },
+                            generator: false,
                             range: [18, 20],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -1517,6 +1519,7 @@ data = {
                                     end: { line: 1, column: 17 }
                                 }
                             },
+                            generator: false,
                             range: [15, 17],
                             loc: {
                                 start: { line: 1, column: 15 },
@@ -1589,6 +1592,7 @@ data = {
                                     end: { line: 1, column: 19 }
                                 }
                             },
+                            generator: false,
                             range: [17, 19],
                             loc: {
                                 start: { line: 1, column: 17 },
@@ -1661,6 +1665,7 @@ data = {
                                     end: { line: 1, column: 20 }
                                 }
                             },
+                            generator: false,
                             range: [18, 20],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -1733,6 +1738,7 @@ data = {
                                     end: { line: 1, column: 19 }
                                 }
                             },
+                            generator: false,
                             range: [17, 19],
                             loc: {
                                 start: { line: 1, column: 17 },
@@ -1806,6 +1812,7 @@ data = {
                                     end: { line: 1, column: 22 }
                                 }
                             },
+                            generator: false,
                             range: [20, 22],
                             loc: {
                                 start: { line: 1, column: 20 },
@@ -1879,6 +1886,7 @@ data = {
                                     end: { line: 1, column: 17 }
                                 }
                             },
+                            generator: false,
                             range: [15, 17],
                             loc: {
                                 start: { line: 1, column: 15 },
@@ -1993,6 +2001,7 @@ data = {
                                     end: { line: 1, column: 34 }
                                 }
                             },
+                            generator: false,
                             range: [19, 34],
                             loc: {
                                 start: { line: 1, column: 19 },
@@ -2107,6 +2116,7 @@ data = {
                                     end: { line: 1, column: 28 }
                                 }
                             },
+                            generator: false,
                             range: [16, 28],
                             loc: {
                                 start: { line: 1, column: 16 },
@@ -2221,6 +2231,7 @@ data = {
                                     end: { line: 1, column: 32 }
                                 }
                             },
+                            generator: false,
                             range: [18, 32],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -2335,6 +2346,7 @@ data = {
                                     end: { line: 1, column: 34 }
                                 }
                             },
+                            generator: false,
                             range: [19, 34],
                             loc: {
                                 start: { line: 1, column: 19 },
@@ -2449,6 +2461,7 @@ data = {
                                     end: { line: 1, column: 32 }
                                 }
                             },
+                            generator: false,
                             range: [18, 32],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -2564,6 +2577,7 @@ data = {
                                     end: { line: 1, column: 34 }
                                 }
                             },
+                            generator: false,
                             range: [20, 34],
                             loc: {
                                 start: { line: 1, column: 20 },
@@ -2679,6 +2693,7 @@ data = {
                                     end: { line: 1, column: 30 }
                                 }
                             },
+                            generator: false,
                             range: [16, 30],
                             loc: {
                                 start: { line: 1, column: 16 },
@@ -3061,6 +3076,7 @@ data = {
                                     end: { line: 1, column: 18 }
                                 }
                             },
+                            generator: false,
                             range: [15, 18],
                             loc: {
                                 start: { line: 1, column: 15 },
@@ -3142,6 +3158,7 @@ data = {
                                     end: { line: 1, column: 22 }
                                 }
                             },
+                            generator: false,
                             range: [19, 22],
                             loc: {
                                 start: { line: 1, column: 19 },
@@ -3216,6 +3233,7 @@ data = {
                                     end: { line: 1, column: 20 }
                                 }
                             },
+                            generator: false,
                             range: [17, 20],
                             loc: {
                                 start: { line: 1, column: 17 },
@@ -3289,6 +3307,7 @@ data = {
                                     end: { line: 1, column: 15 }
                                 }
                             },
+                            generator: false,
                             range: [12, 15],
                             loc: {
                                 start: { line: 1, column: 12 },
@@ -3362,6 +3381,7 @@ data = {
                                     end: { line: 1, column: 15 }
                                 }
                             },
+                            generator: false,
                             range: [12, 15],
                             loc: {
                                 start: { line: 1, column: 12 },
@@ -3436,6 +3456,7 @@ data = {
                                     end: { line: 1, column: 17 }
                                 }
                             },
+                            generator: false,
                             range: [15, 17],
                             loc: {
                                 start: { line: 1, column: 15 },
@@ -3510,6 +3531,7 @@ data = {
                                     end: { line: 1, column: 21 }
                                 }
                             },
+                            generator: false,
                             range: [19, 21],
                             loc: {
                                 start: { line: 1, column: 19 },
@@ -3608,6 +3630,7 @@ data = {
                                     end: { line: 1, column: 29 }
                                 }
                             },
+                            generator: false,
                             range: [22, 29],
                             loc: {
                                 start: { line: 1, column: 22 },
@@ -4558,6 +4581,7 @@ data = {
                     end: { line: 1, column: 37 }
                 }
             },
+            generator: false,
             range: [0, 37],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4677,6 +4701,7 @@ data = {
                     end: { line: 1, column: 37 }
                 }
             },
+            generator: false,
             range: [0, 37],
             loc: {
                 start: { line: 1, column: 0 },
@@ -11130,6 +11155,7 @@ data = {
                             end: { line: 1, column: 26 }
                         }
                     },
+                    generator: false,
                     range: [13, 27],
                     loc: {
                         start: { line: 1, column: 13 },
@@ -11237,6 +11263,7 @@ data = {
                         end: { line: 1, column: 27 }
                     }
                 },
+                generator: false,
                 range: [13, 27],
                 loc: {
                     start: { line: 1, column: 13 },
@@ -12868,6 +12895,7 @@ data = {
                                 end: { line: 1, column: 43 }
                             }
                         },
+                        generator: false,
                         range: [13, 43],
                         loc: {
                             start: { line: 1, column: 13 },
@@ -13341,6 +13369,7 @@ data = {
                         end: { line: 1, column: 21 }
                     }
                 },
+                generator: false,
                 range: [0, 22],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -13379,6 +13408,7 @@ data = {
                         end: { line: 1, column: 22 }
                     }
                 },
+                generator: false,
                 range: [0, 23],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -13425,6 +13455,7 @@ data = {
                         end: { line: 1, column: 24 }
                     }
                 },
+                generator: false,
                 range: [0, 25],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -13489,6 +13520,7 @@ data = {
                         end: { line: 1, column: 27 }
                     }
                 },
+                generator: false,
                 range: [0, 28],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -14731,6 +14763,7 @@ data = {
                     end: { line: 1, column: 29 }
                 }
             },
+            generator: false,
             range: [0, 29],
             loc: {
                 start: { line: 1, column: 0 },
@@ -14759,6 +14792,7 @@ data = {
                     end: { line: 1, column: 19 }
                 }
             },
+            generator: false,
             range: [0, 19],
             loc: {
                 start: { line: 1, column: 0 },
@@ -14787,6 +14821,7 @@ data = {
                     end: { line: 1, column: 24 }
                 }
             },
+            generator: false,
             range: [0, 24],
             loc: {
                 start: { line: 1, column: 0 },
@@ -14831,6 +14866,7 @@ data = {
                     end: { line: 1, column: 23 }
                 }
             },
+            generator: false,
             range: [0, 23],
             loc: {
                 start: { line: 1, column: 0 },
@@ -14877,6 +14913,7 @@ data = {
                         end: { line: 1, column: 24 }
                     }
                 },
+                generator: false,
                 range: [0, 25],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -14942,6 +14979,7 @@ data = {
                             end: { line: 1, column: 51 }
                         }
                     },
+                    generator: false,
                     range: [18, 51],
                     loc: {
                         start: { line: 1, column: 18 },
@@ -14954,6 +14992,7 @@ data = {
                     end: { line: 1, column: 53 }
                 }
             },
+            generator: false,
             range: [0, 53],
             loc: {
                 start: { line: 1, column: 0 },
@@ -15015,6 +15054,7 @@ data = {
                     end: { line: 1, column: 30 }
                 }
             },
+            generator: false,
             range: [0, 30],
             loc: {
                 start: { line: 1, column: 0 },
@@ -15084,6 +15124,7 @@ data = {
                     end: { line: 1, column: 33 }
                 }
             },
+            generator: false,
             range: [0, 33],
             loc: {
                 start: { line: 1, column: 0 },
@@ -15142,6 +15183,7 @@ data = {
                             end: { line: 1, column: 31 }
                         }
                     },
+                    generator: false,
                     range: [9, 31],
                     loc: {
                         start: { line: 1, column: 9 },
@@ -15196,6 +15238,7 @@ data = {
                             end: { line: 1, column: 28 }
                         }
                     },
+                    generator: false,
                     range: [9, 28],
                     loc: {
                         start: { line: 1, column: 9 },
@@ -15250,6 +15293,7 @@ data = {
                             end: { line: 1, column: 33 }
                         }
                     },
+                    generator: false,
                     range: [9, 33],
                     loc: {
                         start: { line: 1, column: 9 },
@@ -15329,6 +15373,7 @@ data = {
                             end: { line: 1, column: 37 }
                         }
                     },
+                    generator: false,
                     range: [12, 37],
                     loc: {
                         start: { line: 1, column: 12 },
@@ -15364,6 +15409,7 @@ data = {
                         end: { line: 1, column: 13 }
                     }
                 },
+                generator: false,
                 range: [0, 14],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -15954,6 +16000,7 @@ data = {
                         end: { line: 2, column: 4 }
                     }
                 },
+                generator: false,
                 range: [0, 25],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -16009,6 +16056,7 @@ data = {
                         end: { line: 2, column: 4 }
                     }
                 },
+                generator: false,
                 range: [0, 36],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -16064,6 +16112,7 @@ data = {
                         end: { line: 2, column: 14 }
                     }
                 },
+                generator: false,
                 range: [0, 47],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -16641,6 +16690,7 @@ data = {
                         end: { line: 1, column: 27 }
                     }
                 },
+                generator: false,
                 range: [ 7, 27 ],
                 loc: {
                     start: { line: 1, column: 7 },
@@ -17506,60 +17556,7 @@ data = {
 
 
     'Yield Expression': {
-        '(function () { yield v })': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'FunctionExpression',
-                id: null,
-                params: [],
-                body: {
-                    type: 'BlockStatement',
-                    body: [{
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'YieldExpression',
-                            argument: {
-                                type: 'Identifier',
-                                name: 'v',
-                                range: [21, 22],
-                                loc: {
-                                    start: { line: 1, column: 21 },
-                                    end: { line: 1, column: 22 }
-                                }
-                            },
-                            delegate: false,
-                            range: [15, 22],
-                            loc: {
-                                start: { line: 1, column: 15 },
-                                end: { line: 1, column: 22 }
-                            }
-                        },
-                        range: [15, 23],
-                        loc: {
-                            start: { line: 1, column: 15 },
-                            end: { line: 1, column: 23 }
-                        }
-                    }],
-                    range: [13, 24],
-                    loc: {
-                        start: { line: 1, column: 13 },
-                        end: { line: 1, column: 24 }
-                    }
-                },
-                range: [0, 25],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 25 }
-                }
-            },
-            range: [0, 25],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 25 }
-            }
-        },
-
-        '(function () { yield *v })': {
+        '(function* () { yield v })': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'FunctionExpression',
@@ -17580,25 +17577,26 @@ data = {
                                     end: { line: 1, column: 23 }
                                 }
                             },
-                            delegate: true,
-                            range: [15, 23],
+                            delegate: false,
+                            range: [16, 23],
                             loc: {
-                                start: { line: 1, column: 15 },
+                                start: { line: 1, column: 16 },
                                 end: { line: 1, column: 23 }
                             }
                         },
-                        range: [15, 24],
+                        range: [16, 24],
                         loc: {
-                            start: { line: 1, column: 15 },
+                            start: { line: 1, column: 16 },
                             end: { line: 1, column: 24 }
                         }
                     }],
-                    range: [13, 25],
+                    range: [14, 25],
                     loc: {
-                        start: { line: 1, column: 13 },
+                        start: { line: 1, column: 14 },
                         end: { line: 1, column: 25 }
                     }
                 },
+                generator: true,
                 range: [0, 26],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -17609,6 +17607,213 @@ data = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 26 }
+            }
+        },
+
+        '(function* () { yield *v })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'YieldExpression',
+                            argument: {
+                                type: 'Identifier',
+                                name: 'v',
+                                range: [23, 24],
+                                loc: {
+                                    start: { line: 1, column: 23 },
+                                    end: { line: 1, column: 24 }
+                                }
+                            },
+                            delegate: true,
+                            range: [16, 24],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 24 }
+                            }
+                        },
+                        range: [16, 25],
+                        loc: {
+                            start: { line: 1, column: 16 },
+                            end: { line: 1, column: 25 }
+                        }
+                    }],
+                    range: [14, 26],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 26 }
+                    }
+                },
+                generator: true,
+                range: [0, 27],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 27 }
+                }
+            },
+            range: [0, 27],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
+            }
+        },
+
+        'function* test () { yield *v }': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'test',
+                range: [10, 14],
+                loc: {
+                    start: { line: 1, column: 10 },
+                    end: { line: 1, column: 14}
+                }
+            },
+            params: [],
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'YieldExpression',
+                        argument: {
+                            type: 'Identifier',
+                            name: 'v',
+                            range: [27, 28],
+                            loc: {
+                                start: { line: 1, column: 27 },
+                                end: { line: 1, column: 28 }
+                            }
+                        },
+                        delegate: true,
+                        range: [20, 28],
+                        loc: {
+                            start: { line: 1, column: 20 },
+                            end: { line: 1, column: 28 }
+                        }
+                    },
+                    range: [20, 29],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 29 }
+                    }
+                }],
+                range: [18, 30],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 30 }
+                }
+            },
+            generator: true,
+            range: [0, 30],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 30 }
+            }
+        },
+
+        'var x = { *test () { yield *v } };': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                init: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'test',
+                            range: [11, 15],
+                            loc: {
+                               start: { line: 1, column: 11 },
+                                end: { line: 1, column: 15 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'YieldExpression',
+                                        argument: {
+                                            type: 'Identifier',
+                                            name: 'v',
+                                            range: [28, 29],
+                                            loc: {
+                                               start: { line: 1, column: 28 },
+                                                end: { line: 1, column: 29 }
+                                            }
+                                        },
+                                        delegate: true,
+                                        range: [21, 29],
+                                        loc: {
+                                           start: { line: 1, column: 21 },
+                                            end: { line: 1, column: 29 }
+                                        }
+                                    },
+                                    range: [21, 30],
+                                    loc: {
+                                       start: { line: 1, column: 21 },
+                                        end: { line: 1, column: 30 }
+                                    }
+                                }],
+                                range: [19, 31],
+                                loc: {
+                                   start: { line: 1, column: 19 },
+                                    end: { line: 1, column: 31 }
+                                }
+                            },
+                            generator: true,
+                            range: [19, 31],
+                            loc: {
+                               start: { line: 1, column: 19 },
+                                end: { line: 1, column: 31 }
+                            }
+                        },
+                        kind: 'init',
+                        method: true,
+                        range: [10, 31],
+                        loc: {
+                           start: { line: 1, column: 10 },
+                            end: { line: 1, column: 31 }
+                        }
+                    }],
+                    range: [8, 33],
+                    loc: {
+                       start: { line: 1, column: 8 },
+                        end: { line: 1, column: 33 }
+                    }
+                },
+                range: [4, 33],
+                loc: {
+                   start: { line: 1, column: 4 },
+                    end: { line: 1, column: 33 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 34],
+            loc: {
+               start: { line: 1, column: 0 },
+                end: { line: 1, column: 34 }
             }
         }
     },
@@ -19302,8 +19507,49 @@ data = {
             lineNumber: 1,
             column: 10,
             message: 'Error: Line 1: Unexpected token =>'
-        }
+        },
 
+        'yield 10': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Illegal yield expression'
+        },
+
+        'yield* 10': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Illegal yield expression'
+        },
+
+        '(function () { yield 10 })': {
+            index: 20,
+            lineNumber: 1,
+            column: 21,
+            message: 'Error: Line 1: Illegal yield expression'
+        },
+
+        '(function () { yield* 10 })': {
+            index: 20,
+            lineNumber: 1,
+            column: 21,
+            message: 'Error: Line 1: Illegal yield expression'
+        },
+
+        '(function* () { yield yield 10 })': {
+            index: 27,
+            lineNumber: 1,
+            column: 28,
+            message: 'Error: Line 1: Illegal yield expression'
+        },
+
+        'var obj = { *test** }': {
+            index: 17,
+            lineNumber: 1,
+            column: 18,
+            message: 'Error: Line 1: Unexpected token *'
+        }
     },
 
     'API': {
@@ -19573,6 +19819,7 @@ data = {
                                 end: { line: 1, column: 40 }
                             }
                         },
+                        generator: false,
                         range: [1, 40],
                         loc: {
                             start: { line: 1, column: 1 },
@@ -19658,6 +19905,7 @@ data = {
                                 end: { line: 1, column: 34 }
                             }
                         },
+                        generator: false,
                         range: [1, 34],
                         loc: {
                             start: { line: 1, column: 1 },

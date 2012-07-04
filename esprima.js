@@ -51,6 +51,7 @@ parseYieldExpression: true
         Regex,
         source,
         strict,
+        yieldAllowed,
         index,
         lineNumber,
         lineStart,
@@ -1434,25 +1435,29 @@ parseYieldExpression: true
 
     // 11.1.5 Object Initialiser
 
-    function parsePropertyFunction(param, first) {
-        var previousStrict, body;
+    function parsePropertyFunction(param, options) {
+        var previousStrict, previousYieldAllowed, body;
 
         previousStrict = strict;
+        previousYieldAllowed = yieldAllowed;
+        yieldAllowed = options.generator;
         body = parseConciseBody();
-        if (first && strict && isRestrictedWord(param[0].name)) {
-            throwError(first, Messages.StrictParamName);
+        if (options.name && strict && isRestrictedWord(param[0].name)) {
+            throwError(options.name, Messages.StrictParamName);
         }
         strict = previousStrict;
+        yieldAllowed = previousYieldAllowed;
 
         return {
             type: Syntax.FunctionExpression,
             id: null,
             params: param,
-            body: body
+            body: body,
+            generator: options.generator
         };
     }
 
-    function parsePropertyMethodFunction() {
+    function parsePropertyMethodFunction(options) {
         var token, previousStrict, param, params, paramSet, method;
 
         previousStrict = strict;
@@ -1483,7 +1488,7 @@ parseYieldExpression: true
 
         expect(')');
 
-        method = parsePropertyFunction(params);
+        method = parsePropertyFunction(params, { generator: options.generator });
 
         strict = previousStrict;
 
@@ -1527,7 +1532,7 @@ parseYieldExpression: true
                 return {
                     type: Syntax.Property,
                     key: key,
-                    value: parsePropertyFunction([]),
+                    value: parsePropertyFunction([], { generator: false }),
                     kind: 'get'
                 };
             } else if (token.value === 'set' && !(match(':') || match('('))) {
@@ -1542,7 +1547,7 @@ parseYieldExpression: true
                 return {
                     type: Syntax.Property,
                     key: key,
-                    value: parsePropertyFunction(param, token),
+                    value: parsePropertyFunction(param, { generator: false, name: token }),
                     kind: 'set'
                 };
             } else {
@@ -1558,7 +1563,7 @@ parseYieldExpression: true
                     return {
                         type: Syntax.Property,
                         key: id,
-                        value: parsePropertyMethodFunction(),
+                        value: parsePropertyMethodFunction({ generator: false }),
                         kind: 'init',
                         method: true
                     };
@@ -1573,7 +1578,24 @@ parseYieldExpression: true
                 }
             }
         } else if (token.type === Token.EOF || token.type === Token.Punctuator) {
-            throwUnexpected(token);
+            if (!match('*')) {
+                throwUnexpected(token);
+            }
+            lex();
+
+            id = parseObjectPropertyKey();
+
+            if (!match('(')) {
+                throwUnexpected(lex());
+            }
+
+            return {
+                type: Syntax.Property,
+                key: id,
+                value: parsePropertyMethodFunction({ generator: true }),
+                kind: 'init',
+                method: true
+            };
         } else {
             key = parseObjectPropertyKey();
             if (match(':')) {
@@ -1588,7 +1610,7 @@ parseYieldExpression: true
                 return {
                     type: Syntax.Property,
                     key: key,
-                    value: parsePropertyMethodFunction(),
+                    value: parsePropertyMethodFunction({ generator: false }),
                     kind: 'init',
                     method: true
                 };
@@ -2195,14 +2217,17 @@ parseYieldExpression: true
     }
 
     function parseArrowFunctionExpression(param) {
-        var previousStrict, body;
+        var previousStrict, previousYieldAllowed, body;
 
         expect('=>');
 
         previousStrict = strict;
+        previousYieldAllowed = yieldAllowed;
         strict = true;
+        yieldAllowed = false;
         body = parseConciseBody();
         strict = previousStrict;
+        yieldAllowed = previousYieldAllowed;
 
         return {
             type: Syntax.ArrowFunctionExpression,
@@ -3383,10 +3408,18 @@ parseYieldExpression: true
     }
 
     function parseFunctionDeclaration() {
-        var id, param, params = [], body, token, firstRestricted, message, previousStrict, paramSet;
+        var id, param, params = [], body, token, firstRestricted, message, previousStrict, previousYieldAllowed, paramSet, generator;
 
         expectKeyword('function');
+
+        generator = false;
+        if (match('*')) {
+            lex();
+            generator = true;
+        }
+
         token = lookahead();
+
         id = parseVariableIdentifier();
         if (strict) {
             if (isRestrictedWord(token.value)) {
@@ -3440,24 +3473,35 @@ parseYieldExpression: true
         expect(')');
 
         previousStrict = strict;
+        previousYieldAllowed = yieldAllowed;
+        yieldAllowed = generator;
         body = parseFunctionSourceElements();
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
         }
         strict = previousStrict;
+        yieldAllowed = previousYieldAllowed;
 
         return {
             type: Syntax.FunctionDeclaration,
             id: id,
             params: params,
-            body: body
+            body: body,
+            generator: generator
         };
     }
 
     function parseFunctionExpression() {
-        var token, id = null, firstRestricted, message, param, params = [], body, previousStrict, paramSet;
+        var token, id = null, firstRestricted, message, param, params = [], body, previousStrict, previousYieldAllowed, paramSet, generator;
 
         expectKeyword('function');
+
+        generator = false;
+
+        if (match('*')) {
+            lex();
+            generator = true;
+        }
 
         if (!match('(')) {
             token = lookahead();
@@ -3515,26 +3559,30 @@ parseYieldExpression: true
         expect(')');
 
         previousStrict = strict;
+        previousYieldAllowed = yieldAllowed;
+        yieldAllowed = generator;
         body = parseFunctionSourceElements();
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
         }
         strict = previousStrict;
+        yieldAllowed = previousYieldAllowed;
 
         return {
             type: Syntax.FunctionExpression,
             id: id,
             params: params,
-            body: body
+            body: body,
+            generator: generator
         };
     }
 
     function parseYieldExpression() {
-        var delegate;
+        var delegate, expr, previousYieldAllowed;
 
         expectKeyword('yield');
 
-        if (!state.inFunctionBody) {
+        if (!yieldAllowed) {
             throwErrorTolerant({}, Messages.IllegalYield);
         }
 
@@ -3544,9 +3592,15 @@ parseYieldExpression: true
             delegate = true;
         }
 
+        // It is a Syntax Error if any AssignmentExpression Contains YieldExpression.
+        previousYieldAllowed = yieldAllowed;
+        yieldAllowed = false;
+        expr = parseAssignmentExpression();
+        yieldAllowed = previousYieldAllowed;
+
         return {
             type: Syntax.YieldExpression,
-            argument: parseAssignmentExpression(),
+            argument: expr,
             delegate: delegate
         };
     }
@@ -3672,6 +3726,7 @@ parseYieldExpression: true
     function parseProgram() {
         var program;
         strict = false;
+        yieldAllowed = false;
         program = {
             type: Syntax.Program,
             body: parseProgramElements()
