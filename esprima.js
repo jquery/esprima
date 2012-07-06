@@ -3571,46 +3571,6 @@ parseYieldExpression: true
         };
     }
 
-    // 14 Program
-    function checkAndParseFormalParameterList() {
-        var token, param, params = [], paramSet = {}, firstRestricted, message;
-
-        while (index < length) {
-            token = lookahead();
-            param = parseVariableIdentifier();
-            if (strict) {
-                if (isRestrictedWord(token.value)) {
-                    throwError(token, Messages.StrictParamName);
-                }
-                if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                    throwError(token, Messages.StrictParamDupe);
-                }
-            } else if (!firstRestricted) {
-                if (isRestrictedWord(token.value)) {
-                    firstRestricted = token;
-                    message = Messages.StrictParamName;
-                } else if (isStrictModeReservedWord(token.value)) {
-                    firstRestricted = token;
-                    message = Messages.StrictReservedWord;
-                } else if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                    firstRestricted = token;
-                    message = Messages.StrictParamDupe;
-                }
-            }
-            params.push(param);
-            paramSet[param.name] = true;
-            if (match(')')) {
-                break;
-            }
-            expect(',');
-        }
-        return {
-            params: params,
-            firstRestricted: firstRestricted,
-            message: message
-        };
-    }
-
     // 14 Classes
 
     function parseMethodDefinition() {
