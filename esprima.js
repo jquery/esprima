@@ -2261,13 +2261,25 @@ parseYieldExpression: true
     }
 
     function parseAssignmentExpression() {
-        var expr, oldParenthesizedCount, coverFormalsList;
+        var expr, token, oldParenthesizedCount, coverFormalsList;
 
         if (matchKeyword('yield')) {
             return parseYieldExpression();
         }
 
         oldParenthesizedCount = state.parenthesizedCount;
+
+        if (match('(')) {
+            token = lookahead2();
+            if (token.type === Token.Punctuator && token.value === ')') {
+                lex();
+                lex();
+                if (!match('=>')) {
+                    throwUnexpected(lex());
+                }
+                return parseArrowFunctionExpression([]);
+            }
+        }
 
         expr = parseConditionalExpression();
 
