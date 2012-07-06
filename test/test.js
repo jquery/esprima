@@ -18001,6 +18001,7 @@ data = {
                                     end: { line: 1, column: 17 }
                                 }
                             },
+                            generator: false,
                             range: [15, 17],
                             loc: {
                                 start: { line: 1, column: 15 },
@@ -18065,6 +18066,7 @@ data = {
                                 end: { line: 1, column: 31 }
                             }
                         },
+                        generator: false,
                         range: [29, 31],
                         loc: {
                             start: { line: 1, column: 29 },
@@ -18188,6 +18190,7 @@ data = {
                                                 end: { line: 1, column: 49 }
                                             }
                                         },
+                                        generator: false,
                                         range: [38, 49],
                                         loc: {
                                             start: { line: 1, column: 38 },

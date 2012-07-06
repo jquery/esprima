@@ -3665,7 +3665,7 @@ parseYieldExpression: true
             return {
                 type: Syntax.MethodDefinition,
                 key: key,
-                value: parsePropertyFunction([]),
+                value: parsePropertyFunction([], { generator: false }),
                 kind: 'get'
             };
         } else if (token.value === 'set' && !match('(')) {
@@ -3687,7 +3687,7 @@ parseYieldExpression: true
             return {
                 type: Syntax.MethodDefinition,
                 key: key,
-                value: parsePropertyMethodFunction(),
+                value: parsePropertyMethodFunction({ generator: false }),
                 kind: ''
             };
         }
