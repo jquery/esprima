@@ -17270,6 +17270,35 @@ data = {
 
 
     'ES6 Arrow Function': {
+        '() => "test"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [],
+                body: {
+                    type: 'Literal',
+                    value: 'test',
+                    raw: '"test"',
+                    range: [6, 12],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 12],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        },
+
         'e => "test"': {
             type: 'ExpressionStatement',
             expression: {
@@ -19672,6 +19701,13 @@ data = {
             lineNumber: 1,
             column: 8,
             message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+        },
+
+        '() <= 42': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token <='
         },
 
         '(10) => 00': {
