@@ -17012,6 +17012,70 @@ data = {
             }
         },
 
+        'module foo {\n module bar = baz }': {
+            type: "ModuleDeclaration",
+            id: {
+                type: "Identifier",
+                name: "foo",
+                range: [7, 10],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            body: {
+                type: "BlockStatement",
+                body: [
+                    {
+                        type: "ModuleDeclaration",
+                        id: {
+                            type: "Identifier",
+                            name: "bar",
+                            range: [21, 24],
+                            loc: {
+                                start: { line: 2, column: 8 },
+                                end: { line: 2, column: 11 }
+                            }
+                        },
+                        from: {
+                            type: "Path",
+                            body: [
+                                {
+                                    type: "Identifier",
+                                    name: "baz",
+                                    range: [27, 30],
+                                    loc: {
+                                        start: { line: 2, column: 14 },
+                                        end: { line: 2, column: 17 }
+                                    }
+                                }
+                            ],
+                            range: [27, 30],
+                            loc: {
+                                start: { line: 2, column: 14 },
+                                end: { line: 2, column: 17 }
+                            }
+                        },
+                        range: [14, 31],
+                        loc: {
+                            start: { line: 2, column: 1 },
+                            end: { line: 2, column: 18 }
+                        }
+                    }
+                ],
+                range: [11, 32],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 2, column: 19 }
+                }
+            },
+            range: [0, 32],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 2, column: 19 }
+            }
+        },
+
         'import * from foo': {
             type: 'ImportDeclaration',
             specifiers: [{

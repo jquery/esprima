@@ -1217,17 +1217,18 @@ parseYieldExpression: true
     // Return true if there is a line terminator before the next token.
 
     function peekLineTerminator(skip) {
-        var pos, line, start, found;
+        var pos, line, start, found, previousTokenLine;
         skip = skip || 0;
 
         pos = index;
-        line = lineNumber;
+        previousTokenLine = line = lineNumber;
         start = lineStart;
         while (skip--) {
             advance();
+            previousTokenLine = lineNumber;
         }
         skipComment();
-        found = lineNumber !== line;
+        found = lineNumber !== previousTokenLine;
         index = pos;
         lineNumber = line;
         lineStart = start;
