@@ -3726,7 +3726,7 @@ parseYieldExpression: true
     }
 
     function parseClassExpression() {
-        var token, id, body, subclassOf;
+        var token, id, body, previousYieldAllowed, subclassOf;
 
         expectKeyword('class');
 
@@ -3736,7 +3736,10 @@ parseYieldExpression: true
 
         if (matchKeyword('extends')) {
             expectKeyword('extends');
+            previousYieldAllowed = yieldAllowed;
+            yieldAllowed = false;
             subclassOf = parseAssignmentExpression();
+            yieldAllowed = previousYieldAllowed;
         }
 
         body = parseClassBody();
@@ -3749,7 +3752,7 @@ parseYieldExpression: true
     }
 
     function parseClassDeclaration() {
-        var token, id, body, subclassOf;
+        var token, id, body, previousYieldAllowed, subclassOf;
 
         expectKeyword('class');
 
@@ -3758,7 +3761,10 @@ parseYieldExpression: true
 
         if (matchKeyword('extends')) {
             expectKeyword('extends');
+            previousYieldAllowed = yieldAllowed;
+            yieldAllowed = false;
             subclassOf = parseAssignmentExpression();
+            yieldAllowed = previousYieldAllowed;
         }
 
         body = parseClassBody();
