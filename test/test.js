@@ -20000,6 +20000,13 @@ data = {
             lineNumber: 1,
             column: 18,
             message: 'Error: Line 1: Unexpected token *'
+        },
+
+        'class A extends yield B { }': {
+            index: 21,
+            lineNumber: 1,
+            column: 22,
+            message: 'Error: Line 1: Illegal yield expression'
         }
     },
 
