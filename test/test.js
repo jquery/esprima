@@ -12575,7 +12575,6 @@ data = {
                     end: { line: 1, column: 26 }
                 }
             },
-            each: false,
             range: [0, 26],
             loc: {
                 start: { line: 1, column: 0 },
@@ -12655,7 +12654,6 @@ data = {
                     end: { line: 1, column: 31 }
                 }
             },
-            each: false,
             range: [0, 31],
             loc: {
                 start: { line: 1, column: 0 },
@@ -12744,7 +12742,6 @@ data = {
                     end: { line: 1, column: 36 }
                 }
             },
-            each: false,
             range: [0, 36],
             loc: {
                 start: { line: 1, column: 0 },
@@ -12824,7 +12821,6 @@ data = {
                     end: { line: 1, column: 31 }
                 }
             },
-            each: false,
             range: [0, 31],
             loc: {
                 start: { line: 1, column: 0 },
@@ -12958,7 +12954,6 @@ data = {
                     end: { line: 1, column: 64 }
                 }
             },
-            each: false,
             range: [0, 64],
             loc: {
                 start: { line: 1, column: 0 },

@@ -2930,8 +2930,7 @@ parseYieldExpression: true
                 type: Syntax.ForOfStatement,
                 left: left,
                 right: right,
-                body: body,
-                each: false
+                body: body
             };
         }
     }
