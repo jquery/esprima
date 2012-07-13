@@ -1551,9 +1551,6 @@ parseYieldExpression: true
                 key = parseObjectPropertyKey();
                 expect('(');
                 token = lookahead();
-                if (token.type !== Token.Identifier) {
-                    throwUnexpected(lex());
-                }
                 param = [ parseVariableIdentifier() ];
                 expect(')');
                 return {
@@ -3655,6 +3652,16 @@ parseYieldExpression: true
     function parseMethodDefinition() {
         var token, key, result, param;
 
+        if (match('*')) {
+            lex();
+            return {
+                type: Syntax.MethodDefinition,
+                key: parseObjectPropertyKey(),
+                value: parsePropertyMethodFunction({ generator: true }),
+                kind: ''
+            };
+        }
+
         token = lookahead();
         key = parseObjectPropertyKey();
 
@@ -3672,15 +3679,12 @@ parseYieldExpression: true
             key = parseObjectPropertyKey();
             expect('(');
             token = lookahead();
-            if (token.type !== Token.Identifier) {
-                throwUnexpected(lex());
-            }
             param = [ parseVariableIdentifier() ];
             expect(')');
             return {
                 type: Syntax.MethodDefinition,
                 key: key,
-                value: parsePropertyFunction(param, token),
+                value: parsePropertyFunction(param, { generator: false, name: token }),
                 kind: 'set'
             };
         } else {
