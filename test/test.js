@@ -18161,6 +18161,253 @@ data = {
             }
         },
 
+        'class A {set a(v) {}}': {
+            id: {
+                type: "Identifier",
+                name: "A",
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            type: "ClassDeclaration",
+            body: {
+                type: "ClassBody",
+                body: [
+                    {
+                        type: "MethodDefinition",
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [13, 14],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        value: {
+                            type: "FunctionExpression",
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'v',
+                                range: [15, 16],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 16 }
+                                }
+                            }],
+                            body: {
+                                type: "BlockStatement",
+                                body: [],
+                                range: [18, 20],
+                                loc: {
+                                    start: { line: 1, column: 18 },
+                                    end: { line: 1, column: 20 }
+                                }
+                            },
+                            generator: false,
+                            range: [18, 20],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 20 }
+                            }
+                        },
+                        kind: "set",
+                        range: [9, 20],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 20 }
+                        }
+                    }
+                ],
+                range: [8, 21],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            }
+        },
+
+        'class A {set(v) {};}': {
+            id: {
+                type: "Identifier",
+                name: "A",
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            type: "ClassDeclaration",
+            body: {
+                type: "ClassBody",
+                body: [
+                    {
+                        type: "MethodDefinition",
+                        key: {
+                            type: "Identifier",
+                            name: "set",
+                            range: [9, 12],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 12 }
+                            }
+                        },
+                        value: {
+                            type: "FunctionExpression",
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'v',
+                                range: [13, 14],
+                                loc: {
+                                    start: { line: 1, column: 13 },
+                                    end: { line: 1, column: 14 }
+                                }
+                            }],
+                            body: {
+                                type: "BlockStatement",
+                                body: [],
+                                range: [16, 18],
+                                loc: {
+                                    start: { line: 1, column: 16 },
+                                    end: { line: 1, column: 18 }
+                                }
+                            },
+                            generator: false,
+                            range: [16, 18],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 18 }
+                            }
+                        },
+                        kind: "",
+                        range: [9, 18],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 18 }
+                        }
+                    }
+                ],
+                range: [8, 20],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 20 }
+                }
+            },
+            range: [0, 20],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 20 }
+            }
+        },
+
+        'class A {*gen(v) { yield v; }}': {
+            id: {
+                type: "Identifier",
+                name: "A",
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            type: "ClassDeclaration",
+            body: {
+                type: "ClassBody",
+                body: [
+                    {
+                        type: "MethodDefinition",
+                        key: {
+                            type: "Identifier",
+                            name: "gen",
+                            range: [10, 13],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 13 }
+                            }
+                        },
+                        value: {
+                            type: "FunctionExpression",
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'v',
+                                range: [14, 15],
+                                loc: {
+                                    start: { line: 1, column: 14 },
+                                    end: { line: 1, column: 15 }
+                                }
+                            }],
+                            body: {
+                                type: "BlockStatement",
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'YieldExpression',
+                                        argument: {
+                                            type: 'Identifier',
+                                            name: 'v',
+                                            range: [25, 26],
+                                            loc: {
+                                               start: { line: 1, column: 25 },
+                                                end: { line: 1, column: 26 }
+                                            }
+                                        },
+                                        delegate: false,
+                                        range: [19, 26],
+                                        loc: {
+                                           start: { line: 1, column: 19 },
+                                            end: { line: 1, column: 26 }
+                                        }
+                                    },
+                                    range: [19, 27],
+                                    loc: {
+                                       start: { line: 1, column: 19 },
+                                        end: { line: 1, column: 27 }
+                                    }
+                                }],
+                                range: [17, 29],
+                                loc: {
+                                    start: { line: 1, column: 17 },
+                                    end: { line: 1, column: 29 }
+                                }
+                            },
+                            generator: true,
+                            range: [17, 29],
+                            loc: {
+                                start: { line: 1, column: 17 },
+                                end: { line: 1, column: 29 }
+                            }
+                        },
+                        kind: "",
+                        range: [9, 29],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 29 }
+                        }
+                    }
+                ],
+                range: [8, 30],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 30 }
+                }
+            },
+            range: [0, 30],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 30 }
+            }
+        },
+
         '"use strict"; (class A {constructor() { super() }})': {
             type: "Program",
             body: [
