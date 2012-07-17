@@ -172,7 +172,6 @@ parseStatement: true, parseSourceElement: true */
     // This is only to have a better contract semantic, i.e. another safety net
     // to catch a logic error. The condition shall be fulfilled in normal case.
     // Do NOT use this to enforce a certain condition on any user input.
-
     function assert(condition, message) {
         if (!condition) {
             throw new Error('ASSERT: ' + message);
@@ -332,25 +331,24 @@ parseStatement: true, parseSourceElement: true */
     function nextChar() {
         return source[index++];
     }
-    
-    
+
+
     function isNewlineOrSemicolon(ch) {
-      return ch===';' || ch==='\n';
+      return ch === ';' || ch === '\n';
     }
-    
-    /**
-     * rewind the lex position to the most recent newline or semicolon.  If that turns out
-     * to be the same position as the most recent parsing of a statement was attempted at, 
-     * don't rewind (because it will fail in the same way).  If it turns out to be the same
-     * position as where we last rewound to, don't do it.  Clears the buffer and sets the
-     * index in order to continue lexing from the new position.
-     */
+
+    // Rewind the lex position to the most recent newline or semicolon.  If that
+    // turns out to be the same position as the most recent parsing of a
+    // statement was attempted at, don't rewind (because it will fail in the
+    // same way).  If it turns out to be the same position as where we last
+    // rewound to, don't do it.  Clears the buffer and sets the index
+    // in order to continue lexing from the new position.
     function rewind() {
         var idx = index;
-        while (idx>0 && !isNewlineOrSemicolon(source[idx])) {
-            idx--;
+        while (idx > 0 && !isNewlineOrSemicolon(source[idx])) {
+            --idx;
         }
-        if (idx<=extra.statementStart) {
+        if (idx <= extra.statementStart) {
             return;
         }
         var doRewind = false;
@@ -358,14 +356,14 @@ parseStatement: true, parseSourceElement: true */
             doRewind = true;
         } else {
             var v = extra.lastRewindLocation;
-            if (v!==idx) {
+            if (v !== idx) {
               doRewind=true;
             }
-        }	        
+        }
         if (doRewind) {
-	        index = idx;
-	        buffer = null;
-	        extra.lastRewindLocation = index;
+            index = idx;
+            buffer = null;
+            extra.lastRewindLocation = index;
         }
     }
 
@@ -1321,7 +1319,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         token = lookahead();
-        if (token.type !== Token.EOF && !match('}')) {        
+        if (token.type !== Token.EOF && !match('}')) {
             if (extra.errors) {
                 rewind();
             }
@@ -1476,7 +1474,8 @@ parseStatement: true, parseSourceElement: true */
             } else {
                 name = toString(property.key.value);
             }
-            kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
+            kind = (property.kind === 'init') ? PropertyKind.Data :
+                (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
             if (Object.prototype.hasOwnProperty.call(map, name)) {
                 if (map[name] === PropertyKind.Data) {
                     if (strict && kind === PropertyKind.Data) {
@@ -1600,7 +1599,7 @@ parseStatement: true, parseSourceElement: true */
 
         return args;
     }
-    
+
     // TODO refactor
     /**
      * From a position 'idx' in the source this function moves back through the source until
@@ -1614,63 +1613,65 @@ parseStatement: true, parseSourceElement: true */
         var ch;
         while (!done) {
           ch = source[idx];
-          if (ch==='/') {
-            // possibly rewind over a block comment
-            if (idx>2 && source[idx-1]==='*') {
-                // it is, let's reverse over it
+          if (ch === '/') {
+            // Possibly rewind over a block comment.
+            if (idx > 2 && source[idx-1] === '*') {
+                // It is, let's reverse over it.
                 idx = idx - 2;
                 var skippedComment = false;
                 while (!skippedComment) {
                     ch = source[idx];
                     if (ch === '*') {
-                        if (idx>0 && source[idx-1]==='/') {
-                            skippedComment=true;
+                        if (idx > 0 && source[idx-1] === '/') {
+                            skippedComment = true;
                         }
-                    } else if (ch==='\n') {
-                        lineChange=true;
+                    } else if (ch === '\n') {
+                        lineChange = true;
                     }
                     if (idx === 0) {
-                        skippedComment = true; // error scenario, hit front of array before finding /*
+                        // error scenario, hit front of array before finding /*
+                        skippedComment = true;
                     }
-                    idx--;                
+                    --idx;
                 }
             } else {
-              done=true;
+              done = true;
             }
-          } else 
-          if (ch==='\n') {
-              lineChange=true;
+          } else if (ch === '\n') {
+              lineChange = true;
           } else if (!isWhiteSpace(ch)) {
-              done=true;
+              done = true;
           }
           if (!done) {
-              idx--;
+              --idx;
           }
         }
-        return {"index":idx,"lineChange":lineChange};
+        return {index:idx, lineChange:lineChange};
     }
-    
+
     /**
-     * When a problem occurs in parseNonComputedProperty, attempt to reposition 
+     * When a problem occurs in parseNonComputedProperty, attempt to reposition
      * the lexer to continue processing.
-     * Example: '(foo.)' we will hit the ')' instead of discovering a property and consuming the ')'
+     * Example: '(foo.)' we will hit the ')' instead of discovering a property
+     * and consuming the ')'
      * will cause the parse of the paretheses to fail, so 'unconsume' it.
-     * Basically rewind by one token if punctuation (type 7) is hit and the char before it was
-     * a dot.  This will enable the enclosing parse rule to consume the punctuation.
+     * Basically rewind by one token if punctuation (type 7) is hit and the char
+     * before it was a dot.
+     * This will enable the enclosing parse rule to consume the punctuation.
      */
     function attemptRecoveryNonComputedProperty(token) {
-        if (token.value && token.type===Token.Punctuator) {
-            var rewindInfo = rewindToInterestingChar(index-token.value.length-1);
+        if (token.value && token.type === Token.Punctuator) {
+            var rewindInfo = rewindToInterestingChar(index - token.value.length - 1);
             var idx = rewindInfo.index;
-            var ch= source[idx];
+            var ch = source[idx];
             // Check if worth rewinding
             // Special case:
             // "foo.\n(foo())\n" - don't really want that to parse as "foo(foo())"
-            if (ch==='.' && rewindInfo.lineChange && token.value==='(') {
+            if (ch === '.' && rewindInfo.lineChange && token.value === '(') {
                 // do not recover in this case
-            } else if (ch==='.') {
-	            index = idx+1;
-	            buffer=null;
+            } else if (ch === '.') {
+                index = idx + 1;
+                buffer = null;
             }
         }
     }
@@ -2273,7 +2274,7 @@ parseStatement: true, parseSourceElement: true */
             expression: expr
         };
     }
-    
+
     /**
      * add the error if not already reported.
      */
@@ -2304,17 +2305,17 @@ parseStatement: true, parseSourceElement: true */
             expect(')');
         } catch (e) {
             if (extra.errors) {
-	            pushError(e);
-	            // If a { was hit instead of a ) then don't consume it, let us assume a ')' was 
-	            // missed and the consequent block is OK
-	            if (source[e.index] === '{') {
-	              index=e.index;
-	              buffer=null;
-	            // activating this block will mean the following statement is parsed as a consequent.
-	            // without it the statement is considered not at all part of the if at all
-	//            } else {
-	//              rewind();
-	            }
+                pushError(e);
+                // If a { was hit instead of a ) then don't consume it, let us assume a ')' was
+                // missed and the consequent block is OK
+                if (source[e.index] === '{') {
+                    index = e.index;
+                    buffer = null;
+                    // Activating this block will mean the following statement is parsed as a consequent.
+                    // Without it the statement is considered not at all part of the if at all
+                //} else {
+                  //rewind();
+                }
             } else {
                 throw e;
             }
@@ -2915,9 +2916,8 @@ parseStatement: true, parseSourceElement: true */
                 body: labeledBody
             };
         }
-        
-        consumeSemicolon();
 
+        consumeSemicolon();
 
         return {
             type: Syntax.ExpressionStatement,
@@ -3475,20 +3475,21 @@ parseStatement: true, parseSourceElement: true */
                 try {
                     return parseFunction.apply(null, arguments);
                 } catch (e) {
-					pushError(e);
-					return null;
+                    pushError(e);
+                    return null;
                 }
             };
         }
-        
+
         function wrapThrowParseStatement(parseFunction) {
             return function () {
-                extra.statementStart = index; // record where attempting to parse statement from
+                // Record where we attempt to parse the statement from.
+                extra.statementStart = index;
                 try {
                     return parseFunction.apply(null, arguments);
                 } catch (e) {
-					pushError(e);
-//					return null;
+                    pushError(e);
+                    //return null;
                 }
             };
         }
@@ -3582,11 +3583,11 @@ parseStatement: true, parseSourceElement: true */
             parseVariableDeclaration = wrapTracking(extra.parseVariableDeclaration);
             parseVariableIdentifier = wrapTracking(extra.parseVariableIdentifier);
         }
-        
+
         if (extra.errors) {
             parseStatement = wrapThrowParseStatement(parseStatement);
             parseExpression = wrapThrow(parseExpression);
-            // this enables 'foo.<EOF>' to return something
+            // The following enables 'foo.<EOF>' to return something.
             parseNonComputedProperty = wrapThrow(parseNonComputedProperty);
             consumeSemicolon = wrapThrow(consumeSemicolon);
         }
