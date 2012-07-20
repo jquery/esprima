@@ -32,7 +32,7 @@ Esprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror
 - Code generation: [escodegen](https://github.com/Constellation/escodegen)
 - Documentation tool: [JFDoc](https://github.com/thejohnfreeman/jfdoc), [JSDuck](https://github.com/senchalabs/jsduck)
 - Source-to-source compilation: [Marv](https://github.com/Yoric/Marv-the-Tinker),
-[LLJS](http://mbebenita.github.com/LLJS/)
+[LLJS](http://mbebenita.github.com/LLJS/), [Harmonizr](https://github.com/jdiamond/harmonizr)
 
 
 ### Questions?
