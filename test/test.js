@@ -3712,13 +3712,21 @@ data = {
                 end: { line: 1, column: 21 }
             },
             comments: [{
+                type: 'Block',
+                value: 'The',
                 range: [3, 10],
-                type: 'Block',
-                value: 'The'
+                loc: {
+                    start: { line: 1, column: 3 },
+                    end: { line: 1, column: 10 }
+                }
             }, {
-                range: [11, 21],
                 type: 'Block',
-                value: 'Answer'
+                value: 'Answer',
+                range: [11, 21],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 21 }
+                }
             }]
         },
 
@@ -3767,9 +3775,13 @@ data = {
                 end: { line: 2, column: 6 }
             },
             comments: [{
-                range: [0, 8],
                 type: 'Block',
-                value: 'a\r\nb'
+                value: 'a\r\nb',
+                range: [0, 8],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 3 }
+                }
             }]
         },
 
@@ -3799,9 +3811,13 @@ data = {
                 end: { line: 2, column: 6 }
             },
             comments: [{
-                range: [0, 7],
                 type: 'Block',
-                value: 'a\rb'
+                value: 'a\rb',
+                range: [0, 7],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 3 }
+                }
             }]
         },
 
@@ -3831,9 +3847,13 @@ data = {
                 end: { line: 2, column: 6 }
             },
             comments: [{
-                range: [0, 7],
                 type: 'Block',
-                value: 'a\nb'
+                value: 'a\nb',
+                range: [0, 7],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 3 }
+                }
             }]
         },
 
@@ -3882,9 +3902,13 @@ data = {
                 end: { line: 1, column: 18 }
             },
             comments: [{
-                range: [3, 18],
                 type: 'Line',
-                value: ' line comment'
+                value: ' line comment',
+                range: [3, 18],
+                loc: {
+                    start: { line: 1, column: 3 },
+                    end: { line: 1, column: 18 }
+                }
             }]
         },
 
@@ -3914,9 +3938,32 @@ data = {
                 end: { line: 2, column: 2 }
             },
             comments: [{
-                range: [0, 17],
                 type: 'Line',
-                value: ' Hello, world!'
+                value: ' Hello, world!',
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            }]
+        },
+
+        '// Hello, world!\n': {
+            type: 'Program',
+            body: [],
+            range: [17, 17],
+            loc: {
+                start: { line: 2, column: 0 },
+                end: { line: 2, column: 0 }
+            },
+            comments: [{
+                type: 'Line',
+                value: ' Hello, world!',
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
             }]
         },
 
@@ -3946,9 +3993,32 @@ data = {
                 end: { line: 2, column: 2 }
             },
             comments: [{
-                range: [0, 3],
                 type: 'Line',
-                value: ''
+                value: '',
+                range: [0, 2],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 2 }
+                },
+            }]
+        },
+
+        '//': {
+            type: 'Program',
+            body: [],
+            range: [2, 2],
+            loc: {
+                start: { line: 1, column: 2 },
+                end: { line: 1, column: 2 }
+            },
+            comments: [{
+                type: 'Line',
+                value: '',
+                range: [0, 2],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 2 }
+                },
             }]
         },
 
@@ -3978,9 +4048,13 @@ data = {
                 end: { line: 1, column: 6 }
             },
             comments: [{
-                range: [0, 4],
                 type: 'Block',
-                value: ''
+                value: '',
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
             }]
         },
 
@@ -4010,13 +4084,21 @@ data = {
                 end: { line: 4, column: 2 }
             },
             comments: [{
-                range: [0, 17],
                 type: 'Line',
-                value: ' Hello, world!'
+                value: ' Hello, world!',
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
             }, {
-                range: [18, 37],
                 type: 'Line',
-                value: '   Another hello'
+                value: '   Another hello',
+                range: [18, 36],
+                loc: {
+                    start: { line: 3, column: 0 },
+                    end: { line: 3, column: 18 }
+                }
             }]
         },
 
@@ -4080,9 +4162,13 @@ data = {
                 end: { line: 2, column: 11 }
             },
             comments: [{
-                range: [9, 25],
                 type: 'Line',
-                value: ' Some comment'
+                value: ' Some comment',
+                range: [9, 24],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 24 }
+                }
             }]
         },
 
@@ -4155,9 +4241,13 @@ data = {
                 end: { line: 1, column: 50 }
             },
             comments: [{
-                range: [27, 40],
                 type: 'Block',
-                value: ' perfect '
+                value: ' perfect ',
+                range: [27, 40],
+                loc: {
+                    start: { line: 1, column: 27 },
+                    end: { line: 1, column: 40 }
+                }
             }]
         }
 
@@ -9909,6 +9999,64 @@ data = {
                 end: { line: 1, column: 7 }
             }
         },
+
+        'x < y < z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '<',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '<',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [0, 1],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 1 }
+                        }
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [4, 5],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    },
+                    range: [0, 5],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z',
+                    range: [8, 9],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 9 }
+                    }
+                },
+                range: [0, 9],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 9 }
+                }
+            },
+            range: [0, 9],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 9 }
+            }
+        }
+
+    },
+
+    'Equality Operators': {
 
         'x |= 42': {
             type: 'ExpressionStatement',
