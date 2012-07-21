@@ -3137,15 +3137,15 @@ parseStatement: true, parseSourceElement: true */
             } else if (ch === '/') {
                 ch = source[index + 1];
                 if (ch === '/') {
-                    start = index;
-                    index += 2;
-                    lineComment = true;
                     loc = {
                         start: {
                             line: lineNumber,
-                            column: index - lineStart - 2
+                            column: index - lineStart
                         }
                     };
+                    start = index;
+                    index += 2;
+                    lineComment = true;
                     if (index >= length) {
                         loc.end = {
                             line: lineNumber,
