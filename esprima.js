@@ -3042,7 +3042,7 @@ parseStatement: true, parseSourceElement: true */
     // The following functions are needed only when the option to preserve
     // the comments is active.
 
-    function addComment(start, end, type, value) {
+    function addComment(type, value, start, end, loc) {
         assert(typeof start === 'number', 'Comment must have valid position');
 
         // Because the way the actual token is scanned, often the comments
@@ -3056,14 +3056,15 @@ parseStatement: true, parseSourceElement: true */
         }
 
         extra.comments.push({
-            range: [start, end],
             type: type,
-            value: value
+            value: value,
+            range: [start, end],
+            loc: loc
         });
     }
 
     function scanComment() {
-        var comment, ch, start, blockComment, lineComment;
+        var comment, ch, loc, start, blockComment, lineComment;
 
         comment = '';
         blockComment = false;
@@ -3077,10 +3078,18 @@ parseStatement: true, parseSourceElement: true */
                 if (index >= length) {
                     lineComment = false;
                     comment += ch;
-                    addComment(start, index, 'Line', comment);
+                    loc.end = {
+                        line: lineNumber,
+                        column: index - lineStart
+                    };
+                    addComment('Line', comment, start, index, loc);
                 } else if (isLineTerminator(ch)) {
+                    loc.end = {
+                        line: lineNumber,
+                        column: index - lineStart
+                    };
                     lineComment = false;
-                    addComment(start, index, 'Line', comment);
+                    addComment('Line', comment, start, index, loc);
                     if (ch === '\r' && source[index] === '\n') {
                         ++index;
                     }
@@ -3116,7 +3125,11 @@ parseStatement: true, parseSourceElement: true */
                             comment = comment.substr(0, comment.length - 1);
                             blockComment = false;
                             ++index;
-                            addComment(start, index, 'Block', comment);
+                            loc.end = {
+                                line: lineNumber,
+                                column: index - lineStart
+                            };
+                            addComment('Block', comment, start, index, loc);
                             comment = '';
                         }
                     }
@@ -3127,10 +3140,22 @@ parseStatement: true, parseSourceElement: true */
                     start = index;
                     index += 2;
                     lineComment = true;
+                    loc = {
+                        start: {
+                            line: lineNumber,
+                            column: index - lineStart - 2
+                        }
+                    };
                 } else if (ch === '*') {
                     start = index;
                     index += 2;
                     blockComment = true;
+                    loc = {
+                        start: {
+                            line: lineNumber,
+                            column: index - lineStart - 2
+                        }
+                    };
                     if (index >= length) {
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
