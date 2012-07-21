@@ -2127,14 +2127,14 @@ parseYieldExpression: true
         return expr;
     }
 
-    function parseBitwiseORExpression() {
+    function parseBitwiseXORExpression() {
         var expr = parseBitwiseANDExpression();
 
-        while (match('|')) {
+        while (match('^')) {
             lex();
             expr = {
                 type: Syntax.BinaryExpression,
-                operator: '|',
+                operator: '^',
                 left: expr,
                 right: parseBitwiseANDExpression()
             };
@@ -2143,16 +2143,16 @@ parseYieldExpression: true
         return expr;
     }
 
-    function parseBitwiseXORExpression() {
-        var expr = parseBitwiseORExpression();
+    function parseBitwiseORExpression() {
+        var expr = parseBitwiseXORExpression();
 
-        while (match('^')) {
+        while (match('|')) {
             lex();
             expr = {
                 type: Syntax.BinaryExpression,
-                operator: '^',
+                operator: '|',
                 left: expr,
-                right: parseBitwiseORExpression()
+                right: parseBitwiseXORExpression()
             };
         }
 
@@ -2162,7 +2162,7 @@ parseYieldExpression: true
     // 11.11 Binary Logical Operators
 
     function parseLogicalANDExpression() {
-        var expr = parseBitwiseXORExpression();
+        var expr = parseBitwiseORExpression();
 
         while (match('&&')) {
             lex();
@@ -2170,7 +2170,7 @@ parseYieldExpression: true
                 type: Syntax.LogicalExpression,
                 operator: '&&',
                 left: expr,
-                right: parseBitwiseXORExpression()
+                right: parseBitwiseORExpression()
             };
         }
 
