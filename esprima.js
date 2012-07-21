@@ -3146,6 +3146,14 @@ parseStatement: true, parseSourceElement: true */
                             column: index - lineStart - 2
                         }
                     };
+                    if (index >= length) {
+                        loc.end = {
+                            line: lineNumber,
+                            column: index - lineStart
+                        };
+                        lineComment = false;
+                        addComment('Line', comment, start, index, loc);
+                    }
                 } else if (ch === '*') {
                     start = index;
                     index += 2;
