@@ -18944,6 +18944,62 @@ data = {
             message: 'Error: Line 1: Invalid left-hand side in for-in'
         },
 
+        '3 = 4': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        'func() = 4': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '(1 + 1) = 10': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '1++': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '1--': {
+            index: 1,
+            lineNumber: 1,
+            column: 2,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '++1': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        '--1': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Invalid left-hand side in assignment'
+        },
+
+        'for((1 + 1) in list) process(x);': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Invalid left-hand side in for-in'
+        },
+
         '[': {
             index: 1,
             lineNumber: 1,
