@@ -3114,10 +3114,29 @@ data = {
             comments: [{
                 type: 'Line',
                 value: ' Hello, world!',
-                range: [0, 17],
+                range: [0, 16],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 1, column: 17 }
+                    end: { line: 1, column: 16 }
+                }
+            }]
+        },
+
+        '// Hello, world!\n': {
+            type: 'Program',
+            body: [],
+            range: [17, 17],
+            loc: {
+                start: { line: 2, column: 0 },
+                end: { line: 2, column: 0 }
+            },
+            comments: [{
+                type: 'Line',
+                value: ' Hello, world!',
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
                 }
             }]
         },
@@ -3150,10 +3169,10 @@ data = {
             comments: [{
                 type: 'Line',
                 value: '',
-                range: [0, 3],
+                range: [0, 2],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 1, column: 3 }
+                    end: { line: 1, column: 2 }
                 },
             }]
         },
@@ -3241,18 +3260,18 @@ data = {
             comments: [{
                 type: 'Line',
                 value: ' Hello, world!',
-                range: [0, 17],
+                range: [0, 16],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 1, column: 17 }
+                    end: { line: 1, column: 16 }
                 }
             }, {
                 type: 'Line',
                 value: '   Another hello',
-                range: [18, 37],
+                range: [18, 36],
                 loc: {
                     start: { line: 3, column: 0 },
-                    end: { line: 3, column: 19 }
+                    end: { line: 3, column: 18 }
                 }
             }]
         },
@@ -3319,10 +3338,10 @@ data = {
             comments: [{
                 type: 'Line',
                 value: ' Some comment',
-                range: [9, 25],
+                range: [9, 24],
                 loc: {
                     start: { line: 1, column: 9 },
-                    end: { line: 1, column: 25 }
+                    end: { line: 1, column: 24 }
                 }
             }]
         },

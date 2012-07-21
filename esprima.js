@@ -3075,27 +3075,27 @@ parseStatement: true, parseSourceElement: true */
 
             if (lineComment) {
                 ch = nextChar();
-                if (index >= length) {
-                    lineComment = false;
-                    comment += ch;
+                if (isLineTerminator(ch)) {
                     loc.end = {
                         line: lineNumber,
-                        column: index - lineStart
-                    };
-                    addComment('Line', comment, start, index, loc);
-                } else if (isLineTerminator(ch)) {
-                    loc.end = {
-                        line: lineNumber,
-                        column: index - lineStart
+                        column: index - lineStart - 1
                     };
                     lineComment = false;
-                    addComment('Line', comment, start, index, loc);
+                    addComment('Line', comment, start, index - 1, loc);
                     if (ch === '\r' && source[index] === '\n') {
                         ++index;
                     }
                     ++lineNumber;
                     lineStart = index;
                     comment = '';
+                } else if (index >= length) {
+                    lineComment = false;
+                    comment += ch;
+                    loc.end = {
+                        line: lineNumber,
+                        column: length - lineStart
+                    };
+                    addComment('Line', comment, start, length, loc);
                 } else {
                     comment += ch;
                 }
