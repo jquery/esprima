@@ -53,6 +53,15 @@ pre.prettyprint {
 var syntax = esprima.parse('var answer = 42');
 </pre>
 
+<p>Since Esprima supports <a href="https://github.com/amdjs/amdjs-api/wiki/AMD">AMD</a> (Asynchronous Module Definition), it can be loaded via a module loader such as <a href="http://requirejs.org">RequireJS</a>:</p>
+
+<pre class="prettyprint lang-js">
+require(['esprima'], function (parser) {
+    // Do something with parser, e.g.
+    console.log(parser.parse('var answer = 42'));
+});
+</pre>
+
 <h3>With Node.js</h3>
 
 <p>Install the library using npm:</p>

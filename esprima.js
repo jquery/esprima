@@ -29,7 +29,7 @@
 */
 
 /*jslint bitwise:true plusplus:true */
-/*global esprima:true, exports:true,
+/*global esprima:true, define:true, exports:true, window: true,
 throwError: true, createLiteral: true, generateStatement: true,
 parseAssignmentExpression: true, parseBlock: true,
 parseClassExpression: true, parseClassDeclaration: true, parseExpression: true,
@@ -41,7 +41,19 @@ parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseCon
 parseYieldExpression: true
 */
 
-(function (exports) {
+(function (factory) {
+    'use strict';
+
+    // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js,
+    // and plain browser loading,
+    if (typeof define === 'function' && define.amd) {
+        define(['exports'], factory);
+    } else if (typeof exports !== 'undefined') {
+        factory(exports);
+    } else {
+        factory((window.esprima = {}));
+    }
+}(function (exports) {
     'use strict';
 
     var Token,
@@ -4531,5 +4543,5 @@ parseYieldExpression: true
         return types;
     }());
 
-}(typeof exports === 'undefined' ? (esprima = {}) : exports));
+}));
 /* vim: set sw=4 ts=4 et tw=80 : */
