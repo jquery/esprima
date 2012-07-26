@@ -1,4 +1,4 @@
-// CodeMirror version 2.31
+// CodeMirror version 2.32
 //
 // All functions that need access to the editor's state live inside
 // the CodeMirror function. Below that, at the bottom of the file,
@@ -1143,7 +1143,7 @@ var CodeMirror = (function() {
         var shouldHaveScrollbar = scrollHeight ? "block" : "none";
         if (scrollbar.style.display != shouldHaveScrollbar) {
           scrollbar.style.display = shouldHaveScrollbar;
-          scrollbarInner.style.height = scrollHeight + "px";
+          if (scrollHeight) scrollbarInner.style.height = scrollHeight + "px";
           checkHeights();
         }
       }
@@ -2667,7 +2667,12 @@ var CodeMirror = (function() {
             outPos += l;
             span_(text, style);
             // Output empty wrapper when at end of line
-            if (outPos == wrapAt && outPos == len) html.push(open + (gecko ? "&#x200b;" : " ") + "</span>");
+            // (Gecko and IE8+ do strange wrapping when adding a space
+            // to the end of the line. Other browsers don't react well
+            // to zero-width spaces. So we do hideous browser sniffing
+            // to determine which to use.)
+            if (outPos == wrapAt && outPos == len)
+              html.push(open + (gecko || (ie && !ie_lt8) ? "&#x200b;" : " ") + "</span>");
             // Stop outputting HTML when gone sufficiently far beyond measure
             else if (outPos > wrapAt + 10 && /\s/.test(text)) span = function(){};
           }
