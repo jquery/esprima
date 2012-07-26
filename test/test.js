@@ -2904,6 +2904,30 @@ data = {
             }]
         },
 
+        '42 /*the*/ /*answer*/': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [0, 2]
+                },
+                range: [0, 21]
+            }],
+            range: [0, 21],
+            comments: [{
+                type: 'Block',
+                value: 'the',
+                range: [3, 10]
+            }, {
+                type: 'Block',
+                value: 'answer',
+                range: [11, 21]
+            }]
+        },
+
         '/* multiline\ncomment\nshould\nbe\nignored */ 42': {
             type: 'ExpressionStatement',
             expression: {
@@ -3031,6 +3055,38 @@ data = {
             }]
         },
 
+        '/*a\nc*/ 42': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    loc: {
+                        start: { line: 2, column: 4 },
+                        end: { line: 2, column: 6 }
+                    }
+                },
+                loc: {
+                    start: { line: 2, column: 4 },
+                    end: { line: 2, column: 6 }
+                }
+            }],
+            loc: {
+                start: { line: 2, column: 4 },
+                end: { line: 2, column: 6 }
+            },
+            comments: [{
+                type: 'Block',
+                value: 'a\nc',
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 3 }
+                }
+            }]
+        },
+
         '// line comment\n42': {
             type: 'ExpressionStatement',
             expression: {
@@ -3141,6 +3197,23 @@ data = {
             }]
         },
 
+        '// Hallo, world!\n': {
+            type: 'Program',
+            body: [],
+            loc: {
+                start: { line: 2, column: 0 },
+                end: { line: 2, column: 0 }
+            },
+            comments: [{
+                type: 'Line',
+                value: ' Hallo, world!',
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            }]
+        },
+
         '//\n42': {
             type: 'Program',
             body: [{
@@ -3173,7 +3246,7 @@ data = {
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 1, column: 2 }
-                },
+                }
             }]
         },
 
@@ -3192,7 +3265,18 @@ data = {
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 1, column: 2 }
-                },
+                }
+            }]
+        },
+
+        '// ': {
+            type: 'Program',
+            body: [],
+            range: [3, 3],
+            comments: [{
+                type: 'Line',
+                value: ' ',
+                range: [0, 3]
             }]
         },
 
@@ -17026,6 +17110,13 @@ function testParse(code, syntax) {
         raw: true,
         tolerant: (typeof syntax.errors !== 'undefined')
     };
+
+    if (typeof syntax.comments !== 'undefined') {
+        if (syntax.comments.length > 0) {
+            options.range = (typeof syntax.comments[0].range !== 'undefined');
+            options.loc = (typeof syntax.comments[0].loc !== 'undefined');
+        }
+    }
 
     expected = JSON.stringify(syntax, null, 4);
     try {

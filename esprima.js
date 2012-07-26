@@ -29,7 +29,7 @@
 */
 
 /*jslint bitwise:true plusplus:true */
-/*global esprima:true, exports:true,
+/*global esprima:true, define:true, exports:true, window: true,
 throwError: true, createLiteral: true, generateStatement: true,
 parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
@@ -37,7 +37,19 @@ parseFunctionSourceElements: true, parseVariableIdentifier: true,
 parseLeftHandSideExpression: true,
 parseStatement: true, parseSourceElement: true */
 
-(function (exports) {
+(function (factory) {
+    'use strict';
+
+    // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js,
+    // and plain browser loading,
+    if (typeof define === 'function' && define.amd) {
+        define(['exports'], factory);
+    } else if (typeof exports !== 'undefined') {
+        factory(exports);
+    } else {
+        factory((window.esprima = {}));
+    }
+}(function (exports) {
     'use strict';
 
     var Token,
@@ -3185,6 +3197,27 @@ parseStatement: true, parseSourceElement: true */
         }
     }
 
+    function filterCommentLocation() {
+        var i, entry, comment, comments = [];
+
+        for (i = 0; i < extra.comments.length; ++i) {
+            entry = extra.comments[i];
+            comment = {
+                type: entry.type,
+                value: entry.value
+            };
+            if (extra.range) {
+                comment.range = entry.range;
+            }
+            if (extra.loc) {
+                comment.loc = entry.loc;
+            }
+            comments.push(comment);
+        }
+
+        extra.comments = comments;
+    }
+
     function collectToken() {
         var token = extra.advance(),
             range,
@@ -3554,6 +3587,7 @@ parseStatement: true, parseSourceElement: true */
         try {
             program = parseProgram();
             if (typeof extra.comments !== 'undefined') {
+                filterCommentLocation();
                 program.comments = extra.comments;
             }
             if (typeof extra.tokens !== 'undefined') {
@@ -3598,5 +3632,5 @@ parseStatement: true, parseSourceElement: true */
         return types;
     }());
 
-}(typeof exports === 'undefined' ? (esprima = {}) : exports));
+}));
 /* vim: set sw=4 ts=4 et tw=80 : */
