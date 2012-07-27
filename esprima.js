@@ -151,6 +151,7 @@ parseStatement: true, parseSourceElement: true */
         UnterminatedRegExp:  'Invalid regular expression: missing /',
         InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
         InvalidLHSInForIn:  'Invalid left-hand side in for-in',
+        MultipleDefaultsInSwitch: 'More than one default clause in switch statement',
         NoCatchOrFinally:  'Missing catch or finally after try',
         UnknownLabel: 'Undefined label \'%0\'',
         Redeclaration: '%0 \'%1\' has already been declared',
@@ -2550,7 +2551,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseSwitchStatement() {
-        var discriminant, cases, oldInSwitch;
+        var discriminant, cases, clause, oldInSwitch, defaultFound;
 
         expectKeyword('switch');
 
@@ -2574,12 +2575,20 @@ parseStatement: true, parseSourceElement: true */
 
         oldInSwitch = state.inSwitch;
         state.inSwitch = true;
+        defaultFound = false;
 
         while (index < length) {
             if (match('}')) {
                 break;
             }
-            cases.push(parseSwitchCase());
+            clause = parseSwitchCase();
+            if (clause.test === null) {
+                if (defaultFound) {
+                    throwError({}, Messages.MultipleDefaultsInSwitch);
+                }
+                defaultFound = true;
+            }
+            cases.push(clause);
         }
 
         state.inSwitch = oldInSwitch;
