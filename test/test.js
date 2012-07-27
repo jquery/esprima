@@ -15791,6 +15791,13 @@ data = {
             message: 'Error: Line 1: Unexpected token const'
         },
 
+        'switch (c) { default: default: }': {
+            index: 30,
+            lineNumber: 1,
+            column: 31,
+            message: 'Error: Line 1: More than one default clause in switch statement'
+        },
+
         'new X()."s"': {
             index: 8,
             lineNumber: 1,
