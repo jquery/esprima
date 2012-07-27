@@ -63,7 +63,11 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'this',
-                range: [0, 4]
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
             }]
         },
 
@@ -95,7 +99,11 @@ data = {
             tokens: [{
                 type: 'Null',
                 value: 'null',
-                range: [0, 4]
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
             }]
         },
 
@@ -127,7 +135,11 @@ data = {
             tokens: [{
                 type: 'Numeric',
                 value: '42',
-                range: [5, 7]
+                range: [5, 7],
+                loc: {
+                    start: { line: 2, column: 4 },
+                    end: { line: 2, column: 6 }
+                }
             }]
         },
 
@@ -237,19 +249,35 @@ data = {
             tokens: [{
                 type: 'Identifier',
                 value: 'x',
-                range: [0, 1]
+                range: [0, 1],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 1 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '=',
-                range: [2, 3]
+                range: [2, 3],
+                loc: {
+                    start: { line: 1, column: 2 },
+                    end: { line: 1, column: 3 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '[',
-                range: [4, 5]
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'Punctuator',
                 value: ']',
-                range: [5, 6]
+                range: [5, 6],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 6 }
+                }
             }]
         },
 
@@ -4250,19 +4278,35 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
-                range: [0, 3]
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
             }, {
                 type: 'Identifier',
                 value: 'x',
-                range: [4, 5]
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '=',
-                range: [6, 7]
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
             }, {
                 type: 'RegularExpression',
                 value: '/[a-z]/i',
-                range: [8, 16]
+                range: [8, 16],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 16 }
+                }
             }]
         },
 
@@ -4312,19 +4356,35 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
-                range: [0, 3]
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
             }, {
                 type: 'Identifier',
                 value: 'x',
-                range: [4, 5]
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '=',
-                range: [6, 7]
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
             }, {
                 type: 'RegularExpression',
                 value: '/[P QR]/i',
-                range: [8, 17]
+                range: [8, 17],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 17 }
+                }
             }]
         },
 
@@ -4374,19 +4434,35 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
-                range: [0, 3]
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
             }, {
                 type: 'Identifier',
                 value: 'x',
-                range: [4, 5]
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '=',
-                range: [6, 7]
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
             }, {
                 type: 'RegularExpression',
                 value: '/foo\\/bar/',
-                range: [8, 18]
+                range: [8, 18],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 18 }
+                }
             }]
         },
 
@@ -4436,19 +4512,35 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
-                range: [0, 3]
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
             }, {
                 type: 'Identifier',
                 value: 'x',
-                range: [4, 5]
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '=',
-                range: [6, 7]
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
             }, {
                 type: 'RegularExpression',
                 value: '/=([^=\\s])+/g',
-                range: [8, 21]
+                range: [8, 21],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 21 }
+                }
             }]
         },
 
@@ -4498,19 +4590,35 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
-                range: [0, 3]
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
             }, {
                 type: 'Identifier',
                 value: 'x',
-                range: [4, 5]
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '=',
-                range: [6, 7]
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
             }, {
                 type: 'RegularExpression',
                 value: '/[P QR]/\\u0067',
-                range: [8, 22]
+                range: [8, 22],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 22 }
+                }
             }]
         },
 
@@ -4560,19 +4668,35 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
-                range: [0, 3]
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
             }, {
                 type: 'Identifier',
                 value: 'x',
-                range: [4, 5]
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '=',
-                range: [6, 7]
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
             }, {
                 type: 'RegularExpression',
                 value: '/[P QR]/\\g',
-                range: [8, 18]
+                range: [8, 18],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 18 }
+                }
             }]
         }
 
