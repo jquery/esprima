@@ -3219,9 +3219,22 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function collectToken() {
-        var token = extra.advance(),
-            range,
-            value;
+        var start, loc, token, range, value;
+
+        skipComment();
+        start = index;
+        loc = {
+            start: {
+                line: lineNumber,
+                column: index - lineStart
+            }
+        };
+
+        token = extra.advance();
+        loc.end = {
+            line: lineNumber,
+            column: index - lineStart
+        };
 
         if (token.type !== Token.EOF) {
             range = [token.range[0], token.range[1]];
@@ -3229,7 +3242,8 @@ parseStatement: true, parseSourceElement: true */
             extra.tokens.push({
                 type: TokenName[token.type],
                 value: value,
-                range: range
+                range: range,
+                loc: loc
             });
         }
 
@@ -3237,12 +3251,23 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function collectRegex() {
-        var pos, regex, token;
+        var pos, loc, regex, token;
 
         skipComment();
 
         pos = index;
+        loc = {
+            start: {
+                line: lineNumber,
+                column: index - lineStart
+            }
+        };
+
         regex = extra.scanRegExp();
+        loc.end = {
+            line: lineNumber,
+            column: index - lineStart
+        };
 
         // Pop the previous token, which is likely '/' or '/='
         if (extra.tokens.length > 0) {
@@ -3257,10 +3282,32 @@ parseStatement: true, parseSourceElement: true */
         extra.tokens.push({
             type: 'RegularExpression',
             value: regex.literal,
-            range: [pos, index]
+            range: [pos, index],
+            loc: loc
         });
 
         return regex;
+    }
+
+    function filterTokenLocation() {
+        var i, entry, token, tokens = [];
+
+        for (i = 0; i < extra.tokens.length; ++i) {
+            entry = extra.tokens[i];
+            token = {
+                type: entry.type,
+                value: entry.value
+            };
+            if (extra.range) {
+                token.range = entry.range;
+            }
+            if (extra.loc) {
+                token.loc = entry.loc;
+            }
+            tokens.push(token);
+        }
+
+        extra.tokens = tokens;
     }
 
     function createLiteral(token) {
@@ -3591,6 +3638,7 @@ parseStatement: true, parseSourceElement: true */
                 program.comments = extra.comments;
             }
             if (typeof extra.tokens !== 'undefined') {
+                filterTokenLocation();
                 program.tokens = extra.tokens;
             }
             if (typeof extra.errors !== 'undefined') {
