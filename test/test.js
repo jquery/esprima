@@ -15791,6 +15791,13 @@ data = {
             message: 'Error: Line 1: Unexpected token const'
         },
 
+        'switch (c) { default: default: }': {
+            index: 30,
+            lineNumber: 1,
+            column: 31,
+            message: 'Error: Line 1: More than one default clause in switch statement'
+        },
+
         'new X()."s"': {
             index: 8,
             lineNumber: 1,
@@ -17351,10 +17358,6 @@ function adjustRegexLiteral(key, value) {
     return value;
 }
 
-if (typeof window === 'undefined') {
-    var esprima = require('../esprima');
-}
-
 function NotMatchingError(expected, actual) {
     'use strict';
     Error.call(this, 'Expected ');
@@ -17382,7 +17385,7 @@ function errorToObject(e) {
     };
 }
 
-function testParse(code, syntax) {
+function testParse(esprima, code, syntax) {
     'use strict';
     var expected, tree, actual, options, StringObject, i, len, err;
 
@@ -17436,7 +17439,7 @@ function testParse(code, syntax) {
     }
 }
 
-function testError(code, exception) {
+function testError(esprima, code, exception) {
     'use strict';
     var i, options, expected, actual, handleInvalidRegexFlag;
 
@@ -17483,7 +17486,7 @@ function testError(code, exception) {
     }
 }
 
-function testAPI(code, result) {
+function testAPI(esprima, code, result) {
     'use strict';
     var expected, res, actual;
 
@@ -17503,14 +17506,14 @@ function testAPI(code, result) {
     }
 }
 
-function runTest(code, result) {
+function runTest(esprima, code, result) {
     'use strict';
     if (result.hasOwnProperty('lineNumber')) {
-        testError(code, result);
+        testError(esprima, code, result);
     } else if (result.hasOwnProperty('result')) {
-        testAPI(code, result);
+        testAPI(esprima, code, result);
     } else {
-        testParse(code, result);
+        testParse(esprima, code, result);
     }
 }
 
@@ -17598,7 +17601,7 @@ if (typeof window !== 'undefined') {
                         expected = fixture[source];
                         total += 1;
                         try {
-                            runTest(source, expected);
+                            runTest(esprima, source, expected);
                             reportSuccess(source, JSON.stringify(expected, null, 4));
                         } catch (e) {
                             failures += 1;
@@ -17622,7 +17625,8 @@ if (typeof window !== 'undefined') {
     (function () {
         'use strict';
 
-        var total = 0,
+        var esprima = require('../esprima'),
+            total = 0,
             failures = [],
             tick = new Date(),
             expected,
@@ -17633,7 +17637,7 @@ if (typeof window !== 'undefined') {
                 total += 1;
                 expected = data[category][source];
                 try {
-                    runTest(source, expected);
+                    runTest(esprima, source, expected);
                 } catch (e) {
                     e.source = source;
                     failures.push(e);
