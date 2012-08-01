@@ -3839,18 +3839,18 @@ parseYieldExpression: true
     function parseProgramElement() {
         var token = lookahead();
 
-        if (token.type === Token.Keyword || (token.type === Token.Identifier && token.value === 'module')) {
+        if (token.type === Token.Keyword) {
             switch (token.value) {
-            case 'module':
-                if (lookahead2().type === Token.Identifier && !peekLineTerminator(1)) {
-                    return parseModuleDeclaration(token.value);
-                } else {
-                    break;
-                }
             case 'export':
                 return parseExportDeclaration();
             case 'import':
                 return parseImportDeclaration();
+            }
+        }
+
+        if (token.value === 'module' && token.type === Token.Identifier) {
+            if (lookahead2().type === Token.Identifier && !peekLineTerminator(1)) {
+                return parseModuleDeclaration();
             }
         }
 
