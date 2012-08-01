@@ -16452,30 +16452,55 @@ data = {
     'Harmony Module': {
 
         'module Universe {}': {
-            type: 'ModuleDeclaration',
-            id: {
-                type: 'Identifier',
-                name: 'Universe',
-                range: [7, 15],
+            type: 'Program',
+            body: [{
+                type: 'ModuleDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'Universe',
+                    range: [7, 15],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 15 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [16, 18],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                range: [0, 18],
                 loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 15 }
-                }
-            },
-            body: {
-                type: 'BlockStatement',
-                body: [],
-                range: [16, 18],
-                loc: {
-                    start: { line: 1, column: 16 },
+                    start: { line: 1, column: 0 },
                     end: { line: 1, column: 18 }
                 }
-            },
+            }],
             range: [0, 18],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 18 }
-            }
+            },
+            tokens: [{
+                type: 'Identifier',
+                value: 'module',
+                range: [0, 6]
+            }, {
+                type: 'Identifier',
+                value: 'Universe',
+                range: [7, 15]
+            }, {
+                type: 'Punctuator',
+                value: '{',
+                range: [16, 17]
+            }, {
+                type: 'Punctuator',
+                value: '}',
+                range: [17, 18]
+            }]
         },
 
         'module Universe { module MilkyWay {} }': {

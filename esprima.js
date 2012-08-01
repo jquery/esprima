@@ -1249,13 +1249,25 @@ parseYieldExpression: true
     }
 
     function lookahead2() {
-        var pos, line, start, result;
+        var adv, pos, line, start, result;
+
+        // If we are collecting the tokens, don't grab the next one yet.
+        adv = (typeof extra.advance === 'function') ? extra.advance : advance;
 
         pos = index;
         line = lineNumber;
         start = lineStart;
-        advance();
-        result = advance();
+
+        // Scan for the next immediate token.
+        if (buffer === null) {
+            buffer = adv();
+        }
+        index = buffer.range[1];
+        lineNumber = buffer.lineNumber;
+        lineStart = buffer.lineStart;
+
+        // Grab the token right after.
+        result = adv();
         index = pos;
         lineNumber = line;
         lineStart = start;
@@ -1265,19 +1277,14 @@ parseYieldExpression: true
 
     // Return true if there is a line terminator before the next token.
 
-    function peekLineTerminator(skip) {
-        var pos, line, start, found, previousTokenLine;
-        skip = skip || 0;
+    function peekLineTerminator() {
+        var pos, line, start, found;
 
         pos = index;
-        previousTokenLine = line = lineNumber;
+        line = lineNumber;
         start = lineStart;
-        while (skip--) {
-            advance();
-            previousTokenLine = lineNumber;
-        }
         skipComment();
-        found = lineNumber !== previousTokenLine;
+        found = lineNumber !== line;
         index = pos;
         lineNumber = line;
         lineStart = start;
@@ -3837,7 +3844,7 @@ parseYieldExpression: true
     }
 
     function parseProgramElement() {
-        var token = lookahead();
+        var token = lookahead(), lineNumber;
 
         if (token.type === Token.Keyword) {
             switch (token.value) {
@@ -3849,7 +3856,9 @@ parseYieldExpression: true
         }
 
         if (token.value === 'module' && token.type === Token.Identifier) {
-            if (lookahead2().type === Token.Identifier && !peekLineTerminator(1)) {
+            lineNumber = token.lineNumber;
+            token = lookahead2();
+            if (token.type === Token.Identifier && token.lineNumber === lineNumber) {
                 return parseModuleDeclaration();
             }
         }
