@@ -1320,7 +1320,6 @@ parseYieldExpression: true
     }
 
     function throwErrorTolerant() {
-        var error;
         try {
             throwError.apply(null, arguments);
         } catch (e) {
@@ -1336,8 +1335,6 @@ parseYieldExpression: true
     // Throw an exception because of the token.
 
     function throwUnexpected(token) {
-        var s;
-
         if (token.type === Token.EOF) {
             throwError(token, Messages.UnexpectedEOS);
         }
@@ -1692,7 +1689,7 @@ parseYieldExpression: true
     }
 
     function parseObjectInitialiser() {
-        var token, properties = [], property, name, kind, map = {}, toString = String;
+        var properties = [], property, name, kind, map = {}, toString = String;
 
         expect('{');
 
@@ -2638,7 +2635,7 @@ parseYieldExpression: true
     }
 
     function parseExportDeclaration() {
-        var id, token, declaration, specifiers;
+        var token, specifiers;
 
         expectKeyword('export');
 
@@ -2870,7 +2867,7 @@ parseYieldExpression: true
     }
 
     function parseForStatement() {
-        var init, test, update, left, right, body, operator, oldInIteration, i, len;
+        var init, test, update, left, right, body, operator, oldInIteration;
 
         init = test = update = null;
 
@@ -3691,7 +3688,7 @@ parseYieldExpression: true
     // 14 Classes
 
     function parseMethodDefinition() {
-        var token, key, result, param;
+        var token, key, param;
 
         if (match('*')) {
             lex();
@@ -3748,7 +3745,7 @@ parseYieldExpression: true
     }
 
     function parseClassBody() {
-        var token, classElement, classElements = [];
+        var classElement, classElements = [];
 
         expect('{');
 
@@ -3771,7 +3768,7 @@ parseYieldExpression: true
     }
 
     function parseClassExpression() {
-        var token, id, body, previousYieldAllowed, subclassOf;
+        var id, body, previousYieldAllowed, subclassOf;
 
         expectKeyword('class');
 
