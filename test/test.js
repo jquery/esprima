@@ -63,7 +63,11 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'this',
-                range: [0, 4]
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
             }]
         },
 
@@ -95,7 +99,11 @@ data = {
             tokens: [{
                 type: 'Null',
                 value: 'null',
-                range: [0, 4]
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
             }]
         },
 
@@ -127,7 +135,11 @@ data = {
             tokens: [{
                 type: 'Numeric',
                 value: '42',
-                range: [5, 7]
+                range: [5, 7],
+                loc: {
+                    start: { line: 2, column: 4 },
+                    end: { line: 2, column: 6 }
+                }
             }]
         },
 
@@ -237,19 +249,35 @@ data = {
             tokens: [{
                 type: 'Identifier',
                 value: 'x',
-                range: [0, 1]
+                range: [0, 1],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 1 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '=',
-                range: [2, 3]
+                range: [2, 3],
+                loc: {
+                    start: { line: 1, column: 2 },
+                    end: { line: 1, column: 3 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '[',
-                range: [4, 5]
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'Punctuator',
                 value: ']',
-                range: [5, 6]
+                range: [5, 6],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 6 }
+                }
             }]
         },
 
@@ -3267,6 +3295,57 @@ data = {
             }
         },
 
+        '/*a\nc*/ 42': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    loc: {
+                        start: { line: 2, column: 4 },
+                        end: { line: 2, column: 6 }
+                    }
+                },
+                loc: {
+                    start: { line: 2, column: 4 },
+                    end: { line: 2, column: 6 }
+                }
+            }],
+            loc: {
+                start: { line: 2, column: 4 },
+                end: { line: 2, column: 6 }
+            },
+            comments: [{
+                type: 'Block',
+                value: 'a\nc',
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 3 }
+                }
+            }]
+        },
+
+        '// line comment\n42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 42,
+                raw: '42',
+                range: [16, 18],
+                loc: {
+                    start: { line: 2, column: 0 },
+                    end: { line: 2, column: 2 }
+                }
+            },
+            range: [16, 18],
+            loc: {
+                start: { line: 2, column: 0 },
+                end: { line: 2, column: 2 }
+            }
+        },
+
         'x = { get() { } }': {
             type: 'ExpressionStatement',
             expression: {
@@ -3730,6 +3809,30 @@ data = {
             }]
         },
 
+        '42 /*the*/ /*answer*/': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [0, 2]
+                },
+                range: [0, 21]
+            }],
+            range: [0, 21],
+            comments: [{
+                type: 'Block',
+                value: 'the',
+                range: [3, 10]
+            }, {
+                type: 'Block',
+                value: 'answer',
+                range: [11, 21]
+            }]
+        },
+
         '/* multiline\ncomment\nshould\nbe\nignored */ 42': {
             type: 'ExpressionStatement',
             expression: {
@@ -3857,6 +3960,38 @@ data = {
             }]
         },
 
+        '/*a\nc*/ 42': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    loc: {
+                        start: { line: 2, column: 4 },
+                        end: { line: 2, column: 6 }
+                    }
+                },
+                loc: {
+                    start: { line: 2, column: 4 },
+                    end: { line: 2, column: 6 }
+                }
+            }],
+            loc: {
+                start: { line: 2, column: 4 },
+                end: { line: 2, column: 6 }
+            },
+            comments: [{
+                type: 'Block',
+                value: 'a\nc',
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 3 }
+                }
+            }]
+        },
+
         '// line comment\n42': {
             type: 'ExpressionStatement',
             expression: {
@@ -3967,6 +4102,23 @@ data = {
             }]
         },
 
+        '// Hallo, world!\n': {
+            type: 'Program',
+            body: [],
+            loc: {
+                start: { line: 2, column: 0 },
+                end: { line: 2, column: 0 }
+            },
+            comments: [{
+                type: 'Line',
+                value: ' Hallo, world!',
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            }]
+        },
+
         '//\n42': {
             type: 'Program',
             body: [{
@@ -3999,7 +4151,7 @@ data = {
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 1, column: 2 }
-                },
+                }
             }]
         },
 
@@ -4018,7 +4170,18 @@ data = {
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 1, column: 2 }
-                },
+                }
+            }]
+        },
+
+        '// ': {
+            type: 'Program',
+            body: [],
+            range: [3, 3],
+            comments: [{
+                type: 'Line',
+                value: ' ',
+                range: [0, 3]
             }]
         },
 
@@ -4291,6 +4454,58 @@ data = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 2 }
             }
+        },
+
+        '3': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 3,
+                    raw: '3',
+                    range: [0, 1]
+                },
+                range: [0, 1]
+            }],
+            range: [0, 1],
+            tokens: [{
+                type: 'Numeric',
+                value: '3',
+                range: [0, 1]
+            }]
+        },
+
+        '5': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 5,
+                    raw: '5',
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 1 }
+                }
+            }],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 1 }
+            },
+            tokens: [{
+                type: 'Numeric',
+                value: '5',
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 1 }
+                }
+            }]
         },
 
         '.14': {
@@ -5403,6 +5618,64 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            }, {
+                type: 'Identifier',
+                value: 'x',
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
+            }, {
+                type: 'Punctuator',
+                value: '=',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            }, {
+                type: 'RegularExpression',
+                value: '/[a-z]/i',
+                range: [8, 16],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 16 }
+                }
+            }]
+        },
+
+        'var x = /[x-z]/i': {
+            type: 'Program',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [4, 5]
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: '/[x-z]/i',
+                        raw: '/[x-z]/i',
+                        range: [8, 16]
+                    },
+                    range: [4, 16]
+                }],
+                kind: 'var',
+                range: [0, 16]
+            }],
+            range: [0, 16],
+            tokens: [{
+                type: 'Keyword',
+                value: 'var',
                 range: [0, 3]
             }, {
                 type: 'Identifier',
@@ -5414,8 +5687,77 @@ data = {
                 range: [6, 7]
             }, {
                 type: 'RegularExpression',
-                value: '/[a-z]/i',
+                value: '/[x-z]/i',
                 range: [8, 16]
+            }]
+        },
+
+        'var x = /[a-c]/i': {
+            type: 'Program',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: '/[a-c]/i',
+                        raw: '/[a-c]/i',
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 16 }
+                        }
+                    },
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 16 }
+                    }
+                }],
+                kind: 'var',
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            },
+            tokens: [{
+                type: 'Keyword',
+                value: 'var',
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            }, {
+                type: 'Identifier',
+                value: 'x',
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
+            }, {
+                type: 'Punctuator',
+                value: '=',
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            }, {
+                type: 'RegularExpression',
+                value: '/[a-c]/i',
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 16 }
+                }
             }]
         },
 
@@ -5465,19 +5807,35 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
-                range: [0, 3]
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
             }, {
                 type: 'Identifier',
                 value: 'x',
-                range: [4, 5]
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '=',
-                range: [6, 7]
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
             }, {
                 type: 'RegularExpression',
                 value: '/[P QR]/i',
-                range: [8, 17]
+                range: [8, 17],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 17 }
+                }
             }]
         },
 
@@ -5527,19 +5885,35 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
-                range: [0, 3]
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
             }, {
                 type: 'Identifier',
                 value: 'x',
-                range: [4, 5]
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '=',
-                range: [6, 7]
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
             }, {
                 type: 'RegularExpression',
                 value: '/foo\\/bar/',
-                range: [8, 18]
+                range: [8, 18],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 18 }
+                }
             }]
         },
 
@@ -5589,19 +5963,35 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
-                range: [0, 3]
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
             }, {
                 type: 'Identifier',
                 value: 'x',
-                range: [4, 5]
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '=',
-                range: [6, 7]
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
             }, {
                 type: 'RegularExpression',
                 value: '/=([^=\\s])+/g',
-                range: [8, 21]
+                range: [8, 21],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 21 }
+                }
             }]
         },
 
@@ -5651,19 +6041,35 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
-                range: [0, 3]
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
             }, {
                 type: 'Identifier',
                 value: 'x',
-                range: [4, 5]
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '=',
-                range: [6, 7]
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
             }, {
                 type: 'RegularExpression',
                 value: '/[P QR]/\\u0067',
-                range: [8, 22]
+                range: [8, 22],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 22 }
+                }
             }]
         },
 
@@ -5713,19 +6119,35 @@ data = {
             tokens: [{
                 type: 'Keyword',
                 value: 'var',
-                range: [0, 3]
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
             }, {
                 type: 'Identifier',
                 value: 'x',
-                range: [4, 5]
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
             }, {
                 type: 'Punctuator',
                 value: '=',
-                range: [6, 7]
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
             }, {
                 type: 'RegularExpression',
                 value: '/[P QR]/\\g',
-                range: [8, 18]
+                range: [8, 18],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 18 }
+                }
             }]
         }
 
@@ -7798,6 +8220,60 @@ data = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 14 }
+            }
+        },
+
+        'x < y < z': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '<',
+                left: {
+                    type: 'BinaryExpression',
+                    operator: '<',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [0, 1],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 1 }
+                        }
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [4, 5],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    },
+                    range: [0, 5],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                right: {
+                    type: 'Identifier',
+                    name: 'z',
+                    range: [8, 9],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 9 }
+                    }
+                },
+                range: [0, 9],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 9 }
+                }
+            },
+            range: [0, 9],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 9 }
             }
         }
 
@@ -9999,64 +10475,6 @@ data = {
                 end: { line: 1, column: 7 }
             }
         },
-
-        'x < y < z': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'BinaryExpression',
-                operator: '<',
-                left: {
-                    type: 'BinaryExpression',
-                    operator: '<',
-                    left: {
-                        type: 'Identifier',
-                        name: 'x',
-                        range: [0, 1],
-                        loc: {
-                            start: { line: 1, column: 0 },
-                            end: { line: 1, column: 1 }
-                        }
-                    },
-                    right: {
-                        type: 'Identifier',
-                        name: 'y',
-                        range: [4, 5],
-                        loc: {
-                            start: { line: 1, column: 4 },
-                            end: { line: 1, column: 5 }
-                        }
-                    },
-                    range: [0, 5],
-                    loc: {
-                        start: { line: 1, column: 0 },
-                        end: { line: 1, column: 5 }
-                    }
-                },
-                right: {
-                    type: 'Identifier',
-                    name: 'z',
-                    range: [8, 9],
-                    loc: {
-                        start: { line: 1, column: 8 },
-                        end: { line: 1, column: 9 }
-                    }
-                },
-                range: [0, 9],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 9 }
-                }
-            },
-            range: [0, 9],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 9 }
-            }
-        }
-
-    },
-
-    'Equality Operators': {
 
         'x |= 42': {
             type: 'ExpressionStatement',
@@ -16458,32 +16876,16 @@ data = {
                 id: {
                     type: 'Identifier',
                     name: 'Universe',
-                    range: [7, 15],
-                    loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 15 }
-                    }
+                    range: [7, 15]
                 },
                 body: {
                     type: 'BlockStatement',
                     body: [],
-                    range: [16, 18],
-                    loc: {
-                        start: { line: 1, column: 16 },
-                        end: { line: 1, column: 18 }
-                    }
+                    range: [16, 18]
                 },
-                range: [0, 18],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 18 }
-                }
+                range: [0, 18]
             }],
             range: [0, 18],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 18 }
-            },
             tokens: [{
                 type: 'Identifier',
                 value: 'module',
@@ -19643,6 +20045,13 @@ data = {
             message: 'Error: Line 1: Unexpected token const'
         },
 
+        'switch (c) { default: default: }': {
+            index: 30,
+            lineNumber: 1,
+            column: 31,
+            message: 'Error: Line 1: More than one default clause in switch statement'
+        },
+
         'new X()."s"': {
             index: 8,
             lineNumber: 1,
@@ -21467,10 +21876,6 @@ function adjustRegexLiteral(key, value) {
     return value;
 }
 
-if (typeof window === 'undefined') {
-    var esprima = require('../esprima');
-}
-
 function NotMatchingError(expected, actual) {
     'use strict';
     Error.call(this, 'Expected ');
@@ -21498,7 +21903,7 @@ function errorToObject(e) {
     };
 }
 
-function testParse(code, syntax) {
+function testParse(esprima, code, syntax) {
     'use strict';
     var expected, tree, actual, options, StringObject, i, len, err;
 
@@ -21513,6 +21918,20 @@ function testParse(code, syntax) {
         raw: true,
         tolerant: (typeof syntax.errors !== 'undefined')
     };
+
+    if (typeof syntax.tokens !== 'undefined') {
+        if (syntax.tokens.length > 0) {
+            options.range = (typeof syntax.tokens[0].range !== 'undefined');
+            options.loc = (typeof syntax.tokens[0].loc !== 'undefined');
+        }
+    }
+
+    if (typeof syntax.comments !== 'undefined') {
+        if (syntax.comments.length > 0) {
+            options.range = (typeof syntax.comments[0].range !== 'undefined');
+            options.loc = (typeof syntax.comments[0].loc !== 'undefined');
+        }
+    }
 
     expected = JSON.stringify(syntax, null, 4);
     try {
@@ -21538,7 +21957,7 @@ function testParse(code, syntax) {
     }
 }
 
-function testError(code, exception) {
+function testError(esprima, code, exception) {
     'use strict';
     var i, options, expected, actual, handleInvalidRegexFlag;
 
@@ -21585,7 +22004,7 @@ function testError(code, exception) {
     }
 }
 
-function testAPI(code, result) {
+function testAPI(esprima, code, result) {
     'use strict';
     var expected, res, actual;
 
@@ -21605,14 +22024,14 @@ function testAPI(code, result) {
     }
 }
 
-function runTest(code, result) {
+function runTest(esprima, code, result) {
     'use strict';
     if (result.hasOwnProperty('lineNumber')) {
-        testError(code, result);
+        testError(esprima, code, result);
     } else if (result.hasOwnProperty('result')) {
-        testAPI(code, result);
+        testAPI(esprima, code, result);
     } else {
-        testParse(code, result);
+        testParse(esprima, code, result);
     }
 }
 
@@ -21700,7 +22119,7 @@ if (typeof window !== 'undefined') {
                         expected = fixture[source];
                         total += 1;
                         try {
-                            runTest(source, expected);
+                            runTest(esprima, source, expected);
                             reportSuccess(source, JSON.stringify(expected, null, 4));
                         } catch (e) {
                             failures += 1;
@@ -21724,7 +22143,8 @@ if (typeof window !== 'undefined') {
     (function () {
         'use strict';
 
-        var total = 0,
+        var esprima = require('../esprima'),
+            total = 0,
             failures = [],
             tick = new Date(),
             expected,
@@ -21735,7 +22155,7 @@ if (typeof window !== 'undefined') {
                 total += 1;
                 expected = data[category][source];
                 try {
-                    runTest(source, expected);
+                    runTest(esprima, source, expected);
                 } catch (e) {
                     e.source = source;
                     failures.push(e);
