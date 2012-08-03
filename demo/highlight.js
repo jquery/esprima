@@ -78,7 +78,7 @@ function trackCursor(editor) {
     code = editor.getValue();
 
     // Executes visitor on the object and its children (recursively).
-    function traverse(object, visitor, master) {
+    function traverse(object, visitor, master, exit) {
         var key, child, parent, path;
 
         parent = (typeof master === 'undefined') ? [] : master;
@@ -87,19 +87,39 @@ function trackCursor(editor) {
             return;
         }
         for (key in object) {
+            if (key === 'scope') continue;
             if (object.hasOwnProperty(key)) {
                 child = object[key];
                 path = [ object ];
                 path.push(parent);
                 if (typeof child === 'object' && child !== null) {
-                    traverse(child, visitor, path);
+                    traverse(child, visitor, path, exit);
                 }
             }
         }
+
+        if (exit) {
+            exit.call(null, object, parent);
+        }
     }
 
+    var scope = {}, targetNodeDecl;
     traverse(syntax, function (node, path) {
-        var start, end;
+        var start, end, params, i, ln;
+
+        if (node.type === esprima.Syntax.FunctionExpression || node.type === esprima.Syntax.FunctionDeclaration) {
+            // Create new scope, deriving the old one.
+            scope = Object.create(scope);
+            params = node.params;
+            for (i = 0, ln = params.length; i < ln; i++) {
+                scope[params[i].name] = params[i];
+            }
+        }
+        else if (node.type === esprima.Syntax.VariableDeclarator) {
+            scope[node.id.name] = node;
+        }
+        node.scope = scope;
+        
         if (node.type !== esprima.Syntax.Identifier) {
             return;
         }
@@ -114,6 +134,11 @@ function trackCursor(editor) {
             };
             markers.push(editor.markText(start, end, 'identifier'));
             id = node;
+            targetNodeDecl = scope[id.name];
+        }
+    }, [], function (node) {
+        if (node.type === esprima.Syntax.FunctionExpression || node.type === esprima.Syntax.FunctionDeclaration) {
+            scope = scope.__proto__;
         }
     });
 
@@ -135,7 +160,10 @@ function trackCursor(editor) {
                 line: node.loc.end.line - 1,
                 ch: node.loc.end.column
             };
-            markers.push(editor.markText(start, end, 'highlight'));
+
+            if (node.scope[node.name] === targetNodeDecl) {
+                markers.push(editor.markText(start, end, 'highlight'));
+            }
         }
     });
 }
