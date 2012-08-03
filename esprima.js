@@ -4603,7 +4603,7 @@ parseYieldExpression: true
     }
 
     // Sync with package.json.
-    exports.version = '1.0.0-dev';
+    exports.version = '1.0.0-dev-harmony';
 
     exports.parse = parse;
 
