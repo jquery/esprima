@@ -18543,7 +18543,7 @@ data = {
                                 end: { line: 1, column: 26 }
                             }
                         },
-                        subclassOf: {
+                        superClass: {
                             type: "Identifier",
                             name: "B",
                             range: [22, 23],
@@ -18593,7 +18593,7 @@ data = {
                     end: { line: 1, column: 39 }
                 }
             },
-            subclassOf: {
+            superClass: {
                 id: {
                     type: "Identifier",
                     name: "B",
@@ -18613,7 +18613,7 @@ data = {
                         end: { line: 1, column: 36 }
                     }
                 },
-                subclassOf: {
+                superClass: {
                     type: "Identifier",
                     name: "C",
                     range: [32, 33],
@@ -18758,7 +18758,7 @@ data = {
                     end: { line: 1, column: 32 }
                 }
             },
-            subclassOf: {
+            superClass: {
                 type: "Identifier",
                 name: "B",
                 range: [16, 17],

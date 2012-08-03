@@ -3777,7 +3777,7 @@ parseYieldExpression: true
     }
 
     function parseClassExpression() {
-        var id, body, previousYieldAllowed, subclassOf;
+        var id, body, previousYieldAllowed, superClass;
 
         expectKeyword('class');
 
@@ -3789,7 +3789,7 @@ parseYieldExpression: true
             expectKeyword('extends');
             previousYieldAllowed = yieldAllowed;
             yieldAllowed = false;
-            subclassOf = parseAssignmentExpression();
+            superClass = parseAssignmentExpression();
             yieldAllowed = previousYieldAllowed;
         }
 
@@ -3798,12 +3798,12 @@ parseYieldExpression: true
             id: id,
             type: Syntax.ClassExpression,
             body: body,
-            subclassOf: subclassOf
+            superClass: superClass
         };
     }
 
     function parseClassDeclaration() {
-        var token, id, body, previousYieldAllowed, subclassOf;
+        var token, id, body, previousYieldAllowed, superClass;
 
         expectKeyword('class');
 
@@ -3814,7 +3814,7 @@ parseYieldExpression: true
             expectKeyword('extends');
             previousYieldAllowed = yieldAllowed;
             yieldAllowed = false;
-            subclassOf = parseAssignmentExpression();
+            superClass = parseAssignmentExpression();
             yieldAllowed = previousYieldAllowed;
         }
 
@@ -3823,7 +3823,7 @@ parseYieldExpression: true
             id: id,
             type: Syntax.ClassDeclaration,
             body: body,
-            subclassOf: subclassOf
+            superClass: superClass
         };
     }
 
