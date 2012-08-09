@@ -1518,8 +1518,11 @@ parseYieldExpression: true
             type: Syntax.FunctionExpression,
             id: null,
             params: param,
+            defaults: [],
             body: body,
-            generator: options.generator
+            rest: null,
+            generator: options.generator,
+            expression: false
         };
     }
 
@@ -3570,8 +3573,11 @@ parseYieldExpression: true
             type: Syntax.FunctionDeclaration,
             id: id,
             params: params,
+            defaults: [],
             body: body,
-            generator: generator
+            rest: null,
+            generator: generator,
+            expression: false
         };
     }
 
@@ -3660,8 +3666,11 @@ parseYieldExpression: true
             type: Syntax.FunctionExpression,
             id: id,
             params: params,
+            defaults: [],
             body: body,
-            generator: generator
+            rest: null,
+            generator: generator,
+            expression: false
         };
     }
 

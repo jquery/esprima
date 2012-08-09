@@ -1371,6 +1371,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -1396,7 +1397,9 @@ var testFixture = {
                                     end: { line: 1, column: 36 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [18, 36],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -1460,6 +1463,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1469,7 +1473,9 @@ var testFixture = {
                                     end: { line: 1, column: 20 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [18, 20],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -1533,6 +1539,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1542,7 +1549,9 @@ var testFixture = {
                                     end: { line: 1, column: 17 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [15, 17],
                             loc: {
                                 start: { line: 1, column: 15 },
@@ -1606,6 +1615,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1615,7 +1625,9 @@ var testFixture = {
                                     end: { line: 1, column: 19 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [17, 19],
                             loc: {
                                 start: { line: 1, column: 17 },
@@ -1679,6 +1691,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1688,7 +1701,9 @@ var testFixture = {
                                     end: { line: 1, column: 20 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [18, 20],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -1752,6 +1767,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1761,7 +1777,9 @@ var testFixture = {
                                     end: { line: 1, column: 19 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [17, 19],
                             loc: {
                                 start: { line: 1, column: 17 },
@@ -1826,6 +1844,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1835,7 +1854,9 @@ var testFixture = {
                                     end: { line: 1, column: 22 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [20, 22],
                             loc: {
                                 start: { line: 1, column: 20 },
@@ -1900,6 +1921,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1909,7 +1931,9 @@ var testFixture = {
                                     end: { line: 1, column: 17 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [15, 17],
                             loc: {
                                 start: { line: 1, column: 15 },
@@ -1981,6 +2005,7 @@ var testFixture = {
                                     end: { line: 1, column: 17 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2024,7 +2049,9 @@ var testFixture = {
                                     end: { line: 1, column: 34 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [19, 34],
                             loc: {
                                 start: { line: 1, column: 19 },
@@ -2096,6 +2123,7 @@ var testFixture = {
                                     end: { line: 1, column: 14 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2139,7 +2167,9 @@ var testFixture = {
                                     end: { line: 1, column: 28 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [16, 28],
                             loc: {
                                 start: { line: 1, column: 16 },
@@ -2211,6 +2241,7 @@ var testFixture = {
                                     end: { line: 1, column: 16 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2254,7 +2285,9 @@ var testFixture = {
                                     end: { line: 1, column: 32 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [18, 32],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -2326,6 +2359,7 @@ var testFixture = {
                                     end: { line: 1, column: 17 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2369,7 +2403,9 @@ var testFixture = {
                                     end: { line: 1, column: 34 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [19, 34],
                             loc: {
                                 start: { line: 1, column: 19 },
@@ -2441,6 +2477,7 @@ var testFixture = {
                                     end: { line: 1, column: 16 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2484,7 +2521,9 @@ var testFixture = {
                                     end: { line: 1, column: 32 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [18, 32],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -2557,6 +2596,7 @@ var testFixture = {
                                     end: { line: 1, column: 18 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2600,7 +2640,9 @@ var testFixture = {
                                     end: { line: 1, column: 34 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [20, 34],
                             loc: {
                                 start: { line: 1, column: 20 },
@@ -2673,6 +2715,7 @@ var testFixture = {
                                     end: { line: 1, column: 14 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2716,7 +2759,9 @@ var testFixture = {
                                     end: { line: 1, column: 30 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [16, 30],
                             loc: {
                                 start: { line: 1, column: 16 },
@@ -3090,6 +3135,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -3099,7 +3145,9 @@ var testFixture = {
                                     end: { line: 1, column: 18 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [15, 18],
                             loc: {
                                 start: { line: 1, column: 15 },
@@ -3172,6 +3220,7 @@ var testFixture = {
                                     end: { line: 1, column: 17 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -3181,7 +3230,9 @@ var testFixture = {
                                     end: { line: 1, column: 22 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [19, 22],
                             loc: {
                                 start: { line: 1, column: 19 },
@@ -3247,6 +3298,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -3256,7 +3308,9 @@ var testFixture = {
                                     end: { line: 1, column: 20 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [17, 20],
                             loc: {
                                 start: { line: 1, column: 17 },
@@ -3372,6 +3426,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -3381,7 +3436,9 @@ var testFixture = {
                                     end: { line: 1, column: 15 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [12, 15],
                             loc: {
                                 start: { line: 1, column: 12 },
@@ -3446,6 +3503,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -3455,7 +3513,9 @@ var testFixture = {
                                     end: { line: 1, column: 15 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [12, 15],
                             loc: {
                                 start: { line: 1, column: 12 },
@@ -3520,6 +3580,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'Literal',
                                 value: 42,
@@ -3530,7 +3591,9 @@ var testFixture = {
                                     end: { line: 1, column: 17 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [15, 17],
                             loc: {
                                 start: { line: 1, column: 15 },
@@ -3595,6 +3658,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'Literal',
                                 value: 42,
@@ -3605,7 +3669,9 @@ var testFixture = {
                                     end: { line: 1, column: 21 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [19, 21],
                             loc: {
                                 start: { line: 1, column: 19 },
@@ -3677,6 +3743,7 @@ var testFixture = {
                                     end: { line: 1, column: 20 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'AssignmentExpression',
                                 operator: '=',
@@ -3704,7 +3771,9 @@ var testFixture = {
                                     end: { line: 1, column: 29 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [22, 29],
                             loc: {
                                 start: { line: 1, column: 22 },
@@ -4838,6 +4907,7 @@ var testFixture = {
                 }
             },
             params: [],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [{
@@ -4881,7 +4951,9 @@ var testFixture = {
                     end: { line: 1, column: 37 }
                 }
             },
+            rest: null,
             generator: false,
+            expression: false,
             range: [0, 37],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4958,6 +5030,7 @@ var testFixture = {
                 }
             },
             params: [],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [{
@@ -5001,7 +5074,9 @@ var testFixture = {
                     end: { line: 1, column: 37 }
                 }
             },
+            rest: null,
             generator: false,
+            expression: false,
             range: [0, 37],
             loc: {
                 start: { line: 1, column: 0 },
@@ -11745,6 +11820,7 @@ var testFixture = {
                     type: 'FunctionExpression',
                     id: null,
                     params: [],
+                    defaults: [],
                     body: {
                         type: 'BlockStatement',
                         body: [],
@@ -11754,7 +11830,9 @@ var testFixture = {
                             end: { line: 1, column: 26 }
                         }
                     },
+                    rest: null,
                     generator: false,
+                    expression: false,
                     range: [13, 27],
                     loc: {
                         start: { line: 1, column: 13 },
@@ -11853,6 +11931,7 @@ var testFixture = {
                     }
                 },
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [],
@@ -11862,7 +11941,9 @@ var testFixture = {
                         end: { line: 1, column: 27 }
                     }
                 },
+                rest: null,
                 generator: false,
+                expression: false,
                 range: [13, 27],
                 loc: {
                     start: { line: 1, column: 13 },
@@ -13446,6 +13527,7 @@ var testFixture = {
                         type: 'FunctionExpression',
                         id: null,
                         params: [],
+                        defaults: [],
                         body: {
                             type: 'BlockStatement',
                             body: [{
@@ -13490,7 +13572,9 @@ var testFixture = {
                                 end: { line: 1, column: 43 }
                             }
                         },
+                        rest: null,
                         generator: false,
+                        expression: false,
                         range: [13, 43],
                         loc: {
                             start: { line: 1, column: 13 },
@@ -13944,6 +14028,7 @@ var testFixture = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -13963,7 +14048,9 @@ var testFixture = {
                         end: { line: 1, column: 21 }
                     }
                 },
+                rest: null,
                 generator: false,
+                expression: false,
                 range: [0, 22],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -13983,6 +14070,7 @@ var testFixture = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -14002,7 +14090,9 @@ var testFixture = {
                         end: { line: 1, column: 22 }
                     }
                 },
+                rest: null,
                 generator: false,
+                expression: false,
                 range: [0, 23],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -14022,6 +14112,7 @@ var testFixture = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -14049,7 +14140,9 @@ var testFixture = {
                         end: { line: 1, column: 24 }
                     }
                 },
+                rest: null,
                 generator: false,
+                expression: false,
                 range: [0, 25],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -14069,6 +14162,7 @@ var testFixture = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -14114,7 +14208,9 @@ var testFixture = {
                         end: { line: 1, column: 27 }
                     }
                 },
+                rest: null,
                 generator: false,
+                expression: false,
                 range: [0, 28],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -15323,6 +15419,7 @@ var testFixture = {
                 }
             },
             params: [],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [{
@@ -15357,7 +15454,9 @@ var testFixture = {
                     end: { line: 1, column: 29 }
                 }
             },
+            rest: null,
             generator: false,
+            expression: false,
             range: [0, 29],
             loc: {
                 start: { line: 1, column: 0 },
@@ -15377,6 +15476,7 @@ var testFixture = {
                 }
             },
             params: [],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [],
@@ -15386,7 +15486,9 @@ var testFixture = {
                     end: { line: 1, column: 19 }
                 }
             },
+            rest: null,
             generator: false,
+            expression: false,
             range: [0, 19],
             loc: {
                 start: { line: 1, column: 0 },
@@ -15406,6 +15508,7 @@ var testFixture = {
                 }
             },
             params: [],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [],
@@ -15415,7 +15518,9 @@ var testFixture = {
                     end: { line: 1, column: 24 }
                 }
             },
+            rest: null,
             generator: false,
+            expression: false,
             range: [0, 24],
             loc: {
                 start: { line: 1, column: 0 },
@@ -15451,6 +15556,7 @@ var testFixture = {
                     end: { line: 1, column: 18 }
                 }
             }],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [],
@@ -15460,7 +15566,9 @@ var testFixture = {
                     end: { line: 1, column: 23 }
                 }
             },
+            rest: null,
             generator: false,
+            expression: false,
             range: [0, 23],
             loc: {
                 start: { line: 1, column: 0 },
@@ -15498,6 +15606,7 @@ var testFixture = {
                         end: { line: 1, column: 19 }
                     }
                 }],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [],
@@ -15507,7 +15616,9 @@ var testFixture = {
                         end: { line: 1, column: 24 }
                     }
                 },
+                rest: null,
                 generator: false,
+                expression: false,
                 range: [0, 25],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -15533,6 +15644,7 @@ var testFixture = {
                 }
             },
             params: [],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [{
@@ -15547,6 +15659,7 @@ var testFixture = {
                         }
                     },
                     params: [],
+                    defaults: [],
                     body: {
                         type: 'BlockStatement',
                         body: [{
@@ -15573,7 +15686,9 @@ var testFixture = {
                             end: { line: 1, column: 51 }
                         }
                     },
+                    rest: null,
                     generator: false,
+                    expression: false,
                     range: [18, 51],
                     loc: {
                         start: { line: 1, column: 18 },
@@ -15586,7 +15701,9 @@ var testFixture = {
                     end: { line: 1, column: 53 }
                 }
             },
+            rest: null,
             generator: false,
+            expression: false,
             range: [0, 53],
             loc: {
                 start: { line: 1, column: 0 },
@@ -15614,6 +15731,7 @@ var testFixture = {
                     end: { line: 1, column: 16 }
                 }
             }],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [{
@@ -15648,7 +15766,9 @@ var testFixture = {
                     end: { line: 1, column: 30 }
                 }
             },
+            rest: null,
             generator: false,
+            expression: false,
             range: [0, 30],
             loc: {
                 start: { line: 1, column: 0 },
@@ -15684,6 +15804,7 @@ var testFixture = {
                     end: { line: 1, column: 19 }
                 }
             }],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [{
@@ -15718,7 +15839,9 @@ var testFixture = {
                     end: { line: 1, column: 33 }
                 }
             },
+            rest: null,
             generator: false,
+            expression: false,
             range: [0, 33],
             loc: {
                 start: { line: 1, column: 0 },
@@ -15743,6 +15866,7 @@ var testFixture = {
                     type: 'FunctionExpression',
                     id: null,
                     params: [],
+                    defaults: [],
                     body: {
                         type: 'BlockStatement',
                         body: [{
@@ -15777,7 +15901,9 @@ var testFixture = {
                             end: { line: 1, column: 31 }
                         }
                     },
+                    rest: null,
                     generator: false,
+                    expression: false,
                     range: [9, 31],
                     loc: {
                         start: { line: 1, column: 9 },
@@ -15823,6 +15949,7 @@ var testFixture = {
                         }
                     },
                     params: [],
+                    defaults: [],
                     body: {
                         type: 'BlockStatement',
                         body: [],
@@ -15832,7 +15959,9 @@ var testFixture = {
                             end: { line: 1, column: 28 }
                         }
                     },
+                    rest: null,
                     generator: false,
+                    expression: false,
                     range: [9, 28],
                     loc: {
                         start: { line: 1, column: 9 },
@@ -15878,6 +16007,7 @@ var testFixture = {
                         }
                     },
                     params: [],
+                    defaults: [],
                     body: {
                         type: 'BlockStatement',
                         body: [],
@@ -15887,7 +16017,9 @@ var testFixture = {
                             end: { line: 1, column: 33 }
                         }
                     },
+                    rest: null,
                     generator: false,
+                    expression: false,
                     range: [9, 33],
                     loc: {
                         start: { line: 1, column: 9 },
@@ -15933,6 +16065,7 @@ var testFixture = {
                         }
                     },
                     params: [],
+                    defaults: [],
                     body: {
                         type: 'BlockStatement',
                         body: [{
@@ -15967,7 +16100,9 @@ var testFixture = {
                             end: { line: 1, column: 37 }
                         }
                     },
+                    rest: null,
                     generator: false,
+                    expression: false,
                     range: [12, 37],
                     loc: {
                         start: { line: 1, column: 12 },
@@ -15994,6 +16129,7 @@ var testFixture = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [],
@@ -16003,7 +16139,9 @@ var testFixture = {
                         end: { line: 1, column: 13 }
                     }
                 },
+                rest: null,
                 generator: false,
+                expression: false,
                 range: [0, 14],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -16558,6 +16696,7 @@ var testFixture = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -16594,7 +16733,9 @@ var testFixture = {
                         end: { line: 2, column: 4 }
                     }
                 },
+                rest: null,
                 generator: false,
+                expression: false,
                 range: [0, 25],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -16614,6 +16755,7 @@ var testFixture = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -16650,7 +16792,9 @@ var testFixture = {
                         end: { line: 2, column: 4 }
                     }
                 },
+                rest: null,
                 generator: false,
+                expression: false,
                 range: [0, 36],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -16670,6 +16814,7 @@ var testFixture = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -16706,7 +16851,9 @@ var testFixture = {
                         end: { line: 2, column: 14 }
                     }
                 },
+                rest: null,
                 generator: false,
+                expression: false,
                 range: [0, 47],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -17284,6 +17431,7 @@ var testFixture = {
                     }
                 },
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [],
@@ -17293,7 +17441,9 @@ var testFixture = {
                         end: { line: 1, column: 27 }
                     }
                 },
+                rest: null,
                 generator: false,
+                expression: false,
                 range: [ 7, 27 ],
                 loc: {
                     start: { line: 1, column: 7 },
@@ -18258,6 +18408,7 @@ var testFixture = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [{
@@ -18292,7 +18443,9 @@ var testFixture = {
                         end: { line: 1, column: 25 }
                     }
                 },
+                rest: null,
                 generator: true,
+                expression: false,
                 range: [0, 26],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -18312,6 +18465,7 @@ var testFixture = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [{
@@ -18346,7 +18500,9 @@ var testFixture = {
                         end: { line: 1, column: 26 }
                     }
                 },
+                rest: null,
                 generator: true,
+                expression: false,
                 range: [0, 27],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -18372,6 +18528,7 @@ var testFixture = {
                 }
             },
             params: [],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [{
@@ -18406,7 +18563,9 @@ var testFixture = {
                     end: { line: 1, column: 30 }
                 }
             },
+            rest: null,
             generator: true,
+            expression: false,
             range: [0, 30],
             loc: {
                 start: { line: 1, column: 0 },
@@ -18444,6 +18603,7 @@ var testFixture = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -18478,7 +18638,9 @@ var testFixture = {
                                     end: { line: 1, column: 31 }
                                 }
                             },
+                            rest: null,
                             generator: true,
+                            expression: false,
                             range: [19, 31],
                             loc: {
                                start: { line: 1, column: 19 },
@@ -18659,6 +18821,7 @@ var testFixture = {
                             type: "FunctionExpression",
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: "BlockStatement",
                                 body: [],
@@ -18668,7 +18831,9 @@ var testFixture = {
                                     end: { line: 1, column: 17 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [15, 17],
                             loc: {
                                 start: { line: 1, column: 15 },
@@ -18724,6 +18889,7 @@ var testFixture = {
                         type: "FunctionExpression",
                         id: null,
                         params: [],
+                        defaults: [],
                         body: {
                             type: "BlockStatement",
                             body: [],
@@ -18733,7 +18899,9 @@ var testFixture = {
                                 end: { line: 1, column: 31 }
                             }
                         },
+                        rest: null,
                         generator: false,
+                        expression: false,
                         range: [29, 31],
                         loc: {
                             start: { line: 1, column: 29 },
@@ -18806,6 +18974,7 @@ var testFixture = {
                                     end: { line: 1, column: 16 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: "BlockStatement",
                                 body: [],
@@ -18815,7 +18984,9 @@ var testFixture = {
                                     end: { line: 1, column: 20 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [18, 20],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -18880,6 +19051,7 @@ var testFixture = {
                                     end: { line: 1, column: 14 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: "BlockStatement",
                                 body: [],
@@ -18889,7 +19061,9 @@ var testFixture = {
                                     end: { line: 1, column: 18 }
                                 }
                             },
+                            rest: null,
                             generator: false,
+                            expression: false,
                             range: [16, 18],
                             loc: {
                                 start: { line: 1, column: 16 },
@@ -18954,6 +19128,7 @@ var testFixture = {
                                     end: { line: 1, column: 15 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: "BlockStatement",
                                 body: [{
@@ -18988,7 +19163,9 @@ var testFixture = {
                                     end: { line: 1, column: 29 }
                                 }
                             },
+                            rest: null,
                             generator: true,
+                            expression: false,
                             range: [17, 29],
                             loc: {
                                 start: { line: 1, column: 17 },
@@ -19068,6 +19245,7 @@ var testFixture = {
                                         type: "FunctionExpression",
                                         id: null,
                                         params: [],
+                                        defaults: [],
                                         body: {
                                             type: "BlockStatement",
                                             body: [
@@ -19104,7 +19282,9 @@ var testFixture = {
                                                 end: { line: 1, column: 49 }
                                             }
                                         },
+                                        rest: null,
                                         generator: false,
+                                        expression: false,
                                         range: [38, 49],
                                         loc: {
                                             start: { line: 1, column: 38 },
@@ -21237,6 +21417,7 @@ var testFixture = {
                         type: 'FunctionExpression',
                         id: null,
                         params: [],
+                        defaults: [],
                         body: {
                             type: 'BlockStatement',
                             body: [{
@@ -21287,7 +21468,9 @@ var testFixture = {
                                 end: { line: 1, column: 40 }
                             }
                         },
+                        rest: null,
                         generator: false,
+                        expression: false,
                         range: [1, 40],
                         loc: {
                             start: { line: 1, column: 1 },
@@ -21330,6 +21513,7 @@ var testFixture = {
                         type: 'FunctionExpression',
                         id: null,
                         params: [],
+                        defaults: [],
                         body: {
                             type: 'BlockStatement',
                             body: [{
@@ -21373,7 +21557,9 @@ var testFixture = {
                                 end: { line: 1, column: 34 }
                             }
                         },
+                        rest: null,
                         generator: false,
+                        expression: false,
                         range: [1, 34],
                         loc: {
                             start: { line: 1, column: 1 },
