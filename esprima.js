@@ -1224,7 +1224,7 @@ parseYieldExpression: true
     }
 
     function scanRegExp() {
-        var str = '', ch, start, pattern, flags, value, classMarker = false, restore;
+        var str = '', ch, start, pattern, flags, value, classMarker = false, restore, terminated = false;
 
         buffer = null;
         skipComment();
@@ -1250,6 +1250,7 @@ parseYieldExpression: true
                     }
                     str += ch;
                 } else if (ch === '/') {
+                    terminated = true;
                     break;
                 } else if (ch === '[') {
                     classMarker = true;
@@ -1259,7 +1260,7 @@ parseYieldExpression: true
             }
         }
 
-        if (str.length === 1) {
+        if (!terminated) {
             throwError({}, Messages.UnterminatedRegExp);
         }
 
