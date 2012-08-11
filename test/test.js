@@ -19352,6 +19352,337 @@ var testFixture = {
 
     },
 
+    'ES6 Template Strings': {
+        '`42`': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'QuasiLiteral',
+                quasis: [{
+                    type: 'QuasiElement',
+                    value: {
+                        raw: '42',
+                        cooked: '42'
+                    },
+                    tail: true,
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 4 }
+                    }
+                }],
+                expressions: [],
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
+            },
+            range: [0, 4],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 4 }
+            }
+        },
+
+        'raw`42`': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'TaggedQuasiExpression',
+                tag: {
+                    type: 'Identifier',
+                    name: 'raw',
+                    range: [0, 3],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 3 }
+                    }
+                },
+                quasi: {
+                    type: 'QuasiLiteral',
+                    quasis: [{
+                        type: 'QuasiElement',
+                        value: {
+                            raw: '42',
+                            cooked: '42'
+                        },
+                        tail: true,
+                        range: [3, 7],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 7 }
+                        }
+                    }],
+                    expressions: [],
+                    range: [3, 7],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 7 }
+                    }
+                },
+                range: [0, 7],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            range: [0, 7],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 7 }
+            }
+        },
+
+        'raw`hello ${name}`': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'TaggedQuasiExpression',
+                tag: {
+                    type: 'Identifier',
+                    name: 'raw',
+                    range: [0, 3],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 3 }
+                    }
+                },
+                quasi: {
+                    type: 'QuasiLiteral',
+                    quasis: [{
+                        type: 'QuasiElement',
+                        value: {
+                            raw: 'hello ',
+                            cooked: 'hello '
+                        },
+                        tail: false,
+                        range: [3, 12],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 12 }
+                        }
+                    }, {
+                        type: 'QuasiElement',
+                        value: {
+                            raw: '',
+                            cooked: ''
+                        },
+                        tail: true,
+                        range: [16, 18],
+                        loc: {
+                            start: { line: 1, column: 16 },
+                            end: { line: 1, column: 18 }
+                        }
+                    }],
+                    expressions: [{
+                        type: 'Identifier',
+                        name: 'name',
+                        range: [12, 16],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 16 }
+                        }
+                    }],
+                    range: [3, 18],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                range: [0, 18],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
+        '`$`': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'QuasiLiteral',
+                quasis: [{
+                    type: 'QuasiElement',
+                    value: {
+                        raw: '$',
+                        cooked: '$'
+                    },
+                    tail: true,
+                    range: [0, 3],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 3 }
+                    }
+                }],
+                expressions: [],
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            },
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            }
+        },
+
+        '`\\n\\r\\b\\v\\t\\f\\\n\\\r\n`': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'QuasiLiteral',
+                quasis: [{
+                    type: 'QuasiElement',
+                    value: {
+                        raw: '\\n\\r\\b\\v\\t\\f\\\n\\\r\n',
+                        cooked: '\n\r\b\v\t\f'
+                    },
+                    tail: true,
+                    range: [0, 19],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 3, column: 19 }
+                    }
+                }],
+                expressions: [],
+                range: [0, 19],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 3, column: 19 }
+                }
+            },
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 3, column: 19 }
+            }
+        },
+
+        '`\n\r\n`': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'QuasiLiteral',
+                quasis: [{
+                    type: 'QuasiElement',
+                    value: {
+                        raw: '\n\r\n',
+                        cooked: ''
+                    },
+                    tail: true,
+                    range: [0, 5],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 3, column: 5 }
+                    }
+                }],
+                expressions: [],
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 3, column: 5 }
+                }
+            },
+            range: [0, 5],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 3, column: 5 }
+            }
+        },
+
+        '`\\u{000042}\\u0042\\x42\\u0\\102\\A`': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'QuasiLiteral',
+                quasis: [{
+                    type: 'QuasiElement',
+                    value: {
+                        raw: '\\u{000042}\\u0042\\x42\\u0\\102\\A',
+                        cooked: 'BBBu0BA'
+                    },
+                    tail: true,
+                    range: [0, 31],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 31 }
+                    }
+                }],
+                expressions: [],
+                range: [0, 31],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 31 }
+                }
+            },
+            range: [0, 31],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 31 }
+            }
+        },
+
+        'new raw`42`': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'NewExpression',
+                callee: {
+                    type: 'TaggedQuasiExpression',
+                    tag: {
+                        type: 'Identifier',
+                        name: 'raw',
+                        range: [4, 7],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 7 }
+                        }
+                    },
+                    quasi: {
+                        type: 'QuasiLiteral',
+                        quasis: [{
+                            type: 'QuasiElement',
+                            value: {
+                                raw: '42',
+                                cooked: '42'
+                            },
+                            tail: true,
+                            range: [7, 11],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 11 }
+                            }
+                        }],
+                        expressions: [],
+                        range: [7, 11],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 11 }
+                        }
+                    },
+                    range: [7, 11],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 11 }
+                    }
+                },
+                'arguments': [],
+                range: [0, 11],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 11 }
+                }
+            },
+            range: [0, 11],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 11 }
+            }
+        }
+
+    },
+
     'Invalid syntax': {
 
         '{': {
@@ -21050,6 +21381,13 @@ var testFixture = {
             message: 'Error: Line 1: Unexpected identifier'
         },
 
+        'module X at Y': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected identifier'
+        },
+
         'export for': {
             index: 7,
             lineNumber: 1,
@@ -21216,6 +21554,48 @@ var testFixture = {
             lineNumber: 1,
             column: 22,
             message: 'Error: Line 1: Illegal yield expression'
+        },
+
+        '"use strict"; `\\102`;': {
+            index: 21,
+            lineNumber: 1,
+            column: 22,
+            message: 'Error: Line 1: Illegal yield expression'
+        },
+
+        '"use strict"; `\\102`;': {
+            index: 14,
+            lineNumber: 1,
+            column: 15,
+            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+        },
+
+        '`test': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        'switch `test`': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected quasi test'
+        },
+
+        '`hello ${10 `test`': {
+            index: 18,
+            lineNumber: 1,
+            column: 19,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '`hello ${10;test`': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
         }
     },
 
@@ -21387,10 +21767,13 @@ var testFixture = {
                 Path:  'Path',
                 Program: 'Program',
                 Property: 'Property',
+                QuasiElement: 'QuasiElement',
+                QuasiLiteral: 'QuasiLiteral',
                 ReturnStatement: 'ReturnStatement',
                 SequenceExpression: 'SequenceExpression',
                 SwitchCase: 'SwitchCase',
                 SwitchStatement: 'SwitchStatement',
+                TaggedQuasiExpression: 'TaggedQuasiExpression',
                 ThisExpression: 'ThisExpression',
                 ThrowStatement: 'ThrowStatement',
                 TryStatement: 'TryStatement',
