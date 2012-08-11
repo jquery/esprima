@@ -32,11 +32,11 @@ background: #FFA;
 <h1>Coverage Analysis <small>ensures systematic exercise of the parser</small></h1>
 
 <p><strong>Note</strong>: This is not a live (in-browser) code coverage report.
-The analysis is <a href="../doc/index.html#coverage">performed</a> offline
+The analysis is <a href="http://code.google.com/p/esprima/wiki/Testing#Code_coverage_test">performed</a> offline
 (using <a href="https://github.com/itay/node-cover">node-cover</a>).<br>
 
-Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab236d</a>
- (dated 6 May 2012 ).</p>
+Tested revision: <a href='https://github.com/ariya/esprima/commit/b61b064'>b61b064</a>
+ (dated 4 Aug 2012 ).</p>
 <pre>
 <span class='covered'>/*</span>
 <span class='covered'>    Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com></span>
@@ -69,15 +69,31 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>  */</span>
 <span class='covered'>  </span>
 <span class='covered'>  /*jslint bitwise:true plusplus:true */</span>
-<span class='covered'>  /*global esprima:true, exports:true,</span>
+<span class='covered'>  /*global esprima:true, define:true, exports:true, window: true,</span>
 <span class='covered'>  throwError: true, createLiteral: true, generateStatement: true,</span>
-<span class='covered'>  parseAssignmentExpression: true, parseBlock: true, parseExpression: true,</span>
+<span class='covered'>  parseAssignmentExpression: true, parseBlock: true,</span>
+<span class='covered'>  parseClassExpression: true, parseClassDeclaration: true, parseExpression: true,</span>
 <span class='covered'>  parseFunctionDeclaration: true, parseFunctionExpression: true,</span>
 <span class='covered'>  parseFunctionSourceElements: true, parseVariableIdentifier: true,</span>
+<span class='covered'>  parseImportSpecifier: true,</span>
 <span class='covered'>  parseLeftHandSideExpression: true,</span>
-<span class='covered'>  parseStatement: true, parseSourceElement: true */</span>
+<span class='covered'>  parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseConciseBody: true,</span>
+<span class='covered'>  parseYieldExpression: true</span>
+<span class='covered'>  */</span>
 <span class='covered'>  </span>
-<span class='covered'>  (function (exports) {</span>
+<span class='covered'>  (function (factory) {</span>
+<span class='covered'>      'use strict';</span>
+<span class='covered'>  </span>
+<span class='covered'>      // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js,</span>
+<span class='covered'>      // and plain browser loading,</span>
+<span class='covered'>      if (typeof define === 'function' && define.amd) {</span>
+<span class='uncovered'>          define(['exports'], factory);</span>
+<span class='covered'>      } else if (typeof exports !== 'undefined') {</span>
+<span class='covered'>          factory(exports);</span>
+<span class='covered'>      } else {</span>
+<span class='uncovered'>          factory((window.esprima = {}));</span>
+<span class='covered'>      }</span>
+<span class='covered'>  }(function (exports) {</span>
 <span class='covered'>      'use strict';</span>
 <span class='covered'>  </span>
 <span class='covered'>      var Token,</span>
@@ -88,6 +104,8 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          Regex,</span>
 <span class='covered'>          source,</span>
 <span class='covered'>          strict,</span>
+<span class='covered'>          yieldAllowed,</span>
+<span class='covered'>          yieldFound,</span>
 <span class='covered'>          index,</span>
 <span class='covered'>          lineNumber,</span>
 <span class='covered'>          lineStart,</span>
@@ -118,37 +136,54 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>      TokenName[Token.StringLiteral] = 'String';</span>
 <span class='covered'>  </span>
 <span class='covered'>      Syntax = {</span>
-<span class='covered'>          AssignmentExpression: 'AssignmentExpression',</span>
 <span class='covered'>          ArrayExpression: 'ArrayExpression',</span>
-<span class='covered'>          BlockStatement: 'BlockStatement',</span>
+<span class='covered'>          ArrayPattern: 'ArrayPattern',</span>
+<span class='covered'>          ArrowFunctionExpression: 'ArrowFunctionExpression',</span>
+<span class='covered'>          AssignmentExpression: 'AssignmentExpression',</span>
 <span class='covered'>          BinaryExpression: 'BinaryExpression',</span>
+<span class='covered'>          BlockStatement: 'BlockStatement',</span>
 <span class='covered'>          BreakStatement: 'BreakStatement',</span>
 <span class='covered'>          CallExpression: 'CallExpression',</span>
 <span class='covered'>          CatchClause: 'CatchClause',</span>
+<span class='covered'>          ClassBody: 'ClassBody',</span>
+<span class='covered'>          ClassDeclaration: 'ClassDeclaration',</span>
+<span class='covered'>          ClassExpression: 'ClassExpression',</span>
+<span class='covered'>          MethodDefinition: 'MethodDefinition',</span>
+<span class='covered'>          ClassHeritage: 'ClassHeritage',</span>
 <span class='covered'>          ConditionalExpression: 'ConditionalExpression',</span>
 <span class='covered'>          ContinueStatement: 'ContinueStatement',</span>
-<span class='covered'>          DoWhileStatement: 'DoWhileStatement',</span>
 <span class='covered'>          DebuggerStatement: 'DebuggerStatement',</span>
+<span class='covered'>          DoWhileStatement: 'DoWhileStatement',</span>
 <span class='covered'>          EmptyStatement: 'EmptyStatement',</span>
+<span class='covered'>          ExportDeclaration: 'ExportDeclaration',</span>
+<span class='covered'>          ExportSpecifier: 'ExportSpecifier',</span>
+<span class='covered'>          ExportSpecifierSet: 'ExportSpecifierSet',</span>
 <span class='covered'>          ExpressionStatement: 'ExpressionStatement',</span>
-<span class='covered'>          ForStatement: 'ForStatement',</span>
 <span class='covered'>          ForInStatement: 'ForInStatement',</span>
+<span class='covered'>          ForOfStatement: 'ForOfStatement',</span>
+<span class='covered'>          ForStatement: 'ForStatement',</span>
 <span class='covered'>          FunctionDeclaration: 'FunctionDeclaration',</span>
 <span class='covered'>          FunctionExpression: 'FunctionExpression',</span>
+<span class='covered'>          Glob: 'Glob',</span>
 <span class='covered'>          Identifier: 'Identifier',</span>
 <span class='covered'>          IfStatement: 'IfStatement',</span>
-<span class='covered'>          Literal: 'Literal',</span>
+<span class='covered'>          ImportDeclaration: 'ImportDeclaration',</span>
+<span class='covered'>          ImportSpecifier: 'ImportSpecifier',</span>
 <span class='covered'>          LabeledStatement: 'LabeledStatement',</span>
+<span class='covered'>          Literal: 'Literal',</span>
 <span class='covered'>          LogicalExpression: 'LogicalExpression',</span>
 <span class='covered'>          MemberExpression: 'MemberExpression',</span>
+<span class='covered'>          ModuleDeclaration: 'ModuleDeclaration',</span>
 <span class='covered'>          NewExpression: 'NewExpression',</span>
 <span class='covered'>          ObjectExpression: 'ObjectExpression',</span>
+<span class='covered'>          ObjectPattern: 'ObjectPattern',</span>
+<span class='covered'>          Path:  'Path',</span>
 <span class='covered'>          Program: 'Program',</span>
 <span class='covered'>          Property: 'Property',</span>
 <span class='covered'>          ReturnStatement: 'ReturnStatement',</span>
 <span class='covered'>          SequenceExpression: 'SequenceExpression',</span>
-<span class='covered'>          SwitchStatement: 'SwitchStatement',</span>
 <span class='covered'>          SwitchCase: 'SwitchCase',</span>
+<span class='covered'>          SwitchStatement: 'SwitchStatement',</span>
 <span class='covered'>          ThisExpression: 'ThisExpression',</span>
 <span class='covered'>          ThrowStatement: 'ThrowStatement',</span>
 <span class='covered'>          TryStatement: 'TryStatement',</span>
@@ -157,7 +192,8 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          VariableDeclaration: 'VariableDeclaration',</span>
 <span class='covered'>          VariableDeclarator: 'VariableDeclarator',</span>
 <span class='covered'>          WhileStatement: 'WhileStatement',</span>
-<span class='covered'>          WithStatement: 'WithStatement'</span>
+<span class='covered'>          WithStatement: 'WithStatement',</span>
+<span class='covered'>          YieldExpression: 'YieldExpression'</span>
 <span class='covered'>      };</span>
 <span class='covered'>  </span>
 <span class='covered'>      PropertyKind = {</span>
@@ -179,12 +215,14 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          UnterminatedRegExp:  'Invalid regular expression: missing /',</span>
 <span class='covered'>          InvalidLHSInAssignment:  'Invalid left-hand side in assignment',</span>
 <span class='covered'>          InvalidLHSInForIn:  'Invalid left-hand side in for-in',</span>
+<span class='covered'>          MultipleDefaultsInSwitch: 'More than one default clause in switch statement',</span>
 <span class='covered'>          NoCatchOrFinally:  'Missing catch or finally after try',</span>
 <span class='covered'>          UnknownLabel: 'Undefined label \'%0\'',</span>
 <span class='covered'>          Redeclaration: '%0 \'%1\' has already been declared',</span>
 <span class='covered'>          IllegalContinue: 'Illegal continue statement',</span>
 <span class='covered'>          IllegalBreak: 'Illegal break statement',</span>
 <span class='covered'>          IllegalReturn: 'Illegal return statement',</span>
+<span class='covered'>          IllegalYield: 'Illegal yield expression',</span>
 <span class='covered'>          StrictModeWith:  'Strict mode code may not include a with statement',</span>
 <span class='covered'>          StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',</span>
 <span class='covered'>          StrictVarName:  'Variable name may not be eval or arguments in strict mode',</span>
@@ -199,7 +237,9 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          StrictLHSAssignment:  'Assignment to eval or arguments is not allowed in strict mode',</span>
 <span class='covered'>          StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',</span>
 <span class='covered'>          StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',</span>
-<span class='covered'>          StrictReservedWord:  'Use of future reserved word in strict mode'</span>
+<span class='covered'>          StrictReservedWord:  'Use of future reserved word in strict mode',</span>
+<span class='covered'>          NoFromAfterImport: 'Missing from after import',</span>
+<span class='covered'>          NoYieldInGenerator: 'Missing yield in generator'</span>
 <span class='covered'>      };</span>
 <span class='covered'>  </span>
 <span class='covered'>      // See also tools/generate-unicode-regex.py.</span>
@@ -460,6 +500,38 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              }</span>
 <span class='covered'>          }</span>
 <span class='covered'>          return String.fromCharCode(code);</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function scanUnicodeCodePointEscape() {</span>
+<span class='covered'>          var ch, code, cu1, cu2;</span>
+<span class='covered'>  </span>
+<span class='covered'>          ch = source[index];</span>
+<span class='covered'>          code = 0;</span>
+<span class='covered'>  </span>
+<span class='covered'>          // At least, one hex digit is required.</span>
+<span class='covered'>          if (ch === '}') {</span>
+<span class='covered'>              throwError({}, Messages.UnexpectedToken, 'ILLEGAL');</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          while (index < length) {</span>
+<span class='covered'>              ch = nextChar();</span>
+<span class='covered'>              if (!isHexDigit(ch)) {</span>
+<span class='covered'>                  break;</span>
+<span class='covered'>              }</span>
+<span class='covered'>              code = code * 16 + '0123456789abcdef'.indexOf(ch.toLowerCase());</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (code > 0x10FFFF || ch !== '}') {</span>
+<span class='covered'>              throwError({}, Messages.UnexpectedToken, 'ILLEGAL');</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          // UTF-16 Encoding</span>
+<span class='covered'>          if (code <= 0xFFFF) {</span>
+<span class='covered'>              return String.fromCharCode(code);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          cu1 = ((code - 0x10000) >> 10) + 0xD800;</span>
+<span class='covered'>          cu2 = ((code - 0x10000) & 1023) + 0xDC00;</span>
+<span class='covered'>          return String.fromCharCode(cu1, cu2);</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function scanIdentifier() {</span>
@@ -727,6 +799,17 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              }</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
+<span class='covered'>          if (ch1 === '=' && ch2 === '>') {</span>
+<span class='covered'>              index += 2;</span>
+<span class='covered'>              return {</span>
+<span class='covered'>                  type: Token.Punctuator,</span>
+<span class='covered'>                  value: '=>',</span>
+<span class='covered'>                  lineNumber: lineNumber,</span>
+<span class='covered'>                  lineStart: lineStart,</span>
+<span class='covered'>                  range: [start, index]</span>
+<span class='covered'>              };</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
 <span class='covered'>          // The remaining 1-character punctuators.</span>
 <span class='covered'>  </span>
 <span class='covered'>          if ('[]<>+-*%&|^!~?:=/'.indexOf(ch1) >= 0) {</span>
@@ -743,7 +826,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>      // 7.8.3 Numeric Literals</span>
 <span class='covered'>  </span>
 <span class='covered'>      function scanNumericLiteral() {</span>
-<span class='covered'>          var number, start, ch;</span>
+<span class='covered'>          var number, start, ch, octal;</span>
 <span class='covered'>  </span>
 <span class='covered'>          ch = source[index];</span>
 <span class='covered'>          assert(isDecimalDigit(ch) || (ch === '.'),</span>
@@ -757,6 +840,8 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>  </span>
 <span class='covered'>              // Hex number starts with '0x'.</span>
 <span class='covered'>              // Octal number starts with '0'.</span>
+<span class='covered'>              // Octal number in ES6 starts with '0o'.</span>
+<span class='covered'>              // Binary number in ES6 starts with '0b'.</span>
 <span class='covered'>              if (number === '0') {</span>
 <span class='covered'>                  if (ch === 'x' || ch === 'X') {</span>
 <span class='covered'>                      number += nextChar();</span>
@@ -786,14 +871,21 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>                          lineStart: lineStart,</span>
 <span class='covered'>                          range: [start, index]</span>
 <span class='covered'>                      };</span>
-<span class='covered'>                  } else if (isOctalDigit(ch)) {</span>
-<span class='covered'>                      number += nextChar();</span>
+<span class='covered'>                  } else if (ch === 'b' || ch === 'B') {</span>
+<span class='covered'>                      nextChar();</span>
+<span class='covered'>                      number = '';</span>
+<span class='covered'>  </span>
 <span class='covered'>                      while (index < length) {</span>
 <span class='covered'>                          ch = source[index];</span>
-<span class='covered'>                          if (!isOctalDigit(ch)) {</span>
+<span class='covered'>                          if (ch !== '0' && ch !== '1') {</span>
 <span class='covered'>                              break;</span>
 <span class='covered'>                          }</span>
 <span class='covered'>                          number += nextChar();</span>
+<span class='covered'>                      }</span>
+<span class='covered'>  </span>
+<span class='covered'>                      if (number.length === 0) {</span>
+<span class='covered'>                          // only 0b or 0B</span>
+<span class='covered'>                          throwError({}, Messages.UnexpectedToken, 'ILLEGAL');</span>
 <span class='covered'>                      }</span>
 <span class='covered'>  </span>
 <span class='covered'>                      if (index < length) {</span>
@@ -804,8 +896,45 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>                      }</span>
 <span class='covered'>                      return {</span>
 <span class='covered'>                          type: Token.NumericLiteral,</span>
+<span class='covered'>                          value: parseInt(number, 2),</span>
+<span class='covered'>                          lineNumber: lineNumber,</span>
+<span class='covered'>                          lineStart: lineStart,</span>
+<span class='covered'>                          range: [start, index]</span>
+<span class='covered'>                      };</span>
+<span class='covered'>                  } else if (ch === 'o' || ch === 'O' || isOctalDigit(ch)) {</span>
+<span class='covered'>                      if (isOctalDigit(ch)) {</span>
+<span class='covered'>                          octal = true;</span>
+<span class='covered'>                          number = nextChar();</span>
+<span class='covered'>                      } else {</span>
+<span class='covered'>                          octal = false;</span>
+<span class='covered'>                          nextChar();</span>
+<span class='covered'>                          number = '';</span>
+<span class='covered'>                      }</span>
+<span class='covered'>  </span>
+<span class='covered'>                      while (index < length) {</span>
+<span class='covered'>                          ch = source[index];</span>
+<span class='covered'>                          if (!isOctalDigit(ch)) {</span>
+<span class='covered'>                              break;</span>
+<span class='covered'>                          }</span>
+<span class='covered'>                          number += nextChar();</span>
+<span class='covered'>                      }</span>
+<span class='covered'>  </span>
+<span class='covered'>                      if (number.length === 0) {</span>
+<span class='covered'>                          // only 0o or 0O</span>
+<span class='covered'>                          throwError({}, Messages.UnexpectedToken, 'ILLEGAL');</span>
+<span class='covered'>                      }</span>
+<span class='covered'>  </span>
+<span class='covered'>                      if (index < length) {</span>
+<span class='covered'>                          ch = source[index];</span>
+<span class='covered'>                          if (isIdentifierStart(ch) || isDecimalDigit(ch)) {</span>
+<span class='covered'>                              throwError({}, Messages.UnexpectedToken, 'ILLEGAL');</span>
+<span class='covered'>                          }</span>
+<span class='covered'>                      }</span>
+<span class='covered'>  </span>
+<span class='covered'>                      return {</span>
+<span class='covered'>                          type: Token.NumericLiteral,</span>
 <span class='covered'>                          value: parseInt(number, 8),</span>
-<span class='covered'>                          octal: true,</span>
+<span class='covered'>                          octal: octal,</span>
 <span class='covered'>                          lineNumber: lineNumber,</span>
 <span class='covered'>                          lineStart: lineStart,</span>
 <span class='covered'>                          range: [start, index]</span>
@@ -914,13 +1043,18 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>                          break;</span>
 <span class='covered'>                      case 'u':</span>
 <span class='covered'>                      case 'x':</span>
-<span class='covered'>                          restore = index;</span>
-<span class='covered'>                          unescaped = scanHexEscape(ch);</span>
-<span class='covered'>                          if (unescaped) {</span>
-<span class='covered'>                              str += unescaped;</span>
+<span class='covered'>                          if (source[index] === '{') {</span>
+<span class='covered'>                              ++index;</span>
+<span class='covered'>                              str += scanUnicodeCodePointEscape();</span>
 <span class='covered'>                          } else {</span>
-<span class='covered'>                              index = restore;</span>
-<span class='covered'>                              str += ch;</span>
+<span class='covered'>                              restore = index;</span>
+<span class='covered'>                              unescaped = scanHexEscape(ch);</span>
+<span class='covered'>                              if (unescaped) {</span>
+<span class='covered'>                                  str += unescaped;</span>
+<span class='covered'>                              } else {</span>
+<span class='covered'>                                  index = restore;</span>
+<span class='covered'>                                  str += ch;</span>
+<span class='covered'>                              }</span>
 <span class='covered'>                          }</span>
 <span class='covered'>                          break;</span>
 <span class='covered'>                      case 'b':</span>
@@ -1007,15 +1141,17 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>                  }</span>
 <span class='covered'>              } else {</span>
 <span class='covered'>                  if (ch === '\\') {</span>
-<span class='covered'>                      str += nextChar();</span>
-<span class='covered'>                  }</span>
-<span class='covered'>                  if (ch === '/') {</span>
+<span class='covered'>                      ch = nextChar();</span>
+<span class='covered'>                      // ECMA-262 7.8.5</span>
+<span class='covered'>                      if (isLineTerminator(ch)) {</span>
+<span class='covered'>                          throwError({}, Messages.UnterminatedRegExp);</span>
+<span class='covered'>                      }</span>
+<span class='covered'>                      str += ch;</span>
+<span class='covered'>                  } else if (ch === '/') {</span>
 <span class='covered'>                      break;</span>
-<span class='covered'>                  }</span>
-<span class='covered'>                  if (ch === '[') {</span>
+<span class='covered'>                  } else if (ch === '[') {</span>
 <span class='covered'>                      classMarker = true;</span>
-<span class='covered'>                  }</span>
-<span class='covered'>                  if (isLineTerminator(ch)) {</span>
+<span class='covered'>                  } else if (isLineTerminator(ch)) {</span>
 <span class='covered'>                      throwError({}, Messages.UnterminatedRegExp);</span>
 <span class='covered'>                  }</span>
 <span class='covered'>              }</span>
@@ -1153,6 +1289,33 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          return buffer;</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
+<span class='covered'>      function lookahead2() {</span>
+<span class='covered'>          var adv, pos, line, start, result;</span>
+<span class='covered'>  </span>
+<span class='covered'>          // If we are collecting the tokens, don't grab the next one yet.</span>
+<span class='covered'>          adv = (typeof extra.advance === 'function') ? extra.advance : advance;</span>
+<span class='covered'>  </span>
+<span class='covered'>          pos = index;</span>
+<span class='covered'>          line = lineNumber;</span>
+<span class='covered'>          start = lineStart;</span>
+<span class='covered'>  </span>
+<span class='covered'>          // Scan for the next immediate token.</span>
+<span class='covered'>          if (buffer === null) {</span>
+<span class='uncovered'>              buffer = adv();</span>
+<span class='covered'>          }</span>
+<span class='covered'>          index = buffer.range[1];</span>
+<span class='covered'>          lineNumber = buffer.lineNumber;</span>
+<span class='covered'>          lineStart = buffer.lineStart;</span>
+<span class='covered'>  </span>
+<span class='covered'>          // Grab the token right after.</span>
+<span class='covered'>          result = adv();</span>
+<span class='covered'>          index = pos;</span>
+<span class='covered'>          lineNumber = line;</span>
+<span class='covered'>          lineStart = start;</span>
+<span class='covered'>  </span>
+<span class='covered'>          return result;</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
 <span class='covered'>      // Return true if there is a line terminator before the next token.</span>
 <span class='covered'>  </span>
 <span class='covered'>      function peekLineTerminator() {</span>
@@ -1198,7 +1361,6 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function throwErrorTolerant() {</span>
-<span class='covered'>          var error;</span>
 <span class='covered'>          try {</span>
 <span class='covered'>              throwError.apply(null, arguments);</span>
 <span class='covered'>          } catch (e) {</span>
@@ -1214,8 +1376,6 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>      // Throw an exception because of the token.</span>
 <span class='covered'>  </span>
 <span class='covered'>      function throwUnexpected(token) {</span>
-<span class='covered'>          var s;</span>
-<span class='covered'>  </span>
 <span class='covered'>          if (token.type === Token.EOF) {</span>
 <span class='covered'>              throwError(token, Messages.UnexpectedEOS);</span>
 <span class='covered'>          }</span>
@@ -1279,6 +1439,14 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          return token.type === Token.Keyword && token.value === keyword;</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
+<span class='covered'>  </span>
+<span class='covered'>      // Return true if the next token matches the specified contextual keyword</span>
+<span class='covered'>  </span>
+<span class='covered'>      function matchContextualKeyword(keyword) {</span>
+<span class='covered'>          var token = lookahead();</span>
+<span class='covered'>          return token.type === Token.Identifier && token.value === keyword;</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
 <span class='covered'>      // Return true if the next token is an assignment operator</span>
 <span class='covered'>  </span>
 <span class='covered'>      function matchAssign() {</span>
@@ -1332,17 +1500,11 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>      // Return true if provided expression is LeftHandSideExpression</span>
 <span class='covered'>  </span>
 <span class='covered'>      function isLeftHandSide(expr) {</span>
-<span class='covered'>          switch (expr.type) {</span>
-<span class='covered'>          case 'AssignmentExpression':</span>
-<span class='covered'>          case 'BinaryExpression':</span>
-<span class='covered'>          case 'ConditionalExpression':</span>
-<span class='covered'>          case 'LogicalExpression':</span>
-<span class='covered'>          case 'SequenceExpression':</span>
-<span class='covered'>          case 'UnaryExpression':</span>
-<span class='covered'>          case 'UpdateExpression':</span>
-<span class='covered'>              return false;</span>
-<span class='covered'>          }</span>
-<span class='covered'>          return true;</span>
+<span class='covered'>          return expr.type === Syntax.Identifier || expr.type === Syntax.MemberExpression;</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function isAssignableLeftHandSide(expr) {</span>
+<span class='covered'>          return isLeftHandSide(expr) || expr.type === Syntax.ObjectPattern || expr.type === Syntax.ArrayPattern;</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      // 11.1.4 Array Initialiser</span>
@@ -1376,22 +1538,67 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>  </span>
 <span class='covered'>      // 11.1.5 Object Initialiser</span>
 <span class='covered'>  </span>
-<span class='covered'>      function parsePropertyFunction(param, first) {</span>
-<span class='covered'>          var previousStrict, body;</span>
+<span class='covered'>      function parsePropertyFunction(param, options) {</span>
+<span class='covered'>          var previousStrict, previousYieldAllowed, body;</span>
 <span class='covered'>  </span>
 <span class='covered'>          previousStrict = strict;</span>
-<span class='covered'>          body = parseFunctionSourceElements();</span>
-<span class='covered'>          if (first && strict && isRestrictedWord(param[0].name)) {</span>
-<span class='covered'>              throwError(first, Messages.StrictParamName);</span>
+<span class='covered'>          previousYieldAllowed = yieldAllowed;</span>
+<span class='covered'>          yieldAllowed = options.generator;</span>
+<span class='covered'>          body = parseConciseBody();</span>
+<span class='covered'>          if (options.name && strict && isRestrictedWord(param[0].name)) {</span>
+<span class='covered'>              throwError(options.name, Messages.StrictParamName);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (yieldAllowed && !yieldFound) {</span>
+<span class='covered'>              throwError({}, Messages.NoYieldInGenerator);</span>
 <span class='covered'>          }</span>
 <span class='covered'>          strict = previousStrict;</span>
+<span class='covered'>          yieldAllowed = previousYieldAllowed;</span>
 <span class='covered'>  </span>
 <span class='covered'>          return {</span>
 <span class='covered'>              type: Syntax.FunctionExpression,</span>
 <span class='covered'>              id: null,</span>
 <span class='covered'>              params: param,</span>
-<span class='covered'>              body: body</span>
+<span class='covered'>              body: body,</span>
+<span class='covered'>              generator: options.generator</span>
 <span class='covered'>          };</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parsePropertyMethodFunction(options) {</span>
+<span class='covered'>          var token, previousStrict, param, params, paramSet, method;</span>
+<span class='covered'>  </span>
+<span class='covered'>          previousStrict = strict;</span>
+<span class='covered'>          strict = true;</span>
+<span class='covered'>          params = [];</span>
+<span class='covered'>  </span>
+<span class='covered'>          expect('(');</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (!match(')')) {</span>
+<span class='covered'>              paramSet = {};</span>
+<span class='covered'>              while (index < length) {</span>
+<span class='covered'>                  token = lookahead();</span>
+<span class='covered'>                  param = parseVariableIdentifier();</span>
+<span class='covered'>                  if (isRestrictedWord(token.value)) {</span>
+<span class='covered'>                      throwError(token, Messages.StrictParamName);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {</span>
+<span class='covered'>                      throwError(token, Messages.StrictParamDupe);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  params.push(param);</span>
+<span class='covered'>                  paramSet[param.name] = true;</span>
+<span class='covered'>                  if (match(')')) {</span>
+<span class='covered'>                      break;</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  expect(',');</span>
+<span class='covered'>              }</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          expect(')');</span>
+<span class='covered'>  </span>
+<span class='covered'>          method = parsePropertyFunction(params, { generator: options.generator });</span>
+<span class='covered'>  </span>
+<span class='covered'>          strict = previousStrict;</span>
+<span class='covered'>  </span>
+<span class='covered'>          return method;</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseObjectPropertyKey() {</span>
@@ -1424,56 +1631,106 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>  </span>
 <span class='covered'>              // Property Assignment: Getter and Setter.</span>
 <span class='covered'>  </span>
-<span class='covered'>              if (token.value === 'get' && !match(':')) {</span>
+<span class='covered'>              if (token.value === 'get' && !(match(':') || match('('))) {</span>
 <span class='covered'>                  key = parseObjectPropertyKey();</span>
 <span class='covered'>                  expect('(');</span>
 <span class='covered'>                  expect(')');</span>
 <span class='covered'>                  return {</span>
 <span class='covered'>                      type: Syntax.Property,</span>
 <span class='covered'>                      key: key,</span>
-<span class='covered'>                      value: parsePropertyFunction([]),</span>
+<span class='covered'>                      value: parsePropertyFunction([], { generator: false }),</span>
 <span class='covered'>                      kind: 'get'</span>
 <span class='covered'>                  };</span>
-<span class='covered'>              } else if (token.value === 'set' && !match(':')) {</span>
+<span class='covered'>              } else if (token.value === 'set' && !(match(':') || match('('))) {</span>
 <span class='covered'>                  key = parseObjectPropertyKey();</span>
 <span class='covered'>                  expect('(');</span>
 <span class='covered'>                  token = lookahead();</span>
-<span class='covered'>                  if (token.type !== Token.Identifier) {</span>
-<span class='covered'>                      throwUnexpected(lex());</span>
-<span class='covered'>                  }</span>
 <span class='covered'>                  param = [ parseVariableIdentifier() ];</span>
 <span class='covered'>                  expect(')');</span>
 <span class='covered'>                  return {</span>
 <span class='covered'>                      type: Syntax.Property,</span>
 <span class='covered'>                      key: key,</span>
-<span class='covered'>                      value: parsePropertyFunction(param, token),</span>
+<span class='covered'>                      value: parsePropertyFunction(param, { generator: false, name: token }),</span>
 <span class='covered'>                      kind: 'set'</span>
 <span class='covered'>                  };</span>
 <span class='covered'>              } else {</span>
-<span class='covered'>                  expect(':');</span>
+<span class='covered'>                  if (match(':')) {</span>
+<span class='covered'>                      lex();</span>
+<span class='covered'>                      return {</span>
+<span class='covered'>                          type: Syntax.Property,</span>
+<span class='covered'>                          key: id,</span>
+<span class='covered'>                          value: parseAssignmentExpression(),</span>
+<span class='covered'>                          kind: 'init'</span>
+<span class='covered'>                      };</span>
+<span class='covered'>                  } else if (match('(')) {</span>
+<span class='covered'>                      return {</span>
+<span class='covered'>                          type: Syntax.Property,</span>
+<span class='covered'>                          key: id,</span>
+<span class='covered'>                          value: parsePropertyMethodFunction({ generator: false }),</span>
+<span class='covered'>                          kind: 'init',</span>
+<span class='covered'>                          method: true</span>
+<span class='covered'>                      };</span>
+<span class='covered'>                  } else {</span>
+<span class='covered'>                      return {</span>
+<span class='covered'>                          type: Syntax.Property,</span>
+<span class='covered'>                          key: id,</span>
+<span class='covered'>                          value: id,</span>
+<span class='covered'>                          kind: 'init',</span>
+<span class='covered'>                          shorthand: true</span>
+<span class='covered'>                      };</span>
+<span class='covered'>                  }</span>
+<span class='covered'>              }</span>
+<span class='covered'>          } else if (token.type === Token.EOF || token.type === Token.Punctuator) {</span>
+<span class='covered'>              if (!match('*')) {</span>
+<span class='covered'>                  throwUnexpected(token);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              lex();</span>
+<span class='covered'>  </span>
+<span class='covered'>              id = parseObjectPropertyKey();</span>
+<span class='covered'>  </span>
+<span class='covered'>              if (!match('(')) {</span>
+<span class='covered'>                  throwUnexpected(lex());</span>
+<span class='covered'>              }</span>
+<span class='covered'>  </span>
+<span class='covered'>              return {</span>
+<span class='covered'>                  type: Syntax.Property,</span>
+<span class='covered'>                  key: id,</span>
+<span class='covered'>                  value: parsePropertyMethodFunction({ generator: true }),</span>
+<span class='covered'>                  kind: 'init',</span>
+<span class='covered'>                  method: true</span>
+<span class='covered'>              };</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>              key = parseObjectPropertyKey();</span>
+<span class='covered'>              if (match(':')) {</span>
+<span class='covered'>                  lex();</span>
 <span class='covered'>                  return {</span>
 <span class='covered'>                      type: Syntax.Property,</span>
-<span class='covered'>                      key: id,</span>
+<span class='covered'>                      key: key,</span>
 <span class='covered'>                      value: parseAssignmentExpression(),</span>
 <span class='covered'>                      kind: 'init'</span>
 <span class='covered'>                  };</span>
+<span class='covered'>              } else if (match('(')) {</span>
+<span class='covered'>                  return {</span>
+<span class='covered'>                      type: Syntax.Property,</span>
+<span class='covered'>                      key: key,</span>
+<span class='covered'>                      value: parsePropertyMethodFunction({ generator: false }),</span>
+<span class='covered'>                      kind: 'init',</span>
+<span class='covered'>                      method: true</span>
+<span class='covered'>                  };</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                  return {</span>
+<span class='covered'>                      type: Syntax.Property,</span>
+<span class='covered'>                      key: key,</span>
+<span class='covered'>                      value: key,</span>
+<span class='covered'>                      kind: 'init',</span>
+<span class='covered'>                      shorthand: true</span>
+<span class='covered'>                  };</span>
 <span class='covered'>              }</span>
-<span class='covered'>          } else if (token.type === Token.EOF || token.type === Token.Punctuator) {</span>
-<span class='covered'>              throwUnexpected(token);</span>
-<span class='covered'>          } else {</span>
-<span class='covered'>              key = parseObjectPropertyKey();</span>
-<span class='covered'>              expect(':');</span>
-<span class='covered'>              return {</span>
-<span class='covered'>                  type: Syntax.Property,</span>
-<span class='covered'>                  key: key,</span>
-<span class='covered'>                  value: parseAssignmentExpression(),</span>
-<span class='covered'>                  kind: 'init'</span>
-<span class='covered'>              };</span>
 <span class='covered'>          }</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseObjectInitialiser() {</span>
-<span class='covered'>          var token, properties = [], property, name, kind, map = {}, toString = String;</span>
+<span class='covered'>          var properties = [], property, name, kind, map = {}, toString = String;</span>
 <span class='covered'>  </span>
 <span class='covered'>          expect('{');</span>
 <span class='covered'>  </span>
@@ -1489,7 +1746,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              if (Object.prototype.hasOwnProperty.call(map, name)) {</span>
 <span class='covered'>                  if (map[name] === PropertyKind.Data) {</span>
 <span class='covered'>                      if (strict && kind === PropertyKind.Data) {</span>
-<span class='covered'>                          throwError({}, Messages.StrictDuplicateProperty);</span>
+<span class='covered'>                          throwErrorTolerant({}, Messages.StrictDuplicateProperty);</span>
 <span class='covered'>                      } else if (kind !== PropertyKind.Data) {</span>
 <span class='covered'>                          throwError({}, Messages.AccessorDataProperty);</span>
 <span class='covered'>                      }</span>
@@ -1552,6 +1809,18 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              if (matchKeyword('function')) {</span>
 <span class='covered'>                  return parseFunctionExpression();</span>
 <span class='covered'>              }</span>
+<span class='covered'>  </span>
+<span class='covered'>              if (matchKeyword('class')) {</span>
+<span class='covered'>                  return parseClassExpression();</span>
+<span class='covered'>              }</span>
+<span class='covered'>  </span>
+<span class='covered'>              if (matchKeyword('super')) {</span>
+<span class='covered'>                  lex();</span>
+<span class='covered'>                  return {</span>
+<span class='covered'>                      type: Syntax.Identifier,</span>
+<span class='covered'>                      name: 'super'</span>
+<span class='covered'>                  };</span>
+<span class='covered'>              }</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
 <span class='covered'>          if (type === Token.BooleanLiteral) {</span>
@@ -1577,6 +1846,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          if (match('(')) {</span>
 <span class='covered'>              lex();</span>
 <span class='covered'>              state.lastParenthesized = expr = parseExpression();</span>
+<span class='covered'>              state.parenthesizedCount += 1;</span>
 <span class='covered'>              expect(')');</span>
 <span class='covered'>              return expr;</span>
 <span class='covered'>          }</span>
@@ -1725,6 +1995,11 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {</span>
 <span class='covered'>                  throwError({}, Messages.StrictLHSPostfix);</span>
 <span class='covered'>              }</span>
+<span class='covered'>  </span>
+<span class='covered'>              if (!isLeftHandSide(expr)) {</span>
+<span class='covered'>                  throwError({}, Messages.InvalidLHSInAssignment);</span>
+<span class='covered'>              }</span>
+<span class='covered'>  </span>
 <span class='covered'>              expr = {</span>
 <span class='covered'>                  type: Syntax.UpdateExpression,</span>
 <span class='covered'>                  operator: lex().value,</span>
@@ -1748,6 +2023,11 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {</span>
 <span class='covered'>                  throwError({}, Messages.StrictLHSPrefix);</span>
 <span class='covered'>              }</span>
+<span class='covered'>  </span>
+<span class='covered'>              if (!isLeftHandSide(expr)) {</span>
+<span class='covered'>                  throwError({}, Messages.InvalidLHSInAssignment);</span>
+<span class='covered'>              }</span>
+<span class='covered'>  </span>
 <span class='covered'>              expr = {</span>
 <span class='covered'>                  type: Syntax.UpdateExpression,</span>
 <span class='covered'>                  operator: token.value,</span>
@@ -1838,34 +2118,19 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>  </span>
 <span class='covered'>          previousAllowIn = state.allowIn;</span>
 <span class='covered'>          state.allowIn = true;</span>
-<span class='covered'>          expr = parseShiftExpression();</span>
-<span class='covered'>          state.allowIn = previousAllowIn;</span>
 <span class='covered'>  </span>
-<span class='covered'>          if (match('<') || match('>') || match('<=') || match('>=')) {</span>
+<span class='covered'>          expr = parseShiftExpression();</span>
+<span class='covered'>  </span>
+<span class='covered'>          while (match('<') || match('>') || match('<=') || match('>=') || (previousAllowIn && matchKeyword('in')) || matchKeyword('instanceof')) {</span>
 <span class='covered'>              expr = {</span>
 <span class='covered'>                  type: Syntax.BinaryExpression,</span>
 <span class='covered'>                  operator: lex().value,</span>
 <span class='covered'>                  left: expr,</span>
-<span class='covered'>                  right: parseRelationalExpression()</span>
-<span class='covered'>              };</span>
-<span class='covered'>          } else if (state.allowIn && matchKeyword('in')) {</span>
-<span class='covered'>              lex();</span>
-<span class='covered'>              expr = {</span>
-<span class='covered'>                  type: Syntax.BinaryExpression,</span>
-<span class='covered'>                  operator: 'in',</span>
-<span class='covered'>                  left: expr,</span>
-<span class='covered'>                  right: parseRelationalExpression()</span>
-<span class='covered'>              };</span>
-<span class='covered'>          } else if (matchKeyword('instanceof')) {</span>
-<span class='covered'>              lex();</span>
-<span class='covered'>              expr = {</span>
-<span class='covered'>                  type: Syntax.BinaryExpression,</span>
-<span class='covered'>                  operator: 'instanceof',</span>
-<span class='covered'>                  left: expr,</span>
-<span class='covered'>                  right: parseRelationalExpression()</span>
+<span class='covered'>                  right: parseShiftExpression()</span>
 <span class='covered'>              };</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
+<span class='covered'>          state.allowIn = previousAllowIn;</span>
 <span class='covered'>          return expr;</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
@@ -1874,7 +2139,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>      function parseEqualityExpression() {</span>
 <span class='covered'>          var expr = parseRelationalExpression();</span>
 <span class='covered'>  </span>
-<span class='covered'>          while (match('==') || match('!=') || match('===') || match('!==')) {</span>
+<span class='covered'>          while ((!peekLineTerminator() && (matchContextualKeyword('is') || matchContextualKeyword('isnt'))) || match('==') || match('!=') || match('===') || match('!==')) {</span>
 <span class='covered'>              expr = {</span>
 <span class='covered'>                  type: Syntax.BinaryExpression,</span>
 <span class='covered'>                  operator: lex().value,</span>
@@ -1904,14 +2169,14 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          return expr;</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
-<span class='covered'>      function parseBitwiseORExpression() {</span>
+<span class='covered'>      function parseBitwiseXORExpression() {</span>
 <span class='covered'>          var expr = parseBitwiseANDExpression();</span>
 <span class='covered'>  </span>
-<span class='covered'>          while (match('|')) {</span>
+<span class='covered'>          while (match('^')) {</span>
 <span class='covered'>              lex();</span>
 <span class='covered'>              expr = {</span>
 <span class='covered'>                  type: Syntax.BinaryExpression,</span>
-<span class='covered'>                  operator: '|',</span>
+<span class='covered'>                  operator: '^',</span>
 <span class='covered'>                  left: expr,</span>
 <span class='covered'>                  right: parseBitwiseANDExpression()</span>
 <span class='covered'>              };</span>
@@ -1920,16 +2185,16 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          return expr;</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
-<span class='covered'>      function parseBitwiseXORExpression() {</span>
-<span class='covered'>          var expr = parseBitwiseORExpression();</span>
+<span class='covered'>      function parseBitwiseORExpression() {</span>
+<span class='covered'>          var expr = parseBitwiseXORExpression();</span>
 <span class='covered'>  </span>
-<span class='covered'>          while (match('^')) {</span>
+<span class='covered'>          while (match('|')) {</span>
 <span class='covered'>              lex();</span>
 <span class='covered'>              expr = {</span>
 <span class='covered'>                  type: Syntax.BinaryExpression,</span>
-<span class='covered'>                  operator: '^',</span>
+<span class='covered'>                  operator: '|',</span>
 <span class='covered'>                  left: expr,</span>
-<span class='covered'>                  right: parseBitwiseORExpression()</span>
+<span class='covered'>                  right: parseBitwiseXORExpression()</span>
 <span class='covered'>              };</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
@@ -1939,7 +2204,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>      // 11.11 Binary Logical Operators</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseLogicalANDExpression() {</span>
-<span class='covered'>          var expr = parseBitwiseXORExpression();</span>
+<span class='covered'>          var expr = parseBitwiseORExpression();</span>
 <span class='covered'>  </span>
 <span class='covered'>          while (match('&&')) {</span>
 <span class='covered'>              lex();</span>
@@ -1947,7 +2212,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>                  type: Syntax.LogicalExpression,</span>
 <span class='covered'>                  operator: '&&',</span>
 <span class='covered'>                  left: expr,</span>
-<span class='covered'>                  right: parseBitwiseXORExpression()</span>
+<span class='covered'>                  right: parseBitwiseORExpression()</span>
 <span class='covered'>              };</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
@@ -1998,20 +2263,132 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>  </span>
 <span class='covered'>      // 11.13 Assignment Operators</span>
 <span class='covered'>  </span>
+<span class='covered'>      function reinterpretAsAssignmentBindingPattern(expr) {</span>
+<span class='covered'>          var i, len, property, element;</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (expr.type === Syntax.ObjectExpression) {</span>
+<span class='covered'>              expr.type = Syntax.ObjectPattern;</span>
+<span class='covered'>              for (i = 0, len = expr.properties.length; i < len; i += 1) {</span>
+<span class='covered'>                  property = expr.properties[i];</span>
+<span class='covered'>                  if (property.kind !== 'init') {</span>
+<span class='covered'>                      throwError({}, Messages.InvalidLHSInAssignment);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  reinterpretAsAssignmentBindingPattern(property.value);</span>
+<span class='covered'>              }</span>
+<span class='covered'>          } else if (expr.type === Syntax.ArrayExpression) {</span>
+<span class='covered'>              expr.type = Syntax.ArrayPattern;</span>
+<span class='covered'>              for (i = 0, len = expr.elements.length; i < len; i += 1) {</span>
+<span class='covered'>                  element = expr.elements[i];</span>
+<span class='covered'>                  if (element) {</span>
+<span class='covered'>                      reinterpretAsAssignmentBindingPattern(element);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>              }</span>
+<span class='covered'>          } else if (expr.type === Syntax.Identifier) {</span>
+<span class='covered'>              if (isRestrictedWord(expr.name)) {</span>
+<span class='covered'>                  throwError({}, Messages.InvalidLHSInAssignment);</span>
+<span class='covered'>              }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>              if (expr.type !== Syntax.MemberExpression && expr.type !== Syntax.CallExpression && expr.type !== Syntax.NewExpression) {</span>
+<span class='covered'>                  throwError({}, Messages.InvalidLHSInAssignment);</span>
+<span class='covered'>              }</span>
+<span class='covered'>          }</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function reinterpretAsCoverFormalsList(expr) {</span>
+<span class='covered'>          var i, len, param, paramSet;</span>
+<span class='covered'>          assert(expr.type === Syntax.SequenceExpression);</span>
+<span class='covered'>  </span>
+<span class='covered'>          paramSet = {};</span>
+<span class='covered'>  </span>
+<span class='covered'>          for (i = 0, len = expr.expressions.length; i < len; i += 1) {</span>
+<span class='covered'>              param = expr.expressions[i];</span>
+<span class='covered'>              if (param.type !== Syntax.Identifier) {</span>
+<span class='covered'>                  return null;</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (isRestrictedWord(param.name)) {</span>
+<span class='covered'>                  throwError({}, Messages.StrictParamName);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (Object.prototype.hasOwnProperty.call(paramSet, param.name)) {</span>
+<span class='covered'>                  throwError({}, Messages.StrictParamDupe);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              paramSet[param.name] = true;</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return expr.expressions;</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseArrowFunctionExpression(param) {</span>
+<span class='covered'>          var previousStrict, previousYieldAllowed, body;</span>
+<span class='covered'>  </span>
+<span class='covered'>          expect('=>');</span>
+<span class='covered'>  </span>
+<span class='covered'>          previousStrict = strict;</span>
+<span class='covered'>          previousYieldAllowed = yieldAllowed;</span>
+<span class='covered'>          strict = true;</span>
+<span class='covered'>          yieldAllowed = false;</span>
+<span class='covered'>          body = parseConciseBody();</span>
+<span class='covered'>          strict = previousStrict;</span>
+<span class='covered'>          yieldAllowed = previousYieldAllowed;</span>
+<span class='covered'>  </span>
+<span class='covered'>          return {</span>
+<span class='covered'>              type: Syntax.ArrowFunctionExpression,</span>
+<span class='covered'>              id: null,</span>
+<span class='covered'>              params: param,</span>
+<span class='covered'>              body: body</span>
+<span class='covered'>          };</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
 <span class='covered'>      function parseAssignmentExpression() {</span>
-<span class='covered'>          var expr;</span>
+<span class='covered'>          var expr, token, oldParenthesizedCount, coverFormalsList;</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (matchKeyword('yield')) {</span>
+<span class='covered'>              return parseYieldExpression();</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          oldParenthesizedCount = state.parenthesizedCount;</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (match('(')) {</span>
+<span class='covered'>              token = lookahead2();</span>
+<span class='covered'>              if (token.type === Token.Punctuator && token.value === ')') {</span>
+<span class='covered'>                  lex();</span>
+<span class='covered'>                  lex();</span>
+<span class='covered'>                  if (!match('=>')) {</span>
+<span class='covered'>                      throwUnexpected(lex());</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  return parseArrowFunctionExpression([]);</span>
+<span class='covered'>              }</span>
+<span class='covered'>          }</span>
 <span class='covered'>  </span>
 <span class='covered'>          expr = parseConditionalExpression();</span>
 <span class='covered'>  </span>
-<span class='covered'>          if (matchAssign()) {</span>
-<span class='covered'>              // LeftHandSideExpression</span>
-<span class='covered'>              if (state.lastParenthesized !== expr && !isLeftHandSide(expr)) {</span>
-<span class='covered'>                  throwError({}, Messages.InvalidLHSInAssignment);</span>
+<span class='covered'>          if (match('=>')) {</span>
+<span class='covered'>              if (expr.type === Syntax.Identifier) {</span>
+<span class='covered'>                  if (state.parenthesizedCount === oldParenthesizedCount || state.parenthesizedCount === (oldParenthesizedCount + 1)) {</span>
+<span class='covered'>                      if (isRestrictedWord(expr.name)) {</span>
+<span class='covered'>                          throwError({}, Messages.StrictParamName);</span>
+<span class='covered'>                      }</span>
+<span class='covered'>                      return parseArrowFunctionExpression([ expr ]);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>              } else if (expr.type === Syntax.SequenceExpression) {</span>
+<span class='covered'>                  if (state.parenthesizedCount === (oldParenthesizedCount + 1)) {</span>
+<span class='covered'>                      coverFormalsList = reinterpretAsCoverFormalsList(expr);</span>
+<span class='covered'>                      if (coverFormalsList) {</span>
+<span class='covered'>                          return parseArrowFunctionExpression(coverFormalsList);</span>
+<span class='covered'>                      }</span>
+<span class='covered'>                  }</span>
 <span class='covered'>              }</span>
+<span class='covered'>          }</span>
 <span class='covered'>  </span>
+<span class='covered'>          if (matchAssign()) {</span>
 <span class='covered'>              // 11.13.1</span>
 <span class='covered'>              if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {</span>
 <span class='covered'>                  throwError({}, Messages.StrictLHSAssignment);</span>
+<span class='covered'>              }</span>
+<span class='covered'>  </span>
+<span class='covered'>              // ES.next draf 11.13 Runtime Semantics step 1</span>
+<span class='covered'>              if (match('=') && (expr.type === Syntax.ObjectExpression || expr.type === Syntax.ArrayExpression)) {</span>
+<span class='covered'>                  reinterpretAsAssignmentBindingPattern(expr);</span>
+<span class='covered'>              } else if (!isLeftHandSide(expr)) {</span>
+<span class='covered'>                  throwError({}, Messages.InvalidLHSInAssignment);</span>
 <span class='covered'>              }</span>
 <span class='covered'>  </span>
 <span class='covered'>              expr = {</span>
@@ -2172,6 +2549,243 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          };</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
+<span class='covered'>      // http://wiki.ecmascript.org/doku.php?id=harmony:modules</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parsePath() {</span>
+<span class='covered'>          var result, id;</span>
+<span class='covered'>  </span>
+<span class='covered'>          result = {</span>
+<span class='covered'>              type: Syntax.Path,</span>
+<span class='covered'>              body: []</span>
+<span class='covered'>          };</span>
+<span class='covered'>  </span>
+<span class='covered'>          while (true) {</span>
+<span class='covered'>              id = parseVariableIdentifier();</span>
+<span class='covered'>              result.body.push(id);</span>
+<span class='covered'>              if (!match('.')) {</span>
+<span class='covered'>                  break;</span>
+<span class='covered'>              }</span>
+<span class='covered'>              lex();</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          return result;</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseGlob() {</span>
+<span class='covered'>          expect('*');</span>
+<span class='covered'>          return {</span>
+<span class='covered'>              type: Syntax.Glob</span>
+<span class='covered'>          };</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseModuleDeclaration() {</span>
+<span class='covered'>          var id, token, declaration;</span>
+<span class='covered'>  </span>
+<span class='covered'>          token = lex();</span>
+<span class='covered'>          if (token.value !== 'module') {</span>
+<span class='uncovered'>              throwUnexpected(token);</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          id = parseVariableIdentifier();</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (match('{')) {</span>
+<span class='covered'>              return {</span>
+<span class='covered'>                  type: Syntax.ModuleDeclaration,</span>
+<span class='covered'>                  id: id,</span>
+<span class='covered'>                  body: parseModuleBlock()</span>
+<span class='covered'>              };</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          expect('=');</span>
+<span class='covered'>  </span>
+<span class='covered'>          token = lookahead();</span>
+<span class='covered'>          if (token.type === Token.StringLiteral) {</span>
+<span class='covered'>              declaration = {</span>
+<span class='covered'>                  type: Syntax.ModuleDeclaration,</span>
+<span class='covered'>                  id: id,</span>
+<span class='covered'>                  from: parsePrimaryExpression()</span>
+<span class='covered'>              };</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>              declaration = {</span>
+<span class='covered'>                  type: Syntax.ModuleDeclaration,</span>
+<span class='covered'>                  id: id,</span>
+<span class='covered'>                  from: parsePath()</span>
+<span class='covered'>              };</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          consumeSemicolon();</span>
+<span class='covered'>  </span>
+<span class='covered'>          return declaration;</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseExportSpecifierSetProperty() {</span>
+<span class='covered'>          var specifier;</span>
+<span class='covered'>  </span>
+<span class='covered'>          specifier = {</span>
+<span class='covered'>              type: Syntax.ExportSpecifier,</span>
+<span class='covered'>              id: parseVariableIdentifier(),</span>
+<span class='covered'>              from: null</span>
+<span class='covered'>          };</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (match(':')) {</span>
+<span class='covered'>              lex();</span>
+<span class='covered'>              specifier.from = parsePath();</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          return specifier;</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseExportSpecifier() {</span>
+<span class='covered'>          var specifier, specifiers;</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (match('{')) {</span>
+<span class='covered'>              lex();</span>
+<span class='covered'>              specifiers = [];</span>
+<span class='covered'>  </span>
+<span class='covered'>              do {</span>
+<span class='covered'>                  specifiers.push(parseExportSpecifierSetProperty());</span>
+<span class='covered'>              } while (match(',') && lex());</span>
+<span class='covered'>  </span>
+<span class='covered'>              expect('}');</span>
+<span class='covered'>  </span>
+<span class='covered'>              return {</span>
+<span class='covered'>                  type: Syntax.ExportSpecifierSet,</span>
+<span class='covered'>                  specifiers: specifiers</span>
+<span class='covered'>              };</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (match('*')) {</span>
+<span class='covered'>              specifier = {</span>
+<span class='covered'>                  type: Syntax.ExportSpecifier,</span>
+<span class='covered'>                  id: parseGlob(),</span>
+<span class='covered'>                  from: null</span>
+<span class='covered'>              };</span>
+<span class='covered'>  </span>
+<span class='covered'>              if (matchContextualKeyword('from')) {</span>
+<span class='covered'>                  lex();</span>
+<span class='covered'>                  specifier.from = parsePath();</span>
+<span class='covered'>              }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>              specifier = {</span>
+<span class='covered'>                  type: Syntax.ExportSpecifier,</span>
+<span class='covered'>                  id: parseVariableIdentifier(),</span>
+<span class='covered'>                  from: null</span>
+<span class='covered'>              };</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return specifier;</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseExportDeclaration() {</span>
+<span class='covered'>          var token, specifiers;</span>
+<span class='covered'>  </span>
+<span class='covered'>          expectKeyword('export');</span>
+<span class='covered'>  </span>
+<span class='covered'>          token = lookahead();</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (token.type === Token.Keyword || (token.type === Token.Identifier && token.value === 'module')) {</span>
+<span class='covered'>              switch (token.value) {</span>
+<span class='covered'>              case 'function':</span>
+<span class='covered'>                  return {</span>
+<span class='covered'>                      type: Syntax.ExportDeclaration,</span>
+<span class='covered'>                      declaration: parseFunctionDeclaration()</span>
+<span class='covered'>                  };</span>
+<span class='covered'>              case 'module':</span>
+<span class='covered'>                  return {</span>
+<span class='covered'>                      type: Syntax.ExportDeclaration,</span>
+<span class='covered'>                      declaration: parseModuleDeclaration()</span>
+<span class='covered'>                  };</span>
+<span class='covered'>              case 'let':</span>
+<span class='covered'>              case 'const':</span>
+<span class='covered'>                  return {</span>
+<span class='covered'>                      type: Syntax.ExportDeclaration,</span>
+<span class='covered'>                      declaration: parseConstLetDeclaration(token.value)</span>
+<span class='covered'>                  };</span>
+<span class='covered'>              case 'var':</span>
+<span class='covered'>                  return {</span>
+<span class='covered'>                      type: Syntax.ExportDeclaration,</span>
+<span class='covered'>                      declaration: parseStatement()</span>
+<span class='covered'>                  };</span>
+<span class='covered'>              }</span>
+<span class='covered'>              throwUnexpected(lex());</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          specifiers = [ parseExportSpecifier() ];</span>
+<span class='covered'>          if (match(',')) {</span>
+<span class='covered'>              while (index < length) {</span>
+<span class='covered'>                  if (!match(',')) {</span>
+<span class='covered'>                      break;</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  lex();</span>
+<span class='covered'>                  specifiers.push(parseExportSpecifier());</span>
+<span class='covered'>              }</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          consumeSemicolon();</span>
+<span class='covered'>  </span>
+<span class='covered'>          return {</span>
+<span class='covered'>              type: Syntax.ExportDeclaration,</span>
+<span class='covered'>              specifiers: specifiers</span>
+<span class='covered'>          };</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseImportDeclaration() {</span>
+<span class='covered'>          var specifiers, from;</span>
+<span class='covered'>  </span>
+<span class='covered'>          expectKeyword('import');</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (match('*')) {</span>
+<span class='covered'>              specifiers = [parseGlob()];</span>
+<span class='covered'>          } else if (match('{')) {</span>
+<span class='covered'>              lex();</span>
+<span class='covered'>              specifiers = [];</span>
+<span class='covered'>  </span>
+<span class='covered'>              do {</span>
+<span class='covered'>                  specifiers.push(parseImportSpecifier());</span>
+<span class='covered'>              } while (match(',') && lex());</span>
+<span class='covered'>  </span>
+<span class='covered'>              expect('}');</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>              specifiers = [parseVariableIdentifier()];</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (!matchContextualKeyword('from')) {</span>
+<span class='covered'>              throwError({}, Messages.NoFromAfterImport);</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          lex();</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (lookahead().type === Token.StringLiteral) {</span>
+<span class='covered'>              from = parsePrimaryExpression();</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>              from = parsePath();</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          consumeSemicolon();</span>
+<span class='covered'>  </span>
+<span class='covered'>          return {</span>
+<span class='covered'>              type: Syntax.ImportDeclaration,</span>
+<span class='covered'>              specifiers: specifiers,</span>
+<span class='covered'>              from: from</span>
+<span class='covered'>          };</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseImportSpecifier() {</span>
+<span class='covered'>          var specifier;</span>
+<span class='covered'>  </span>
+<span class='covered'>          specifier = {</span>
+<span class='covered'>              type: Syntax.ImportSpecifier,</span>
+<span class='covered'>              id: parseVariableIdentifier(),</span>
+<span class='covered'>              from: null</span>
+<span class='covered'>          };</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (match(':')) {</span>
+<span class='covered'>              lex();</span>
+<span class='covered'>              specifier.from = parsePath();</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          return specifier;</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
 <span class='covered'>      // 12.3 Empty Statement</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseEmptyStatement() {</span>
@@ -2294,7 +2908,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseForStatement() {</span>
-<span class='covered'>          var init, test, update, left, right, body, oldInIteration;</span>
+<span class='covered'>          var init, test, update, left, right, body, operator, oldInIteration;</span>
 <span class='covered'>  </span>
 <span class='covered'>          init = test = update = null;</span>
 <span class='covered'>  </span>
@@ -2305,28 +2919,38 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          if (match(';')) {</span>
 <span class='covered'>              lex();</span>
 <span class='covered'>          } else {</span>
-<span class='covered'>              if (matchKeyword('var') || matchKeyword('let')) {</span>
+<span class='covered'>              if (matchKeyword('var') || matchKeyword('let') || matchKeyword('const')) {</span>
 <span class='covered'>                  state.allowIn = false;</span>
 <span class='covered'>                  init = parseForVariableDeclaration();</span>
 <span class='covered'>                  state.allowIn = true;</span>
 <span class='covered'>  </span>
-<span class='covered'>                  if (init.declarations.length === 1 && matchKeyword('in')) {</span>
-<span class='covered'>                      lex();</span>
-<span class='covered'>                      left = init;</span>
-<span class='covered'>                      right = parseExpression();</span>
-<span class='covered'>                      init = null;</span>
+<span class='covered'>                  if (init.declarations.length === 1) {</span>
+<span class='covered'>                      if (matchKeyword('in') || matchContextualKeyword('of')) {</span>
+<span class='covered'>                          operator = lookahead();</span>
+<span class='covered'>                          if (!((operator.value === 'in' || init.kind !== 'var') && init.declarations[0].init)) {</span>
+<span class='covered'>                              lex();</span>
+<span class='covered'>                              left = init;</span>
+<span class='covered'>                              right = parseExpression();</span>
+<span class='covered'>                              init = null;</span>
+<span class='covered'>                          }</span>
+<span class='covered'>                      }</span>
 <span class='covered'>                  }</span>
 <span class='covered'>              } else {</span>
 <span class='covered'>                  state.allowIn = false;</span>
 <span class='covered'>                  init = parseExpression();</span>
 <span class='covered'>                  state.allowIn = true;</span>
 <span class='covered'>  </span>
-<span class='covered'>                  if (matchKeyword('in')) {</span>
+<span class='covered'>                  if (matchContextualKeyword('of')) {</span>
+<span class='covered'>                      operator = lex();</span>
+<span class='covered'>                      left = init;</span>
+<span class='covered'>                      right = parseExpression();</span>
+<span class='covered'>                      init = null;</span>
+<span class='covered'>                  } else if (matchKeyword('in')) {</span>
 <span class='covered'>                      // LeftHandSideExpression</span>
-<span class='covered'>                      if (matchKeyword('in') && (state.lastParenthesized !== init && !isLeftHandSide(init))) {</span>
+<span class='covered'>                      if (!isAssignableLeftHandSide(init)) {</span>
 <span class='covered'>                          throwError({}, Messages.InvalidLHSInForIn);</span>
 <span class='covered'>                      }</span>
-<span class='covered'>                      lex();</span>
+<span class='covered'>                      operator = lex();</span>
 <span class='covered'>                      left = init;</span>
 <span class='covered'>                      right = parseExpression();</span>
 <span class='covered'>                      init = null;</span>
@@ -2369,13 +2993,22 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              };</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
-<span class='covered'>          return {</span>
-<span class='covered'>              type: Syntax.ForInStatement,</span>
-<span class='covered'>              left: left,</span>
-<span class='covered'>              right: right,</span>
-<span class='covered'>              body: body,</span>
-<span class='covered'>              each: false</span>
-<span class='covered'>          };</span>
+<span class='covered'>          if (operator.value === 'in') {</span>
+<span class='covered'>              return {</span>
+<span class='covered'>                  type: Syntax.ForInStatement,</span>
+<span class='covered'>                  left: left,</span>
+<span class='covered'>                  right: right,</span>
+<span class='covered'>                  body: body,</span>
+<span class='covered'>                  each: false</span>
+<span class='covered'>              };</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>              return {</span>
+<span class='covered'>                  type: Syntax.ForOfStatement,</span>
+<span class='covered'>                  left: left,</span>
+<span class='covered'>                  right: right,</span>
+<span class='covered'>                  body: body</span>
+<span class='covered'>              };</span>
+<span class='covered'>          }</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      // 12.7 The continue statement</span>
@@ -2575,7 +3208,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              if (match('}') || matchKeyword('default') || matchKeyword('case')) {</span>
 <span class='covered'>                  break;</span>
 <span class='covered'>              }</span>
-<span class='covered'>              statement = parseStatement();</span>
+<span class='covered'>              statement = parseSourceElement();</span>
 <span class='covered'>              if (typeof statement === 'undefined') {</span>
 <span class='covered'>                  break;</span>
 <span class='covered'>              }</span>
@@ -2590,7 +3223,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseSwitchStatement() {</span>
-<span class='covered'>          var discriminant, cases, oldInSwitch;</span>
+<span class='covered'>          var discriminant, cases, clause, oldInSwitch, defaultFound;</span>
 <span class='covered'>  </span>
 <span class='covered'>          expectKeyword('switch');</span>
 <span class='covered'>  </span>
@@ -2614,12 +3247,20 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>  </span>
 <span class='covered'>          oldInSwitch = state.inSwitch;</span>
 <span class='covered'>          state.inSwitch = true;</span>
+<span class='covered'>          defaultFound = false;</span>
 <span class='covered'>  </span>
 <span class='covered'>          while (index < length) {</span>
 <span class='covered'>              if (match('}')) {</span>
 <span class='covered'>                  break;</span>
 <span class='covered'>              }</span>
-<span class='covered'>              cases.push(parseSwitchCase());</span>
+<span class='covered'>              clause = parseSwitchCase();</span>
+<span class='covered'>              if (clause.test === null) {</span>
+<span class='covered'>                  if (defaultFound) {</span>
+<span class='covered'>                      throwError({}, Messages.MultipleDefaultsInSwitch);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  defaultFound = true;</span>
+<span class='covered'>              }</span>
+<span class='covered'>              cases.push(clause);</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
 <span class='covered'>          state.inSwitch = oldInSwitch;</span>
@@ -2666,7 +3307,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              param = parseExpression();</span>
 <span class='covered'>              // 12.14.1</span>
 <span class='covered'>              if (strict && param.type === Syntax.Identifier && isRestrictedWord(param.name)) {</span>
-<span class='covered'>                  throwError({}, Messages.StrictCatchVariable);</span>
+<span class='covered'>                  throwErrorTolerant({}, Messages.StrictCatchVariable);</span>
 <span class='covered'>              }</span>
 <span class='covered'>          }</span>
 <span class='covered'>          expect(')');</span>
@@ -2757,6 +3398,8 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>                  return parseForStatement();</span>
 <span class='covered'>              case 'function':</span>
 <span class='covered'>                  return parseFunctionDeclaration();</span>
+<span class='covered'>              case 'class':</span>
+<span class='covered'>                  return parseClassDeclaration();</span>
 <span class='covered'>              case 'if':</span>
 <span class='covered'>                  return parseIfStatement();</span>
 <span class='covered'>              case 'return':</span>
@@ -2809,9 +3452,17 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>  </span>
 <span class='covered'>      // 13 Function Definition</span>
 <span class='covered'>  </span>
+<span class='covered'>      function parseConciseBody() {</span>
+<span class='covered'>          if (match('{')) {</span>
+<span class='covered'>              return parseFunctionSourceElements();</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>              return parseAssignmentExpression();</span>
+<span class='covered'>          }</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
 <span class='covered'>      function parseFunctionSourceElements() {</span>
 <span class='covered'>          var sourceElement, sourceElements = [], token, directive, firstRestricted,</span>
-<span class='covered'>              oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody;</span>
+<span class='covered'>              oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody, oldParenthesizedCount;</span>
 <span class='covered'>  </span>
 <span class='covered'>          expect('{');</span>
 <span class='covered'>  </span>
@@ -2844,11 +3495,13 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          oldInIteration = state.inIteration;</span>
 <span class='covered'>          oldInSwitch = state.inSwitch;</span>
 <span class='covered'>          oldInFunctionBody = state.inFunctionBody;</span>
+<span class='covered'>          oldParenthesizedCount = state.parenthesizedCount;</span>
 <span class='covered'>  </span>
 <span class='covered'>          state.labelSet = {};</span>
 <span class='covered'>          state.inIteration = false;</span>
 <span class='covered'>          state.inSwitch = false;</span>
 <span class='covered'>          state.inFunctionBody = true;</span>
+<span class='covered'>          state.parenthesizedCount = 0;</span>
 <span class='covered'>  </span>
 <span class='covered'>          while (index < length) {</span>
 <span class='covered'>              if (match('}')) {</span>
@@ -2867,6 +3520,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          state.inIteration = oldInIteration;</span>
 <span class='covered'>          state.inSwitch = oldInSwitch;</span>
 <span class='covered'>          state.inFunctionBody = oldInFunctionBody;</span>
+<span class='covered'>          state.parenthesizedCount = oldParenthesizedCount;</span>
 <span class='covered'>  </span>
 <span class='covered'>          return {</span>
 <span class='covered'>              type: Syntax.BlockStatement,</span>
@@ -2875,10 +3529,18 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseFunctionDeclaration() {</span>
-<span class='covered'>          var id, param, params = [], body, token, firstRestricted, message, previousStrict, paramSet;</span>
+<span class='covered'>          var id, param, params = [], body, token, firstRestricted, message, previousStrict, previousYieldAllowed, paramSet, generator;</span>
 <span class='covered'>  </span>
 <span class='covered'>          expectKeyword('function');</span>
+<span class='covered'>  </span>
+<span class='covered'>          generator = false;</span>
+<span class='covered'>          if (match('*')) {</span>
+<span class='covered'>              lex();</span>
+<span class='covered'>              generator = true;</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
 <span class='covered'>          token = lookahead();</span>
+<span class='covered'>  </span>
 <span class='covered'>          id = parseVariableIdentifier();</span>
 <span class='covered'>          if (strict) {</span>
 <span class='covered'>              if (isRestrictedWord(token.value)) {</span>
@@ -2932,24 +3594,38 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          expect(')');</span>
 <span class='covered'>  </span>
 <span class='covered'>          previousStrict = strict;</span>
+<span class='covered'>          previousYieldAllowed = yieldAllowed;</span>
+<span class='covered'>          yieldAllowed = generator;</span>
 <span class='covered'>          body = parseFunctionSourceElements();</span>
 <span class='covered'>          if (strict && firstRestricted) {</span>
 <span class='covered'>              throwError(firstRestricted, message);</span>
 <span class='covered'>          }</span>
+<span class='covered'>          if (yieldAllowed && !yieldFound) {</span>
+<span class='covered'>              throwError({}, Messages.NoYieldInGenerator);</span>
+<span class='covered'>          }</span>
 <span class='covered'>          strict = previousStrict;</span>
+<span class='covered'>          yieldAllowed = previousYieldAllowed;</span>
 <span class='covered'>  </span>
 <span class='covered'>          return {</span>
 <span class='covered'>              type: Syntax.FunctionDeclaration,</span>
 <span class='covered'>              id: id,</span>
 <span class='covered'>              params: params,</span>
-<span class='covered'>              body: body</span>
+<span class='covered'>              body: body,</span>
+<span class='covered'>              generator: generator</span>
 <span class='covered'>          };</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseFunctionExpression() {</span>
-<span class='covered'>          var token, id = null, firstRestricted, message, param, params = [], body, previousStrict, paramSet;</span>
+<span class='covered'>          var token, id = null, firstRestricted, message, param, params = [], body, previousStrict, previousYieldAllowed, paramSet, generator;</span>
 <span class='covered'>  </span>
 <span class='covered'>          expectKeyword('function');</span>
+<span class='covered'>  </span>
+<span class='covered'>          generator = false;</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (match('*')) {</span>
+<span class='covered'>              lex();</span>
+<span class='covered'>              generator = true;</span>
+<span class='covered'>          }</span>
 <span class='covered'>  </span>
 <span class='covered'>          if (!match('(')) {</span>
 <span class='covered'>              token = lookahead();</span>
@@ -3007,21 +3683,191 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          expect(')');</span>
 <span class='covered'>  </span>
 <span class='covered'>          previousStrict = strict;</span>
+<span class='covered'>          previousYieldAllowed = yieldAllowed;</span>
+<span class='covered'>          yieldAllowed = generator;</span>
 <span class='covered'>          body = parseFunctionSourceElements();</span>
 <span class='covered'>          if (strict && firstRestricted) {</span>
 <span class='covered'>              throwError(firstRestricted, message);</span>
 <span class='covered'>          }</span>
+<span class='covered'>          if (yieldAllowed && !yieldFound) {</span>
+<span class='covered'>              throwError({}, Messages.NoYieldInGenerator);</span>
+<span class='covered'>          }</span>
 <span class='covered'>          strict = previousStrict;</span>
+<span class='covered'>          yieldAllowed = previousYieldAllowed;</span>
+<span class='covered'>  </span>
 <span class='covered'>  </span>
 <span class='covered'>          return {</span>
 <span class='covered'>              type: Syntax.FunctionExpression,</span>
 <span class='covered'>              id: id,</span>
 <span class='covered'>              params: params,</span>
-<span class='covered'>              body: body</span>
+<span class='covered'>              body: body,</span>
+<span class='covered'>              generator: generator</span>
 <span class='covered'>          };</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
-<span class='covered'>      // 14 Program</span>
+<span class='covered'>      function parseYieldExpression() {</span>
+<span class='covered'>          var delegate, expr, previousYieldAllowed;</span>
+<span class='covered'>  </span>
+<span class='covered'>          expectKeyword('yield');</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (!yieldAllowed) {</span>
+<span class='covered'>              throwErrorTolerant({}, Messages.IllegalYield);</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          delegate = false;</span>
+<span class='covered'>          if (match('*')) {</span>
+<span class='covered'>              lex();</span>
+<span class='covered'>              delegate = true;</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          // It is a Syntax Error if any AssignmentExpression Contains YieldExpression.</span>
+<span class='covered'>          previousYieldAllowed = yieldAllowed;</span>
+<span class='covered'>          yieldAllowed = false;</span>
+<span class='covered'>          expr = parseAssignmentExpression();</span>
+<span class='covered'>          yieldAllowed = previousYieldAllowed;</span>
+<span class='covered'>          yieldFound = true;</span>
+<span class='covered'>  </span>
+<span class='covered'>          return {</span>
+<span class='covered'>              type: Syntax.YieldExpression,</span>
+<span class='covered'>              argument: expr,</span>
+<span class='covered'>              delegate: delegate</span>
+<span class='covered'>          };</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      // 14 Classes</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseMethodDefinition() {</span>
+<span class='covered'>          var token, key, param;</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (match('*')) {</span>
+<span class='covered'>              lex();</span>
+<span class='covered'>              return {</span>
+<span class='covered'>                  type: Syntax.MethodDefinition,</span>
+<span class='covered'>                  key: parseObjectPropertyKey(),</span>
+<span class='covered'>                  value: parsePropertyMethodFunction({ generator: true }),</span>
+<span class='covered'>                  kind: ''</span>
+<span class='covered'>              };</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          token = lookahead();</span>
+<span class='covered'>          key = parseObjectPropertyKey();</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (token.value === 'get' && !match('(')) {</span>
+<span class='covered'>              key = parseObjectPropertyKey();</span>
+<span class='covered'>              expect('(');</span>
+<span class='covered'>              expect(')');</span>
+<span class='covered'>              return {</span>
+<span class='covered'>                  type: Syntax.MethodDefinition,</span>
+<span class='covered'>                  key: key,</span>
+<span class='covered'>                  value: parsePropertyFunction([], { generator: false }),</span>
+<span class='covered'>                  kind: 'get'</span>
+<span class='covered'>              };</span>
+<span class='covered'>          } else if (token.value === 'set' && !match('(')) {</span>
+<span class='covered'>              key = parseObjectPropertyKey();</span>
+<span class='covered'>              expect('(');</span>
+<span class='covered'>              token = lookahead();</span>
+<span class='covered'>              param = [ parseVariableIdentifier() ];</span>
+<span class='covered'>              expect(')');</span>
+<span class='covered'>              return {</span>
+<span class='covered'>                  type: Syntax.MethodDefinition,</span>
+<span class='covered'>                  key: key,</span>
+<span class='covered'>                  value: parsePropertyFunction(param, { generator: false, name: token }),</span>
+<span class='covered'>                  kind: 'set'</span>
+<span class='covered'>              };</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>              return {</span>
+<span class='covered'>                  type: Syntax.MethodDefinition,</span>
+<span class='covered'>                  key: key,</span>
+<span class='covered'>                  value: parsePropertyMethodFunction({ generator: false }),</span>
+<span class='covered'>                  kind: ''</span>
+<span class='covered'>              };</span>
+<span class='covered'>          }</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseClassElement() {</span>
+<span class='covered'>          if (match(';')) {</span>
+<span class='covered'>              lex();</span>
+<span class='covered'>              return;</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>              return parseMethodDefinition();</span>
+<span class='covered'>          }</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseClassBody() {</span>
+<span class='covered'>          var classElement, classElements = [];</span>
+<span class='covered'>  </span>
+<span class='covered'>          expect('{');</span>
+<span class='covered'>  </span>
+<span class='covered'>          while (index < length) {</span>
+<span class='covered'>              if (match('}')) {</span>
+<span class='covered'>                  break;</span>
+<span class='covered'>              }</span>
+<span class='covered'>              classElement = parseClassElement();</span>
+<span class='covered'>              if (typeof classElement !== 'undefined') {</span>
+<span class='covered'>                  classElements.push(classElement);</span>
+<span class='covered'>              }</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          expect('}');</span>
+<span class='covered'>  </span>
+<span class='covered'>          return {</span>
+<span class='covered'>              type: Syntax.ClassBody,</span>
+<span class='covered'>              body: classElements</span>
+<span class='covered'>          };</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseClassExpression() {</span>
+<span class='covered'>          var id, body, previousYieldAllowed, superClass;</span>
+<span class='covered'>  </span>
+<span class='covered'>          expectKeyword('class');</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (!matchKeyword('extends') && !match('{')) {</span>
+<span class='covered'>              id = parseVariableIdentifier();</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (matchKeyword('extends')) {</span>
+<span class='covered'>              expectKeyword('extends');</span>
+<span class='covered'>              previousYieldAllowed = yieldAllowed;</span>
+<span class='covered'>              yieldAllowed = false;</span>
+<span class='covered'>              superClass = parseAssignmentExpression();</span>
+<span class='covered'>              yieldAllowed = previousYieldAllowed;</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          body = parseClassBody();</span>
+<span class='covered'>          return {</span>
+<span class='covered'>              id: id,</span>
+<span class='covered'>              type: Syntax.ClassExpression,</span>
+<span class='covered'>              body: body,</span>
+<span class='covered'>              superClass: superClass</span>
+<span class='covered'>          };</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseClassDeclaration() {</span>
+<span class='covered'>          var token, id, body, previousYieldAllowed, superClass;</span>
+<span class='covered'>  </span>
+<span class='covered'>          expectKeyword('class');</span>
+<span class='covered'>  </span>
+<span class='covered'>          token = lookahead();</span>
+<span class='covered'>          id = parseVariableIdentifier();</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (matchKeyword('extends')) {</span>
+<span class='covered'>              expectKeyword('extends');</span>
+<span class='covered'>              previousYieldAllowed = yieldAllowed;</span>
+<span class='covered'>              yieldAllowed = false;</span>
+<span class='covered'>              superClass = parseAssignmentExpression();</span>
+<span class='covered'>              yieldAllowed = previousYieldAllowed;</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          body = parseClassBody();</span>
+<span class='covered'>          return {</span>
+<span class='covered'>              id: id,</span>
+<span class='covered'>              type: Syntax.ClassDeclaration,</span>
+<span class='covered'>              body: body,</span>
+<span class='covered'>              superClass: superClass</span>
+<span class='covered'>          };</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      // 15 Program</span>
 <span class='covered'>  </span>
 <span class='covered'>      function parseSourceElement() {</span>
 <span class='covered'>          var token = lookahead();</span>
@@ -3043,7 +3889,30 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          }</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
-<span class='covered'>      function parseSourceElements() {</span>
+<span class='covered'>      function parseProgramElement() {</span>
+<span class='covered'>          var token = lookahead(), lineNumber;</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (token.type === Token.Keyword) {</span>
+<span class='covered'>              switch (token.value) {</span>
+<span class='covered'>              case 'export':</span>
+<span class='covered'>                  return parseExportDeclaration();</span>
+<span class='covered'>              case 'import':</span>
+<span class='covered'>                  return parseImportDeclaration();</span>
+<span class='covered'>              }</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (token.value === 'module' && token.type === Token.Identifier) {</span>
+<span class='covered'>              lineNumber = token.lineNumber;</span>
+<span class='covered'>              token = lookahead2();</span>
+<span class='covered'>              if (token.type === Token.Identifier && token.lineNumber === lineNumber) {</span>
+<span class='covered'>                  return parseModuleDeclaration();</span>
+<span class='covered'>              }</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          return parseSourceElement();</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseProgramElements() {</span>
 <span class='covered'>          var sourceElement, sourceElements = [], token, directive, firstRestricted;</span>
 <span class='covered'>  </span>
 <span class='covered'>          while (index < length) {</span>
@@ -3052,7 +3921,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>                  break;</span>
 <span class='covered'>              }</span>
 <span class='covered'>  </span>
-<span class='covered'>              sourceElement = parseSourceElement();</span>
+<span class='covered'>              sourceElement = parseProgramElement();</span>
 <span class='covered'>              sourceElements.push(sourceElement);</span>
 <span class='covered'>              if (sourceElement.expression.type !== Syntax.Literal) {</span>
 <span class='covered'>                  // this is not directive</span>
@@ -3072,7 +3941,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
 <span class='covered'>          while (index < length) {</span>
-<span class='covered'>              sourceElement = parseSourceElement();</span>
+<span class='covered'>              sourceElement = parseProgramElement();</span>
 <span class='covered'>              if (typeof sourceElement === 'undefined') {</span>
 <span class='covered'>                  break;</span>
 <span class='covered'>              }</span>
@@ -3081,12 +3950,51 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          return sourceElements;</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
+<span class='covered'>      function parseModuleElement() {</span>
+<span class='covered'>          return parseProgramElement();</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseModuleElements() {</span>
+<span class='covered'>          var list = [],</span>
+<span class='covered'>              statement;</span>
+<span class='covered'>  </span>
+<span class='covered'>          while (index < length) {</span>
+<span class='covered'>              if (match('}')) {</span>
+<span class='covered'>                  break;</span>
+<span class='covered'>              }</span>
+<span class='covered'>              statement = parseModuleElement();</span>
+<span class='covered'>              if (typeof statement === 'undefined') {</span>
+<span class='covered'>                  break;</span>
+<span class='covered'>              }</span>
+<span class='covered'>              list.push(statement);</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          return list;</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function parseModuleBlock() {</span>
+<span class='covered'>          var block;</span>
+<span class='covered'>  </span>
+<span class='covered'>          expect('{');</span>
+<span class='covered'>  </span>
+<span class='covered'>          block = parseModuleElements();</span>
+<span class='covered'>  </span>
+<span class='covered'>          expect('}');</span>
+<span class='covered'>  </span>
+<span class='covered'>          return {</span>
+<span class='covered'>              type: Syntax.BlockStatement,</span>
+<span class='covered'>              body: block</span>
+<span class='covered'>          };</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
 <span class='covered'>      function parseProgram() {</span>
 <span class='covered'>          var program;</span>
 <span class='covered'>          strict = false;</span>
+<span class='covered'>          yieldAllowed = false;</span>
+<span class='covered'>          yieldFound = false;</span>
 <span class='covered'>          program = {</span>
 <span class='covered'>              type: Syntax.Program,</span>
-<span class='covered'>              body: parseSourceElements()</span>
+<span class='covered'>              body: parseProgramElements()</span>
 <span class='covered'>          };</span>
 <span class='covered'>          return program;</span>
 <span class='covered'>      }</span>
@@ -3094,7 +4002,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>      // The following functions are needed only when the option to preserve</span>
 <span class='covered'>      // the comments is active.</span>
 <span class='covered'>  </span>
-<span class='covered'>      function addComment(start, end, type, value) {</span>
+<span class='covered'>      function addComment(type, value, start, end, loc) {</span>
 <span class='covered'>          assert(typeof start === 'number', 'Comment must have valid position');</span>
 <span class='covered'>  </span>
 <span class='covered'>          // Because the way the actual token is scanned, often the comments</span>
@@ -3108,14 +4016,15 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
 <span class='covered'>          extra.comments.push({</span>
-<span class='covered'>              range: [start, end],</span>
 <span class='covered'>              type: type,</span>
-<span class='covered'>              value: value</span>
+<span class='covered'>              value: value,</span>
+<span class='covered'>              range: [start, end],</span>
+<span class='covered'>              loc: loc</span>
 <span class='covered'>          });</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function scanComment() {</span>
-<span class='covered'>          var comment, ch, start, blockComment, lineComment;</span>
+<span class='covered'>          var comment, ch, loc, start, blockComment, lineComment;</span>
 <span class='covered'>  </span>
 <span class='covered'>          comment = '';</span>
 <span class='covered'>          blockComment = false;</span>
@@ -3126,19 +4035,27 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>  </span>
 <span class='covered'>              if (lineComment) {</span>
 <span class='covered'>                  ch = nextChar();</span>
-<span class='covered'>                  if (index >= length) {</span>
+<span class='covered'>                  if (isLineTerminator(ch)) {</span>
+<span class='covered'>                      loc.end = {</span>
+<span class='covered'>                          line: lineNumber,</span>
+<span class='covered'>                          column: index - lineStart - 1</span>
+<span class='covered'>                      };</span>
 <span class='covered'>                      lineComment = false;</span>
-<span class='covered'>                      comment += ch;</span>
-<span class='covered'>                      addComment(start, index, 'Line', comment);</span>
-<span class='covered'>                  } else if (isLineTerminator(ch)) {</span>
-<span class='covered'>                      lineComment = false;</span>
-<span class='covered'>                      addComment(start, index, 'Line', comment);</span>
+<span class='covered'>                      addComment('Line', comment, start, index - 1, loc);</span>
 <span class='covered'>                      if (ch === '\r' && source[index] === '\n') {</span>
 <span class='covered'>                          ++index;</span>
 <span class='covered'>                      }</span>
 <span class='covered'>                      ++lineNumber;</span>
 <span class='covered'>                      lineStart = index;</span>
 <span class='covered'>                      comment = '';</span>
+<span class='covered'>                  } else if (index >= length) {</span>
+<span class='covered'>                      lineComment = false;</span>
+<span class='covered'>                      comment += ch;</span>
+<span class='covered'>                      loc.end = {</span>
+<span class='covered'>                          line: lineNumber,</span>
+<span class='covered'>                          column: length - lineStart</span>
+<span class='covered'>                      };</span>
+<span class='covered'>                      addComment('Line', comment, start, length, loc);</span>
 <span class='covered'>                  } else {</span>
 <span class='covered'>                      comment += ch;</span>
 <span class='covered'>                  }</span>
@@ -3168,7 +4085,11 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>                              comment = comment.substr(0, comment.length - 1);</span>
 <span class='covered'>                              blockComment = false;</span>
 <span class='covered'>                              ++index;</span>
-<span class='covered'>                              addComment(start, index, 'Block', comment);</span>
+<span class='covered'>                              loc.end = {</span>
+<span class='covered'>                                  line: lineNumber,</span>
+<span class='covered'>                                  column: index - lineStart</span>
+<span class='covered'>                              };</span>
+<span class='covered'>                              addComment('Block', comment, start, index, loc);</span>
 <span class='covered'>                              comment = '';</span>
 <span class='covered'>                          }</span>
 <span class='covered'>                      }</span>
@@ -3176,13 +4097,33 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              } else if (ch === '/') {</span>
 <span class='covered'>                  ch = source[index + 1];</span>
 <span class='covered'>                  if (ch === '/') {</span>
+<span class='covered'>                      loc = {</span>
+<span class='covered'>                          start: {</span>
+<span class='covered'>                              line: lineNumber,</span>
+<span class='covered'>                              column: index - lineStart</span>
+<span class='covered'>                          }</span>
+<span class='covered'>                      };</span>
 <span class='covered'>                      start = index;</span>
 <span class='covered'>                      index += 2;</span>
 <span class='covered'>                      lineComment = true;</span>
+<span class='covered'>                      if (index >= length) {</span>
+<span class='covered'>                          loc.end = {</span>
+<span class='covered'>                              line: lineNumber,</span>
+<span class='covered'>                              column: index - lineStart</span>
+<span class='covered'>                          };</span>
+<span class='covered'>                          lineComment = false;</span>
+<span class='covered'>                          addComment('Line', comment, start, index, loc);</span>
+<span class='covered'>                      }</span>
 <span class='covered'>                  } else if (ch === '*') {</span>
 <span class='covered'>                      start = index;</span>
 <span class='covered'>                      index += 2;</span>
 <span class='covered'>                      blockComment = true;</span>
+<span class='covered'>                      loc = {</span>
+<span class='covered'>                          start: {</span>
+<span class='covered'>                              line: lineNumber,</span>
+<span class='covered'>                              column: index - lineStart - 2</span>
+<span class='covered'>                          }</span>
+<span class='covered'>                      };</span>
 <span class='covered'>                      if (index >= length) {</span>
 <span class='covered'>                          throwError({}, Messages.UnexpectedToken, 'ILLEGAL');</span>
 <span class='covered'>                      }</span>
@@ -3204,10 +4145,44 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          }</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
+<span class='covered'>      function filterCommentLocation() {</span>
+<span class='covered'>          var i, entry, comment, comments = [];</span>
+<span class='covered'>  </span>
+<span class='covered'>          for (i = 0; i < extra.comments.length; ++i) {</span>
+<span class='covered'>              entry = extra.comments[i];</span>
+<span class='covered'>              comment = {</span>
+<span class='covered'>                  type: entry.type,</span>
+<span class='covered'>                  value: entry.value</span>
+<span class='covered'>              };</span>
+<span class='covered'>              if (extra.range) {</span>
+<span class='covered'>                  comment.range = entry.range;</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (extra.loc) {</span>
+<span class='covered'>                  comment.loc = entry.loc;</span>
+<span class='covered'>              }</span>
+<span class='covered'>              comments.push(comment);</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          extra.comments = comments;</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
 <span class='covered'>      function collectToken() {</span>
-<span class='covered'>          var token = extra.advance(),</span>
-<span class='covered'>              range,</span>
-<span class='covered'>              value;</span>
+<span class='covered'>          var start, loc, token, range, value;</span>
+<span class='covered'>  </span>
+<span class='covered'>          skipComment();</span>
+<span class='covered'>          start = index;</span>
+<span class='covered'>          loc = {</span>
+<span class='covered'>              start: {</span>
+<span class='covered'>                  line: lineNumber,</span>
+<span class='covered'>                  column: index - lineStart</span>
+<span class='covered'>              }</span>
+<span class='covered'>          };</span>
+<span class='covered'>  </span>
+<span class='covered'>          token = extra.advance();</span>
+<span class='covered'>          loc.end = {</span>
+<span class='covered'>              line: lineNumber,</span>
+<span class='covered'>              column: index - lineStart</span>
+<span class='covered'>          };</span>
 <span class='covered'>  </span>
 <span class='covered'>          if (token.type !== Token.EOF) {</span>
 <span class='covered'>              range = [token.range[0], token.range[1]];</span>
@@ -3215,7 +4190,8 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              extra.tokens.push({</span>
 <span class='covered'>                  type: TokenName[token.type],</span>
 <span class='covered'>                  value: value,</span>
-<span class='covered'>                  range: range</span>
+<span class='covered'>                  range: range,</span>
+<span class='covered'>                  loc: loc</span>
 <span class='covered'>              });</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
@@ -3223,12 +4199,23 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function collectRegex() {</span>
-<span class='covered'>          var pos, regex, token;</span>
+<span class='covered'>          var pos, loc, regex, token;</span>
 <span class='covered'>  </span>
 <span class='covered'>          skipComment();</span>
 <span class='covered'>  </span>
 <span class='covered'>          pos = index;</span>
+<span class='covered'>          loc = {</span>
+<span class='covered'>              start: {</span>
+<span class='covered'>                  line: lineNumber,</span>
+<span class='covered'>                  column: index - lineStart</span>
+<span class='covered'>              }</span>
+<span class='covered'>          };</span>
+<span class='covered'>  </span>
 <span class='covered'>          regex = extra.scanRegExp();</span>
+<span class='covered'>          loc.end = {</span>
+<span class='covered'>              line: lineNumber,</span>
+<span class='covered'>              column: index - lineStart</span>
+<span class='covered'>          };</span>
 <span class='covered'>  </span>
 <span class='covered'>          // Pop the previous token, which is likely '/' or '/='</span>
 <span class='covered'>          if (extra.tokens.length > 0) {</span>
@@ -3243,10 +4230,32 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          extra.tokens.push({</span>
 <span class='covered'>              type: 'RegularExpression',</span>
 <span class='covered'>              value: regex.literal,</span>
-<span class='covered'>              range: [pos, index]</span>
+<span class='covered'>              range: [pos, index],</span>
+<span class='covered'>              loc: loc</span>
 <span class='covered'>          });</span>
 <span class='covered'>  </span>
 <span class='covered'>          return regex;</span>
+<span class='covered'>      }</span>
+<span class='covered'>  </span>
+<span class='covered'>      function filterTokenLocation() {</span>
+<span class='covered'>          var i, entry, token, tokens = [];</span>
+<span class='covered'>  </span>
+<span class='covered'>          for (i = 0; i < extra.tokens.length; ++i) {</span>
+<span class='covered'>              entry = extra.tokens[i];</span>
+<span class='covered'>              token = {</span>
+<span class='covered'>                  type: entry.type,</span>
+<span class='covered'>                  value: entry.value</span>
+<span class='covered'>              };</span>
+<span class='covered'>              if (extra.range) {</span>
+<span class='covered'>                  token.range = entry.range;</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (extra.loc) {</span>
+<span class='covered'>                  token.loc = entry.loc;</span>
+<span class='covered'>              }</span>
+<span class='covered'>              tokens.push(token);</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          extra.tokens = tokens;</span>
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      function createLiteral(token) {</span>
@@ -3332,6 +4341,15 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>                              node.loc.start = node.object.loc.start;</span>
 <span class='covered'>                          }</span>
 <span class='covered'>                      }</span>
+<span class='covered'>  </span>
+<span class='covered'>                      if (node.type === Syntax.CallExpression) {</span>
+<span class='covered'>                          if (typeof node.callee.range !== 'undefined') {</span>
+<span class='covered'>                              node.range[0] = node.callee.range[0];</span>
+<span class='covered'>                          }</span>
+<span class='covered'>                          if (typeof node.callee.loc !== 'undefined') {</span>
+<span class='covered'>                              node.loc.start = node.callee.loc.start;</span>
+<span class='covered'>                          }</span>
+<span class='covered'>                      }</span>
 <span class='covered'>                      return node;</span>
 <span class='covered'>                  }</span>
 <span class='covered'>              };</span>
@@ -3370,18 +4388,27 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              extra.parseConditionalExpression = parseConditionalExpression;</span>
 <span class='covered'>              extra.parseConstLetDeclaration = parseConstLetDeclaration;</span>
 <span class='covered'>              extra.parseEqualityExpression = parseEqualityExpression;</span>
+<span class='covered'>              extra.parseExportDeclaration = parseExportDeclaration;</span>
+<span class='covered'>              extra.parseExportSpecifier = parseExportSpecifier;</span>
+<span class='covered'>              extra.parseExportSpecifierSetProperty = parseExportSpecifierSetProperty;</span>
 <span class='covered'>              extra.parseExpression = parseExpression;</span>
 <span class='covered'>              extra.parseForVariableDeclaration = parseForVariableDeclaration;</span>
 <span class='covered'>              extra.parseFunctionDeclaration = parseFunctionDeclaration;</span>
 <span class='covered'>              extra.parseFunctionExpression = parseFunctionExpression;</span>
+<span class='covered'>              extra.parseGlob = parseGlob;</span>
+<span class='covered'>              extra.parseImportDeclaration = parseImportDeclaration;</span>
+<span class='covered'>              extra.parseImportSpecifier = parseImportSpecifier;</span>
 <span class='covered'>              extra.parseLogicalANDExpression = parseLogicalANDExpression;</span>
 <span class='covered'>              extra.parseLogicalORExpression = parseLogicalORExpression;</span>
 <span class='covered'>              extra.parseMultiplicativeExpression = parseMultiplicativeExpression;</span>
+<span class='covered'>              extra.parseModuleDeclaration = parseModuleDeclaration;</span>
+<span class='covered'>              extra.parseModuleBlock = parseModuleBlock;</span>
 <span class='covered'>              extra.parseNewExpression = parseNewExpression;</span>
 <span class='covered'>              extra.parseNonComputedMember = parseNonComputedMember;</span>
 <span class='covered'>              extra.parseNonComputedProperty = parseNonComputedProperty;</span>
 <span class='covered'>              extra.parseObjectProperty = parseObjectProperty;</span>
 <span class='covered'>              extra.parseObjectPropertyKey = parseObjectPropertyKey;</span>
+<span class='covered'>              extra.parsePath = parsePath;</span>
 <span class='covered'>              extra.parsePostfixExpression = parsePostfixExpression;</span>
 <span class='covered'>              extra.parsePrimaryExpression = parsePrimaryExpression;</span>
 <span class='covered'>              extra.parseProgram = parseProgram;</span>
@@ -3393,6 +4420,10 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              extra.parseUnaryExpression = parseUnaryExpression;</span>
 <span class='covered'>              extra.parseVariableDeclaration = parseVariableDeclaration;</span>
 <span class='covered'>              extra.parseVariableIdentifier = parseVariableIdentifier;</span>
+<span class='covered'>              extra.parseMethodDefinition = parseMethodDefinition;</span>
+<span class='covered'>              extra.parseClassDeclaration = parseClassDeclaration;</span>
+<span class='covered'>              extra.parseClassExpression = parseClassExpression;</span>
+<span class='covered'>              extra.parseClassBody = parseClassBody;</span>
 <span class='covered'>  </span>
 <span class='covered'>              parseAdditiveExpression = wrapTracking(extra.parseAdditiveExpression);</span>
 <span class='covered'>              parseAssignmentExpression = wrapTracking(extra.parseAssignmentExpression);</span>
@@ -3406,19 +4437,28 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              parseComputedMember = wrapTracking(extra.parseComputedMember);</span>
 <span class='covered'>              parseConditionalExpression = wrapTracking(extra.parseConditionalExpression);</span>
 <span class='covered'>              parseConstLetDeclaration = wrapTracking(extra.parseConstLetDeclaration);</span>
+<span class='covered'>              parseExportDeclaration = wrapTracking(parseExportDeclaration);</span>
+<span class='covered'>              parseExportSpecifier = wrapTracking(parseExportSpecifier);</span>
+<span class='covered'>              parseExportSpecifierSetProperty = wrapTracking(parseExportSpecifierSetProperty);</span>
 <span class='covered'>              parseEqualityExpression = wrapTracking(extra.parseEqualityExpression);</span>
 <span class='covered'>              parseExpression = wrapTracking(extra.parseExpression);</span>
 <span class='covered'>              parseForVariableDeclaration = wrapTracking(extra.parseForVariableDeclaration);</span>
 <span class='covered'>              parseFunctionDeclaration = wrapTracking(extra.parseFunctionDeclaration);</span>
 <span class='covered'>              parseFunctionExpression = wrapTracking(extra.parseFunctionExpression);</span>
+<span class='covered'>              parseGlob = wrapTracking(extra.parseGlob);</span>
+<span class='covered'>              parseImportDeclaration = wrapTracking(extra.parseImportDeclaration);</span>
+<span class='covered'>              parseImportSpecifier = wrapTracking(extra.parseImportSpecifier);</span>
 <span class='covered'>              parseLogicalANDExpression = wrapTracking(extra.parseLogicalANDExpression);</span>
 <span class='covered'>              parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);</span>
 <span class='covered'>              parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);</span>
+<span class='covered'>              parseModuleDeclaration = wrapTracking(extra.parseModuleDeclaration);</span>
+<span class='covered'>              parseModuleBlock = wrapTracking(extra.parseModuleBlock);</span>
 <span class='covered'>              parseNewExpression = wrapTracking(extra.parseNewExpression);</span>
 <span class='covered'>              parseNonComputedMember = wrapTracking(extra.parseNonComputedMember);</span>
 <span class='covered'>              parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);</span>
 <span class='covered'>              parseObjectProperty = wrapTracking(extra.parseObjectProperty);</span>
 <span class='covered'>              parseObjectPropertyKey = wrapTracking(extra.parseObjectPropertyKey);</span>
+<span class='covered'>              parsePath = wrapTracking(extra.parsePath);</span>
 <span class='covered'>              parsePostfixExpression = wrapTracking(extra.parsePostfixExpression);</span>
 <span class='covered'>              parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);</span>
 <span class='covered'>              parseProgram = wrapTracking(extra.parseProgram);</span>
@@ -3430,6 +4470,10 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);</span>
 <span class='covered'>              parseVariableDeclaration = wrapTracking(extra.parseVariableDeclaration);</span>
 <span class='covered'>              parseVariableIdentifier = wrapTracking(extra.parseVariableIdentifier);</span>
+<span class='covered'>              parseMethodDefinition = wrapTracking(extra.parseMethodDefinition);</span>
+<span class='covered'>              parseClassDeclaration = wrapTracking(extra.parseClassDeclaration);</span>
+<span class='covered'>              parseClassExpression = wrapTracking(extra.parseClassExpression);</span>
+<span class='covered'>              parseClassBody = wrapTracking(extra.parseClassBody);</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
 <span class='covered'>          if (typeof extra.tokens !== 'undefined') {</span>
@@ -3464,20 +4508,29 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              parseConditionalExpression = extra.parseConditionalExpression;</span>
 <span class='covered'>              parseConstLetDeclaration = extra.parseConstLetDeclaration;</span>
 <span class='covered'>              parseEqualityExpression = extra.parseEqualityExpression;</span>
+<span class='covered'>              parseExportDeclaration = extra.parseExportDeclaration;</span>
+<span class='covered'>              parseExportSpecifier = extra.parseExportSpecifier;</span>
+<span class='covered'>              parseExportSpecifierSetProperty = extra.parseExportSpecifierSetProperty;</span>
 <span class='covered'>              parseExpression = extra.parseExpression;</span>
 <span class='covered'>              parseForVariableDeclaration = extra.parseForVariableDeclaration;</span>
 <span class='covered'>              parseFunctionDeclaration = extra.parseFunctionDeclaration;</span>
 <span class='covered'>              parseFunctionExpression = extra.parseFunctionExpression;</span>
+<span class='covered'>              parseGlob = extra.parseGlob;</span>
+<span class='covered'>              parseImportDeclaration = extra.parseImportDeclaration;</span>
+<span class='covered'>              parseImportSpecifier = extra.parseImportSpecifier;</span>
 <span class='covered'>              parseLogicalANDExpression = extra.parseLogicalANDExpression;</span>
 <span class='covered'>              parseLogicalORExpression = extra.parseLogicalORExpression;</span>
 <span class='covered'>              parseMultiplicativeExpression = extra.parseMultiplicativeExpression;</span>
+<span class='covered'>              parseModuleDeclaration = extra.parseModuleDeclaration;</span>
+<span class='covered'>              parseModuleBlock = extra.parseModuleBlock;</span>
 <span class='covered'>              parseNewExpression = extra.parseNewExpression;</span>
 <span class='covered'>              parseNonComputedMember = extra.parseNonComputedMember;</span>
 <span class='covered'>              parseNonComputedProperty = extra.parseNonComputedProperty;</span>
 <span class='covered'>              parseObjectProperty = extra.parseObjectProperty;</span>
 <span class='covered'>              parseObjectPropertyKey = extra.parseObjectPropertyKey;</span>
-<span class='covered'>              parsePrimaryExpression = extra.parsePrimaryExpression;</span>
+<span class='covered'>              parsePath = extra.parsePath;</span>
 <span class='covered'>              parsePostfixExpression = extra.parsePostfixExpression;</span>
+<span class='covered'>              parsePrimaryExpression = extra.parsePrimaryExpression;</span>
 <span class='covered'>              parseProgram = extra.parseProgram;</span>
 <span class='covered'>              parsePropertyFunction = extra.parsePropertyFunction;</span>
 <span class='covered'>              parseRelationalExpression = extra.parseRelationalExpression;</span>
@@ -3487,6 +4540,10 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>              parseUnaryExpression = extra.parseUnaryExpression;</span>
 <span class='covered'>              parseVariableDeclaration = extra.parseVariableDeclaration;</span>
 <span class='covered'>              parseVariableIdentifier = extra.parseVariableIdentifier;</span>
+<span class='covered'>              parseMethodDefinition = extra.parseMethodDefinition;</span>
+<span class='covered'>              parseClassDeclaration = extra.parseClassDeclaration;</span>
+<span class='covered'>              parseClassExpression = extra.parseClassExpression;</span>
+<span class='covered'>              parseClassBody = extra.parseClassBody;</span>
 <span class='covered'>          }</span>
 <span class='covered'>  </span>
 <span class='covered'>          if (typeof extra.scanRegExp === 'function') {</span>
@@ -3522,6 +4579,7 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          state = {</span>
 <span class='covered'>              allowIn: true,</span>
 <span class='covered'>              labelSet: {},</span>
+<span class='covered'>              parenthesizedCount: 0,</span>
 <span class='covered'>              lastParenthesized: null,</span>
 <span class='covered'>              inFunctionBody: false,</span>
 <span class='covered'>              inIteration: false,</span>
@@ -3564,9 +4622,11 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>          try {</span>
 <span class='covered'>              program = parseProgram();</span>
 <span class='covered'>              if (typeof extra.comments !== 'undefined') {</span>
+<span class='covered'>                  filterCommentLocation();</span>
 <span class='covered'>                  program.comments = extra.comments;</span>
 <span class='covered'>              }</span>
 <span class='covered'>              if (typeof extra.tokens !== 'undefined') {</span>
+<span class='covered'>                  filterTokenLocation();</span>
 <span class='covered'>                  program.tokens = extra.tokens;</span>
 <span class='covered'>              }</span>
 <span class='covered'>              if (typeof extra.errors !== 'undefined') {</span>
@@ -3583,11 +4643,32 @@ Tested revision: <a href='https://github.com/ariya/esprima/commit/eab236d'>eab23
 <span class='covered'>      }</span>
 <span class='covered'>  </span>
 <span class='covered'>      // Sync with package.json.</span>
-<span class='covered'>      exports.version = '1.0.0-dev';</span>
+<span class='covered'>      exports.version = '1.0.0-dev-harmony';</span>
 <span class='covered'>  </span>
 <span class='covered'>      exports.parse = parse;</span>
 <span class='covered'>  </span>
-<span class='partial'>  }(typeof exports === 'undefined' ? <span class='partialuncovered'>(esprima = {}) </span>: exports));</span>
+<span class='covered'>      // Deep copy.</span>
+<span class='covered'>      exports.Syntax = (function () {</span>
+<span class='covered'>          var name, types = {};</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (typeof Object.create === 'function') {</span>
+<span class='covered'>              types = Object.create(null);</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          for (name in Syntax) {</span>
+<span class='covered'>              if (Syntax.hasOwnProperty(name)) {</span>
+<span class='covered'>                  types[name] = Syntax[name];</span>
+<span class='covered'>              }</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          if (typeof Object.freeze === 'function') {</span>
+<span class='covered'>              Object.freeze(types);</span>
+<span class='covered'>          }</span>
+<span class='covered'>  </span>
+<span class='covered'>          return types;</span>
+<span class='covered'>      }());</span>
+<span class='covered'>  </span>
+<span class='covered'>  }));</span>
 <span class='covered'>  /* vim: set sw=4 ts=4 et tw=80 : */</span></pre></td>          
 </pre>
 </div>

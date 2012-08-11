@@ -28,12 +28,7 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint browser:true node:true */
-/*global esprima:true */
-
-var runTests, data;
-
-data = {
+var testFixture = {
 
     'Primary Expression': {
 
@@ -1376,6 +1371,7 @@ data = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -1401,6 +1397,9 @@ data = {
                                     end: { line: 1, column: 36 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [18, 36],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -1464,6 +1463,7 @@ data = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1473,6 +1473,9 @@ data = {
                                     end: { line: 1, column: 20 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [18, 20],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -1536,6 +1539,7 @@ data = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1545,6 +1549,9 @@ data = {
                                     end: { line: 1, column: 17 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [15, 17],
                             loc: {
                                 start: { line: 1, column: 15 },
@@ -1608,6 +1615,7 @@ data = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1617,6 +1625,9 @@ data = {
                                     end: { line: 1, column: 19 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [17, 19],
                             loc: {
                                 start: { line: 1, column: 17 },
@@ -1680,6 +1691,7 @@ data = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1689,6 +1701,9 @@ data = {
                                     end: { line: 1, column: 20 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [18, 20],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -1752,6 +1767,7 @@ data = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1761,6 +1777,9 @@ data = {
                                     end: { line: 1, column: 19 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [17, 19],
                             loc: {
                                 start: { line: 1, column: 17 },
@@ -1825,6 +1844,7 @@ data = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1834,6 +1854,9 @@ data = {
                                     end: { line: 1, column: 22 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [20, 22],
                             loc: {
                                 start: { line: 1, column: 20 },
@@ -1898,6 +1921,7 @@ data = {
                             type: 'FunctionExpression',
                             id: null,
                             params: [],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [],
@@ -1907,6 +1931,9 @@ data = {
                                     end: { line: 1, column: 17 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [15, 17],
                             loc: {
                                 start: { line: 1, column: 15 },
@@ -1978,6 +2005,7 @@ data = {
                                     end: { line: 1, column: 17 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2021,6 +2049,9 @@ data = {
                                     end: { line: 1, column: 34 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [19, 34],
                             loc: {
                                 start: { line: 1, column: 19 },
@@ -2092,6 +2123,7 @@ data = {
                                     end: { line: 1, column: 14 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2135,6 +2167,9 @@ data = {
                                     end: { line: 1, column: 28 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [16, 28],
                             loc: {
                                 start: { line: 1, column: 16 },
@@ -2206,6 +2241,7 @@ data = {
                                     end: { line: 1, column: 16 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2249,6 +2285,9 @@ data = {
                                     end: { line: 1, column: 32 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [18, 32],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -2320,6 +2359,7 @@ data = {
                                     end: { line: 1, column: 17 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2363,6 +2403,9 @@ data = {
                                     end: { line: 1, column: 34 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [19, 34],
                             loc: {
                                 start: { line: 1, column: 19 },
@@ -2434,6 +2477,7 @@ data = {
                                     end: { line: 1, column: 16 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2477,6 +2521,9 @@ data = {
                                     end: { line: 1, column: 32 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [18, 32],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -2549,6 +2596,7 @@ data = {
                                     end: { line: 1, column: 18 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2592,6 +2640,9 @@ data = {
                                     end: { line: 1, column: 34 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [20, 34],
                             loc: {
                                 start: { line: 1, column: 20 },
@@ -2664,6 +2715,7 @@ data = {
                                     end: { line: 1, column: 14 }
                                 }
                             }],
+                            defaults: [],
                             body: {
                                 type: 'BlockStatement',
                                 body: [{
@@ -2707,6 +2759,9 @@ data = {
                                     end: { line: 1, column: 30 }
                                 }
                             },
+                            rest: null,
+                            generator: false,
+                            expression: false,
                             range: [16, 30],
                             loc: {
                                 start: { line: 1, column: 16 },
@@ -10260,6 +10315,7 @@ data = {
                     type: 'FunctionExpression',
                     id: null,
                     params: [],
+                    defaults: [],
                     body: {
                         type: 'BlockStatement',
                         body: [],
@@ -10269,6 +10325,9 @@ data = {
                             end: { line: 1, column: 26 }
                         }
                     },
+                    rest: null,
+                    generator: false,
+                    expression: false,
                     range: [13, 27],
                     loc: {
                         start: { line: 1, column: 13 },
@@ -10367,6 +10426,7 @@ data = {
                     }
                 },
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [],
@@ -10376,6 +10436,9 @@ data = {
                         end: { line: 1, column: 27 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: false,
                 range: [13, 27],
                 loc: {
                     start: { line: 1, column: 13 },
@@ -11830,6 +11893,7 @@ data = {
                         type: 'FunctionExpression',
                         id: null,
                         params: [],
+                        defaults: [],
                         body: {
                             type: 'BlockStatement',
                             body: [{
@@ -11874,6 +11938,9 @@ data = {
                                 end: { line: 1, column: 43 }
                             }
                         },
+                        rest: null,
+                        generator: false,
+                        expression: false,
                         range: [13, 43],
                         loc: {
                             start: { line: 1, column: 13 },
@@ -12328,6 +12395,7 @@ data = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -12347,6 +12415,9 @@ data = {
                         end: { line: 1, column: 21 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: false,
                 range: [0, 22],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -12366,6 +12437,7 @@ data = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -12385,6 +12457,9 @@ data = {
                         end: { line: 1, column: 22 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: false,
                 range: [0, 23],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -12404,6 +12479,7 @@ data = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -12431,6 +12507,9 @@ data = {
                         end: { line: 1, column: 24 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: false,
                 range: [0, 25],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -12450,6 +12529,7 @@ data = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -12495,6 +12575,9 @@ data = {
                         end: { line: 1, column: 27 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: false,
                 range: [0, 28],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -13623,6 +13706,7 @@ data = {
                 }
             },
             params: [],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [{
@@ -13657,6 +13741,9 @@ data = {
                     end: { line: 1, column: 29 }
                 }
             },
+            rest: null,
+            generator: false,
+            expression: false,
             range: [0, 29],
             loc: {
                 start: { line: 1, column: 0 },
@@ -13676,6 +13763,7 @@ data = {
                 }
             },
             params: [],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [],
@@ -13685,6 +13773,9 @@ data = {
                     end: { line: 1, column: 19 }
                 }
             },
+            rest: null,
+            generator: false,
+            expression: false,
             range: [0, 19],
             loc: {
                 start: { line: 1, column: 0 },
@@ -13704,6 +13795,7 @@ data = {
                 }
             },
             params: [],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [],
@@ -13713,6 +13805,9 @@ data = {
                     end: { line: 1, column: 24 }
                 }
             },
+            rest: null,
+            generator: false,
+            expression: false,
             range: [0, 24],
             loc: {
                 start: { line: 1, column: 0 },
@@ -13748,6 +13843,7 @@ data = {
                     end: { line: 1, column: 18 }
                 }
             }],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [],
@@ -13757,6 +13853,9 @@ data = {
                     end: { line: 1, column: 23 }
                 }
             },
+            rest: null,
+            generator: false,
+            expression: false,
             range: [0, 23],
             loc: {
                 start: { line: 1, column: 0 },
@@ -13794,6 +13893,7 @@ data = {
                         end: { line: 1, column: 19 }
                     }
                 }],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [],
@@ -13803,6 +13903,9 @@ data = {
                         end: { line: 1, column: 24 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: false,
                 range: [0, 25],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -13828,6 +13931,7 @@ data = {
                 }
             },
             params: [],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [{
@@ -13842,6 +13946,7 @@ data = {
                         }
                     },
                     params: [],
+                    defaults: [],
                     body: {
                         type: 'BlockStatement',
                         body: [{
@@ -13868,6 +13973,9 @@ data = {
                             end: { line: 1, column: 51 }
                         }
                     },
+                    rest: null,
+                    generator: false,
+                    expression: false,
                     range: [18, 51],
                     loc: {
                         start: { line: 1, column: 18 },
@@ -13880,6 +13988,9 @@ data = {
                     end: { line: 1, column: 53 }
                 }
             },
+            rest: null,
+            generator: false,
+            expression: false,
             range: [0, 53],
             loc: {
                 start: { line: 1, column: 0 },
@@ -13907,6 +14018,7 @@ data = {
                     end: { line: 1, column: 16 }
                 }
             }],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [{
@@ -13941,6 +14053,9 @@ data = {
                     end: { line: 1, column: 30 }
                 }
             },
+            rest: null,
+            generator: false,
+            expression: false,
             range: [0, 30],
             loc: {
                 start: { line: 1, column: 0 },
@@ -13976,6 +14091,7 @@ data = {
                     end: { line: 1, column: 19 }
                 }
             }],
+            defaults: [],
             body: {
                 type: 'BlockStatement',
                 body: [{
@@ -14010,6 +14126,9 @@ data = {
                     end: { line: 1, column: 33 }
                 }
             },
+            rest: null,
+            generator: false,
+            expression: false,
             range: [0, 33],
             loc: {
                 start: { line: 1, column: 0 },
@@ -14034,6 +14153,7 @@ data = {
                     type: 'FunctionExpression',
                     id: null,
                     params: [],
+                    defaults: [],
                     body: {
                         type: 'BlockStatement',
                         body: [{
@@ -14068,6 +14188,9 @@ data = {
                             end: { line: 1, column: 31 }
                         }
                     },
+                    rest: null,
+                    generator: false,
+                    expression: false,
                     range: [9, 31],
                     loc: {
                         start: { line: 1, column: 9 },
@@ -14113,6 +14236,7 @@ data = {
                         }
                     },
                     params: [],
+                    defaults: [],
                     body: {
                         type: 'BlockStatement',
                         body: [],
@@ -14122,6 +14246,9 @@ data = {
                             end: { line: 1, column: 28 }
                         }
                     },
+                    rest: null,
+                    generator: false,
+                    expression: false,
                     range: [9, 28],
                     loc: {
                         start: { line: 1, column: 9 },
@@ -14167,6 +14294,7 @@ data = {
                         }
                     },
                     params: [],
+                    defaults: [],
                     body: {
                         type: 'BlockStatement',
                         body: [],
@@ -14176,6 +14304,9 @@ data = {
                             end: { line: 1, column: 33 }
                         }
                     },
+                    rest: null,
+                    generator: false,
+                    expression: false,
                     range: [9, 33],
                     loc: {
                         start: { line: 1, column: 9 },
@@ -14221,6 +14352,7 @@ data = {
                         }
                     },
                     params: [],
+                    defaults: [],
                     body: {
                         type: 'BlockStatement',
                         body: [{
@@ -14255,6 +14387,9 @@ data = {
                             end: { line: 1, column: 37 }
                         }
                     },
+                    rest: null,
+                    generator: false,
+                    expression: false,
                     range: [12, 37],
                     loc: {
                         start: { line: 1, column: 12 },
@@ -14281,6 +14416,7 @@ data = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [],
@@ -14290,6 +14426,9 @@ data = {
                         end: { line: 1, column: 13 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: false,
                 range: [0, 14],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -14844,6 +14983,7 @@ data = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -14880,6 +15020,9 @@ data = {
                         end: { line: 2, column: 4 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: false,
                 range: [0, 25],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -14899,6 +15042,7 @@ data = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -14935,6 +15079,9 @@ data = {
                         end: { line: 2, column: 4 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: false,
                 range: [0, 36],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -14954,6 +15101,7 @@ data = {
                 type: 'FunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [
@@ -14990,6 +15138,9 @@ data = {
                         end: { line: 2, column: 14 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: false,
                 range: [0, 47],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -15291,6 +15442,13 @@ data = {
             index: 1,
             lineNumber: 1,
             column: 2,
+            message: 'Error: Line 1: Invalid regular expression: missing /'
+        },
+
+        '/test': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
             message: 'Error: Line 1: Invalid regular expression: missing /'
         },
 
@@ -16726,6 +16884,7 @@ data = {
                         type: 'FunctionExpression',
                         id: null,
                         params: [],
+                        defaults: [],
                         body: {
                             type: 'BlockStatement',
                             body: [{
@@ -16776,6 +16935,9 @@ data = {
                                 end: { line: 1, column: 40 }
                             }
                         },
+                        rest: null,
+                        generator: false,
+                        expression: false,
                         range: [1, 40],
                         loc: {
                             start: { line: 1, column: 1 },
@@ -16818,6 +16980,7 @@ data = {
                         type: 'FunctionExpression',
                         id: null,
                         params: [],
+                        defaults: [],
                         body: {
                             type: 'BlockStatement',
                             body: [{
@@ -16861,6 +17024,9 @@ data = {
                                 end: { line: 1, column: 34 }
                             }
                         },
+                        rest: null,
+                        generator: false,
+                        expression: false,
                         range: [1, 34],
                         loc: {
                             start: { line: 1, column: 1 },
@@ -17347,318 +17513,3 @@ data = {
     }
 };
 
-// Special handling for regular expression literal since we need to
-// convert it to a string literal, otherwise it will be decoded
-// as object "{}" and the regular expression would be lost.
-function adjustRegexLiteral(key, value) {
-    'use strict';
-    if (key === 'value' && value instanceof RegExp) {
-        value = value.toString();
-    }
-    return value;
-}
-
-function NotMatchingError(expected, actual) {
-    'use strict';
-    Error.call(this, 'Expected ');
-    this.expected = expected;
-    this.actual = actual;
-}
-NotMatchingError.prototype = new Error();
-
-function errorToObject(e) {
-    'use strict';
-    var msg = e.toString();
-
-    // Opera 9.64 produces an non-standard string in toString().
-    if (msg.substr(0, 6) !== 'Error:') {
-        if (typeof e.message === 'string') {
-            msg = 'Error: ' + e.message;
-        }
-    }
-
-    return {
-        index: e.index,
-        lineNumber: e.lineNumber,
-        column: e.column,
-        message: msg
-    };
-}
-
-function testParse(esprima, code, syntax) {
-    'use strict';
-    var expected, tree, actual, options, StringObject, i, len, err;
-
-    // alias, so that JSLint does not complain.
-    StringObject = String;
-
-    options = {
-        comment: (typeof syntax.comments !== 'undefined'),
-        range: true,
-        loc: true,
-        tokens: (typeof syntax.tokens !== 'undefined'),
-        raw: true,
-        tolerant: (typeof syntax.errors !== 'undefined')
-    };
-
-    if (typeof syntax.tokens !== 'undefined') {
-        if (syntax.tokens.length > 0) {
-            options.range = (typeof syntax.tokens[0].range !== 'undefined');
-            options.loc = (typeof syntax.tokens[0].loc !== 'undefined');
-        }
-    }
-
-    if (typeof syntax.comments !== 'undefined') {
-        if (syntax.comments.length > 0) {
-            options.range = (typeof syntax.comments[0].range !== 'undefined');
-            options.loc = (typeof syntax.comments[0].loc !== 'undefined');
-        }
-    }
-
-    expected = JSON.stringify(syntax, null, 4);
-    try {
-        tree = esprima.parse(code, options);
-        tree = (options.comment || options.tokens || options.tolerant) ? tree : tree.body[0];
-
-        if (options.tolerant) {
-            for (i = 0, len = tree.errors.length; i < len; i += 1) {
-                tree.errors[i] = errorToObject(tree.errors[i]);
-            }
-        }
-
-        actual = JSON.stringify(tree, adjustRegexLiteral, 4);
-
-        // Only to ensure that there is no error when using string object.
-        esprima.parse(new StringObject(code), options);
-
-    } catch (e) {
-        throw new NotMatchingError(expected, e.toString());
-    }
-    if (expected !== actual) {
-        throw new NotMatchingError(expected, actual);
-    }
-}
-
-function testError(esprima, code, exception) {
-    'use strict';
-    var i, options, expected, actual, handleInvalidRegexFlag;
-
-    // Different parsing options should give the same error.
-    options = [
-        {},
-        { comment: true },
-        { raw: true },
-        { raw: true, comment: true }
-    ];
-
-    // If handleInvalidRegexFlag is true, an invalid flag in a regular expression
-    // will throw an exception. In some old version V8, this is not the case
-    // and hence handleInvalidRegexFlag is false.
-    handleInvalidRegexFlag = false;
-    try {
-        'test'.match(new RegExp('[a-z]', 'x'));
-    } catch (e) {
-        handleInvalidRegexFlag = true;
-    }
-
-    expected = JSON.stringify(exception);
-
-    for (i = 0; i < options.length; i += 1) {
-
-        try {
-            esprima.parse(code, options[i]);
-        } catch (e) {
-            actual = JSON.stringify(errorToObject(e));
-        }
-
-        if (expected !== actual) {
-
-            // Compensate for old V8 which does not handle invalid flag.
-            if (exception.message.indexOf('Invalid regular expression') > 0) {
-                if (typeof actual === 'undefined' && !handleInvalidRegexFlag) {
-                    return;
-                }
-            }
-
-            throw new NotMatchingError(expected, actual);
-        }
-
-    }
-}
-
-function testAPI(esprima, code, result) {
-    'use strict';
-    var expected, res, actual;
-
-    expected = JSON.stringify(result.result, null, 4);
-    try {
-        if (typeof result.property !== 'undefined') {
-            res = esprima[result.property];
-        } else {
-            res = esprima[result.call].apply(esprima, result.args);
-        }
-        actual = JSON.stringify(res, adjustRegexLiteral, 4);
-    } catch (e) {
-        throw new NotMatchingError(expected, e.toString());
-    }
-    if (expected !== actual) {
-        throw new NotMatchingError(expected, actual);
-    }
-}
-
-function runTest(esprima, code, result) {
-    'use strict';
-    if (result.hasOwnProperty('lineNumber')) {
-        testError(esprima, code, result);
-    } else if (result.hasOwnProperty('result')) {
-        testAPI(esprima, code, result);
-    } else {
-        testParse(esprima, code, result);
-    }
-}
-
-if (typeof window !== 'undefined') {
-    // Run all tests in a browser environment.
-    runTests = function () {
-        'use strict';
-        var total = 0,
-            failures = 0,
-            category,
-            fixture,
-            source,
-            tick,
-            expected,
-            index,
-            len;
-
-        function setText(el, str) {
-            if (typeof el.innerText === 'string') {
-                el.innerText = str;
-            } else {
-                el.textContent = str;
-            }
-        }
-
-        function startCategory(category) {
-            var report, e;
-            report = document.getElementById('report');
-            e = document.createElement('h4');
-            setText(e, category);
-            report.appendChild(e);
-        }
-
-        function reportSuccess(code) {
-            var report, e;
-            report = document.getElementById('report');
-            e = document.createElement('pre');
-            e.setAttribute('class', 'code');
-            setText(e, code);
-            report.appendChild(e);
-        }
-
-        function reportFailure(code, expected, actual) {
-            var report, e;
-
-            report = document.getElementById('report');
-
-            e = document.createElement('p');
-            setText(e, 'Code:');
-            report.appendChild(e);
-
-            e = document.createElement('pre');
-            e.setAttribute('class', 'code');
-            setText(e, code);
-            report.appendChild(e);
-
-            e = document.createElement('p');
-            setText(e, 'Expected');
-            report.appendChild(e);
-
-            e = document.createElement('pre');
-            e.setAttribute('class', 'expected');
-            setText(e, expected);
-            report.appendChild(e);
-
-            e = document.createElement('p');
-            setText(e, 'Actual');
-            report.appendChild(e);
-
-            e = document.createElement('pre');
-            e.setAttribute('class', 'actual');
-            setText(e, actual);
-            report.appendChild(e);
-        }
-
-        setText(document.getElementById('version'), esprima.version);
-
-        tick = new Date();
-        for (category in data) {
-            if (data.hasOwnProperty(category)) {
-                startCategory(category);
-                fixture = data[category];
-                for (source in fixture) {
-                    if (fixture.hasOwnProperty(source)) {
-                        expected = fixture[source];
-                        total += 1;
-                        try {
-                            runTest(esprima, source, expected);
-                            reportSuccess(source, JSON.stringify(expected, null, 4));
-                        } catch (e) {
-                            failures += 1;
-                            reportFailure(source, e.expected, e.actual);
-                        }
-                    }
-                }
-            }
-        }
-        tick = (new Date()) - tick;
-
-        if (failures > 0) {
-            setText(document.getElementById('status'), total + ' tests. ' +
-                'Failures: ' + failures + '. ' + tick + ' ms');
-        } else {
-            setText(document.getElementById('status'), total + ' tests. ' +
-                'No failure. ' + tick + ' ms');
-        }
-    };
-} else {
-    (function () {
-        'use strict';
-
-        var esprima = require('../esprima'),
-            total = 0,
-            failures = [],
-            tick = new Date(),
-            expected,
-            header;
-
-        Object.keys(data).forEach(function (category) {
-            Object.keys(data[category]).forEach(function (source) {
-                total += 1;
-                expected = data[category][source];
-                try {
-                    runTest(esprima, source, expected);
-                } catch (e) {
-                    e.source = source;
-                    failures.push(e);
-                }
-            });
-        });
-        tick = (new Date()) - tick;
-
-        header = total + ' tests. ' + failures.length + ' failures. ' +
-            tick + ' ms';
-        if (failures.length) {
-            console.error(header);
-            failures.forEach(function (failure) {
-                console.error(failure.source + ': Expected\n    ' +
-                    failure.expected.split('\n').join('\n    ') +
-                    '\nto match\n    ' + failure.actual);
-            });
-        } else {
-            console.log(header);
-        }
-        process.exit(failures.length === 0 ? 0 : 1);
-    }());
-}
-/* vim: set sw=4 ts=4 et tw=80 : */

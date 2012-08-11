@@ -9,7 +9,7 @@ if [ `command -v cover` ]; then
     rm -rf .coverage_data
     rm -rf cover_index
 
-    cover run test/test.js
+    cover run test/runner.js
     cover report html
 
     cat test/coverage.header.html > test/coverage.html

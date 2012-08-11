@@ -35,7 +35,7 @@
         index;
 
     suites = [
-        'test',
+        'runner',
         'compat'
     ];
 

@@ -961,7 +961,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function scanRegExp() {
-        var str = '', ch, start, pattern, flags, value, classMarker = false, restore;
+        var str = '', ch, start, pattern, flags, value, classMarker = false, restore, terminated = false;
 
         buffer = null;
         skipComment();
@@ -987,6 +987,7 @@ parseStatement: true, parseSourceElement: true */
                     }
                     str += ch;
                 } else if (ch === '/') {
+                    terminated = true;
                     break;
                 } else if (ch === '[') {
                     classMarker = true;
@@ -996,7 +997,7 @@ parseStatement: true, parseSourceElement: true */
             }
         }
 
-        if (str.length === 1) {
+        if (!terminated) {
             throwError({}, Messages.UnterminatedRegExp);
         }
 
@@ -1352,7 +1353,11 @@ parseStatement: true, parseSourceElement: true */
             type: Syntax.FunctionExpression,
             id: null,
             params: param,
-            body: body
+            defaults: [],
+            body: body,
+            rest: null,
+            generator: false,
+            expression: false
         };
     }
 
@@ -2908,7 +2913,11 @@ parseStatement: true, parseSourceElement: true */
             type: Syntax.FunctionDeclaration,
             id: id,
             params: params,
-            body: body
+            defaults: [],
+            body: body,
+            rest: null,
+            generator: false,
+            expression: false
         };
     }
 
@@ -2983,7 +2992,11 @@ parseStatement: true, parseSourceElement: true */
             type: Syntax.FunctionExpression,
             id: id,
             params: params,
-            body: body
+            defaults: [],
+            body: body,
+            rest: null,
+            generator: false,
+            expression: false
         };
     }
 
