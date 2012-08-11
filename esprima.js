@@ -82,7 +82,8 @@ parseYieldExpression: true
         NullLiteral: 5,
         NumericLiteral: 6,
         Punctuator: 7,
-        StringLiteral: 8
+        StringLiteral: 8,
+        Quasi: 9
     };
 
     TokenName = {};
@@ -140,10 +141,13 @@ parseYieldExpression: true
         Path:  'Path',
         Program: 'Program',
         Property: 'Property',
+        QuasiElement: 'QuasiElement',
+        QuasiLiteral: 'QuasiLiteral',
         ReturnStatement: 'ReturnStatement',
         SequenceExpression: 'SequenceExpression',
         SwitchCase: 'SwitchCase',
         SwitchStatement: 'SwitchStatement',
+        TaggedQuasiExpression: 'TaggedQuasiExpression',
         ThisExpression: 'ThisExpression',
         ThrowStatement: 'ThrowStatement',
         TryStatement: 'TryStatement',
@@ -169,6 +173,7 @@ parseYieldExpression: true
         UnexpectedString:  'Unexpected string',
         UnexpectedIdentifier:  'Unexpected identifier',
         UnexpectedReserved:  'Unexpected reserved word',
+        UnexpectedQuasi:  'Unexpected quasi %0',
         UnexpectedEOS:  'Unexpected end of input',
         NewlineAfterThrow:  'Illegal newline after throw',
         InvalidRegExp: 'Invalid regular expression',
@@ -1081,6 +1086,143 @@ parseYieldExpression: true
         };
     }
 
+    function scanQuasi() {
+        var cooked = '', ch, start, terminated, tail, restore, unescaped, code, octal;
+
+        terminated = false;
+        tail = false;
+        start = index;
+
+        ++index;
+
+        while (index < length) {
+            ch = nextChar();
+            if (ch === '`') {
+                tail = true;
+                terminated = true;
+                break;
+            } else if (ch === '$') {
+                if (source[index] === '{') {
+                    ++index;
+                    terminated = true;
+                    break;
+                }
+                cooked += ch;
+            } else if (ch === '\\') {
+                ch = nextChar();
+                if (!isLineTerminator(ch)) {
+                    switch (ch) {
+                    case 'n':
+                        cooked += '\n';
+                        break;
+                    case 'r':
+                        cooked += '\r';
+                        break;
+                    case 't':
+                        cooked += '\t';
+                        break;
+                    case 'u':
+                    case 'x':
+                        if (source[index] === '{') {
+                            ++index;
+                            cooked += scanUnicodeCodePointEscape();
+                        } else {
+                            restore = index;
+                            unescaped = scanHexEscape(ch);
+                            if (unescaped) {
+                                cooked += unescaped;
+                            } else {
+                                index = restore;
+                                cooked += ch;
+                            }
+                        }
+                        break;
+                    case 'b':
+                        cooked += '\b';
+                        break;
+                    case 'f':
+                        cooked += '\f';
+                        break;
+                    case 'v':
+                        cooked += '\v';
+                        break;
+
+                    default:
+                        if (isOctalDigit(ch)) {
+                            code = '01234567'.indexOf(ch);
+
+                            // \0 is not octal escape sequence
+                            if (code !== 0) {
+                                octal = true;
+                            }
+
+                            if (index < length && isOctalDigit(source[index])) {
+                                octal = true;
+                                code = code * 8 + '01234567'.indexOf(nextChar());
+
+                                // 3 digits are only allowed when string starts
+                                // with 0, 1, 2, 3
+                                if ('0123'.indexOf(ch) >= 0 &&
+                                        index < length &&
+                                        isOctalDigit(source[index])) {
+                                    code = code * 8 + '01234567'.indexOf(nextChar());
+                                }
+                            }
+                            cooked += String.fromCharCode(code);
+                        } else {
+                            cooked += ch;
+                        }
+                        break;
+                    }
+                } else {
+                    ++lineNumber;
+                    if (ch ===  '\r' && source[index] === '\n') {
+                        ++index;
+                    }
+                }
+            } else if (isLineTerminator(ch)) {
+                ++lineNumber;
+                if (ch ===  '\r' && source[index] === '\n') {
+                    ++index;
+                }
+            } else {
+                cooked += ch;
+            }
+        }
+
+        if (!terminated) {
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        }
+
+        return {
+            type: Token.Quasi,
+            value: {
+                cooked: cooked,
+                raw: sliceSource(start + 1, index - ((tail) ? 1 : 2))
+            },
+            tail: tail,
+            octal: octal,
+            lineNumber: lineNumber,
+            lineStart: lineStart,
+            range: [start, index]
+        };
+    }
+
+    function scanQuasiElement(option) {
+        var startsWith;
+
+        buffer = null;
+        skipComment();
+
+        startsWith = (option.head) ? '`' : '}';
+
+        if (source[index] !== startsWith) {
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        }
+
+        return scanQuasi();
+    }
+
     function scanRegExp() {
         var str = '', ch, start, pattern, flags, value, classMarker = false, restore;
 
@@ -1205,6 +1347,10 @@ parseYieldExpression: true
 
         if (ch === '.' || isDecimalDigit(ch)) {
             return scanNumericLiteral();
+        }
+
+        if (ch === '`') {
+            return scanQuasi();
         }
 
         token = scanIdentifier();
@@ -1359,6 +1505,10 @@ parseYieldExpression: true
                 throwError(token, Messages.StrictReservedWord);
             }
             throwError(token, Messages.UnexpectedToken, token.value);
+        }
+
+        if (token.type === Token.Quasi) {
+            throwError(token, Messages.UnexpectedQuasi, token.value.raw);
         }
 
         // BooleanLiteral, NullLiteral, or Punctuator.
@@ -1740,6 +1890,41 @@ parseYieldExpression: true
         };
     }
 
+    function parseQuasiElement(option) {
+        var token = scanQuasiElement(option);
+        if (strict && token.octal) {
+            throwError(token, Messages.StrictOctalLiteral);
+        }
+        return {
+            type: Syntax.QuasiElement,
+            value: {
+                raw: token.value.raw,
+                cooked: token.value.cooked
+            },
+            tail: token.tail
+        };
+    }
+
+    function parseQuasiLiteral() {
+        var quasi, quasis, expressions;
+
+        quasi = parseQuasiElement({ head: true });
+        quasis = [ quasi ];
+        expressions = [];
+
+        while (!quasi.tail) {
+            expressions.push(parseExpression());
+            quasi = parseQuasiElement({ head: false });
+            quasis.push(quasi);
+        }
+
+        return {
+            type: Syntax.QuasiLiteral,
+            quasis: quasis,
+            expressions: expressions
+        };
+    }
+
     // 11.1 Primary Expressions
 
     function parsePrimaryExpression() {
@@ -1818,6 +2003,10 @@ parseYieldExpression: true
             return createLiteral(scanRegExp());
         }
 
+        if (type === Token.Quasi) {
+            return parseQuasiLiteral();
+        }
+
         return throwUnexpected(lex());
     }
 
@@ -1880,6 +2069,14 @@ parseYieldExpression: true
         return expr;
     }
 
+    function parseTaggedQuasi(tag) {
+        return {
+            type: Syntax.TaggedQuasiExpression,
+            tag: tag,
+            quasi: parseQuasiLiteral()
+        };
+    }
+
     function parseCallMember(object) {
         return {
             type: Syntax.CallExpression,
@@ -1920,6 +2117,8 @@ parseYieldExpression: true
                 expr = parseComputedMember(expr);
             } else if (match('(')) {
                 expr = parseCallMember(expr);
+            } else if (lookahead().type === Token.Quasi) {
+                expr = parseTaggedQuasi(expr);
             } else {
                 break;
             }
@@ -1940,6 +2139,8 @@ parseYieldExpression: true
                 expr = parseNonComputedMember(expr);
             } else if (match('[')) {
                 expr = parseComputedMember(expr);
+            } else if (lookahead().type === Token.Quasi) {
+                expr = parseTaggedQuasi(expr);
             } else {
                 break;
             }
@@ -2544,10 +2745,7 @@ parseYieldExpression: true
     function parseModuleDeclaration() {
         var id, token, declaration;
 
-        token = lex();
-        if (token.value !== 'module') {
-            throwUnexpected(token);
-        }
+        lex();
 
         id = parseVariableIdentifier();
 
@@ -4383,9 +4581,12 @@ parseYieldExpression: true
             extra.parseProgram = parseProgram;
             extra.parsePropertyFunction = parsePropertyFunction;
             extra.parseRelationalExpression = parseRelationalExpression;
+            extra.parseQuasiElement = parseQuasiElement;
+            extra.parseQuasiLiteral = parseQuasiLiteral;
             extra.parseStatement = parseStatement;
             extra.parseShiftExpression = parseShiftExpression;
             extra.parseSwitchCase = parseSwitchCase;
+            extra.parseTaggedQuasi = parseTaggedQuasi;
             extra.parseUnaryExpression = parseUnaryExpression;
             extra.parseVariableDeclaration = parseVariableDeclaration;
             extra.parseVariableIdentifier = parseVariableIdentifier;
@@ -4432,10 +4633,13 @@ parseYieldExpression: true
             parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
             parseProgram = wrapTracking(extra.parseProgram);
             parsePropertyFunction = wrapTracking(extra.parsePropertyFunction);
+            parseQuasiElement = wrapTracking(extra.parseQuasiElement);
+            parseQuasiLiteral = wrapTracking(extra.parseQuasiLiteral);
             parseRelationalExpression = wrapTracking(extra.parseRelationalExpression);
             parseStatement = wrapTracking(extra.parseStatement);
             parseShiftExpression = wrapTracking(extra.parseShiftExpression);
             parseSwitchCase = wrapTracking(extra.parseSwitchCase);
+            parseTaggedQuasi = wrapTracking(extra.parseTaggedQuasi);
             parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);
             parseVariableDeclaration = wrapTracking(extra.parseVariableDeclaration);
             parseVariableIdentifier = wrapTracking(extra.parseVariableIdentifier);
@@ -4502,10 +4706,13 @@ parseYieldExpression: true
             parsePrimaryExpression = extra.parsePrimaryExpression;
             parseProgram = extra.parseProgram;
             parsePropertyFunction = extra.parsePropertyFunction;
+            parseQuasiElement = extra.parseQuasiElement;
+            parseQuasiLiteral = extra.parseQuasiLiteral;
             parseRelationalExpression = extra.parseRelationalExpression;
             parseStatement = extra.parseStatement;
             parseShiftExpression = extra.parseShiftExpression;
             parseSwitchCase = extra.parseSwitchCase;
+            parseTaggedQuasi = extra.parseTaggedQuasi;
             parseUnaryExpression = extra.parseUnaryExpression;
             parseVariableDeclaration = extra.parseVariableDeclaration;
             parseVariableIdentifier = extra.parseVariableIdentifier;
