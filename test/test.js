@@ -15445,6 +15445,13 @@ var testFixture = {
             message: 'Error: Line 1: Invalid regular expression: missing /'
         },
 
+        '/test': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Invalid regular expression: missing /'
+        },
+
         'var x = /[a-z]/\\ux': {
             index: 18,
             lineNumber: 1,
