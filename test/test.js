@@ -18143,6 +18143,7 @@ var testFixture = {
                 type: 'ArrowFunctionExpression',
                 id: null,
                 params: [],
+                defaults: [],
                 body: {
                     type: 'Literal',
                     value: 'test',
@@ -18153,6 +18154,9 @@ var testFixture = {
                         end: { line: 1, column: 12 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: true,
                 range: [0, 12],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -18180,6 +18184,7 @@ var testFixture = {
                         end: { line: 1, column: 1 }
                     }
                 }],
+                defaults: [],
                 body: {
                     type: 'Literal',
                     value: 'test',
@@ -18190,6 +18195,9 @@ var testFixture = {
                         end: { line: 1, column: 11 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: true,
                 range: [0, 11],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -18217,6 +18225,7 @@ var testFixture = {
                         end: { line: 1, column: 3 }
                     }
                 }],
+                defaults: [],
                 body: {
                     type: 'Literal',
                     value: 'test',
@@ -18227,6 +18236,9 @@ var testFixture = {
                         end: { line: 1, column: 13 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: true,
                 range: [0, 13],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -18262,6 +18274,7 @@ var testFixture = {
                         end: { line: 1, column: 5 }
                     }
                 }],
+                defaults: [],
                 body: {
                     type: 'Literal',
                     value: 'test',
@@ -18272,6 +18285,9 @@ var testFixture = {
                         end: { line: 1, column: 16 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: true,
                 range: [0, 16],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -18299,6 +18315,7 @@ var testFixture = {
                         end: { line: 1, column: 1 }
                     }
                 }],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [{
@@ -18325,6 +18342,9 @@ var testFixture = {
                         end: { line: 1, column: 12 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: false,
                 range: [0, 12],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -18360,6 +18380,7 @@ var testFixture = {
                         end: { line: 1, column: 5 }
                     }
                 }],
+                defaults: [],
                 body: {
                     type: 'BlockStatement',
                     body: [{
@@ -18386,6 +18407,9 @@ var testFixture = {
                         end: { line: 1, column: 17 }
                     }
                 },
+                rest: null,
+                generator: false,
+                expression: false,
                 range: [0, 17],
                 loc: {
                     start: { line: 1, column: 0 },
