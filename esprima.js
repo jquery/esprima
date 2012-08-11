@@ -2296,7 +2296,11 @@ parseYieldExpression: true
             type: Syntax.ArrowFunctionExpression,
             id: null,
             params: param,
-            body: body
+            defaults: [],
+            body: body,
+            rest: null,
+            generator: false,
+            expression: body.type !== Syntax.BlockStatement
         };
     }
 
