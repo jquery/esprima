@@ -3593,7 +3593,7 @@ var testFixture = {
                             },
                             rest: null,
                             generator: false,
-                            expression: false,
+                            expression: true,
                             range: [15, 17],
                             loc: {
                                 start: { line: 1, column: 15 },
@@ -3671,7 +3671,7 @@ var testFixture = {
                             },
                             rest: null,
                             generator: false,
-                            expression: false,
+                            expression: true,
                             range: [19, 21],
                             loc: {
                                 start: { line: 1, column: 19 },
@@ -3773,7 +3773,7 @@ var testFixture = {
                             },
                             rest: null,
                             generator: false,
-                            expression: false,
+                            expression: true,
                             range: [22, 29],
                             loc: {
                                 start: { line: 1, column: 22 },

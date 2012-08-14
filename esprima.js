@@ -1673,7 +1673,7 @@ parseYieldExpression: true
             body: body,
             rest: null,
             generator: options.generator,
-            expression: false
+            expression: body.type !== Syntax.BlockStatement
         };
     }
 
