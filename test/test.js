@@ -10251,6 +10251,199 @@ var testFixture = {
 
     },
 
+    'Expressions in parenthesis': {
+
+        '(func())': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'Identifier',
+                    name: 'func',
+                    range: [1, 5],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                arguments: [],
+                range: [0, 8],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 8 }
+                }
+            },
+            range: [0, 8],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 8 }
+            }
+        },
+
+        '(\nfunc()\n)': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'Identifier',
+                    name: 'func',
+                    range: [2, 6],
+                    loc: {
+                        start: { line: 2, column: 0 },
+                        end: { line: 2, column: 4 }
+                    }
+                },
+                arguments: [],
+                range: [0, 10],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 3, column: 1 }
+                }
+            },
+            range: [0, 10],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 3, column: 1 }
+            }
+        },
+
+        '(object.property)': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Identifier',
+                    name: 'object',
+                    range: [1, 7],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 7 }
+                    }
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'property',
+                    range: [8, 16],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            }
+        },
+
+        '(\nobject\n.property\n.sub\n)': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'Identifier',
+                        name: 'object',
+                        range: [2, 8],
+                        loc: {
+                            start: { line: 2, column: 0 },
+                            end: { line: 2, column: 6 }
+                        }
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'property',
+                        range: [10, 18],
+                        loc: {
+                            start: { line: 3, column: 1 },
+                            end: { line: 3, column: 9 }
+                        }
+                    },
+                    range: [2, 18],
+                    loc: {
+                        start: { line: 2, column: 0 },
+                        end: { line: 3, column: 9 }
+                    }
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'sub',
+                    range: [20, 23],
+                    loc: {
+                        start: { line: 4, column: 1 },
+                        end: { line: 4, column: 4 }
+                    }
+                },
+                range: [0, 25],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 5, column: 1 }
+                }
+            },
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 5, column: 1 }
+            }
+        },
+
+        '(object.method())': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'Identifier',
+                        name: 'object',
+                        range: [1, 7],
+                        loc: {
+                            start: { line: 1, column: 1 },
+                            end: { line: 1, column: 7 }
+                        }
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'method',
+                        range: [8, 14],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    range: [1, 14],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                arguments: [],
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            }
+        }
+
+    },
+
     'If Statement': {
 
         'if (morning) goodMorning()': {
@@ -16945,9 +17138,9 @@ var testFixture = {
                         }
                     },
                     'arguments': [],
-                    range: [1, 43],
+                    range: [0, 43],
                     loc: {
-                        start: { line: 1, column: 1 },
+                        start: { line: 1, column: 0 },
                         end: { line: 1, column: 43 }
                     }
                 },
@@ -17034,9 +17227,9 @@ var testFixture = {
                         }
                     },
                     'arguments': [],
-                    range: [1, 37],
+                    range: [0, 37],
                     loc: {
-                        start: { line: 1, column: 1 },
+                        start: { line: 1, column: 0 },
                         end: { line: 1, column: 37 }
                     }
                 },
