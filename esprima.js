@@ -3372,6 +3372,21 @@ parseStatement: true, parseSourceElement: true */
                 }
             }
 
+            function getMin(loc1, loc2) {
+                if (loc1.line < loc2.line) {
+                    return loc1;
+                }
+                if (loc1.line > loc2.line) {
+                    return loc2;
+                }
+                // if-else instead of ternary for valid coverage test
+                if (loc1.column < loc2.column) {
+                    return loc1;
+                } else {
+                    return loc2;
+                }
+            }
+
             return function () {
                 var node, rangeInfo, locInfo;
 
@@ -3406,19 +3421,23 @@ parseStatement: true, parseSourceElement: true */
 
                     if (node.type === Syntax.MemberExpression) {
                         if (typeof node.object.range !== 'undefined') {
-                            node.range[0] = node.object.range[0];
+                            if (node.object.range[0] < node.range[0]) {
+                                node.range[0] = node.object.range[0];
+                            }
                         }
                         if (typeof node.object.loc !== 'undefined') {
-                            node.loc.start = node.object.loc.start;
+                            node.loc.start = getMin(node.loc.start, node.object.loc.start);
                         }
                     }
 
                     if (node.type === Syntax.CallExpression) {
                         if (typeof node.callee.range !== 'undefined') {
-                            node.range[0] = node.callee.range[0];
+                            if (node.callee.range[0] < node.range[0]) {
+                                node.range[0] = node.callee.range[0];
+                            }
                         }
                         if (typeof node.callee.loc !== 'undefined') {
-                            node.loc.start = node.callee.loc.start;
+                            node.loc.start = getMin(node.loc.start, node.callee.loc.start);
                         }
                     }
                     return node;
