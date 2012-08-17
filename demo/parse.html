@@ -23,6 +23,11 @@
     background-color: #eee;
 }
 
+.highlight {
+    background-color: #add8e6;
+    background-color: rgba(173, 216, 230, 0.6);
+}
+
 label {
     margin-left: 5px;
     margin-right: 15px;
@@ -128,7 +133,8 @@ function updateTree(syntax) {
                         type: 'Text',
                         label: node.type,
                         expanded: true,
-                        children: []
+                        children: [],
+                        data: node
                     });
                     for (key in node) {
                         if (Object.prototype.hasOwnProperty.call(node, key)) {
@@ -158,6 +164,27 @@ function updateTree(syntax) {
             label: '?'
         };
     }
+
+    window.tree.subscribe('focusChanged', function (args) {
+        var from, to;
+
+        function convert(loc) {
+            return {
+                line: loc.line - 1,
+                ch:   loc.column
+            };
+        }
+
+        if (window.editorMark) {
+            window.editorMark.clear();
+            delete window.editorMark;
+        }
+        if (args.newNode && args.newNode.data && args.newNode.data.loc) {
+            from = convert(args.newNode.data.loc.start);
+            to = convert(args.newNode.data.loc.end);
+            window.editorMark = window.editor.markText(from, to, 'highlight');
+        }
+    });
 
     window.tree.buildTreeFromObject(convert('Program body', syntax.body));
     window.tree.render();
