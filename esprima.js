@@ -3387,12 +3387,12 @@ parseStatement: true, parseSourceElement: true */
                 node = parseFunction.apply(null, arguments);
                 if (typeof node !== 'undefined') {
 
-                    if (range) {
+                    if (range && typeof node.range === 'undefined') {
                         rangeInfo[1] = index;
                         node.range = rangeInfo;
                     }
 
-                    if (loc) {
+                    if (loc && typeof node.loc === 'undefined') {
                         locInfo.end = {
                             line: lineNumber,
                             column: index - lineStart
