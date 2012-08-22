@@ -4926,7 +4926,7 @@ var testFixture = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'NewExpression',
-                callee: {
+                constructor: {
                     type: 'Identifier',
                     name: 'Button',
                     range: [4, 10],
@@ -4953,7 +4953,7 @@ var testFixture = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'NewExpression',
-                callee: {
+                constructor: {
                     type: 'Identifier',
                     name: 'Button',
                     range: [4, 10],
@@ -4980,9 +4980,9 @@ var testFixture = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'NewExpression',
-                callee: {
+                constructor: {
                     type: 'NewExpression',
-                    callee: {
+                    constructor: {
                         type: 'Identifier',
                         name: 'foo',
                         range: [8, 11],
@@ -5016,9 +5016,9 @@ var testFixture = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'NewExpression',
-                callee: {
+                constructor: {
                     type: 'NewExpression',
-                    callee: {
+                    constructor: {
                         type: 'Identifier',
                         name: 'foo',
                         range: [8, 11],
@@ -5057,7 +5057,7 @@ var testFixture = {
                     computed: false,
                     object: {
                         type: 'NewExpression',
-                        callee: {
+                        constructor: {
                             type: 'Identifier',
                             name: 'foo',
                             range: [4, 7],
@@ -5106,7 +5106,7 @@ var testFixture = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'NewExpression',
-                callee: {
+                constructor: {
                     type: 'MemberExpression',
                     computed: true,
                     object: {
@@ -5152,7 +5152,7 @@ var testFixture = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'NewExpression',
-                callee: {
+                constructor: {
                     type: 'MemberExpression',
                     computed: false,
                     object: {

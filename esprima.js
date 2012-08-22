@@ -1628,7 +1628,7 @@ parseStatement: true, parseSourceElement: true */
 
         expr = {
             type: Syntax.NewExpression,
-            callee: parseLeftHandSideExpression(),
+            constructor: parseLeftHandSideExpression(),
             'arguments': []
         };
 
