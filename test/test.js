@@ -166,10 +166,10 @@ var testFixture = {
                             end: { line: 1, column: 6 }
                         }
                     },
-                    range: [0, 8],
+                    range: [1, 6],
                     loc: {
-                        start: { line: 1, column: 0 },
-                        end: { line: 1, column: 8 }
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 6 }
                     }
                 },
                 right: {
@@ -10328,10 +10328,10 @@ var testFixture = {
                     rest: null,
                     generator: false,
                     expression: false,
-                    range: [13, 27],
+                    range: [14, 26],
                     loc: {
-                        start: { line: 1, column: 13 },
-                        end: { line: 1, column: 27 }
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 26 }
                     }
                 },
                 range: [13, 27],
@@ -12418,10 +12418,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 22],
+                range: [1, 21],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 22 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 21 }
                 }
             },
             range: [0, 22],
@@ -12460,10 +12460,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 23],
+                range: [1, 22],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 23 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 22 }
                 }
             },
             range: [0, 23],
@@ -12510,10 +12510,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 25],
+                range: [1, 24],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 25 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 24 }
                 }
             },
             range: [0, 25],
@@ -12578,10 +12578,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 28],
+                range: [1, 27],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 28 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 27 }
                 }
             },
             range: [0, 28],
@@ -13161,6 +13161,7 @@ var testFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
+            guardedHandlers: [],
             handlers: [{
                 type: 'CatchClause',
                 param: {
@@ -13172,7 +13173,6 @@ var testFixture = {
                         end: { line: 1, column: 16 }
                     }
                 },
-                guard: null,
                 body: {
                     type: 'BlockStatement',
                     body: [],
@@ -13207,6 +13207,7 @@ var testFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
+            guardedHandlers: [],
             handlers: [{
                 type: 'CatchClause',
                 param: {
@@ -13218,7 +13219,6 @@ var testFixture = {
                         end: { line: 1, column: 19 }
                     }
                 },
-                guard: null,
                 body: {
                     type: 'BlockStatement',
                     body: [],
@@ -13253,6 +13253,7 @@ var testFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
+            guardedHandlers: [],
             handlers: [{
                 type: 'CatchClause',
                 param: {
@@ -13264,7 +13265,6 @@ var testFixture = {
                         end: { line: 1, column: 24 }
                     }
                 },
-                guard: null,
                 body: {
                     type: 'BlockStatement',
                     body: [],
@@ -13299,6 +13299,7 @@ var testFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
+            guardedHandlers: [],
             handlers: [{
                 type: 'CatchClause',
                 param: {
@@ -13310,7 +13311,6 @@ var testFixture = {
                         end: { line: 1, column: 16 }
                     }
                 },
-                guard: null,
                 body: {
                     type: 'BlockStatement',
                     body: [{
@@ -13378,6 +13378,7 @@ var testFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
+            guardedHandlers: [],
             handlers: [],
             finalizer: {
                 type: 'BlockStatement',
@@ -13464,6 +13465,7 @@ var testFixture = {
                     end: { line: 1, column: 17 }
                 }
             },
+            guardedHandlers: [],
             handlers: [{
                 type: 'CatchClause',
                 param: {
@@ -13475,7 +13477,6 @@ var testFixture = {
                         end: { line: 1, column: 26 }
                     }
                 },
-                guard: null,
                 body: {
                     type: 'BlockStatement',
                     body: [{
@@ -13568,6 +13569,7 @@ var testFixture = {
                     end: { line: 1, column: 17 }
                 }
             },
+            guardedHandlers: [],
             handlers: [{
                 type: 'CatchClause',
                 param: {
@@ -13579,7 +13581,6 @@ var testFixture = {
                         end: { line: 1, column: 26 }
                     }
                 },
-                guard: null,
                 body: {
                     type: 'BlockStatement',
                     body: [{
@@ -13906,10 +13907,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 25],
+                range: [1, 24],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 25 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 24 }
                 }
             },
             range: [0, 25],
@@ -14429,10 +14430,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 14],
+                range: [1, 13],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 14 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 13 }
                 }
             },
             range: [0, 14],
@@ -15023,10 +15024,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 25],
+                range: [1, 24],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 2, column: 5 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 2, column: 4 }
                 }
             },
             range: [0, 25],
@@ -15082,10 +15083,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 36],
+                range: [1, 35],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 2, column: 5 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 2, column: 4 }
                 }
             },
             range: [0, 36],
@@ -15141,10 +15142,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 47],
+                range: [1, 46],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 2, column: 15 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 2, column: 14 }
                 }
             },
             range: [0, 47],
@@ -16945,10 +16946,10 @@ var testFixture = {
                         }
                     },
                     'arguments': [],
-                    range: [1, 43],
+                    range: [1, 42],
                     loc: {
                         start: { line: 1, column: 1 },
-                        end: { line: 1, column: 43 }
+                        end: { line: 1, column: 42 }
                     }
                 },
                 range: [0, 43],
@@ -17034,10 +17035,10 @@ var testFixture = {
                         }
                     },
                     'arguments': [],
-                    range: [1, 37],
+                    range: [1, 36],
                     loc: {
                         start: { line: 1, column: 1 },
-                        end: { line: 1, column: 37 }
+                        end: { line: 1, column: 36 }
                     }
                 },
                 range: [0, 37],
@@ -17147,6 +17148,7 @@ var testFixture = {
                         end: { line: 1, column: 20 }
                     }
                 },
+                guardedHandlers: [],
                 handlers: [{
                     type: 'CatchClause',
                     param: {
@@ -17158,7 +17160,6 @@ var testFixture = {
                             end: { line: 1, column: 32 }
                         }
                     },
-                    guard: null,
                     body: {
                         type: 'BlockStatement',
                         body: [],
@@ -17224,6 +17225,7 @@ var testFixture = {
                         end: { line: 1, column: 20 }
                     }
                 },
+                guardedHandlers: [],
                 handlers: [{
                     type: 'CatchClause',
                     param: {
@@ -17235,7 +17237,6 @@ var testFixture = {
                             end: { line: 1, column: 37 }
                         }
                     },
-                    guard: null,
                     body: {
                         type: 'BlockStatement',
                         body: [],

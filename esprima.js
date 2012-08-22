@@ -1311,15 +1311,14 @@ parseStatement: true, parseSourceElement: true */
     // 11.1.4 Array Initialiser
 
     function parseArrayInitialiser() {
-        var elements = [],
-            undef;
+        var elements = [];
 
         expect('[');
 
         while (!match(']')) {
             if (match(',')) {
                 lex();
-                elements.push(undef);
+                elements.push(null);
             } else {
                 elements.push(parseAssignmentExpression());
 
@@ -2645,7 +2644,6 @@ parseStatement: true, parseSourceElement: true */
         return {
             type: Syntax.CatchClause,
             param: param,
-            guard: null,
             body: parseBlock()
         };
     }
@@ -2673,6 +2671,7 @@ parseStatement: true, parseSourceElement: true */
         return {
             type: Syntax.TryStatement,
             block: block,
+            guardedHandlers: [],
             handlers: handlers,
             finalizer: finalizer
         };
@@ -3387,12 +3386,12 @@ parseStatement: true, parseSourceElement: true */
                 node = parseFunction.apply(null, arguments);
                 if (typeof node !== 'undefined') {
 
-                    if (range) {
+                    if (range && typeof node.range === 'undefined') {
                         rangeInfo[1] = index;
                         node.range = rangeInfo;
                     }
 
-                    if (loc) {
+                    if (loc && typeof node.loc === 'undefined') {
                         locInfo.end = {
                             line: lineNumber,
                             column: index - lineStart
