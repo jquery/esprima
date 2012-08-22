@@ -1621,15 +1621,14 @@ parseYieldExpression: true
     // 11.1.4 Array Initialiser
 
     function parseArrayInitialiser() {
-        var elements = [],
-            undef;
+        var elements = [];
 
         expect('[');
 
         while (!match(']')) {
             if (match(',')) {
                 lex();
-                elements.push(undef);
+                elements.push(null);
             } else {
                 elements.push(parseAssignmentExpression());
 
