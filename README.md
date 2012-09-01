@@ -25,7 +25,7 @@ Esprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror
 
 - Smart editing: [outline view](https://github.com/aclement/esprima-outline), [content assist](http://contraptionsforprogramming.blogspot.com/2012/02/better-javascript-content-assist-in.html)
 - Source code modification: [Esmorph](https://github.com/ariya/esmorph), [Code Painter](https://github.com/fawek/codepainter),
-  [node-falafel](https://github.com/substack/node-falafel)
+  [node-falafel](https://github.com/substack/node-falafel), [Esmangle](https://github.com/Constellation/esmangle)
 - Code coverage analysis: [node-cover](https://github.com/itay/node-cover),
 [coveraje](https://github.com/coveraje/coveraje),
 [CoverJS](https://github.com/arian/CoverJS)
