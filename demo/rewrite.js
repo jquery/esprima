@@ -22,21 +22,28 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint browser:true evil:true */
+/*jslint browser:true */
+/*global esprima:true, escodegen:true */
+
+function id(i) {
+    'use strict';
+    return document.getElementById(i);
+}
+
+function setText(id, str) {
+    'use strict';
+    var el = document.getElementById(id);
+    if (typeof el.innerText === 'string') {
+        el.innerText = str;
+    } else {
+        el.textContent = str;
+    }
+}
 
 function sourceRewrite() {
     'use strict';
 
-    var code, syntax, indent;
-
-    function setText(id, str) {
-        var el = document.getElementById(id);
-        if (typeof el.innerText === 'string') {
-            el.innerText = str;
-        } else {
-            el.textContent = str;
-        }
-    }
+    var code, syntax, indent, quotes, option;
 
     setText('error', '');
     if (typeof window.editor !== 'undefined') {
@@ -44,28 +51,79 @@ function sourceRewrite() {
         code = window.editor.getValue();
     } else {
         // Plain textarea, likely in a situation where CodeMirror does not work.
-        code = document.getElementById('code').value;
+        code = id('code').value;
     }
 
     indent = '';
-    if (document.getElementById('onetab').checked) {
+    if (id('onetab').checked) {
         indent = '\t';
-    } else if (document.getElementById('twospaces').checked) {
+    } else if (id('twospaces').checked) {
         indent = '  ';
-    } else if (document.getElementById('fourspaces').checked) {
+    } else if (id('fourspaces').checked) {
         indent = '    ';
     }
 
+    quotes = 'auto';
+    if (id('singlequotes').checked) {
+        quotes = 'single';
+    } else if (id('doublequotes').checked) {
+        quotes = 'double';
+    }
+
+    option = {
+        format: {
+            indent: {
+                style: indent
+            },
+            quotes: quotes
+        }
+    };
+
     try {
         syntax = window.esprima.parse(code, { raw: true });
-        code = window.escodegen.generate(syntax, { indent: indent });
+        code = window.escodegen.generate(syntax, option);
     } catch (e) {
         setText('error', e.toString());
     } finally {
         if (typeof window.editor !== 'undefined') {
             window.editor.setValue(code);
         } else {
-            document.getElementById('code').value = code;
+            id('code').value = code;
         }
     }
 }
+
+/*jslint sloppy:true browser:true */
+/*global sourceRewrite:true, CodeMirror:true */
+window.onload = function () {
+    var version, el;
+
+    version = 'Using Esprima version ' + esprima.version;
+    version += ' and Escodegen version ' + escodegen.version + '.';
+
+    el = id('version');
+    if (typeof el.innerText === 'string') {
+        el.innerText = version;
+    } else {
+        el.textContent = version;
+    }
+
+    id('rewrite').onclick = sourceRewrite;
+
+    try {
+        window.checkEnv();
+
+        // This is just testing, to detect whether CodeMirror would fail or not
+        window.editor = CodeMirror.fromTextArea(id("test"));
+
+        window.editor = CodeMirror.fromTextArea(id("code"), {
+            lineNumbers: true,
+            matchBrackets: true
+        });
+    } catch (e) {
+        // CodeMirror failed to initialize, possible in e.g. old IE.
+        id('codemirror').innerHTML = '';
+    } finally {
+        id('testbox').parentNode.removeChild(id('testbox'));
+    }
+};
