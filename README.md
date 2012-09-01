@@ -15,8 +15,8 @@ with an experimental branch for ES.Next/Harmony
 [Parser API](https://developer.mozilla.org/en/SpiderMonkey/Parser_API)
 - Heavily tested (> 500 [unit tests](http://esprima.org/test/) with solid 100% code coverage)
 - Optional tracking of syntax node location (index-based and line-column)
-- [Blazing fast](http://esprima.org/test/benchmarks.html), up to 3x faster than
-UglifyJS `parse-js` ([speed comparison](http://esprima.org/test/compare.html))
+- [Blazing fast](http://esprima.org/test/benchmarks.html) (3x faster than
+UglifyJS on the [speed comparison test](http://esprima.org/test/compare.html) using Chrome)
 
 Esprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror 4.6+, Opera 8+) as well as
 [Node.js](http://nodejs.org).
