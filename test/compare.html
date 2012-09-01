@@ -9,6 +9,13 @@
 <script src="compare.js"></script>
 <script src="3rdparty/benchmark.js"></script>
 <script src="3rdparty/XMLHttpRequest.js"></script>
+<script>
+/*jslint browser:true, sloppy:true */
+/*global setupBenchmarks:true*/
+window.onload = function () {
+    window.setTimeout(setupBenchmarks, 211);
+};
+</script>
 </head>
 <body>
 
@@ -32,60 +39,8 @@
 <p><span id="status">Please wait...</span>
 <input id="run" type="submit" value="Run speed comparison" disabled /></p>
 
-<table>
-<thead>
-    <tr>
-        <th>Source</th>
-        <th>Size (KiB)</th>
-        <th>Esprima</th>
-        <th>parse-js</th>
-        <th>ZeParser</th>
-        <th>Narcissus</th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-        <td>jQuery 1.7.1</td>
-        <td id="jquery-1.7.1-size"></td>
-        <td id="esprima-jquery-1.7.1"></td>
-        <td id="parsejs-jquery-1.7.1"></td>
-        <td id="zeparser-jquery-1.7.1"></td>
-        <td id="narcissus-jquery-1.7.1"></td>
-    </tr>
-    <tr>
-        <td>Prototype 1.7.0.0</td>
-        <td id="prototype-1.7.0.0-size"></td>
-        <td id="esprima-prototype-1.7.0.0"></td>
-        <td id="parsejs-prototype-1.7.0.0"></td>
-        <td id="zeparser-prototype-1.7.0.0"></td>
-        <td id="narcissus-prototype-1.7.0.0"></td>
-    </tr>
-    <tr>
-        <td>MooTools 1.4.1</td>
-        <td id="mootools-1.4.1-size"></td>
-        <td id="esprima-mootools-1.4.1"></td>
-        <td id="parsejs-mootools-1.4.1"></td>
-        <td id="zeparser-mootools-1.4.1"></td>
-        <td id="narcissus-mootools-1.4.1"></td>
-    </tr>
-    <tr>
-        <td>Ext Core 3.1.0</td>
-        <td id="ext-core-3.1.0-size"></td>
-        <td id="esprima-ext-core-3.1.0"></td>
-        <td id="parsejs-ext-core-3.1.0"></td>
-        <td id="zeparser-ext-core-3.1.0"></td>
-        <td id="narcissus-ext-core-3.1.0"></td>
-    </tr>
-    <tr>
-        <td>Total</td>
-        <td id="total-size"></td>
-        <td id="esprima-time"></td>
-        <td id="parsejs-time"></td>
-        <td id="zeparser-time"></td>
-        <td id="narcissus-time"></td>
-    </tr>
-</tbody>
-</table>
+<p id="result"></p>
+
 
 <p><strong>Warning:</strong> Since each parser has a different format for the syntax tree, the speed is not fully comparable (the cost of constructing different result is not taken into account). These tests exist only to ensure that Esprima parser is not ridiculously slow compare to other parsers.</p>
 
@@ -100,30 +55,6 @@
 <a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
 </div>
 </div>
-<script>
-/*jslint sloppy:true, browser:true */
-/*global runBenchmarks: true, exports: true */
-window.onload = function () {
-
-    function inject(fname) {
-        var head = document.getElementsByTagName('head')[0],
-            script = document.createElement('script');
-
-        script.src = fname;
-        script.type = 'text/javascript';
-        head.appendChild(script);
-    }
-
-    // Mozilla Narcissus
-    if (typeof Object.create === 'function' && typeof Object.defineProperty === 'function') {
-        inject('3rdparty/jsdefs.js');
-        inject('3rdparty/jslex.js');
-        inject('3rdparty/jsparse.js');
-    }
-
-    window.setTimeout(runBenchmarks, 211);
-};
-</script>
 
 <!-- ZeParser (https://github.com/qfox/ZeParser) -->
 <script src="3rdparty/Tokenizer.js"></script>
@@ -131,6 +62,7 @@ window.onload = function () {
 
 <!-- parse-js, part of UglifyJS -->
 <script>
+/*global exports:true*/
 exports = window.parseJS = {};
 </script>
 <script src="3rdparty/parse-js.js"></script>
