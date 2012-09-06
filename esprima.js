@@ -3480,7 +3480,6 @@ parseYieldExpression: true
         return {
             type: Syntax.CatchClause,
             param: param,
-            guard: null,
             body: parseBlock()
         };
     }
@@ -3508,6 +3507,7 @@ parseYieldExpression: true
         return {
             type: Syntax.TryStatement,
             block: block,
+            guardedHandlers: [],
             handlers: handlers,
             finalizer: finalizer
         };
@@ -4487,12 +4487,12 @@ parseYieldExpression: true
                 node = parseFunction.apply(null, arguments);
                 if (typeof node !== 'undefined') {
 
-                    if (range) {
+                    if (range && typeof node.range === 'undefined') {
                         rangeInfo[1] = index;
                         node.range = rangeInfo;
                     }
 
-                    if (loc) {
+                    if (loc && typeof node.loc === 'undefined') {
                         locInfo.end = {
                             line: lineNumber,
                             column: index - lineStart

@@ -33,7 +33,7 @@
 <h1>Source Rewrite <small>cleans up and reformats everything</small></h1>
 
 <p>Type ECMAScript code in the editor. Press <b>Rewrite</b> button to get the code
-parsed and reconstructed.</p>
+rewritten using <a href="https://github.com/Constellation/escodegen">Escodegen project</a>.</p>
 
 <p><textarea id="code" autofocus="autofocus" cols="70" rows="25" spellcheck="false">
     // Example of messy code with confusing and inconsistent indentations
@@ -52,7 +52,7 @@ var items = list.slice(0), swapped =false,
         if (!swapped)
         break;
     }
-        return items;
+       return items; alert("Finish");
 }
 </textarea></p>
 
@@ -61,6 +61,12 @@ var items = list.slice(0), swapped =false,
  <label><input type="radio" name="indent" id="twospaces" value="twospaces"> 2 spaces</label>
  <label><input checked type="radio" name="indent" id="fourspaces" value="fourspaces"> 4 spaces</label>
 </p>
+<p>String literal quotes:
+ <label><input checked type="radio" name="quotes" id="singlequotes" value="singlequotes"> single (')</label>
+ <label><input type="radio" name="quotes" id="doublequotes" value="doublequotes"> double (")</label>
+ <label><input type="radio" name="quotes" id="autoquotes" value="autoquotes"> automatic (minimize literal length)</label>
+</p>
+
 
 <p><input type="button" value="Rewrite" id="rewrite"></p>
 
@@ -71,11 +77,10 @@ var items = list.slice(0), swapped =false,
 <p><b>Notes</b>:</p>
 <ul>
     <li>Only valid syntax is accepted.</li>
-    <li>Comments are <em>not</em> preserved.</li>
-    <li>It is still experimental (see the <a href="https://github.com/Constellation/escodegen">escodegen project</a>).</li>
+    <li>Comments are <em>not yet</em> preserved (see <a href="http://code.google.com/p/esprima/issues/detail?id=197">issue #197</a>).</li>
 </ul>
 
-<p style="margin-top: 50px;">Using Esprima version <span id="version"></span>.</p>
+<p style="margin-top: 50px;" id="version"></p>
 
 <div class="footer"><strong>Esprima</strong> is created by
 <a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
@@ -83,38 +88,5 @@ var items = list.slice(0), swapped =false,
 
 <p id="testbox" style="visibility: hidden;"><textarea id="test"></textarea></p>
 </div>
-<script>
-/*jslint sloppy:true browser:true */
-/*global sourceRewrite:true, CodeMirror:true */
-window.onload = function () {
-    var el;
-
-    el = document.getElementById('version');
-    if (typeof el.innerText === 'string') {
-        el.innerText = window.esprima.version;
-    } else {
-        el.textContent = window.esprima.version;
-    }
-
-    document.getElementById('rewrite').onclick = sourceRewrite;
-};
-
-try {
-    window.checkEnv();
-
-    // This is just testing, to detect whether CodeMirror would fail or not
-    window.editor = CodeMirror.fromTextArea(document.getElementById("test"));
-
-    window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true,
-        matchBrackets: true
-    });
-} catch (e) {
-    // CodeMirror failed to initialize, possible in e.g. old IE.
-    document.getElementById('codemirror').innerHTML = '';
-} finally {
-    document.getElementById('testbox').parentNode.removeChild(document.getElementById('testbox'));
-}
-</script>
 </body>
 </html>
