@@ -10685,10 +10685,10 @@ var testFixture = {
                             end: { line: 1, column: 21 }
                         }
                     }],
-                    range: [0, 24],
+                    range: [1, 23],
                     loc: {
-                        start: { line: 1, column: 0 },
-                        end: { line: 1, column: 24 }
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 23 }
                     }
                 },
                 right: {
@@ -11833,10 +11833,10 @@ var testFixture = {
                     rest: null,
                     generator: false,
                     expression: false,
-                    range: [13, 27],
+                    range: [14, 26],
                     loc: {
-                        start: { line: 1, column: 13 },
-                        end: { line: 1, column: 27 }
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 26 }
                     }
                 },
                 range: [13, 27],
@@ -14051,10 +14051,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 22],
+                range: [1, 21],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 22 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 21 }
                 }
             },
             range: [0, 22],
@@ -14093,10 +14093,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 23],
+                range: [1, 22],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 23 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 22 }
                 }
             },
             range: [0, 23],
@@ -14143,10 +14143,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 25],
+                range: [1, 24],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 25 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 24 }
                 }
             },
             range: [0, 25],
@@ -14211,10 +14211,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 28],
+                range: [1, 27],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 28 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 27 }
                 }
             },
             range: [0, 28],
@@ -15620,10 +15620,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 25],
+                range: [1, 24],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 25 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 24 }
                 }
             },
             range: [0, 25],
@@ -16143,10 +16143,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 14],
+                range: [1, 13],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 14 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 13 }
                 }
             },
             range: [0, 14],
@@ -16737,10 +16737,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 25],
+                range: [1, 24],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 2, column: 5 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 2, column: 4 }
                 }
             },
             range: [0, 25],
@@ -16796,10 +16796,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 36],
+                range: [1, 35],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 2, column: 5 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 2, column: 4 }
                 }
             },
             range: [0, 36],
@@ -16855,10 +16855,10 @@ var testFixture = {
                 rest: null,
                 generator: false,
                 expression: false,
-                range: [0, 47],
+                range: [1, 46],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 2, column: 15 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 2, column: 14 }
                 }
             },
             range: [0, 47],
@@ -18185,10 +18185,10 @@ var testFixture = {
                 params: [{
                     type: 'Identifier',
                     name: 'e',
-                    range: [0, 3],
+                    range: [1, 2],
                     loc: {
-                        start: { line: 1, column: 0 },
-                        end: { line: 1, column: 3 }
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
                     }
                 }],
                 defaults: [],
@@ -18436,10 +18436,10 @@ var testFixture = {
                 rest: null,
                 generator: true,
                 expression: false,
-                range: [0, 26],
+                range: [1, 25],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 26 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 25 }
                 }
             },
             range: [0, 26],
@@ -18493,10 +18493,10 @@ var testFixture = {
                 rest: null,
                 generator: true,
                 expression: false,
-                range: [0, 27],
+                range: [1, 26],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 27 }
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 26 }
                 }
             },
             range: [0, 27],
@@ -19295,10 +19295,10 @@ var testFixture = {
                                 end: { line: 1, column: 50 }
                             }
                         },
-                        range: [14, 51],
+                        range: [15, 50],
                         loc: {
-                            start: { line: 1, column: 14 },
-                            end: { line: 1, column: 51 }
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 50 }
                         }
                     },
                     range: [14, 51],
