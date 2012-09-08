@@ -14874,6 +14874,7 @@ var testFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
+            guardedHandlers: [],
             handlers: [{
                 type: 'CatchClause',
                 param: {
@@ -14885,7 +14886,6 @@ var testFixture = {
                         end: { line: 1, column: 16 }
                     }
                 },
-                guard: null,
                 body: {
                     type: 'BlockStatement',
                     body: [],
@@ -14920,6 +14920,7 @@ var testFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
+            guardedHandlers: [],
             handlers: [{
                 type: 'CatchClause',
                 param: {
@@ -14931,7 +14932,6 @@ var testFixture = {
                         end: { line: 1, column: 19 }
                     }
                 },
-                guard: null,
                 body: {
                     type: 'BlockStatement',
                     body: [],
@@ -14966,6 +14966,7 @@ var testFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
+            guardedHandlers: [],
             handlers: [{
                 type: 'CatchClause',
                 param: {
@@ -14977,7 +14978,6 @@ var testFixture = {
                         end: { line: 1, column: 24 }
                     }
                 },
-                guard: null,
                 body: {
                     type: 'BlockStatement',
                     body: [],
@@ -15012,6 +15012,7 @@ var testFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
+            guardedHandlers: [],
             handlers: [{
                 type: 'CatchClause',
                 param: {
@@ -15023,7 +15024,6 @@ var testFixture = {
                         end: { line: 1, column: 16 }
                     }
                 },
-                guard: null,
                 body: {
                     type: 'BlockStatement',
                     body: [{
@@ -15091,6 +15091,7 @@ var testFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
+            guardedHandlers: [],
             handlers: [],
             finalizer: {
                 type: 'BlockStatement',
@@ -15177,6 +15178,7 @@ var testFixture = {
                     end: { line: 1, column: 17 }
                 }
             },
+            guardedHandlers: [],
             handlers: [{
                 type: 'CatchClause',
                 param: {
@@ -15188,7 +15190,6 @@ var testFixture = {
                         end: { line: 1, column: 26 }
                     }
                 },
-                guard: null,
                 body: {
                     type: 'BlockStatement',
                     body: [{
@@ -15281,6 +15282,7 @@ var testFixture = {
                     end: { line: 1, column: 17 }
                 }
             },
+            guardedHandlers: [],
             handlers: [{
                 type: 'CatchClause',
                 param: {
@@ -15292,7 +15294,6 @@ var testFixture = {
                         end: { line: 1, column: 26 }
                     }
                 },
-                guard: null,
                 body: {
                     type: 'BlockStatement',
                     body: [{
