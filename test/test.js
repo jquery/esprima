@@ -13966,29 +13966,16 @@ var testFixture = {
                     end: { line: 1, column: 4 }
                 }
             },
-            consequent: {
-                type: 'ExpressionStatement',
-                expression: {
-                    type: 'FunctionExpression',
-                    id: null,
-                    params: [],
-                    defaults: [],
-                    body: {
-                        type: 'BlockStatement',
-                        body: [],
-                        range: [24, 26],
-                        loc: {
-                            start: { line: 1, column: 24 },
-                            end: { line: 1, column: 26 }
-                        }
-                    },
-                    rest: null,
-                    generator: false,
-                    expression: false,
-                    range: [14, 26],
+            body: {
+                type: 'WhileStatement',
+                test: {
+                    type: 'Literal',
+                    value: true,
+                    raw: 'true',
+                    range: [13, 17],
                     loc: {
-                        start: { line: 1, column: 14 },
-                        end: { line: 1, column: 26 }
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 17 }
                     }
                 },
                 body: {
@@ -16211,13 +16198,10 @@ var testFixture = {
                         end: { line: 2, column: 3 }
                     }
                 },
-                rest: null,
-                generator: false,
-                expression: false,
-                range: [1, 21],
+                range: [4, 8],
                 loc: {
-                    start: { line: 1, column: 1 },
-                    end: { line: 1, column: 21 }
+                    start: { line: 2, column: 0 },
+                    end: { line: 2, column: 4 }
                 }
             }],
             range: [0, 9],
@@ -16266,13 +16250,10 @@ var testFixture = {
                         end: { line: 2, column: 3 }
                     }
                 },
-                rest: null,
-                generator: false,
-                expression: false,
-                range: [1, 22],
+                range: [4, 8],
                 loc: {
-                    start: { line: 1, column: 1 },
-                    end: { line: 1, column: 22 }
+                    start: { line: 2, column: 0 },
+                    end: { line: 2, column: 4 }
                 }
             }],
             range: [0, 9],
@@ -16295,13 +16276,11 @@ var testFixture = {
                         end: { line: 1, column: 5 }
                     }
                 },
-                rest: null,
-                generator: false,
-                expression: false,
-                range: [1, 24],
+                init: null,
+                range: [4, 5],
                 loc: {
-                    start: { line: 1, column: 1 },
-                    end: { line: 1, column: 24 }
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
                 }
             }],
             kind: 'var',
@@ -16386,13 +16365,10 @@ var testFixture = {
                         end: { line: 2, column: 1 }
                     }
                 },
-                rest: null,
-                generator: false,
-                expression: false,
-                range: [1, 27],
+                range: [20, 22],
                 loc: {
-                    start: { line: 1, column: 1 },
-                    end: { line: 1, column: 27 }
+                    start: { line: 2, column: 0 },
+                    end: { line: 2, column: 2 }
                 }
             }],
             range: [0, 24],
@@ -17029,40 +17005,12 @@ var testFixture = {
                 start: { line: 0, column: 0 },
                 end: { line: 0, column: 0 }
             },
-            guardedHandlers: [],
-            handlers: [{
-                type: 'CatchClause',
-                param: {
-                    type: 'Identifier',
-                    name: 'Universe',
-                    range: [7, 15]
-                },
-                body: {
-                    type: 'BlockStatement',
-                    body: [],
-                    range: [16, 18]
-                },
-                range: [0, 18]
-            }],
-            range: [0, 18],
-            tokens: [{
-                type: 'Identifier',
-                value: 'module',
-                range: [0, 6]
-            }, {
-                type: 'Identifier',
-                value: 'Universe',
-                range: [7, 15]
-            }, {
-                type: 'Punctuator',
-                value: '{',
-                range: [16, 17]
-            }, {
-                type: 'Punctuator',
-                value: '}',
-                range: [17, 18]
-            }]
+            tokens: []
         },
+    },
+
+    'Harmony Module': {
+
 
         'module Universe { module MilkyWay {} }': {
             type: 'ModuleDeclaration',
@@ -17123,37 +17071,20 @@ var testFixture = {
                 name: 'MilkyWay',
                 range: [7, 15],
                 loc: {
-                    start: { line: 1, column: 4 },
-                    end: { line: 1, column: 7 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 15 }
                 }
             },
-            guardedHandlers: [],
-            handlers: [{
-                type: 'CatchClause',
-                param: {
-                    type: 'Identifier',
-                    name: 'eval',
-                    range: [15, 19],
-                    loc: {
-                        start: { line: 1, column: 15 },
-                        end: { line: 1, column: 19 }
-                    }
-                },
-                body: {
-                    type: 'BlockStatement',
-                    body: [],
-                    range: [21, 24],
-                    loc: {
-                        start: { line: 1, column: 21 },
-                        end: { line: 1, column: 24 }
-                    }
-                },
-                range: [8, 24],
+            from: {
+                type: 'Literal',
+                value: 'Universe/MilkyWay',
+                raw: '"Universe/MilkyWay"',
+                range: [18,37],
                 loc: {
                     start: { line: 1, column: 18 },
                     end: { line: 1, column: 37 }
                 }
-            }],
+            },
             range: [0, 37],
             loc: {
                 start: { line: 1, column: 0 },
@@ -19453,9 +19384,9 @@ var testFixture = {
                         end: { line: 1, column: 7 }
                     }
                 },
-                range: [0, 7],
+                range: [3, 7],
                 loc: {
-                    start: { line: 1, column: 0 },
+                    start: { line: 1, column: 3 },
                     end: { line: 1, column: 7 }
                 }
             },
@@ -19521,9 +19452,9 @@ var testFixture = {
                         end: { line: 1, column: 18 }
                     }
                 },
-                range: [0, 18],
+                range: [3, 18],
                 loc: {
-                    start: { line: 1, column: 0 },
+                    start: { line: 1, column: 3 },
                     end: { line: 1, column: 18 }
                 }
             },
