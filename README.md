@@ -15,8 +15,8 @@ with an experimental branch for ES.Next/Harmony
 [Parser API](https://developer.mozilla.org/en/SpiderMonkey/Parser_API)
 - Heavily tested (> 500 [unit tests](http://esprima.org/test/) with solid 100% code coverage)
 - Optional tracking of syntax node location (index-based and line-column)
-- [Blazing fast](http://esprima.org/test/benchmarks.html), up to 3x faster than
-UglifyJS `parse-js` ([speed comparison](http://esprima.org/test/compare.html))
+- [Blazing fast](http://esprima.org/test/benchmarks.html) (3x faster than
+UglifyJS on the [speed comparison test](http://esprima.org/test/compare.html) using Chrome)
 
 Esprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror 4.6+, Opera 8+) as well as
 [Node.js](http://nodejs.org).
@@ -25,7 +25,7 @@ Esprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror
 
 - Smart editing: [outline view](https://github.com/aclement/esprima-outline), [content assist](http://contraptionsforprogramming.blogspot.com/2012/02/better-javascript-content-assist-in.html)
 - Source code modification: [Esmorph](https://github.com/ariya/esmorph), [Code Painter](https://github.com/fawek/codepainter),
-  [node-falafel](https://github.com/substack/node-falafel)
+  [node-falafel](https://github.com/substack/node-falafel), [Esmangle](https://github.com/Constellation/esmangle)
 - Code coverage analysis: [node-cover](https://github.com/itay/node-cover),
 [coveraje](https://github.com/coveraje/coveraje),
 [CoverJS](https://github.com/arian/CoverJS)
