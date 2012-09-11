@@ -2228,7 +2228,353 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 30 }
             }
+        },
+
+        'const {a} = {}': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'ObjectPattern',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [7, 8],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 8 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [7, 8],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 8 }
+                            }
+                        },
+                        kind: 'init',
+                        shorthand: true,
+                        range: [7, 8],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 8 }
+                        }
+                    }]
+                },
+                init: {
+                    type: 'ObjectExpression',
+                    properties: [],
+                    range: [12, 14],
+                    loc: {
+                        start: { line: 1, column: 12 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                range: [6, 14],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 14 }
+                }
+            }],
+            kind: 'const',
+            range: [0, 14],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 14 }
+            }
+        },
+
+        'let {a} = {}': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'ObjectPattern',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [5, 6],
+                            loc: {
+                                start: { line: 1, column: 5 },
+                                end: { line: 1, column: 6 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [5, 6],
+                            loc: {
+                                start: { line: 1, column: 5 },
+                                end: { line: 1, column: 6 }
+                            }
+                        },
+                        kind: 'init',
+                        shorthand: true,
+                        range: [5, 6],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 6 }
+                        }
+                    }]
+                },
+                init: {
+                    type: 'ObjectExpression',
+                    properties: [],
+                    range: [10, 12],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [4, 12],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 12 }
+                }
+            }],
+            kind: 'let',
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        },
+
+        'var {a} = {}': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'ObjectPattern',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [5, 6],
+                            loc: {
+                                start: { line: 1, column: 5 },
+                                end: { line: 1, column: 6 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [5, 6],
+                            loc: {
+                                start: { line: 1, column: 5 },
+                                end: { line: 1, column: 6 }
+                            }
+                        },
+                        kind: 'init',
+                        shorthand: true,
+                        range: [5, 6],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 6 }
+                        }
+                    }]
+                },
+                init: {
+                    type: 'ObjectExpression',
+                    properties: [],
+                    range: [10, 12],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [4, 12],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 12 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        },
+
+        'const {a:b} = {}': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'ObjectPattern',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [7, 8],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 8 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [9, 10],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 10 }
+                            }
+                        },
+                        kind: 'init',
+                        range: [7, 10],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 10 }
+                        }
+                    }]
+                },
+                init: {
+                    type: 'ObjectExpression',
+                    properties: [],
+                    range: [14, 16],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                range: [6, 16],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            kind: 'const',
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
+        },
+
+        'let {a:b} = {}': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'ObjectPattern',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [5, 6],
+                            loc: {
+                                start: { line: 1, column: 5 },
+                                end: { line: 1, column: 6 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [7, 8],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 8 }
+                            }
+                        },
+                        kind: 'init',
+                        range: [5, 8],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 8 }
+                        }
+                    }]
+                },
+                init: {
+                    type: 'ObjectExpression',
+                    properties: [],
+                    range: [12, 14],
+                    loc: {
+                        start: { line: 1, column: 12 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                range: [4, 14],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 14 }
+                }
+            }],
+            kind: 'let',
+            range: [0, 14],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 14 }
+            }
+        },
+
+        'var {a:b} = {}': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'ObjectPattern',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [5, 6],
+                            loc: {
+                                start: { line: 1, column: 5 },
+                                end: { line: 1, column: 6 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [7, 8],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 8 }
+                            }
+                        },
+                        kind: 'init',
+                        range: [5, 8],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 8 }
+                        }
+                    }]
+                },
+                init: {
+                    type: 'ObjectExpression',
+                    properties: [],
+                    range: [12, 14],
+                    loc: {
+                        start: { line: 1, column: 12 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                range: [4, 14],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 14 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 14],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 14 }
+            }
         }
+
 
     },
 

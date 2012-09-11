@@ -15918,21 +15918,21 @@ var testFixture = {
             index: 15,
             lineNumber: 1,
             column: 16,
-            message: 'Error: Line 1: Unexpected token ;'
+            message: 'Error: Line 1: Const must be initialized'
         },
 
         'const x, y = 12;': {
             index: 7,
             lineNumber: 1,
             column: 8,
-            message: 'Error: Line 1: Unexpected token ,'
+            message: 'Error: Line 1: Const must be initialized'
         },
 
         'const x;': {
             index: 7,
             lineNumber: 1,
             column: 8,
-            message: 'Error: Line 1: Unexpected token ;'
+            message: 'Error: Line 1: Const must be initialized'
         },
 
         'if(true) let a = 1;': {

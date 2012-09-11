@@ -204,7 +204,8 @@ parseYieldExpression: true
         StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
         StrictReservedWord:  'Use of future reserved word in strict mode',
         NoFromAfterImport: 'Missing from after import',
-        NoYieldInGenerator: 'Missing yield in generator'
+        NoYieldInGenerator: 'Missing yield in generator',
+        NoUnintializedConst: 'Const must be initialized'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -2646,15 +2647,23 @@ parseYieldExpression: true
     }
 
     function parseVariableDeclaration(kind) {
-        var id = parseVariableIdentifier(),
+        var id,
             init = null;
-
-        // 12.2.1
-        if (strict && isRestrictedWord(id.name)) {
-            throwErrorTolerant({}, Messages.StrictVarName);
+        if (match('{')) {
+            id = parseObjectInitialiser();
+            reinterpretAsAssignmentBindingPattern(id);
+        } else {
+            id = parseVariableIdentifier();
+            // 12.2.1
+            if (strict && isRestrictedWord(id.name)) {
+                throwErrorTolerant({}, Messages.StrictVarName);
+            }
         }
 
         if (kind === 'const') {
+            if (!match('=')) {
+                throwError({}, Messages.NoUnintializedConst);
+            }
             expect('=');
             init = parseAssignmentExpression();
         } else if (match('=')) {
