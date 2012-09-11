@@ -16281,16 +16281,16 @@ var testFixture = {
         },
 
         'function hello() {\'use strict\'; eval = 10; }': {
-            index: 36,
+            index: 32,
             lineNumber: 1,
-            column: 37,
+            column: 33,
             message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
         },
 
         'function hello() {\'use strict\'; arguments = 10; }': {
-            index: 41,
+            index: 32,
             lineNumber: 1,
-            column: 42,
+            column: 33,
             message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
         },
 
@@ -17390,6 +17390,142 @@ var testFixture = {
             }]
         },
 
+        '"use strict"; eval = 0;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'eval',
+                        range: [14, 18],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0',
+                        range: [21, 22],
+                        loc: {
+                            start: { line: 1, column: 21 },
+                            end: { line: 1, column: 22 }
+                        }
+                    },
+                    range: [14, 22],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                range: [14, 23],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 23 }
+                }
+            }],
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            },
+            errors: [{
+                index: 14,
+                lineNumber: 1,
+                column: 15,
+                message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
+            }]
+        },
+
+        '"use strict"; arguments = 0;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'arguments',
+                        range: [14, 23],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 23 }
+                        }
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0',
+                        range: [26, 27],
+                        loc: {
+                            start: { line: 1, column: 26 },
+                            end: { line: 1, column: 27 }
+                        }
+                    },
+                    range: [14, 27],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                range: [14, 28],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 28 }
+                }
+            }],
+            range: [0, 28],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
+            },
+            errors: [{
+                index: 14,
+                lineNumber: 1,
+                column: 15,
+                message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
+            }]
+        },
+
         '"use strict";x={y:1,y:1}': {
             type: 'Program',
             body: [{
@@ -17508,6 +17644,859 @@ var testFixture = {
                 lineNumber: 1,
                 column: 24,
                 message: 'Error: Line 1: Duplicate data property in object literal not allowed in strict mode'
+            }]
+        },
+
+        '"use strict"; function eval() {};': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'eval',
+                    range: [23, 27],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [30, 32],
+                    loc: {
+                        start: { line: 1, column: 30 },
+                        end: { line: 1, column: 32 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [14, 32],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 32 }
+                }
+            }, {
+                type: 'EmptyStatement',
+                range: [32, 33],
+                loc: {
+                    start: { line: 1, column: 32 },
+                    end: { line: 1, column: 33 }
+                }
+            }],
+            range: [0, 33],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 33 }
+            },
+            errors: [{
+                index: 23,
+                lineNumber: 1,
+                column: 24,
+                message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            }]
+        },
+
+        '"use strict"; function arguments() {};': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'arguments',
+                    range: [23, 32],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 32 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [35, 37],
+                    loc: {
+                        start: { line: 1, column: 35 },
+                        end: { line: 1, column: 37 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [14, 37],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 37 }
+                }
+            }, {
+                type: 'EmptyStatement',
+                range: [37, 38],
+                loc: {
+                    start: { line: 1, column: 37 },
+                    end: { line: 1, column: 38 }
+                }
+            }],
+            range: [0, 38],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            },
+            errors: [{
+                index: 23,
+                lineNumber: 1,
+                column: 24,
+                message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            }]
+        },
+
+        '"use strict"; function interface() {};': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'interface',
+                    range: [23, 32],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 32 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [35, 37],
+                    loc: {
+                        start: { line: 1, column: 35 },
+                        end: { line: 1, column: 37 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [14, 37],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 37 }
+                }
+            }, {
+                type: 'EmptyStatement',
+                range: [37, 38],
+                loc: {
+                    start: { line: 1, column: 37 },
+                    end: { line: 1, column: 38 }
+                }
+            }],
+            range: [0, 38],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            },
+            errors: [{
+                index: 23,
+                lineNumber: 1,
+                column: 24,
+                message: 'Error: Line 1: Use of future reserved word in strict mode'
+            }]
+        },
+
+        '"use strict"; (function eval() {});': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'FunctionExpression',
+                    id: {
+                        type: 'Identifier',
+                        name: 'eval',
+                        range: [24, 28],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 28 }
+                        }
+                    },
+                    params: [],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [31, 33],
+                        loc: {
+                            start: { line: 1, column: 31 },
+                            end: { line: 1, column: 33 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [15, 33],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 33 }
+                    }
+                },
+                range: [14, 35],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 35 }
+                }
+            }],
+            range: [0, 35],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 35 }
+            },
+            errors: [{
+                index: 24,
+                lineNumber: 1,
+                column: 25,
+                message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            }]
+        },
+
+        '"use strict"; (function arguments() {});': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'FunctionExpression',
+                    id: {
+                        type: 'Identifier',
+                        name: 'arguments',
+                        range: [24, 33],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 33 }
+                        }
+                    },
+                    params: [],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [36, 38],
+                        loc: {
+                            start: { line: 1, column: 36 },
+                            end: { line: 1, column: 38 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [15, 38],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 38 }
+                    }
+                },
+                range: [14, 40],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 40 }
+                }
+            }],
+            range: [0, 40],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 40 }
+            },
+            errors: [{
+                index: 24,
+                lineNumber: 1,
+                column: 25,
+                message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            }]
+        },
+
+        '"use strict"; (function interface() {});': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'FunctionExpression',
+                    id: {
+                        type: 'Identifier',
+                        name: 'interface',
+                        range: [24, 33],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 33 }
+                        }
+                    },
+                    params: [],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [36, 38],
+                        loc: {
+                            start: { line: 1, column: 36 },
+                            end: { line: 1, column: 38 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [15, 38],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 38 }
+                    }
+                },
+                range: [14, 40],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 40 }
+                }
+            }],
+            range: [0, 40],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 40 }
+            },
+            errors: [{
+                index: 24,
+                lineNumber: 1,
+                column: 25,
+                message: 'Error: Line 1: Use of future reserved word in strict mode'
+            }]
+        },
+
+        '"use strict"; function f(eval) {};': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'f',
+                    range: [23, 24],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                params: [{
+                    type: 'Identifier',
+                    name: 'eval',
+                    range: [25, 29],
+                    loc: {
+                        start: { line: 1, column: 25 },
+                        end: { line: 1, column: 29 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [31, 33],
+                    loc: {
+                        start: { line: 1, column: 31 },
+                        end: { line: 1, column: 33 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [14, 33],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 33 }
+                }
+            }, {
+                type: 'EmptyStatement',
+                range: [33, 34],
+                loc: {
+                    start: { line: 1, column: 33 },
+                    end: { line: 1, column: 34 }
+                }
+            }],
+            range: [0, 34],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 34 }
+            },
+            errors: [{
+                index: 25,
+                lineNumber: 1,
+                column: 26,
+                message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            }]
+        },
+
+        '"use strict"; function f(arguments) {};': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'f',
+                    range: [23, 24],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                params: [{
+                    type: 'Identifier',
+                    name: 'arguments',
+                    range: [25, 34],
+                    loc: {
+                        start: { line: 1, column: 25 },
+                        end: { line: 1, column: 34 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [36, 38],
+                    loc: {
+                        start: { line: 1, column: 36 },
+                        end: { line: 1, column: 38 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [14, 38],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 38 }
+                }
+            }, {
+                type: 'EmptyStatement',
+                range: [38, 39],
+                loc: {
+                    start: { line: 1, column: 38 },
+                    end: { line: 1, column: 39 }
+                }
+            }],
+            range: [0, 39],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 39 }
+            },
+            errors: [{
+                index: 25,
+                lineNumber: 1,
+                column: 26,
+                message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            }]
+        },
+
+        '"use strict"; (function f(eval) {});': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'FunctionExpression',
+                    id: {
+                        type: 'Identifier',
+                        name: 'f',
+                        range: [24, 25],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    params: [{
+                        type: 'Identifier',
+                        name: 'eval',
+                        range: [26, 30],
+                        loc: {
+                            start: { line: 1, column: 26 },
+                            end: { line: 1, column: 30 }
+                        }
+                    }],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [32, 34],
+                        loc: {
+                            start: { line: 1, column: 32 },
+                            end: { line: 1, column: 34 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [15, 34],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 34 }
+                    }
+                },
+                range: [14, 36],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 36 }
+                }
+            }],
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            },
+            errors: [{
+                index: 26,
+                lineNumber: 1,
+                column: 27,
+                message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            }]
+        },
+
+
+        '"use strict"; (function f(arguments) {});': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'FunctionExpression',
+                    id: {
+                        type: 'Identifier',
+                        name: 'f',
+                        range: [24, 25],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    params: [{
+                        type: 'Identifier',
+                        name: 'arguments',
+                        range: [26, 35],
+                        loc: {
+                            start: { line: 1, column: 26 },
+                            end: { line: 1, column: 35 }
+                        }
+                    }],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [37, 39],
+                        loc: {
+                            start: { line: 1, column: 37 },
+                            end: { line: 1, column: 39 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [15, 39],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 39 }
+                    }
+                },
+                range: [14, 41],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 41 }
+                }
+            }],
+            range: [0, 41],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 41 }
+            },
+            errors: [{
+                index: 26,
+                lineNumber: 1,
+                column: 27,
+                message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            }]
+        },
+
+        '"use strict"; x = { set f(eval) {} }' : {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [14, 15],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 15 }
+                        }
+                    },
+                    right: {
+                        type: 'ObjectExpression',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'f',
+                                range: [24, 25],
+                                loc: {
+                                    start: { line: 1, column: 24 },
+                                    end: { line: 1, column: 25 }
+                                }
+                            },
+                            value : {
+                                type: 'FunctionExpression',
+                                id: null,
+                                params: [{
+                                    type: 'Identifier',
+                                    name: 'eval',
+                                    range: [26, 30],
+                                    loc: {
+                                        start: { line: 1, column: 26 },
+                                        end: { line: 1, column: 30 }
+                                    }
+                                }],
+                                defaults: [],
+                                body: {
+                                    type: 'BlockStatement',
+                                    body: [],
+                                    range: [32, 34],
+                                    loc: {
+                                        start: { line: 1, column: 32 },
+                                        end: { line: 1, column: 34 }
+                                    }
+                                },
+                                rest: null,
+                                generator: false,
+                                expression: false,
+                                range: [32, 34],
+                                loc: {
+                                    start: { line: 1, column: 32 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            kind: 'set',
+                            range: [20, 34],
+                            loc: {
+                                start: { line: 1, column: 20 },
+                                end: { line: 1, column: 34 }
+                            }
+                        }],
+                        range: [18, 36],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 36 }
+                        }
+                    },
+                    range: [14, 36],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 36 }
+                    }
+                },
+                range: [14, 36],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 36 }
+                }
+            }],
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            },
+            errors: [{
+                index: 26,
+                lineNumber: 1,
+                column: 27,
+                message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
             }]
         }
 
