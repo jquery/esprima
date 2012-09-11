@@ -2644,18 +2644,20 @@ parseYieldExpression: true
     }
 
     function parseVariableDeclaration(kind) {
-        var id = parseVariableIdentifier(),
+        var id,
             init = null;
-
-        // 12.2.1
-        if (strict && isRestrictedWord(id.name)) {
-            throwErrorTolerant({}, Messages.StrictVarName);
+        if (lookahead().value === '{') {
+            id = parseObjectInitialiser();
+            reinterpretAsAssignmentBindingPattern(id);
+        } else {
+            id = parseVariableIdentifier();
+            // 12.2.1
+            if (strict && isRestrictedWord(id.name)) {
+                throwErrorTolerant({}, Messages.StrictVarName);
+            }
         }
 
-        if (kind === 'const') {
-            expect('=');
-            init = parseAssignmentExpression();
-        } else if (match('=')) {
+        if (match('=')) {
             lex();
             init = parseAssignmentExpression();
         }
