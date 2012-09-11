@@ -1344,7 +1344,7 @@ parseStatement: true, parseSourceElement: true */
         previousStrict = strict;
         body = parseFunctionSourceElements();
         if (first && strict && isRestrictedWord(param[0].name)) {
-            throwError(first, Messages.StrictParamName);
+            throwErrorTolerant(first, Messages.StrictParamName);
         }
         strict = previousStrict;
 
@@ -2845,7 +2845,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseFunctionDeclaration() {
-        var id, param, params = [], body, token, firstRestricted, message, previousStrict, paramSet;
+        var id, param, params = [], body, token, stricted, firstRestricted, message, previousStrict, paramSet;
 
         expectKeyword('function');
         token = lookahead();
@@ -2873,7 +2873,8 @@ parseStatement: true, parseSourceElement: true */
                 param = parseVariableIdentifier();
                 if (strict) {
                     if (isRestrictedWord(token.value)) {
-                        throwError(token, Messages.StrictParamName);
+                        stricted = token;
+                        message = Messages.StrictParamName;
                     }
                     if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
                         throwError(token, Messages.StrictParamDupe);
@@ -2906,6 +2907,9 @@ parseStatement: true, parseSourceElement: true */
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
         }
+        if (strict && stricted) {
+            throwErrorTolerant(stricted, message);
+        }
         strict = previousStrict;
 
         return {
@@ -2921,7 +2925,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseFunctionExpression() {
-        var token, id = null, firstRestricted, message, param, params = [], body, previousStrict, paramSet;
+        var token, id = null, stricted, firstRestricted, message, param, params = [], body, previousStrict, paramSet;
 
         expectKeyword('function');
 
@@ -2952,7 +2956,8 @@ parseStatement: true, parseSourceElement: true */
                 param = parseVariableIdentifier();
                 if (strict) {
                     if (isRestrictedWord(token.value)) {
-                        throwError(token, Messages.StrictParamName);
+                        stricted = token;
+                        message = Messages.StrictParamName;
                     }
                     if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
                         throwError(token, Messages.StrictParamDupe);
@@ -2984,6 +2989,9 @@ parseStatement: true, parseSourceElement: true */
         body = parseFunctionSourceElements();
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
+        }
+        if (strict && stricted) {
+            throwErrorTolerant(stricted, message);
         }
         strict = previousStrict;
 
