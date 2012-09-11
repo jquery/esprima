@@ -16281,16 +16281,16 @@ var testFixture = {
         },
 
         'function hello() {\'use strict\'; eval = 10; }': {
-            index: 36,
+            index: 32,
             lineNumber: 1,
-            column: 37,
+            column: 33,
             message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
         },
 
         'function hello() {\'use strict\'; arguments = 10; }': {
-            index: 41,
+            index: 32,
             lineNumber: 1,
-            column: 42,
+            column: 33,
             message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
         },
 
@@ -17387,6 +17387,142 @@ var testFixture = {
                 lineNumber: 1,
                 column: 28,
                 message: 'Error: Line 1: Variable name may not be eval or arguments in strict mode'
+            }]
+        },
+
+        '"use strict"; eval = 0;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'eval',
+                        range: [14, 18],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0',
+                        range: [21, 22],
+                        loc: {
+                            start: { line: 1, column: 21 },
+                            end: { line: 1, column: 22 }
+                        }
+                    },
+                    range: [14, 22],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                range: [14, 23],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 23 }
+                }
+            }],
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            },
+            errors: [{
+                index: 14,
+                lineNumber: 1,
+                column: 15,
+                message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
+            }]
+        },
+
+        '"use strict"; arguments = 0;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'arguments',
+                        range: [14, 23],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 23 }
+                        }
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0',
+                        range: [26, 27],
+                        loc: {
+                            start: { line: 1, column: 26 },
+                            end: { line: 1, column: 27 }
+                        }
+                    },
+                    range: [14, 27],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                range: [14, 28],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 28 }
+                }
+            }],
+            range: [0, 28],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
+            },
+            errors: [{
+                index: 14,
+                lineNumber: 1,
+                column: 15,
+                message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
             }]
         },
 

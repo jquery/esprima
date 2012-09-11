@@ -1961,8 +1961,9 @@ parseStatement: true, parseSourceElement: true */
     // 11.13 Assignment Operators
 
     function parseAssignmentExpression() {
-        var expr;
+        var token, expr;
 
+        token = lookahead();
         expr = parseConditionalExpression();
 
         if (matchAssign()) {
@@ -1973,7 +1974,7 @@ parseStatement: true, parseSourceElement: true */
 
             // 11.13.1
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
-                throwError({}, Messages.StrictLHSAssignment);
+                throwErrorTolerant(token, Messages.StrictLHSAssignment);
             }
 
             expr = {
