@@ -17509,6 +17509,288 @@ var testFixture = {
                 column: 24,
                 message: 'Error: Line 1: Duplicate data property in object literal not allowed in strict mode'
             }]
+        },
+
+        '"use strict"; function eval() {};': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'eval',
+                    range: [23, 27],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [30, 32],
+                    loc: {
+                        start: { line: 1, column: 30 },
+                        end: { line: 1, column: 32 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [14, 32],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 32 }
+                }
+            }, {
+                type: 'EmptyStatement',
+                range: [32, 33],
+                loc: {
+                    start: { line: 1, column: 32 },
+                    end: { line: 1, column: 33 }
+                },
+            }],
+            range: [0, 33],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 33 }
+            },
+            errors: [{
+                index: 23,
+                lineNumber: 1,
+                column: 24,
+                message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            }]
+        },
+
+        '"use strict"; function arguments() {};': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'arguments',
+                    range: [23, 32],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 32 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [35, 37],
+                    loc: {
+                        start: { line: 1, column: 35 },
+                        end: { line: 1, column: 37 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [14, 37],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 37 }
+                }
+            }, {
+                type: 'EmptyStatement',
+                range: [37, 38],
+                loc: {
+                    start: { line: 1, column: 37 },
+                    end: { line: 1, column: 38 }
+                },
+            }],
+            range: [0, 38],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            },
+            errors: [{
+                index: 23,
+                lineNumber: 1,
+                column: 24,
+                message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            }]
+        },
+
+        '"use strict"; (function eval() {});': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'FunctionExpression',
+                    id: {
+                        type: 'Identifier',
+                        name: 'eval',
+                        range: [24, 28],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 28 }
+                        }
+                    },
+                    params: [],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [31, 33],
+                        loc: {
+                            start: { line: 1, column: 31 },
+                            end: { line: 1, column: 33 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [15, 33],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 33 }
+                    }
+                },
+                range: [14, 35],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 35 }
+                },
+            }],
+            range: [0, 35],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 35 }
+            },
+            errors: [{
+                index: 24,
+                lineNumber: 1,
+                column: 25,
+                message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            }]
+        },
+
+        '"use strict"; (function arguments() {});': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'FunctionExpression',
+                    id: {
+                        type: 'Identifier',
+                        name: 'arguments',
+                        range: [24, 33],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 33 }
+                        }
+                    },
+                    params: [],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [36, 38],
+                        loc: {
+                            start: { line: 1, column: 36 },
+                            end: { line: 1, column: 38 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [15, 38],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 38 }
+                    }
+                },
+                range: [14, 40],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 40 }
+                },
+            }],
+            range: [0, 40],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 40 }
+            },
+            errors: [{
+                index: 24,
+                lineNumber: 1,
+                column: 25,
+                message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            }]
         }
 
     }
