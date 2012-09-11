@@ -17007,7 +17007,7 @@ var testFixture = {
                 end: { line: 0, column: 0 }
             },
             tokens: []
-        },
+        }
     },
 
     'Harmony Module': {
