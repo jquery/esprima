@@ -17651,6 +17651,76 @@ var testFixture = {
             }]
         },
 
+        '"use strict"; function interface() {};': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'interface',
+                    range: [23, 32],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 32 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [35, 37],
+                    loc: {
+                        start: { line: 1, column: 35 },
+                        end: { line: 1, column: 37 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [14, 37],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 37 }
+                }
+            }, {
+                type: 'EmptyStatement',
+                range: [37, 38],
+                loc: {
+                    start: { line: 1, column: 37 },
+                    end: { line: 1, column: 38 }
+                },
+            }],
+            range: [0, 38],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            },
+            errors: [{
+                index: 23,
+                lineNumber: 1,
+                column: 24,
+                message: 'Error: Line 1: Use of future reserved word in strict mode'
+            }]
+        },
+
         '"use strict"; (function eval() {});': {
             type: 'Program',
             body: [{
@@ -17790,6 +17860,77 @@ var testFixture = {
                 lineNumber: 1,
                 column: 25,
                 message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            }]
+        },
+
+        '"use strict"; (function interface() {});': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'FunctionExpression',
+                    id: {
+                        type: 'Identifier',
+                        name: 'interface',
+                        range: [24, 33],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 33 }
+                        }
+                    },
+                    params: [],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [36, 38],
+                        loc: {
+                            start: { line: 1, column: 36 },
+                            end: { line: 1, column: 38 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [15, 38],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 38 }
+                    }
+                },
+                range: [14, 40],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 40 }
+                },
+            }],
+            range: [0, 40],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 40 }
+            },
+            errors: [{
+                index: 24,
+                lineNumber: 1,
+                column: 25,
+                message: 'Error: Line 1: Use of future reserved word in strict mode'
             }]
         },
 
