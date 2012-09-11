@@ -17566,7 +17566,7 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 32 },
                     end: { line: 1, column: 33 }
-                },
+                }
             }],
             range: [0, 33],
             loc: {
@@ -17636,7 +17636,7 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 37 },
                     end: { line: 1, column: 38 }
-                },
+                }
             }],
             range: [0, 38],
             loc: {
@@ -17706,7 +17706,7 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 37 },
                     end: { line: 1, column: 38 }
-                },
+                }
             }],
             range: [0, 38],
             loc: {
@@ -17777,7 +17777,7 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 14 },
                     end: { line: 1, column: 35 }
-                },
+                }
             }],
             range: [0, 35],
             loc: {
@@ -17848,7 +17848,7 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 14 },
                     end: { line: 1, column: 40 }
-                },
+                }
             }],
             range: [0, 40],
             loc: {
@@ -17919,7 +17919,7 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 14 },
                     end: { line: 1, column: 40 }
-                },
+                }
             }],
             range: [0, 40],
             loc: {
@@ -17997,7 +17997,7 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 33 },
                     end: { line: 1, column: 34 }
-                },
+                }
             }],
             range: [0, 34],
             loc: {
@@ -18075,7 +18075,7 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 38 },
                     end: { line: 1, column: 39 }
-                },
+                }
             }],
             range: [0, 39],
             loc: {
@@ -18154,7 +18154,7 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 14 },
                     end: { line: 1, column: 36 }
-                },
+                }
             }],
             range: [0, 36],
             loc: {
@@ -18234,7 +18234,7 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 14 },
                     end: { line: 1, column: 41 }
-                },
+                }
             }],
             range: [0, 41],
             loc: {
