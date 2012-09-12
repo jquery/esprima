@@ -1503,7 +1503,8 @@ parseYieldExpression: true
             if (isFutureReservedWord(token.value)) {
                 throwError(token, Messages.UnexpectedReserved);
             } else if (strict && isStrictModeReservedWord(token.value)) {
-                throwError(token, Messages.StrictReservedWord);
+                throwErrorTolerant(token, Messages.StrictReservedWord);
+                return;
             }
             throwError(token, Messages.UnexpectedToken, token.value);
         }
@@ -1656,7 +1657,7 @@ parseYieldExpression: true
         yieldAllowed = options.generator;
         body = parseConciseBody();
         if (options.name && strict && isRestrictedWord(param[0].name)) {
-            throwError(options.name, Messages.StrictParamName);
+            throwErrorTolerant(options.name, Messages.StrictParamName);
         }
         if (yieldAllowed && !yieldFound) {
             throwError({}, Messages.NoYieldInGenerator);
@@ -2526,6 +2527,7 @@ parseYieldExpression: true
             }
         }
 
+        token = lookahead();
         expr = parseConditionalExpression();
 
         if (match('=>')) {
@@ -2549,7 +2551,7 @@ parseYieldExpression: true
         if (matchAssign()) {
             // 11.13.1
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
-                throwError({}, Messages.StrictLHSAssignment);
+                throwErrorTolerant(token, Messages.StrictLHSAssignment);
             }
 
             // ES.next draf 11.13 Runtime Semantics step 1
@@ -3694,7 +3696,7 @@ parseYieldExpression: true
     }
 
     function parseFunctionDeclaration() {
-        var id, param, params = [], body, token, firstRestricted, message, previousStrict, previousYieldAllowed, paramSet, generator;
+        var id, param, params = [], body, token, stricted, firstRestricted, message, previousStrict, previousYieldAllowed, paramSet, generator;
 
         expectKeyword('function');
 
@@ -3709,7 +3711,7 @@ parseYieldExpression: true
         id = parseVariableIdentifier();
         if (strict) {
             if (isRestrictedWord(token.value)) {
-                throwError(token, Messages.StrictFunctionName);
+                throwErrorTolerant(token, Messages.StrictFunctionName);
             }
         } else {
             if (isRestrictedWord(token.value)) {
@@ -3730,7 +3732,8 @@ parseYieldExpression: true
                 param = parseVariableIdentifier();
                 if (strict) {
                     if (isRestrictedWord(token.value)) {
-                        throwError(token, Messages.StrictParamName);
+                        stricted = token;
+                        message = Messages.StrictParamName;
                     }
                     if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
                         throwError(token, Messages.StrictParamDupe);
@@ -3765,6 +3768,9 @@ parseYieldExpression: true
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
         }
+        if (strict && stricted) {
+            throwErrorTolerant(stricted, message);
+        }
         if (yieldAllowed && !yieldFound) {
             throwError({}, Messages.NoYieldInGenerator);
         }
@@ -3784,7 +3790,7 @@ parseYieldExpression: true
     }
 
     function parseFunctionExpression() {
-        var token, id = null, firstRestricted, message, param, params = [], body, previousStrict, previousYieldAllowed, paramSet, generator;
+        var token, id = null, stricted, firstRestricted, message, param, params = [], body, previousStrict, previousYieldAllowed, paramSet, generator;
 
         expectKeyword('function');
 
@@ -3800,7 +3806,7 @@ parseYieldExpression: true
             id = parseVariableIdentifier();
             if (strict) {
                 if (isRestrictedWord(token.value)) {
-                    throwError(token, Messages.StrictFunctionName);
+                    throwErrorTolerant(token, Messages.StrictFunctionName);
                 }
             } else {
                 if (isRestrictedWord(token.value)) {
@@ -3822,7 +3828,8 @@ parseYieldExpression: true
                 param = parseVariableIdentifier();
                 if (strict) {
                     if (isRestrictedWord(token.value)) {
-                        throwError(token, Messages.StrictParamName);
+                        stricted = token;
+                        message = Messages.StrictParamName;
                     }
                     if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
                         throwError(token, Messages.StrictParamDupe);
@@ -3856,6 +3863,9 @@ parseYieldExpression: true
         body = parseFunctionSourceElements();
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
+        }
+        if (strict && stricted) {
+            throwErrorTolerant(stricted, message);
         }
         if (yieldAllowed && !yieldFound) {
             throwError({}, Messages.NoYieldInGenerator);
