@@ -58,7 +58,8 @@ var syntax = esprima.parse('var answer = 42');
 <pre class="prettyprint lang-js">
 require(['esprima'], function (parser) {
     // Do something with parser, e.g.
-    console.log(parser.parse('var answer = 42'));
+    var syntax = parser.parse('var answer = 42');
+    console.log(JSON.stringify(syntax, null, 4));
 });
 </pre>
 
