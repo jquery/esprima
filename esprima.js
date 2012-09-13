@@ -3073,12 +3073,19 @@ parseYieldExpression: true
     }
 
     function parseForStatement() {
-        var init, test, update, left, right, body, operator, oldInIteration;
+        var init, test, update, left, right, body, operator, oldInIteration, each;
 
         init = test = update = null;
 
         expectKeyword('for');
 
+        // http://wiki.ecmascript.org/doku.php?id=proposals:iterators_and_generators&s=each
+        if (matchContextualKeyword("each")) {
+            lex();
+            each = true;
+        } else {
+            each = false;
+        };
         expect('(');
 
         if (match(';')) {
@@ -3164,7 +3171,7 @@ parseYieldExpression: true
                 left: left,
                 right: right,
                 body: body,
-                each: false
+                each: each
             };
         } else {
             return {
