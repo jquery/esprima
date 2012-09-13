@@ -5,8 +5,8 @@
 <title>Esprima: Transpile Demo</title>
 <script src="../test/3rdparty/platform.js"></script>
 <script src="checkenv.js"></script>
-<script src="transpile.js"></script>
 <script src="../esprima.js"></script>
+<script src="../test/3rdparty/modifier.js"></script>
 <script src="../test/3rdparty/harmonizr.js"></script>
 <script src="../assets/codemirror/codemirror.js"></script>
 <script src="../assets/codemirror/javascript.js"></script>
@@ -14,7 +14,7 @@
 <link rel="stylesheet" type="text/css" href="../assets/style.css"/>
 <style>
 .CodeMirror-scroll {
-    height: 300px;
+    height: 440px;
 }
 
 #codebox {
@@ -42,15 +42,7 @@
 
 <h1>Transpile <small>from ES.Next back to ES.now</small></h1>
 
-<p>Type ES Harmony code in the left box. The transpiled version will be shown in the right box.</p>
-
-<p><b>Note</b>: This is work-in-progress. Only transpilation of
-<a href="http://wiki.ecmascript.org/doku.php?id=harmony:object_literals#object_literal_property_value_shorthand">object literal property value shorthand</a>
-and <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules">module declaration</a> are currently supported.</p>
-
-<p><b>Credit</b>: Module transpilation is based on <a href="https://github.com/jdiamond/harmonizr">Harmonizr project</a>.</p>
-
-<p>&nbsp;</p>
+<p>Type ES Harmony code in the left box. The transpiled version (using <a href="https://github.com/jdiamond/harmonizr">Harmonizr project</a>) will be shown in the right box.</p>
 
 <div>
 <span id="codebox"><textarea id="code" autofocus="autofocus" cols="50" rows="25" spellcheck="false">
@@ -63,7 +55,23 @@ module LinearAlgebra {
     export function Point(x, y) {
         return { x, y };
     }
+}
 
+class Vector3 {
+
+  constructor (x, y, z) {
+    this.x = x; this.y = y; this.z = z;
+  }
+
+  // Euclidian norm
+  get magnitude() {
+
+    // Arrow function
+    var sqr = p => p * p;
+
+    return Math.sqrt(sqr(this.x) + sqr(this.y) +
+      sqr(this.z));
+  }
 }
 </textarea></span>
 
@@ -83,46 +91,7 @@ module LinearAlgebra {
 
 <p id="testbox" style="visibility: hidden;"><textarea id="test"></textarea></p>
 </div>
-<script>
-/*jslint sloppy:true browser:true */
-/*global updateCode:true, CodeMirror:true */
-window.onload = function () {
-    var el;
 
-    el = document.getElementById('version');
-    if (typeof el.innerText === 'string') {
-        el.innerText = window.esprima.version;
-    } else {
-        el.textContent = window.esprima.version;
-    }
-
-    try {
-        updateCode(1);
-    } catch (e) { }
-};
-
-try {
-    window.checkEnv();
-
-    // This is just testing, to detect whether CodeMirror would fail or not
-    window.editor = CodeMirror.fromTextArea(document.getElementById("test"));
-
-    window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true,
-        matchBrackets: true,
-        onChange: updateCode
-    });
-
-    window.resultview = CodeMirror.fromTextArea(document.getElementById("result"), {
-        lineNumbers: true,
-        readOnly: 'nocursor'
-    });
-} catch (e) {
-    // CodeMirror failed to initialize, possible in e.g. old IE.
-    document.getElementById('codemirror').innerHTML = '';
-} finally {
-    document.getElementById('testbox').parentNode.removeChild(document.getElementById('testbox'));
-}
-</script>
+<script src="transpile.js"></script>
 </body>
 </html>

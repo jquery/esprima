@@ -22,71 +22,8 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint browser:true evil:true */
-/*global esprima:true */
-
-
-function transpile(code) {
-    'use strict';
-
-    var result, tree, operations, i, op;
-
-     // Executes visitor on the object and its children (recursively).
-    function traverse(object, visitor, master) {
-        var key, child, parent, path;
-
-        parent = (typeof master === 'undefined') ? [] : master;
-
-        if (visitor.call(null, object, parent) === false) {
-            return;
-        }
-        for (key in object) {
-            if (object.hasOwnProperty(key)) {
-                child = object[key];
-                path = [ object ];
-                path.push(parent);
-                if (typeof child === 'object' && child !== null) {
-                    traverse(child, visitor, path);
-                }
-            }
-        }
-    }
-
-    tree = esprima.parse(code, { range: true, raw: true });
-
-    operations = [];
-
-    traverse(tree, function (node, path) {
-        var pos, text;
-        if (node.type !== esprima.Syntax.Property) {
-            return;
-        }
-        if (typeof node.shorthand !== 'undefined' && node.shorthand) {
-            pos = node.key.range[1];
-            text = node.key.name;
-            if (typeof text === 'undefined') {
-                text = node.key.raw;
-            }
-            text = ': ' + text;
-            operations.push({
-                pos: pos,
-                text: text
-            });
-        }
-    });
-
-    operations.sort(function (a, b) { return b.pos - a.pos; });
-
-    result = code;
-    for (i = 0; i < operations.length; i += 1) {
-        op = operations[i];
-        result = result.slice(0, op.pos) + op.text + result.slice(op.pos, result.length);
-    }
-
-    result = harmonizr.harmonize(result, { style: 'revealing' });
-
-    return result;
-}
+/*jslint browser:true */
+/*global esprima:true, harmonizr:true */
 
 var updateId;
 
@@ -120,7 +57,7 @@ function updateCode(delay) {
 
         try {
             timestamp = new Date();
-            result = transpile(code);
+            result = harmonizr.harmonize(code, { style: 'revealing' });
             timestamp = new Date() - timestamp;
             setText('error', 'No error. Transpiled in ' + timestamp + ' ms.');
 
@@ -136,3 +73,44 @@ function updateCode(delay) {
         updateId = undefined;
     }, delay || 250);
 }
+
+/*jslint sloppy:true browser:true */
+/*global updateCode:true, CodeMirror:true */
+window.onload = function () {
+    var el;
+
+    el = document.getElementById('version');
+    if (typeof el.innerText === 'string') {
+        el.innerText = window.esprima.version;
+    } else {
+        el.textContent = window.esprima.version;
+    }
+
+    try {
+        updateCode(1);
+    } catch (e) { }
+};
+
+try {
+    window.checkEnv();
+
+    // This is just testing, to detect whether CodeMirror would fail or not
+    window.editor = CodeMirror.fromTextArea(document.getElementById("test"));
+
+    window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        matchBrackets: true,
+        onChange: updateCode
+    });
+
+    window.resultview = CodeMirror.fromTextArea(document.getElementById("result"), {
+        lineNumbers: true,
+        readOnly: 'nocursor'
+    });
+} catch (e) {
+    // CodeMirror failed to initialize, possible in e.g. old IE.
+    document.getElementById('codemirror').innerHTML = '';
+} finally {
+    document.getElementById('testbox').parentNode.removeChild(document.getElementById('testbox'));
+}
+
