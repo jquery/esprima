@@ -58,13 +58,14 @@ var syntax = esprima.parse('var answer = 42');
 <pre class="prettyprint lang-js">
 require(['esprima'], function (parser) {
     // Do something with parser, e.g.
-    console.log(parser.parse('var answer = 42'));
+    var syntax = parser.parse('var answer = 42');
+    console.log(JSON.stringify(syntax, null, 4));
 });
 </pre>
 
 <h3>With Node.js</h3>
 
-<p>Install the library using npm:</p>
+<p>Esprima is available as a Node.js <a href="https://npmjs.org/package/esprima">package</a>, install it using npm:</p>
 
 <pre class="prettyprint lang-bsh">
 npm install esprima
