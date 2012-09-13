@@ -1660,8 +1660,10 @@ parseYieldExpression: true
         if (options.name && strict && isRestrictedWord(param[0].name)) {
             throwErrorTolerant(options.name, Messages.StrictParamName);
         }
-        if (yieldAllowed && !yieldFound) {
-            throwError({}, Messages.NoYieldInGenerator);
+        if (! extra.allow_starless_generators){
+            if (yieldAllowed && !yieldFound) {
+                throwError({}, Messages.NoYieldInGenerator);
+            }
         }
         strict = previousStrict;
         yieldAllowed = previousYieldAllowed;
@@ -3705,7 +3707,7 @@ parseYieldExpression: true
     }
 
     function parseFunctionDeclaration() {
-        var id, param, params = [], body, token, stricted, firstRestricted, message, previousStrict, previousYieldAllowed, paramSet, generator;
+        var id, param, params = [], body, token, stricted, firstRestricted, message, previousStrict, previousYieldAllowed, paramSet, generator, expression, yieldrequired;
 
         expectKeyword('function');
 
@@ -3713,6 +3715,9 @@ parseYieldExpression: true
         if (match('*')) {
             lex();
             generator = true;
+            yieldrequired = true;
+        } else if (extra.allow_starless_generators) {
+            generator = true;  // yield possible.  we set to false later if none found.
         }
 
         token = lookahead();
@@ -3773,17 +3778,32 @@ parseYieldExpression: true
 
         previousStrict = strict;
         previousYieldAllowed = yieldAllowed;
-        yieldAllowed = generator;
-        body = parseFunctionSourceElements();
+        yieldAllowed = generator || previousYieldAllowed;
+
+
+        // here we redo some work in order to set 'expression'
+        expression = ! match('{');
+        body = parseConciseBody();
+
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
         }
+
         if (strict && stricted) {
             throwErrorTolerant(stricted, message);
         }
-        if (yieldAllowed && !yieldFound) {
-            throwError({}, Messages.NoYieldInGenerator);
+
+        if (extra.allow_starless_generators){
+            generator = yieldFound;
+            if (yieldrequired && !yieldFound) {
+                throwError({}, Messages.NoYieldInGenerator);
+            }
+        } else {
+            if (yieldAllowed && !yieldFound) {
+                throwError({}, Messages.NoYieldInGenerator);
+            }
         }
+
         strict = previousStrict;
         yieldAllowed = previousYieldAllowed;
 
@@ -3795,20 +3815,22 @@ parseYieldExpression: true
             body: body,
             rest: null,
             generator: generator,
-            expression: false
+            expression: expression
         };
     }
 
     function parseFunctionExpression() {
-        var token, id = null, stricted, firstRestricted, message, param, params = [], body, previousStrict, previousYieldAllowed, paramSet, generator;
+        var token, id = null, stricted, firstRestricted, message, param, params = [], body, previousStrict, previousYieldAllowed, paramSet, generator, expression, yieldrequired;
 
         expectKeyword('function');
 
         generator = false;
-
         if (match('*')) {
             lex();
             generator = true;
+            yieldrequired = true;
+        } else if (extra.allow_starless_generators) {
+            generator = true;  // yield possible.  we set to false later if none found.
         }
 
         if (!match('(')) {
@@ -3871,16 +3893,30 @@ parseYieldExpression: true
         previousStrict = strict;
         previousYieldAllowed = yieldAllowed;
         yieldAllowed = generator;
-        body = parseFunctionSourceElements();
+
+        // here we redo some work in order to set 'expression'
+        expression = ! match('{');
+        body = parseConciseBody();
+
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
         }
+
         if (strict && stricted) {
             throwErrorTolerant(stricted, message);
         }
-        if (yieldAllowed && !yieldFound) {
-            throwError({}, Messages.NoYieldInGenerator);
+
+        if (extra.allow_starless_generators){
+            generator = yieldFound;
+            if (yieldrequired && !yieldFound) {
+                throwError({}, Messages.NoYieldInGenerator);
+            }
+        } else {
+            if (yieldAllowed && !yieldFound) {
+                throwError({}, Messages.NoYieldInGenerator);
+            }
         }
+
         strict = previousStrict;
         yieldAllowed = previousYieldAllowed;
 
@@ -3893,7 +3929,7 @@ parseYieldExpression: true
             body: body,
             rest: null,
             generator: generator,
-            expression: false
+            expression: expression
         };
     }
 
@@ -4788,6 +4824,9 @@ parseYieldExpression: true
         };
 
         extra = {};
+        extra.allow_starless_generators = true; // true by default here.  ugh.
+
+
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
@@ -4801,7 +4840,14 @@ parseYieldExpression: true
             if (typeof options.tolerant === 'boolean' && options.tolerant) {
                 extra.errors = [];
             }
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=666399
+            // http://wiki.ecmascript.org/doku.php?id=harmony:generators
+            if (typeof options.allow_starless_generators === 'boolean') {
+                extra.allow_starless_generators = options.allow_starless_generators;
+            }
         }
+
+
 
         if (length > 0) {
             if (typeof source[0] === 'undefined') {

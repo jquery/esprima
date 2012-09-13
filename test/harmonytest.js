@@ -5295,12 +5295,13 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Illegal yield expression'
         },
 
+        /* with allow_starless, this delegation is impossible to distinguish
         'yield* 10': {
             index: 5,
             lineNumber: 1,
             column: 6,
             message: 'Error: Line 1: Illegal yield expression'
-        },
+        }, */
 
         'e => yield* 10': {
             index: 10,
@@ -5309,19 +5310,21 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Illegal yield expression'
         },
 
+        /* legal in mozilla
         '(function () { yield 10 })': {
             index: 20,
             lineNumber: 1,
             column: 21,
             message: 'Error: Line 1: Illegal yield expression'
-        },
+        }, */
 
+        /* with allow_starless, this delegation is impossible to distinguish
         '(function () { yield* 10 })': {
             index: 20,
             lineNumber: 1,
             column: 21,
             message: 'Error: Line 1: Illegal yield expression'
-        },
+        },*/
 
         '(function* () { yield yield 10 })': {
             index: 27,
@@ -5344,12 +5347,13 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Missing yield in generator'
         },
 
+        /* with allow_starless, this delegation is impossible to distinguish
         'var obj = { *test() { } }': {
             index: 23,
             lineNumber: 1,
             column: 24,
             message: 'Error: Line 1: Missing yield in generator'
-        },
+        },*/
 
         'var obj = { *test** }': {
             index: 17,
