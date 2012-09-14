@@ -4922,7 +4922,126 @@ var harmonyTestFixture = {
         }
 
     },
-
+    'Expression Closures':{
+        'function a() 1' : {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'a',
+                range: [
+                    9,
+                    10
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 9
+                    },
+                    end: {
+                        line: 1,
+                        column: 10
+                    }
+                }
+            },
+            params: [],
+            defaults: [],
+            body: {
+                type: 'Literal',
+                value: 1,
+                raw: '1',
+                range: [
+                    13,
+                    14
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 13
+                    },
+                    end: {
+                        line: 1,
+                        column: 14
+                    }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: true,
+            range: [
+                0,
+                14
+            ],
+            loc: {
+                start: {
+                    line: 1,
+                    column: 0
+                },
+                end: {
+                    line: 1,
+                    column: 14
+                }
+            }
+        },
+        'function a() {} // not an expression' :
+        {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'a',
+                range: [
+                    9,
+                    10
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 9
+                    },
+                    end: {
+                        line: 1,
+                        column: 10
+                    }
+                }
+            },
+            params: [],
+            defaults: [],
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [
+                    13,
+                    15
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 13
+                    },
+                    end: {
+                        line: 1,
+                        column: 15
+                    }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            range: [
+                0,
+                15
+            ],
+            loc: {
+                start: {
+                    line: 1,
+                    column: 0
+                },
+                end: {
+                    line: 1,
+                    column: 15
+                }
+            }
+        }
+    },
     'Harmony Invalid syntax': {
 
         '0o': {
@@ -5391,6 +5510,12 @@ var harmonyTestFixture = {
             lineNumber: 1,
             column: 12,
             message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+        'function () 1; // even with expression closures, must be named': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message:  'Error: Line 1: Unexpected token ('
         }
 
     }

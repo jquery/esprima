@@ -3705,7 +3705,7 @@ parseYieldExpression: true
     }
 
     function parseFunctionDeclaration() {
-        var id, param, params = [], body, token, stricted, firstRestricted, message, previousStrict, previousYieldAllowed, paramSet, generator;
+        var id, param, params = [], body, token, stricted, firstRestricted, message, previousStrict, previousYieldAllowed, paramSet, generator, expression;
 
         expectKeyword('function');
 
@@ -3774,7 +3774,11 @@ parseYieldExpression: true
         previousStrict = strict;
         previousYieldAllowed = yieldAllowed;
         yieldAllowed = generator;
-        body = parseFunctionSourceElements();
+
+        // here we redo some work in order to set 'expression'
+        expression = ! match('{');
+        body = parseConciseBody();
+
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
         }
@@ -3795,12 +3799,12 @@ parseYieldExpression: true
             body: body,
             rest: null,
             generator: generator,
-            expression: false
+            expression: expression
         };
     }
 
     function parseFunctionExpression() {
-        var token, id = null, stricted, firstRestricted, message, param, params = [], body, previousStrict, previousYieldAllowed, paramSet, generator;
+        var token, id = null, stricted, firstRestricted, message, param, params = [], body, previousStrict, previousYieldAllowed, paramSet, generator, expression;
 
         expectKeyword('function');
 
@@ -3871,7 +3875,11 @@ parseYieldExpression: true
         previousStrict = strict;
         previousYieldAllowed = yieldAllowed;
         yieldAllowed = generator;
-        body = parseFunctionSourceElements();
+
+        // here we redo some work in order to set 'expression'
+        expression = ! match('{');
+        body = parseConciseBody();
+
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
         }
@@ -3893,7 +3901,7 @@ parseYieldExpression: true
             body: body,
             rest: null,
             generator: generator,
-            expression: false
+            expression: expression
         };
     }
 
