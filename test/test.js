@@ -18226,6 +18226,92 @@ var testFixture = {
             }]
         },
 
+        '"use strict"; function f(foo,  foo) {};': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'f',
+                    range: [23, 24],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                params: [{
+                    type: 'Identifier',
+                    name: 'foo',
+                    range: [25, 28],
+                    loc: {
+                        start: { line: 1, column: 25 },
+                        end: { line: 1, column: 28 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 'foo',
+                    range: [31, 34],
+                    loc: {
+                        start: { line: 1, column: 31 },
+                        end: { line: 1, column: 34 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [36, 38],
+                    loc: {
+                        start: { line: 1, column: 36 },
+                        end: { line: 1, column: 38 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [14, 38],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 38 }
+                }
+            }, {
+                type: 'EmptyStatement',
+                range: [38, 39],
+                loc: {
+                    start: { line: 1, column: 38 },
+                    end: { line: 1, column: 39 }
+                }
+            }],
+            range: [0, 39],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 39 }
+            },
+            errors: [{
+                index: 31,
+                lineNumber: 1,
+                column: 32,
+                message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+            }]
+        },
+
         '"use strict"; (function f(eval) {});': {
             type: 'Program',
             body: [{
@@ -18382,6 +18468,93 @@ var testFixture = {
                 lineNumber: 1,
                 column: 27,
                 message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            }]
+        },
+
+        '"use strict"; (function f(foo,  foo) {});': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'FunctionExpression',
+                    id: {
+                        type: 'Identifier',
+                        name: 'f',
+                        range: [24, 25],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    params: [{
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [26, 29],
+                        loc: {
+                            start: { line: 1, column: 26 },
+                            end: { line: 1, column: 29 }
+                        }
+                    }, {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [32, 35],
+                        loc: {
+                            start: { line: 1, column: 32 },
+                            end: { line: 1, column: 35 }
+                        }
+                    }],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [37, 39],
+                        loc: {
+                            start: { line: 1, column: 37 },
+                            end: { line: 1, column: 39 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [15, 39],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 39 }
+                    }
+                },
+                range: [14, 41],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 41 }
+                }
+            }],
+            range: [0, 41],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 41 }
+            },
+            errors: [{
+                index: 32,
+                lineNumber: 1,
+                column: 33,
+                message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
             }]
         },
 
