@@ -1369,7 +1369,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (token.type === Token.StringLiteral || token.type === Token.NumericLiteral) {
             if (strict && token.octal) {
-                throwError(token, Messages.StrictOctalLiteral);
+                throwErrorTolerant(token, Messages.StrictOctalLiteral);
             }
             return createLiteral(token);
         }
@@ -1690,7 +1690,7 @@ parseStatement: true, parseSourceElement: true */
         if ((match('++') || match('--')) && !peekLineTerminator()) {
             // 11.3.1, 11.3.2
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
-                throwError({}, Messages.StrictLHSPostfix);
+                throwErrorTolerant({}, Messages.StrictLHSPostfix);
             }
 
             if (!isLeftHandSide(expr)) {
@@ -1718,7 +1718,7 @@ parseStatement: true, parseSourceElement: true */
             expr = parseUnaryExpression();
             // 11.4.4, 11.4.5
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
-                throwError({}, Messages.StrictLHSPrefix);
+                throwErrorTolerant({}, Messages.StrictLHSPrefix);
             }
 
             if (!isLeftHandSide(expr)) {
@@ -2803,7 +2803,7 @@ parseStatement: true, parseSourceElement: true */
             if (directive === 'use strict') {
                 strict = true;
                 if (firstRestricted) {
-                    throwError(firstRestricted, Messages.StrictOctalLiteral);
+                    throwErrorTolerant(firstRestricted, Messages.StrictOctalLiteral);
                 }
             } else {
                 if (!firstRestricted && token.octal) {
@@ -2879,7 +2879,8 @@ parseStatement: true, parseSourceElement: true */
                         message = Messages.StrictParamName;
                     }
                     if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        throwError(token, Messages.StrictParamDupe);
+                        stricted = token;
+                        message = Messages.StrictParamDupe;
                     }
                 } else if (!firstRestricted) {
                     if (isRestrictedWord(token.value)) {
@@ -2962,7 +2963,8 @@ parseStatement: true, parseSourceElement: true */
                         message = Messages.StrictParamName;
                     }
                     if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        throwError(token, Messages.StrictParamDupe);
+                        stricted = token;
+                        message = Messages.StrictParamDupe;
                     }
                 } else if (!firstRestricted) {
                     if (isRestrictedWord(token.value)) {
@@ -3050,7 +3052,7 @@ parseStatement: true, parseSourceElement: true */
             if (directive === 'use strict') {
                 strict = true;
                 if (firstRestricted) {
-                    throwError(firstRestricted, Messages.StrictOctalLiteral);
+                    throwErrorTolerant(firstRestricted, Messages.StrictOctalLiteral);
                 }
             } else {
                 if (!firstRestricted && token.octal) {

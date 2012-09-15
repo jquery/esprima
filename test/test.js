@@ -17458,6 +17458,124 @@ var testFixture = {
             }]
         },
 
+        '"use strict"; eval++;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UpdateExpression',
+                    operator: '++',
+                    argument: {
+                        type: 'Identifier',
+                        name: 'eval',
+                        range: [14, 18],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    prefix: false,
+                    range: [14, 20],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 20 }
+                    }
+                },
+                range: [14, 21],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 21 }
+                }
+            }],
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            },
+            errors: [{
+                index: 18,
+                lineNumber: 1,
+                column: 19,
+                message: 'Error: Line 1: Postfix increment/decrement may not have eval or arguments operand in strict mode'
+            }]
+        },
+
+        '"use strict"; --eval;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UpdateExpression',
+                    operator: '--',
+                    argument: {
+                        type: 'Identifier',
+                        name: 'eval',
+                        range: [16, 20],
+                        loc: {
+                            start: { line: 1, column: 16 },
+                            end: { line: 1, column: 20 }
+                        }
+                    },
+                    prefix: true,
+                    range: [14, 20],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 20 }
+                    }
+                },
+                range: [14, 21],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 21 }
+                }
+            }],
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            },
+            errors: [{
+                index: 20,
+                lineNumber: 1,
+                column: 21,
+                message: 'Error: Line 1: Prefix increment/decrement may not have eval or arguments operand in strict mode'
+            }]
+        },
+
         '"use strict"; arguments = 0;': {
             type: 'Program',
             body: [{
@@ -17525,6 +17643,125 @@ var testFixture = {
                 message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
             }]
         },
+
+        '"use strict"; arguments--;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UpdateExpression',
+                    operator: '--',
+                    argument: {
+                        type: 'Identifier',
+                        name: 'arguments',
+                        range: [14, 23],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 23 }
+                        }
+                    },
+                    prefix: false,
+                    range: [14, 25],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                range: [14, 26],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 26 }
+                }
+            }],
+            range: [0, 26],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 26 }
+            },
+            errors: [{
+                index: 23,
+                lineNumber: 1,
+                column: 24,
+                message: 'Error: Line 1: Postfix increment/decrement may not have eval or arguments operand in strict mode'
+            }]
+        },
+
+        '"use strict"; ++arguments;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UpdateExpression',
+                    operator: '++',
+                    argument: {
+                        type: 'Identifier',
+                        name: 'arguments',
+                        range: [16, 25],
+                        loc: {
+                            start: { line: 1, column: 16 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    prefix: true,
+                    range: [14, 25],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                range: [14, 26],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 26 }
+                }
+            }],
+            range: [0, 26],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 26 }
+            },
+            errors: [{
+                index: 25,
+                lineNumber: 1,
+                column: 26,
+                message: 'Error: Line 1: Prefix increment/decrement may not have eval or arguments operand in strict mode'
+            }]
+        },
+
 
         '"use strict";x={y:1,y:1}': {
             type: 'Program',
@@ -18226,6 +18463,92 @@ var testFixture = {
             }]
         },
 
+        '"use strict"; function f(foo,  foo) {};': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'f',
+                    range: [23, 24],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                params: [{
+                    type: 'Identifier',
+                    name: 'foo',
+                    range: [25, 28],
+                    loc: {
+                        start: { line: 1, column: 25 },
+                        end: { line: 1, column: 28 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 'foo',
+                    range: [31, 34],
+                    loc: {
+                        start: { line: 1, column: 31 },
+                        end: { line: 1, column: 34 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [36, 38],
+                    loc: {
+                        start: { line: 1, column: 36 },
+                        end: { line: 1, column: 38 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [14, 38],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 38 }
+                }
+            }, {
+                type: 'EmptyStatement',
+                range: [38, 39],
+                loc: {
+                    start: { line: 1, column: 38 },
+                    end: { line: 1, column: 39 }
+                }
+            }],
+            range: [0, 39],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 39 }
+            },
+            errors: [{
+                index: 31,
+                lineNumber: 1,
+                column: 32,
+                message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+            }]
+        },
+
         '"use strict"; (function f(eval) {});': {
             type: 'Program',
             body: [{
@@ -18385,6 +18708,93 @@ var testFixture = {
             }]
         },
 
+        '"use strict"; (function f(foo,  foo) {});': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'FunctionExpression',
+                    id: {
+                        type: 'Identifier',
+                        name: 'f',
+                        range: [24, 25],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    params: [{
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [26, 29],
+                        loc: {
+                            start: { line: 1, column: 26 },
+                            end: { line: 1, column: 29 }
+                        }
+                    }, {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [32, 35],
+                        loc: {
+                            start: { line: 1, column: 32 },
+                            end: { line: 1, column: 35 }
+                        }
+                    }],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [37, 39],
+                        loc: {
+                            start: { line: 1, column: 37 },
+                            end: { line: 1, column: 39 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [15, 39],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 39 }
+                    }
+                },
+                range: [14, 41],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 41 }
+                }
+            }],
+            range: [0, 41],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 41 }
+            },
+            errors: [{
+                index: 32,
+                lineNumber: 1,
+                column: 33,
+                message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+            }]
+        },
+
         '"use strict"; x = { set f(eval) {} }' : {
             type: 'Program',
             body: [{
@@ -18498,7 +18908,234 @@ var testFixture = {
                 column: 27,
                 message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
             }]
+        },
+
+        'function hello() { "octal directive\\1"; "use strict"; }': {
+            type: 'Program',
+            body: [{
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'hello',
+                    range: [9, 14],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'Literal',
+                            value: 'octal directive\u0001',
+                            raw: '"octal directive\\1"',
+                            range: [19, 38],
+                            loc: {
+                                start: { line: 1, column: 19 },
+                                end: { line: 1, column: 38 }
+                            }
+                        },
+                        range: [19, 39],
+                        loc: {
+                            start: { line: 1, column: 19 },
+                            end: { line: 1, column: 39 }
+                        }
+                    }, {
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'Literal',
+                            value: 'use strict',
+                            raw: '"use strict"',
+                            range: [40, 52],
+                            loc: {
+                                start: { line: 1, column: 40 },
+                                end: { line: 1, column: 52 }
+                            }
+                        },
+                        range: [40, 53],
+                        loc: {
+                            start: { line: 1, column: 40 },
+                            end: { line: 1, column: 53 }
+                        }
+                    }],
+                    range: [17, 55],
+                    loc: {
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 55 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [0, 55],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 55 }
+                }
+            }],
+            range: [0, 55],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 55 }
+            },
+            errors: [{
+                index: 19,
+                lineNumber: 1,
+                column: 20,
+                message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            }]
+        },
+
+        '"\\1"; \'use strict\';': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: '\u0001',
+                    raw: '"\\1"',
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 4 }
+                    }
+                },
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 5 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '\'use strict\'',
+                    range: [6, 18],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                range: [6, 19],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 19 }
+                }
+            }],
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            },
+            errors: [{
+                index: 0,
+                lineNumber: 1,
+                column: 1,
+                message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            }]
+        },
+
+        '"use strict"; var x = { 014: 3}': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [18, 19],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: {
+                        type: 'ObjectExpression',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Literal',
+                                value: 12,
+                                raw: '014',
+                                range: [24, 27],
+                                loc: {
+                                    start: { line: 1, column: 24 },
+                                    end: { line: 1, column: 27 }
+                                }
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 3,
+                                raw: '3',
+                                range: [29, 30],
+                                loc: {
+                                    start: { line: 1, column: 29 },
+                                    end: { line: 1, column: 30 }
+                                }
+                            },
+                            kind: 'init',
+                            range: [24, 30],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 30 }
+                            }
+                        }],
+                        range: [22, 31],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 31 }
+                        }
+                    },
+                    range: [18, 31],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 31 }
+                    }
+                }],
+                kind: 'var',
+                range: [14, 31],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 31 }
+                }
+            }],
+            range: [0, 31],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 31 }
+            },
+            errors: [{
+                index: 24,
+                lineNumber: 1,
+                column: 25,
+                message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            }]
         }
+
+
 
     }
 };
