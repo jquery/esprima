@@ -17458,6 +17458,65 @@ var testFixture = {
             }]
         },
 
+        '"use strict"; eval++;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UpdateExpression',
+                    operator: '++',
+                    argument: {
+                        type: 'Identifier',
+                        name: 'eval',
+                        range: [14, 18],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    prefix: false,
+                    range: [14, 20],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 20 }
+                    }
+                },
+                range: [14, 21],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 21 }
+                }
+            }],
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            },
+            errors: [{
+                index: 18,
+                lineNumber: 1,
+                column: 19,
+                message: 'Error: Line 1: Postfix increment/decrement may not have eval or arguments operand in strict mode'
+            }]
+        },
+
         '"use strict"; arguments = 0;': {
             type: 'Program',
             body: [{
@@ -17523,6 +17582,65 @@ var testFixture = {
                 lineNumber: 1,
                 column: 15,
                 message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
+            }]
+        },
+
+        '"use strict"; arguments--;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UpdateExpression',
+                    operator: '--',
+                    argument: {
+                        type: 'Identifier',
+                        name: 'arguments',
+                        range: [14, 23],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 23 }
+                        }
+                    },
+                    prefix: false,
+                    range: [14, 25],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                range: [14, 26],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 26 }
+                }
+            }],
+            range: [0, 26],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 26 }
+            },
+            errors: [{
+                index: 23,
+                lineNumber: 1,
+                column: 24,
+                message: 'Error: Line 1: Postfix increment/decrement may not have eval or arguments operand in strict mode'
             }]
         },
 
