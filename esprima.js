@@ -1718,7 +1718,7 @@ parseStatement: true, parseSourceElement: true */
             expr = parseUnaryExpression();
             // 11.4.4, 11.4.5
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
-                throwError({}, Messages.StrictLHSPrefix);
+                throwErrorTolerant({}, Messages.StrictLHSPrefix);
             }
 
             if (!isLeftHandSide(expr)) {
