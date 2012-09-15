@@ -28,7 +28,8 @@ Esprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror
   [node-falafel](https://github.com/substack/node-falafel), [Esmangle](https://github.com/Constellation/esmangle)
 - Code coverage analysis: [node-cover](https://github.com/itay/node-cover),
 [coveraje](https://github.com/coveraje/coveraje),
-[CoverJS](https://github.com/arian/CoverJS)
+[CoverJS](https://github.com/arian/CoverJS),
+[Istanbul](https://github.com/yahoo/Istanbul)
 - Code generation: [escodegen](https://github.com/Constellation/escodegen)
 - Documentation tool: [JFDoc](https://github.com/thejohnfreeman/jfdoc), [JSDuck](https://github.com/senchalabs/jsduck)
 - Source-to-source compilation: [Marv](https://github.com/Yoric/Marv-the-Tinker),
