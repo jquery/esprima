@@ -1369,7 +1369,7 @@ parseStatement: true, parseSourceElement: true */
 
         if (token.type === Token.StringLiteral || token.type === Token.NumericLiteral) {
             if (strict && token.octal) {
-                throwError(token, Messages.StrictOctalLiteral);
+                throwErrorTolerant(token, Messages.StrictOctalLiteral);
             }
             return createLiteral(token);
         }
@@ -2803,7 +2803,7 @@ parseStatement: true, parseSourceElement: true */
             if (directive === 'use strict') {
                 strict = true;
                 if (firstRestricted) {
-                    throwError(firstRestricted, Messages.StrictOctalLiteral);
+                    throwErrorTolerant(firstRestricted, Messages.StrictOctalLiteral);
                 }
             } else {
                 if (!firstRestricted && token.octal) {
@@ -3052,7 +3052,7 @@ parseStatement: true, parseSourceElement: true */
             if (directive === 'use strict') {
                 strict = true;
                 if (firstRestricted) {
-                    throwError(firstRestricted, Messages.StrictOctalLiteral);
+                    throwErrorTolerant(firstRestricted, Messages.StrictOctalLiteral);
                 }
             } else {
                 if (!firstRestricted && token.octal) {

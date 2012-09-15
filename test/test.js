@@ -18671,7 +18671,234 @@ var testFixture = {
                 column: 27,
                 message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
             }]
+        },
+
+        'function hello() { "octal directive\\1"; "use strict"; }': {
+            type: 'Program',
+            body: [{
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'hello',
+                    range: [9, 14],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'Literal',
+                            value: 'octal directive\u0001',
+                            raw: '"octal directive\\1"',
+                            range: [19, 38],
+                            loc: {
+                                start: { line: 1, column: 19 },
+                                end: { line: 1, column: 38 }
+                            }
+                        },
+                        range: [19, 39],
+                        loc: {
+                            start: { line: 1, column: 19 },
+                            end: { line: 1, column: 39 }
+                        }
+                    }, {
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'Literal',
+                            value: 'use strict',
+                            raw: '"use strict"',
+                            range: [40, 52],
+                            loc: {
+                                start: { line: 1, column: 40 },
+                                end: { line: 1, column: 52 }
+                            }
+                        },
+                        range: [40, 53],
+                        loc: {
+                            start: { line: 1, column: 40 },
+                            end: { line: 1, column: 53 }
+                        }
+                    }],
+                    range: [17, 55],
+                    loc: {
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 55 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [0, 55],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 55 }
+                }
+            }],
+            range: [0, 55],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 55 }
+            },
+            errors: [{
+                index: 19,
+                lineNumber: 1,
+                column: 20,
+                message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            }]
+        },
+
+        '"\\1"; \'use strict\';': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: '\u0001',
+                    raw: '"\\1"',
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 4 }
+                    }
+                },
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 5 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '\'use strict\'',
+                    range: [6, 18],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                range: [6, 19],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 19 }
+                }
+            }],
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            },
+            errors: [{
+                index: 0,
+                lineNumber: 1,
+                column: 1,
+                message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            }]
+        },
+
+        '"use strict"; var x = { 014: 3}': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [18, 19],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: {
+                        type: 'ObjectExpression',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Literal',
+                                value: 12,
+                                raw: '014',
+                                range: [24, 27],
+                                loc: {
+                                    start: { line: 1, column: 24 },
+                                    end: { line: 1, column: 27 }
+                                }
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 3,
+                                raw: '3',
+                                range: [29, 30],
+                                loc: {
+                                    start: { line: 1, column: 29 },
+                                    end: { line: 1, column: 30 }
+                                }
+                            },
+                            kind: 'init',
+                            range: [24, 30],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 30 }
+                            }
+                        }],
+                        range: [22, 31],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 31 }
+                        }
+                    },
+                    range: [18, 31],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 31 }
+                    }
+                }],
+                kind: 'var',
+                range: [14, 31],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 31 }
+                }
+            }],
+            range: [0, 31],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 31 }
+            },
+            errors: [{
+                index: 24,
+                lineNumber: 1,
+                column: 25,
+                message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            }]
         }
+
+
 
     }
 };
