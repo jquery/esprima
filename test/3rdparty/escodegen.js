@@ -34,19 +34,21 @@
 /*jslint bitwise:true */
 /*global escodegen:true, exports:true, generateStatement: true*/
 
-(function (factory) {
+(function (factory, global) {
     'use strict';
 
     // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js,
     // and plain browser loading,
     if (typeof define === 'function' && define.amd) {
-        define(['exports'], factory);
+        define(['exports'], function(exports) {
+            factory(exports, global);
+        });
     } else if (typeof exports !== 'undefined') {
-        factory(exports);
+        factory(exports, global);
     } else {
-        factory((window.escodegen = {}));
+        factory((global.escodegen = {}), global);
     }
-}(function (exports) {
+}(function (exports, global) {
     'use strict';
 
     var Syntax,
@@ -55,6 +57,7 @@
         Regex,
         VisitorKeys,
         VisitorOption,
+        SourceNode,
         isArray,
         base,
         indent,
@@ -69,7 +72,8 @@
         semicolons,
         safeConcatenation,
         extra,
-        parse;
+        parse,
+        sourceMap;
 
     Syntax = {
         AssignmentExpression: 'AssignmentExpression',
@@ -188,7 +192,9 @@
                 parentheses: true,
                 semicolons: true,
                 safeConcatenation: false
-            }
+            },
+            sourceMap: null,
+            sourceMapWithCode: false
         };
     }
 
@@ -221,10 +227,68 @@
         };
     }
 
+    // Fallback for the non SourceMap environment
+    function SourceNodeMock(line, column, filename, chunk) {
+        var result = [];
+
+        function flatten(input) {
+            var i, iz;
+            if (isArray(input)) {
+                for (i = 0, iz = input.length; i < iz; ++i) {
+                    flatten(input[i]);
+                }
+            } else if (input instanceof SourceNodeMock) {
+                result.push(input);
+            } else if (typeof input === 'string' && input) {
+                result.push(input);
+            }
+        }
+
+        flatten(chunk);
+        this.children = result;
+    }
+
+    SourceNodeMock.prototype.toString = function toString() {
+        var res = '', i, iz, node;
+        for (i = 0, iz = this.children.length; i < iz; ++i) {
+            node = this.children[i];
+            if (node instanceof SourceNodeMock) {
+                res += node.toString();
+            } else {
+                res += node;
+            }
+        }
+        return res;
+    };
+
+    SourceNodeMock.prototype.replaceRight = function replaceRight(pattern, replacement) {
+        var last = this.children[this.children.length - 1];
+        if (last instanceof SourceNodeMock) {
+          last.replaceRight(pattern, replacement);
+        } else if (typeof last === 'string') {
+          this.children[this.children.length - 1] = last.replace(pattern, replacement);
+        } else {
+          this.children.push(''.replace(pattern, replacement));
+        }
+        return this;
+    };
+
+    SourceNodeMock.prototype.join = function join(sep) {
+        var i, iz, result;
+        result = [];
+        iz = this.children.length;
+        if (iz > 0) {
+            for (i = 0, iz -= 1; i < iz; ++i) {
+                result.push(this.children[i], sep);
+            }
+            result.push(this.children[iz]);
+            this.children = result;
+        }
+        return this;
+    };
+
     function endsWithLineTerminator(str) {
-        var len, ch;
-        len = str.length;
-        ch = str.charAt(len - 1);
+        var ch = str.charAt(str.length - 1);
         return ch === '\r' || ch === '\n';
     }
 
@@ -446,19 +510,30 @@
     }
 
     function join(left, right) {
-        var leftChar = left.charAt(left.length - 1),
-            rightChar = right.charAt(0);
+        var leftSource = toSourceNode(left).toString(),
+            rightSource = toSourceNode(right).toString(),
+            leftChar = leftSource.charAt(leftSource.length - 1),
+            rightChar = rightSource.charAt(0);
 
         if (((leftChar === '+' || leftChar === '-') && leftChar === rightChar) || (isIdentifierPart(leftChar) && isIdentifierPart(rightChar))) {
-            return left + ' ' + right;
+            return [left, ' ', right];
         } else if (isWhiteSpace(leftChar) || isLineTerminator(leftChar) || isWhiteSpace(rightChar) || isLineTerminator(rightChar)) {
-            return left + right;
+            return [left, right];
         }
-        return left + space + right;
+        return [left, space, right];
     }
 
     function addIndent(stmt) {
-        return base + stmt;
+        return [base, stmt];
+    }
+
+    function withIndent(fn) {
+        var previousBase;
+        previousBase = base;
+        base += indent;
+        var result = fn.call(this, base);
+        base = previousBase;
+        return result;
     }
 
     function calculateSpaces(str) {
@@ -469,6 +544,20 @@
             }
         }
         return (str.length - 1) - i;
+    }
+
+    function toSourceNode(generated, node) {
+        if (node == null) {
+            if (generated instanceof SourceNode) {
+                return generated;
+            } else {
+                node = {};
+            }
+        }
+        if (node.loc == null) {
+            return new SourceNode(null, null, sourceMap, generated);
+        }
+        return new SourceNode(node.loc.start.line, node.loc.start.column, sourceMap, generated);
     }
 
     function adjustMultilineComment(value, specialBase) {
@@ -502,7 +591,7 @@
             }
             base = specialBase;
         } else {
-            if (spaces % 2 === 1) {
+            if (spaces & 1) {
                 // /*
                 //  *
                 //  */
@@ -514,7 +603,7 @@
         }
 
         for (i = 1, len = array.length; i < len; i += 1) {
-            array[i] = addIndent(array[i].slice(spaces));
+            array[i] = toSourceNode(addIndent(array[i].slice(spaces))).join('');
         }
 
         base = previousBase;
@@ -544,30 +633,30 @@
             save = result;
 
             comment = stmt.leadingComments[0];
-            result = '';
+            result = [];
             if (safeConcatenation && stmt.type === Syntax.Program && stmt.body.length === 0) {
-                result += '\n';
+                result.push('\n');
             }
-            result += generateComment(comment);
-            if (!endsWithLineTerminator(result)) {
-                result += '\n';
+            result.push(generateComment(comment));
+            if (!endsWithLineTerminator(toSourceNode(result).toString())) {
+                result.push('\n');
             }
 
             for (i = 1, len = stmt.leadingComments.length; i < len; i += 1) {
                 comment = stmt.leadingComments[i];
-                fragment = generateComment(comment);
-                if (!endsWithLineTerminator(fragment)) {
-                    fragment += '\n';
+                fragment = [generateComment(comment)];
+                if (!endsWithLineTerminator(toSourceNode(fragment).toString())) {
+                    fragment.push('\n');
                 }
-                result += addIndent(fragment);
+                result.push(addIndent(fragment));
             }
 
-            result += addIndent(save);
+            result.push(addIndent(save));
         }
 
         if (stmt.trailingComments) {
-            tailingToStatement = !endsWithLineTerminator(result);
-            specialBase = stringRepeat(' ', calculateSpaces(base + result + indent));
+            tailingToStatement = !endsWithLineTerminator(toSourceNode(result).toString());
+            specialBase = stringRepeat(' ', calculateSpaces(toSourceNode([base, result, indent]).toString()));
             for (i = 0, len = stmt.trailingComments.length; i < len; i += 1) {
                 comment = stmt.trailingComments[i];
                 if (tailingToStatement) {
@@ -578,16 +667,16 @@
                     //               */
                     if (i === 0) {
                         // first case
-                        result += indent;
+                        result.push(indent);
                     } else {
-                        result += specialBase;
+                        result.push(specialBase);
                     }
-                    result += generateComment(comment, specialBase);
+                    result.push(generateComment(comment, specialBase));
                 } else {
-                    result += addIndent(generateComment(comment));
+                    result.push(addIndent(generateComment(comment)));
                 }
-                if (i !== len - 1 && !endsWithLineTerminator(result)) {
-                    result += '\n';
+                if (i !== len - 1 && !endsWithLineTerminator(toSourceNode(result).toString())) {
+                    result.push('\n');
                 }
             }
         }
@@ -597,56 +686,57 @@
 
     function parenthesize(text, current, should) {
         if (current < should) {
-            return '(' + text + ')';
+            return ['(', text, ')'];
         }
         return text;
     }
 
     function maybeBlock(stmt, semicolonOptional) {
-        var previousBase, result, noLeadingComment;
+        var result, noLeadingComment;
 
         noLeadingComment = !extra.comment || !stmt.leadingComments;
 
         if (stmt.type === Syntax.BlockStatement && noLeadingComment) {
-            return space + generateStatement(stmt);
+            return [space, generateStatement(stmt)];
         }
 
         if (stmt.type === Syntax.EmptyStatement && noLeadingComment) {
             return ';';
         }
 
-        previousBase = base;
-        base += indent;
-        result = newline + addIndent(generateStatement(stmt, { semicolonOptional: semicolonOptional }));
-        base = previousBase;
+        withIndent(function (indent) {
+            result = [newline, addIndent(generateStatement(stmt, { semicolonOptional: semicolonOptional }))];
+        });
 
         return result;
     }
 
     function maybeBlockSuffix(stmt, result) {
-        if (stmt.type === Syntax.BlockStatement && (!extra.comment || !stmt.leadingComments) && !endsWithLineTerminator(result)) {
-            return space;
+        var ends = endsWithLineTerminator(toSourceNode(result).toString());
+        if (stmt.type === Syntax.BlockStatement && (!extra.comment || !stmt.leadingComments) && !ends) {
+            return [result, space];
         }
-        if (endsWithLineTerminator(result)) {
-            return addIndent('');
+        if (ends) {
+            return [result, base];
         }
-        return (newline === '' ? ' ' : newline) + addIndent('');
+        return [result, newline, base];
     }
 
     function generateFunctionBody(node) {
         var result, i, len;
-        result = '(';
+        result = ['('];
         for (i = 0, len = node.params.length; i < len; i += 1) {
-            result += node.params[i].name;
+            result.push(node.params[i].name);
             if (i + 1 < len) {
-                result += ',' + space;
+                result.push(',' + space);
             }
         }
-        return result + ')' + maybeBlock(node.body);
+        result.push(')', maybeBlock(node.body));
+        return result;
     }
 
     function generateExpression(expr, option) {
-        var result, precedence, currentPrecedence, previousBase, i, len, raw, fragment, allowIn, allowCall, allowUnparenthesizedNew;
+        var result, precedence, currentPrecedence, i, len, raw, fragment, multiline, leftChar, leftSource, rightChar, rightSource, allowIn, allowCall, allowUnparenthesizedNew;
 
         precedence = option.precedence;
         allowIn = option.allowIn;
@@ -654,16 +744,16 @@
 
         switch (expr.type) {
         case Syntax.SequenceExpression:
-            result = '';
+            result = [];
             allowIn |= (Precedence.Sequence < precedence);
             for (i = 0, len = expr.expressions.length; i < len; i += 1) {
-                result += generateExpression(expr.expressions[i], {
+                result.push(generateExpression(expr.expressions[i], {
                     precedence: Precedence.Assignment,
                     allowIn: allowIn,
                     allowCall: true
-                });
+                }));
                 if (i + 1 < len) {
-                    result += ',' + space;
+                    result.push(',' + space);
                 }
             }
             result = parenthesize(result, Precedence.Sequence, precedence);
@@ -672,16 +762,19 @@
         case Syntax.AssignmentExpression:
             allowIn |= (Precedence.Assignment < precedence);
             result = parenthesize(
-                generateExpression(expr.left, {
-                    precedence: Precedence.Call,
-                    allowIn: allowIn,
-                    allowCall: true
-                }) + space + expr.operator + space +
+                [
+                    generateExpression(expr.left, {
+                        precedence: Precedence.Call,
+                        allowIn: allowIn,
+                        allowCall: true
+                    }),
+                    space + expr.operator + space,
                     generateExpression(expr.right, {
                         precedence: Precedence.Assignment,
                         allowIn: allowIn,
                         allowCall: true
-                    }),
+                    })
+                ],
                 Precedence.Assignment,
                 precedence
             );
@@ -690,21 +783,25 @@
         case Syntax.ConditionalExpression:
             allowIn |= (Precedence.Conditional < precedence);
             result = parenthesize(
-                generateExpression(expr.test, {
-                    precedence: Precedence.LogicalOR,
-                    allowIn: allowIn,
-                    allowCall: true
-                }) + space + '?' + space +
+                [
+                    generateExpression(expr.test, {
+                        precedence: Precedence.LogicalOR,
+                        allowIn: allowIn,
+                        allowCall: true
+                    }),
+                    space + '?' + space,
                     generateExpression(expr.consequent, {
                         precedence: Precedence.Assignment,
                         allowIn: allowIn,
                         allowCall: true
-                    }) + space + ':' + space +
+                    }),
+                    space + ':' + space,
                     generateExpression(expr.alternate, {
                         precedence: Precedence.Assignment,
                         allowIn: allowIn,
                         allowCall: true
-                    }),
+                    })
+                ],
                 Precedence.Conditional,
                 precedence
             );
@@ -731,15 +828,15 @@
                 allowCall: true
             });
 
-            if (expr.operator === '/' && fragment.charAt(0) === '/') {
+            if (expr.operator === '/' && fragment.toString().charAt(0) === '/') {
                 // If '/' concats with '/', it is interpreted as comment start
-                result += ' ' + fragment;
+                result.push(' ', fragment);
             } else {
                 result = join(result, fragment);
             }
 
             if (expr.operator === 'in' && !allowIn) {
-                result = '(' + result + ')';
+                result = ['(', result, ')'];
             } else {
                 result = parenthesize(result, currentPrecedence, precedence);
             }
@@ -747,28 +844,28 @@
             break;
 
         case Syntax.CallExpression:
-            result = generateExpression(expr.callee, {
+            result = [generateExpression(expr.callee, {
                 precedence: Precedence.Call,
                 allowIn: true,
                 allowCall: true,
                 allowUnparenthesizedNew: false
-            });
+            })];
 
-            result += '(';
+            result.push('(');
             for (i = 0, len = expr['arguments'].length; i < len; i += 1) {
-                result += generateExpression(expr['arguments'][i], {
+                result.push(generateExpression(expr['arguments'][i], {
                     precedence: Precedence.Assignment,
                     allowIn: true,
                     allowCall: true
-                });
+                }));
                 if (i + 1 < len) {
-                    result += ',' + space;
+                    result.push(',' + space);
                 }
             }
-            result += ')';
+            result.push(')');
 
             if (!allowCall) {
-                result = '(' + result + ')';
+                result = ['(', result, ')'];
             } else {
                 result = parenthesize(result, Precedence.Call, precedence);
             }
@@ -789,46 +886,46 @@
             );
 
             if (!allowUnparenthesizedNew || parentheses || len > 0) {
-                result += '(';
+                result.push('(');
                 for (i = 0; i < len; i += 1) {
-                    result += generateExpression(expr['arguments'][i], {
+                    result.push(generateExpression(expr['arguments'][i], {
                         precedence: Precedence.Assignment,
                         allowIn: true,
                         allowCall: true
-                    });
+                    }));
                     if (i + 1 < len) {
-                        result += ',' + space;
+                        result.push(',' + space);
                     }
                 }
-                result += ')';
+                result.push(')');
             }
 
             result = parenthesize(result, Precedence.New, precedence);
             break;
 
         case Syntax.MemberExpression:
-            result = generateExpression(expr.object, {
+            result = [generateExpression(expr.object, {
                 precedence: Precedence.Call,
                 allowIn: true,
                 allowCall: allowCall,
                 allowUnparenthesizedNew: false
-            });
+            })];
 
             if (expr.computed) {
-                result += '[' + generateExpression(expr.property, {
+                result.push('[', generateExpression(expr.property, {
                     precedence: Precedence.Sequence,
                     allowIn: true,
                     allowCall: allowCall
-                }) + ']';
+                }), ']');
             } else {
                 if (expr.object.type === Syntax.Literal && typeof expr.object.value === 'number') {
                     if (result.indexOf('.') < 0) {
                         if (!/[eExX]/.test(result) && !(result.length >= 2 && result[0] === '0')) {
-                            result += '.';
+                            result.push('.');
                         }
                     }
                 }
-                result += '.' + expr.property.name;
+                result.push('.' + expr.property.name);
             }
 
             result = parenthesize(result, Precedence.Member, precedence);
@@ -836,11 +933,7 @@
 
         case Syntax.UnaryExpression:
             fragment = generateExpression(expr.argument, {
-                precedence: Precedence.Unary + +(
-                    expr.argument.type === Syntax.UnaryExpression
-                    && expr.operator.length < 3
-                    && expr.argument.operator === expr.operator
-                ),
+                precedence: Precedence.Unary,
                 allowIn: true,
                 allowCall: true
             });
@@ -848,15 +941,24 @@
             if (space === '') {
                 result = join(expr.operator, fragment);
             } else {
-                result = expr.operator;
-                if (expr.operator.length > 2
-                || expr.argument.type === Syntax.UpdateExpression && expr.argument.prefix &&
-                    ( expr.operator === '+' && expr.argument.operator === '++'
-                    || expr.operator === '-' && expr.argument.operator === '--')
-                ) {
-                    result += ' ';
+                result = [expr.operator];
+                if (expr.operator.length > 2) {
+                    // delete, void, typeof
+                    // get `typeof []`, not `typeof[]`
+                    result = join(result, fragment);
+                } else {
+                    // Prevent inserting spaces between operator and argument if it is unnecessary
+                    // like, `!cond`
+                    leftSource = toSourceNode(result).toString();
+                    leftChar = leftSource.charAt(leftSource.length - 1);
+                    rightChar = fragment.toString().charAt(0);
+
+                    if (((leftChar === '+' || leftChar === '-') && leftChar === rightChar) || (isIdentifierPart(leftChar) && isIdentifierPart(rightChar))) {
+                        result.push(' ', fragment);
+                    } else {
+                        result.push(fragment);
+                    }
                 }
-                result += fragment;
             }
             result = parenthesize(result, Precedence.Unary, precedence);
             break;
@@ -864,22 +966,27 @@
         case Syntax.UpdateExpression:
             if (expr.prefix) {
                 result = parenthesize(
-                    expr.operator +
+                    [
+                        expr.operator,
                         generateExpression(expr.argument, {
                             precedence: Precedence.Unary,
                             allowIn: true,
                             allowCall: true
-                        }),
+                        })
+                    ],
                     Precedence.Unary,
                     precedence
                 );
             } else {
                 result = parenthesize(
-                    generateExpression(expr.argument, {
-                        precedence: Precedence.Postfix,
-                        allowIn: true,
-                        allowCall: true
-                    }) + expr.operator,
+                    [
+                        generateExpression(expr.argument, {
+                            precedence: Precedence.Postfix,
+                            allowIn: true,
+                            allowCall: true
+                        }),
+                        expr.operator
+                    ],
                     Precedence.Postfix,
                     precedence
                 );
@@ -893,7 +1000,7 @@
             } else {
                 result += space;
             }
-            result += generateFunctionBody(expr);
+            result = [result, generateFunctionBody(expr)];
             break;
 
         case Syntax.ArrayExpression:
@@ -901,51 +1008,58 @@
                 result = '[]';
                 break;
             }
-            result = '[' + newline;
-            previousBase = base;
-            base += indent;
-            for (i = 0, len = expr.elements.length; i < len; i += 1) {
-                if (!expr.elements[i]) {
-                    result += addIndent('');
-                    if (i + 1 === len) {
-                        result += ',';
+            multiline = expr.elements.length > 1;
+            result = ['[', multiline ? newline : ''];
+            withIndent(function (indent) {
+                for (i = 0, len = expr.elements.length; i < len; i += 1) {
+                    if (!expr.elements[i]) {
+                        if(multiline) result.push(base);
+                        if (i + 1 === len) {
+                            result.push(',');
+                        }
+                    } else {
+                        result.push(multiline ? base : '', generateExpression(expr.elements[i], {
+                            precedence: Precedence.Assignment,
+                            allowIn: true,
+                            allowCall: true
+                        }));
                     }
-                } else {
-                    result += addIndent(generateExpression(expr.elements[i], {
-                        precedence: Precedence.Assignment,
-                        allowIn: true,
-                        allowCall: true
-                    }));
+                    if (i + 1 < len) {
+                        result.push(',' + (multiline ? newline : space));
+                    }
                 }
-                if (i + 1 < len) {
-                    result += ',' + newline;
-                }
+            });
+            if (multiline && !endsWithLineTerminator(toSourceNode(result).toString())) {
+                result.push(newline);
             }
-            base = previousBase;
-            if (!endsWithLineTerminator(result)) {
-                result += newline;
-            }
-            result += addIndent(']');
+            result.push(multiline ? base : '', ']');
             break;
 
         case Syntax.Property:
             if (expr.kind === 'get' || expr.kind === 'set') {
-                result = expr.kind + ' ' + generateExpression(expr.key, {
-                    precedence: Precedence.Sequence,
-                    allowIn: true,
-                    allowCall: true
-                }) + generateFunctionBody(expr.value);
-            } else {
-                result =
+                result = [
+                    expr.kind + ' ',
                     generateExpression(expr.key, {
                         precedence: Precedence.Sequence,
                         allowIn: true,
                         allowCall: true
-                    }) + ':' + space + generateExpression(expr.value, {
+                    }),
+                    generateFunctionBody(expr.value)
+                ];
+            } else {
+                result = [
+                    generateExpression(expr.key, {
+                        precedence: Precedence.Sequence,
+                        allowIn: true,
+                        allowCall: true
+                    }),
+                    ':' + space,
+                    generateExpression(expr.value, {
                         precedence: Precedence.Assignment,
                         allowIn: true,
                         allowCall: true
-                    });
+                    })
+                ];
             }
             break;
 
@@ -954,24 +1068,26 @@
                 result = '{}';
                 break;
             }
-            result = '{' + newline;
-            previousBase = base;
-            base += indent;
-            for (i = 0, len = expr.properties.length; i < len; i += 1) {
-                result += addIndent(generateExpression(expr.properties[i], {
-                    precedence: Precedence.Sequence,
-                    allowIn: true,
-                    allowCall: true
-                }));
-                if (i + 1 < len) {
-                    result += ',' + newline;
+            multiline = expr.properties.length > 1;
+            result = ['{', multiline ? newline : ''];
+
+            withIndent(function (indent) {
+                for (i = 0, len = expr.properties.length; i < len; i += 1) {
+                    result.push(multiline ? base : '', generateExpression(expr.properties[i], {
+                        precedence: Precedence.Sequence,
+                        allowIn: true,
+                        allowCall: true
+                    }));
+                    if (i + 1 < len) {
+                        result.push(',' + (multiline ? newline : space));
+                    }
                 }
+            });
+
+            if (multiline && !endsWithLineTerminator(toSourceNode(result).toString())) {
+                result.push(newline);
             }
-            base = previousBase;
-            if (!endsWithLineTerminator(result)) {
-                result += newline;
-            }
-            result += addIndent('}');
+            result.push(multiline ? base : '', '}');
             break;
 
         case Syntax.ThisExpression:
@@ -1016,17 +1132,14 @@
             break;
 
         default:
-            break;
-        }
-
-        if (result === undefined) {
             throw new Error('Unknown expression type: ' + expr.type);
         }
-        return result;
+
+        return toSourceNode(result, expr);
     }
 
     function generateStatement(stmt, option) {
-        var i, len, result, previousBase, node, allowIn, fragment, semicolon;
+        var i, len, result, node, allowIn, fragment, semicolon;
 
         allowIn = true;
         semicolon = ';';
@@ -1039,20 +1152,19 @@
 
         switch (stmt.type) {
         case Syntax.BlockStatement:
-            result = '{' + newline;
+            result = ['{', newline];
 
-            previousBase = base;
-            base += indent;
-            for (i = 0, len = stmt.body.length; i < len; i += 1) {
-                fragment = addIndent(generateStatement(stmt.body[i], {semicolonOptional: i === len - 1}));
-                result += fragment;
-                if (!endsWithLineTerminator(fragment)) {
-                    result += newline;
+            withIndent(function (indent) {
+                for (i = 0, len = stmt.body.length; i < len; i += 1) {
+                    fragment = addIndent(generateStatement(stmt.body[i], {semicolonOptional: i === len - 1}));
+                    result.push(fragment);
+                    if (!endsWithLineTerminator(toSourceNode(fragment).toString())) {
+                        result.push(newline);
+                    }
                 }
-            }
-            base = previousBase;
+            });
 
-            result += addIndent('}');
+            result.push(addIndent('}'));
             break;
 
         case Syntax.BreakStatement:
@@ -1072,25 +1184,33 @@
             break;
 
         case Syntax.DoWhileStatement:
+            // Because `do 42 while (cond)` is Syntax Error. We need semicolon.
             result = join('do', maybeBlock(stmt.body));
-            result += maybeBlockSuffix(stmt.body, result);
-            result += 'while' + space + '(' + generateExpression(stmt.test, {
-                precedence: Precedence.Sequence,
-                allowIn: true,
-                allowCall: true
-            }) + ')' + semicolon;
+            result = maybeBlockSuffix(stmt.body, result);
+            result = join(result, [
+                'while' + space + '(',
+                generateExpression(stmt.test, {
+                    precedence: Precedence.Sequence,
+                    allowIn: true,
+                    allowCall: true
+                }),
+                ')' + semicolon
+            ]);
             break;
 
         case Syntax.CatchClause:
-            previousBase = base;
-            base += indent;
-            result = 'catch' + space + '(' + generateExpression(stmt.param, {
-                precedence: Precedence.Sequence,
-                allowIn: true,
-                allowCall: true
-            }) + ')';
-            base = previousBase;
-            result += maybeBlock(stmt.body);
+            withIndent(function (indent) {
+                result = [
+                    'catch' + space + '(',
+                    generateExpression(stmt.param, {
+                        precedence: Precedence.Sequence,
+                        allowIn: true,
+                        allowCall: true
+                    }),
+                    ')'
+                ];
+            });
+            result.push(maybeBlock(stmt.body));
             break;
 
         case Syntax.DebuggerStatement:
@@ -1102,342 +1222,326 @@
             break;
 
         case Syntax.ExpressionStatement:
-            result = generateExpression(stmt.expression, {
+            result = [generateExpression(stmt.expression, {
                 precedence: Precedence.Sequence,
                 allowIn: true,
                 allowCall: true
-            });
+            })];
             // 12.4 '{', 'function' is not allowed in this position.
             // wrap expression with parentheses
-            if (result.charAt(0) === '{' || (result.slice(0, 8) === 'function' && " (".indexOf(result.charAt(8)) >= 0)) {
-                result = '(' + result + ')' + semicolon;
+            if (result.toString().charAt(0) === '{' || (result.toString().slice(0, 8) === 'function' && " (".indexOf(result.toString().charAt(8)) >= 0)) {
+                result = ['(', result, ')' + semicolon];
             } else {
-                result += semicolon;
+                result.push(semicolon);
             }
             break;
 
         case Syntax.VariableDeclarator:
             if (stmt.init) {
-                result = stmt.id.name + space + '=' + space + generateExpression(stmt.init, {
-                    precedence: Precedence.Assignment,
-                    allowIn: allowIn,
-                    allowCall: true
-                });
+                result = [
+                    stmt.id.name + space + '=' + space,
+                    generateExpression(stmt.init, {
+                        precedence: Precedence.Assignment,
+                        allowIn: allowIn,
+                        allowCall: true
+                    })
+                ];
             } else {
                 result = stmt.id.name;
             }
             break;
 
         case Syntax.VariableDeclaration:
-            result = stmt.kind;
+            result = [stmt.kind];
             // special path for
             // var x = function () {
             // };
             if (stmt.declarations.length === 1 && stmt.declarations[0].init &&
                     stmt.declarations[0].init.type === Syntax.FunctionExpression) {
-                result += ' ' + generateStatement(stmt.declarations[0], {
+                result.push(' ', generateStatement(stmt.declarations[0], {
                     allowIn: allowIn
-                });
+                }));
             } else {
                 // VariableDeclarator is typed as Statement,
                 // but joined with comma (not LineTerminator).
                 // So if comment is attached to target node, we should specialize.
-                previousBase = base;
-                base += indent;
-
-                node = stmt.declarations[0];
-                if (extra.comment && node.leadingComments) {
-                    result += '\n' + addIndent(generateStatement(node, {
-                        allowIn: allowIn
-                    }));
-                } else {
-                    result += ' ' + generateStatement(node, {
-                        allowIn: allowIn
-                    });
-                }
-
-                for (i = 1, len = stmt.declarations.length; i < len; i += 1) {
-                    node = stmt.declarations[i];
+                withIndent(function (indent) {
+                    node = stmt.declarations[0];
                     if (extra.comment && node.leadingComments) {
-                        result += ',' + newline + addIndent(generateStatement(node, {
+                        result.push('\n', addIndent(generateStatement(node, {
+                            allowIn: allowIn
+                        })));
+                    } else {
+                        result.push(' ', generateStatement(node, {
                             allowIn: allowIn
                         }));
-                    } else {
-                        result += ',' + space + generateStatement(node, {
-                            allowIn: allowIn
-                        });
                     }
-                }
-                base = previousBase;
+
+                    for (i = 1, len = stmt.declarations.length; i < len; i += 1) {
+                        node = stmt.declarations[i];
+                        if (extra.comment && node.leadingComments) {
+                            result.push(',' + newline, addIndent(generateStatement(node, {
+                                allowIn: allowIn
+                            })));
+                        } else {
+                            result.push(',' + space, generateStatement(node, {
+                                allowIn: allowIn
+                            }));
+                        }
+                    }
+                });
             }
-            result += semicolon;
+            result.push(semicolon);
             break;
 
         case Syntax.ThrowStatement:
-            result = join(
+            result = [join(
                 'throw',
                 generateExpression(stmt.argument, {
                     precedence: Precedence.Sequence,
                     allowIn: true,
                     allowCall: true
                 })
-            ) + semicolon;
+            ), semicolon];
             break;
 
         case Syntax.TryStatement:
-            result = 'try' + maybeBlock(stmt.block);
-            result += maybeBlockSuffix(stmt.block, result);
+            result = ['try', maybeBlock(stmt.block)];
+            result = maybeBlockSuffix(stmt.block, result);
             for (i = 0, len = stmt.handlers.length; i < len; i += 1) {
-                result += generateStatement(stmt.handlers[i]);
+                result = join(result, generateStatement(stmt.handlers[i]));
                 if (stmt.finalizer || i + 1 !== len) {
-                    result += maybeBlockSuffix(stmt.handlers[i].body, result);
+                    result = maybeBlockSuffix(stmt.handlers[i].body, result);
                 }
             }
             if (stmt.finalizer) {
-                result += 'finally' + maybeBlock(stmt.finalizer);
+                result = join(result, ['finally', maybeBlock(stmt.finalizer)]);
             }
             break;
 
         case Syntax.SwitchStatement:
-            previousBase = base;
-            base += indent;
-            result = 'switch' + space + '(' + generateExpression(stmt.discriminant, {
-                precedence: Precedence.Sequence,
-                allowIn: true,
-                allowCall: true
-            }) + ')' + space + '{' + newline;
-            base = previousBase;
+            withIndent(function (indent) {
+                result = [
+                    'switch' + space + '(',
+                    generateExpression(stmt.discriminant, {
+                        precedence: Precedence.Sequence,
+                        allowIn: true,
+                        allowCall: true
+                    }),
+                    ')' + space + '{' + newline
+                ];
+            });
             if (stmt.cases) {
                 for (i = 0, len = stmt.cases.length; i < len; i += 1) {
                     fragment = addIndent(generateStatement(stmt.cases[i], {semicolonOptional: i === len - 1}));
-                    result += fragment;
-                    if (!endsWithLineTerminator(fragment)) {
-                        result += newline;
+                    result.push(fragment);
+                    if (!endsWithLineTerminator(toSourceNode(fragment).toString())) {
+                        result.push(newline);
                     }
                 }
             }
-            result += addIndent('}');
+            result.push(addIndent('}'));
             break;
 
         case Syntax.SwitchCase:
-            previousBase = base;
-            base += indent;
-            if (stmt.test) {
-                result = join(
-                    'case',
+            withIndent(function (indent) {
+                if (stmt.test) {
+                    result = [
+                        join('case', generateExpression(stmt.test, {
+                            precedence: Precedence.Sequence,
+                            allowIn: true,
+                            allowCall: true
+                        })),
+                        ':'
+                    ];
+                } else {
+                    result = ['default:'];
+                }
+
+                i = 0;
+                len = stmt.consequent.length;
+                if (len && stmt.consequent[0].type === Syntax.BlockStatement) {
+                    fragment = maybeBlock(stmt.consequent[0]);
+                    result.push(fragment);
+                    i = 1;
+                }
+
+                if (i !== len && !endsWithLineTerminator(toSourceNode(result).toString())) {
+                    result.push(newline);
+                }
+
+                for (; i < len; i += 1) {
+                    fragment = addIndent(generateStatement(stmt.consequent[i], {semicolonOptional: i === len - 1 && semicolon === ''}));
+                    result.push(fragment);
+                    if (i + 1 !== len && !endsWithLineTerminator(toSourceNode(fragment).toString())) {
+                        result.push(newline);
+                    }
+                }
+            });
+            break;
+
+        case Syntax.IfStatement:
+            withIndent(function (indent) {
+                result = [
+                    'if'+ space + '(',
                     generateExpression(stmt.test, {
                         precedence: Precedence.Sequence,
                         allowIn: true,
                         allowCall: true
-                    })
-                ) + ':';
-            } else {
-                result = 'default:';
-            }
-
-            i = 0;
-            len = stmt.consequent.length;
-            if (len && stmt.consequent[0].type === Syntax.BlockStatement) {
-                fragment = maybeBlock(stmt.consequent[0]);
-                result += fragment;
-                i = 1;
-            }
-
-            if (i !== len && !endsWithLineTerminator(result)) {
-                result += newline;
-            }
-
-            for (; i < len; i += 1) {
-                fragment = addIndent(generateStatement(stmt.consequent[i], {semicolonOptional: i === len - 1 && semicolon === ''}));
-                result += fragment;
-                if (i + 1 !== len && !endsWithLineTerminator(fragment)) {
-                    result += newline;
-                }
-            }
-
-            base = previousBase;
-            break;
-
-        case Syntax.IfStatement:
-            previousBase = base;
-            base += indent;
+                    }),
+                    ')'
+                ];
+            });
             if (stmt.alternate) {
+                result.push(maybeBlock(stmt.consequent));
+                result = maybeBlockSuffix(stmt.consequent, result);
                 if (stmt.alternate.type === Syntax.IfStatement) {
-                    result = 'if' + space + '(' +  generateExpression(stmt.test, {
-                        precedence: Precedence.Sequence,
-                        allowIn: true,
-                        allowCall: true
-                    }) + ')';
-                    base = previousBase;
-                    result += maybeBlock(stmt.consequent);
-                    result += maybeBlockSuffix(stmt.consequent, result);
-                    result += 'else ' + generateStatement(stmt.alternate);
+                    result = join(result, ['else ', generateStatement(stmt.alternate, {semicolonOptional: semicolon === ''})]);
                 } else {
-                    result = 'if' + space + '(' + generateExpression(stmt.test, {
-                        precedence: Precedence.Sequence,
-                        allowIn: true,
-                        allowCall: true
-                    }) + ')';
-                    base = previousBase;
-                    result += maybeBlock(stmt.consequent);
-                    result += maybeBlockSuffix(stmt.consequent, result);
-                    result += 'else';
-                    result = join(result, maybeBlock(stmt.alternate, semicolon === ''));
+                    result = join(result, join('else', maybeBlock(stmt.alternate, semicolon === '')));
                 }
             } else {
-                result = 'if' + space + '(' + generateExpression(stmt.test, {
-                    precedence: Precedence.Sequence,
-                    allowIn: true,
-                    allowCall: true
-                }) + ')';
-                base = previousBase;
-                result += maybeBlock(stmt.consequent, semicolon === '');
+                result.push(maybeBlock(stmt.consequent, semicolon === ''));
             }
             break;
 
         case Syntax.ForStatement:
-            previousBase = base;
-            base += indent;
-            result = 'for' + space + '(';
-            if (stmt.init) {
-                if (stmt.init.type === Syntax.VariableDeclaration) {
-                    result += generateStatement(stmt.init, {
-                        allowIn: false
-                    });
+            withIndent(function (indent) {
+                result = ['for' + space + '('];
+                if (stmt.init) {
+                    if (stmt.init.type === Syntax.VariableDeclaration) {
+                        result.push(generateStatement(stmt.init, {allowIn: false}));
+                    } else {
+                        result.push(generateExpression(stmt.init, {
+                            precedence: Precedence.Sequence,
+                            allowIn: false,
+                            allowCall: true
+                        }), ';');
+                    }
                 } else {
-                    result += generateExpression(stmt.init, {
-                        precedence: Precedence.Sequence,
-                        allowIn: false,
-                        allowCall: true
-                    }) + ';';
+                    result.push(';');
                 }
-            } else {
-                result += ';';
-            }
 
-            if (stmt.test) {
-                result += space + generateExpression(stmt.test, {
-                    precedence: Precedence.Sequence,
-                    allowIn: true,
-                    allowCall: true
-                }) + ';';
-            } else {
-                result += ';';
-            }
+                if (stmt.test) {
+                    result.push(space, generateExpression(stmt.test, {
+                        precedence: Precedence.Sequence,
+                        allowIn: true,
+                        allowCall: true
+                    }), ';');
+                } else {
+                    result.push(';');
+                }
 
-            if (stmt.update) {
-                result += space + generateExpression(stmt.update, {
-                    precedence: Precedence.Sequence,
-                    allowIn: true,
-                    allowCall: true
-                }) + ')';
-            } else {
-                result += ')';
-            }
-            base = previousBase;
+                if (stmt.update) {
+                    result.push(space, generateExpression(stmt.update, {
+                        precedence: Precedence.Sequence,
+                        allowIn: true,
+                        allowCall: true
+                    }), ')');
+                } else {
+                    result.push(')');
+                }
+            });
 
-            result += maybeBlock(stmt.body, semicolon === '');
+            result.push(maybeBlock(stmt.body, semicolon === ''));
             break;
 
         case Syntax.ForInStatement:
-            result = 'for' + space + '(';
-            if (stmt.left.type === Syntax.VariableDeclaration) {
-                previousBase = base;
-                base += indent + indent;
-                result += stmt.left.kind + ' ' + generateStatement(stmt.left.declarations[0], {
-                    allowIn: false
-                });
-                base = previousBase;
-            } else {
-                previousBase = base;
-                base += indent;
-                result += generateExpression(stmt.left, {
-                    precedence: Precedence.Call,
-                    allowIn: true,
-                    allowCall: true
-                });
-                base = previousBase;
-            }
+            result = ['for' + space + '('];
+            withIndent(function (indent) {
+                if (stmt.left.type === Syntax.VariableDeclaration) {
+                    withIndent(function (indent) {
+                        result.push(stmt.left.kind + ' ', generateStatement(stmt.left.declarations[0], {
+                            allowIn: false
+                        }));
+                    });
+                } else {
+                    result.push(generateExpression(stmt.left, {
+                        precedence: Precedence.Call,
+                        allowIn: true,
+                        allowCall: true
+                    }));
+                }
 
-            previousBase = base;
-            base += indent;
-            result = join(result, 'in');
-            result = join(
-                result,
-                generateExpression(stmt.right, {
-                    precedence: Precedence.Sequence,
-                    allowIn: true,
-                    allowCall: true
-                })
-            ) + ')';
-            base = previousBase;
-            result += maybeBlock(stmt.body, semicolon === '');
+                result = join(result, 'in');
+                result = [join(
+                    result,
+                    generateExpression(stmt.right, {
+                        precedence: Precedence.Sequence,
+                        allowIn: true,
+                        allowCall: true
+                    })
+                ), ')'];
+            });
+            result.push(maybeBlock(stmt.body, semicolon === ''));
             break;
 
         case Syntax.LabeledStatement:
-            result = stmt.label.name + ':' + maybeBlock(stmt.body, semicolon === '');
+            result = [stmt.label.name + ':', maybeBlock(stmt.body, semicolon === '')];
             break;
 
         case Syntax.Program:
             len = stmt.body.length;
-            result = safeConcatenation && len > 0 ? '\n': '';
+            result = [safeConcatenation && len > 0 ? '\n' : ''];
             for (i = 0; i < len; i += 1) {
                 fragment = addIndent(generateStatement(stmt.body[i], {semicolonOptional: !safeConcatenation && i === len - 1}));
-                result += fragment;
-                if (i + 1 < len && !endsWithLineTerminator(fragment)) {
-                    result += newline;
+                result.push(fragment);
+                if (i + 1 < len && !endsWithLineTerminator(toSourceNode(fragment).toString())) {
+                    result.push(newline);
                 }
             }
             break;
 
         case Syntax.FunctionDeclaration:
-            result = 'function ' + stmt.id.name + generateFunctionBody(stmt);
+            result = ['function ' + stmt.id.name, generateFunctionBody(stmt)];
             break;
 
         case Syntax.ReturnStatement:
             if (stmt.argument) {
-                result = join(
+                result = [join(
                     'return',
                     generateExpression(stmt.argument, {
                         precedence: Precedence.Sequence,
                         allowIn: true,
                         allowCall: true
                     })
-                ) + semicolon;
+                ), semicolon];
             } else {
-                result = 'return' + semicolon;
+                result = ['return' + semicolon];
             }
             break;
 
         case Syntax.WhileStatement:
-            previousBase = base;
-            base += indent;
-            result = 'while' + space + '(' + generateExpression(stmt.test, {
-                precedence: Precedence.Sequence,
-                allowIn: true,
-                allowCall: true
-            }) + ')';
-            base = previousBase;
-            result += maybeBlock(stmt.body, semicolon === '');
+            withIndent(function (indent) {
+                result = [
+                    'while' + space + '(',
+                    generateExpression(stmt.test, {
+                        precedence: Precedence.Sequence,
+                        allowIn: true,
+                        allowCall: true
+                    }),
+                    ')'
+                ];
+            });
+            result.push(maybeBlock(stmt.body, semicolon === ''));
             break;
 
         case Syntax.WithStatement:
-            previousBase = base;
-            base += indent;
-            result = 'with' + space + '(' + generateExpression(stmt.object, {
-                precedence: Precedence.Sequence,
-                allowIn: true,
-                allowCall: true
-            }) + ')';
-            base = previousBase;
-            result += maybeBlock(stmt.body, semicolon === '');
+            withIndent(function (indent) {
+                result = [
+                    'with' + space + '(',
+                    generateExpression(stmt.object, {
+                        precedence: Precedence.Sequence,
+                        allowIn: true,
+                        allowCall: true
+                    }),
+                    ')'
+                ];
+            });
+            result.push(maybeBlock(stmt.body, semicolon === ''));
             break;
 
         default:
-            break;
-        }
-
-        if (result === undefined) {
             throw new Error('Unknown statement type: ' + stmt.type);
         }
 
@@ -1447,18 +1551,18 @@
             result = addCommentsToStatement(stmt, result);
         }
 
-        if (stmt.type === Syntax.Program && !safeConcatenation && newline === '' &&
-            result.charAt(result.length - 1) === '\n') {
-            return result.slice(0, -1);
+        var fragment = toSourceNode(result).toString();
+        if (stmt.type === Syntax.Program && !safeConcatenation && newline === '' &&  fragment.charAt(fragment.length - 1) === '\n') {
+            result = toSourceNode(result).replaceRight(/\s+$/, '');
         }
 
-        return result;
+        return toSourceNode(result, stmt);
     }
 
     function generate(node, options) {
-        var defaultOptions = getDefaultOptions();
+        var defaultOptions = getDefaultOptions(), result, pair;
 
-        if (typeof options !== 'undefined') {
+        if (options != null) {
             // Obsolete options
             //
             //   `options.indent`
@@ -1498,7 +1602,19 @@
         semicolons = options.format.semicolons;
         safeConcatenation = options.format.safeConcatenation;
         parse = json ? null : options.parse;
+        sourceMap = options.sourceMap;
         extra = options;
+
+        if (sourceMap) {
+            if (typeof process !== 'undefined') {
+                // We assume environment is node.js
+                SourceNode = require('source-map').SourceNode;
+            } else {
+                SourceNode = global.sourceMap.SourceNode;
+            }
+        } else {
+            SourceNode = SourceNodeMock;
+        }
 
         switch (node.type) {
         case Syntax.BlockStatement:
@@ -1524,7 +1640,8 @@
         case Syntax.VariableDeclarator:
         case Syntax.WhileStatement:
         case Syntax.WithStatement:
-            return generateStatement(node);
+            result = generateStatement(node);
+            break;
 
         case Syntax.AssignmentExpression:
         case Syntax.ArrayExpression:
@@ -1543,16 +1660,27 @@
         case Syntax.ThisExpression:
         case Syntax.UnaryExpression:
         case Syntax.UpdateExpression:
-            return generateExpression(node, {
+            result = generateExpression(node, {
                 precedence: Precedence.Sequence,
                 allowIn: true,
                 allowCall: true
             });
+            break;
 
         default:
-            break;
+            throw new Error('Unknown node type: ' + node.type);
         }
-        throw new Error('Unknown node type: ' + node.type);
+
+        if (!sourceMap) {
+            return result.toString();
+        }
+
+        pair = result.toStringWithSourceMap({file: options.sourceMap});
+
+        if (options.sourceMapWithCode) {
+            return pair;
+        }
+        return pair.map.toString();
     }
 
     // simple visitor implementation
@@ -1587,7 +1715,7 @@
         Property: ['key', 'value'],
         ReturnStatement: ['argument'],
         SequenceExpression: ['expressions'],
-        SwitchStatement: ['descriminant', 'cases'],
+        SwitchStatement: ['discriminant', 'cases'],
         SwitchCase: ['test', 'consequent'],
         ThisExpression: [],
         ThrowStatement: ['argument'],
@@ -1606,17 +1734,27 @@
     };
 
     function traverse(top, visitor) {
-        var worklist, leavelist, node, ret, current, current2, candidates, candidate;
+        var worklist, leavelist, node, ret, current, current2, candidates, candidate, marker = {};
 
         worklist = [ top ];
-        leavelist = [];
+        leavelist = [ null ];
 
         while (worklist.length) {
             node = worklist.pop();
 
-            if (node) {
+            if (node === marker) {
+                node = leavelist.pop();
+                if (visitor.leave) {
+                    ret = visitor.leave(node, leavelist[leavelist.length - 1]);
+                } else {
+                    ret = undefined;
+                }
+                if (ret === VisitorOption.Break) {
+                    return;
+                }
+            } else if (node) {
                 if (visitor.enter) {
-                    ret = visitor.enter(node);
+                    ret = visitor.enter(node, leavelist[leavelist.length - 1]);
                 } else {
                     ret = undefined;
                 }
@@ -1625,7 +1763,7 @@
                     return;
                 }
 
-                worklist.push(null);
+                worklist.push(marker);
                 leavelist.push(node);
 
                 if (ret !== VisitorOption.Skip) {
@@ -1647,20 +1785,9 @@
                         }
                     }
                 }
-            } else {
-                node = leavelist.pop();
-                if (visitor.leave) {
-                    ret = visitor.leave(node);
-                } else {
-                    ret = undefined;
-                }
-                if (ret === VisitorOption.Break) {
-                    return;
-                }
             }
         }
     }
-
 
     // based on LLVM libc++ upper_bound / lower_bound
     // MIT License
@@ -1824,11 +1951,11 @@
     }
 
     // Sync with package.json.
-    exports.version = '0.0.6-dev';
+    exports.version = '0.0.9-dev';
 
     exports.generate = generate;
     exports.traverse = traverse;
     exports.attachComments = attachComments;
 
-}));
+}, this));
 /* vim: set sw=4 ts=4 et tw=80 : */
