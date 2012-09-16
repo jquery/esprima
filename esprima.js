@@ -1458,11 +1458,11 @@ parseStatement: true, parseSourceElement: true */
                     if (strict && kind === PropertyKind.Data) {
                         throwErrorTolerant({}, Messages.StrictDuplicateProperty);
                     } else if (kind !== PropertyKind.Data) {
-                        throwError({}, Messages.AccessorDataProperty);
+                        throwErrorTolerant({}, Messages.AccessorDataProperty);
                     }
                 } else {
                     if (kind === PropertyKind.Data) {
-                        throwError({}, Messages.AccessorDataProperty);
+                        throwErrorTolerant({}, Messages.AccessorDataProperty);
                     } else if (map[name] & kind) {
                         throwErrorTolerant({}, Messages.AccessorGetSet);
                     }
