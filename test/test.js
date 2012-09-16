@@ -19153,8 +19153,432 @@ var testFixture = {
                 column: 25,
                 message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
             }]
-        }
+        },
 
+        '"use strict"; var x = { get i() {}, get i() {} }': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [18, 19],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: {
+                        type: 'ObjectExpression',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'i',
+                                range: [28, 29],
+                                loc: {
+                                    start: { line: 1, column: 28 },
+                                    end: { line: 1, column: 29 }
+                                }
+                            },
+                            value: {
+                                type: 'FunctionExpression',
+                                id: null,
+                                params: [],
+                                defaults: [],
+                                body: {
+                                    type: 'BlockStatement',
+                                    body: [],
+                                    range: [32, 34],
+                                    loc: {
+                                        start: { line: 1, column: 32 },
+                                        end: { line: 1, column: 34 }
+                                    }
+                                },
+                                rest: null,
+                                generator: false,
+                                expression: false,
+                                range: [32, 34],
+                                loc: {
+                                    start: { line: 1, column: 32 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            kind: 'get',
+                            range: [24, 34],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 34 }
+                            }
+                        }, {
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'i',
+                                range: [40, 41],
+                                loc: {
+                                    start: { line: 1, column: 40 },
+                                    end: { line: 1, column: 41 }
+                                }
+                            },
+                            value: {
+                                type: 'FunctionExpression',
+                                id: null,
+                                params: [],
+                                defaults: [],
+                                body: {
+                                    type: 'BlockStatement',
+                                    body: [],
+                                    range: [44, 46],
+                                    loc: {
+                                        start: { line: 1, column: 44 },
+                                        end: { line: 1, column: 46 }
+                                    }
+                                },
+                                rest: null,
+                                generator: false,
+                                expression: false,
+                                range: [44, 46],
+                                loc: {
+                                    start: { line: 1, column: 44 },
+                                    end: { line: 1, column: 46 }
+                                }
+                            },
+                            kind: 'get',
+                            range: [36, 46],
+                            loc: {
+                                start: { line: 1, column: 36 },
+                                end: { line: 1, column: 46 }
+                            }
+                        }],
+                        range: [22, 48],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 48 }
+                        }
+                    },
+                    range: [18, 48],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 48 }
+                    }
+                }],
+                kind: 'var',
+                range: [14, 48],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 48 }
+                }
+            }],
+            range: [0, 48],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 48 }
+            },
+            errors: [{
+                index: 46,
+                lineNumber: 1,
+                column: 47,
+                message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
+            }]
+        },
+
+        '"use strict"; var x = { i: 42, get i() {} }': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [18, 19],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: {
+                        type: 'ObjectExpression',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'i',
+                                range: [24, 25],
+                                loc: {
+                                    start: { line: 1, column: 24 },
+                                    end: { line: 1, column: 25 }
+                                }
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 42,
+                                raw: '42',
+                                range: [27, 29],
+                                loc: {
+                                    start: { line: 1, column: 27 },
+                                    end: { line: 1, column: 29 }
+                                }
+                            },
+                            kind: 'init',
+                            range: [24, 29],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 29 }
+                            }
+                        }, {
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'i',
+                                range: [35, 36],
+                                loc: {
+                                    start: { line: 1, column: 35 },
+                                    end: { line: 1, column: 36 }
+                                }
+                            },
+                            value: {
+                                type: 'FunctionExpression',
+                                id: null,
+                                params: [],
+                                defaults: [],
+                                body: {
+                                    type: 'BlockStatement',
+                                    body: [],
+                                    range: [39, 41],
+                                    loc: {
+                                        start: { line: 1, column: 39 },
+                                        end: { line: 1, column: 41 }
+                                    }
+                                },
+                                rest: null,
+                                generator: false,
+                                expression: false,
+                                range: [39, 41],
+                                loc: {
+                                    start: { line: 1, column: 39 },
+                                    end: { line: 1, column: 41 }
+                                }
+                            },
+                            kind: 'get',
+                            range: [31, 41],
+                            loc: {
+                                start: { line: 1, column: 31 },
+                                end: { line: 1, column: 41 }
+                            }
+                        }],
+                        range: [22, 43],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 43 }
+                        }
+                    },
+                    range: [18, 43],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 43 }
+                    }
+                }],
+                kind: 'var',
+                range: [14, 43],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 43 }
+                }
+            }],
+            range: [0, 43],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 43 }
+            },
+            errors: [{
+                index: 41,
+                lineNumber: 1,
+                column: 42,
+                message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+            }]
+        },
+
+        '"use strict"; var x = { set i(x) {}, i: 42 }': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [18, 19],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: {
+                        type: 'ObjectExpression',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'i',
+                                range: [28, 29],
+                                loc: {
+                                    start: { line: 1, column: 28 },
+                                    end: { line: 1, column: 29 }
+                                }
+                            },
+                            value: {
+                                type: 'FunctionExpression',
+                                id: null,
+                                params: [{
+                                    type: 'Identifier',
+                                    name: 'x',
+                                    range: [30, 31],
+                                    loc: {
+                                        start: { line: 1, column: 30 },
+                                        end: { line: 1, column: 31 }
+                                    }
+                                }],
+                                defaults: [],
+                                body: {
+                                    type: 'BlockStatement',
+                                    body: [],
+                                    range: [33, 35],
+                                    loc: {
+                                        start: { line: 1, column: 33 },
+                                        end: { line: 1, column: 35 }
+                                    }
+                                },
+                                rest: null,
+                                generator: false,
+                                expression: false,
+                                range: [33, 35],
+                                loc: {
+                                    start: { line: 1, column: 33 },
+                                    end: { line: 1, column: 35 }
+                                }
+                            },
+                            kind: 'set',
+                            range: [24, 35],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 35 }
+                            }
+                        }, {
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'i',
+                                range: [37, 38],
+                                loc: {
+                                    start: { line: 1, column: 37 },
+                                    end: { line: 1, column: 38 }
+                                }
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 42,
+                                raw: '42',
+                                range: [40, 42],
+                                loc: {
+                                    start: { line: 1, column: 40 },
+                                    end: { line: 1, column: 42 }
+                                }
+                            },
+                            kind: 'init',
+                            range: [37, 42],
+                            loc: {
+                                start: { line: 1, column: 37 },
+                                end: { line: 1, column: 42 }
+                            }
+                        }],
+                        range: [22, 44],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 44 }
+                        }
+                    },
+                    range: [18, 44],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 44 }
+                    }
+                }],
+                kind: 'var',
+                range: [14, 44],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 44 }
+                }
+            }],
+            range: [0, 44],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 44 }
+            },
+            errors: [{
+                index: 42,
+                lineNumber: 1,
+                column: 43,
+                message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+            }]
+
+
+        }
 
 
     }

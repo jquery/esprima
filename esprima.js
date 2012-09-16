@@ -1862,13 +1862,13 @@ parseYieldExpression: true
                     if (strict && kind === PropertyKind.Data) {
                         throwErrorTolerant({}, Messages.StrictDuplicateProperty);
                     } else if (kind !== PropertyKind.Data) {
-                        throwError({}, Messages.AccessorDataProperty);
+                        throwErrorTolerant({}, Messages.AccessorDataProperty);
                     }
                 } else {
                     if (kind === PropertyKind.Data) {
-                        throwError({}, Messages.AccessorDataProperty);
+                        throwErrorTolerant({}, Messages.AccessorDataProperty);
                     } else if (map[name] & kind) {
-                        throwError({}, Messages.AccessorGetSet);
+                        throwErrorTolerant({}, Messages.AccessorGetSet);
                     }
                 }
                 map[name] |= kind;

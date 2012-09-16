@@ -244,6 +244,16 @@ then the return value will be (JSON formatted):
 <li>Put the link to the issues for cross-ref.</li>
 </ul>
 
+<h4>Baseline syntax tree as the expected result</h4>
+
+<p>The test suite contains a collection of a pair of code and its syntax tree. To generate the syntax tree suitably formatted for the test fixture, use the included helper script <code>tools/generate-test-fixture.js</code> (with Node.js), e.g.:
+
+<pre class="prettyprint lang-bsh">
+node tools/generate-test-fixture.js "var answer = 42"
+</pre>
+
+The syntax tree will be printed out to the console. This can be used in the test fixture.
+
 <h3 id="tests">Test Workflow</h3>
 
 <h4 id="unittests">Unit tests</h4>
