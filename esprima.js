@@ -1464,7 +1464,7 @@ parseStatement: true, parseSourceElement: true */
                     if (kind === PropertyKind.Data) {
                         throwError({}, Messages.AccessorDataProperty);
                     } else if (map[name] & kind) {
-                        throwError({}, Messages.AccessorGetSet);
+                        throwErrorTolerant({}, Messages.AccessorGetSet);
                     }
                 }
                 map[name] |= kind;

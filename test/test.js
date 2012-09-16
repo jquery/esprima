@@ -19133,8 +19133,154 @@ var testFixture = {
                 column: 25,
                 message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
             }]
-        }
+        },
 
+        '"use strict"; var x = { get i() {}, get i() {} }': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [18, 19],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: {
+                        type: 'ObjectExpression',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'i',
+                                range: [28, 29],
+                                loc: {
+                                    start: { line: 1, column: 28 },
+                                    end: { line: 1, column: 29 }
+                                }
+                            },
+                            value: {
+                                type: 'FunctionExpression',
+                                id: null,
+                                params: [],
+                                defaults: [],
+                                body: {
+                                    type: 'BlockStatement',
+                                    body: [],
+                                    range: [32, 34],
+                                    loc: {
+                                        start: { line: 1, column: 32 },
+                                        end: { line: 1, column: 34 }
+                                    }
+                                },
+                                rest: null,
+                                generator: false,
+                                expression: false,
+                                range: [32, 34],
+                                loc: {
+                                    start: { line: 1, column: 32 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            kind: 'get',
+                            range: [24, 34],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 34 }
+                            }
+                        }, {
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'i',
+                                range: [40, 41],
+                                loc: {
+                                    start: { line: 1, column: 40 },
+                                    end: { line: 1, column: 41 }
+                                }
+                            },
+                            value: {
+                                type: 'FunctionExpression',
+                                id: null,
+                                params: [],
+                                defaults: [],
+                                body: {
+                                    type: 'BlockStatement',
+                                    body: [],
+                                    range: [44, 46],
+                                    loc: {
+                                        start: { line: 1, column: 44 },
+                                        end: { line: 1, column: 46 }
+                                    }
+                                },
+                                rest: null,
+                                generator: false,
+                                expression: false,
+                                range: [44, 46],
+                                loc: {
+                                    start: { line: 1, column: 44 },
+                                    end: { line: 1, column: 46 }
+                                }
+                            },
+                            kind: 'get',
+                            range: [36, 46],
+                            loc: {
+                                start: { line: 1, column: 36 },
+                                end: { line: 1, column: 46 }
+                            }
+                        }],
+                        range: [22, 48],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 48 }
+                        }
+                    },
+                    range: [18, 48],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 48 }
+                    }
+                }],
+                kind: 'var',
+                range: [14, 48],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 48 }
+                }
+            }],
+            range: [0, 48],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 48 }
+            },
+            errors: [{
+                index: 46,
+                lineNumber: 1,
+                column: 47,
+                message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
+            }]
+        }
 
 
     }
