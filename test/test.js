@@ -512,7 +512,264 @@ var testFixture = {
                 end: { line: 1, column: 16 }
             }
         },
-
+        'x = [ 1, 2]' : {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [
+                        0,
+                        1
+                    ],
+                    loc: {
+                        start: {
+                            line: 1,
+                            column: 0
+                        },
+                        end: {
+                            line: 1,
+                            column: 1
+                        }
+                    }
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [
+                        {
+                            type: 'Literal',
+                            value: 1,
+                            raw: '1',
+                            range: [
+                                6,
+                                7
+                            ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 6
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 7
+                                }
+                            }
+                        },
+                        {
+                            type: 'Literal',
+                            value: 2,
+                            raw: '2',
+                            range: [
+                                9,
+                                10
+                            ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 9
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 10
+                                }
+                            }
+                        }
+                    ],
+                    range: [
+                        4,
+                        11
+                    ],
+                    loc: {
+                        start: {
+                            line: 1,
+                            column: 4
+                        },
+                        end: {
+                            line: 1,
+                            column: 11
+                        }
+                    }
+                },
+                range: [
+                    0,
+                    11
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 0
+                    },
+                    end: {
+                        line: 1,
+                        column: 11
+                    }
+                }
+            },
+            range: [
+                0,
+                11
+            ],
+            loc: {
+                start: {
+                    line: 1,
+                    column: 0
+                },
+                end: {
+                    line: 1,
+                    column: 11
+                }
+            }
+        },
+        'x = [ 1, [1, 2]]' : {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [
+                        0,
+                        1
+                    ],
+                    loc: {
+                        start: {
+                            line: 1,
+                            column: 0
+                        },
+                        end: {
+                            line: 1,
+                            column: 1
+                        }
+                    }
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [
+                        {
+                            type: 'Literal',
+                            value: 1,
+                            raw: '1',
+                            range: [
+                                6,
+                                7
+                            ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 6
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 7
+                                }
+                            }
+                        },
+                        {
+                            type: 'ArrayExpression',
+                            elements: [
+                                {
+                                    type: 'Literal',
+                                    value: 1,
+                                    raw: '1',
+                                    range: [
+                                        10,
+                                        11
+                                    ],
+                                    loc: {
+                                        start: {
+                                            line: 1,
+                                            column: 10
+                                        },
+                                        end: {
+                                            line: 1,
+                                            column: 11
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'Literal',
+                                    value: 2,
+                                    raw: '2',
+                                    range: [
+                                        13,
+                                        14
+                                    ],
+                                    loc: {
+                                        start: {
+                                            line: 1,
+                                            column: 13
+                                        },
+                                        end: {
+                                            line: 1,
+                                            column: 14
+                                        }
+                                    }
+                                }
+                            ],
+                            range: [
+                                9,
+                                15
+                            ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 9
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 15
+                                }
+                            }
+                        }
+                    ],
+                    range: [
+                        4,
+                        16
+                    ],
+                    loc: {
+                        start: {
+                            line: 1,
+                            column: 4
+                        },
+                        end: {
+                            line: 1,
+                            column: 16
+                        }
+                    }
+                },
+                range: [
+                    0,
+                    16
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 0
+                    },
+                    end: {
+                        line: 1,
+                        column: 16
+                    }
+                }
+            },
+            range: [
+                0,
+                16
+            ],
+            loc: {
+                start: {
+                    line: 1,
+                    column: 0
+                },
+                end: {
+                    line: 1,
+                    column: 16
+                }
+            }
+        },
         'x = [ 1, 2,, 3, ]': {
             type: 'ExpressionStatement',
             expression: {
@@ -795,7 +1052,6 @@ var testFixture = {
     },
 
     'Object Initializer': {
-
         'x = {}': {
             type: 'ExpressionStatement',
             expression: {
@@ -16053,7 +16309,7 @@ var testFixture = {
             column: 5,
             message: 'Error: Line 1: Invalid regular expression: missing /'
         },
-        
+
         '//\r \n]': {
             index: 5,
             lineNumber: 3,
@@ -16818,6 +17074,8 @@ var testFixture = {
                 ClassExpression: 'ClassExpression',
                 MethodDefinition: 'MethodDefinition',
                 ClassHeritage: 'ClassHeritage',
+                ComprehensionBlock: 'ComprehensionBlock',
+                ComprehensionExpression: 'ComprehensionExpression',
                 ConditionalExpression: 'ConditionalExpression',
                 ContinueStatement: 'ContinueStatement',
                 DebuggerStatement: 'DebuggerStatement',
