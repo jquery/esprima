@@ -16818,6 +16818,8 @@ var testFixture = {
                 ClassExpression: 'ClassExpression',
                 MethodDefinition: 'MethodDefinition',
                 ClassHeritage: 'ClassHeritage',
+                ComprehensionBlock: 'ComprehensionBlock',
+                ComprehensionExpression: 'ComprehensionExpression',
                 ConditionalExpression: 'ConditionalExpression',
                 ContinueStatement: 'ContinueStatement',
                 DebuggerStatement: 'DebuggerStatement',

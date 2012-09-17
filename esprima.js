@@ -33,6 +33,7 @@
 throwError: true, createLiteral: true, generateStatement: true,
 parseAssignmentExpression: true, parseBlock: true,
 parseClassExpression: true, parseClassDeclaration: true, parseExpression: true,
+parseForStatement: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
 parseFunctionSourceElements: true, parseVariableIdentifier: true,
 parseImportSpecifier: true,
@@ -111,6 +112,8 @@ parseYieldExpression: true
         ClassExpression: 'ClassExpression',
         MethodDefinition: 'MethodDefinition',
         ClassHeritage: 'ClassHeritage',
+        ComprehensionBlock: 'ComprehensionBlock',
+        ComprehensionExpression: 'ComprehensionExpression',
         ConditionalExpression: 'ConditionalExpression',
         ContinueStatement: 'ContinueStatement',
         DebuggerStatement: 'DebuggerStatement',
@@ -205,7 +208,9 @@ parseYieldExpression: true
         StrictReservedWord:  'Use of future reserved word in strict mode',
         NoFromAfterImport: 'Missing from after import',
         NoYieldInGenerator: 'Missing yield in generator',
-        NoUnintializedConst: 'Const must be initialized'
+        NoUnintializedConst: 'Const must be initialized',
+        ComprehensionRequiresBlock: 'Comprehension must have at least one block',
+        ComprehensionError:  'Comprehension Error'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -1623,29 +1628,69 @@ parseYieldExpression: true
     // 11.1.4 Array Initialiser
 
     function parseArrayInitialiser() {
-        var elements = [];
+        var elements = [], blocks = [], filter = null, token, tmp, possiblecomprehension = true, body;
 
         expect('[');
-
         while (!match(']')) {
-            if (match(',')) {
+            token = lookahead();
+            switch (token.value) {
+            case 'for':
+                if (!possiblecomprehension) {
+                    throwError({}, Messages.ComprehensionError);
+                }
+                matchKeyword('for');
+                tmp = parseForStatement({ignore_body: true});
+                tmp.type = Syntax.ComprehensionBlock;
+                if (tmp.left.kind) { // can't be let or const
+                    throwError({}, Messages.ComprehensionError);
+                }
+                blocks.push(tmp);
+                break;
+            case 'if':
+                if (!possiblecomprehension) {
+                    throwError({}, Messages.ComprehensionError);
+                }
+                expectKeyword('if');
+                expect('(');
+                filter = parseExpression();
+                expect(')');
+                break;
+            case ',':
+                possiblecomprehension = false; // no longer allowed.
                 lex();
                 elements.push(null);
-            } else {
+                break;
+            default:
                 elements.push(parseAssignmentExpression());
-
-                if (!match(']')) {
-                    expect(',');
+                if (!(match(']') || matchKeyword('for') || matchKeyword('if'))) {
+                    expect(','); // this lexes.
+                    possiblecomprehension = false;
                 }
             }
         }
 
         expect(']');
 
-        return {
-            type: Syntax.ArrayExpression,
-            elements: elements
-        };
+        if (filter && !blocks.length) {
+            throwError({}, Messages.ComprehensionRequiresBlock);
+        }
+
+        if (blocks.length) {
+            if (elements.length !== 1) {
+                throwError({}, Messages.ComprehensionError);
+            }
+            return {
+                type:  Syntax.ComprehensionExpression,
+                filter: filter,
+                blocks: blocks,
+                body: elements[0]
+            };
+        } else {
+            return {
+                type: Syntax.ArrayExpression,
+                elements: elements
+            };
+        }
     }
 
     // 11.1.5 Object Initialiser
@@ -3083,11 +3128,9 @@ parseYieldExpression: true
         };
     }
 
-    function parseForStatement() {
+    function parseForStatement(opts) {
         var init, test, update, left, right, body, operator, oldInIteration;
-
         init = test = update = null;
-
         expectKeyword('for');
 
         expect('(');
@@ -3155,7 +3198,11 @@ parseYieldExpression: true
         oldInIteration = state.inIteration;
         state.inIteration = true;
 
-        body = parseStatement();
+        if (opts !== undefined && opts.ignore_body) {
+            // no body
+        } else {
+            body = parseStatement();
+        }
 
         state.inIteration = oldInIteration;
 
