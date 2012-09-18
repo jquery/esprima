@@ -5815,6 +5815,13 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Comprehension Error'
         },
 
+        'for each (let x in {}) {};': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Each is not supported'
+        },
+
         '[x for (let x in [])]': {
             index: 20,
             lineNumber: 1,

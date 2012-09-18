@@ -210,7 +210,8 @@ parseYieldExpression: true
         NoYieldInGenerator: 'Missing yield in generator',
         NoUnintializedConst: 'Const must be initialized',
         ComprehensionRequiresBlock: 'Comprehension must have at least one block',
-        ComprehensionError:  'Comprehension Error'
+        ComprehensionError:  'Comprehension Error',
+        EachNotAllowed:  'Each is not supported'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -3132,6 +3133,11 @@ parseYieldExpression: true
         var init, test, update, left, right, body, operator, oldInIteration;
         init = test = update = null;
         expectKeyword('for');
+
+        // http://wiki.ecmascript.org/doku.php?id=proposals:iterators_and_generators&s=each
+        if (matchContextualKeyword("each")) {
+            throwError({}, Messages.EachNotAllowed);
+        }
 
         expect('(');
 
