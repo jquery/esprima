@@ -205,7 +205,8 @@ parseYieldExpression: true
         StrictReservedWord:  'Use of future reserved word in strict mode',
         NoFromAfterImport: 'Missing from after import',
         NoYieldInGenerator: 'Missing yield in generator',
-        NoUnintializedConst: 'Const must be initialized'
+        NoUnintializedConst: 'Const must be initialized',
+        EachNotAllowed:  'Each is not supported'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -3089,6 +3090,11 @@ parseYieldExpression: true
         init = test = update = null;
 
         expectKeyword('for');
+
+        // http://wiki.ecmascript.org/doku.php?id=proposals:iterators_and_generators&s=each
+        if (matchContextualKeyword("each")) {
+            throwError({},Messages.EachNotAllowed)
+        }
 
         expect('(');
 

@@ -28,7 +28,7 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-var testFixture;
+var testFixture = {};
 
 var harmonyTestFixture = {
 
@@ -5391,7 +5391,13 @@ var harmonyTestFixture = {
             lineNumber: 1,
             column: 12,
             message: 'Error: Line 1: Unexpected token ILLEGAL'
-        }
+        },
+        'for each (let x in {}) {};' : {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Each is not supported'
+         }
 
     }
 
