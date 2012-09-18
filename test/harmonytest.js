@@ -1905,6 +1905,335 @@ var harmonyTestFixture = {
 
     },
 
+    'Array Comprehension': {
+        '[[x,b,c] for (x in []) for (b in []) if (b && c)]' : {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ComprehensionExpression',
+                filter: {
+                    type: 'LogicalExpression',
+                    operator: '&&',
+                    left: {
+                        type: 'Identifier',
+                        name: 'b',
+                        range: [
+                            41,
+                            42
+                        ],
+                        loc: {
+                            start: {
+                                line: 1,
+                                column: 41
+                            },
+                            end: {
+                                line: 1,
+                                column: 42
+                            }
+                        }
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'c',
+                        range: [
+                            46,
+                            47
+                        ],
+                        loc: {
+                            start: {
+                                line: 1,
+                                column: 46
+                            },
+                            end: {
+                                line: 1,
+                                column: 47
+                            }
+                        }
+                    },
+                    range: [
+                        41,
+                        47
+                    ],
+                    loc: {
+                        start: {
+                            line: 1,
+                            column: 41
+                        },
+                        end: {
+                            line: 1,
+                            column: 47
+                        }
+                    }
+                },
+                blocks: [
+                    {
+                        type: 'ComprehensionBlock',
+                        left: {
+                            type: 'Identifier',
+                            name: 'x',
+                            range: [
+                                14,
+                                15
+                            ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 14
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 15
+                                }
+                            }
+                        },
+                        right: {
+                            type: 'ArrayExpression',
+                            elements: [],
+                            range: [
+                                19,
+                                21
+                            ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 19
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 21
+                                }
+                            }
+                        },
+                        each: false
+                    },
+                    {
+                        type: 'ComprehensionBlock',
+                        left: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [
+                                28,
+                                29
+                            ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 28
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 29
+                                }
+                            }
+                        },
+                        right: {
+                            type: 'ArrayExpression',
+                            elements: [],
+                            range: [
+                                33,
+                                35
+                            ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 33
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 35
+                                }
+                            }
+                        },
+                        each: false
+                    }
+                ],
+                range: [
+                    0,
+                    49
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 0
+                    },
+                    end: {
+                        line: 1,
+                        column: 49
+                    }
+                }
+            },
+            range: [
+                0,
+                49
+            ],
+            loc: {
+                start: {
+                    line: 1,
+                    column: 0
+                },
+                end: {
+                    line: 1,
+                    column: 49
+                }
+            }
+        },
+
+        '[x for (a in [])]' : {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ComprehensionExpression',
+                filter: null,
+                blocks: [
+                    {
+                        type: 'ComprehensionBlock',
+                        left: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [
+                                8,
+                                9
+                            ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 8
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 9
+                                }
+                            }
+                        },
+                        right: {
+                            type: 'ArrayExpression',
+                            elements: [],
+                            range: [
+                                13,
+                                15
+                            ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 13
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 15
+                                }
+                            }
+                        },
+                        each: false
+                    }
+                ],
+                range: [
+                    0,
+                    17
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 0
+                    },
+                    end: {
+                        line: 1,
+                        column: 17
+                    }
+                }
+            },
+            range: [
+                0,
+                17
+            ],
+            loc: {
+                start: {
+                    line: 1,
+                    column: 0
+                },
+                end: {
+                    line: 1,
+                    column: 17
+                }
+            }
+        },
+
+        '[1 for (x in [])]' : {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ComprehensionExpression',
+                filter: null,
+                blocks: [
+                    {
+                        type: 'ComprehensionBlock',
+                        left: {
+                            type: 'Identifier',
+                            name: 'x',
+                            range: [
+                                8,
+                                9
+                            ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 8
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 9
+                                }
+                            }
+                        },
+                        right: {
+                            type: 'ArrayExpression',
+                            elements: [],
+                            range: [
+                                13,
+                                15
+                            ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 13
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 15
+                                }
+                            }
+                        },
+                        each: false
+                    }
+                ],
+                range: [
+                    0,
+                    17
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 0
+                    },
+                    end: {
+                        line: 1,
+                        column: 17
+                    }
+                }
+            },
+            range: [
+                0,
+                17
+            ],
+            loc: {
+                start: {
+                    line: 1,
+                    column: 0
+                },
+                end: {
+                    line: 1,
+                    column: 17
+                }
+            }
+        }
+
+    },
 
     // http://wiki.ecmascript.org/doku.php?id=harmony:object_literals#object_literal_property_value_shorthand
 
@@ -5391,6 +5720,55 @@ var harmonyTestFixture = {
             lineNumber: 1,
             column: 12,
             message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '[a,b if (a)] // (a,b)':{
+            index: 4,
+            lineNumber: 1,
+            column: 5,
+            message: 'Error: Line 1: Comprehension Error'
+        },
+
+        '[x for (let x in [])]': {
+            index: 20,
+            lineNumber: 1,
+            column: 21,
+            message: 'Error: Line 1: Comprehension Error'
+        },
+
+        '[x for (const x in [])]': {
+            index: 22,
+            lineNumber: 1,
+            column: 23,
+            message: 'Error: Line 1: Comprehension Error'
+        },
+
+        '[x for (var x in [])]': {
+            index: 20,
+            lineNumber: 1,
+            column: 21,
+            message: 'Error: Line 1: Comprehension Error'
+        },
+
+        '[a,b for (a in [])] // (a,b) ':{
+            index: 4,
+            lineNumber: 1,
+            column: 5,
+            message: 'Error: Line 1: Comprehension Error'
+        },
+
+        '[x if (x)]  // block required':{
+            index: 10,
+            lineNumber: 1,
+            column: 11,
+            message: 'Error: Line 1: Comprehension must have at least one block'
+        },
+
+        'var a = [x if (x)]': {
+            index: 18,
+            lineNumber: 1,
+            column: 19,
+            message: 'Error: Line 1: Comprehension must have at least one block'
         }
 
     }

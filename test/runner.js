@@ -320,24 +320,28 @@ if (typeof window !== 'undefined') {
             expected,
             header;
 
-        vm.runInThisContext(fs.readFileSync(__dirname + '/test.js', 'utf-8'));
-
-        Object.keys(testFixture).forEach(function (category) {
-            Object.keys(testFixture[category]).forEach(function (source) {
-                total += 1;
-                expected = testFixture[category][source];
-                try {
-                    runTest(esprima, source, expected);
-                } catch (e) {
-                    e.source = source;
-                    failures.push(e);
-                }
-            });
-        });
-        tick = (new Date()) - tick;
+        fs.readdirSync(__dirname).forEach(function(fn){
+            if (/^test-/.test(fn)) {
+                vm.runInThisContext(fs.readFileSync(__dirname + '/' + fn, 'utf-8'));
+                Object.keys(testFixture).forEach(function (category) {
+                    Object.keys(testFixture[category]).forEach(function (source) {
+                        total += 1;
+                        expected = testFixture[category][source];
+                        try {
+                            runTest(esprima, source, expected);
+                        } catch (e) {
+                            e.source = source;
+                            failures.push(e);
+                        }
+                    });
+                });
+                tick = (new Date()) - tick;
+            } // end of match
+        })
 
         header = total + ' tests. ' + failures.length + ' failures. ' +
             tick + ' ms';
+
         if (failures.length) {
             console.error(header);
             failures.forEach(function (failure) {
@@ -348,6 +352,7 @@ if (typeof window !== 'undefined') {
         } else {
             console.log(header);
         }
+
         process.exit(failures.length === 0 ? 0 : 1);
     }());
 }
