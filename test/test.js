@@ -12008,8 +12008,117 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 64 }
             }
+        },
+        'for each (let x in {}) {};' : {
+            type: 'ForInStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [
+                    {
+                        type: 'VariableDeclarator',
+                        id: {
+                            type: 'Identifier',
+                            name: 'x',
+                            range: [
+                                14,
+                                15
+                            ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 14
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 15
+                                }
+                            }
+                        },
+                        init: null,
+                        range: [
+                            14,
+                            15
+                        ],
+                        loc: {
+                            start: {
+                                line: 1,
+                                column: 14
+                            },
+                            end: {
+                                line: 1,
+                                column: 15
+                            }
+                        }
+                    }
+                ],
+                kind: 'let',
+                range: [
+                    10,
+                    15
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 10
+                    },
+                    end: {
+                        line: 1,
+                        column: 15
+                    }
+                }
+            },
+            right: {
+                type: 'ObjectExpression',
+                properties: [],
+                range: [
+                    19,
+                    21
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 19
+                    },
+                    end: {
+                        line: 1,
+                        column: 21
+                    }
+                }
+            },
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [
+                    23,
+                    25
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 23
+                    },
+                    end: {
+                        line: 1,
+                        column: 25
+                    }
+                }
+            },
+            each: true,
+            range: [
+                0,
+                25
+            ],
+            loc: {
+                start: {
+                    line: 1,
+                    column: 0
+                },
+                end: {
+                    line: 1,
+                    column: 25
+                }
+            }
         }
-
     },
 
     'continue statement': {
