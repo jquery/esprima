@@ -16053,7 +16053,7 @@ var testFixture = {
             column: 5,
             message: 'Error: Line 1: Invalid regular expression: missing /'
         },
-        
+
         '//\r \n]': {
             index: 5,
             lineNumber: 3,
