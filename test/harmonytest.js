@@ -528,9 +528,9 @@ var harmonyTestFixture = {
                         end: { line: 1, column: 7 }
                     }
                 },
-                range: [3, 7],
+                range: [0, 7],
                 loc: {
-                    start: { line: 1, column: 3 },
+                    start: { line: 1, column: 0 },
                     end: { line: 1, column: 7 }
                 }
             },
@@ -596,9 +596,9 @@ var harmonyTestFixture = {
                         end: { line: 1, column: 18 }
                     }
                 },
-                range: [3, 18],
+                range: [0, 18],
                 loc: {
-                    start: { line: 1, column: 3 },
+                    start: { line: 1, column: 0 },
                     end: { line: 1, column: 18 }
                 }
             },
@@ -770,9 +770,9 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 11 }
                         }
                     },
-                    range: [7, 11],
+                    range: [4, 11],
                     loc: {
-                        start: { line: 1, column: 7 },
+                        start: { line: 1, column: 4 },
                         end: { line: 1, column: 11 }
                     }
                 },
