@@ -2698,6 +2698,9 @@ parseYieldExpression: true
         if (match('{')) {
             id = parseObjectInitialiser();
             reinterpretAsAssignmentBindingPattern(id);
+        } else if (match('[')) {
+            id = parseArrayInitialiser();
+            reinterpretAsAssignmentBindingPattern(id);
         } else {
             id = parseVariableIdentifier();
             // 12.2.1
