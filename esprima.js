@@ -1590,36 +1590,22 @@ parseStatement: true, parseSourceElement: true */
         };
     }
 
-    function parseNonComputedMember(object) {
-        return {
-            type: Syntax.MemberExpression,
-            computed: false,
-            object: object,
-            property: parseNonComputedProperty()
-        };
+    function parseNonComputedMember() {
+        expect('.');
+
+        return parseNonComputedProperty();
     }
 
-    function parseComputedMember(object) {
-        var property, expr;
+    function parseComputedMember() {
+        var expr;
 
         expect('[');
-        property = parseExpression();
-        expr = {
-            type: Syntax.MemberExpression,
-            computed: true,
-            object: object,
-            property: property
-        };
-        expect(']');
-        return expr;
-    }
 
-    function parseCallMember(object) {
-        return {
-            type: Syntax.CallExpression,
-            callee: object,
-            'arguments': parseArguments()
-        };
+        expr = parseExpression();
+
+        expect(']');
+
+        return expr;
     }
 
     function parseNewExpression() {
@@ -1641,41 +1627,58 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseLeftHandSideExpressionAllowCall() {
-        var useNew, expr;
+        var expr;
 
-        useNew = matchKeyword('new');
-        expr = useNew ? parseNewExpression() : parsePrimaryExpression();
+        expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
-        while (index < length) {
-            if (match('.')) {
-                lex();
-                expr = parseNonComputedMember(expr);
+        while (match('.') || match('[') || match('(')) {
+            if (match('(')) {
+                expr = {
+                    type: Syntax.CallExpression,
+                    callee: expr,
+                    'arguments': parseArguments()
+                };
             } else if (match('[')) {
-                expr = parseComputedMember(expr);
-            } else if (match('(')) {
-                expr = parseCallMember(expr);
+                expr = {
+                    type: Syntax.MemberExpression,
+                    computed: true,
+                    object: expr,
+                    property: parseComputedMember()
+                };
             } else {
-                break;
+                expr = {
+                    type: Syntax.MemberExpression,
+                    computed: false,
+                    object: expr,
+                    property: parseNonComputedMember()
+                };
             }
         }
 
         return expr;
     }
 
+
     function parseLeftHandSideExpression() {
-        var useNew, expr;
+        var expr;
 
-        useNew = matchKeyword('new');
-        expr = useNew ? parseNewExpression() : parsePrimaryExpression();
+        expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
-        while (index < length) {
-            if (match('.')) {
-                lex();
-                expr = parseNonComputedMember(expr);
-            } else if (match('[')) {
-                expr = parseComputedMember(expr);
+        while (match('.') || match('[')) {
+            if (match('[')) {
+                expr = {
+                    type: Syntax.MemberExpression,
+                    computed: true,
+                    object: expr,
+                    property: parseComputedMember()
+                };
             } else {
-                break;
+                expr = {
+                    type: Syntax.MemberExpression,
+                    computed: false,
+                    object: expr,
+                    property: parseNonComputedMember()
+                };
             }
         }
 
@@ -3378,14 +3381,97 @@ parseStatement: true, parseSourceElement: true */
 
         marker.apply = function (node) {
             if (extra.range) {
-                node.range = this.range;
+                node.range = [this.range[0], this.range[1]];
             }
             if (extra.loc) {
-                node.loc = this.loc;
+                node.loc = {
+                    start: {
+                        line: this.loc.start.line,
+                        column: this.loc.start.column
+                    },
+                    end: {
+                        line: this.loc.end.line,
+                        column: this.loc.end.column
+                    }
+                };
             }
         };
 
         return marker;
+    }
+
+    function trackLeftHandSideExpression() {
+        var marker, expr;
+
+        skipComment();
+        marker = createLocationMarker();
+
+        expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
+
+        while (match('.') || match('[')) {
+            if (match('[')) {
+                expr = {
+                    type: Syntax.MemberExpression,
+                    computed: true,
+                    object: expr,
+                    property: parseComputedMember()
+                };
+                marker.end();
+                marker.apply(expr);
+            } else {
+                expr = {
+                    type: Syntax.MemberExpression,
+                    computed: false,
+                    object: expr,
+                    property: parseNonComputedMember()
+                };
+                marker.end();
+                marker.apply(expr);
+            }
+        }
+
+        return expr;
+    }
+
+    function trackLeftHandSideExpressionAllowCall() {
+        var marker, expr;
+
+        skipComment();
+        marker = createLocationMarker();
+
+        expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
+
+        while (match('.') || match('[') || match('(')) {
+            if (match('(')) {
+                expr = {
+                    type: Syntax.CallExpression,
+                    callee: expr,
+                    'arguments': parseArguments()
+                };
+                marker.end();
+                marker.apply(expr);
+            } else if (match('[')) {
+                expr = {
+                    type: Syntax.MemberExpression,
+                    computed: true,
+                    object: expr,
+                    property: parseComputedMember()
+                };
+                marker.end();
+                marker.apply(expr);
+            } else {
+                expr = {
+                    type: Syntax.MemberExpression,
+                    computed: false,
+                    object: expr,
+                    property: parseNonComputedMember()
+                };
+                marker.end();
+                marker.apply(expr);
+            }
+        }
+
+        return expr;
     }
 
     function wrapTrackingFunction(range, loc) {
@@ -3437,24 +3523,6 @@ parseStatement: true, parseSourceElement: true */
                     visit(node);
                 }
 
-                if (node.type === Syntax.MemberExpression) {
-                    if (typeof node.object.range !== 'undefined') {
-                        node.range[0] = node.object.range[0];
-                    }
-                    if (typeof node.object.loc !== 'undefined') {
-                        node.loc.start = node.object.loc.start;
-                    }
-                }
-
-                if (node.type === Syntax.CallExpression) {
-                    if (typeof node.callee.range !== 'undefined') {
-                        node.range[0] = node.callee.range[0];
-                    }
-                    if (typeof node.callee.loc !== 'undefined') {
-                        node.loc.start = node.callee.loc.start;
-                    }
-                }
-
                 return node;
             };
         };
@@ -3476,6 +3544,11 @@ parseStatement: true, parseSourceElement: true */
 
         if (extra.range || extra.loc) {
 
+            extra.parseLeftHandSideExpression = parseLeftHandSideExpression;
+            extra.parseLeftHandSideExpressionAllowCall = parseLeftHandSideExpressionAllowCall;
+            parseLeftHandSideExpression = trackLeftHandSideExpression;
+            parseLeftHandSideExpressionAllowCall = trackLeftHandSideExpressionAllowCall;
+
             wrapTracking = wrapTrackingFunction(extra.range, extra.loc);
 
             extra.parseAdditiveExpression = parseAdditiveExpression;
@@ -3485,7 +3558,6 @@ parseStatement: true, parseSourceElement: true */
             extra.parseBitwiseXORExpression = parseBitwiseXORExpression;
             extra.parseBlock = parseBlock;
             extra.parseFunctionSourceElements = parseFunctionSourceElements;
-            extra.parseCallMember = parseCallMember;
             extra.parseCatchClause = parseCatchClause;
             extra.parseComputedMember = parseComputedMember;
             extra.parseConditionalExpression = parseConditionalExpression;
@@ -3495,11 +3567,12 @@ parseStatement: true, parseSourceElement: true */
             extra.parseForVariableDeclaration = parseForVariableDeclaration;
             extra.parseFunctionDeclaration = parseFunctionDeclaration;
             extra.parseFunctionExpression = parseFunctionExpression;
+            extra.parseLeftHandSideExpression = parseLeftHandSideExpression;
+            extra.parseLeftHandSideExpressionAllowCall = parseLeftHandSideExpressionAllowCall;
             extra.parseLogicalANDExpression = parseLogicalANDExpression;
             extra.parseLogicalORExpression = parseLogicalORExpression;
             extra.parseMultiplicativeExpression = parseMultiplicativeExpression;
             extra.parseNewExpression = parseNewExpression;
-            extra.parseNonComputedMember = parseNonComputedMember;
             extra.parseNonComputedProperty = parseNonComputedProperty;
             extra.parseObjectProperty = parseObjectProperty;
             extra.parseObjectPropertyKey = parseObjectPropertyKey;
@@ -3522,7 +3595,6 @@ parseStatement: true, parseSourceElement: true */
             parseBitwiseXORExpression = wrapTracking(extra.parseBitwiseXORExpression);
             parseBlock = wrapTracking(extra.parseBlock);
             parseFunctionSourceElements = wrapTracking(extra.parseFunctionSourceElements);
-            parseCallMember = wrapTracking(extra.parseCallMember);
             parseCatchClause = wrapTracking(extra.parseCatchClause);
             parseComputedMember = wrapTracking(extra.parseComputedMember);
             parseConditionalExpression = wrapTracking(extra.parseConditionalExpression);
@@ -3532,11 +3604,12 @@ parseStatement: true, parseSourceElement: true */
             parseForVariableDeclaration = wrapTracking(extra.parseForVariableDeclaration);
             parseFunctionDeclaration = wrapTracking(extra.parseFunctionDeclaration);
             parseFunctionExpression = wrapTracking(extra.parseFunctionExpression);
+            parseLeftHandSideExpression = wrapTracking(parseLeftHandSideExpression);
+            parseLeftHandSideExpressionAllowCall = wrapTracking(parseLeftHandSideExpressionAllowCall);
             parseLogicalANDExpression = wrapTracking(extra.parseLogicalANDExpression);
             parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);
             parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);
             parseNewExpression = wrapTracking(extra.parseNewExpression);
-            parseNonComputedMember = wrapTracking(extra.parseNonComputedMember);
             parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
             parseObjectProperty = wrapTracking(extra.parseObjectProperty);
             parseObjectPropertyKey = wrapTracking(extra.parseObjectPropertyKey);
@@ -3579,7 +3652,6 @@ parseStatement: true, parseSourceElement: true */
             parseBitwiseXORExpression = extra.parseBitwiseXORExpression;
             parseBlock = extra.parseBlock;
             parseFunctionSourceElements = extra.parseFunctionSourceElements;
-            parseCallMember = extra.parseCallMember;
             parseCatchClause = extra.parseCatchClause;
             parseComputedMember = extra.parseComputedMember;
             parseConditionalExpression = extra.parseConditionalExpression;
@@ -3589,11 +3661,12 @@ parseStatement: true, parseSourceElement: true */
             parseForVariableDeclaration = extra.parseForVariableDeclaration;
             parseFunctionDeclaration = extra.parseFunctionDeclaration;
             parseFunctionExpression = extra.parseFunctionExpression;
+            parseLeftHandSideExpression = extra.parseLeftHandSideExpression;
+            parseLeftHandSideExpressionAllowCall = extra.parseLeftHandSideExpressionAllowCall;
             parseLogicalANDExpression = extra.parseLogicalANDExpression;
             parseLogicalORExpression = extra.parseLogicalORExpression;
             parseMultiplicativeExpression = extra.parseMultiplicativeExpression;
             parseNewExpression = extra.parseNewExpression;
-            parseNonComputedMember = extra.parseNonComputedMember;
             parseNonComputedProperty = extra.parseNonComputedProperty;
             parseObjectProperty = extra.parseObjectProperty;
             parseObjectPropertyKey = extra.parseObjectPropertyKey;

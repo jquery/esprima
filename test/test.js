@@ -5147,7 +5147,6 @@ var testFixture = {
             }
         },
 
-
         'new foo.bar()': {
             type: 'ExpressionStatement',
             expression: {
@@ -5193,6 +5192,60 @@ var testFixture = {
             }
         },
 
+        '( new foo).bar()': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'NewExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'foo',
+                            range: [6, 9],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 9 }
+                            }
+                        },
+                        'arguments': [],
+                        range: [2, 9],
+                        loc: {
+                            start: { line: 1, column: 2 },
+                            end: { line: 1, column: 9 }
+                        }
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'bar',
+                        range: [11, 14],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    range: [0, 14],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                'arguments': [],
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            },
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
+        },
+
         'foo(bar, baz)': {
             type: 'ExpressionStatement',
             expression: {
@@ -5223,6 +5276,33 @@ var testFixture = {
                         end: { line: 1, column: 12 }
                     }
                 }],
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 13 }
+            }
+        },
+
+        '(    foo  )()': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'Identifier',
+                    name: 'foo',
+                    range: [5, 8],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 8 }
+                    }
+                },
+                'arguments': [],
                 range: [0, 13],
                 loc: {
                     start: { line: 1, column: 0 },
