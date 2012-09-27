@@ -84,7 +84,7 @@ parseYieldExpression: true
         NumericLiteral: 6,
         Punctuator: 7,
         StringLiteral: 8,
-        Quasi: 9
+        Template: 9
     };
 
     TokenName = {};
@@ -144,13 +144,13 @@ parseYieldExpression: true
         Path:  'Path',
         Program: 'Program',
         Property: 'Property',
-        QuasiElement: 'QuasiElement',
-        QuasiLiteral: 'QuasiLiteral',
+        TemplateElement: 'TemplateElement',
+        TemplateLiteral: 'TemplateLiteral',
         ReturnStatement: 'ReturnStatement',
         SequenceExpression: 'SequenceExpression',
         SwitchCase: 'SwitchCase',
         SwitchStatement: 'SwitchStatement',
-        TaggedQuasiExpression: 'TaggedQuasiExpression',
+        TaggedTemplateExpression: 'TaggedTemplateExpression',
         ThisExpression: 'ThisExpression',
         ThrowStatement: 'ThrowStatement',
         TryStatement: 'TryStatement',
@@ -176,7 +176,7 @@ parseYieldExpression: true
         UnexpectedString:  'Unexpected string',
         UnexpectedIdentifier:  'Unexpected identifier',
         UnexpectedReserved:  'Unexpected reserved word',
-        UnexpectedQuasi:  'Unexpected quasi %0',
+        UnexpectedTemplate:  'Unexpected quasi %0',
         UnexpectedEOS:  'Unexpected end of input',
         NewlineAfterThrow:  'Illegal newline after throw',
         InvalidRegExp: 'Invalid regular expression',
@@ -1093,7 +1093,7 @@ parseYieldExpression: true
         };
     }
 
-    function scanQuasi() {
+    function scanTemplate() {
         var cooked = '', ch, start, terminated, tail, restore, unescaped, code, octal;
 
         terminated = false;
@@ -1202,7 +1202,7 @@ parseYieldExpression: true
         }
 
         return {
-            type: Token.Quasi,
+            type: Token.Template,
             value: {
                 cooked: cooked,
                 raw: sliceSource(start + 1, index - ((tail) ? 1 : 2))
@@ -1215,7 +1215,7 @@ parseYieldExpression: true
         };
     }
 
-    function scanQuasiElement(option) {
+    function scanTemplateElement(option) {
         var startsWith;
 
         buffer = null;
@@ -1227,7 +1227,7 @@ parseYieldExpression: true
             throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
         }
 
-        return scanQuasi();
+        return scanTemplate();
     }
 
     function scanRegExp() {
@@ -1358,7 +1358,7 @@ parseYieldExpression: true
         }
 
         if (ch === '`') {
-            return scanQuasi();
+            return scanTemplate();
         }
 
         token = scanIdentifier();
@@ -1516,8 +1516,8 @@ parseYieldExpression: true
             throwError(token, Messages.UnexpectedToken, token.value);
         }
 
-        if (token.type === Token.Quasi) {
-            throwError(token, Messages.UnexpectedQuasi, token.value.raw);
+        if (token.type === Token.Template) {
+            throwError(token, Messages.UnexpectedTemplate, token.value.raw);
         }
 
         // BooleanLiteral, NullLiteral, or Punctuator.
@@ -1938,13 +1938,13 @@ parseYieldExpression: true
         };
     }
 
-    function parseQuasiElement(option) {
-        var token = scanQuasiElement(option);
+    function parseTemplateElement(option) {
+        var token = scanTemplateElement(option);
         if (strict && token.octal) {
             throwError(token, Messages.StrictOctalLiteral);
         }
         return {
-            type: Syntax.QuasiElement,
+            type: Syntax.TemplateElement,
             value: {
                 raw: token.value.raw,
                 cooked: token.value.cooked
@@ -1953,21 +1953,21 @@ parseYieldExpression: true
         };
     }
 
-    function parseQuasiLiteral() {
+    function parseTemplateLiteral() {
         var quasi, quasis, expressions;
 
-        quasi = parseQuasiElement({ head: true });
+        quasi = parseTemplateElement({ head: true });
         quasis = [ quasi ];
         expressions = [];
 
         while (!quasi.tail) {
             expressions.push(parseExpression());
-            quasi = parseQuasiElement({ head: false });
+            quasi = parseTemplateElement({ head: false });
             quasis.push(quasi);
         }
 
         return {
-            type: Syntax.QuasiLiteral,
+            type: Syntax.TemplateLiteral,
             quasis: quasis,
             expressions: expressions
         };
@@ -2051,8 +2051,8 @@ parseYieldExpression: true
             return createLiteral(scanRegExp());
         }
 
-        if (type === Token.Quasi) {
-            return parseQuasiLiteral();
+        if (type === Token.Template) {
+            return parseTemplateLiteral();
         }
 
         return throwUnexpected(lex());
@@ -2117,11 +2117,11 @@ parseYieldExpression: true
         return expr;
     }
 
-    function parseTaggedQuasi(tag) {
+    function parseTaggedTemplate(tag) {
         return {
-            type: Syntax.TaggedQuasiExpression,
+            type: Syntax.TaggedTemplateExpression,
             tag: tag,
-            quasi: parseQuasiLiteral()
+            quasi: parseTemplateLiteral()
         };
     }
 
@@ -2165,8 +2165,8 @@ parseYieldExpression: true
                 expr = parseComputedMember(expr);
             } else if (match('(')) {
                 expr = parseCallMember(expr);
-            } else if (lookahead().type === Token.Quasi) {
-                expr = parseTaggedQuasi(expr);
+            } else if (lookahead().type === Token.Template) {
+                expr = parseTaggedTemplate(expr);
             } else {
                 break;
             }
@@ -2187,8 +2187,8 @@ parseYieldExpression: true
                 expr = parseNonComputedMember(expr);
             } else if (match('[')) {
                 expr = parseComputedMember(expr);
-            } else if (lookahead().type === Token.Quasi) {
-                expr = parseTaggedQuasi(expr);
+            } else if (lookahead().type === Token.Template) {
+                expr = parseTaggedTemplate(expr);
             } else {
                 break;
             }
@@ -4670,12 +4670,12 @@ parseYieldExpression: true
             extra.parseProgram = parseProgram;
             extra.parsePropertyFunction = parsePropertyFunction;
             extra.parseRelationalExpression = parseRelationalExpression;
-            extra.parseQuasiElement = parseQuasiElement;
-            extra.parseQuasiLiteral = parseQuasiLiteral;
+            extra.parseTemplateElement = parseTemplateElement;
+            extra.parseTemplateLiteral = parseTemplateLiteral;
             extra.parseStatement = parseStatement;
             extra.parseShiftExpression = parseShiftExpression;
             extra.parseSwitchCase = parseSwitchCase;
-            extra.parseTaggedQuasi = parseTaggedQuasi;
+            extra.parseTaggedTemplate = parseTaggedTemplate;
             extra.parseUnaryExpression = parseUnaryExpression;
             extra.parseVariableDeclaration = parseVariableDeclaration;
             extra.parseVariableIdentifier = parseVariableIdentifier;
@@ -4722,13 +4722,13 @@ parseYieldExpression: true
             parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
             parseProgram = wrapTracking(extra.parseProgram);
             parsePropertyFunction = wrapTracking(extra.parsePropertyFunction);
-            parseQuasiElement = wrapTracking(extra.parseQuasiElement);
-            parseQuasiLiteral = wrapTracking(extra.parseQuasiLiteral);
+            parseTemplateElement = wrapTracking(extra.parseTemplateElement);
+            parseTemplateLiteral = wrapTracking(extra.parseTemplateLiteral);
             parseRelationalExpression = wrapTracking(extra.parseRelationalExpression);
             parseStatement = wrapTracking(extra.parseStatement);
             parseShiftExpression = wrapTracking(extra.parseShiftExpression);
             parseSwitchCase = wrapTracking(extra.parseSwitchCase);
-            parseTaggedQuasi = wrapTracking(extra.parseTaggedQuasi);
+            parseTaggedTemplate = wrapTracking(extra.parseTaggedTemplate);
             parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);
             parseVariableDeclaration = wrapTracking(extra.parseVariableDeclaration);
             parseVariableIdentifier = wrapTracking(extra.parseVariableIdentifier);
@@ -4795,13 +4795,13 @@ parseYieldExpression: true
             parsePrimaryExpression = extra.parsePrimaryExpression;
             parseProgram = extra.parseProgram;
             parsePropertyFunction = extra.parsePropertyFunction;
-            parseQuasiElement = extra.parseQuasiElement;
-            parseQuasiLiteral = extra.parseQuasiLiteral;
+            parseTemplateElement = extra.parseTemplateElement;
+            parseTemplateLiteral = extra.parseTemplateLiteral;
             parseRelationalExpression = extra.parseRelationalExpression;
             parseStatement = extra.parseStatement;
             parseShiftExpression = extra.parseShiftExpression;
             parseSwitchCase = extra.parseSwitchCase;
-            parseTaggedQuasi = extra.parseTaggedQuasi;
+            parseTaggedTemplate = extra.parseTaggedTemplate;
             parseUnaryExpression = extra.parseUnaryExpression;
             parseVariableDeclaration = extra.parseVariableDeclaration;
             parseVariableIdentifier = extra.parseVariableIdentifier;

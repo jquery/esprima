@@ -459,15 +459,15 @@ var harmonyTestFixture = {
 
     },
 
-    // ECMAScript 6th Syntax, 11.1. 9 Quasi Literals
+    // ECMAScript 6th Syntax, 11.1. 9 Template Literals
 
     'ES6 Template Strings': {
         '`42`': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'QuasiLiteral',
+                type: 'TemplateLiteral',
                 quasis: [{
-                    type: 'QuasiElement',
+                    type: 'TemplateElement',
                     value: {
                         raw: '42',
                         cooked: '42'
@@ -496,7 +496,7 @@ var harmonyTestFixture = {
         'raw`42`': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'TaggedQuasiExpression',
+                type: 'TaggedTemplateExpression',
                 tag: {
                     type: 'Identifier',
                     name: 'raw',
@@ -507,9 +507,9 @@ var harmonyTestFixture = {
                     }
                 },
                 quasi: {
-                    type: 'QuasiLiteral',
+                    type: 'TemplateLiteral',
                     quasis: [{
-                        type: 'QuasiElement',
+                        type: 'TemplateElement',
                         value: {
                             raw: '42',
                             cooked: '42'
@@ -544,7 +544,7 @@ var harmonyTestFixture = {
         'raw`hello ${name}`': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'TaggedQuasiExpression',
+                type: 'TaggedTemplateExpression',
                 tag: {
                     type: 'Identifier',
                     name: 'raw',
@@ -555,9 +555,9 @@ var harmonyTestFixture = {
                     }
                 },
                 quasi: {
-                    type: 'QuasiLiteral',
+                    type: 'TemplateLiteral',
                     quasis: [{
-                        type: 'QuasiElement',
+                        type: 'TemplateElement',
                         value: {
                             raw: 'hello ',
                             cooked: 'hello '
@@ -569,7 +569,7 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 12 }
                         }
                     }, {
-                        type: 'QuasiElement',
+                        type: 'TemplateElement',
                         value: {
                             raw: '',
                             cooked: ''
@@ -612,9 +612,9 @@ var harmonyTestFixture = {
         '`$`': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'QuasiLiteral',
+                type: 'TemplateLiteral',
                 quasis: [{
-                    type: 'QuasiElement',
+                    type: 'TemplateElement',
                     value: {
                         raw: '$',
                         cooked: '$'
@@ -643,9 +643,9 @@ var harmonyTestFixture = {
         '`\\n\\r\\b\\v\\t\\f\\\n\\\r\n`': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'QuasiLiteral',
+                type: 'TemplateLiteral',
                 quasis: [{
-                    type: 'QuasiElement',
+                    type: 'TemplateElement',
                     value: {
                         raw: '\\n\\r\\b\\v\\t\\f\\\n\\\r\n',
                         cooked: '\n\r\b\v\t\f'
@@ -674,9 +674,9 @@ var harmonyTestFixture = {
         '`\n\r\n`': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'QuasiLiteral',
+                type: 'TemplateLiteral',
                 quasis: [{
-                    type: 'QuasiElement',
+                    type: 'TemplateElement',
                     value: {
                         raw: '\n\r\n',
                         cooked: ''
@@ -705,9 +705,9 @@ var harmonyTestFixture = {
         '`\\u{000042}\\u0042\\x42\\u0\\102\\A`': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'QuasiLiteral',
+                type: 'TemplateLiteral',
                 quasis: [{
-                    type: 'QuasiElement',
+                    type: 'TemplateElement',
                     value: {
                         raw: '\\u{000042}\\u0042\\x42\\u0\\102\\A',
                         cooked: 'BBBu0BA'
@@ -738,7 +738,7 @@ var harmonyTestFixture = {
             expression: {
                 type: 'NewExpression',
                 callee: {
-                    type: 'TaggedQuasiExpression',
+                    type: 'TaggedTemplateExpression',
                     tag: {
                         type: 'Identifier',
                         name: 'raw',
@@ -749,9 +749,9 @@ var harmonyTestFixture = {
                         }
                     },
                     quasi: {
-                        type: 'QuasiLiteral',
+                        type: 'TemplateLiteral',
                         quasis: [{
-                            type: 'QuasiElement',
+                            type: 'TemplateElement',
                             value: {
                                 raw: '42',
                                 cooked: '42'
