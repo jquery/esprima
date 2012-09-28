@@ -4529,6 +4529,39 @@ parseYieldExpression: true
         };
     }
 
+    function createLocationMarker() {
+        var marker = {};
+
+        marker.range = [index, index];
+        marker.loc = {
+            start: {
+                line: lineNumber,
+                column: index - lineStart
+            },
+            end: {
+                line: lineNumber,
+                column: index - lineStart
+            }
+        };
+
+        marker.end = function () {
+            this.range[1] = index;
+            this.loc.end.line = lineNumber;
+            this.loc.end.column = index - lineStart;
+        };
+
+        marker.apply = function (node) {
+            if (extra.range) {
+                node.range = this.range;
+            }
+            if (extra.loc) {
+                node.loc = this.loc;
+            }
+        };
+
+        return marker;
+    }
+
     function wrapTrackingFunction(range, loc) {
 
         return function (parseFunction) {
@@ -4558,58 +4591,46 @@ parseYieldExpression: true
             }
 
             return function () {
-                var node, rangeInfo, locInfo;
+                var marker, node;
 
                 skipComment();
-                rangeInfo = [index, 0];
-                locInfo = {
-                    start: {
-                        line: lineNumber,
-                        column: index - lineStart
-                    }
-                };
 
+                marker = createLocationMarker();
                 node = parseFunction.apply(null, arguments);
-                if (typeof node !== 'undefined') {
+                marker.end();
 
-                    if (range && typeof node.range === 'undefined') {
-                        rangeInfo[1] = index;
-                        node.range = rangeInfo;
-                    }
-
-                    if (loc && typeof node.loc === 'undefined') {
-                        locInfo.end = {
-                            line: lineNumber,
-                            column: index - lineStart
-                        };
-                        node.loc = locInfo;
-                    }
-
-                    if (isBinary(node)) {
-                        visit(node);
-                    }
-
-                    if (node.type === Syntax.MemberExpression) {
-                        if (typeof node.object.range !== 'undefined') {
-                            node.range[0] = node.object.range[0];
-                        }
-                        if (typeof node.object.loc !== 'undefined') {
-                            node.loc.start = node.object.loc.start;
-                        }
-                    }
-
-                    if (node.type === Syntax.CallExpression) {
-                        if (typeof node.callee.range !== 'undefined') {
-                            node.range[0] = node.callee.range[0];
-                        }
-                        if (typeof node.callee.loc !== 'undefined') {
-                            node.loc.start = node.callee.loc.start;
-                        }
-                    }
-                    return node;
+                if (range && typeof node.range === 'undefined') {
+                    marker.apply(node);
                 }
-            };
 
+                if (loc && typeof node.loc === 'undefined') {
+                    marker.apply(node);
+                }
+
+                if (isBinary(node)) {
+                    visit(node);
+                }
+
+                if (node.type === Syntax.MemberExpression) {
+                    if (typeof node.object.range !== 'undefined') {
+                        node.range[0] = node.object.range[0];
+                    }
+                    if (typeof node.object.loc !== 'undefined') {
+                        node.loc.start = node.object.loc.start;
+                    }
+                }
+
+                if (node.type === Syntax.CallExpression) {
+                    if (typeof node.callee.range !== 'undefined') {
+                        node.range[0] = node.callee.range[0];
+                    }
+                    if (typeof node.callee.loc !== 'undefined') {
+                        node.loc.start = node.callee.loc.start;
+                    }
+                }
+
+                return node;
+            };
         };
     }
 
