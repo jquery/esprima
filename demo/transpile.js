@@ -105,7 +105,7 @@ try {
 
     window.resultview = CodeMirror.fromTextArea(document.getElementById("result"), {
         lineNumbers: true,
-        readOnly: 'nocursor'
+        readOnly: true
     });
 } catch (e) {
     // CodeMirror failed to initialize, possible in e.g. old IE.
