@@ -108,6 +108,29 @@ esprima.parse(code, options);
 
 <h2 id="examples">Examples</h2>
 
+<h3 id="nestedternary">Detect Nested Ternary Conditionals</h3>
+
+<p>The script <code>detectnestedternary.js</code> in the <code>examples/</code> subdirectory is using Esprima to look for a ternary conditional, i.e. <a href="http://en.wikipedia.org/wiki/%3F:">operator ?:</a>, which is immediately followed (in one of its code paths) by another ternary conditional. The script can be invoked from the command-line with Node.js:</p>
+
+<pre class="prettyprint lang-bsh">
+node detectnestedternary.js /some/path
+</pre>
+
+<p>An example code fragment which will be flagged by this script as having a nested ternary conditional:</p>
+
+<pre class="prettyprint lang-js">
+var str = (age < 1) ? "baby" :
+    (age < 5) ? "toddler" :
+    (age < 18) ? "child": "adult";
+</pre>
+
+<p>which will yield the following report:</p>
+
+<pre>
+  Line 1 : Nested ternary for "age &lt 1"
+  Line 2 : Nested ternary for "age &lt 5"
+</pre>
+
 <h3 id="booleantrap">Find Possible Boolean Traps</h3>
 
 <p>The script <code>findbooleantrap.js</code> in the <code>examples/</code> subdirectory is using Esprima to detect some possible cases of Boolean trap, i.e. the use of Boolean literal which may lead to ambiguities and lack of readability. The script can be invoked from command-line with Node.js:</p>
