@@ -28,7 +28,7 @@
 
 <p><strong>Note</strong>: Only regular expression literals and objects created with <code>RegExp</code> are considered.</p>
 <p>Type ECMAScript code:</p>
-    <p><textarea id="code" autofocus="autofocus" cols="70" rows="15" spellcheck="false">
+<div><textarea id="code" autofocus="autofocus" cols="70" rows="15" spellcheck="false">
 var letterRE = new RegExp('[a-zA-Z]', 'g'),
     digitRE = RegExp('[0-9]');
 
@@ -39,7 +39,7 @@ if (/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@'
     .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
     .replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
 }
-</textarea></p>
+</textarea></div>
 <p id="codemirror" align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
 
 <p>Using Esprima version <span id="version"></span>.</p>
@@ -51,7 +51,7 @@ if (/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@'
 <a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
 </div>
 
-<p id="testbox" style="visibility: hidden;"><textarea id="test"></textarea></p>
+<div id="testbox" style="visibility: hidden;"><textarea id="test"></textarea></div>
 </div>
 <script>
 /*jslint sloppy:true browser:true */

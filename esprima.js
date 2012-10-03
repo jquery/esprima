@@ -1487,6 +1487,21 @@ parseStatement: true, parseSourceElement: true */
         };
     }
 
+    // 11.1.6 The Grouping Operator
+
+    function parseGroupExpression() {
+        var expr;
+
+        expect('(');
+
+        expr = parseExpression();
+
+        expect(')');
+
+        return expr;
+    }
+
+
     // 11.1 Primary Expressions
 
     function parsePrimaryExpression() {
@@ -1542,10 +1557,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (match('(')) {
-            lex();
-            state.lastParenthesized = expr = parseExpression();
-            expect(')');
-            return expr;
+            return parseGroupExpression();
         }
 
         if (match('/') || match('/=')) {
@@ -3384,6 +3396,24 @@ parseStatement: true, parseSourceElement: true */
             this.loc.end.column = index - lineStart;
         };
 
+        marker.applyGroup = function (node) {
+            if (extra.range) {
+                node.groupRange = [this.range[0], this.range[1]];
+            }
+            if (extra.loc) {
+                node.groupLoc = {
+                    start: {
+                        line: this.loc.start.line,
+                        column: this.loc.start.column
+                    },
+                    end: {
+                        line: this.loc.end.line,
+                        column: this.loc.end.column
+                    }
+                };
+            }
+        };
+
         marker.apply = function (node) {
             if (extra.range) {
                 node.range = [this.range[0], this.range[1]];
@@ -3403,6 +3433,23 @@ parseStatement: true, parseSourceElement: true */
         };
 
         return marker;
+    }
+
+    function trackGroupExpression() {
+        var marker, expr;
+
+        skipComment();
+        marker = createLocationMarker();
+        expect('(');
+
+        expr = parseExpression();
+
+        expect(')');
+
+        marker.end();
+        marker.applyGroup(expr);
+
+        return expr;
     }
 
     function trackLeftHandSideExpression() {
@@ -3479,6 +3526,23 @@ parseStatement: true, parseSourceElement: true */
         return expr;
     }
 
+    function filterGroup(node) {
+        var n, i, entry;
+
+        n = (Object.prototype.toString.apply(node) === '[object Array]') ? [] : {};
+        for (i in node) {
+            if (node.hasOwnProperty(i) && i !== 'groupRange' && i !== 'groupLoc') {
+                entry = node[i];
+                if (entry === null || typeof entry !== 'object' || entry instanceof RegExp) {
+                    n[i] = entry;
+                } else {
+                    n[i] = filterGroup(entry);
+                }
+            }
+        }
+        return n;
+    }
+
     function wrapTrackingFunction(range, loc) {
 
         return function (parseFunction) {
@@ -3489,6 +3553,8 @@ parseStatement: true, parseSourceElement: true */
             }
 
             function visit(node) {
+                var start, end;
+
                 if (isBinary(node.left)) {
                     visit(node.left);
                 }
@@ -3496,14 +3562,31 @@ parseStatement: true, parseSourceElement: true */
                     visit(node.right);
                 }
 
-                if (range && typeof node.range === 'undefined') {
-                    node.range = [node.left.range[0], node.right.range[1]];
+                if (range) {
+                    if (node.left.groupRange || node.right.groupRange) {
+                        start = node.left.groupRange ? node.left.groupRange[0] : node.left.range[0];
+                        end = node.right.groupRange ? node.right.groupRange[1] : node.right.range[1];
+                        node.range = [start, end];
+                    } else if (typeof node.range === 'undefined') {
+                        start = node.left.range[0];
+                        end = node.right.range[1];
+                        node.range = [start, end];
+                    }
                 }
-                if (loc && typeof node.loc === 'undefined') {
-                    node.loc = {
-                        start: node.left.loc.start,
-                        end: node.right.loc.end
-                    };
+                if (loc) {
+                    if (node.left.groupLoc || node.right.groupLoc) {
+                        start = node.left.groupLoc ? node.left.groupLoc.start : node.left.loc.start;
+                        end = node.right.groupLoc ? node.right.groupLoc.end : node.right.loc.end;
+                        node.loc = {
+                            start: start,
+                            end: end
+                        };
+                    } else if (typeof node.loc === 'undefined') {
+                        node.loc = {
+                            start: node.left.loc.start,
+                            end: node.right.loc.end
+                        };
+                    }
                 }
             }
 
@@ -3549,8 +3632,10 @@ parseStatement: true, parseSourceElement: true */
 
         if (extra.range || extra.loc) {
 
+            extra.parseGroupExpression = parseGroupExpression;
             extra.parseLeftHandSideExpression = parseLeftHandSideExpression;
             extra.parseLeftHandSideExpressionAllowCall = parseLeftHandSideExpressionAllowCall;
+            parseGroupExpression = trackGroupExpression;
             parseLeftHandSideExpression = trackLeftHandSideExpression;
             parseLeftHandSideExpressionAllowCall = trackLeftHandSideExpressionAllowCall;
 
@@ -3663,6 +3748,7 @@ parseStatement: true, parseSourceElement: true */
             parseForVariableDeclaration = extra.parseForVariableDeclaration;
             parseFunctionDeclaration = extra.parseFunctionDeclaration;
             parseFunctionExpression = extra.parseFunctionExpression;
+            parseGroupExpression = extra.parseGroupExpression;
             parseLeftHandSideExpression = extra.parseLeftHandSideExpression;
             parseLeftHandSideExpressionAllowCall = extra.parseLeftHandSideExpressionAllowCall;
             parseLogicalANDExpression = extra.parseLogicalANDExpression;
@@ -3718,7 +3804,6 @@ parseStatement: true, parseSourceElement: true */
         state = {
             allowIn: true,
             labelSet: {},
-            lastParenthesized: null,
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false
@@ -3769,6 +3854,9 @@ parseStatement: true, parseSourceElement: true */
             }
             if (typeof extra.errors !== 'undefined') {
                 program.errors = extra.errors;
+            }
+            if (extra.range || extra.loc) {
+                program.body = filterGroup(program.body);
             }
         } catch (e) {
             throw e;
