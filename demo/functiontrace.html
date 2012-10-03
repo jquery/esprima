@@ -33,7 +33,7 @@
 <h1>Function Trace <small>reveals what is being called</small></h1>
 
 <p>Type ECMAScript code:</p>
-    <p><textarea id="code" autofocus="autofocus" cols="70" rows="25" spellcheck="false">
+<div><textarea id="code" autofocus="autofocus" cols="70" rows="25" spellcheck="false">
 Array.prototype.swap = function (i, j) {
     var k = this[i]; this[i] = this[j]; this[j] = k;
 }
@@ -55,7 +55,7 @@ function bubbleSort(list) {
 var N = 100, data = []; while (N &gt; 0) data.push(N--);
 
 bubbleSort(data);
-</textarea></p>
+</textarea></div>
 <p id="codemirror" align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
 
 <p><input type="button" value="Insert tracing" id="instrument">
@@ -71,7 +71,7 @@ bubbleSort(data);
 <a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
 </div>
 
-<p id="testbox" style="visibility: hidden;"><textarea id="test"></textarea></p>
+<div id="testbox" style="visibility: hidden;"><textarea id="test"></textarea></div>
 </div>
 <script>
 /*jslint sloppy:true browser:true */
