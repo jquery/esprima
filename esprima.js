@@ -1716,6 +1716,11 @@ parseStatement: true, parseSourceElement: true */
     function parseUnaryExpression() {
         var token, expr;
 
+        token = lookahead();
+        if (token.type !== Token.Punctuator && token.type !== Token.Keyword) {
+            return parsePostfixExpression();
+        }
+
         if (match('++') || match('--')) {
             token = lex();
             expr = parseUnaryExpression();
