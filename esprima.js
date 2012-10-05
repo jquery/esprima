@@ -1702,6 +1702,11 @@ parseStatement: true, parseSourceElement: true */
     function parsePostfixExpression() {
         var expr = parseLeftHandSideExpressionAllowCall();
 
+        var token = lookahead();
+        if (token.type !== Token.Punctuator) {
+            return expr;
+        }
+
         if ((match('++') || match('--')) && !peekLineTerminator()) {
             // 11.3.1, 11.3.2
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {

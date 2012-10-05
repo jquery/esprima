@@ -33,8 +33,7 @@ var setupBenchmarks,
 parsers = [
     'Esprima',
     'parse-js',
-    'ZeParser',
-    'Narcissus'
+    'Acorn'
 ];
 
 fixtureList = [
@@ -65,13 +64,6 @@ function inject(fname) {
 }
 
 if (typeof window !== 'undefined') {
-
-    // Mozilla Narcissus
-    if (typeof Object.create === 'function' && typeof Object.defineProperty === 'function') {
-        inject('3rdparty/jsdefs.js');
-        inject('3rdparty/jslex.js');
-        inject('3rdparty/jsparse.js');
-    }
 
     // Run all tests in a browser environment.
     setupBenchmarks = function () {
@@ -278,19 +270,13 @@ if (typeof window !== 'undefined') {
                     };
                     break;
 
-                case 'ZeParser':
+                case 'Acorn':
                     fn = function () {
-                        var syntax = window.ZeParser.parse(source, false);
-                        window.tree.push(syntax.length);
+                        var syntax = window.acorn.parse(source);
+                        window.tree.push(syntax.body.length);
                     };
                     break;
 
-                case 'Narcissus':
-                    fn = function () {
-                        var syntax = window.Narcissus.parser.parse(source);
-                        window.tree.push(syntax.children.length);
-                    };
-                    break;
                 default:
                     throw 'Unknown parser type ' + parser;
                 }

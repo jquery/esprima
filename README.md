@@ -1,40 +1,38 @@
-Esprima ([esprima.org](http://esprima.org)) is an educational
-[ECMAScript](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
-(also popularly known as [JavaScript](http://en.wikipedia.org/wiki/JavaScript>JavaScript))
-parsing infrastructure for multipurpose analysis. It is also written in ECMAScript.
-
-Esprima is created and maintained by [Ariya Hidayat](http://ariya.ofilabs.com/about)
-(Twitter: [@ariyahidayat](http://twitter.com/ariyahidayat)), with the help of
-[many contributors](https://github.com/ariya/esprima/contributors).
-
-### Features
-
-- Supports [ECMAScript 5.1](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
-with an experimental branch for ES.Next/Harmony
-- Sensible format for the abstract syntax tree (AST), compatible with Mozilla
-[Parser API](https://developer.mozilla.org/en/SpiderMonkey/Parser_API)
-- Heavily tested (> 500 [unit tests](http://esprima.org/test/) with solid 100% code coverage)
-- Optional tracking of syntax node location (index-based and line-column)
-- [Blazing fast](http://esprima.org/test/benchmarks.html) (3x faster than
-UglifyJS on the [speed comparison test](http://esprima.org/test/compare.html) using Chrome)
+**Esprima** ([esprima.org](http://esprima.org)) is a high performance,
+standard-compliant [ECMAScript](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
+parser written in ECMAScript (also popularly known as
+[JavaScript](http://en.wikipedia.org/wiki/JavaScript>JavaScript)).
+Esprima is created and maintained by [Ariya Hidayat](http://twitter.com/ariyahidayat),
+with the help of [many contributors](https://github.com/ariya/esprima/contributors).
 
 Esprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror 4.6+, Opera 8+) as well as
 [Node.js](http://nodejs.org).
 
-### Use-cases
+### Features
 
-- Smart editing: [outline view](https://github.com/aclement/esprima-outline), [content assist](http://contraptionsforprogramming.blogspot.com/2012/02/better-javascript-content-assist-in.html)
-- Source code modification: [Esmorph](https://github.com/ariya/esmorph), [Code Painter](https://github.com/fawek/codepainter),
-  [node-falafel](https://github.com/substack/node-falafel), [Esmangle](https://github.com/Constellation/esmangle)
-- Code coverage analysis: [node-cover](https://github.com/itay/node-cover),
-[coveraje](https://github.com/coveraje/coveraje),
-[CoverJS](https://github.com/arian/CoverJS),
-[Istanbul](https://github.com/yahoo/Istanbul)
-- Code generation: [escodegen](https://github.com/Constellation/escodegen)
+- Full support for [ECMAScript 5.1](http://www.ecma-international.org/publications/standards/Ecma-262.htm)(ECMA-262)
+- Sensible [syntax tree format](http://esprima.org/doc/index.html#ast) compatible with Mozilla
+[Parser AST](https://developer.mozilla.org/en/SpiderMonkey/Parser_API)
+- Heavily tested (> 550 [unit tests](http://esprima.org/test/) with solid 100% statement coverage)
+- Optional tracking of syntax node location (index-based and line-column)
+- Experimental support for ES6/Harmony (module, class, destructuring, ...)
+
+Esprima is blazing fast (see the [benchmark suite](http://esprima.org/test/benchmarks.html)).
+It is up to 3x faster than UglifyJS v1 and it is still [competitive](http://esprima.org/test/compare.html)
+with the new generation of fast parsers.
+
+### Applications
+
+Esprima serves as the basis for many popular JavaScript development tools:
+
+- Code coverage analysis: [node-cover](https://github.com/itay/node-cover), [Istanbul](https://github.com/yahoo/Istanbul)
 - Documentation tool: [JFDoc](https://github.com/thejohnfreeman/jfdoc), [JSDuck](https://github.com/senchalabs/jsduck)
-- Source-to-source compilation: [Marv](https://github.com/Yoric/Marv-the-Tinker),
-[LLJS](http://mbebenita.github.com/LLJS/), [Six](https://github.com/matthewrobb/six), [Sweet.js](http://sweetjs.org/), [Harmonizr](https://github.com/jdiamond/harmonizr)
-
+- Language extension: [LLJS](http://mbebenita.github.com/LLJS/) (low-level JS),
+[Sweet.js](http://sweetjs.org/) (macro)
+- ES6/Harmony transpiler: [Six](https://github.com/matthewrobb/six), [Harmonizr](https://github.com/jdiamond/harmonizr)
+- Eclipse Orion smart editing ([outline view](https://github.com/aclement/esprima-outline), [content assist](http://contraptionsforprogramming.blogspot.com/2012/02/better-javascript-content-assist-in.html))
+- Source code modification: [Esmorph](https://github.com/ariya/esmorph), [Code Painter](https://github.com/fawek/codepainter),
+- Source transformation: [node-falafel](https://github.com/substack/node-falafel), [Esmangle](https://github.com/Constellation/esmangle), [escodegen](https://github.com/Constellation/escodegen)
 
 ### Questions?
 - [Documentation](http://esprima.org/doc)
@@ -43,6 +41,8 @@ and [future plans](http://code.google.com/p/esprima/issues/list?q=Enhancement)
 - [Mailing list](http://groups.google.com/group/esprima)
 - [Contribution guide](http://esprima.org/doc/index.html#contribution)
 
+Follow [@Esprima](http://twitter.com/Esprima) on Twitter to get the
+development updates.
 Feedback and contribution are welcomed!
 
 ### License
