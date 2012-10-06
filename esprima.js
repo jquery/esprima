@@ -1938,7 +1938,6 @@ parseYieldExpression: true
         };
     }
 
-<<<<<<< HEAD
     function parseTemplateElement(option) {
         var token = scanTemplateElement(option);
         if (strict && token.octal) {
@@ -1974,13 +1973,14 @@ parseYieldExpression: true
         };
     }
 
-=======
     // 11.1.6 The Grouping Operator
 
     function parseGroupExpression() {
         var expr;
 
         expect('(');
+
+        ++state.parenthesizedCount;
 
         expr = parseExpression();
 
@@ -1990,7 +1990,6 @@ parseYieldExpression: true
     }
 
 
->>>>>>> master
     // 11.1 Primary Expressions
 
     function parsePrimaryExpression() {
@@ -2058,15 +2057,7 @@ parseYieldExpression: true
         }
 
         if (match('(')) {
-<<<<<<< HEAD
-            lex();
-            state.lastParenthesized = expr = parseExpression();
-            state.parenthesizedCount += 1;
-            expect(')');
-            return expr;
-=======
             return parseGroupExpression();
->>>>>>> master
         }
 
         if (match('/') || match('/=')) {
@@ -2228,6 +2219,7 @@ parseYieldExpression: true
         var expr = parseLeftHandSideExpressionAllowCall();
 
         var token = lookahead();
+
         if (token.type !== Token.Punctuator) {
             return expr;
         }
@@ -4865,14 +4857,9 @@ parseYieldExpression: true
             extra.parseForVariableDeclaration = parseForVariableDeclaration;
             extra.parseFunctionDeclaration = parseFunctionDeclaration;
             extra.parseFunctionExpression = parseFunctionExpression;
-<<<<<<< HEAD
             extra.parseGlob = parseGlob;
             extra.parseImportDeclaration = parseImportDeclaration;
             extra.parseImportSpecifier = parseImportSpecifier;
-            extra.parseLeftHandSideExpression = parseLeftHandSideExpression;
-            extra.parseLeftHandSideExpressionAllowCall = parseLeftHandSideExpressionAllowCall;
-=======
->>>>>>> master
             extra.parseLogicalANDExpression = parseLogicalANDExpression;
             extra.parseLogicalORExpression = parseLogicalORExpression;
             extra.parseMultiplicativeExpression = parseMultiplicativeExpression;
@@ -4923,7 +4910,6 @@ parseYieldExpression: true
             parseGlob = wrapTracking(extra.parseGlob);
             parseImportDeclaration = wrapTracking(extra.parseImportDeclaration);
             parseImportSpecifier = wrapTracking(extra.parseImportSpecifier);
-            parseLeftHandSideExpression = wrapTracking(parseLeftHandSideExpression);
             parseLogicalANDExpression = wrapTracking(extra.parseLogicalANDExpression);
             parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);
             parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);
@@ -4991,13 +4977,10 @@ parseYieldExpression: true
             parseForVariableDeclaration = extra.parseForVariableDeclaration;
             parseFunctionDeclaration = extra.parseFunctionDeclaration;
             parseFunctionExpression = extra.parseFunctionExpression;
-<<<<<<< HEAD
             parseGlob = extra.parseGlob;
             parseImportDeclaration = extra.parseImportDeclaration;
             parseImportSpecifier = extra.parseImportSpecifier;
-=======
             parseGroupExpression = extra.parseGroupExpression;
->>>>>>> master
             parseLeftHandSideExpression = extra.parseLeftHandSideExpression;
             parseLeftHandSideExpressionAllowCall = extra.parseLeftHandSideExpressionAllowCall;
             parseLogicalANDExpression = extra.parseLogicalANDExpression;
@@ -5062,11 +5045,7 @@ parseYieldExpression: true
         state = {
             allowIn: true,
             labelSet: {},
-<<<<<<< HEAD
             parenthesizedCount: 0,
-            lastParenthesized: null,
-=======
->>>>>>> master
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false
