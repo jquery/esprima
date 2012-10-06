@@ -4623,6 +4623,8 @@ parseYieldExpression: true
         marker = createLocationMarker();
         expect('(');
 
+        ++state.parenthesizedCount;
+
         expr = parseExpression();
 
         expect(')');
