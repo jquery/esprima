@@ -15,6 +15,10 @@ pre.prettyprint {
     font-size: 13px;
     line-height: 19px;
 }
+
+table td {
+    text-align: left;
+}
 </style>
 </head>
 <body onload="prettyPrint()">
@@ -103,17 +107,35 @@ esprima.parse(code, options);
 
 <p>The output of the parser is the syntax tree formatted in <a href="http://www.json.org">JSON</a>, see the following <a href="#ast">Syntax Tree Format</a> section.</p>
 
-<p>Available options so far:
+<p>Available options so far (by default, every option <b>false</b>):</p>
 
-<ul>
-    <li>loc: When set to true, line and column-based location info will be added to each syntax node.</li>
-    <li>range: When set to true, an index-based location range array will be added to each syntax node.</li>
-    <li>raw: When set to true, every literal has an additional property called raw which stores the actual verbatim source.</li>
-    <li>tokens: When set to true, an extra list of array is included in the output, containing all found tokens during parsing.</li>
-    <li>comment: When set to true, there will be additional array containing the list of all found line and block comments.</li>
-</ul>
+<table>
+    <tr>
+        <th>Option</th>
+        <th>When set to true</th>
+    </tr>
+    <tr>
+        <td>loc</td>
+        <td>Nodes have line and column-based location info</td>
+    </tr>
+    <tr>
+        <td>range</td>
+        <td>Nodes have an index-based location range (array)</td>
+    </tr>
+    <tr>
+        <td>raw</td>
+        <td>Literals have extra property which stores the verbatim source</td>
+    </tr>
+    <tr>
+        <td>tokens</td>
+        <td>An extra array containing all found tokens</td>
+    </tr>
+    <tr>
+        <td>comment</td>
+        <td>An extra array containing all line and block comments</td>
+    </tr>
+</table>
 
-<p>By default, every option mentioned above is <b>false</b>.</p>
 
 <p>The easiest way to see the different output based on various option settings is to use the <a href="../demo/parse.html">online parser demo</a>.
 
