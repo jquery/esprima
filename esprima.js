@@ -1700,9 +1700,9 @@ parseStatement: true, parseSourceElement: true */
     // 11.3 Postfix Expressions
 
     function parsePostfixExpression() {
-        var expr = parseLeftHandSideExpressionAllowCall();
+        var expr = parseLeftHandSideExpressionAllowCall(), token;
 
-        var token = lookahead();
+        token = lookahead();
         if (token.type !== Token.Punctuator) {
             return expr;
         }
