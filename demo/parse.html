@@ -260,9 +260,10 @@ function parse(delay) {
 <p>Esprima version <span id="version"></span>.</p>
 
 <p>Type ECMAScript code:</p>
-    <p><textarea id="code" autofocus="autofocus" cols="70" rows="15" spellcheck="false">
+<div><textarea id="code" autofocus="autofocus" cols="70" rows="15" spellcheck="false">
 // Life, Universe, and Everything
-var answer = 6 * 7;</textarea></p>
+var answer = 6 * 7;
+</textarea></div>
 <p id="codemirror" align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
 <p><label><input type="checkbox" id="raw"> Preserve raw value of literals</label>
 <label><input type="checkbox" id="comment"> Include comments</label></p>
@@ -302,7 +303,7 @@ var answer = 6 * 7;</textarea></p>
 </div>
 -->
 
-<p id="testbox"><textarea id="test"></textarea></p>
+<div id="testbox"><textarea id="test"></textarea></div>
 </div>
 <script>
 window.onload = function () {

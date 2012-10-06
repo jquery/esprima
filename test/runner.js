@@ -123,6 +123,40 @@ function testParse(esprima, code, syntax) {
     if (expected !== actual) {
         throw new NotMatchingError(expected, actual);
     }
+
+    function filter(key, value) {
+        if (key === 'value' && value instanceof RegExp) {
+            value = value.toString();
+        }
+        return (key === 'loc' || key === 'range') ? undefined : value;
+    }
+
+    if (options.tolerant) {
+        return;
+    }
+
+
+    // Check again without any location info.
+    options.range = false;
+    options.loc = false;
+    expected = JSON.stringify(syntax, filter, 4);
+    try {
+        tree = esprima.parse(code, options);
+        tree = (options.comment || options.tokens) ? tree : tree.body[0];
+
+        if (options.tolerant) {
+            for (i = 0, len = tree.errors.length; i < len; i += 1) {
+                tree.errors[i] = errorToObject(tree.errors[i]);
+            }
+        }
+
+        actual = JSON.stringify(tree, filter, 4);
+    } catch (e) {
+        throw new NotMatchingError(expected, e.toString());
+    }
+    if (expected !== actual) {
+        throw new NotMatchingError(expected, actual);
+    }
 }
 
 function testError(esprima, code, exception) {
