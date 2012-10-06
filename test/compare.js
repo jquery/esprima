@@ -37,15 +37,15 @@ parsers = [
 ];
 
 fixtureList = [
-    'jQuery 1.7.1',
-    'Prototype 1.7.0.0',
-    'MooTools 1.4.1',
-    'Ext Core 3.1.0'
+    'Underscore 1.4.1',
+    'Backbone 0.9.2',
+    'CodeMirror 2.34',
+    'jQuery 1.8.2'
 ];
 
 function slug(name) {
     'use strict';
-    return name.toLowerCase().replace(/\s/g, '-');
+    return name.toLowerCase().replace(/\.js/g, 'js').replace(/\s/g, '-');
 }
 
 function kb(bytes) {

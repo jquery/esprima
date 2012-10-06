@@ -325,18 +325,6 @@ The syntax tree will be printed out to the console. This can be used in the test
 
 <pre class="prettyprint lang-bsh">/path/to/v8/shell test/benchmark.js</pre>
 
-<p>The current corpus for the benchmarks:</p>
-
-<ul>
-    <li>jQuery (version 1.7.1 and 1.6.4)</li>
-    <li>jQuery Mobile (version 1.0)</li>
-    <li>Prototype (version 1.7.0.0 and 1.6.1)</li>
-    <li>Ext Core (version 3.1.0 and 3.0.0)</li>
-    <li>MooTools (version 1.4.1 and 1.3.2)</li>
-    <li>Backbone (version 0.5.3)</li>
-    <li>Underscore (version 1.2.3)</li>
-</ul>
-
 <h4>Speed comparison tests</h4>
 
 <p>Available by opening <code>test/compare.html</code>. The online version is <a href="http://esprima.org/test/compare.html">esprima.org/test/compare.html</a>.</p>
@@ -344,15 +332,6 @@ The syntax tree will be printed out to the console. This can be used in the test
 <p>Note: Because the corpus is fetched via XML HTTP Request, the benchmarks test needs to be served via a web server and not local file.</p>
 
 <p><strong>Warning</strong>: Since each parser has a different format for the syntax tree, the speed is not fully comparable (the cost of constructing different result is not taken into account). These tests exist only to ensure that Esprima parser is not ridiculously slow, e.g. one magnitude slower compare to other parsers.</p>
-
-<p>The current corpus for the speed comparison tests:</p>
-
-<ul>
-    <li>jQuery version 1.7.1</li>
-    <li>Prototype version 1.7.0.0</li>
-    <li>MooTools version 1.4.1</li>
-    <li>Ext Core version 3.1.0</li>
-</ul>
 
 <h4>Manual tests</h4>
 
