@@ -238,6 +238,9 @@ function parse(delay) {
         el = document.getElementById('syntax');
         el.value = str;
 
+        el = document.getElementById('url');
+        el.value = location.protocol + "//" + location.host + location.pathname + '?code=' + encodeURIComponent(code);
+
         parseId = undefined;
     }, delay || 811);
 }
@@ -293,6 +296,12 @@ var answer = 6 * 7;
         </div>
     </div>
     </li>
+    <li id="tab_url">
+    <h3><a id="show_url">URL</a></h3>
+    <div class="tab">
+        <input id="url" type="text" readonly onclick="this.select()">
+    </div>
+    </li>
 </ul>
 </div>
 
@@ -327,6 +336,7 @@ window.onload = function () {
         id('tab_tree').className = 'active';
         id('tab_syntax').className = '';
         id('tab_tokens').className = '';
+        id('tab_url').className = '';
         parse(1);
     };
 
@@ -334,12 +344,21 @@ window.onload = function () {
         id('tab_tree').className = '';
         id('tab_syntax').className = 'active';
         id('tab_tokens').className = '';
+        id('tab_url').className = '';
     };
 
     id('show_tokens').onclick = function () {
         id('tab_tree').className = '';
         id('tab_syntax').className = '';
         id('tab_tokens').className = 'active';
+        id('tab_url').className = '';
+    };
+
+    id('show_url').onclick = function () {
+        id('tab_tree').className = '';
+        id('tab_syntax').className = '';
+        id('tab_tokens').className = '';
+        id('tab_url').className = 'active';
     };
 };
 </script>
@@ -371,6 +390,25 @@ try {
         matchBrackets: true,
         onChange: parse
     });
+
+    (function () {
+        'use strict';
+        var queries, elements, code, i, iz, pair;
+        if (location.search) {
+            queries = {};
+            elements = location.search.substring(1).split(/[;&]/);
+            for (i = 0, iz = elements.length; i < iz; i += 1) {
+                pair = elements[i].split('=');
+                if (pair.length === 2) {
+                    queries[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+                }
+            }
+            code = queries['code'];
+            if (code) {
+                window.editor.setValue(code);
+            }
+        }
+    }());
 } catch (e) {
     // CodeMirror failed to initialize, possible in e.g. old IE.
     document.getElementById('codemirror').innerHTML = '';
