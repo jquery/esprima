@@ -2,6 +2,18 @@
     padding: 7px 0px 7px 7px;
 }
 
+#url {
+    font-family: Inconsolata, Monaco, Consolas, "Lucida Console", monospace;
+    font-size: 13px;
+    color: #555;
+    width: 80%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #aaa;
+    overflow: auto;
+    display: block;
+}
+
 .tabs {
     position: relative;
     display: block;
