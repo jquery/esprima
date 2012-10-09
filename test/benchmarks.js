@@ -27,25 +27,28 @@
 /*jslint browser: true node: true */
 /*global load:true, print:true */
 var setupBenchmarks,
-    fixture;
+    fullFixture;
 
-fixture = [
-    'jQuery 1.7.1',
-    'jQuery 1.6.4',
-    'jQuery.Mobile 1.0',
-    'Prototype 1.7.0.0',
-    'Prototype 1.6.1',
-    'Ext Core 3.1.0',
-    'Ext Core 3.0.0',
+fullFixture = [
+    'Underscore 1.4.1',
+    'Backbone 0.9.2',
+    'CodeMirror 2.34',
     'MooTools 1.4.1',
-    'MooTools 1.3.2',
-    'Backbone 0.5.3',
-    'Underscore 1.2.3'
+    'jQuery 1.8.2',
+    'jQuery.Mobile 1.2.0',
+    'Angular 1.0.2',
+    'three.js r51'
+];
+
+quickFixture = [
+    'Backbone 0.9.2',
+    'jQuery 1.8.2',
+    'Angular 1.0.2'
 ];
 
 function slug(name) {
     'use strict';
-    return name.toLowerCase().replace(/\s/g, '-');
+    return name.toLowerCase().replace(/\.js/g, 'js').replace(/\s/g, '-');
 }
 
 function kb(bytes) {
@@ -91,8 +94,8 @@ if (typeof window !== 'undefined') {
             str += '<thead><tr><th>Source</th><th>Size (KiB)</th>';
             str += '<th>Time (ms)</th><th>Variance</th></tr></thead>';
             str += '<tbody>';
-            for (index = 0; index < fixture.length; index += 1) {
-                test = fixture[index];
+            for (index = 0; index < fullFixture.length; index += 1) {
+                test = fullFixture[index];
                 name = slug(test);
                 str += '<tr>';
                 str += '<td>' + test + '</td>';
@@ -165,11 +168,11 @@ if (typeof window !== 'undefined') {
             function loadNextTest() {
                 var test;
 
-                if (index < fixture.length) {
-                    test = fixture[index];
+                if (index < fullFixture.length) {
+                    test = fullFixture[index];
                     index += 1;
                     setText('status', 'Please wait. Loading ' + test +
-                            ' (' + index + ' of ' + fixture.length + ')');
+                            ' (' + index + ' of ' + fullFixture.length + ')');
                     window.setTimeout(function () {
                         load(slug(test), loadNextTest);
                     }, 100);
@@ -190,8 +193,8 @@ if (typeof window !== 'undefined') {
 
             function reset() {
                 var i, name;
-                for (i = 0; i < fixture.length; i += 1) {
-                    name = slug(fixture[i]);
+                for (i = 0; i < fullFixture.length; i += 1) {
+                    name = slug(fullFixture[i]);
                     setText(name + '-time', '');
                     setText(name + '-variance', '');
                 }
@@ -244,11 +247,11 @@ if (typeof window !== 'undefined') {
         }
 
         id('runquick').onclick = function () {
-            runBenchmarks(['jQuery 1.7.1', 'jQuery.Mobile 1.0', 'Backbone 0.5.3']);
+            runBenchmarks(quickFixture);
         };
 
         id('runfull').onclick = function () {
-            runBenchmarks(fixture);
+            runBenchmarks(fullFixture);
         };
 
         setText('benchmarkjs-version', ' version ' + window.Benchmark.version);
@@ -325,9 +328,9 @@ if (typeof window !== 'undefined') {
         }
 
         if (option === 'quick') {
-            runTests(['jQuery 1.7.1', 'jQuery.Mobile 1.0', 'Backbone 0.5.3']);
+            runTests(quickFixture);
         } else {
-            runTests(fixture);
+            runTests(fullFixture);
         }
     }(this));
 }

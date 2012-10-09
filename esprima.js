@@ -1700,9 +1700,9 @@ parseStatement: true, parseSourceElement: true */
     // 11.3 Postfix Expressions
 
     function parsePostfixExpression() {
-        var expr = parseLeftHandSideExpressionAllowCall();
+        var expr = parseLeftHandSideExpressionAllowCall(), token;
 
-        var token = lookahead();
+        token = lookahead();
         if (token.type !== Token.Punctuator) {
             return expr;
         }
@@ -1783,186 +1783,148 @@ parseStatement: true, parseSourceElement: true */
         return parsePostfixExpression();
     }
 
+    function binaryPrecedence(token, allowIn) {
+        var prec = 0;
+
+        if (token.type !== Token.Punctuator && token.type !== Token.Keyword) {
+            return 0;
+        }
+
+        switch (token.value) {
+        case '||':
+            prec = 1;
+            break;
+
+        case '&&':
+            prec = 2;
+            break;
+
+        case '|':
+            prec = 3;
+            break;
+
+        case '^':
+            prec = 4;
+            break;
+
+        case '&':
+            prec = 5;
+            break;
+
+        case '==':
+        case '!=':
+        case '===':
+        case '!==':
+            prec = 6;
+            break;
+
+        case '<':
+        case '>':
+        case '<=':
+        case '>=':
+        case 'instanceof':
+            prec = 7;
+            break;
+
+        case 'in':
+            prec = allowIn ? 7 : 0;
+            break;
+
+        case '<<':
+        case '>>':
+        case '>>>':
+            prec = 8;
+            break;
+
+        case '+':
+        case '-':
+            prec = 9;
+            break;
+
+        case '*':
+        case '/':
+        case '%':
+            prec = 11;
+            break;
+
+        default:
+            break;
+        }
+
+        return prec;
+    }
+
     // 11.5 Multiplicative Operators
-
-    function parseMultiplicativeExpression() {
-        var expr = parseUnaryExpression();
-
-        while (match('*') || match('/') || match('%')) {
-            expr = {
-                type: Syntax.BinaryExpression,
-                operator: lex().value,
-                left: expr,
-                right: parseUnaryExpression()
-            };
-        }
-
-        return expr;
-    }
-
     // 11.6 Additive Operators
-
-    function parseAdditiveExpression() {
-        var expr = parseMultiplicativeExpression();
-
-        while (match('+') || match('-')) {
-            expr = {
-                type: Syntax.BinaryExpression,
-                operator: lex().value,
-                left: expr,
-                right: parseMultiplicativeExpression()
-            };
-        }
-
-        return expr;
-    }
-
     // 11.7 Bitwise Shift Operators
-
-    function parseShiftExpression() {
-        var expr = parseAdditiveExpression();
-
-        while (match('<<') || match('>>') || match('>>>')) {
-            expr = {
-                type: Syntax.BinaryExpression,
-                operator: lex().value,
-                left: expr,
-                right: parseAdditiveExpression()
-            };
-        }
-
-        return expr;
-    }
     // 11.8 Relational Operators
+    // 11.9 Equality Operators
+    // 11.10 Binary Bitwise Operators
+    // 11.11 Binary Logical Operators
 
-    function parseRelationalExpression() {
-        var expr, previousAllowIn;
+    // Reduce: make a binary expression from the three topmost entries.
+    function reduceBinary(stack) {
+        var right = stack.pop(),
+            operator = stack.pop().value,
+            left = stack.pop(),
+            logical = (operator === '||' || operator === '&&');
+
+        stack.push({
+            type: logical ? Syntax.LogicalExpression : Syntax.BinaryExpression,
+            operator: operator,
+            left: left,
+            right: right
+        });
+    }
+
+    function parseBinaryExpression() {
+        var expr, token, prec, previousAllowIn, stack;
 
         previousAllowIn = state.allowIn;
         state.allowIn = true;
 
-        expr = parseShiftExpression();
+        expr = parseUnaryExpression();
 
-        while (match('<') || match('>') || match('<=') || match('>=') || (previousAllowIn && matchKeyword('in')) || matchKeyword('instanceof')) {
-            expr = {
-                type: Syntax.BinaryExpression,
-                operator: lex().value,
-                left: expr,
-                right: parseShiftExpression()
-            };
+        token = lookahead();
+        prec = binaryPrecedence(token, previousAllowIn);
+        if (prec === 0) {
+            return expr;
+        }
+        token.prec = prec;
+        lex();
+
+        stack = [expr, token, parseUnaryExpression()];
+
+        while ((prec = binaryPrecedence(lookahead(), previousAllowIn)) > 0) {
+
+            // Reduce.
+            while ((stack.length > 2) && (prec <= stack[stack.length - 2].prec)) {
+                reduceBinary(stack);
+            }
+
+            // Shift.
+            token = lex();
+            token.prec = prec;
+            stack.push(token);
+            stack.push(parseUnaryExpression());
+        }
+
+        // Final reduce to clean-up the stack.
+        while (stack.length > 1) {
+            reduceBinary(stack);
         }
 
         state.allowIn = previousAllowIn;
-        return expr;
+        return stack[0];
     }
 
-    // 11.9 Equality Operators
-
-    function parseEqualityExpression() {
-        var expr = parseRelationalExpression();
-
-        while (match('==') || match('!=') || match('===') || match('!==')) {
-            expr = {
-                type: Syntax.BinaryExpression,
-                operator: lex().value,
-                left: expr,
-                right: parseRelationalExpression()
-            };
-        }
-
-        return expr;
-    }
-
-    // 11.10 Binary Bitwise Operators
-
-    function parseBitwiseANDExpression() {
-        var expr = parseEqualityExpression();
-
-        while (match('&')) {
-            lex();
-            expr = {
-                type: Syntax.BinaryExpression,
-                operator: '&',
-                left: expr,
-                right: parseEqualityExpression()
-            };
-        }
-
-        return expr;
-    }
-
-    function parseBitwiseXORExpression() {
-        var expr = parseBitwiseANDExpression();
-
-        while (match('^')) {
-            lex();
-            expr = {
-                type: Syntax.BinaryExpression,
-                operator: '^',
-                left: expr,
-                right: parseBitwiseANDExpression()
-            };
-        }
-
-        return expr;
-    }
-
-    function parseBitwiseORExpression() {
-        var expr = parseBitwiseXORExpression();
-
-        while (match('|')) {
-            lex();
-            expr = {
-                type: Syntax.BinaryExpression,
-                operator: '|',
-                left: expr,
-                right: parseBitwiseXORExpression()
-            };
-        }
-
-        return expr;
-    }
-
-    // 11.11 Binary Logical Operators
-
-    function parseLogicalANDExpression() {
-        var expr = parseBitwiseORExpression();
-
-        while (match('&&')) {
-            lex();
-            expr = {
-                type: Syntax.LogicalExpression,
-                operator: '&&',
-                left: expr,
-                right: parseBitwiseORExpression()
-            };
-        }
-
-        return expr;
-    }
-
-    function parseLogicalORExpression() {
-        var expr = parseLogicalANDExpression();
-
-        while (match('||')) {
-            lex();
-            expr = {
-                type: Syntax.LogicalExpression,
-                operator: '||',
-                left: expr,
-                right: parseLogicalANDExpression()
-            };
-        }
-
-        return expr;
-    }
 
     // 11.12 Conditional Operator
 
     function parseConditionalExpression() {
         var expr, previousAllowIn, consequent;
 
-        expr = parseLogicalORExpression();
+        expr = parseBinaryExpression();
 
         if (match('?')) {
             lex();
@@ -3646,25 +3608,18 @@ parseStatement: true, parseSourceElement: true */
 
             wrapTracking = wrapTrackingFunction(extra.range, extra.loc);
 
-            extra.parseAdditiveExpression = parseAdditiveExpression;
             extra.parseAssignmentExpression = parseAssignmentExpression;
-            extra.parseBitwiseANDExpression = parseBitwiseANDExpression;
-            extra.parseBitwiseORExpression = parseBitwiseORExpression;
-            extra.parseBitwiseXORExpression = parseBitwiseXORExpression;
+            extra.parseBinaryExpression = parseBinaryExpression;
             extra.parseBlock = parseBlock;
             extra.parseFunctionSourceElements = parseFunctionSourceElements;
             extra.parseCatchClause = parseCatchClause;
             extra.parseComputedMember = parseComputedMember;
             extra.parseConditionalExpression = parseConditionalExpression;
             extra.parseConstLetDeclaration = parseConstLetDeclaration;
-            extra.parseEqualityExpression = parseEqualityExpression;
             extra.parseExpression = parseExpression;
             extra.parseForVariableDeclaration = parseForVariableDeclaration;
             extra.parseFunctionDeclaration = parseFunctionDeclaration;
             extra.parseFunctionExpression = parseFunctionExpression;
-            extra.parseLogicalANDExpression = parseLogicalANDExpression;
-            extra.parseLogicalORExpression = parseLogicalORExpression;
-            extra.parseMultiplicativeExpression = parseMultiplicativeExpression;
             extra.parseNewExpression = parseNewExpression;
             extra.parseNonComputedProperty = parseNonComputedProperty;
             extra.parseObjectProperty = parseObjectProperty;
@@ -3673,34 +3628,25 @@ parseStatement: true, parseSourceElement: true */
             extra.parsePrimaryExpression = parsePrimaryExpression;
             extra.parseProgram = parseProgram;
             extra.parsePropertyFunction = parsePropertyFunction;
-            extra.parseRelationalExpression = parseRelationalExpression;
             extra.parseStatement = parseStatement;
-            extra.parseShiftExpression = parseShiftExpression;
             extra.parseSwitchCase = parseSwitchCase;
             extra.parseUnaryExpression = parseUnaryExpression;
             extra.parseVariableDeclaration = parseVariableDeclaration;
             extra.parseVariableIdentifier = parseVariableIdentifier;
 
-            parseAdditiveExpression = wrapTracking(extra.parseAdditiveExpression);
             parseAssignmentExpression = wrapTracking(extra.parseAssignmentExpression);
-            parseBitwiseANDExpression = wrapTracking(extra.parseBitwiseANDExpression);
-            parseBitwiseORExpression = wrapTracking(extra.parseBitwiseORExpression);
-            parseBitwiseXORExpression = wrapTracking(extra.parseBitwiseXORExpression);
+            parseBinaryExpression = wrapTracking(extra.parseBinaryExpression);
             parseBlock = wrapTracking(extra.parseBlock);
             parseFunctionSourceElements = wrapTracking(extra.parseFunctionSourceElements);
             parseCatchClause = wrapTracking(extra.parseCatchClause);
             parseComputedMember = wrapTracking(extra.parseComputedMember);
             parseConditionalExpression = wrapTracking(extra.parseConditionalExpression);
             parseConstLetDeclaration = wrapTracking(extra.parseConstLetDeclaration);
-            parseEqualityExpression = wrapTracking(extra.parseEqualityExpression);
             parseExpression = wrapTracking(extra.parseExpression);
             parseForVariableDeclaration = wrapTracking(extra.parseForVariableDeclaration);
             parseFunctionDeclaration = wrapTracking(extra.parseFunctionDeclaration);
             parseFunctionExpression = wrapTracking(extra.parseFunctionExpression);
             parseLeftHandSideExpression = wrapTracking(parseLeftHandSideExpression);
-            parseLogicalANDExpression = wrapTracking(extra.parseLogicalANDExpression);
-            parseLogicalORExpression = wrapTracking(extra.parseLogicalORExpression);
-            parseMultiplicativeExpression = wrapTracking(extra.parseMultiplicativeExpression);
             parseNewExpression = wrapTracking(extra.parseNewExpression);
             parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
             parseObjectProperty = wrapTracking(extra.parseObjectProperty);
@@ -3709,9 +3655,7 @@ parseStatement: true, parseSourceElement: true */
             parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
             parseProgram = wrapTracking(extra.parseProgram);
             parsePropertyFunction = wrapTracking(extra.parsePropertyFunction);
-            parseRelationalExpression = wrapTracking(extra.parseRelationalExpression);
             parseStatement = wrapTracking(extra.parseStatement);
-            parseShiftExpression = wrapTracking(extra.parseShiftExpression);
             parseSwitchCase = wrapTracking(extra.parseSwitchCase);
             parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);
             parseVariableDeclaration = wrapTracking(extra.parseVariableDeclaration);
@@ -3737,18 +3681,14 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (extra.range || extra.loc) {
-            parseAdditiveExpression = extra.parseAdditiveExpression;
             parseAssignmentExpression = extra.parseAssignmentExpression;
-            parseBitwiseANDExpression = extra.parseBitwiseANDExpression;
-            parseBitwiseORExpression = extra.parseBitwiseORExpression;
-            parseBitwiseXORExpression = extra.parseBitwiseXORExpression;
+            parseBinaryExpression = extra.parseBinaryExpression;
             parseBlock = extra.parseBlock;
             parseFunctionSourceElements = extra.parseFunctionSourceElements;
             parseCatchClause = extra.parseCatchClause;
             parseComputedMember = extra.parseComputedMember;
             parseConditionalExpression = extra.parseConditionalExpression;
             parseConstLetDeclaration = extra.parseConstLetDeclaration;
-            parseEqualityExpression = extra.parseEqualityExpression;
             parseExpression = extra.parseExpression;
             parseForVariableDeclaration = extra.parseForVariableDeclaration;
             parseFunctionDeclaration = extra.parseFunctionDeclaration;
@@ -3756,9 +3696,6 @@ parseStatement: true, parseSourceElement: true */
             parseGroupExpression = extra.parseGroupExpression;
             parseLeftHandSideExpression = extra.parseLeftHandSideExpression;
             parseLeftHandSideExpressionAllowCall = extra.parseLeftHandSideExpressionAllowCall;
-            parseLogicalANDExpression = extra.parseLogicalANDExpression;
-            parseLogicalORExpression = extra.parseLogicalORExpression;
-            parseMultiplicativeExpression = extra.parseMultiplicativeExpression;
             parseNewExpression = extra.parseNewExpression;
             parseNonComputedProperty = extra.parseNonComputedProperty;
             parseObjectProperty = extra.parseObjectProperty;
@@ -3767,9 +3704,7 @@ parseStatement: true, parseSourceElement: true */
             parsePostfixExpression = extra.parsePostfixExpression;
             parseProgram = extra.parseProgram;
             parsePropertyFunction = extra.parsePropertyFunction;
-            parseRelationalExpression = extra.parseRelationalExpression;
             parseStatement = extra.parseStatement;
-            parseShiftExpression = extra.parseShiftExpression;
             parseSwitchCase = extra.parseSwitchCase;
             parseUnaryExpression = extra.parseUnaryExpression;
             parseVariableDeclaration = extra.parseVariableDeclaration;
@@ -3874,7 +3809,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     // Sync with package.json.
-    exports.version = '1.0.0-dev';
+    exports.version = '1.1.0-dev';
 
     exports.parse = parse;
 
