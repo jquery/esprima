@@ -30,7 +30,7 @@
 
 /*jslint bitwise:true plusplus:true */
 /*global esprima:true, define:true, exports:true, window: true,
-throwError: true, createLiteral: true, generateStatement: true,
+throwError: true, generateStatement: true,
 parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
 parseFunctionSourceElements: true, parseVariableIdentifier: true,
@@ -1694,7 +1694,7 @@ parseStatement: true, parseSourceElement: true */
             if (strict && token.octal) {
                 throwErrorTolerant(token, Messages.StrictOctalLiteral);
             }
-            return createLiteral(token);
+            return delegate.createLiteral(token);
         }
 
         return delegate.createIdentifier(token.value);
@@ -1819,7 +1819,7 @@ parseStatement: true, parseSourceElement: true */
             if (strict && token.octal) {
                 throwErrorTolerant(token, Messages.StrictOctalLiteral);
             }
-            return createLiteral(lex());
+            return delegate.createLiteral(lex());
         }
 
         if (type === Token.Keyword) {
@@ -1836,13 +1836,13 @@ parseStatement: true, parseSourceElement: true */
         if (type === Token.BooleanLiteral) {
             lex();
             token.value = (token.value === 'true');
-            return createLiteral(token);
+            return delegate.createLiteral(token);
         }
 
         if (type === Token.NullLiteral) {
             lex();
             token.value = null;
-            return createLiteral(token);
+            return delegate.createLiteral(token);
         }
 
         if (match('[')) {
@@ -1858,7 +1858,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (match('/') || match('/=')) {
-            return createLiteral(scanRegExp());
+            return delegate.createLiteral(scanRegExp());
         }
 
         return throwUnexpected(lex());
@@ -3423,21 +3423,6 @@ parseStatement: true, parseSourceElement: true */
         extra.tokens = tokens;
     }
 
-    function createLiteral(token) {
-        return {
-            type: Syntax.Literal,
-            value: token.value
-        };
-    }
-
-    function createRawLiteral(token) {
-        return {
-            type: Syntax.Literal,
-            value: token.value,
-            raw: sliceSource(token.range[0], token.range[1])
-        };
-    }
-
     function createLocationMarker() {
         var marker = {};
 
@@ -3669,11 +3654,6 @@ parseStatement: true, parseSourceElement: true */
             skipComment = scanComment;
         }
 
-        if (extra.raw) {
-            extra.createLiteral = createLiteral;
-            createLiteral = createRawLiteral;
-        }
-
         if (extra.range || extra.loc) {
 
             extra.parseGroupExpression = parseGroupExpression;
@@ -3753,10 +3733,6 @@ parseStatement: true, parseSourceElement: true */
             skipComment = extra.skipComment;
         }
 
-        if (extra.raw) {
-            createLiteral = extra.createLiteral;
-        }
-
         if (extra.range || extra.loc) {
             parseAssignmentExpression = extra.parseAssignmentExpression;
             parseBinaryExpression = extra.parseBinaryExpression;
@@ -3804,6 +3780,26 @@ parseStatement: true, parseSourceElement: true */
         return result;
     }
 
+    // This is used to modify the delegate.
+
+    function extend(object, properties) {
+        var entry, result = {};
+
+        for (entry in object) {
+            if (object.hasOwnProperty(entry)) {
+                result[entry] = object[entry];
+            }
+        }
+
+        for (entry in properties) {
+            if (properties.hasOwnProperty(entry)) {
+                result[entry] = properties[entry];
+            }
+        }
+
+        return result;
+    }
+
     function parse(code, options) {
         var program, toString;
 
@@ -3831,7 +3827,19 @@ parseStatement: true, parseSourceElement: true */
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
-            extra.raw = (typeof options.raw === 'boolean') && options.raw;
+
+            if ((typeof options.raw === 'boolean') && options.raw) {
+                delegate = extend(delegate, {
+                    'createLiteral': function (token) {
+                        return {
+                            type: Syntax.Literal,
+                            value: token.value,
+                            raw: sliceSource(token.range[0], token.range[1])
+                        };
+                    }
+                });
+            }
+
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
             }
