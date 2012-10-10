@@ -342,12 +342,6 @@ parseStatement: true, parseSourceElement: true */
         return isFutureReservedWord(id);
     }
 
-    // Return the next character and move forward.
-
-    function nextChar() {
-        return source[index++];
-    }
-
     // 7.4 Comments
 
     function skipComment() {
@@ -360,7 +354,7 @@ parseStatement: true, parseSourceElement: true */
             ch = source[index];
 
             if (lineComment) {
-                ch = nextChar();
+                ch = source[index++];
                 if (isLineTerminator(ch)) {
                     lineComment = false;
                     if (ch === '\r' && source[index] === '\n') {
@@ -381,7 +375,7 @@ parseStatement: true, parseSourceElement: true */
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
                 } else {
-                    ch = nextChar();
+                    ch = source[index++];
                     if (index >= length) {
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
@@ -428,7 +422,7 @@ parseStatement: true, parseSourceElement: true */
         len = (prefix === 'u') ? 4 : 2;
         for (i = 0; i < len; ++i) {
             if (index < length && isHexDigit(source[index])) {
-                ch = nextChar();
+                ch = source[index++];
                 code = code * 16 + '0123456789abcdef'.indexOf(ch.toLowerCase());
             } else {
                 return '';
@@ -464,7 +458,7 @@ parseStatement: true, parseSourceElement: true */
                 id = 'u';
             }
         } else {
-            id = nextChar();
+            id = source[index++];
         }
 
         while (index < length) {
@@ -490,7 +484,7 @@ parseStatement: true, parseSourceElement: true */
                     id += 'u';
                 }
             } else {
-                id += nextChar();
+                id += source[index++];
             }
         }
 
@@ -589,7 +583,7 @@ parseStatement: true, parseSourceElement: true */
         if (ch1 === '.' && !isDecimalDigit(ch2)) {
             return {
                 type: Token.Punctuator,
-                value: nextChar(),
+                value: source[index++],
                 lineNumber: lineNumber,
                 lineStart: lineStart,
                 range: [start, index]
@@ -707,7 +701,7 @@ parseStatement: true, parseSourceElement: true */
         if ('[]<>+-*%&|^!~?:=/'.indexOf(ch1) >= 0) {
             return {
                 type: Token.Punctuator,
-                value: nextChar(),
+                value: source[index++],
                 lineNumber: lineNumber,
                 lineStart: lineStart,
                 range: [start, index]
@@ -727,20 +721,20 @@ parseStatement: true, parseSourceElement: true */
         start = index;
         number = '';
         if (ch !== '.') {
-            number = nextChar();
+            number = source[index++];
             ch = source[index];
 
             // Hex number starts with '0x'.
             // Octal number starts with '0'.
             if (number === '0') {
                 if (ch === 'x' || ch === 'X') {
-                    number += nextChar();
+                    number += source[index++];
                     while (index < length) {
                         ch = source[index];
                         if (!isHexDigit(ch)) {
                             break;
                         }
-                        number += nextChar();
+                        number += source[index++];
                     }
 
                     if (number.length <= 2) {
@@ -762,13 +756,13 @@ parseStatement: true, parseSourceElement: true */
                         range: [start, index]
                     };
                 } else if (isOctalDigit(ch)) {
-                    number += nextChar();
+                    number += source[index++];
                     while (index < length) {
                         ch = source[index];
                         if (!isOctalDigit(ch)) {
                             break;
                         }
-                        number += nextChar();
+                        number += source[index++];
                     }
 
                     if (index < length) {
@@ -798,38 +792,38 @@ parseStatement: true, parseSourceElement: true */
                 if (!isDecimalDigit(ch)) {
                     break;
                 }
-                number += nextChar();
+                number += source[index++];
             }
         }
 
         if (ch === '.') {
-            number += nextChar();
+            number += source[index++];
             while (index < length) {
                 ch = source[index];
                 if (!isDecimalDigit(ch)) {
                     break;
                 }
-                number += nextChar();
+                number += source[index++];
             }
         }
 
         if (ch === 'e' || ch === 'E') {
-            number += nextChar();
+            number += source[index++];
 
             ch = source[index];
             if (ch === '+' || ch === '-') {
-                number += nextChar();
+                number += source[index++];
             }
 
             ch = source[index];
             if (isDecimalDigit(ch)) {
-                number += nextChar();
+                number += source[index++];
                 while (index < length) {
                     ch = source[index];
                     if (!isDecimalDigit(ch)) {
                         break;
                     }
-                    number += nextChar();
+                    number += source[index++];
                 }
             } else {
                 ch = 'character ' + ch;
@@ -869,13 +863,13 @@ parseStatement: true, parseSourceElement: true */
         ++index;
 
         while (index < length) {
-            ch = nextChar();
+            ch = source[index++];
 
             if (ch === quote) {
                 quote = '';
                 break;
             } else if (ch === '\\') {
-                ch = nextChar();
+                ch = source[index++];
                 if (!isLineTerminator(ch)) {
                     switch (ch) {
                     case 'n':
@@ -919,14 +913,14 @@ parseStatement: true, parseSourceElement: true */
 
                             if (index < length && isOctalDigit(source[index])) {
                                 octal = true;
-                                code = code * 8 + '01234567'.indexOf(nextChar());
+                                code = code * 8 + '01234567'.indexOf(source[index++]);
 
                                 // 3 digits are only allowed when string starts
                                 // with 0, 1, 2, 3
                                 if ('0123'.indexOf(ch) >= 0 &&
                                         index < length &&
                                         isOctalDigit(source[index])) {
-                                    code = code * 8 + '01234567'.indexOf(nextChar());
+                                    code = code * 8 + '01234567'.indexOf(source[index++]);
                                 }
                             }
                             str += String.fromCharCode(code);
@@ -971,10 +965,10 @@ parseStatement: true, parseSourceElement: true */
         start = index;
         ch = source[index];
         assert(ch === '/', 'Regular expression literal must start with a slash');
-        str = nextChar();
+        str = source[index++];
 
         while (index < length) {
-            ch = nextChar();
+            ch = source[index++];
             str += ch;
             if (classMarker) {
                 if (ch === ']') {
@@ -982,7 +976,7 @@ parseStatement: true, parseSourceElement: true */
                 }
             } else {
                 if (ch === '\\') {
-                    ch = nextChar();
+                    ch = source[index++];
                     // ECMA-262 7.8.5
                     if (isLineTerminator(ch)) {
                         throwError({}, Messages.UnterminatedRegExp);
@@ -3205,7 +3199,7 @@ parseStatement: true, parseSourceElement: true */
             ch = source[index];
 
             if (lineComment) {
-                ch = nextChar();
+                ch = source[index++];
                 if (isLineTerminator(ch)) {
                     loc.end = {
                         line: lineNumber,
@@ -3245,7 +3239,7 @@ parseStatement: true, parseSourceElement: true */
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
                 } else {
-                    ch = nextChar();
+                    ch = source[index++];
                     if (index >= length) {
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
