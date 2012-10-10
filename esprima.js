@@ -30,7 +30,7 @@
 
 /*jslint bitwise:true plusplus:true */
 /*global esprima:true, define:true, exports:true, window: true,
-throwError: true, createLiteral: true, generateStatement: true, peek: true,
+throwError: true, generateStatement: true, peek: true,
 parseAssignmentExpression: true, parseBlock: true,
 parseClassExpression: true, parseClassDeclaration: true, parseExpression: true,
 parseForStatement: true,
@@ -2026,7 +2026,7 @@ parseYieldExpression: true
             if (strict && token.octal) {
                 throwErrorTolerant(token, Messages.StrictOctalLiteral);
             }
-            return createLiteral(token);
+            return delegate.createLiteral(token);
         }
 
         return delegate.createIdentifier(token.value);
@@ -2253,7 +2253,7 @@ parseYieldExpression: true
             if (strict && lookahead.octal) {
                 throwErrorTolerant(lookahead, Messages.StrictOctalLiteral);
             }
-            return createLiteral(lex());
+            return delegate.createLiteral(lex());
         }
 
         if (type === Token.Keyword) {
@@ -2282,13 +2282,13 @@ parseYieldExpression: true
         if (type === Token.BooleanLiteral) {
             token = lex();
             token.value = (token.value === 'true');
-            return createLiteral(token);
+            return delegate.createLiteral(token);
         }
 
         if (type === Token.NullLiteral) {
             token = lex();
             token.value = null;
-            return createLiteral(token);
+            return delegate.createLiteral(token);
         }
 
         if (match('[')) {
@@ -2304,7 +2304,7 @@ parseYieldExpression: true
         }
 
         if (match('/') || match('/=')) {
-            return createLiteral(scanRegExp());
+            return delegate.createLiteral(scanRegExp());
         }
 
         if (type === Token.Template) {
@@ -4713,14 +4713,6 @@ parseYieldExpression: true
         extra.tokens = tokens;
     }
 
-    function createLiteral(token) {
-        return {
-            type: Syntax.Literal,
-            value: token.value,
-            raw: sliceSource(token.range[0], token.range[1])
-        };
-    }
-
     function createLocationMarker() {
         var marker = {};
 
@@ -5099,10 +5091,6 @@ parseYieldExpression: true
             skipComment = extra.skipComment;
         }
 
-        if (extra.raw) {
-            createLiteral = extra.createLiteral;
-        }
-
         if (extra.range || extra.loc) {
             parseAssignmentExpression = extra.parseAssignmentExpression;
             parseBinaryExpression = extra.parseBinaryExpression;
@@ -5164,6 +5152,26 @@ parseYieldExpression: true
         for (i = 0; i < length; ++i) {
             result[i] = str.charAt(i);
         }
+        return result;
+    }
+
+    // This is used to modify the delegate.
+
+    function extend(object, properties) {
+        var entry, result = {};
+
+        for (entry in object) {
+            if (object.hasOwnProperty(entry)) {
+                result[entry] = object[entry];
+            }
+        }
+
+        for (entry in properties) {
+            if (properties.hasOwnProperty(entry)) {
+                result[entry] = properties[entry];
+            }
+        }
+
         return result;
     }
 
