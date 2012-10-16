@@ -1878,15 +1878,8 @@ parseYieldExpression: true
                     kind: 'init',
                     method: true
                 };
-            } else {
-                return {
-                    type: Syntax.Property,
-                    key: key,
-                    value: key,
-                    kind: 'init',
-                    shorthand: true
-                };
             }
+            throwUnexpected(lex());
         }
     }
 

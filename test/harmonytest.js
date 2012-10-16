@@ -2284,100 +2284,6 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 12 }
             }
-        },
-
-        'x = { 2, "chance" }': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'AssignmentExpression',
-                operator: '=',
-                left: {
-                    type: 'Identifier',
-                    name: 'x',
-                    range: [0, 1],
-                    loc: {
-                        start: { line: 1, column: 0 },
-                        end: { line: 1, column: 1 }
-                    }
-                },
-                right: {
-                    type: 'ObjectExpression',
-                    properties: [{
-                        type: 'Property',
-                        key: {
-                            type: 'Literal',
-                            value: 2,
-                            raw: '2',
-                            range: [6, 7],
-                            loc: {
-                                start: { line: 1, column: 6 },
-                                end: { line: 1, column: 7 }
-                            }
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: 2,
-                            raw: '2',
-                            range: [6, 7],
-                            loc: {
-                                start: { line: 1, column: 6 },
-                                end: { line: 1, column: 7 }
-                            }
-                        },
-                        kind: 'init',
-                        shorthand: true,
-                        range: [6, 7],
-                        loc: {
-                            start: { line: 1, column: 6 },
-                            end: { line: 1, column: 7 }
-                        }
-                    }, {
-                        type: 'Property',
-                        key: {
-                            type: 'Literal',
-                            value: 'chance',
-                            raw: '"chance"',
-                            range: [9, 17],
-                            loc: {
-                                start: { line: 1, column: 9 },
-                                end: { line: 1, column: 17 }
-                            }
-                        },
-                        value: {
-                            type: 'Literal',
-                            value: 'chance',
-                            raw: '"chance"',
-                            range: [9, 17],
-                            loc: {
-                                start: { line: 1, column: 9 },
-                                end: { line: 1, column: 17 }
-                            }
-                        },
-                        kind: 'init',
-                        shorthand: true,
-                        range: [9, 17],
-                        loc: {
-                            start: { line: 1, column: 9 },
-                            end: { line: 1, column: 17 }
-                        }
-                    }],
-                    range: [4, 19],
-                    loc: {
-                        start: { line: 1, column: 4 },
-                        end: { line: 1, column: 19 }
-                    }
-                },
-                range: [0, 19],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 19 }
-                }
-            },
-            range: [0, 19],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 19 }
-            }
         }
 
     },
@@ -5986,6 +5892,20 @@ var harmonyTestFixture = {
             lineNumber: 1,
             column: 16,
             message: 'Error: Line 1: Comprehension Error'
+        },
+
+        '({ "chance" }) = obj': {
+            index: 12,
+            lineNumber: 1,
+            column: 13,
+            message: 'Error: Line 1: Unexpected token }'
+        },
+
+        '({ 42 }) = obj': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Unexpected token }'
         }
     }
 
