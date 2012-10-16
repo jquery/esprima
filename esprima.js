@@ -1641,6 +1641,7 @@ parseYieldExpression: true
                 }
                 matchKeyword('for');
                 tmp = parseForStatement({ignore_body: true});
+                tmp.of = tmp.type === Syntax.ForOfStatement;
                 tmp.type = Syntax.ComprehensionBlock;
                 if (tmp.left.kind) { // can't be let or const
                     throwError({}, Messages.ComprehensionError);
