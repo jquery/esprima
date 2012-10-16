@@ -24,14 +24,29 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint sloppy:true node:true */
+/*jslint sloppy:true node:true rhino:true */
 
-var fs = require('fs'),
-    esprima = require('esprima'),
-    fname,
-    content,
-    options,
-    syntax;
+var fs, esprima, fname, content, options, syntax;
+
+if (typeof require === 'function') {
+    fs = require('fs');
+    esprima = require('esprima');
+} else if (typeof load === 'function') {
+    try {
+        load('esprima.js');
+    } catch (e) {
+        load('../esprima.js');
+    }
+}
+
+// Shims to Node.js objects when running under Rhino.
+if (typeof console === 'undefined' && typeof process === 'undefined') {
+    console = { log: print };
+    fs = { readFileSync: readFile };
+    process = { argv: arguments, exit: quit };
+    process.argv.unshift('esparse.js');
+    process.argv.unshift('rhino');
+}
 
 function showUsage() {
     console.log('Usage:');
