@@ -33,7 +33,7 @@ var fs = require('fs'),
     options,
     syntax;
 
-if (process.argv.length <= 2) {
+function showUsage() {
     console.log('Usage:');
     console.log('   esparse [options] file.js');
     console.log();
@@ -49,11 +49,17 @@ if (process.argv.length <= 2) {
     process.exit(1);
 }
 
+if (process.argv.length <= 2) {
+    showUsage();
+}
+
 options = {};
 
 process.argv.splice(2).forEach(function (entry) {
 
-    if (entry === '-v' || entry === '--version') {
+    if (entry === '-h' || entry === '--help') {
+        showUsage();
+    } else if (entry === '-v' || entry === '--version') {
         console.log('ECMAScript Parser (using Esprima version', esprima.version, ')');
         console.log();
         process.exit(0);
