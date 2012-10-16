@@ -43,6 +43,7 @@ function showUsage() {
     console.log('  --loc          Include line-column location info for each syntax node');
     console.log('  --range        Include index-based range for each syntax node');
     console.log('  --raw          Display the raw value of literals');
+    console.log('  --tokens       List all tokens in an array');
     console.log('  --tolerant     Tolerate errors on a best-effort basis (experimental)');
     console.log('  -v, --version  Shows program version');
     console.log();
@@ -71,6 +72,8 @@ process.argv.splice(2).forEach(function (entry) {
         options.range = true;
     } else if (entry === '--raw') {
         options.raw = true;
+    } else if (entry === '--tokens') {
+        options.tokens = true;
     } else if (entry === '--tolerant') {
         options.tolerant = true;
     } else if (entry.slice(0, 2) === '--') {
