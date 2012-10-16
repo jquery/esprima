@@ -43,7 +43,7 @@ if (process.argv.length <= 2) {
     console.log('  --loc          Include line-column location info for each syntax node');
     console.log('  --range        Include index-based range for each syntax node');
     console.log('  --raw          Display the raw value of literals');
-    console.log('  --tolerant     Tolerate errors on a best-effort basis (WIP)');
+    console.log('  --tolerant     Tolerate errors on a best-effort basis (experimental)');
     console.log('  -v, --version  Shows program version');
     console.log();
     process.exit(1);
