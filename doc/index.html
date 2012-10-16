@@ -37,7 +37,7 @@ pre.prettyprint {
 <h2 id="usage">Basic Usage</h2>
 
 <p>Esprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror 4.6+, Opera 8+) as well as
-<a href="http://nodejs.org">Node.js</a>.</p>
+<a href="http://www.mozilla.org/rhino">Rhino</a> and <a href="http://nodejs.org">Node.js</a>.</p>
 
 <h3>In a web browser</h3>
 
@@ -80,7 +80,18 @@ console.log(JSON.stringify(esprima.parse('var answer = 42'), null, 4));
 
 <h3>With Rhino</h3>
 
-<p>Note: This would be available soon.</p>
+<p>Load the source file from another script:</p>
+
+<pre class="prettyprint lang-js">
+load('/path/to/esprima.js');
+</pre>
+
+<p>The module <code>esprima</code> will be available as part of the global object:</p>
+
+<pre class="prettyprint lang-js">
+var syntax = esprima.parse('42');
+print(JSON.stringify(syntax, null, 2));
+</pre>
 
 <h3>Parsing Interface</h3>
 
