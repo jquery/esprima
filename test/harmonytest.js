@@ -1906,6 +1906,7 @@ var harmonyTestFixture = {
     },
 
     'Array Comprehension': {
+
         '[[x,b,c] for (x in []) for (b in []) if (b && c)]' : {
             type: 'ExpressionStatement',
             expression: {
@@ -1957,7 +1958,8 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 21 }
                         }
                     },
-                    each: false
+                    each: false,
+                    of: false
                 }, {
                     type: 'ComprehensionBlock',
                     left: {
@@ -1978,7 +1980,8 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 35 }
                         }
                     },
-                    each: false
+                    each: false,
+                    of: false
                 }],
                 body: {
                     type: 'ArrayExpression',
@@ -2026,7 +2029,6 @@ var harmonyTestFixture = {
             }
         },
 
-
         '[x for (a in [])]' : {
             type: 'ExpressionStatement',
             expression: {
@@ -2052,7 +2054,8 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 15 }
                         }
                     },
-                    each: false
+                    each: false,
+                    of: false
                 }],
                 body: {
                     type: 'Identifier',
@@ -2101,7 +2104,8 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 15 }
                         }
                     },
-                    each: false
+                    each: false,
+                    of: false
                 }],
                 body: {
                     type: 'Literal',
@@ -2125,6 +2129,7 @@ var harmonyTestFixture = {
                 end: { line: 1, column: 17 }
             }
         },
+
         '[(x,1) for (x in [])]' : {
             type: 'ExpressionStatement',
             expression: {
@@ -2150,7 +2155,8 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 19 }
                         }
                     },
-                    each: false
+                    each: false,
+                    of: false
                 }],
                 body: {
                     type: 'SequenceExpression',
@@ -2189,7 +2195,154 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 21 }
             }
+        },
+
+
+        '[x for (x of array)]': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ComprehensionExpression',
+                filter: null,
+                blocks: [{
+                    type: 'ComprehensionBlock',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [8, 9],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 9 }
+                        }
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'array',
+                        range: [13, 18],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    of: true
+                }],
+                body: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                },
+                range: [0, 20],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 20 }
+                }
+            },
+            range: [0, 20],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 20 }
+            }
+        },
+
+        '[x for (x of array) for (y of array2) if (x === test)]': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ComprehensionExpression',
+                filter: {
+                    type: 'BinaryExpression',
+                    operator: '===',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [42, 43],
+                        loc: {
+                            start: { line: 1, column: 42 },
+                            end: { line: 1, column: 43 }
+                        }
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'test',
+                        range: [48, 52],
+                        loc: {
+                            start: { line: 1, column: 48 },
+                            end: { line: 1, column: 52 }
+                        }
+                    },
+                    range: [42, 52],
+                    loc: {
+                        start: { line: 1, column: 42 },
+                        end: { line: 1, column: 52 }
+                    }
+                },
+                blocks: [{
+                    type: 'ComprehensionBlock',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [8, 9],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 9 }
+                        }
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'array',
+                        range: [13, 18],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    of: true
+                }, {
+                    type: 'ComprehensionBlock',
+                    left: {
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [25, 26],
+                        loc: {
+                            start: { line: 1, column: 25 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'array2',
+                        range: [30, 36],
+                        loc: {
+                            start: { line: 1, column: 30 },
+                            end: { line: 1, column: 36 }
+                        }
+                    },
+                    of: true
+                }],
+                body: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                },
+                range: [0, 54],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 54 }
+                }
+            },
+            range: [0, 54],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 54 }
+            }
         }
+
     },
 
     // http://wiki.ecmascript.org/doku.php?id=harmony:object_literals#object_literal_property_value_shorthand
