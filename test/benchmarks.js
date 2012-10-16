@@ -27,7 +27,8 @@
 /*jslint browser: true node: true */
 /*global load:true, print:true */
 var setupBenchmarks,
-    fullFixture;
+    fullFixture,
+    quickFixture;
 
 fullFixture = [
     'Underscore 1.4.1',

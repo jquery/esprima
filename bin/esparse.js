@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /*
+  Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
 
   Redistribution and use in source and binary forms, with or without
@@ -23,20 +24,94 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint sloppy:true node:true */
+/*jslint sloppy:true node:true rhino:true */
 
-var fs = require('fs'),
-    esprima = require('esprima'),
-    files = process.argv.splice(2);
+var fs, esprima, fname, content, options, syntax;
 
-if (files.length === 0) {
+if (typeof require === 'function') {
+    fs = require('fs');
+    esprima = require('esprima');
+} else if (typeof load === 'function') {
+    try {
+        load('esprima.js');
+    } catch (e) {
+        load('../esprima.js');
+    }
+}
+
+// Shims to Node.js objects when running under Rhino.
+if (typeof console === 'undefined' && typeof process === 'undefined') {
+    console = { log: print };
+    fs = { readFileSync: readFile };
+    process = { argv: arguments, exit: quit };
+    process.argv.unshift('esparse.js');
+    process.argv.unshift('rhino');
+}
+
+function showUsage() {
     console.log('Usage:');
-    console.log('   esparse file.js');
+    console.log('   esparse [options] file.js');
+    console.log();
+    console.log('Available options:');
+    console.log();
+    console.log('  --comment      Gather all line and block comments in an array');
+    console.log('  --loc          Include line-column location info for each syntax node');
+    console.log('  --range        Include index-based range for each syntax node');
+    console.log('  --raw          Display the raw value of literals');
+    console.log('  --tokens       List all tokens in an array');
+    console.log('  --tolerant     Tolerate errors on a best-effort basis (experimental)');
+    console.log('  -v, --version  Shows program version');
+    console.log();
     process.exit(1);
 }
 
-files.forEach(function (filename) {
-    var content = fs.readFileSync(filename, 'utf-8');
-    console.log(JSON.stringify(esprima.parse(content), null, 4));
+if (process.argv.length <= 2) {
+    showUsage();
+}
+
+options = {};
+
+process.argv.splice(2).forEach(function (entry) {
+
+    if (entry === '-h' || entry === '--help') {
+        showUsage();
+    } else if (entry === '-v' || entry === '--version') {
+        console.log('ECMAScript Parser (using Esprima version', esprima.version, ')');
+        console.log();
+        process.exit(0);
+    } else if (entry === '--comment') {
+        options.comment = true;
+    } else if (entry === '--loc') {
+        options.loc = true;
+    } else if (entry === '--range') {
+        options.range = true;
+    } else if (entry === '--raw') {
+        options.raw = true;
+    } else if (entry === '--tokens') {
+        options.tokens = true;
+    } else if (entry === '--tolerant') {
+        options.tolerant = true;
+    } else if (entry.slice(0, 2) === '--') {
+        console.log('Error: unknown option ' + entry + '.');
+        process.exit(1);
+    } else if (typeof fname === 'string') {
+        console.log('Error: more than one input file.');
+        process.exit(1);
+    } else {
+        fname = entry;
+    }
 });
-/* vim: set sw=4 ts=4 et tw=80 : */
+
+if (typeof fname !== 'string') {
+    console.log('Error: no input file.');
+    process.exit(1);
+}
+
+try {
+    content = fs.readFileSync(fname, 'utf-8');
+    syntax = esprima.parse(content, options);
+    console.log(JSON.stringify(syntax, null, 4));
+} catch (e) {
+    console.log('Error: ' + e.message);
+    process.exit(1);
+}
