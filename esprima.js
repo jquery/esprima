@@ -3894,31 +3894,36 @@ parseStatement: true, parseSourceElement: true */
         return program;
     }
 
+
+    // Deep copy.
+    function copyEnumeration(object) {
+        var name, result = {};
+
+        if (typeof Object.create === 'function') {
+            result = Object.create(null);
+        }
+
+        for (name in object) {
+            if (object.hasOwnProperty(name)) {
+                result[name] = object[name];
+            }
+        }
+
+        if (typeof Object.freeze === 'function') {
+            Object.freeze(result);
+        }
+
+        return result;
+    }
+
     // Sync with package.json.
     exports.version = '1.1.0-dev';
 
     exports.parse = parse;
 
-    // Deep copy.
-    exports.Syntax = (function () {
-        var name, types = {};
+    exports.Syntax = copyEnumeration(Syntax);
 
-        if (typeof Object.create === 'function') {
-            types = Object.create(null);
-        }
-
-        for (name in Syntax) {
-            if (Syntax.hasOwnProperty(name)) {
-                types[name] = Syntax[name];
-            }
-        }
-
-        if (typeof Object.freeze === 'function') {
-            Object.freeze(types);
-        }
-
-        return types;
-    }());
+    exports.SyntaxTreeDelegate = copyEnumeration(SyntaxTreeDelegate);
 
 }));
 /* vim: set sw=4 ts=4 et tw=80 : */
