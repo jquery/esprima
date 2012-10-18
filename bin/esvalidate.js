@@ -98,6 +98,7 @@ if (fnames.length === 0) {
 
 if (options.format === 'junit') {
     console.log('<?xml version="1.0" encoding="UTF-8"?>');
+    console.log('<testsuites>');
 }
 
 count = 0;
@@ -116,18 +117,18 @@ fnames.forEach(function (fname) {
             }
 
             console.log('<testsuite name="' + fname + '" errors="0" ' +
-                ' failures="' + syntax.errors.length +
-                ' tests="' + syntax.errors.length +
-                '" time="' + Math.round((Date.now() - timestamp) / 1000) +
+                ' failures="' + syntax.errors.length + '" ' +
+                ' tests="' + syntax.errors.length + '" ' +
+                ' time="' + Math.round((Date.now() - timestamp) / 1000) +
                 '">');
 
             syntax.errors.forEach(function (error) {
                 var msg = error.message;
                 msg = msg.replace(/^Line\ [0-9]*\:\ /, '');
-                console.log('  <testcase name="' + name + '_line_' + error.lineNumber + '" ' +
+                console.log('  <testcase name="Line ' + error.lineNumber + ': ' + msg + '" ' +
                     ' time="0">');
-                console.log('    <error type="SyntaxError" message="' + msg + '">' +
-                    msg + '(' + name + ':' + error.lineNumber + ')' +
+                console.log('    <error type="SyntaxError" message="' + error.message + '">' +
+                    error.message + '(' + name + ':' + error.lineNumber + ')' +
                     '</error>');
                 console.log('  </testcase>');
             });
@@ -149,6 +150,10 @@ fnames.forEach(function (fname) {
         console.log('Error: ' + e.message);
     }
 });
+
+if (options.format === 'junit') {
+    console.log('</testsuites>');
+}
 
 if (count > 0) {
     process.exit(1);
