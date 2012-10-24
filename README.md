@@ -6,7 +6,7 @@ Esprima is created and maintained by [Ariya Hidayat](http://twitter.com/ariyahid
 with the help of [many contributors](https://github.com/ariya/esprima/contributors).
 
 Esprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror 4.6+, Opera 8+) as well as
-[Node.js](http://nodejs.org).
+[Rhino](http://www.mozilla.org/rhino) and [Node.js](http://nodejs.org).
 
 ### Features
 
