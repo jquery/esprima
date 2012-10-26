@@ -30,7 +30,7 @@
 
 /*jslint bitwise:true plusplus:true */
 /*global esprima:true, define:true, exports:true, window: true,
-throwError: true, createLiteral: true, generateStatement: true,
+throwError: true, createLiteral: true, generateStatement: true, peek: true,
 parseAssignmentExpression: true, parseBlock: true,
 parseClassExpression: true, parseClassDeclaration: true, parseExpression: true,
 parseForStatement: true,
@@ -74,7 +74,7 @@ parseYieldExpression: true
         lineStart,
         length,
         delegate,
-        buffer,
+        lookahead,
         state,
         extra;
 
@@ -1139,9 +1139,9 @@ parseYieldExpression: true
     }
 
     function scanTemplateElement(option) {
-        var startsWith;
+        var startsWith, template;
 
-        buffer = null;
+        lookahead = null;
         skipComment();
 
         startsWith = (option.head) ? '`' : '}';
@@ -1150,13 +1150,17 @@ parseYieldExpression: true
             throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
         }
 
-        return scanTemplate();
+        template = scanTemplate();
+
+        peek();
+
+        return template;
     }
 
     function scanRegExp() {
         var str, ch, start, pattern, flags, value, classMarker = false, restore, terminated = false;
 
-        buffer = null;
+        lookahead = null;
         skipComment();
 
         start = index;
@@ -1236,6 +1240,8 @@ parseYieldExpression: true
             throwError({}, Messages.InvalidRegExp);
         }
 
+        peek();
+
         return {
             literal: str,
             value: value,
@@ -1293,35 +1299,31 @@ parseYieldExpression: true
     function lex() {
         var token;
 
-        if (buffer) {
-            index = buffer.range[1];
-            lineNumber = buffer.lineNumber;
-            lineStart = buffer.lineStart;
-            token = buffer;
-            buffer = null;
-            return token;
-        }
+        token = lookahead;
+        index = token.range[1];
+        lineNumber = token.lineNumber;
+        lineStart = token.lineStart;
 
-        buffer = null;
-        return advance();
+        lookahead = advance();
+
+        index = token.range[1];
+        lineNumber = token.lineNumber;
+        lineStart = token.lineStart;
+
+        return token;
     }
 
-    function lookahead() {
+    function peek() {
         var pos, line, start;
-
-        if (buffer !== null) {
-            return buffer;
-        }
 
         pos = index;
         line = lineNumber;
         start = lineStart;
-        buffer = advance();
+        lookahead = advance();
         index = pos;
         lineNumber = line;
-        lineStart = start;
 
-        return buffer;
+        return lookahead;
     }
 
     function lookahead2() {
@@ -1335,12 +1337,12 @@ parseYieldExpression: true
         start = lineStart;
 
         // Scan for the next immediate token.
-        if (buffer === null) {
-            buffer = adv();
+        if (lookahead === null) {
+            lookahead = adv();
         }
-        index = buffer.range[1];
-        lineNumber = buffer.lineNumber;
-        lineStart = buffer.lineStart;
+        index = lookahead.range[1];
+        lineNumber = lookahead.lineNumber;
+        lineStart = lookahead.lineStart;
 
         // Grab the token right after.
         result = adv();
@@ -1807,34 +1809,31 @@ parseYieldExpression: true
     // Return true if the next token matches the specified punctuator.
 
     function match(value) {
-        var token = lookahead();
-        return token.type === Token.Punctuator && token.value === value;
+        return lookahead.type === Token.Punctuator && lookahead.value === value;
     }
 
     // Return true if the next token matches the specified keyword
 
     function matchKeyword(keyword) {
-        var token = lookahead();
-        return token.type === Token.Keyword && token.value === keyword;
+        return lookahead.type === Token.Keyword && lookahead.value === keyword;
     }
 
 
     // Return true if the next token matches the specified contextual keyword
 
     function matchContextualKeyword(keyword) {
-        var token = lookahead();
-        return token.type === Token.Identifier && token.value === keyword;
+        return lookahead.type === Token.Identifier && lookahead.value === keyword;
     }
 
     // Return true if the next token is an assignment operator
 
     function matchAssign() {
-        var token = lookahead(),
-            op = token.value;
+        var op;
 
-        if (token.type !== Token.Punctuator) {
+        if (lookahead.type !== Token.Punctuator) {
             return false;
         }
+        op = lookahead.value;
         return op === '=' ||
             op === '*=' ||
             op === '/=' ||
@@ -1850,7 +1849,7 @@ parseYieldExpression: true
     }
 
     function consumeSemicolon() {
-        var token, line;
+        var line;
 
         // Catch the very common case first.
         if (source[index] === ';') {
@@ -1869,9 +1868,8 @@ parseYieldExpression: true
             return;
         }
 
-        token = lookahead();
-        if (token.type !== Token.EOF && !match('}')) {
-            throwUnexpected(token);
+        if (lookahead.type !== Token.EOF && !match('}')) {
+            throwUnexpected(lookahead);
         }
     }
 
@@ -1888,12 +1886,11 @@ parseYieldExpression: true
     // 11.1.4 Array Initialiser
 
     function parseArrayInitialiser() {
-        var elements = [], blocks = [], filter = null, token, tmp, possiblecomprehension = true, body;
+        var elements = [], blocks = [], filter = null, tmp, possiblecomprehension = true, body;
 
         expect('[');
         while (!match(']')) {
-            token = lookahead();
-            switch (token.value) {
+            switch (lookahead.value) {
             case 'for':
                 if (!possiblecomprehension) {
                     throwError({}, Messages.ComprehensionError);
@@ -2041,7 +2038,7 @@ parseYieldExpression: true
     function parseObjectProperty() {
         var token, key, id, param;
 
-        token = lookahead();
+        token = lookahead;
 
         if (token.type === Token.Identifier) {
 
@@ -2063,7 +2060,7 @@ parseYieldExpression: true
             if (token.value === 'set' && !(match(':') || match('('))) {
                 key = parseObjectPropertyKey();
                 expect('(');
-                token = lookahead();
+                token = lookahead;
                 param = [ parseVariableIdentifier() ];
                 expect(')');
                 return {
@@ -2248,9 +2245,9 @@ parseYieldExpression: true
     // 11.1 Primary Expressions
 
     function parsePrimaryExpression() {
-        var expr,
-            token = lookahead(),
-            type = token.type;
+        var type, token;
+
+        type = lookahead.type;
 
         if (type === Token.Identifier) {
             return {
@@ -2260,8 +2257,8 @@ parseYieldExpression: true
         }
 
         if (type === Token.StringLiteral || type === Token.NumericLiteral) {
-            if (strict && token.octal) {
-                throwErrorTolerant(token, Messages.StrictOctalLiteral);
+            if (strict && lookahead.octal) {
+                throwErrorTolerant(lookahead, Messages.StrictOctalLiteral);
             }
             return createLiteral(lex());
         }
@@ -2292,13 +2289,13 @@ parseYieldExpression: true
         }
 
         if (type === Token.BooleanLiteral) {
-            lex();
+            token = lex();
             token.value = (token.value === 'true');
             return createLiteral(token);
         }
 
         if (type === Token.NullLiteral) {
-            lex();
+            token = lex();
             token.value = null;
             return createLiteral(token);
         }
@@ -2418,7 +2415,7 @@ parseYieldExpression: true
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
-        while (match('.') || match('[') || match('(') || lookahead().type === Token.Template) {
+        while (match('.') || match('[') || match('(') || lookahead.type === Token.Template) {
             if (match('(')) {
                 expr = {
                     type: Syntax.CallExpression,
@@ -2457,7 +2454,7 @@ parseYieldExpression: true
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
-        while (match('.') || match('[') || lookahead().type === Token.Template) {
+        while (match('.') || match('[') || lookahead.type === Token.Template) {
             if (match('[')) {
                 expr = {
                     type: Syntax.MemberExpression,
@@ -2488,9 +2485,9 @@ parseYieldExpression: true
 
     function parsePostfixExpression() {
         var expr = parseLeftHandSideExpressionAllowCall(),
-            token = lookahead();
+            token = lookahead;
 
-        if (token.type !== Token.Punctuator) {
+        if (lookahead.type !== Token.Punctuator) {
             return expr;
         }
 
@@ -2520,8 +2517,7 @@ parseYieldExpression: true
     function parseUnaryExpression() {
         var token, expr;
 
-        token = lookahead();
-        if (token.type !== Token.Punctuator && token.type !== Token.Keyword) {
+        if (lookahead.type !== Token.Punctuator && lookahead.type !== Token.Keyword) {
             return parsePostfixExpression();
         }
 
@@ -2678,7 +2674,7 @@ parseYieldExpression: true
 
         expr = parseUnaryExpression();
 
-        token = lookahead();
+        token = lookahead;
         prec = binaryPrecedence(token, previousAllowIn);
         if (prec === 0) {
             return expr;
@@ -2688,7 +2684,7 @@ parseYieldExpression: true
 
         stack = [expr, token, parseUnaryExpression()];
 
-        while ((prec = binaryPrecedence(lookahead(), previousAllowIn)) > 0) {
+        while ((prec = binaryPrecedence(lookahead, previousAllowIn)) > 0) {
 
             // Reduce.
             while ((stack.length > 2) && (prec <= stack[stack.length - 2].prec)) {
@@ -2889,7 +2885,7 @@ parseYieldExpression: true
             }
         }
 
-        token = lookahead();
+        token = lookahead;
         expr = parseConditionalExpression();
 
         if (match('=>') && expr.type === Syntax.Identifier) {
@@ -3161,7 +3157,7 @@ parseYieldExpression: true
 
         expect('=');
 
-        token = lookahead();
+        token = lookahead;
         if (token.type === Token.StringLiteral) {
             declaration = {
                 type: Syntax.ModuleDeclaration,
@@ -3243,7 +3239,7 @@ parseYieldExpression: true
 
         expectKeyword('export');
 
-        token = lookahead();
+        token = lookahead;
 
         if (token.type === Token.Keyword || (token.type === Token.Identifier && token.value === 'module')) {
             switch (token.value) {
@@ -3322,7 +3318,7 @@ parseYieldExpression: true
 
         lex();
 
-        if (lookahead().type === Token.StringLiteral) {
+        if (lookahead.type === Token.StringLiteral) {
             from = parsePrimaryExpression();
         } else {
             from = parsePath();
@@ -3497,7 +3493,7 @@ parseYieldExpression: true
 
                 if (init.declarations.length === 1) {
                     if (matchKeyword('in') || matchContextualKeyword('of')) {
-                        operator = lookahead();
+                        operator = lookahead;
                         if (!((operator.value === 'in' || init.kind !== 'var') && init.declarations[0].init)) {
                             lex();
                             left = init;
@@ -3586,7 +3582,7 @@ parseYieldExpression: true
     // 12.7 The continue statement
 
     function parseContinueStatement() {
-        var token, label = null;
+        var label = null;
 
         expectKeyword('continue');
 
@@ -3615,8 +3611,7 @@ parseYieldExpression: true
             };
         }
 
-        token = lookahead();
-        if (token.type === Token.Identifier) {
+        if (lookahead.type === Token.Identifier) {
             label = parseVariableIdentifier();
 
             if (!Object.prototype.hasOwnProperty.call(state.labelSet, label.name)) {
@@ -3639,7 +3634,7 @@ parseYieldExpression: true
     // 12.8 The break statement
 
     function parseBreakStatement() {
-        var token, label = null;
+        var label = null;
 
         expectKeyword('break');
 
@@ -3668,8 +3663,7 @@ parseYieldExpression: true
             };
         }
 
-        token = lookahead();
-        if (token.type === Token.Identifier) {
+        if (lookahead.type === Token.Identifier) {
             label = parseVariableIdentifier();
 
             if (!Object.prototype.hasOwnProperty.call(state.labelSet, label.name)) {
@@ -3692,7 +3686,7 @@ parseYieldExpression: true
     // 12.9 The return statement
 
     function parseReturnStatement() {
-        var token, argument = null;
+        var argument = null;
 
         expectKeyword('return');
 
@@ -3720,8 +3714,7 @@ parseYieldExpression: true
         }
 
         if (!match(';')) {
-            token = lookahead();
-            if (!match('}') && token.type !== Token.EOF) {
+            if (!match('}') && lookahead.type !== Token.EOF) {
                 argument = parseExpression();
             }
         }
@@ -3935,16 +3928,16 @@ parseYieldExpression: true
     // 12 Statements
 
     function parseStatement() {
-        var token = lookahead(),
+        var type = lookahead.type,
             expr,
             labeledBody;
 
-        if (token.type === Token.EOF) {
-            throwUnexpected(token);
+        if (type === Token.EOF) {
+            throwUnexpected(lookahead);
         }
 
-        if (token.type === Token.Punctuator) {
-            switch (token.value) {
+        if (type === Token.Punctuator) {
+            switch (lookahead.value) {
             case ';':
                 return parseEmptyStatement();
             case '{':
@@ -3956,8 +3949,8 @@ parseYieldExpression: true
             }
         }
 
-        if (token.type === Token.Keyword) {
-            switch (token.value) {
+        if (type === Token.Keyword) {
+            switch (lookahead.value) {
             case 'break':
                 return parseBreakStatement();
             case 'continue':
@@ -4038,10 +4031,10 @@ parseYieldExpression: true
         expect('{');
 
         while (index < length) {
-            token = lookahead();
-            if (token.type !== Token.StringLiteral) {
+            if (lookahead.type !== Token.StringLiteral) {
                 break;
             }
+            token = lookahead;
 
             sourceElement = parseSourceElement();
             sourceElements.push(sourceElement);
@@ -4129,7 +4122,7 @@ parseYieldExpression: true
     function parseParam(options) {
         var token, rest, param;
 
-        token = lookahead();
+        token = lookahead;
         if (token.value === '...') {
             token = lex();
             rest = true;
@@ -4200,7 +4193,7 @@ parseYieldExpression: true
             generator = true;
         }
 
-        token = lookahead();
+        token = lookahead;
 
         id = parseVariableIdentifier();
         if (strict) {
@@ -4268,7 +4261,7 @@ parseYieldExpression: true
         }
 
         if (!match('(')) {
-            token = lookahead();
+            token = lookahead;
             id = parseVariableIdentifier();
             if (strict) {
                 if (isRestrictedWord(token.value)) {
@@ -4368,7 +4361,7 @@ parseYieldExpression: true
             };
         }
 
-        token = lookahead();
+        token = lookahead;
         key = parseObjectPropertyKey();
 
         if (token.value === 'get' && !match('(')) {
@@ -4385,7 +4378,7 @@ parseYieldExpression: true
         if (token.value === 'set' && !match('(')) {
             key = parseObjectPropertyKey();
             expect('(');
-            token = lookahead();
+            token = lookahead;
             param = [ parseVariableIdentifier() ];
             expect(')');
             return {
@@ -4465,7 +4458,7 @@ parseYieldExpression: true
 
         expectKeyword('class');
 
-        token = lookahead();
+        token = lookahead;
         id = parseVariableIdentifier();
 
         if (matchKeyword('extends')) {
@@ -4488,13 +4481,11 @@ parseYieldExpression: true
     // 15 Program
 
     function parseSourceElement() {
-        var token = lookahead();
-
-        if (token.type === Token.Keyword) {
-            switch (token.value) {
+        if (lookahead.type === Token.Keyword) {
+            switch (lookahead.value) {
             case 'const':
             case 'let':
-                return parseConstLetDeclaration(token.value);
+                return parseConstLetDeclaration(lookahead.value);
             case 'function':
                 return parseFunctionDeclaration();
             default:
@@ -4502,16 +4493,16 @@ parseYieldExpression: true
             }
         }
 
-        if (token.type !== Token.EOF) {
+        if (lookahead.type !== Token.EOF) {
             return parseStatement();
         }
     }
 
     function parseProgramElement() {
-        var token = lookahead(), lineNumber;
+        var lineNumber, token;
 
-        if (token.type === Token.Keyword) {
-            switch (token.value) {
+        if (lookahead.type === Token.Keyword) {
+            switch (lookahead.value) {
             case 'export':
                 return parseExportDeclaration();
             case 'import':
@@ -4519,8 +4510,8 @@ parseYieldExpression: true
             }
         }
 
-        if (token.value === 'module' && token.type === Token.Identifier) {
-            lineNumber = token.lineNumber;
+        if (lookahead.value === 'module' && lookahead.type === Token.Identifier) {
+            lineNumber = lookahead.lineNumber;
             token = lookahead2();
             if (token.type === Token.Identifier && token.lineNumber === lineNumber) {
                 return parseModuleDeclaration();
@@ -4534,7 +4525,7 @@ parseYieldExpression: true
         var sourceElement, sourceElements = [], token, directive, firstRestricted;
 
         while (index < length) {
-            token = lookahead();
+            token = lookahead;
             if (token.type !== Token.StringLiteral) {
                 break;
             }
@@ -4610,6 +4601,7 @@ parseYieldExpression: true
         strict = false;
         yieldAllowed = false;
         yieldFound = false;
+        peek();
         program = {
             type: Syntax.Program,
             body: parseProgramElements()
@@ -4984,7 +4976,7 @@ parseYieldExpression: true
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
-        while (match('.') || match('[') || lookahead().type === Token.Template) {
+        while (match('.') || match('[') || lookahead.type === Token.Template) {
             if (match('[')) {
                 expr = {
                     type: Syntax.MemberExpression,
@@ -5025,7 +5017,7 @@ parseYieldExpression: true
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
-        while (match('.') || match('[') || match('(') || lookahead().type === Token.Template) {
+        while (match('.') || match('[') || match('(') || lookahead.type === Token.Template) {
             if (match('(')) {
                 expr = {
                     type: Syntax.CallExpression,
@@ -5367,7 +5359,7 @@ parseYieldExpression: true
         lineNumber = (source.length > 0) ? 1 : 0;
         lineStart = 0;
         length = source.length;
-        buffer = null;
+        lookahead = null;
         state = {
             allowIn: true,
             labelSet: {},
