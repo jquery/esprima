@@ -7982,7 +7982,7 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 14 }
             }
-        }
+        },
         'var [a, ...b] = c': {
             type: 'VariableDeclaration',
             declarations: [{
