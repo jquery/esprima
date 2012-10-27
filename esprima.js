@@ -3196,7 +3196,7 @@ parseYieldExpression: true
     // 12.4 Expression Statement
 
     function parseExpressionStatement() {
-        var expr = parseExpression(true);
+        var expr = parseExpression();
 
         consumeSemicolon();
 
