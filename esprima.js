@@ -110,7 +110,6 @@ parseYieldExpression: true
         ClassBody: 'ClassBody',
         ClassDeclaration: 'ClassDeclaration',
         ClassExpression: 'ClassExpression',
-        MethodDefinition: 'MethodDefinition',
         ClassHeritage: 'ClassHeritage',
         ComprehensionBlock: 'ComprehensionBlock',
         ComprehensionExpression: 'ComprehensionExpression',
@@ -137,20 +136,22 @@ parseYieldExpression: true
         Literal: 'Literal',
         LogicalExpression: 'LogicalExpression',
         MemberExpression: 'MemberExpression',
+        MethodDefinition: 'MethodDefinition',
         ModuleDeclaration: 'ModuleDeclaration',
         NewExpression: 'NewExpression',
         ObjectExpression: 'ObjectExpression',
         ObjectPattern: 'ObjectPattern',
-        Path:  'Path',
+        Path: 'Path',
         Program: 'Program',
         Property: 'Property',
-        TemplateElement: 'TemplateElement',
-        TemplateLiteral: 'TemplateLiteral',
         ReturnStatement: 'ReturnStatement',
         SequenceExpression: 'SequenceExpression',
+        SpreadElement: 'SpreadElement',
         SwitchCase: 'SwitchCase',
         SwitchStatement: 'SwitchStatement',
         TaggedTemplateExpression: 'TaggedTemplateExpression',
+        TemplateElement: 'TemplateElement',
+        TemplateLiteral: 'TemplateLiteral',
         ThisExpression: 'ThisExpression',
         ThrowStatement: 'ThrowStatement',
         TryStatement: 'TryStatement',
@@ -182,6 +183,7 @@ parseYieldExpression: true
         InvalidRegExp: 'Invalid regular expression',
         UnterminatedRegExp:  'Invalid regular expression: missing /',
         InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
+        InvalidLHSInFormalsList:  'Invalid left-hand side in formals list',
         InvalidLHSInForIn:  'Invalid left-hand side in for-in',
         MultipleDefaultsInSwitch: 'More than one default clause in switch statement',
         NoCatchOrFinally:  'Missing catch or finally after try',
@@ -211,7 +213,9 @@ parseYieldExpression: true
         NoUnintializedConst: 'Const must be initialized',
         ComprehensionRequiresBlock: 'Comprehension must have at least one block',
         ComprehensionError:  'Comprehension Error',
-        EachNotAllowed:  'Each is not supported'
+        EachNotAllowed:  'Each is not supported',
+        RestDuplicate: 'Duplicate rest parameters',
+        RestNotLast: 'Rest parameter must come last'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -655,19 +659,33 @@ parseYieldExpression: true
         // to check the next character.
 
         ch2 = source[index + 1];
-        if (ch1 === '.' && !isDecimalDigit(ch2)) {
-            return {
-                type: Token.Punctuator,
-                value: nextChar(),
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                range: [start, index]
-            };
+        ch3 = source[index + 2];
+
+        if (ch1 === '.') {
+            if (ch2 === '.' && ch3 === '.') {
+                index += 3;
+                return {
+                    type: Token.Punctuator,
+                    value: '...',
+                    lineNumber: lineNumber,
+                    lineStart: lineStart,
+                    range: [start, index]
+                };
+            }
+
+            if (!isDecimalDigit(ch2)) {
+                return {
+                    type: Token.Punctuator,
+                    value: nextChar(),
+                    lineNumber: lineNumber,
+                    lineStart: lineStart,
+                    range: [start, index]
+                };
+            }
         }
 
         // Peek more characters.
 
-        ch3 = source[index + 2];
         ch4 = source[index + 3];
 
         // 4-character punctuator: >>>=
@@ -1626,6 +1644,30 @@ parseYieldExpression: true
         return isLeftHandSide(expr) || expr.type === Syntax.ObjectPattern || expr.type === Syntax.ArrayPattern;
     }
 
+    function isParameter(expr) {
+        var i;
+
+        if (expr.type === Syntax.Identifier) {
+            return true;
+        } else if (expr.type === Syntax.ObjectExpression) {
+            for (i = 0; i < expr.properties; i++) {
+                if (!isParameter(expr.properties[i].value)) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (expr.type === Syntax.ArrayExpression) {
+            for (i = 0; i < expr.elements; i++) {
+                if (!isParameter(expr.elements[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return false;
+    }
+
     // 11.1.4 Array Initialiser
 
     function parseArrayInitialiser() {
@@ -1663,7 +1705,7 @@ parseYieldExpression: true
                 elements.push(null);
                 break;
             default:
-                elements.push(parseAssignmentExpression());
+                elements.push(parseSpreadOrAssignmentExpression());
                 if (!(match(']') || matchKeyword('for') || matchKeyword('if'))) {
                     expect(','); // this lexes.
                     possiblecomprehension = false;
@@ -1697,14 +1739,16 @@ parseYieldExpression: true
 
     // 11.1.5 Object Initialiser
 
-    function parsePropertyFunction(param, options) {
-        var previousStrict, previousYieldAllowed, body;
+    function parsePropertyFunction(options) {
+        var previousStrict, previousYieldAllowed, params, body;
 
         previousStrict = strict;
         previousYieldAllowed = yieldAllowed;
         yieldAllowed = options.generator;
+        params = options.params || [];
+
         body = parseConciseBody();
-        if (options.name && strict && isRestrictedWord(param[0].name)) {
+        if (options.name && strict && isRestrictedWord(params[0].name)) {
             throwErrorTolerant(options.name, Messages.StrictParamName);
         }
         if (yieldAllowed && !yieldFound) {
@@ -1716,47 +1760,36 @@ parseYieldExpression: true
         return {
             type: Syntax.FunctionExpression,
             id: null,
-            params: param,
+            params: params,
             defaults: [],
             body: body,
-            rest: null,
+            rest: options.rest || null,
             generator: options.generator,
             expression: body.type !== Syntax.BlockStatement
         };
     }
 
     function parsePropertyMethodFunction(options) {
-        var token, previousStrict, param, params, paramSet, method;
+        var token, previousStrict, tmp, method, firstRestricted, message;
 
         previousStrict = strict;
         strict = true;
-        params = [];
 
-        expect('(');
+        tmp = parseParams();
 
-        if (!match(')')) {
-            paramSet = {};
-            while (index < length) {
-                token = lookahead();
-                param = parseVariableIdentifier();
-                if (isRestrictedWord(token.value)) {
-                    throwError(token, Messages.StrictParamName);
-                }
-                if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                    throwError(token, Messages.StrictParamDupe);
-                }
-                params.push(param);
-                paramSet[param.name] = true;
-                if (match(')')) {
-                    break;
-                }
-                expect(',');
-            }
+        if (tmp.firstRestricted) {
+            throwError(tmp.firstRestricted, tmp.message);
+        }
+        if (tmp.stricted) {
+            throwErrorTolerant(tmp.stricted, tmp.message);
         }
 
-        expect(')');
 
-        method = parsePropertyFunction(params, { generator: options.generator });
+        method = parsePropertyFunction({
+            params: tmp.params,
+            rest: tmp.rest,
+            generator: options.generator
+        });
 
         strict = previousStrict;
 
@@ -1800,7 +1833,7 @@ parseYieldExpression: true
                 return {
                     type: Syntax.Property,
                     key: key,
-                    value: parsePropertyFunction([], { generator: false }),
+                    value: parsePropertyFunction({ generator: false }),
                     kind: 'get'
                 };
             } else if (token.value === 'set' && !(match(':') || match('('))) {
@@ -1812,7 +1845,7 @@ parseYieldExpression: true
                 return {
                     type: Syntax.Property,
                     key: key,
-                    value: parsePropertyFunction(param, { generator: false, name: token }),
+                    value: parsePropertyFunction({ params: param, generator: false, name: token }),
                     kind: 'set'
                 };
             } else {
@@ -1970,15 +2003,21 @@ parseYieldExpression: true
     // 11.1.6 The Grouping Operator
 
     function parseGroupExpression() {
-        var expr;
+        var expr, parenCount;
 
         expect('(');
 
-        ++state.parenthesizedCount;
+        parenCount = ++state.parenthesizedCount;
 
+        state.allowArrowFunction = true;
         expr = parseExpression();
+        state.allowArrowFunction = false;
 
-        expect(')');
+        if (parenCount !== state.parenthesizedCount && expr.type === 'ArrowFunctionExpression') {
+            --state.parenthesizedCount;
+        } else {
+            expect(')');
+        }
 
         return expr;
     }
@@ -2065,6 +2104,18 @@ parseYieldExpression: true
         return throwUnexpected(lex());
     }
 
+    function parseSpreadOrAssignmentExpression() {
+        if (match('...')) {
+            lex();
+            return {
+                type: Syntax.SpreadElement,
+                argument: parseAssignmentExpression()
+            };
+        } else {
+            return parseAssignmentExpression();
+        }
+    }
+
     // 11.2 Left-Hand-Side Expressions
 
     function parseArguments() {
@@ -2074,7 +2125,7 @@ parseYieldExpression: true
 
         if (!match(')')) {
             while (index < length) {
-                args.push(parseAssignmentExpression());
+                args.push(parseSpreadOrAssignmentExpression());
                 if (match(')')) {
                     break;
                 }
@@ -2521,35 +2572,115 @@ parseYieldExpression: true
                 throwError({}, Messages.InvalidLHSInAssignment);
             }
         } else {
-            if (expr.type !== Syntax.MemberExpression && expr.type !== Syntax.CallExpression && expr.type !== Syntax.NewExpression) {
+            if (expr.type !== Syntax.MemberExpression
+             && expr.type !== Syntax.CallExpression
+             && expr.type !== Syntax.SpreadElement
+             && expr.type !== Syntax.NewExpression) {
                 throwError({}, Messages.InvalidLHSInAssignment);
             }
         }
     }
 
-    function reinterpretAsCoverFormalsList(expr) {
-        var i, len, param, paramSet;
-        assert(expr.type === Syntax.SequenceExpression);
+    function reinterpretAsCoverFormalsList(expressions) {
+        var i, j, len, param, params, paramSet, options, rest, previousStrict;
 
-        paramSet = {};
+        params = [];
+        rest = null;
 
-        for (i = 0, len = expr.expressions.length; i < len; i += 1) {
-            param = expr.expressions[i];
-            if (param.type !== Syntax.Identifier) {
+        options = {
+            paramSet: {}
+        }
+
+        for (i = 0, len = expressions.length; i < len; i += 1) {
+            param = expressions[i];
+            if (param.type === Syntax.Identifier) {
+                params.push(param);
+                checkParam(options, param, param.name);
+            } else if (param.type === Syntax.SpreadElement) {
+                if (rest) {
+                    throwError({}, Messages.RestDuplicate);
+                }
+                if (i !== len - 1) {
+                    throwError({}, Messages.RestNotLast);
+                }
+                rest = param.argument;
+                checkParam(options, rest, rest.name);
+            } else if (param.type === Syntax.ObjectExpression || param.type === Syntax.ArrayExpression) {
+                reinterpretAsDestructuredParameter(options, param);
+                params.push(param);
+            } else {
                 return null;
             }
-            if (isRestrictedWord(param.name)) {
-                throwError({}, Messages.StrictParamName);
-            }
-            if (Object.prototype.hasOwnProperty.call(paramSet, param.name)) {
-                throwError({}, Messages.StrictParamDupe);
-            }
-            paramSet[param.name] = true;
         }
-        return expr.expressions;
+
+
+        if (options.firstRestricted) {
+            throwError(options.firstRestricted, options.message);
+        }
+        if (options.stricted) {
+            throwErrorTolerant(options.stricted, options.message);
+        }
+
+        return { params: params, rest: rest };
     }
 
-    function parseArrowFunctionExpression(param) {
+    function checkParam(options, param, name) {
+        if (strict) {
+            if (isRestrictedWord(name)) {
+                options.stricted = param;
+                options.message = Messages.StrictParamName;
+            }
+            if (Object.prototype.hasOwnProperty.call(options.paramSet, name)) {
+                options.stricted = param;
+                options.message = Messages.StrictParamDupe;
+            }
+        } else if (!options.firstRestricted) {
+            if (isRestrictedWord(name)) {
+                options.firstRestricted = param;
+                options.message = Messages.StrictParamName;
+            } else if (isStrictModeReservedWord(name)) {
+                options.firstRestricted = param;
+                options.message = Messages.StrictReservedWord;
+            } else if (Object.prototype.hasOwnProperty.call(options.paramSet, name)) {
+                options.firstRestricted = param;
+                options.message = Messages.StrictParamDupe;
+            }
+        }
+        options.paramSet[name] = true;
+    }
+
+
+
+    function reinterpretAsDestructuredParameter(options, expr) {
+        var i, len, property, element;
+
+        if (expr.type === Syntax.ObjectExpression) {
+            expr.type = Syntax.ObjectPattern;
+            for (i = 0, len = expr.properties.length; i < len; i += 1) {
+                property = expr.properties[i];
+                if (property.kind !== 'init') {
+                    throwError({}, Messages.InvalidLHSInFormalsList);
+                }
+                reinterpretAsDestructuredParameter(options, property.value);
+            }
+        } else if (expr.type === Syntax.ArrayExpression) {
+            expr.type = Syntax.ArrayPattern;
+            for (i = 0, len = expr.elements.length; i < len; i += 1) {
+                element = expr.elements[i];
+                if (element) {
+                    reinterpretAsDestructuredParameter(options, element);
+                }
+            }
+        } else if (expr.type === Syntax.Identifier) {
+            checkParam(options, expr, expr.name);
+        } else {
+            if (expr.type !== Syntax.MemberExpression) {
+                throwError({}, Messages.InvalidLHSInFormalsList);
+            }
+        }
+    }
+
+    function parseArrowFunctionExpression(options) {
         var previousStrict, previousYieldAllowed, body;
 
         expect('=>');
@@ -2565,17 +2696,18 @@ parseYieldExpression: true
         return {
             type: Syntax.ArrowFunctionExpression,
             id: null,
-            params: param,
+            params: options.params,
             defaults: [],
             body: body,
-            rest: null,
+            rest: options.rest,
             generator: false,
             expression: body.type !== Syntax.BlockStatement
         };
     }
 
+
     function parseAssignmentExpression() {
-        var expr, token, oldParenthesizedCount, coverFormalsList;
+        var expr, token, oldParenthesizedCount, coverFormalsList, params;
 
         if (matchKeyword('yield')) {
             return parseYieldExpression();
@@ -2585,34 +2717,24 @@ parseYieldExpression: true
 
         if (match('(')) {
             token = lookahead2();
-            if (token.type === Token.Punctuator && token.value === ')') {
-                lex();
-                lex();
+            if (token.type === Token.Punctuator && token.value === ')' || token.value === '...') {
+                params = parseParams();
                 if (!match('=>')) {
                     throwUnexpected(lex());
                 }
-                return parseArrowFunctionExpression([]);
+                return parseArrowFunctionExpression(params);
             }
         }
 
         token = lookahead();
         expr = parseConditionalExpression();
 
-        if (match('=>')) {
-            if (expr.type === Syntax.Identifier) {
-                if (state.parenthesizedCount === oldParenthesizedCount || state.parenthesizedCount === (oldParenthesizedCount + 1)) {
-                    if (isRestrictedWord(expr.name)) {
-                        throwError({}, Messages.StrictParamName);
-                    }
-                    return parseArrowFunctionExpression([ expr ]);
+        if (match('=>') && expr.type === Syntax.Identifier) {
+            if (state.parenthesizedCount === oldParenthesizedCount || state.parenthesizedCount === (oldParenthesizedCount + 1)) {
+                if (isRestrictedWord(expr.name)) {
+                    throwError({}, Messages.StrictParamName);
                 }
-            } else if (expr.type === Syntax.SequenceExpression) {
-                if (state.parenthesizedCount === (oldParenthesizedCount + 1)) {
-                    coverFormalsList = reinterpretAsCoverFormalsList(expr);
-                    if (coverFormalsList) {
-                        return parseArrowFunctionExpression(coverFormalsList);
-                    }
-                }
+                return parseArrowFunctionExpression({ rest: null, params: [ expr ] });
             }
         }
 
@@ -2643,10 +2765,14 @@ parseYieldExpression: true
     // 11.14 Comma Operator
 
     function parseExpression() {
-        var expr = parseAssignmentExpression();
+        var expr, sequence, coverFormalsList, rest, token;
+
+
+        expr = parseAssignmentExpression();
+        state.allowArrowFunction && (state.allowArrowFunction = isParameter(expr));
 
         if (match(',')) {
-            expr = {
+            sequence = {
                 type: Syntax.SequenceExpression,
                 expressions: [ expr ]
             };
@@ -2656,11 +2782,36 @@ parseYieldExpression: true
                     break;
                 }
                 lex();
-                expr.expressions.push(parseAssignmentExpression());
+                expr = parseSpreadOrAssignmentExpression();
+                sequence.expressions.push(expr);
+                if (state.allowArrowFunction && expr.type === Syntax.SpreadElement) {
+                    rest = true;
+                    if (!match(')')) {
+                        throwError({}, Messages.InvalidSpread);
+                    }
+                    break;
+                } else {
+                    state.allowArrowFunction && (state.allowArrowFunction = isParameter(expr));
+                }
             }
 
         }
-        return expr;
+        if (state.allowArrowFunction) {
+            if (match(')') && lookahead2().value == '=>') {
+                lex();
+                --state.parenthesizedCount;
+                coverFormalsList = reinterpretAsCoverFormalsList(sequence ? sequence.expressions : [ expr ]);
+                if (coverFormalsList) {
+                    return parseArrowFunctionExpression(coverFormalsList);
+                }
+            }
+
+            if (rest) {
+                throwError({}, Messages.InvalidSpread);
+            }
+        }
+
+        return sequence || expr;
     }
 
     // 12.1 Block
@@ -3045,7 +3196,7 @@ parseYieldExpression: true
     // 12.4 Expression Statement
 
     function parseExpressionStatement() {
-        var expr = parseExpression();
+        var expr = parseExpression(true);
 
         consumeSemicolon();
 
@@ -3781,40 +3932,50 @@ parseYieldExpression: true
         };
     }
 
+    function parseParam(options) {
+        var token, rest, param;
+
+        token = lookahead();
+        if (token.value === '...') {
+            token = lex();
+            rest = true;
+        }
+
+        if (match('[')) {
+            param = parseArrayInitialiser();
+            reinterpretAsDestructuredParameter(options, param);
+        } else if (match('{')) {
+            param = parseObjectInitialiser();
+            reinterpretAsDestructuredParameter(options, param);
+        } else {
+            param = parseVariableIdentifier();
+            checkParam(options, token, token.value);
+        }
+
+        if (rest) {
+            options.rest = param;
+            return false;
+        }
+
+        options.params.push(param);
+        return !match(')');
+    }
+
     function parseParams(firstRestricted) {
-        var param, params = [], token, stricted, paramSet, message;
+        var options;
+
+        options = {
+            params: [],
+            rest: null,
+            firstRestricted: firstRestricted
+        }
 
         expect('(');
 
         if (!match(')')) {
-            paramSet = {};
+            options.paramSet = {};
             while (index < length) {
-                token = lookahead();
-                param = parseVariableIdentifier();
-                if (strict) {
-                    if (isRestrictedWord(token.value)) {
-                        stricted = token;
-                        message = Messages.StrictParamName;
-                    }
-                    if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        stricted = token;
-                        message = Messages.StrictParamDupe;
-                    }
-                } else if (!firstRestricted) {
-                    if (isRestrictedWord(token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictParamName;
-                    } else if (isStrictModeReservedWord(token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictReservedWord;
-                    } else if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictParamDupe;
-                    }
-                }
-                params.push(param);
-                paramSet[param.name] = true;
-                if (match(')')) {
+                if (!parseParam(options)) {
                     break;
                 }
                 expect(',');
@@ -3823,16 +3984,11 @@ parseYieldExpression: true
 
         expect(')');
 
-        return {
-            params: params,
-            stricted: stricted,
-            firstRestricted: firstRestricted,
-            message: message
-        };
+        return options;
     }
 
     function parseFunctionDeclaration() {
-        var id, params, body, token, stricted, tmp, firstRestricted, message, previousStrict, previousYieldAllowed, generator, expression;
+        var id, body, token, stricted, tmp, firstRestricted, message, previousStrict, previousYieldAllowed, generator, expression;
 
         expectKeyword('function');
 
@@ -3860,7 +4016,6 @@ parseYieldExpression: true
         }
 
         tmp = parseParams(firstRestricted);
-        params = tmp.params;
         stricted = tmp.stricted;
         firstRestricted = tmp.firstRestricted;
         if (tmp.message) {
@@ -3890,17 +4045,17 @@ parseYieldExpression: true
         return {
             type: Syntax.FunctionDeclaration,
             id: id,
-            params: params,
+            params: tmp.params,
             defaults: [],
             body: body,
-            rest: null,
+            rest: tmp.rest,
             generator: generator,
             expression: expression
         };
     }
 
     function parseFunctionExpression() {
-        var token, id = null, stricted, firstRestricted, message, tmp, param, params, body, previousStrict, previousYieldAllowed, paramSet, generator, expression;
+        var token, id = null, stricted, firstRestricted, message, tmp, body, previousStrict, previousYieldAllowed, paramSet, generator, expression;
 
         expectKeyword('function');
 
@@ -3930,7 +4085,6 @@ parseYieldExpression: true
         }
 
         tmp = parseParams(firstRestricted);
-        params = tmp.params;
         stricted = tmp.stricted;
         firstRestricted = tmp.firstRestricted;
         if (tmp.message) {
@@ -3961,10 +4115,10 @@ parseYieldExpression: true
         return {
             type: Syntax.FunctionExpression,
             id: id,
-            params: params,
+            params: tmp.params,
             defaults: [],
             body: body,
-            rest: null,
+            rest: tmp.rest,
             generator: generator,
             expression: expression
         };
@@ -4024,7 +4178,7 @@ parseYieldExpression: true
             return {
                 type: Syntax.MethodDefinition,
                 key: key,
-                value: parsePropertyFunction([], { generator: false }),
+                value: parsePropertyFunction({ generator: false }),
                 kind: 'get'
             };
         } else if (token.value === 'set' && !match('(')) {
@@ -4036,7 +4190,7 @@ parseYieldExpression: true
             return {
                 type: Syntax.MethodDefinition,
                 key: key,
-                value: parsePropertyFunction(param, { generator: false, name: token }),
+                value: parsePropertyFunction({ params: param, generator: false, name: token }),
                 kind: 'set'
             };
         } else {
@@ -4599,20 +4753,25 @@ parseYieldExpression: true
     }
 
     function trackGroupExpression() {
-        var marker, expr;
+        var marker, expr, parenCount;
 
         skipComment();
         marker = createLocationMarker();
         expect('(');
 
-        ++state.parenthesizedCount;
-
+        parenCount = ++state.parenthesizedCount;
+        state.allowArrowFunction = true;
         expr = parseExpression();
+        state.allowArrowFunction = false;
 
-        expect(')');
-
-        marker.end();
-        marker.applyGroup(expr);
+        if (parenCount === state.parenthesizedCount) {
+            expect(')');
+            marker.end();
+            marker.applyGroup(expr);
+        } else if (expr.type === 'ArrowFunctionExpression') {
+            marker.end();
+            marker.apply(expr);
+        }
 
         return expr;
     }
@@ -4853,12 +5012,14 @@ parseYieldExpression: true
             extra.parseNonComputedProperty = parseNonComputedProperty;
             extra.parseObjectProperty = parseObjectProperty;
             extra.parseObjectPropertyKey = parseObjectPropertyKey;
+            extra.parseParams = parseParams;
             extra.parsePath = parsePath;
             extra.parsePostfixExpression = parsePostfixExpression;
             extra.parsePrimaryExpression = parsePrimaryExpression;
             extra.parseProgram = parseProgram;
             extra.parsePropertyFunction = parsePropertyFunction;
             extra.parseRelationalExpression = parseRelationalExpression;
+            extra.parseSpreadOrAssignmentExpression = parseSpreadOrAssignmentExpression;
             extra.parseTemplateElement = parseTemplateElement;
             extra.parseTemplateLiteral = parseTemplateLiteral;
             extra.parseStatement = parseStatement;
@@ -4903,11 +5064,13 @@ parseYieldExpression: true
             parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
             parseObjectProperty = wrapTracking(extra.parseObjectProperty);
             parseObjectPropertyKey = wrapTracking(extra.parseObjectPropertyKey);
+            parseParams = wrapTracking(extra.parseParams);
             parsePath = wrapTracking(extra.parsePath);
             parsePostfixExpression = wrapTracking(extra.parsePostfixExpression);
             parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
             parseProgram = wrapTracking(extra.parseProgram);
             parsePropertyFunction = wrapTracking(extra.parsePropertyFunction);
+            parseSpreadOrAssignmentExpression = wrapTracking(extra.parseSpreadOrAssignmentExpression);
             parseTemplateElement = wrapTracking(extra.parseTemplateElement);
             parseTemplateLiteral = wrapTracking(extra.parseTemplateLiteral);
             parseRelationalExpression = wrapTracking(extra.parseRelationalExpression);
@@ -4976,6 +5139,7 @@ parseYieldExpression: true
             parseNonComputedProperty = extra.parseNonComputedProperty;
             parseObjectProperty = extra.parseObjectProperty;
             parseObjectPropertyKey = extra.parseObjectPropertyKey;
+            parseParams = extra.parseParams;
             parsePath = extra.parsePath;
             parsePostfixExpression = extra.parsePostfixExpression;
             parsePrimaryExpression = extra.parsePrimaryExpression;
@@ -4984,6 +5148,7 @@ parseYieldExpression: true
             parseTemplateElement = extra.parseTemplateElement;
             parseTemplateLiteral = extra.parseTemplateLiteral;
             parseRelationalExpression = extra.parseRelationalExpression;
+            parseSpreadOrAssignmentExpression = extra.parseSpreadOrAssignmentExpression;
             parseStatement = extra.parseStatement;
             parseShiftExpression = extra.parseShiftExpression;
             parseSwitchCase = extra.parseSwitchCase;
