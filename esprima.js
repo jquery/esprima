@@ -2210,9 +2210,8 @@ parseYieldExpression: true
     // 11.3 Postfix Expressions
 
     function parsePostfixExpression() {
-        var expr = parseLeftHandSideExpressionAllowCall();
-
-        var token = lookahead();
+        var expr = parseLeftHandSideExpressionAllowCall(),
+            token = lookahead();
 
         if (token.type !== Token.Punctuator) {
             return expr;
@@ -3228,9 +3227,7 @@ parseYieldExpression: true
         oldInIteration = state.inIteration;
         state.inIteration = true;
 
-        if (opts !== undefined && opts.ignore_body) {
-            // no body
-        } else {
+        if (!(opts !== undefined && opts.ignore_body)) {
             body = parseStatement();
         }
 
