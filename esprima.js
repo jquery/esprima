@@ -196,6 +196,7 @@ parseYieldExpression: true
         StrictVarName:  'Variable name may not be eval or arguments in strict mode',
         StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
         StrictParamDupe: 'Strict mode function may not have duplicate parameter names',
+        ParameterAfterRestParameter: 'Rest parameter must be final parameter of an argument list.',
         StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
         StrictOctalLiteral:  'Octal literals are not allowed in strict mode.',
         StrictDelete:  'Delete of an unqualified identifier in strict mode.',
@@ -651,11 +652,11 @@ parseYieldExpression: true
             };
         }
 
-        // Dot (.) can also start a floating-point number, hence the need
-        // to check the next character.
+        // Dot (.) can also start a floating-point number and ellipsis, hence
+        // the need to check the next character.
 
         ch2 = source[index + 1];
-        if (ch1 === '.' && !isDecimalDigit(ch2)) {
+        if (ch1 === '.' && !isDecimalDigit(ch2) && ch2 !== '.') {
             return {
                 type: Token.Punctuator,
                 value: nextChar(),
@@ -685,7 +686,7 @@ parseYieldExpression: true
             }
         }
 
-        // 3-character punctuators: === !== >>> <<= >>=
+        // 3-character punctuators: === !== >>> <<= >>= ...
 
         if (ch1 === '=' && ch2 === '=' && ch3 === '=') {
             index += 3;
@@ -736,6 +737,17 @@ parseYieldExpression: true
             return {
                 type: Token.Punctuator,
                 value: '>>=',
+                lineNumber: lineNumber,
+                lineStart: lineStart,
+                range: [start, index]
+            };
+        }
+
+        if (ch1 === '.' && ch2 === '.' && ch3 === '.') {
+            index += 3;
+            return {
+                type: Token.Punctuator,
+                value: '...',
                 lineNumber: lineNumber,
                 lineStart: lineStart,
                 range: [start, index]
@@ -2210,9 +2222,8 @@ parseYieldExpression: true
     // 11.3 Postfix Expressions
 
     function parsePostfixExpression() {
-        var expr = parseLeftHandSideExpressionAllowCall();
-
-        var token = lookahead();
+        var expr = parseLeftHandSideExpressionAllowCall(),
+            token = lookahead();
 
         if (token.type !== Token.Punctuator) {
             return expr;
@@ -3228,9 +3239,7 @@ parseYieldExpression: true
         oldInIteration = state.inIteration;
         state.inIteration = true;
 
-        if (opts !== undefined && opts.ignore_body) {
-            // no body
-        } else {
+        if (!(opts !== undefined && opts.ignore_body)) {
             body = parseStatement();
         }
 
@@ -3781,8 +3790,86 @@ parseYieldExpression: true
         };
     }
 
+    function parseParam() {
+        var param, token;
+        if (match('...')) {
+            lex();
+            token = lookahead();
+            param = {
+                type: 'RestParameter',
+                value: parseVariableIdentifier()
+            };
+        } else {
+            token = lookahead();
+            param = parseVariableIdentifier();
+        }
+
+        param.token = token;
+        return param;
+    }
+
+    function parseParams(firstRestricted) {
+        var param, params = [], token, stricted, paramSet, message;
+
+        expect('(');
+
+        if (!match(')')) {
+            paramSet = {};
+            while (index < length) {
+                param = parseParam();
+                token = param.token;
+                delete param.token;
+
+                if (strict) {
+                    if (isRestrictedWord(token.value)) {
+                        stricted = token;
+                        message = Messages.StrictParamName;
+                    }
+                    if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
+                        stricted = token;
+                        message = Messages.StrictParamDupe;
+                    }
+                } else if (!firstRestricted) {
+                    if (isRestrictedWord(token.value)) {
+                        firstRestricted = token;
+                        message = Messages.StrictParamName;
+                    } else if (isStrictModeReservedWord(token.value)) {
+                        firstRestricted = token;
+                        message = Messages.StrictReservedWord;
+                    } else if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
+                        firstRestricted = token;
+                        message = Messages.StrictParamDupe;
+                    }
+                }
+                params.push(param);
+
+                if (param.type === 'RestParameter') {
+                    if (!match(')')) {
+                        throwError({}, Messages.ParameterAfterRestParameter);
+                    }
+                    break;
+                } else {
+                    paramSet[param.name] = true;
+                    if (match(')')) {
+                        break;
+                    }
+                    expect(',');
+                }
+            }
+        }
+
+        expect(')');
+
+        return {
+            params: params,
+            stricted: stricted,
+            firstRestricted: firstRestricted,
+            message: message
+        };
+    }
+
     function parseFunctionDeclaration() {
-        var id, param, params = [], body, token, stricted, firstRestricted, message, previousStrict, previousYieldAllowed, paramSet, generator, expression;
+        var id, params, body, token, stricted, tmp, firstRestricted, message, previousStrict, previousYieldAllowed, generator, expression;
 
         expectKeyword('function');
 
@@ -3809,44 +3896,13 @@ parseYieldExpression: true
             }
         }
 
-        expect('(');
-
-        if (!match(')')) {
-            paramSet = {};
-            while (index < length) {
-                token = lookahead();
-                param = parseVariableIdentifier();
-                if (strict) {
-                    if (isRestrictedWord(token.value)) {
-                        stricted = token;
-                        message = Messages.StrictParamName;
-                    }
-                    if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        stricted = token;
-                        message = Messages.StrictParamDupe;
-                    }
-                } else if (!firstRestricted) {
-                    if (isRestrictedWord(token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictParamName;
-                    } else if (isStrictModeReservedWord(token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictReservedWord;
-                    } else if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictParamDupe;
-                    }
-                }
-                params.push(param);
-                paramSet[param.name] = true;
-                if (match(')')) {
-                    break;
-                }
-                expect(',');
-            }
+        tmp = parseParams(firstRestricted);
+        params = tmp.params;
+        stricted = tmp.stricted;
+        firstRestricted = tmp.firstRestricted;
+        if (tmp.message) {
+            message = tmp.message;
         }
-
-        expect(')');
 
         previousStrict = strict;
         previousYieldAllowed = yieldAllowed;
@@ -3881,7 +3937,7 @@ parseYieldExpression: true
     }
 
     function parseFunctionExpression() {
-        var token, id = null, stricted, firstRestricted, message, param, params = [], body, previousStrict, previousYieldAllowed, paramSet, generator, expression;
+        var token, id = null, stricted, firstRestricted, message, tmp, param, params, body, previousStrict, previousYieldAllowed, paramSet, generator, expression;
 
         expectKeyword('function');
 
@@ -3910,44 +3966,13 @@ parseYieldExpression: true
             }
         }
 
-        expect('(');
-
-        if (!match(')')) {
-            paramSet = {};
-            while (index < length) {
-                token = lookahead();
-                param = parseVariableIdentifier();
-                if (strict) {
-                    if (isRestrictedWord(token.value)) {
-                        stricted = token;
-                        message = Messages.StrictParamName;
-                    }
-                    if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        stricted = token;
-                        message = Messages.StrictParamDupe;
-                    }
-                } else if (!firstRestricted) {
-                    if (isRestrictedWord(token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictParamName;
-                    } else if (isStrictModeReservedWord(token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictReservedWord;
-                    } else if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictParamDupe;
-                    }
-                }
-                params.push(param);
-                paramSet[param.name] = true;
-                if (match(')')) {
-                    break;
-                }
-                expect(',');
-            }
+        tmp = parseParams(firstRestricted);
+        params = tmp.params;
+        stricted = tmp.stricted;
+        firstRestricted = tmp.firstRestricted;
+        if (tmp.message) {
+            message = tmp.message;
         }
-
-        expect(')');
 
         previousStrict = strict;
         previousYieldAllowed = yieldAllowed;
@@ -4853,6 +4878,7 @@ parseYieldExpression: true
             extra.parseForVariableDeclaration = parseForVariableDeclaration;
             extra.parseFunctionDeclaration = parseFunctionDeclaration;
             extra.parseFunctionExpression = parseFunctionExpression;
+            extra.parseParam = parseParam;
             extra.parseGlob = parseGlob;
             extra.parseImportDeclaration = parseImportDeclaration;
             extra.parseImportSpecifier = parseImportSpecifier;
@@ -4903,6 +4929,7 @@ parseYieldExpression: true
             parseForVariableDeclaration = wrapTracking(extra.parseForVariableDeclaration);
             parseFunctionDeclaration = wrapTracking(extra.parseFunctionDeclaration);
             parseFunctionExpression = wrapTracking(extra.parseFunctionExpression);
+            parseParam = wrapTracking(extra.parseParam);
             parseGlob = wrapTracking(extra.parseGlob);
             parseImportDeclaration = wrapTracking(extra.parseImportDeclaration);
             parseImportSpecifier = wrapTracking(extra.parseImportSpecifier);
@@ -4973,6 +5000,7 @@ parseYieldExpression: true
             parseForVariableDeclaration = extra.parseForVariableDeclaration;
             parseFunctionDeclaration = extra.parseFunctionDeclaration;
             parseFunctionExpression = extra.parseFunctionExpression;
+            parseParam = extra.parseParam;
             parseGlob = extra.parseGlob;
             parseImportDeclaration = extra.parseImportDeclaration;
             parseImportSpecifier = extra.parseImportSpecifier;
