@@ -215,7 +215,8 @@ parseYieldExpression: true
         ComprehensionError:  'Comprehension Error',
         EachNotAllowed:  'Each is not supported',
         RestDuplicate: 'Duplicate rest parameters',
-        RestNotLast: 'Rest parameter must come last'
+        RestNotLast: 'Rest parameter must come last',
+        InvalidSpread: 'Invalid spread/rest parameter location'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -2571,11 +2572,15 @@ parseYieldExpression: true
             if (isRestrictedWord(expr.name)) {
                 throwError({}, Messages.InvalidLHSInAssignment);
             }
+        } else if (expr.type === Syntax.SpreadElement) {
+            reinterpretAsAssignmentBindingPattern(expr.argument);
+            if (expr.argument.type !== Syntax.Identifier && expr.argument.type !== Syntax.ArrayPattern) {
+                throwError({}, Messages.InvalidLHSInAssignment);
+            }
         } else {
-            if (expr.type !== Syntax.MemberExpression
-             && expr.type !== Syntax.CallExpression
-             && expr.type !== Syntax.SpreadElement
-             && expr.type !== Syntax.NewExpression) {
+            if (expr.type !== Syntax.MemberExpression &&
+                expr.type !== Syntax.CallExpression &&
+                expr.type !== Syntax.NewExpression) {
                 throwError({}, Messages.InvalidLHSInAssignment);
             }
         }
