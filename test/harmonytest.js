@@ -5507,6 +5507,75 @@ var harmonyTestFixture = {
         }
     },
 
+    // ECMAScript 6th Syntax, 13 - Rest parameters
+    // http://wiki.ecmascript.org/doku.php?id=harmony:rest_parameters
+    'ES6: Rest parameters': {
+        'function f(a, ...b) {}': {
+            type: "FunctionDeclaration",
+            id: {
+                type: "Identifier",
+                name: "f",
+                range: [ 9, 10 ],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            params: [
+                {
+                    type: "Identifier",
+                    name: "a",
+                    range: [ 11, 12 ],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                {
+                    type: "RestParameter",
+                    value: {
+                        type: "Identifier",
+                        name: "b",
+                        range: [ 17, 18 ],
+                        loc: {
+                            start: { line: 1, column: 17 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    range: [ 14, 18 ],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 18 }
+                    }
+                }
+            ],
+            defaults: [],
+            body: {
+                type: "BlockStatement",
+                body: [],
+                range: [ 20, 22 ],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            range: [ 0, 22 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+        'function f(a, ...b, c)': {
+            index: 18,
+            lineNumber: 1,
+            column: 19,
+            message: 'Error: Line 1: Rest parameter must be final parameter of an argument list.'
+        }
+    },
+
     'Harmony Invalid syntax': {
 
         '0o': {
