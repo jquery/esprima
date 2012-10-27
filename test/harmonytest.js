@@ -7983,6 +7983,390 @@ var harmonyTestFixture = {
                 end: { line: 1, column: 14 }
             }
         }
+        'var [a, ...b] = c': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'ArrayPattern',
+                    elements: [{
+                        type: 'Identifier',
+                        name: 'a',
+                        range: [5, 6],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 6 }
+                        }
+                    }, {
+                        type: 'SpreadElement',
+                        argument: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [11, 12],
+                            loc: {
+                                start: { line: 1, column: 11 },
+                                end: { line: 1, column: 12 }
+                            }
+                        },
+                        range: [8, 12],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 12 }
+                        }
+                    }]
+                },
+                init: {
+                    type: 'Identifier',
+                    name: 'c',
+                    range: [16, 17],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                range: [4, 17],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 17 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            }
+        },
+        'var [...a] = b': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'ArrayPattern',
+                    elements: [{
+                        type: 'SpreadElement',
+                        argument: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [8, 9],
+                            loc: {
+                                start: { line: 1, column: 8 },
+                                end: { line: 1, column: 9 }
+                            }
+                        },
+                        range: [5, 9],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 9 }
+                        }
+                    }]
+                },
+                init: {
+                    type: 'Identifier',
+                    name: 'b',
+                    range: [13, 14],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                range: [4, 14],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 14 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 14],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 14 }
+            }
+        },
+        'var { a: [...b] } = c': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'ObjectPattern',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [6, 7],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 7 }
+                            }
+                        },
+                        value: {
+                            type: 'ArrayPattern',
+                            elements: [{
+                                type: 'SpreadElement',
+                                argument: {
+                                    type: 'Identifier',
+                                    name: 'b',
+                                    range: [13, 14],
+                                    loc: {
+                                        start: { line: 1, column: 13 },
+                                        end: { line: 1, column: 14 }
+                                    }
+                                },
+                                range: [10, 14],
+                                loc: {
+                                    start: { line: 1, column: 10 },
+                                    end: { line: 1, column: 14 }
+                                }
+                            }],
+                            range: [9, 15],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 15 }
+                            }
+                        },
+                        kind: 'init',
+                        range: [6, 15],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 15 }
+                        }
+                    }]
+                },
+                init: {
+                    type: 'Identifier',
+                    name: 'c',
+                    range: [20, 21],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 21 }
+                    }
+                },
+                range: [4, 21],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 21 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            }
+        },
+        'var { a: [b, ...c] } = d': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'ObjectPattern',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [6, 7],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 7 }
+                            }
+                        },
+                        value: {
+                            type: 'ArrayPattern',
+                            elements: [{
+                                type: 'Identifier',
+                                name: 'b',
+                                range: [10, 11],
+                                loc: {
+                                    start: { line: 1, column: 10 },
+                                    end: { line: 1, column: 11 }
+                                }
+                            }, {
+                                type: 'SpreadElement',
+                                argument: {
+                                    type: 'Identifier',
+                                    name: 'c',
+                                    range: [16, 17],
+                                    loc: {
+                                        start: { line: 1, column: 16 },
+                                        end: { line: 1, column: 17 }
+                                    }
+                                },
+                                range: [13, 17],
+                                loc: {
+                                    start: { line: 1, column: 13 },
+                                    end: { line: 1, column: 17 }
+                                }
+                            }],
+                            range: [9, 18],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 18 }
+                            }
+                        },
+                        kind: 'init',
+                        range: [6, 18],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 18 }
+                        }
+                    }]
+                },
+                init: {
+                    type: 'Identifier',
+                    name: 'd',
+                    range: [23, 24],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                range: [4, 24],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 24 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 24 }
+            }
+        },
+        'var [a, [...b]] = c': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'ArrayPattern',
+                    elements: [{
+                        type: 'Identifier',
+                        name: 'a',
+                        range: [5, 6],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 6 }
+                        }
+                    }, {
+                        type: 'ArrayPattern',
+                        elements: [{
+                            type: 'SpreadElement',
+                            argument: {
+                                type: 'Identifier',
+                                name: 'b',
+                                range: [12, 13],
+                                loc: {
+                                    start: { line: 1, column: 12 },
+                                    end: { line: 1, column: 13 }
+                                }
+                            },
+                            range: [9, 13],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 13 }
+                            }
+                        }],
+                        range: [8, 14],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 14 }
+                        }
+                    }]
+                },
+                init: {
+                    type: 'Identifier',
+                    name: 'c',
+                    range: [18, 19],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 19 }
+                    }
+                },
+                range: [4, 19],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 19 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        },
+        'var [a, [b, ...c]] = d': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'ArrayPattern',
+                    elements: [{
+                        type: 'Identifier',
+                        name: 'a',
+                        range: [5, 6],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 6 }
+                        }
+                    }, {
+                        type: 'ArrayPattern',
+                        elements: [{
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [9, 10],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 10 }
+                            }
+                        }, {
+                            type: 'SpreadElement',
+                            argument: {
+                                type: 'Identifier',
+                                name: 'c',
+                                range: [15, 16],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 16 }
+                                }
+                            },
+                            range: [12, 16],
+                            loc: {
+                                start: { line: 1, column: 12 },
+                                end: { line: 1, column: 16 }
+                            }
+                        }],
+                        range: [8, 17],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 17 }
+                        }
+                    }]
+                },
+                init: {
+                    type: 'Identifier',
+                    name: 'd',
+                    range: [21, 22],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                range: [4, 22],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 22 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        }
     },
 
     // http://wiki.ecmascript.org/doku.php?id=strawman:maximally_minimal_classes
