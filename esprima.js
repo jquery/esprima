@@ -432,16 +432,16 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function scanIdentifier() {
-        var ch, start, id, restore;
+        var ch, start, id, restore, type;
 
         ch = source[index];
         if (!isIdentifierStart(ch)) {
             return;
         }
 
-        start = index;
+        start = index++;
+        id = ch;
         if (ch === '\\') {
-            ++index;
             if (source[index] !== 'u') {
                 return;
             }
@@ -457,8 +457,6 @@ parseStatement: true, parseSourceElement: true */
                 index = restore;
                 id = 'u';
             }
-        } else {
-            id = source[index++];
         }
 
         while (index < length) {
@@ -466,8 +464,10 @@ parseStatement: true, parseSourceElement: true */
             if (!isIdentifierPart(ch)) {
                 break;
             }
+            ++index;
+            id += ch;
             if (ch === '\\') {
-                ++index;
+                id = id.substr(0, id.length - 1);
                 if (source[index] !== 'u') {
                     return;
                 }
@@ -483,59 +483,25 @@ parseStatement: true, parseSourceElement: true */
                     index = restore;
                     id += 'u';
                 }
-            } else {
-                id += source[index++];
             }
         }
 
         // There is no keyword or literal with only one character.
         // Thus, it must be an identifier.
         if (id.length === 1) {
-            return {
-                type: Token.Identifier,
-                value: id,
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                range: [start, index]
-            };
-        }
-
-        if (isKeyword(id)) {
-            return {
-                type: Token.Keyword,
-                value: id,
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                range: [start, index]
-            };
-        }
-
-        // 7.8.1 Null Literals
-
-        if (id === 'null') {
-            return {
-                type: Token.NullLiteral,
-                value: id,
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                range: [start, index]
-            };
-        }
-
-        // 7.8.2 Boolean Literals
-
-        if (id === 'true' || id === 'false') {
-            return {
-                type: Token.BooleanLiteral,
-                value: id,
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                range: [start, index]
-            };
+            type = Token.Identifier;
+        } else if (isKeyword(id)) {
+            type = Token.Keyword;
+        } else if (id === 'null') {
+            type = Token.NullLiteral;
+        } else if (id === 'true' || id === 'false') {
+            type = Token.BooleanLiteral;
+        } else {
+            type = Token.Identifier;
         }
 
         return {
-            type: Token.Identifier,
+            type: type,
             value: id,
             lineNumber: lineNumber,
             lineStart: lineStart,
