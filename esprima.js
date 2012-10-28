@@ -2608,8 +2608,8 @@ parseYieldExpression: true
                 if (i !== len - 1) {
                     throwError({}, Messages.RestNotLast);
                 }
+                reinterpretAsDestructuredParameter(options, param.argument);
                 rest = param.argument;
-                checkParam(options, rest, rest.name);
             } else if (param.type === Syntax.ObjectExpression || param.type === Syntax.ArrayExpression) {
                 reinterpretAsDestructuredParameter(options, param);
                 params.push(param);
@@ -3950,6 +3950,9 @@ parseYieldExpression: true
             param = parseArrayInitialiser();
             reinterpretAsDestructuredParameter(options, param);
         } else if (match('{')) {
+            if (rest) {
+                throwError({}, Messages.InvalidLHSInFormalsList);
+            }
             param = parseObjectInitialiser();
             reinterpretAsDestructuredParameter(options, param);
         } else {
