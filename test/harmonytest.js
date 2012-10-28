@@ -6895,7 +6895,7 @@ var harmonyTestFixture = {
                     }
                 },
                 rest: {
-                    type: 'ArrayExpression',
+                    type: 'ArrayPattern',
                     elements: [{
                         type: 'Identifier',
                         name: 'a',
