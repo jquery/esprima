@@ -515,21 +515,21 @@ parseYieldExpression: true
 
         ch = source[index];
         if (!isIdentifierStart(ch)) {
-            return;
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
         }
 
         start = index++;
         id = ch;
         if (ch === '\\') {
             if (source[index] !== 'u') {
-                return;
+                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
             }
             ++index;
             restore = index;
             ch = scanHexEscape('u');
             if (ch) {
                 if (ch === '\\' || !isIdentifierStart(ch)) {
-                    return;
+                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                 }
                 id = ch;
             } else {
@@ -548,14 +548,14 @@ parseYieldExpression: true
             if (ch === '\\') {
                 id = id.substr(0, id.length - 1);
                 if (source[index] !== 'u') {
-                    return;
+                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                 }
                 ++index;
                 restore = index;
                 ch = scanHexEscape('u');
                 if (ch) {
                     if (ch === '\\' || !isIdentifierPart(ch)) {
-                        return;
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
                     id += ch;
                 } else {
@@ -774,6 +774,8 @@ parseYieldExpression: true
                 range: [start, index]
             };
         }
+
+        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
     }
 
     // 7.8.3 Numeric Literals
@@ -1323,31 +1325,25 @@ parseYieldExpression: true
             };
         }
 
-        token = scanPunctuator();
-        if (typeof token !== 'undefined') {
-            return token;
-        }
-
         ch = source[index];
-
-        if (ch === '\'' || ch === '"') {
-            return scanStringLiteral();
-        }
-
-        if (ch === '.' || isDecimalDigit(ch)) {
-            return scanNumericLiteral();
-        }
 
         if (ch === '`') {
             return scanTemplate();
         }
-
-        token = scanIdentifier();
-        if (typeof token !== 'undefined') {
-            return token;
+        if (isIdentifierStart(ch)) {
+            return scanIdentifier();
+        } else if (ch === '.') {
+            if (isDecimalDigit(source[index + 1])) {
+                return scanNumericLiteral();
+            }
+            return scanPunctuator();
+        } else if (ch === '\'' || ch === '"') {
+            return scanStringLiteral();
+        } else if (isDecimalDigit(ch)) {
+            return scanNumericLiteral();
         }
 
-        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        return scanPunctuator();
     }
 
     function lex() {
