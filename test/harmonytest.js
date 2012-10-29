@@ -3498,6 +3498,41 @@ var harmonyTestFixture = {
             }
         },
 
+        'export class Class {}': {
+            type: 'ExportDeclaration',
+            declaration: {
+                id: {
+                    type: 'Identifier',
+                    name: 'Class',
+                    range: [ 13, 18 ],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                type: 'ClassDeclaration',
+                body: {
+                    type: 'ClassBody',
+                    body: [],
+                    range: [ 19, 21 ],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 21 }
+                    }
+                },
+                range: [ 7, 21 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            range: [ 0, 21 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            }
+        },
+
         'export SolarSystem': {
             type: 'ExportDeclaration',
             specifiers: [{
