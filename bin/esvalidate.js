@@ -147,6 +147,7 @@ fnames.forEach(function (fname) {
 
         }
     } catch (e) {
+        ++count;
         console.log('Error: ' + e.message);
     }
 });
