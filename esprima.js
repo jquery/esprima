@@ -2962,6 +2962,11 @@ parseYieldExpression: true
                     type: Syntax.ExportDeclaration,
                     declaration: parseStatement()
                 };
+            case 'class':
+                return {
+                    type: Syntax.ExportDeclaration,
+                    declaration: parseClassDeclaration()
+                };
             }
             throwUnexpected(lex());
         }
