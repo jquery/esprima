@@ -436,21 +436,21 @@ parseStatement: true, parseSourceElement: true */
 
         ch = source[index];
         if (!isIdentifierStart(ch)) {
-            return;
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
         }
 
         start = index++;
         id = ch;
         if (ch === '\\') {
             if (source[index] !== 'u') {
-                return;
+                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
             }
             ++index;
             restore = index;
             ch = scanHexEscape('u');
             if (ch) {
                 if (ch === '\\' || !isIdentifierStart(ch)) {
-                    return;
+                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                 }
                 id = ch;
             } else {
@@ -469,14 +469,14 @@ parseStatement: true, parseSourceElement: true */
             if (ch === '\\') {
                 id = id.substr(0, id.length - 1);
                 if (source[index] !== 'u') {
-                    return;
+                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                 }
                 ++index;
                 restore = index;
                 ch = scanHexEscape('u');
                 if (ch) {
                     if (ch === '\\' || !isIdentifierPart(ch)) {
-                        return;
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
                     id += ch;
                 } else {
@@ -520,36 +520,13 @@ parseStatement: true, parseSourceElement: true */
 
         // Check for most common single-character punctuators.
 
-        if (ch1 === ';' || ch1 === '{' || ch1 === '}') {
+        if (ch1 === '.' || ch1 === '(' || ch1 === ')' || ch1 === ';' || ch1 === ',' ||
+                ch1 === '{' || ch1 === '}' || ch1 === '[' || ch1 === ']' ||
+                ch1 === ':' || ch1 === '?' || ch1 === '~') {
             ++index;
             return {
                 type: Token.Punctuator,
                 value: ch1,
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                range: [start, index]
-            };
-        }
-
-        if (ch1 === ',' || ch1 === '(' || ch1 === ')') {
-            ++index;
-            return {
-                type: Token.Punctuator,
-                value: ch1,
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                range: [start, index]
-            };
-        }
-
-        // Dot (.) can also start a floating-point number, hence the need
-        // to check the next character.
-
-        ch2 = source[index + 1];
-        if (ch1 === '.' && !isDecimalDigit(ch2)) {
-            return {
-                type: Token.Punctuator,
-                value: source[index++],
                 lineNumber: lineNumber,
                 lineStart: lineStart,
                 range: [start, index]
@@ -558,6 +535,7 @@ parseStatement: true, parseSourceElement: true */
 
         // Peek more characters.
 
+        ch2 = source[index + 1];
         ch3 = source[index + 2];
         ch4 = source[index + 3];
 
@@ -636,19 +614,6 @@ parseStatement: true, parseSourceElement: true */
         // 2-character punctuators: <= >= == != ++ -- << >> && ||
         // += -= *= %= &= |= ^= /=
 
-        if (ch2 === '=') {
-            if ('<>=!+-*%&|^/'.indexOf(ch1) >= 0) {
-                index += 2;
-                return {
-                    type: Token.Punctuator,
-                    value: ch1 + ch2,
-                    lineNumber: lineNumber,
-                    lineStart: lineStart,
-                    range: [start, index]
-                };
-            }
-        }
-
         if (ch1 === ch2 && ('+-<>&|'.indexOf(ch1) >= 0)) {
             if ('+-<>&|'.indexOf(ch2) >= 0) {
                 index += 2;
@@ -662,17 +627,22 @@ parseStatement: true, parseSourceElement: true */
             }
         }
 
-        // The remaining 1-character punctuators.
-
-        if ('[]<>+-*%&|^!~?:=/'.indexOf(ch1) >= 0) {
+        if ('<>=!+-*%&|^/'.indexOf(ch1) >= 0) {
+            ++index;
+            if (ch2 === '=') {
+                ++index;
+                ch1 += ch2;
+            }
             return {
                 type: Token.Punctuator,
-                value: source[index++],
+                value: ch1,
                 lineNumber: lineNumber,
                 lineStart: lineStart,
                 range: [start, index]
             };
         }
+
+        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
     }
 
     // 7.8.3 Numeric Literals
@@ -1036,27 +1006,24 @@ parseStatement: true, parseSourceElement: true */
             };
         }
 
-        token = scanPunctuator();
-        if (typeof token !== 'undefined') {
-            return token;
-        }
-
         ch = source[index];
 
-        if (ch === '\'' || ch === '"') {
+        if (isIdentifierStart(ch)) {
+            return scanIdentifier();
+        } else if (ch === '.') {
+            // Dot (.) can also start a floating-point number, hence the need
+            // to check the next character.
+            if (isDecimalDigit(source[index + 1])) {
+                return scanNumericLiteral();
+            }
+            return scanPunctuator();
+        } else if (ch === '\'' || ch === '"') {
             return scanStringLiteral();
-        }
-
-        if (ch === '.' || isDecimalDigit(ch)) {
+        } else if (isDecimalDigit(ch)) {
             return scanNumericLiteral();
         }
 
-        token = scanIdentifier();
-        if (typeof token !== 'undefined') {
-            return token;
-        }
-
-        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        return scanPunctuator();
     }
 
     function lex() {
@@ -2905,26 +2872,8 @@ parseStatement: true, parseSourceElement: true */
         return delegate.createBlockStatement(sourceElements);
     }
 
-    function parseFunctionDeclaration() {
-        var id, param, params = [], body, token, stricted, firstRestricted, message, previousStrict, paramSet;
-
-        expectKeyword('function');
-        token = lookahead;
-        id = parseVariableIdentifier();
-        if (strict) {
-            if (isRestrictedWord(token.value)) {
-                throwErrorTolerant(token, Messages.StrictFunctionName);
-            }
-        } else {
-            if (isRestrictedWord(token.value)) {
-                firstRestricted = token;
-                message = Messages.StrictFunctionName;
-            } else if (isStrictModeReservedWord(token.value)) {
-                firstRestricted = token;
-                message = Messages.StrictReservedWord;
-            }
-        }
-
+    function parseParams(firstRestricted) {
+        var param, params = [], token, stricted, paramSet, message;
         expect('(');
 
         if (!match(')')) {
@@ -2964,6 +2913,42 @@ parseStatement: true, parseSourceElement: true */
 
         expect(')');
 
+        return {
+            params: params,
+            stricted: stricted,
+            firstRestricted: firstRestricted,
+            message: message
+        };
+    }
+
+    function parseFunctionDeclaration() {
+        var id, param, params = [], body, token, stricted, tmp, firstRestricted, message, previousStrict;
+
+        expectKeyword('function');
+        token = lookahead;
+        id = parseVariableIdentifier();
+        if (strict) {
+            if (isRestrictedWord(token.value)) {
+                throwErrorTolerant(token, Messages.StrictFunctionName);
+            }
+        } else {
+            if (isRestrictedWord(token.value)) {
+                firstRestricted = token;
+                message = Messages.StrictFunctionName;
+            } else if (isStrictModeReservedWord(token.value)) {
+                firstRestricted = token;
+                message = Messages.StrictReservedWord;
+            }
+        }
+
+        tmp = parseParams(firstRestricted);
+        params = tmp.params;
+        stricted = tmp.stricted;
+        firstRestricted = tmp.firstRestricted;
+        if (tmp.message) {
+            message = tmp.message;
+        }
+
         previousStrict = strict;
         body = parseFunctionSourceElements();
         if (strict && firstRestricted) {
@@ -2978,7 +2963,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseFunctionExpression() {
-        var token, id = null, stricted, firstRestricted, message, param, params = [], body, previousStrict, paramSet;
+        var token, id = null, stricted, firstRestricted, message, tmp, params = [], body, previousStrict;
 
         expectKeyword('function');
 
@@ -3000,44 +2985,13 @@ parseStatement: true, parseSourceElement: true */
             }
         }
 
-        expect('(');
-
-        if (!match(')')) {
-            paramSet = {};
-            while (index < length) {
-                token = lookahead;
-                param = parseVariableIdentifier();
-                if (strict) {
-                    if (isRestrictedWord(token.value)) {
-                        stricted = token;
-                        message = Messages.StrictParamName;
-                    }
-                    if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        stricted = token;
-                        message = Messages.StrictParamDupe;
-                    }
-                } else if (!firstRestricted) {
-                    if (isRestrictedWord(token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictParamName;
-                    } else if (isStrictModeReservedWord(token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictReservedWord;
-                    } else if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictParamDupe;
-                    }
-                }
-                params.push(param);
-                paramSet[param.name] = true;
-                if (match(')')) {
-                    break;
-                }
-                expect(',');
-            }
+        tmp = parseParams(firstRestricted);
+        params = tmp.params;
+        stricted = tmp.stricted;
+        firstRestricted = tmp.firstRestricted;
+        if (tmp.message) {
+            message = tmp.message;
         }
-
-        expect(')');
 
         previousStrict = strict;
         body = parseFunctionSourceElements();

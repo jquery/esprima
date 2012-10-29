@@ -106,6 +106,11 @@ fnames.forEach(function (fname) {
     var content, timestamp, syntax, name;
     try {
         content = fs.readFileSync(fname, 'utf-8');
+
+        if (content[0] === '#' && content[1] === '!') {
+            content = '//' + content.substr(2, content.length);
+        }
+
         timestamp = Date.now();
         syntax = esprima.parse(content, { tolerant: true });
 
@@ -147,6 +152,7 @@ fnames.forEach(function (fname) {
 
         }
     } catch (e) {
+        ++count;
         console.log('Error: ' + e.message);
     }
 });
