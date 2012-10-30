@@ -893,7 +893,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function scanRegExp() {
-        var str = '', ch, start, pattern, flags, value, classMarker = false, restore, terminated = false;
+        var str, ch, start, pattern, flags, value, classMarker = false, restore, terminated = false;
 
         lookahead = null;
         skipComment();
@@ -993,7 +993,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function advance() {
-        var ch, token;
+        var ch;
 
         skipComment();
 
@@ -1564,7 +1564,6 @@ parseStatement: true, parseSourceElement: true */
         if (lookahead.type !== Token.EOF && !match('}')) {
             throwUnexpected(lookahead);
         }
-        return;
     }
 
     // Return true if provided expression is LeftHandSideExpression
@@ -1842,7 +1841,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseNewExpression() {
-        var expr, callee, args;
+        var callee, args;
 
         expectKeyword('new');
         callee = parseLeftHandSideExpression();
@@ -2922,7 +2921,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseFunctionDeclaration() {
-        var id, param, params = [], body, token, stricted, tmp, firstRestricted, message, previousStrict;
+        var id, params = [], body, token, stricted, tmp, firstRestricted, message, previousStrict;
 
         expectKeyword('function');
         token = lookahead;
