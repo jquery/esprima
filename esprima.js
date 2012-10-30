@@ -955,7 +955,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function scanRegExp() {
-        var str = '', ch, start, pattern, flags, value, classMarker = false, restore, terminated = false;
+        var str, ch, start, pattern, flags, value, classMarker = false, restore, terminated = false;
 
         buffer = null;
         skipComment();
@@ -1294,7 +1294,6 @@ parseStatement: true, parseSourceElement: true */
         if (token.type !== Token.EOF && !match('}')) {
             throwUnexpected(token);
         }
-        return;
     }
 
     // Return true if provided expression is LeftHandSideExpression
@@ -1499,8 +1498,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.1 Primary Expressions
 
     function parsePrimaryExpression() {
-        var expr,
-            token = lookahead(),
+        var token = lookahead(),
             type = token.type;
 
         if (type === Token.Identifier) {
