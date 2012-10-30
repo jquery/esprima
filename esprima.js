@@ -1193,7 +1193,7 @@ parseYieldExpression: true
     }
 
     function scanRegExp() {
-        var str = '', ch, start, pattern, flags, value, classMarker = false, restore, terminated = false;
+        var str, ch, start, pattern, flags, value, classMarker = false, restore, terminated = false;
 
         buffer = null;
         skipComment();
@@ -1291,7 +1291,7 @@ parseYieldExpression: true
     }
 
     function advance() {
-        var ch, token;
+        var ch;
 
         skipComment();
 
@@ -1911,7 +1911,6 @@ parseYieldExpression: true
         if (token.type !== Token.EOF && !match('}')) {
             throwUnexpected(token);
         }
-        return;
     }
 
     // Return true if provided expression is LeftHandSideExpression
