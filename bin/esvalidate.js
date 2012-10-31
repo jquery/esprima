@@ -24,18 +24,36 @@
 */
 
 /*jslint sloppy:true plusplus:true node:true rhino:true */
+/*global phantom:true */
 
-var fs, esprima, options, fnames, count;
+var fs, system, esprima, options, fnames, count;
 
-if (typeof require === 'function') {
-    fs = require('fs');
-    esprima = require('esprima');
-} else if (typeof load === 'function') {
-    try {
-        load('esprima.js');
-    } catch (e) {
-        load('../esprima.js');
+if (typeof esprima === 'undefined') {
+    // PhantomJS can only require() relative files
+    if (typeof phantom === 'object') {
+        fs = require('fs');
+        system = require('system');
+        esprima = require('./esprima');
+    } else if (typeof require === 'function') {
+        fs = require('fs');
+        esprima = require('esprima');
+    } else if (typeof load === 'function') {
+        try {
+            load('esprima.js');
+        } catch (e) {
+            load('../esprima.js');
+        }
     }
+}
+
+// Shims to Node.js objects when running under PhantomJS 1.7+.
+if (typeof phantom === 'object') {
+    fs.readFileSync = fs.read;
+    process = {
+        argv: [].slice.call(system.args),
+        exit: phantom.exit
+    };
+    process.argv.unshift('phantomjs');
 }
 
 // Shims to Node.js objects when running under Rhino.
@@ -163,4 +181,8 @@ if (options.format === 'junit') {
 
 if (count > 0) {
     process.exit(1);
+}
+
+if (count === 0 && typeof phantom === 'object') {
+    process.exit(0);
 }
