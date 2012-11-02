@@ -171,7 +171,18 @@ fnames.forEach(function (fname) {
         }
     } catch (e) {
         ++count;
-        console.log('Error: ' + e.message);
+        if (options.format === 'junit') {
+            console.log('<testsuite name="' + fname + '" errors="1" failures="0" tests="1" ' +
+                ' time="' + Math.round((Date.now() - timestamp) / 1000) + '">');
+            console.log(' <testcase name="' + e.message + '" ' + ' time="0">');
+            console.log(' <error type="ParseError" message="' + e.message + '">' +
+                e.message + '(' + fname + ((e.lineNumber) ? ':' + e.lineNumber : '') +
+                ')</error>');
+            console.log(' </testcase>');
+            console.log('</testsuite>');
+        } else {
+            console.log('Error: ' + e.message);
+        }
     }
 });
 
