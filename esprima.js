@@ -2542,13 +2542,13 @@ parseYieldExpression: true
 
         for (i = 0, len = expr.expressions.length; i < len; i += 1) {
             param = expr.expressions[i];
-            if (param.type !== Syntax.Identifier) {
+            if (param.type === Syntax.Identifier) {
+                validateParam(options, param, param.name);
+                params.push(param);
+            } else {
                 return null;
             }
-            validateParam(param);
-            params.push(param);
         }
-
         if (options.firstRestricted) {
             throwError(options.firstRestricted, options.message);
         }
@@ -3833,6 +3833,9 @@ parseYieldExpression: true
         validateParam(options, token, token.value);
 
         if (rest) {
+            if (!match(')')) {
+                throwError({}, Messages.ParameterAfterRestParameter);
+            }
             options.rest = param;
             return false;
         }
