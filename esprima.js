@@ -2532,28 +2532,34 @@ parseYieldExpression: true
     }
 
     function reinterpretAsCoverFormalsList(expr) {
-        var i, len, param, paramSet;
+        var i, len, param, params, options;
         assert(expr.type === Syntax.SequenceExpression);
 
-        paramSet = {};
+        params = [];
+        options = {
+            paramSet: {}
+        };
 
         for (i = 0, len = expr.expressions.length; i < len; i += 1) {
             param = expr.expressions[i];
             if (param.type !== Syntax.Identifier) {
                 return null;
             }
-            if (isRestrictedWord(param.name)) {
-                throwError({}, Messages.StrictParamName);
-            }
-            if (Object.prototype.hasOwnProperty.call(paramSet, param.name)) {
-                throwError({}, Messages.StrictParamDupe);
-            }
-            paramSet[param.name] = true;
+            validateParam(param);
+            params.push(param);
         }
-        return expr.expressions;
+
+        if (options.firstRestricted) {
+            throwError(options.firstRestricted, options.message);
+        }
+        if (options.stricted) {
+            throwErrorTolerant(options.stricted, options.message);
+        }
+
+        return { params: params, rest: null };
     }
 
-    function parseArrowFunctionExpression(param) {
+    function parseArrowFunctionExpression(options) {
         var previousStrict, previousYieldAllowed, body;
 
         expect('=>');
@@ -2569,17 +2575,17 @@ parseYieldExpression: true
         return {
             type: Syntax.ArrowFunctionExpression,
             id: null,
-            params: param,
+            params: options.params,
             defaults: [],
             body: body,
-            rest: null,
+            rest: options.rest,
             generator: false,
             expression: body.type !== Syntax.BlockStatement
         };
     }
 
     function parseAssignmentExpression() {
-        var expr, token, oldParenthesizedCount, coverFormalsList;
+        var expr, token, params, oldParenthesizedCount, coverFormalsList;
 
         if (matchKeyword('yield')) {
             return parseYieldExpression();
@@ -2589,13 +2595,12 @@ parseYieldExpression: true
 
         if (match('(')) {
             token = lookahead2();
-            if (token.type === Token.Punctuator && token.value === ')') {
-                lex();
-                lex();
+            if (token.type === Token.Punctuator && token.value === ')' || token.value === '...') {
+                params = parseParams();
                 if (!match('=>')) {
                     throwUnexpected(lex());
                 }
-                return parseArrowFunctionExpression([]);
+                return parseArrowFunctionExpression(params);
             }
         }
 
@@ -2608,7 +2613,7 @@ parseYieldExpression: true
                     if (isRestrictedWord(expr.name)) {
                         throwError({}, Messages.StrictParamName);
                     }
-                    return parseArrowFunctionExpression([ expr ]);
+                    return parseArrowFunctionExpression({ params: [ expr ], rest: null });
                 }
             } else if (expr.type === Syntax.SequenceExpression) {
                 if (state.parenthesizedCount === (oldParenthesizedCount + 1)) {
