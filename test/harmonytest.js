@@ -5546,58 +5546,47 @@ var harmonyTestFixture = {
     // http://wiki.ecmascript.org/doku.php?id=harmony:rest_parameters
     'ES6: Rest parameters': {
         'function f(a, ...b) {}': {
-            type: "FunctionDeclaration",
+            type: 'FunctionDeclaration',
             id: {
-                type: "Identifier",
-                name: "f",
-                range: [ 9, 10 ],
+                type: 'Identifier',
+                name: 'f',
+                range: [9, 10],
                 loc: {
                     start: { line: 1, column: 9 },
                     end: { line: 1, column: 10 }
                 }
             },
-            params: [
-                {
-                    type: "Identifier",
-                    name: "a",
-                    range: [ 11, 12 ],
-                    loc: {
-                        start: { line: 1, column: 11 },
-                        end: { line: 1, column: 12 }
-                    }
-                },
-                {
-                    type: "RestParameter",
-                    value: {
-                        type: "Identifier",
-                        name: "b",
-                        range: [ 17, 18 ],
-                        loc: {
-                            start: { line: 1, column: 17 },
-                            end: { line: 1, column: 18 }
-                        }
-                    },
-                    range: [ 14, 18 ],
-                    loc: {
-                        start: { line: 1, column: 14 },
-                        end: { line: 1, column: 18 }
-                    }
+            params: [{
+                type: 'Identifier',
+                name: 'a',
+                range: [11, 12],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 12 }
                 }
-            ],
+            }],
             defaults: [],
             body: {
-                type: "BlockStatement",
+                type: 'BlockStatement',
                 body: [],
-                range: [ 20, 22 ],
+                range: [20, 22],
                 loc: {
                     start: { line: 1, column: 20 },
                     end: { line: 1, column: 22 }
                 }
             },
-            rest: null,
+            rest: {
+                type: 'Identifier',
+                name: 'b',
+                range: [17, 18],
+                loc: {
+                    start: { line: 1, column: 17 },
+                    end: { line: 1, column: 18 }
+                }
+            },
             generator: false,
             expression: false,
-            range: [ 0, 22 ],
+            range: [0, 22],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 22 }
