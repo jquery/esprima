@@ -182,6 +182,7 @@ parseYieldExpression: true
         InvalidRegExp: 'Invalid regular expression',
         UnterminatedRegExp:  'Invalid regular expression: missing /',
         InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
+        InvalidLHSInFormalsList:  'Invalid left-hand side in formals list',
         InvalidLHSInForIn:  'Invalid left-hand side in for-in',
         MultipleDefaultsInSwitch: 'More than one default clause in switch statement',
         NoCatchOrFinally:  'Missing catch or finally after try',
@@ -196,7 +197,8 @@ parseYieldExpression: true
         StrictVarName:  'Variable name may not be eval or arguments in strict mode',
         StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
         StrictParamDupe: 'Strict mode function may not have duplicate parameter names',
-        ParameterAfterRestParameter: 'Rest parameter must be final parameter of an argument list.',
+        ParameterAfterRestParameter: 'Rest parameter must be final parameter of an argument list',
+        ObjectPatternAsRestParameter: 'Invalid rest parameter',
         StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
         StrictOctalLiteral:  'Octal literals are not allowed in strict mode.',
         StrictDelete:  'Delete of an unqualified identifier in strict mode.',
@@ -2531,6 +2533,36 @@ parseYieldExpression: true
         }
     }
 
+
+    function reinterpretAsDestructuredParameter(options, expr) {
+        var i, len, property, element;
+
+        if (expr.type === Syntax.ObjectExpression) {
+            expr.type = Syntax.ObjectPattern;
+            for (i = 0, len = expr.properties.length; i < len; i += 1) {
+                property = expr.properties[i];
+                if (property.kind !== 'init') {
+                    throwError({}, Messages.InvalidLHSInFormalsList);
+                }
+                reinterpretAsDestructuredParameter(options, property.value);
+            }
+        } else if (expr.type === Syntax.ArrayExpression) {
+            expr.type = Syntax.ArrayPattern;
+            for (i = 0, len = expr.elements.length; i < len; i += 1) {
+                element = expr.elements[i];
+                if (element) {
+                    reinterpretAsDestructuredParameter(options, element);
+                }
+            }
+        } else if (expr.type === Syntax.Identifier) {
+            validateParam(options, expr, expr.name);
+        } else {
+            if (expr.type !== Syntax.MemberExpression) {
+                throwError({}, Messages.InvalidLHSInFormalsList);
+            }
+        }
+    }
+
     function reinterpretAsCoverFormalsList(expr) {
         var i, len, param, params, options;
         assert(expr.type === Syntax.SequenceExpression);
@@ -2543,12 +2575,16 @@ parseYieldExpression: true
         for (i = 0, len = expr.expressions.length; i < len; i += 1) {
             param = expr.expressions[i];
             if (param.type === Syntax.Identifier) {
+                params.push(param);
                 validateParam(options, param, param.name);
+            } else if (param.type === Syntax.ObjectExpression || param.type === Syntax.ArrayExpression) {
+                reinterpretAsDestructuredParameter(options, param);
                 params.push(param);
             } else {
                 return null;
             }
         }
+
         if (options.firstRestricted) {
             throwError(options.firstRestricted, options.message);
         }
@@ -3829,8 +3865,19 @@ parseYieldExpression: true
             rest = true;
         }
 
-        param = parseVariableIdentifier();
-        validateParam(options, token, token.value);
+        if (match('[')) {
+            param = parseArrayInitialiser();
+            reinterpretAsDestructuredParameter(options, param);
+        } else if (match('{')) {
+            if (rest) {
+                throwError({}, Messages.ObjectPatternAsRestParameter);
+            }
+            param = parseObjectInitialiser();
+            reinterpretAsDestructuredParameter(options, param);
+        } else {
+            param = parseVariableIdentifier();
+            validateParam(options, token, token.value);
+        }
 
         if (rest) {
             if (!match(')')) {
