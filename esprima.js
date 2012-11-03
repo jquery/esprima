@@ -37,7 +37,7 @@ parseForStatement: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
 parseFunctionSourceElements: true, parseVariableIdentifier: true,
 parseImportSpecifier: true,
-parseLeftHandSideExpression: true,
+parseLeftHandSideExpression: true, parseParams: true,
 parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseConciseBody: true,
 parseYieldExpression: true
 */
@@ -1709,14 +1709,16 @@ parseYieldExpression: true
 
     // 11.1.5 Object Initialiser
 
-    function parsePropertyFunction(param, options) {
-        var previousStrict, previousYieldAllowed, body;
+    function parsePropertyFunction(options) {
+        var previousStrict, previousYieldAllowed, params, body;
 
         previousStrict = strict;
         previousYieldAllowed = yieldAllowed;
         yieldAllowed = options.generator;
+        params = options.params || [];
+
         body = parseConciseBody();
-        if (options.name && strict && isRestrictedWord(param[0].name)) {
+        if (options.name && strict && isRestrictedWord(params[0].name)) {
             throwErrorTolerant(options.name, Messages.StrictParamName);
         }
         if (yieldAllowed && !yieldFound) {
@@ -1728,52 +1730,43 @@ parseYieldExpression: true
         return {
             type: Syntax.FunctionExpression,
             id: null,
-            params: param,
+            params: params,
             defaults: [],
             body: body,
-            rest: null,
+            rest: options.rest || null,
             generator: options.generator,
             expression: body.type !== Syntax.BlockStatement
         };
     }
 
+
     function parsePropertyMethodFunction(options) {
-        var token, previousStrict, param, params, paramSet, method;
+        var token, previousStrict, tmp, method, firstRestricted, message;
 
         previousStrict = strict;
         strict = true;
-        params = [];
 
-        expect('(');
+        tmp = parseParams();
 
-        if (!match(')')) {
-            paramSet = {};
-            while (index < length) {
-                token = lookahead();
-                param = parseVariableIdentifier();
-                if (isRestrictedWord(token.value)) {
-                    throwError(token, Messages.StrictParamName);
-                }
-                if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                    throwError(token, Messages.StrictParamDupe);
-                }
-                params.push(param);
-                paramSet[param.name] = true;
-                if (match(')')) {
-                    break;
-                }
-                expect(',');
-            }
+        if (tmp.firstRestricted) {
+            throwError(tmp.firstRestricted, tmp.message);
+        }
+        if (tmp.stricted) {
+            throwErrorTolerant(tmp.stricted, tmp.message);
         }
 
-        expect(')');
 
-        method = parsePropertyFunction(params, { generator: options.generator });
+        method = parsePropertyFunction({
+            params: tmp.params,
+            rest: tmp.rest,
+            generator: options.generator
+        });
 
         strict = previousStrict;
 
         return method;
     }
+
 
     function parseObjectPropertyKey() {
         var token = lex();
@@ -1812,7 +1805,7 @@ parseYieldExpression: true
                 return {
                     type: Syntax.Property,
                     key: key,
-                    value: parsePropertyFunction([], { generator: false }),
+                    value: parsePropertyFunction({ generator: false }),
                     kind: 'get'
                 };
             } else if (token.value === 'set' && !(match(':') || match('('))) {
@@ -1824,7 +1817,7 @@ parseYieldExpression: true
                 return {
                     type: Syntax.Property,
                     key: key,
-                    value: parsePropertyFunction(param, { generator: false, name: token }),
+                    value: parsePropertyFunction({ params: param, generator: false, name: token }),
                     kind: 'set'
                 };
             } else {
@@ -3851,7 +3844,7 @@ parseYieldExpression: true
             params: [],
             rest: null,
             firstRestricted: firstRestricted
-        }
+        };
 
         expect('(');
 
@@ -4060,7 +4053,7 @@ parseYieldExpression: true
             return {
                 type: Syntax.MethodDefinition,
                 key: key,
-                value: parsePropertyFunction([], { generator: false }),
+                value: parsePropertyFunction({ generator: false }),
                 kind: 'get'
             };
         } else if (token.value === 'set' && !match('(')) {
@@ -4072,7 +4065,7 @@ parseYieldExpression: true
             return {
                 type: Syntax.MethodDefinition,
                 key: key,
-                value: parsePropertyFunction(param, { generator: false, name: token }),
+                value: parsePropertyFunction({ params: param, generator: false, name: token }),
                 kind: 'set'
             };
         } else {
