@@ -1193,7 +1193,8 @@ parseStatement: true, parseSourceElement: true */
         createLiteral: function (token) {
             return {
                 type: Syntax.Literal,
-                value: token.value
+                value: token.value,
+                raw: sliceSource(token.range[0], token.range[1])
             };
         },
 
@@ -3696,18 +3697,6 @@ parseStatement: true, parseSourceElement: true */
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
-
-            if ((typeof options.raw === 'boolean') && options.raw) {
-                delegate = extend(delegate, {
-                    'createLiteral': function (token) {
-                        return {
-                            type: Syntax.Literal,
-                            value: token.value,
-                            raw: sliceSource(token.range[0], token.range[1])
-                        };
-                    }
-                });
-            }
 
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
