@@ -201,6 +201,7 @@ parseYieldExpression: true
         ParameterAfterRestParameter: 'Rest parameter must be final parameter of an argument list',
         ElementAfterSpreadElement: 'Spread must be the final element of an element list',
         ObjectPatternAsRestParameter: 'Invalid rest parameter',
+        ObjectPatternAsSpread: 'Invalid spread argument',
         StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
         StrictOctalLiteral:  'Octal literals are not allowed in strict mode.',
         StrictDelete:  'Delete of an unqualified identifier in strict mode.',
@@ -2550,6 +2551,11 @@ parseYieldExpression: true
             if (isRestrictedWord(expr.name)) {
                 throwError({}, Messages.InvalidLHSInAssignment);
             }
+        } else if (expr.type === Syntax.SpreadElement) {
+            reinterpretAsAssignmentBindingPattern(expr.argument);
+            if (expr.argument.type === Syntax.ObjectPattern) {
+                throwError({}, Messages.ObjectPatternAsSpread);
+            }
         } else {
             if (expr.type !== Syntax.MemberExpression && expr.type !== Syntax.CallExpression && expr.type !== Syntax.NewExpression) {
                 throwError({}, Messages.InvalidLHSInAssignment);
@@ -2588,10 +2594,11 @@ parseYieldExpression: true
     }
 
     function reinterpretAsCoverFormalsList(expr) {
-        var i, len, param, params, options;
+        var i, len, param, params, options, rest;
         assert(expr.type === Syntax.SequenceExpression);
 
         params = [];
+        rest = null;
         options = {
             paramSet: {}
         };
@@ -2604,6 +2611,12 @@ parseYieldExpression: true
             } else if (param.type === Syntax.ObjectExpression || param.type === Syntax.ArrayExpression) {
                 reinterpretAsDestructuredParameter(options, param);
                 params.push(param);
+            } else if (param.type === Syntax.SpreadElement) {
+                if (i !== len - 1) {
+                    throwError({}, Messages.ParameterAfterRestParameter);
+                }
+                reinterpretAsDestructuredParameter(options, param.argument);
+                rest = param.argument;
             } else {
                 return null;
             }
@@ -2616,7 +2629,7 @@ parseYieldExpression: true
             throwErrorTolerant(options.stricted, options.message);
         }
 
-        return { params: params, rest: null };
+        return { params: params, rest: rest };
     }
 
     function parseArrowFunctionExpression(options) {
@@ -4969,6 +4982,7 @@ parseYieldExpression: true
             extra.parseProgram = parseProgram;
             extra.parsePropertyFunction = parsePropertyFunction;
             extra.parseRelationalExpression = parseRelationalExpression;
+            extra.parseSpreadOrAssignmentExpression = parseSpreadOrAssignmentExpression;
             extra.parseTemplateElement = parseTemplateElement;
             extra.parseTemplateLiteral = parseTemplateLiteral;
             extra.parseStatement = parseStatement;
@@ -5023,6 +5037,7 @@ parseYieldExpression: true
             parseTemplateElement = wrapTracking(extra.parseTemplateElement);
             parseTemplateLiteral = wrapTracking(extra.parseTemplateLiteral);
             parseRelationalExpression = wrapTracking(extra.parseRelationalExpression);
+            parseSpreadOrAssignmentExpression = wrapTracking(extra.parseSpreadOrAssignmentExpression);
             parseStatement = wrapTracking(extra.parseStatement);
             parseShiftExpression = wrapTracking(extra.parseShiftExpression);
             parseSwitchCase = wrapTracking(extra.parseSwitchCase);
@@ -5097,6 +5112,7 @@ parseYieldExpression: true
             parseTemplateElement = extra.parseTemplateElement;
             parseTemplateLiteral = extra.parseTemplateLiteral;
             parseRelationalExpression = extra.parseRelationalExpression;
+            parseSpreadOrAssignmentExpression = extra.parseSpreadOrAssignmentExpression;
             parseStatement = extra.parseStatement;
             parseShiftExpression = extra.parseShiftExpression;
             parseSwitchCase = extra.parseSwitchCase;
