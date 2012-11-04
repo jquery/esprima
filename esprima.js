@@ -182,6 +182,7 @@ parseYieldExpression: true
         InvalidRegExp: 'Invalid regular expression',
         UnterminatedRegExp:  'Invalid regular expression: missing /',
         InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
+        InvalidLHSInFormalsList:  'Invalid left-hand side in formals list',
         InvalidLHSInForIn:  'Invalid left-hand side in for-in',
         MultipleDefaultsInSwitch: 'More than one default clause in switch statement',
         NoCatchOrFinally:  'Missing catch or finally after try',
@@ -196,7 +197,8 @@ parseYieldExpression: true
         StrictVarName:  'Variable name may not be eval or arguments in strict mode',
         StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
         StrictParamDupe: 'Strict mode function may not have duplicate parameter names',
-        ParameterAfterRestParameter: 'Rest parameter must be final parameter of an argument list.',
+        ParameterAfterRestParameter: 'Rest parameter must be final parameter of an argument list',
+        ObjectPatternAsRestParameter: 'Invalid rest parameter',
         StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
         StrictOctalLiteral:  'Octal literals are not allowed in strict mode.',
         StrictDelete:  'Delete of an unqualified identifier in strict mode.',
@@ -1709,14 +1711,16 @@ parseYieldExpression: true
 
     // 11.1.5 Object Initialiser
 
-    function parsePropertyFunction(param, options) {
-        var previousStrict, previousYieldAllowed, body;
+    function parsePropertyFunction(options) {
+        var previousStrict, previousYieldAllowed, params, body;
 
         previousStrict = strict;
         previousYieldAllowed = yieldAllowed;
         yieldAllowed = options.generator;
+        params = options.params || [];
+
         body = parseConciseBody();
-        if (options.name && strict && isRestrictedWord(param[0].name)) {
+        if (options.name && strict && isRestrictedWord(params[0].name)) {
             throwErrorTolerant(options.name, Messages.StrictParamName);
         }
         if (yieldAllowed && !yieldFound) {
@@ -1728,52 +1732,43 @@ parseYieldExpression: true
         return {
             type: Syntax.FunctionExpression,
             id: null,
-            params: param,
+            params: params,
             defaults: [],
             body: body,
-            rest: null,
+            rest: options.rest || null,
             generator: options.generator,
             expression: body.type !== Syntax.BlockStatement
         };
     }
 
+
     function parsePropertyMethodFunction(options) {
-        var token, previousStrict, param, params, paramSet, method;
+        var token, previousStrict, tmp, method, firstRestricted, message;
 
         previousStrict = strict;
         strict = true;
-        params = [];
 
-        expect('(');
+        tmp = parseParams();
 
-        if (!match(')')) {
-            paramSet = {};
-            while (index < length) {
-                token = lookahead();
-                param = parseVariableIdentifier();
-                if (isRestrictedWord(token.value)) {
-                    throwError(token, Messages.StrictParamName);
-                }
-                if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                    throwError(token, Messages.StrictParamDupe);
-                }
-                params.push(param);
-                paramSet[param.name] = true;
-                if (match(')')) {
-                    break;
-                }
-                expect(',');
-            }
+        if (tmp.firstRestricted) {
+            throwError(tmp.firstRestricted, tmp.message);
+        }
+        if (tmp.stricted) {
+            throwErrorTolerant(tmp.stricted, tmp.message);
         }
 
-        expect(')');
 
-        method = parsePropertyFunction(params, { generator: options.generator });
+        method = parsePropertyFunction({
+            params: tmp.params,
+            rest: tmp.rest,
+            generator: options.generator
+        });
 
         strict = previousStrict;
 
         return method;
     }
+
 
     function parseObjectPropertyKey() {
         var token = lex();
@@ -1812,7 +1807,7 @@ parseYieldExpression: true
                 return {
                     type: Syntax.Property,
                     key: key,
-                    value: parsePropertyFunction([], { generator: false }),
+                    value: parsePropertyFunction({ generator: false }),
                     kind: 'get'
                 };
             } else if (token.value === 'set' && !(match(':') || match('('))) {
@@ -1824,7 +1819,7 @@ parseYieldExpression: true
                 return {
                     type: Syntax.Property,
                     key: key,
-                    value: parsePropertyFunction(param, { generator: false, name: token }),
+                    value: parsePropertyFunction({ params: param, generator: false, name: token }),
                     kind: 'set'
                 };
             } else {
@@ -2538,29 +2533,69 @@ parseYieldExpression: true
         }
     }
 
+
+    function reinterpretAsDestructuredParameter(options, expr) {
+        var i, len, property, element;
+
+        if (expr.type === Syntax.ObjectExpression) {
+            expr.type = Syntax.ObjectPattern;
+            for (i = 0, len = expr.properties.length; i < len; i += 1) {
+                property = expr.properties[i];
+                if (property.kind !== 'init') {
+                    throwError({}, Messages.InvalidLHSInFormalsList);
+                }
+                reinterpretAsDestructuredParameter(options, property.value);
+            }
+        } else if (expr.type === Syntax.ArrayExpression) {
+            expr.type = Syntax.ArrayPattern;
+            for (i = 0, len = expr.elements.length; i < len; i += 1) {
+                element = expr.elements[i];
+                if (element) {
+                    reinterpretAsDestructuredParameter(options, element);
+                }
+            }
+        } else if (expr.type === Syntax.Identifier) {
+            validateParam(options, expr, expr.name);
+        } else {
+            if (expr.type !== Syntax.MemberExpression) {
+                throwError({}, Messages.InvalidLHSInFormalsList);
+            }
+        }
+    }
+
     function reinterpretAsCoverFormalsList(expr) {
-        var i, len, param, paramSet;
+        var i, len, param, params, options;
         assert(expr.type === Syntax.SequenceExpression);
 
-        paramSet = {};
+        params = [];
+        options = {
+            paramSet: {}
+        };
 
         for (i = 0, len = expr.expressions.length; i < len; i += 1) {
             param = expr.expressions[i];
-            if (param.type !== Syntax.Identifier) {
+            if (param.type === Syntax.Identifier) {
+                params.push(param);
+                validateParam(options, param, param.name);
+            } else if (param.type === Syntax.ObjectExpression || param.type === Syntax.ArrayExpression) {
+                reinterpretAsDestructuredParameter(options, param);
+                params.push(param);
+            } else {
                 return null;
             }
-            if (isRestrictedWord(param.name)) {
-                throwError({}, Messages.StrictParamName);
-            }
-            if (Object.prototype.hasOwnProperty.call(paramSet, param.name)) {
-                throwError({}, Messages.StrictParamDupe);
-            }
-            paramSet[param.name] = true;
         }
-        return expr.expressions;
+
+        if (options.firstRestricted) {
+            throwError(options.firstRestricted, options.message);
+        }
+        if (options.stricted) {
+            throwErrorTolerant(options.stricted, options.message);
+        }
+
+        return { params: params, rest: null };
     }
 
-    function parseArrowFunctionExpression(param) {
+    function parseArrowFunctionExpression(options) {
         var previousStrict, previousYieldAllowed, body;
 
         expect('=>');
@@ -2576,17 +2611,17 @@ parseYieldExpression: true
         return {
             type: Syntax.ArrowFunctionExpression,
             id: null,
-            params: param,
+            params: options.params,
             defaults: [],
             body: body,
-            rest: null,
+            rest: options.rest,
             generator: false,
             expression: body.type !== Syntax.BlockStatement
         };
     }
 
     function parseAssignmentExpression() {
-        var expr, token, oldParenthesizedCount, coverFormalsList;
+        var expr, token, params, oldParenthesizedCount, coverFormalsList;
 
         if (matchKeyword('yield')) {
             return parseYieldExpression();
@@ -2596,13 +2631,12 @@ parseYieldExpression: true
 
         if (match('(')) {
             token = lookahead2();
-            if (token.type === Token.Punctuator && token.value === ')') {
-                lex();
-                lex();
+            if (token.type === Token.Punctuator && token.value === ')' || token.value === '...') {
+                params = parseParams();
                 if (!match('=>')) {
                     throwUnexpected(lex());
                 }
-                return parseArrowFunctionExpression([]);
+                return parseArrowFunctionExpression(params);
             }
         }
 
@@ -2615,7 +2649,7 @@ parseYieldExpression: true
                     if (isRestrictedWord(expr.name)) {
                         throwError({}, Messages.StrictParamName);
                     }
-                    return parseArrowFunctionExpression([ expr ]);
+                    return parseArrowFunctionExpression({ params: [ expr ], rest: null });
                 }
             } else if (expr.type === Syntax.SequenceExpression) {
                 if (state.parenthesizedCount === (oldParenthesizedCount + 1)) {
@@ -3795,86 +3829,98 @@ parseYieldExpression: true
         };
     }
 
-    function parseParam() {
-        var param, token;
-        if (match('...')) {
-            lex();
-            token = lookahead();
-            param = {
-                type: 'RestParameter',
-                value: parseVariableIdentifier()
-            };
-        } else {
-            token = lookahead();
-            param = parseVariableIdentifier();
-        }
 
-        param.token = token;
-        return param;
+    function validateParam(options, param, name) {
+        if (strict) {
+            if (isRestrictedWord(name)) {
+                options.stricted = param;
+                options.message = Messages.StrictParamName;
+            }
+            if (Object.prototype.hasOwnProperty.call(options.paramSet, name)) {
+                options.stricted = param;
+                options.message = Messages.StrictParamDupe;
+            }
+        } else if (!options.firstRestricted) {
+            if (isRestrictedWord(name)) {
+                options.firstRestricted = param;
+                options.message = Messages.StrictParamName;
+            } else if (isStrictModeReservedWord(name)) {
+                options.firstRestricted = param;
+                options.message = Messages.StrictReservedWord;
+            } else if (Object.prototype.hasOwnProperty.call(options.paramSet, name)) {
+                options.firstRestricted = param;
+                options.message = Messages.StrictParamDupe;
+            }
+        }
+        options.paramSet[name] = true;
     }
 
+
+    function parseParam(options) {
+        var token, rest, param;
+
+        token = lookahead();
+        if (token.value === '...') {
+            token = lex();
+            rest = true;
+        }
+
+        if (match('[')) {
+            param = parseArrayInitialiser();
+            reinterpretAsDestructuredParameter(options, param);
+        } else if (match('{')) {
+            if (rest) {
+                throwError({}, Messages.ObjectPatternAsRestParameter);
+            }
+            param = parseObjectInitialiser();
+            reinterpretAsDestructuredParameter(options, param);
+        } else {
+            param = parseVariableIdentifier();
+            validateParam(options, token, token.value);
+        }
+
+        if (rest) {
+            if (!match(')')) {
+                throwError({}, Messages.ParameterAfterRestParameter);
+            }
+            options.rest = param;
+            return false;
+        }
+
+        options.params.push(param);
+        return !match(')');
+    }
+
+
     function parseParams(firstRestricted) {
-        var param, params = [], token, stricted, paramSet, message;
+        var options;
+
+        options = {
+            params: [],
+            rest: null,
+            firstRestricted: firstRestricted
+        }
 
         expect('(');
 
         if (!match(')')) {
-            paramSet = {};
+            options.paramSet = {};
             while (index < length) {
-                param = parseParam();
-                token = param.token;
-                delete param.token;
-
-                if (strict) {
-                    if (isRestrictedWord(token.value)) {
-                        stricted = token;
-                        message = Messages.StrictParamName;
-                    }
-                    if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        stricted = token;
-                        message = Messages.StrictParamDupe;
-                    }
-                } else if (!firstRestricted) {
-                    if (isRestrictedWord(token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictParamName;
-                    } else if (isStrictModeReservedWord(token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictReservedWord;
-                    } else if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
-                        firstRestricted = token;
-                        message = Messages.StrictParamDupe;
-                    }
-                }
-                params.push(param);
-
-                if (param.type === 'RestParameter') {
-                    if (!match(')')) {
-                        throwError({}, Messages.ParameterAfterRestParameter);
-                    }
+                if (!parseParam(options)) {
                     break;
-                } else {
-                    paramSet[param.name] = true;
-                    if (match(')')) {
-                        break;
-                    }
-                    expect(',');
                 }
+                expect(',');
             }
         }
 
         expect(')');
 
-        return {
-            params: params,
-            stricted: stricted,
-            firstRestricted: firstRestricted,
-            message: message
-        };
+        return options;
     }
 
+
     function parseFunctionDeclaration() {
-        var id, params, body, token, stricted, tmp, firstRestricted, message, previousStrict, previousYieldAllowed, generator, expression;
+        var id, body, token, tmp, firstRestricted, message, previousStrict, previousYieldAllowed, generator, expression;
 
         expectKeyword('function');
 
@@ -3902,8 +3948,6 @@ parseYieldExpression: true
         }
 
         tmp = parseParams(firstRestricted);
-        params = tmp.params;
-        stricted = tmp.stricted;
         firstRestricted = tmp.firstRestricted;
         if (tmp.message) {
             message = tmp.message;
@@ -3920,8 +3964,8 @@ parseYieldExpression: true
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
         }
-        if (strict && stricted) {
-            throwErrorTolerant(stricted, message);
+        if (strict && tmp.stricted) {
+            throwErrorTolerant(tmp.stricted, message);
         }
         if (yieldAllowed && !yieldFound) {
             throwError({}, Messages.NoYieldInGenerator);
@@ -3932,17 +3976,17 @@ parseYieldExpression: true
         return {
             type: Syntax.FunctionDeclaration,
             id: id,
-            params: params,
+            params: tmp.params,
             defaults: [],
             body: body,
-            rest: null,
+            rest: tmp.rest,
             generator: generator,
             expression: expression
         };
     }
 
     function parseFunctionExpression() {
-        var token, id = null, stricted, firstRestricted, message, tmp, param, params, body, previousStrict, previousYieldAllowed, paramSet, generator, expression;
+        var token, id = null, firstRestricted, message, tmp, body, previousStrict, previousYieldAllowed, generator, expression;
 
         expectKeyword('function');
 
@@ -3972,8 +4016,6 @@ parseYieldExpression: true
         }
 
         tmp = parseParams(firstRestricted);
-        params = tmp.params;
-        stricted = tmp.stricted;
         firstRestricted = tmp.firstRestricted;
         if (tmp.message) {
             message = tmp.message;
@@ -3990,8 +4032,8 @@ parseYieldExpression: true
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
         }
-        if (strict && stricted) {
-            throwErrorTolerant(stricted, message);
+        if (strict && tmp.stricted) {
+            throwErrorTolerant(tmp.stricted, message);
         }
         if (yieldAllowed && !yieldFound) {
             throwError({}, Messages.NoYieldInGenerator);
@@ -4003,10 +4045,10 @@ parseYieldExpression: true
         return {
             type: Syntax.FunctionExpression,
             id: id,
-            params: params,
+            params: tmp.params,
             defaults: [],
             body: body,
-            rest: null,
+            rest: tmp.rest,
             generator: generator,
             expression: expression
         };
@@ -4066,7 +4108,7 @@ parseYieldExpression: true
             return {
                 type: Syntax.MethodDefinition,
                 key: key,
-                value: parsePropertyFunction([], { generator: false }),
+                value: parsePropertyFunction({ generator: false }),
                 kind: 'get'
             };
         } else if (token.value === 'set' && !match('(')) {
@@ -4078,7 +4120,7 @@ parseYieldExpression: true
             return {
                 type: Syntax.MethodDefinition,
                 key: key,
-                value: parsePropertyFunction(param, { generator: false, name: token }),
+                value: parsePropertyFunction({ params: param, generator: false, name: token }),
                 kind: 'set'
             };
         } else {
@@ -4896,6 +4938,7 @@ parseYieldExpression: true
             extra.parseNonComputedProperty = parseNonComputedProperty;
             extra.parseObjectProperty = parseObjectProperty;
             extra.parseObjectPropertyKey = parseObjectPropertyKey;
+            extra.parseParam = parseParam;
             extra.parsePath = parsePath;
             extra.parsePostfixExpression = parsePostfixExpression;
             extra.parsePrimaryExpression = parsePrimaryExpression;
@@ -4947,6 +4990,7 @@ parseYieldExpression: true
             parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
             parseObjectProperty = wrapTracking(extra.parseObjectProperty);
             parseObjectPropertyKey = wrapTracking(extra.parseObjectPropertyKey);
+            parseParam = wrapTracking(extra.parseParam);
             parsePath = wrapTracking(extra.parsePath);
             parsePostfixExpression = wrapTracking(extra.parsePostfixExpression);
             parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
