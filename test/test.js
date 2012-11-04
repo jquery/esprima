@@ -16903,7 +16903,8 @@ var testFixture = {
                     type: 'ExpressionStatement',
                     expression: {
                         type: 'Literal',
-                        value: null
+                        value: null,
+                        raw: 'null'
                     }
                 }]
             }
@@ -16918,7 +16919,8 @@ var testFixture = {
                     type: 'ExpressionStatement',
                     expression: {
                         type: 'Literal',
-                        value: 42
+                        value: 42,
+                        raw: '42'
                     }
                 }]
             }
@@ -16933,7 +16935,8 @@ var testFixture = {
                     type: 'ExpressionStatement',
                     expression: {
                         type: 'Literal',
-                        value: true
+                        value: true,
+                        raw: 'true'
                     }
                 }]
             }
@@ -16978,7 +16981,8 @@ var testFixture = {
                     type: 'ExpressionStatement',
                     expression: {
                         type: 'Literal',
-                        value: 42
+                        value: 42,
+                        raw: '42'
                     }
                 }]
             }
@@ -16993,7 +16997,8 @@ var testFixture = {
                     type: 'ExpressionStatement',
                     expression: {
                         type: 'Literal',
-                        value: true
+                        value: true,
+                        raw: 'true'
                     }
                 }]
             }

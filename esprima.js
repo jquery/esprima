@@ -1527,7 +1527,8 @@ parseYieldExpression: true
         createLiteral: function (token) {
             return {
                 type: Syntax.Literal,
-                value: token.value
+                value: token.value,
+                raw: sliceSource(token.range[0], token.range[1])
             };
         },
 
@@ -4870,13 +4871,6 @@ parseYieldExpression: true
     function createLiteral(token) {
         return {
             type: Syntax.Literal,
-            value: token.value
-        };
-    }
-
-    function createRawLiteral(token) {
-        return {
-            type: Syntax.Literal,
             value: token.value,
             raw: sliceSource(token.range[0], token.range[1])
         };
@@ -5156,11 +5150,6 @@ parseYieldExpression: true
             skipComment = scanComment;
         }
 
-        if (extra.raw) {
-            extra.createLiteral = createLiteral;
-            createLiteral = createRawLiteral;
-        }
-
         if (extra.range || extra.loc) {
 
             extra.parseGroupExpression = parseGroupExpression;
@@ -5372,7 +5361,6 @@ parseYieldExpression: true
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
-            extra.raw = (typeof options.raw === 'boolean') && options.raw;
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
             }
