@@ -194,6 +194,7 @@ parseYieldExpression: true
         IllegalBreak: 'Illegal break statement',
         IllegalReturn: 'Illegal return statement',
         IllegalYield: 'Illegal yield expression',
+        IllegalSpread: 'Illegal spread element',
         StrictModeWith:  'Strict mode code may not include a with statement',
         StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',
         StrictVarName:  'Variable name may not be eval or arguments in strict mode',
@@ -1992,9 +1993,13 @@ parseYieldExpression: true
 
         ++state.parenthesizedCount;
 
+        state.allowArrowFunction = !state.allowArrowFunction;
         expr = parseExpression();
+        state.allowArrowFunction = false;
 
-        expect(')');
+        if (expr.type !== Syntax.ArrowFunctionExpression) {
+            expect(')');
+        }
 
         return expr;
     }
@@ -2594,9 +2599,8 @@ parseYieldExpression: true
         }
     }
 
-    function reinterpretAsCoverFormalsList(expr) {
+    function reinterpretAsCoverFormalsList(expressions) {
         var i, len, param, params, options, rest;
-        assert(expr.type === Syntax.SequenceExpression);
 
         params = [];
         rest = null;
@@ -2604,8 +2608,8 @@ parseYieldExpression: true
             paramSet: {}
         };
 
-        for (i = 0, len = expr.expressions.length; i < len; i += 1) {
-            param = expr.expressions[i];
+        for (i = 0, len = expressions.length; i < len; i += 1) {
+            param = expressions[i];
             if (param.type === Syntax.Identifier) {
                 params.push(param);
                 validateParam(options, param, param.name);
@@ -2681,21 +2685,12 @@ parseYieldExpression: true
         token = lookahead();
         expr = parseConditionalExpression();
 
-        if (match('=>')) {
-            if (expr.type === Syntax.Identifier) {
-                if (state.parenthesizedCount === oldParenthesizedCount || state.parenthesizedCount === (oldParenthesizedCount + 1)) {
-                    if (isRestrictedWord(expr.name)) {
-                        throwError({}, Messages.StrictParamName);
-                    }
-                    return parseArrowFunctionExpression({ params: [ expr ], rest: null });
+        if (match('=>') && expr.type === Syntax.Identifier) {
+            if (state.parenthesizedCount === oldParenthesizedCount || state.parenthesizedCount === (oldParenthesizedCount + 1)) {
+                if (isRestrictedWord(expr.name)) {
+                    throwError({}, Messages.StrictParamName);
                 }
-            } else if (expr.type === Syntax.SequenceExpression) {
-                if (state.parenthesizedCount === (oldParenthesizedCount + 1)) {
-                    coverFormalsList = reinterpretAsCoverFormalsList(expr);
-                    if (coverFormalsList) {
-                        return parseArrowFunctionExpression(coverFormalsList);
-                    }
-                }
+                return parseArrowFunctionExpression({ params: [ expr ], rest: null });
             }
         }
 
@@ -2726,10 +2721,12 @@ parseYieldExpression: true
     // 11.14 Comma Operator
 
     function parseExpression() {
-        var expr = parseAssignmentExpression();
+        var expr, sequence, coverFormalsList, spreadFound, token;
+
+        expr = parseAssignmentExpression();
 
         if (match(',')) {
-            expr = {
+            sequence = {
                 type: Syntax.SequenceExpression,
                 expressions: [ expr ]
             };
@@ -2738,12 +2735,42 @@ parseYieldExpression: true
                 if (!match(',')) {
                     break;
                 }
-                lex();
-                expr.expressions.push(parseAssignmentExpression());
-            }
 
+                lex();
+                expr = parseSpreadOrAssignmentExpression();
+                sequence.expressions.push(expr);
+
+                if (expr.type === Syntax.SpreadElement) {
+                    spreadFound = true;
+                    if (!match(')')) {
+                        throwError({}, Messages.ElementAfterSpreadElement);
+                    }
+                    break;
+                }
+            }
         }
-        return expr;
+
+        if (state.allowArrowFunction && match(')')) {
+            token = lookahead2();
+            if (token.value === '=>') {
+                lex();
+
+                state.allowArrowFunction = false;
+                expr = sequence ? sequence.expressions : [ expr ];
+                coverFormalsList = reinterpretAsCoverFormalsList(expr);
+                if (coverFormalsList) {
+                    return parseArrowFunctionExpression(coverFormalsList);
+                }
+
+                throwUnexpected(token);
+            }
+        }
+
+        if (spreadFound) {
+            throwError({}, Messages.IllegalSpread);
+        }
+
+        return sequence || expr;
     }
 
     // 12.1 Block
@@ -4729,12 +4756,18 @@ parseYieldExpression: true
 
         ++state.parenthesizedCount;
 
+        state.allowArrowFunction = !state.allowArrowFunction;
         expr = parseExpression();
+        state.allowArrowFunction = false;
 
-        expect(')');
-
-        marker.end();
-        marker.applyGroup(expr);
+        if (expr.type === 'ArrowFunctionExpression') {
+            marker.end();
+            marker.apply(expr);
+        } else {
+            expect(')');
+            marker.end();
+            marker.applyGroup(expr);
+        }
 
         return expr;
     }
