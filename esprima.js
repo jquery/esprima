@@ -38,6 +38,7 @@ parseFunctionDeclaration: true, parseFunctionExpression: true,
 parseFunctionSourceElements: true, parseVariableIdentifier: true,
 parseImportSpecifier: true,
 parseLeftHandSideExpression: true, parseParams: true, validateParam: true,
+parseSpreadOrAssignmentExpression: true,
 parseStatement: true, parseSourceElement: true, parseModuleBlock: true, parseConciseBody: true,
 parseYieldExpression: true
 */
@@ -199,6 +200,7 @@ parseYieldExpression: true
         StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
         StrictParamDupe: 'Strict mode function may not have duplicate parameter names',
         ParameterAfterRestParameter: 'Rest parameter must be final parameter of an argument list',
+        ElementAfterSpreadElement: 'Spread must be the final element of an element list',
         ObjectPatternAsRestParameter: 'Invalid rest parameter',
         StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
         StrictOctalLiteral:  'Octal literals are not allowed in strict mode.',
@@ -1678,8 +1680,13 @@ parseYieldExpression: true
                 elements.push(null);
                 break;
             default:
-                elements.push(parseAssignmentExpression());
-                if (!(match(']') || matchKeyword('for') || matchKeyword('if'))) {
+                tmp = parseSpreadOrAssignmentExpression();
+                elements.push(tmp);
+                if (tmp && tmp.type === Syntax.SpreadElement) {
+                    if (!match(']')) {
+                        throwError({}, Messages.ElementAfterSpreadElement);
+                    }
+                } else if (!(match(']') || matchKeyword('for') || matchKeyword('if'))) {
                     expect(','); // this lexes.
                     possiblecomprehension = false;
                 }
@@ -2076,16 +2083,21 @@ parseYieldExpression: true
     // 11.2 Left-Hand-Side Expressions
 
     function parseArguments() {
-        var args = [];
+        var args = [], arg;
 
         expect('(');
 
         if (!match(')')) {
             while (index < length) {
-                args.push(parseAssignmentExpression());
+                arg = parseSpreadOrAssignmentExpression();
+                args.push(arg);
+
                 if (match(')')) {
                     break;
+                } else if (arg.type === Syntax.SpreadElement) {
+                    throwError({}, Messages.ElementAfterSpreadElement);
                 }
+
                 expect(',');
             }
         }
@@ -2093,6 +2105,18 @@ parseYieldExpression: true
         expect(')');
 
         return args;
+    }
+
+    function parseSpreadOrAssignmentExpression() {
+        if (match('...')) {
+            lex();
+            return {
+                type: Syntax.SpreadElement,
+                argument: parseAssignmentExpression()
+            };
+        } else {
+            return parseAssignmentExpression();
+        }
     }
 
     function parseNonComputedProperty() {
