@@ -28,7 +28,7 @@
         "jslint": "~0.1.9"
     },
     "scripts": {
-        "test": "node test/run.js",
+        "test": "node_modules/jslint/bin/jslint.js esprima.js && node test/run.js",
         "benchmark": "node test/benchmarks.js",
         "benchmark-quick": "node test/benchmarks.js quick"
     }
