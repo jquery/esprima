@@ -5428,7 +5428,7 @@ parseYieldExpression: true
         return program;
     }
 
-    // Sync with package.json.
+    // Sync with package.json and component.json.
     exports.version = '1.1.0-dev-harmony';
 
     exports.parse = parse;
