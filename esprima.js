@@ -322,20 +322,29 @@ parseYieldExpression: true
         // Some others are from future reserved words.
 
         switch (id.length) {
-        case 2: return (id === 'if') || (id === 'in') || (id === 'do');
-        case 3: return (id === 'var') || (id === 'for') || (id === 'new') ||
+        case 2:
+            return (id === 'if') || (id === 'in') || (id === 'do');
+        case 3:
+            return (id === 'var') || (id === 'for') || (id === 'new') ||
                 (id === 'try') || (id === 'let');
-        case 4: return (id === 'this') || (id === 'else') || (id === 'case') ||
+        case 4:
+            return (id === 'this') || (id === 'else') || (id === 'case') ||
                 (id === 'void') || (id === 'with') || (id === 'enum');
-        case 5: return (id === 'while') || (id === 'break') || (id === 'catch') ||
+        case 5:
+            return (id === 'while') || (id === 'break') || (id === 'catch') ||
                 (id === 'throw') || (id === 'const') || (id === 'yield') ||
                 (id === 'class') || (id === 'super');
-        case 6: return (id === 'return') || (id === 'typeof') || (id === 'delete') ||
+        case 6:
+            return (id === 'return') || (id === 'typeof') || (id === 'delete') ||
                 (id === 'switch') || (id === 'export') || (id === 'import');
-        case 7: return (id === 'default') || (id === 'finally') || (id === 'extends');
-        case 8: return (id === 'function') || (id === 'continue') || (id === 'debugger');
-        case 10: return (id === 'instanceof');
-        default: return false;
+        case 7:
+            return (id === 'default') || (id === 'finally') || (id === 'extends');
+        case 8:
+            return (id === 'function') || (id === 'continue') || (id === 'debugger');
+        case 10:
+            return (id === 'instanceof');
+        default:
+            return false;
         }
     }
 
@@ -755,7 +764,8 @@ parseYieldExpression: true
                         lineStart: lineStart,
                         range: [start, index]
                     };
-                } else if (ch === 'b' || ch === 'B') {
+                }
+                if (ch === 'b' || ch === 'B') {
                     ++index;
                     number = '';
 
@@ -785,7 +795,8 @@ parseYieldExpression: true
                         lineStart: lineStart,
                         range: [start, index]
                     };
-                } else if (ch === 'o' || ch === 'O' || isOctalDigit(ch)) {
+                }
+                if (ch === 'o' || ch === 'O' || isOctalDigit(ch)) {
                     if (isOctalDigit(ch)) {
                         octal = true;
                         number = source[index++];
@@ -1202,8 +1213,7 @@ parseYieldExpression: true
                     ch = scanHexEscape('u');
                     if (ch) {
                         flags += ch;
-                        str += '\\u';
-                        for (; restore < index; ++restore) {
+                        for (str += '\\u'; restore < index; ++restore) {
                             str += source[restore];
                         }
                     } else {
@@ -1261,16 +1271,19 @@ parseYieldExpression: true
         }
         if (isIdentifierStart(ch)) {
             return scanIdentifier();
-        } else if (ch === '.') {
+        }
+        if (ch === '.') {
             // Dot (.) can also start a floating-point number, hence the need
             // to check the next character.
             if (isDecimalDigit(source[index + 1])) {
                 return scanNumericLiteral();
             }
             return scanPunctuator();
-        } else if (ch === '\'' || ch === '"') {
+        }
+        if (ch === '\'' || ch === '"') {
             return scanStringLiteral();
-        } else if (isDecimalDigit(ch)) {
+        }
+        if (isDecimalDigit(ch)) {
             return scanNumericLiteral();
         }
 
@@ -1636,13 +1649,12 @@ parseYieldExpression: true
                     argument: argument,
                     prefix: true
                 };
-            } else {
-                return {
-                    type: Syntax.UnaryExpression,
-                    operator: operator,
-                    argument: argument
-                };
             }
+            return {
+                type: Syntax.UnaryExpression,
+                operator: operator,
+                argument: argument
+            };
         },
 
         createVariableDeclaration: function (declarations, kind) {
@@ -1939,12 +1951,11 @@ parseYieldExpression: true
                 blocks: blocks,
                 body: elements[0]
             };
-        } else {
-            return {
-                type: Syntax.ArrayExpression,
-                elements: elements
-            };
         }
+        return {
+            type: Syntax.ArrayExpression,
+            elements: elements
+        };
     }
 
     // 11.1.5 Object Initialiser
@@ -2048,7 +2059,8 @@ parseYieldExpression: true
                     value: parsePropertyFunction({ generator: false }),
                     kind: 'get'
                 };
-            } else if (token.value === 'set' && !(match(':') || match('('))) {
+            }
+            if (token.value === 'set' && !(match(':') || match('('))) {
                 key = parseObjectPropertyKey();
                 expect('(');
                 token = lookahead();
@@ -2060,34 +2072,34 @@ parseYieldExpression: true
                     value: parsePropertyFunction({ params: param, generator: false, name: token }),
                     kind: 'set'
                 };
-            } else {
-                if (match(':')) {
-                    lex();
-                    return {
-                        type: Syntax.Property,
-                        key: id,
-                        value: parseAssignmentExpression(),
-                        kind: 'init'
-                    };
-                } else if (match('(')) {
-                    return {
-                        type: Syntax.Property,
-                        key: id,
-                        value: parsePropertyMethodFunction({ generator: false }),
-                        kind: 'init',
-                        method: true
-                    };
-                } else {
-                    return {
-                        type: Syntax.Property,
-                        key: id,
-                        value: id,
-                        kind: 'init',
-                        shorthand: true
-                    };
-                }
             }
-        } else if (token.type === Token.EOF || token.type === Token.Punctuator) {
+            if (match(':')) {
+                lex();
+                return {
+                    type: Syntax.Property,
+                    key: id,
+                    value: parseAssignmentExpression(),
+                    kind: 'init'
+                };
+            }
+            if (match('(')) {
+                return {
+                    type: Syntax.Property,
+                    key: id,
+                    value: parsePropertyMethodFunction({ generator: false }),
+                    kind: 'init',
+                    method: true
+                };
+            }
+            return {
+                type: Syntax.Property,
+                key: id,
+                value: id,
+                kind: 'init',
+                shorthand: true
+            };
+        }
+        if (token.type === Token.EOF || token.type === Token.Punctuator) {
             if (!match('*')) {
                 throwUnexpected(token);
             }
@@ -2106,27 +2118,27 @@ parseYieldExpression: true
                 kind: 'init',
                 method: true
             };
-        } else {
-            key = parseObjectPropertyKey();
-            if (match(':')) {
-                lex();
-                return {
-                    type: Syntax.Property,
-                    key: key,
-                    value: parseAssignmentExpression(),
-                    kind: 'init'
-                };
-            } else if (match('(')) {
-                return {
-                    type: Syntax.Property,
-                    key: key,
-                    value: parsePropertyMethodFunction({ generator: false }),
-                    kind: 'init',
-                    method: true
-                };
-            }
-            throwUnexpected(lex());
         }
+        key = parseObjectPropertyKey();
+        if (match(':')) {
+            lex();
+            return {
+                type: Syntax.Property,
+                key: key,
+                value: parseAssignmentExpression(),
+                kind: 'init'
+            };
+        }
+        if (match('(')) {
+            return {
+                type: Syntax.Property,
+                key: key,
+                value: parsePropertyMethodFunction({ generator: false }),
+                kind: 'init',
+                method: true
+            };
+        }
+        throwUnexpected(lex());
     }
 
     function parseObjectInitialiser() {
@@ -2348,9 +2360,8 @@ parseYieldExpression: true
                 type: Syntax.SpreadElement,
                 argument: parseAssignmentExpression()
             };
-        } else {
-            return parseAssignmentExpression();
         }
+        return parseAssignmentExpression();
     }
 
     function parseNonComputedProperty() {
@@ -3563,14 +3574,13 @@ parseYieldExpression: true
                 body: body,
                 each: false
             };
-        } else {
-            return {
-                type: Syntax.ForOfStatement,
-                left: left,
-                right: right,
-                body: body
-            };
         }
+        return {
+            type: Syntax.ForOfStatement,
+            left: left,
+            right: right,
+            body: body
+        };
     }
 
     // 12.7 The continue statement
@@ -4017,9 +4027,8 @@ parseYieldExpression: true
     function parseConciseBody() {
         if (match('{')) {
             return parseFunctionSourceElements();
-        } else {
-            return parseAssignmentExpression();
         }
+        return parseAssignmentExpression();
     }
 
     function parseFunctionSourceElements() {
@@ -4372,7 +4381,8 @@ parseYieldExpression: true
                 value: parsePropertyFunction({ generator: false }),
                 kind: 'get'
             };
-        } else if (token.value === 'set' && !match('(')) {
+        }
+        if (token.value === 'set' && !match('(')) {
             key = parseObjectPropertyKey();
             expect('(');
             token = lookahead();
@@ -4384,23 +4394,21 @@ parseYieldExpression: true
                 value: parsePropertyFunction({ params: param, generator: false, name: token }),
                 kind: 'set'
             };
-        } else {
-            return {
-                type: Syntax.MethodDefinition,
-                key: key,
-                value: parsePropertyMethodFunction({ generator: false }),
-                kind: ''
-            };
         }
+        return {
+            type: Syntax.MethodDefinition,
+            key: key,
+            value: parsePropertyMethodFunction({ generator: false }),
+            kind: ''
+        };
     }
 
     function parseClassElement() {
         if (match(';')) {
             lex();
             return;
-        } else {
-            return parseMethodDefinition();
         }
+        return parseMethodDefinition();
     }
 
     function parseClassBody() {
