@@ -250,38 +250,13 @@ parseStatement: true, parseSourceElement: true */
     // 7.6.1.2 Future Reserved Words
 
     function isFutureReservedWord(id) {
-        switch (id) {
-
-        // Future reserved words.
-        case 'class':
-        case 'enum':
-        case 'export':
-        case 'extends':
-        case 'import':
-        case 'super':
-            return true;
-        }
-
-        return false;
+        return ['class', 'enum', 'export', 'extends', 'import', 'super'].
+            indexOf(id) >= 0;
     }
 
     function isStrictModeReservedWord(id) {
-        switch (id) {
-
-        // Strict Mode reserved words.
-        case 'implements':
-        case 'interface':
-        case 'package':
-        case 'private':
-        case 'protected':
-        case 'public':
-        case 'static':
-        case 'yield':
-        case 'let':
-            return true;
-        }
-
-        return false;
+        return ['implements', 'interface', 'package', 'private', 'protected',
+            'public', 'static', 'yield', 'let'].indexOf(id) >= 0;
     }
 
     function isRestrictedWord(id) {
@@ -291,55 +266,39 @@ parseStatement: true, parseSourceElement: true */
     // 7.6.1.1 Keywords
 
     function isKeyword(id) {
-        var keyword = false;
-        switch (id.length) {
-        case 2:
-            keyword = (id === 'if') || (id === 'in') || (id === 'do');
-            break;
-        case 3:
-            keyword = (id === 'var') || (id === 'for') || (id === 'new') || (id === 'try');
-            break;
-        case 4:
-            keyword = (id === 'this') || (id === 'else') || (id === 'case') || (id === 'void') || (id === 'with');
-            break;
-        case 5:
-            keyword = (id === 'while') || (id === 'break') || (id === 'catch') || (id === 'throw');
-            break;
-        case 6:
-            keyword = (id === 'return') || (id === 'typeof') || (id === 'delete') || (id === 'switch');
-            break;
-        case 7:
-            keyword = (id === 'default') || (id === 'finally');
-            break;
-        case 8:
-            keyword = (id === 'function') || (id === 'continue') || (id === 'debugger');
-            break;
-        case 10:
-            keyword = (id === 'instanceof');
-            break;
-        }
-
-        if (keyword) {
-            return true;
-        }
-
-        switch (id) {
-        // Future reserved words.
-        // 'const' is specialized as Keyword in V8.
-        case 'const':
-            return true;
-
-        // For compatiblity to SpiderMonkey and ES.next
-        case 'yield':
-        case 'let':
-            return true;
-        }
-
         if (strict && isStrictModeReservedWord(id)) {
             return true;
         }
 
-        return isFutureReservedWord(id);
+        // 'const' is specialized as Keyword in V8.
+        // 'yield' and 'let' are for compatiblity with SpiderMonkey and ES.next.
+        // Some others are from future reserved words.
+
+        switch (id.length) {
+        case 2:
+            return (id === 'if') || (id === 'in') || (id === 'do');
+        case 3:
+            return (id === 'var') || (id === 'for') || (id === 'new') ||
+                (id === 'try') || (id === 'let');
+        case 4:
+            return (id === 'this') || (id === 'else') || (id === 'case') ||
+                (id === 'void') || (id === 'with') || (id === 'enum');
+        case 5:
+            return (id === 'while') || (id === 'break') || (id === 'catch') ||
+                (id === 'throw') || (id === 'const') || (id === 'yield') ||
+                (id === 'class') || (id === 'super');
+        case 6:
+            return (id === 'return') || (id === 'typeof') || (id === 'delete') ||
+                (id === 'switch') || (id === 'export') || (id === 'import');
+        case 7:
+            return (id === 'default') || (id === 'finally') || (id === 'extends');
+        case 8:
+            return (id === 'function') || (id === 'continue') || (id === 'debugger');
+        case 10:
+            return (id === 'instanceof');
+        default:
+            return false;
+        }
     }
 
     // 7.4 Comments
@@ -691,7 +650,8 @@ parseStatement: true, parseSourceElement: true */
                         lineStart: lineStart,
                         range: [start, index]
                     };
-                } else if (isOctalDigit(ch)) {
+                }
+                if (isOctalDigit(ch)) {
                     number += source[index++];
                     while (index < length) {
                         ch = source[index];
@@ -893,7 +853,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function scanRegExp() {
-        var str = '', ch, start, pattern, flags, value, classMarker = false, restore, terminated = false;
+        var str, ch, start, pattern, flags, value, classMarker = false, restore, terminated = false;
 
         lookahead = null;
         skipComment();
@@ -952,8 +912,7 @@ parseStatement: true, parseSourceElement: true */
                     ch = scanHexEscape('u');
                     if (ch) {
                         flags += ch;
-                        str += '\\u';
-                        for (; restore < index; ++restore) {
+                        for (str += '\\u'; restore < index; ++restore) {
                             str += source[restore];
                         }
                     } else {
@@ -993,7 +952,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function advance() {
-        var ch, token;
+        var ch;
 
         skipComment();
 
@@ -1010,16 +969,19 @@ parseStatement: true, parseSourceElement: true */
 
         if (isIdentifierStart(ch)) {
             return scanIdentifier();
-        } else if (ch === '.') {
+        }
+        if (ch === '.') {
             // Dot (.) can also start a floating-point number, hence the need
             // to check the next character.
             if (isDecimalDigit(source[index + 1])) {
                 return scanNumericLiteral();
             }
             return scanPunctuator();
-        } else if (ch === '\'' || ch === '"') {
+        }
+        if (ch === '\'' || ch === '"') {
             return scanStringLiteral();
-        } else if (isDecimalDigit(ch)) {
+        }
+        if (isDecimalDigit(ch)) {
             return scanNumericLiteral();
         }
 
@@ -1354,13 +1316,12 @@ parseStatement: true, parseSourceElement: true */
                     argument: argument,
                     prefix: true
                 };
-            } else {
-                return {
-                    type: Syntax.UnaryExpression,
-                    operator: operator,
-                    argument: argument
-                };
             }
+            return {
+                type: Syntax.UnaryExpression,
+                operator: operator,
+                argument: argument
+            };
         },
 
         createVariableDeclaration: function (declarations, kind) {
@@ -1564,7 +1525,6 @@ parseStatement: true, parseSourceElement: true */
         if (lookahead.type !== Token.EOF && !match('}')) {
             throwUnexpected(lookahead);
         }
-        return;
     }
 
     // Return true if provided expression is LeftHandSideExpression
@@ -1645,7 +1605,8 @@ parseStatement: true, parseSourceElement: true */
                 expect(')');
                 value = parsePropertyFunction([]);
                 return delegate.createProperty('get', key, value);
-            } else if (token.value === 'set' && !match(':')) {
+            }
+            if (token.value === 'set' && !match(':')) {
                 key = parseObjectPropertyKey();
                 expect('(');
                 token = lookahead;
@@ -1656,12 +1617,12 @@ parseStatement: true, parseSourceElement: true */
                 expect(')');
                 value = parsePropertyFunction(param, token);
                 return delegate.createProperty('set', key, value);
-            } else {
-                expect(':');
-                value = parseAssignmentExpression();
-                return delegate.createProperty('init', id, value);
             }
-        } else if (token.type === Token.EOF || token.type === Token.Punctuator) {
+            expect(':');
+            value = parseAssignmentExpression();
+            return delegate.createProperty('init', id, value);
+        }
+        if (token.type === Token.EOF || token.type === Token.Punctuator) {
             throwUnexpected(token);
         } else {
             key = parseObjectPropertyKey();
@@ -1842,7 +1803,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseNewExpression() {
-        var expr, callee, args;
+        var callee, args;
 
         expectKeyword('new');
         callee = parseLeftHandSideExpression();
@@ -2435,8 +2396,8 @@ parseStatement: true, parseSourceElement: true */
         state.inIteration = oldInIteration;
 
         return (typeof left === 'undefined') ?
-            delegate.createForStatement(init, test, update, body) :
-            delegate.createForInStatement(left, right, body);
+                delegate.createForStatement(init, test, update, body) :
+                delegate.createForInStatement(left, right, body);
     }
 
     // 12.7 The continue statement
@@ -2922,7 +2883,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseFunctionDeclaration() {
-        var id, param, params = [], body, token, stricted, tmp, firstRestricted, message, previousStrict;
+        var id, params = [], body, token, stricted, tmp, firstRestricted, message, previousStrict;
 
         expectKeyword('function');
         token = lookahead;
