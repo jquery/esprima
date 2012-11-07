@@ -1014,8 +1014,7 @@ parseStatement: true, parseSourceElement: true */
         lookahead = advance();
         index = pos;
         lineNumber = line;
-
-        return lookahead;
+        lineStart = start;
     }
 
     SyntaxTreeDelegate = {
