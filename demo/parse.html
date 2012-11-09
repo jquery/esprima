@@ -217,7 +217,8 @@ function parse(delay) {
             comment: document.getElementById('comment').checked,
             raw: document.getElementById('raw').checked,
             range: document.getElementById('range').checked,
-            loc: document.getElementById('loc').checked
+            loc: document.getElementById('loc').checked,
+            tolerant: document.getElementById('tolerant').checked
         };
 
         document.getElementById('tokens').value = '';
@@ -269,7 +270,8 @@ var answer = 6 * 7;
 </textarea></div>
 <p id="codemirror" align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
 <p><label><input type="checkbox" id="raw"> Preserve raw value of literals</label>
-<label><input type="checkbox" id="comment"> Include comments</label></p>
+<label><input type="checkbox" id="comment"> Include comments</label>
+<label><input type="checkbox" id="tolerant"> Tolerate errors</label></p>
 <p>Syntax node location info (start, end):
 <label><input type="checkbox" id="range">Index-based range</label>
 <label><input type="checkbox" id="loc">Line and column-based</label></p>
@@ -372,6 +374,7 @@ try {
     document.getElementById('range').onchange = quickParse;
     document.getElementById('loc').onchange = quickParse;
     document.getElementById('tokens').onchange = quickParse;
+    document.getElementById('tolerant').onchange = quickParse;
 
     // Special handling for IE.
     document.getElementById('comment').onclick = quickParse;
@@ -379,6 +382,7 @@ try {
     document.getElementById('range').onclick = quickParse;
     document.getElementById('loc').onclick = quickParse;
     document.getElementById('tokens').onclick = quickParse;
+    document.getElementById('tolerant').onclick = quickParse;
 
     window.checkEnv();
 
