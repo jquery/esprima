@@ -1014,8 +1014,7 @@ parseStatement: true, parseSourceElement: true */
         lookahead = advance();
         index = pos;
         lineNumber = line;
-
-        return lookahead;
+        lineStart = start;
     }
 
     SyntaxTreeDelegate = {
@@ -1193,7 +1192,8 @@ parseStatement: true, parseSourceElement: true */
         createLiteral: function (token) {
             return {
                 type: Syntax.Literal,
-                value: token.value
+                value: token.value,
+                raw: sliceSource(token.range[0], token.range[1])
             };
         },
 
@@ -3697,18 +3697,6 @@ parseStatement: true, parseSourceElement: true */
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
 
-            if ((typeof options.raw === 'boolean') && options.raw) {
-                delegate = extend(delegate, {
-                    'createLiteral': function (token) {
-                        return {
-                            type: Syntax.Literal,
-                            value: token.value,
-                            raw: sliceSource(token.range[0], token.range[1])
-                        };
-                    }
-                });
-            }
-
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
             }
@@ -3763,7 +3751,7 @@ parseStatement: true, parseSourceElement: true */
         return program;
     }
 
-    // Sync with package.json.
+    // Sync with package.json and component.json.
     exports.version = '1.1.0-dev';
 
     exports.parse = parse;
