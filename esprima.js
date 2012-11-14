@@ -2334,6 +2334,12 @@ parseYieldExpression: true
     function binaryPrecedence(token, allowIn) {
         var prec = 0;
 
+        if (matchContextualKeyword('is') || matchContextualKeyword('isnt')) {
+            if (!peekLineTerminator()) {
+                return 6;
+            }
+        }
+
         if (token.type !== Token.Punctuator && token.type !== Token.Keyword) {
             return 0;
         }
