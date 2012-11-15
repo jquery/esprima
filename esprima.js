@@ -2672,7 +2672,7 @@ parseYieldExpression: true
     // 11.12 Conditional Operator
 
     function parseConditionalExpression() {
-        var expr, previousAllowIn, consequent;
+        var expr, previousAllowIn, consequent, alternate;
 
         expr = parseBinaryExpression();
 
@@ -2683,13 +2683,9 @@ parseYieldExpression: true
             consequent = parseAssignmentExpression();
             state.allowIn = previousAllowIn;
             expect(':');
+            alternate = parseAssignmentExpression();
 
-            expr = {
-                type: Syntax.ConditionalExpression,
-                test: expr,
-                consequent: consequent,
-                alternate: parseAssignmentExpression()
-            };
+            expr = delegate.createConditionalExpression(expr, consequent, alternate);
         }
 
         return expr;
@@ -5203,6 +5199,7 @@ parseYieldExpression: true
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
+
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
             }
