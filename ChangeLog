@@ -1,3 +1,11 @@
+2012-10-28: Version 1.0.1
+
+    Improvements:
+
+      * esvalidate understands shebang in a Unix shell script (issue 361)
+      * esvalidate treats fatal parsing failure as an error (issue 361)
+      * Reduce Node.js package via .npmignore (issue 362)
+
 2012-10-22: Version 1.0.0
 
     Initial release.
