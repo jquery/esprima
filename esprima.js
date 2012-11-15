@@ -1989,7 +1989,7 @@ parseYieldExpression: true
 
 
     function parsePropertyMethodFunction(options) {
-        var token, previousStrict, tmp, method, firstRestricted, message;
+        var previousStrict, tmp, method, firstRestricted, message;
 
         previousStrict = strict;
         strict = true;
@@ -2381,7 +2381,7 @@ parseYieldExpression: true
     }
 
     function parseNewExpression() {
-        var expr, callee, args;
+        var callee, args;
 
         expectKeyword('new');
         callee = parseLeftHandSideExpression();
@@ -2823,7 +2823,7 @@ parseYieldExpression: true
     }
 
     function parseAssignmentExpression() {
-        var expr, token, params, oldParenthesizedCount, coverFormalsList;
+        var expr, token, params, oldParenthesizedCount;
 
         if (matchKeyword('yield')) {
             return parseYieldExpression();
