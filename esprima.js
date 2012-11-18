@@ -67,8 +67,6 @@ parseYieldExpression: true
         SyntaxTreeDelegate,
         source,
         strict,
-        yieldAllowed,
-        yieldFound,
         index,
         lineNumber,
         lineStart,
@@ -1961,19 +1959,19 @@ parseYieldExpression: true
         var previousStrict, previousYieldAllowed, params, body;
 
         previousStrict = strict;
-        previousYieldAllowed = yieldAllowed;
-        yieldAllowed = options.generator;
+        previousYieldAllowed = state.yieldAllowed;
+        state.yieldAllowed = options.generator;
         params = options.params || [];
 
         body = parseConciseBody();
         if (options.name && strict && isRestrictedWord(params[0].name)) {
             throwErrorTolerant(options.name, Messages.StrictParamName);
         }
-        if (yieldAllowed && !yieldFound) {
+        if (state.yieldAllowed && !state.yieldFound) {
             throwError({}, Messages.NoYieldInGenerator);
         }
         strict = previousStrict;
-        yieldAllowed = previousYieldAllowed;
+        state.yieldAllowed = previousYieldAllowed;
 
         return {
             type: Syntax.FunctionExpression,
@@ -2803,12 +2801,12 @@ parseYieldExpression: true
         expect('=>');
 
         previousStrict = strict;
-        previousYieldAllowed = yieldAllowed;
+        previousYieldAllowed = state.yieldAllowed;
         strict = true;
-        yieldAllowed = false;
+        state.yieldAllowed = false;
         body = parseConciseBody();
         strict = previousStrict;
-        yieldAllowed = previousYieldAllowed;
+        state.yieldAllowed = previousYieldAllowed;
 
         return {
             type: Syntax.ArrowFunctionExpression,
@@ -4061,8 +4059,8 @@ parseYieldExpression: true
         }
 
         previousStrict = strict;
-        previousYieldAllowed = yieldAllowed;
-        yieldAllowed = generator;
+        previousYieldAllowed = state.yieldAllowed;
+        state.yieldAllowed = generator;
 
         // here we redo some work in order to set 'expression'
         expression = !match('{');
@@ -4074,11 +4072,11 @@ parseYieldExpression: true
         if (strict && tmp.stricted) {
             throwErrorTolerant(tmp.stricted, message);
         }
-        if (yieldAllowed && !yieldFound) {
+        if (state.yieldAllowed && !state.yieldFound) {
             throwError({}, Messages.NoYieldInGenerator);
         }
         strict = previousStrict;
-        yieldAllowed = previousYieldAllowed;
+        state.yieldAllowed = previousYieldAllowed;
 
         return {
             type: Syntax.FunctionDeclaration,
@@ -4129,8 +4127,8 @@ parseYieldExpression: true
         }
 
         previousStrict = strict;
-        previousYieldAllowed = yieldAllowed;
-        yieldAllowed = generator;
+        previousYieldAllowed = state.yieldAllowed;
+        state.yieldAllowed = generator;
 
         // here we redo some work in order to set 'expression'
         expression = !match('{');
@@ -4142,11 +4140,11 @@ parseYieldExpression: true
         if (strict && tmp.stricted) {
             throwErrorTolerant(tmp.stricted, message);
         }
-        if (yieldAllowed && !yieldFound) {
+        if (state.yieldAllowed && !state.yieldFound) {
             throwError({}, Messages.NoYieldInGenerator);
         }
         strict = previousStrict;
-        yieldAllowed = previousYieldAllowed;
+        state.yieldAllowed = previousYieldAllowed;
 
 
         return {
@@ -4166,7 +4164,7 @@ parseYieldExpression: true
 
         expectKeyword('yield');
 
-        if (!yieldAllowed) {
+        if (!state.yieldAllowed) {
             throwErrorTolerant({}, Messages.IllegalYield);
         }
 
@@ -4177,11 +4175,11 @@ parseYieldExpression: true
         }
 
         // It is a Syntax Error if any AssignmentExpression Contains YieldExpression.
-        previousYieldAllowed = yieldAllowed;
-        yieldAllowed = false;
+        previousYieldAllowed = state.yieldAllowed;
+        state.yieldAllowed = false;
         expr = parseAssignmentExpression();
-        yieldAllowed = previousYieldAllowed;
-        yieldFound = true;
+        state.yieldAllowed = previousYieldAllowed;
+        state.yieldFound = true;
 
         return {
             type: Syntax.YieldExpression,
@@ -4282,10 +4280,10 @@ parseYieldExpression: true
 
         if (matchKeyword('extends')) {
             expectKeyword('extends');
-            previousYieldAllowed = yieldAllowed;
-            yieldAllowed = false;
+            previousYieldAllowed = state.yieldAllowed;
+            state.yieldAllowed = false;
             superClass = parseAssignmentExpression();
-            yieldAllowed = previousYieldAllowed;
+            state.yieldAllowed = previousYieldAllowed;
         }
 
         body = parseClassBody();
@@ -4307,10 +4305,10 @@ parseYieldExpression: true
 
         if (matchKeyword('extends')) {
             expectKeyword('extends');
-            previousYieldAllowed = yieldAllowed;
-            yieldAllowed = false;
+            previousYieldAllowed = state.yieldAllowed;
+            state.yieldAllowed = false;
             superClass = parseAssignmentExpression();
-            yieldAllowed = previousYieldAllowed;
+            state.yieldAllowed = previousYieldAllowed;
         }
 
         body = parseClassBody();
@@ -4443,8 +4441,6 @@ parseYieldExpression: true
     function parseProgram() {
         var body;
         strict = false;
-        yieldAllowed = false;
-        yieldFound = false;
         peek();
         body = parseProgramElements();
         return delegate.createProgram(body);
@@ -5192,7 +5188,9 @@ parseYieldExpression: true
             parenthesizedCount: 0,
             inFunctionBody: false,
             inIteration: false,
-            inSwitch: false
+            inSwitch: false,
+            yieldAllowed: false,
+            yieldFound: false
         };
 
         extra = {};
