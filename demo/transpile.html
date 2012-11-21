@@ -49,28 +49,28 @@
 // Module declaration
 module LinearAlgebra {
 
-    export const CoordinateSystem = 'Cartesian';
+  export const CoordinateSystem = 'Cartesian';
 
-    // Object literal property shorthand.
-    export function Point(x, y) {
-        return { x, y };
-    }
-}
-
-class Vector3 {
-
-  constructor (x, y, z) {
-    this.x = x; this.y = y; this.z = z;
+  // Object literal property shorthand.
+  export function Point(x, y) {
+    return { x, y };
   }
 
-  // Euclidian norm
-  get magnitude() {
+  export class Vector3 {
 
-    // Arrow function
-    var sqr = p => p * p;
+    constructor (x, y, z) {
+      this.x = x; this.y = y; this.z = z;
+    }
 
-    return Math.sqrt(sqr(this.x) + sqr(this.y) +
-      sqr(this.z));
+    // Euclidian norm
+    get magnitude() {
+
+      // Arrow function
+      var sqr = p => p * p;
+
+      return Math.sqrt(sqr(this.x) + sqr(this.y) +
+        sqr(this.z));
+    }
   }
 }
 </textarea></span>
