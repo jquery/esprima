@@ -264,9 +264,6 @@ if (typeof window !== 'undefined') {
     };
 } else {
 
-    // UMD workaround for V8 shell.
-    var window;
-
     (function (global) {
         'use strict';
         var Benchmark,
@@ -281,7 +278,6 @@ if (typeof window !== 'undefined') {
             dirname = 'test';
             load(dirname + '/3rdparty/benchmark.js');
 
-            window = global;
             load(dirname + '/../esprima.js');
 
             Benchmark = global.Benchmark;
