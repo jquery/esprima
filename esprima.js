@@ -250,13 +250,34 @@ parseStatement: true, parseSourceElement: true */
     // 7.6.1.2 Future Reserved Words
 
     function isFutureReservedWord(id) {
-        return ['class', 'enum', 'export', 'extends', 'import', 'super'].
-            indexOf(id) >= 0;
+        switch (id) {
+        case 'class':
+        case 'enum':
+        case 'export':
+        case 'extends':
+        case 'import':
+        case 'super':
+            return true;
+        default:
+            return false;
+        }
     }
 
     function isStrictModeReservedWord(id) {
-        return ['implements', 'interface', 'package', 'private', 'protected',
-            'public', 'static', 'yield', 'let'].indexOf(id) >= 0;
+        switch (id) {
+        case 'implements':
+        case 'interface':
+        case 'package':
+        case 'private':
+        case 'protected':
+        case 'public':
+        case 'static':
+        case 'yield':
+        case 'let':
+            return true;
+        default:
+            return false;
+        }
     }
 
     function isRestrictedWord(id) {
