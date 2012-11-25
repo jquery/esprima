@@ -250,13 +250,34 @@ parseStatement: true, parseSourceElement: true */
     // 7.6.1.2 Future Reserved Words
 
     function isFutureReservedWord(id) {
-        return ['class', 'enum', 'export', 'extends', 'import', 'super'].
-            indexOf(id) >= 0;
+        switch (id) {
+        case 'class':
+        case 'enum':
+        case 'export':
+        case 'extends':
+        case 'import':
+        case 'super':
+            return true;
+        default:
+            return false;
+        }
     }
 
     function isStrictModeReservedWord(id) {
-        return ['implements', 'interface', 'package', 'private', 'protected',
-            'public', 'static', 'yield', 'let'].indexOf(id) >= 0;
+        switch (id) {
+        case 'implements':
+        case 'interface':
+        case 'package':
+        case 'private':
+        case 'protected':
+        case 'public':
+        case 'static':
+        case 'yield':
+        case 'let':
+            return true;
+        default:
+            return false;
+        }
     }
 
     function isRestrictedWord(id) {
@@ -390,16 +411,10 @@ parseStatement: true, parseSourceElement: true */
         return String.fromCharCode(code);
     }
 
-    function scanIdentifier() {
-        var ch, start, id, restore, type;
+    function getEscapedIdentifier() {
+        var ch, id, restore, type;
 
-        ch = source[index];
-        if (!isIdentifierStart(ch)) {
-            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-        }
-
-        start = index++;
-        id = ch;
+        ch = id = source[index++];
         if (ch === '\\') {
             if (source[index] !== 'u') {
                 throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
@@ -445,6 +460,39 @@ parseStatement: true, parseSourceElement: true */
             }
         }
 
+        return id;
+    }
+
+    function getIdentifier() {
+        var start, ch;
+
+        start = index++;
+        while (index < length) {
+            ch = source[index];
+            if (ch === '\\') {
+                index = start;
+                return getEscapedIdentifier();
+            }
+            if (isIdentifierPart(ch)) {
+                ++index;
+            } else {
+                break;
+            }
+        }
+
+        return sliceSource(start, index);
+    }
+
+    function scanIdentifier() {
+        var start, id, type;
+
+        start = index;
+        if (!isIdentifierStart(source[index])) {
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        }
+
+        id = (source[index] === '\\') ? getEscapedIdentifier() : getIdentifier();
+
         // There is no keyword or literal with only one character.
         // Thus, it must be an identifier.
         if (id.length === 1) {
@@ -467,6 +515,7 @@ parseStatement: true, parseSourceElement: true */
             range: [start, index]
         };
     }
+
 
     // 7.7 Punctuators
 
