@@ -130,7 +130,7 @@ process.argv.splice(2).forEach(function (entry) {
         options.format = entry.slice(9);
     } else if (entry.slice(0, 2) === '--') {
         console.log('Error: unknown option ' + entry + '.');
-       // process.exit(1);
+        process.exit(1);
     } else {
         fnames.push(entry);
     }
