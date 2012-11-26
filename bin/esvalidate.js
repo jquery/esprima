@@ -26,42 +26,38 @@
 /*jslint sloppy:true plusplus:true node:true rhino:true */
 /*global phantom:true */
 
-var fs, system, esprima, options, fnames, count, formats, formatter;
+var fs, system, esprima, options, fnames, count, formats, formatter, dieLoudly;
 
 if (typeof esprima === 'undefined') {
+    function tryGet(method) {
+        var valueToGet = null;
+        var args = [].slice.apply(arguments);
+        if(args.length > 2) {
+            args.unshift();
+            var path = args.splice(2, 1)[0];
+
+            try {
+               valueToGet = method(path);
+            } catch(e) {
+                return tryGet.apply(this, args);
+            }
+        }
+        return valueToGet;
+    }
+
     // PhantomJS can only require() relative files
     if (typeof phantom === 'object') {
         fs = require('fs');
         system = require('system');
-        try {
-            esprima = require('./esprima');
-            formats = require('bin/formats');
-        } catch(e) {
-            esprima = require('../esprima');
-            formats = require('./formats');
-        }
+        esprima = tryGet(require, './esprima', '../esprima'); 
+        formats = tryGet(require, 'bin/formats', './formats');
     } else if (typeof require === 'function') {
         fs = require('fs');
-        try {
-            esprima = require('esprima');
-            formats = require('formats');
-        } catch(e) {
-            try {
-                esprima = require('./esprima.js');
-                formats = require('bin/formats.js');
-            } catch (e) {
-                esprima = require('../esprima.js');
-                formats = require('./formats.js');
-            }
-        }
+        esprima = tryGet(require, 'esprima', './esprima.js', '../esprima.js');
+        formats = tryGet(require, 'formats', 'bin/formats.js', './formats.js');
     } else if (typeof load === 'function') {
-        try {
-            load('esprima.js');
-            load('bin/formats.js');
-        } catch (e) {
-            load('../esprima.js');
-            load('formats.js');
-        }
+        esprima = tryGet(load, 'esprima.js', '../esprima.js');
+        formats = tryGet(load, 'bin/formats.js', 'formats.js');
     }
 }
 
@@ -104,6 +100,7 @@ function showUsage() {
 
     console.log('  --format=type  Set the report format: ' + availableFormats);
     console.log('  -v, --version  Print program version');
+    console.log('  -q, --quiet    If an error is encountered during parsing, die silently');
     console.log();
     process.exit(1);
 }
@@ -117,6 +114,7 @@ options = {
 };
 
 fnames = [];
+dieLoudly = true;
 
 process.argv.splice(2).forEach(function (entry) {
 
@@ -126,21 +124,24 @@ process.argv.splice(2).forEach(function (entry) {
         console.log('ECMAScript Validator (using Esprima version', esprima.version, ')');
         console.log();
         process.exit(0);
+    } else if (entry === '-q' || entry === '--quiet') {
+        dieLoudly = false;
     } else if (entry.slice(0, 9) === '--format=') {
         options.format = entry.slice(9);
-        if (options.format in formats) {
-            formatter = formats[options.format](console.log);
-        } else {
-            console.log('Error: unknown report format ' + options.format + '.');
-            process.exit(1);
-        }
     } else if (entry.slice(0, 2) === '--') {
         console.log('Error: unknown option ' + entry + '.');
-        process.exit(1);
+       // process.exit(1);
     } else {
         fnames.push(entry);
     }
 });
+
+if (options.format in formats) {
+    formatter = formats[options.format](console.log);
+} else {
+    console.log('Error: unknown report format ' + options.format + '.');
+    process.exit(1);
+}
 
 if (fnames.length === 0) {
     console.log('Error: no input file.');
@@ -152,6 +153,9 @@ formatter.startLog();
 count = 0;
 fnames.forEach(function (fname) {
     var content, timestamp, syntax, name, errors, failures, tests, time;
+
+    timestamp = Date.now();
+
     try {
         content = fs.readFileSync(fname, 'utf-8');
 
@@ -159,9 +163,8 @@ fnames.forEach(function (fname) {
             content = '//' + content.substr(2, content.length);
         }
 
-        timestamp = Date.now();
         syntax = esprima.parse(content, { tolerant: true });
-
+       
         name = fname;
         if (name.lastIndexOf('/') >= 0) {
             name = name.slice(name.lastIndexOf('/') + 1);
@@ -179,7 +182,7 @@ fnames.forEach(function (fname) {
             ++count;
         });
 
-        formatter.endSection(name, errors, failures, tests, time);
+        formatter.endSection();
 
     } catch (e) {
         ++count;
@@ -191,13 +194,13 @@ fnames.forEach(function (fname) {
 
         formatter.startSection(fname, errors, failures, tests, time);
         formatter.writeError(fname, e, "ParseError");
-        formatter.endSection(fname, errors, failures, tests, time);
+        formatter.endSection();
     }
 });
 
 formatter.endLog();
 
-if (count > 0) {
+if ((count > 0) && dieLoudly) {
     process.exit(1);
 }
 

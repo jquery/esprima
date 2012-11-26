@@ -26,7 +26,7 @@
                       error.message + '(' + fileName + ':' + ((error.lineNumber) ? ':' + error.lineNumber : '') + ')</error>');
         log('  </testcase>');
       },
-      endSection: function(fileName, failures, tests, time)  {
+      endSection: function()  {
         log('</testsuite>');
       },
       endLog: function() {
@@ -50,37 +50,43 @@
         }
         log(msg);
       },
-      endSection: function(fileName, failures, tests, time)  { },
+      endSection: function()  { },
       endLog: function() { }
     };
   };
 
   var sublime = function(log) {
 
-      function numberWang(wangaNumb) {
-        var
-          thatsNumberWang = 8 - wangaNumb,
-          stayNumberWang = '', i;
+    function numberWang(wangaNumb) {
+      var
+        thatsNumberWang = 8 - wangaNumb,
+        stayNumberWang = '', i;
 
-        for (i = 0; i < thatsNumberWang; i += 1) {
-          stayNumberWang += ' ';
-        }
-
-        return stayNumberWang;
+      for (i = 0; i < thatsNumberWang; i += 1) {
+        stayNumberWang += ' ';
       }
+
+      return stayNumberWang;
+    }
 
     return {
       startLog: function() { },
       startSection: function(fileName, failures, tests, time) { 
-        log("[esvalidate file: " + fileName + "]");
-        log(failures + " Errors:");
+        log("[esvalidate file:" + fileName + "]");
+        if(failures > 0) {
+          log(failures + " Error" + (failures > 1 ? "s" : "") + ":");
+        }
       },
-      writeError: function(fileName, error, errorType) {
-        log(numberWang((error.lineNumber.toString() + error.column.toString()).length), error.lineNumber + ',' + error.column + ':', error.message);
+      writeError: function(fileName, error, errorType) {        
+        var msg = error.message;
+        msg = msg.replace(removeLineNumRegEx, '');
+        if(error.lineNumber && error.column) {
+          log(numberWang((error.lineNumber.toString() + error.column.toString()).length), error.lineNumber + ',' + error.column + ':', msg);
+        } else {
+          log(msg);
+        }
       },
-      endSection: function(fileName, failures, tests, time) {
-        log("[Finished in " + time + "]");
-      },
+      endSection: function() { },
       endLog: function() { }
     };
   };
