@@ -29,27 +29,29 @@
 var fs, system, esprima, options, fnames, count, formats, formatter, dieLoudly;
 
 if (typeof esprima === 'undefined') {
-    function tryGet(method) {
-        var valueToGet = null;
-        var args = [].slice.apply(arguments);
-        if(args.length > 2) {
+    var tryGet = function (method) {
+        var valueToGet, args, path;
+        valueToGet = null;
+        args = [].slice.apply(arguments);
+
+        if (args.length > 2) {
             args.unshift();
-            var path = args.splice(2, 1)[0];
+            path = args.splice(2, 1)[0];
 
             try {
-               valueToGet = method(path);
-            } catch(e) {
+                valueToGet = method(path);
+            } catch (e) {
                 return tryGet.apply(this, args);
             }
         }
         return valueToGet;
-    }
+    };
 
     // PhantomJS can only require() relative files
     if (typeof phantom === 'object') {
         fs = require('fs');
         system = require('system');
-        esprima = tryGet(require, './esprima', '../esprima'); 
+        esprima = tryGet(require, './esprima', '../esprima');
         formats = tryGet(require, 'bin/formats', './formats');
     } else if (typeof require === 'function') {
         fs = require('fs');
@@ -81,6 +83,8 @@ if (typeof console === 'undefined' && typeof process === 'undefined') {
 }
 
 function showUsage() {
+    var format, availableFormats;
+
     console.log('Usage:');
     console.log('   esvalidate [options] file.js');
     console.log();
@@ -89,14 +93,14 @@ function showUsage() {
 
     console.log(formats);
 
-    var availableFormats = null;
-    for (var format in formats) {
-        if(availableFormats === null) {
+    availableFormats = null;
+    Object.keys(formats).forEach(function (format) {
+        if (availableFormats === null) {
             availableFormats = format;
         } else {
             availableFormats = availableFormats + ", " + format;
         }
-    }
+    });
 
     console.log('  --format=type  Set the report format: ' + availableFormats);
     console.log('  -v, --version  Print program version');
@@ -136,7 +140,7 @@ process.argv.splice(2).forEach(function (entry) {
     }
 });
 
-if (options.format in formats) {
+if (formats.hasOwnProperty(options.format)) {
     formatter = formats[options.format](console.log);
 } else {
     console.log('Error: unknown report format ' + options.format + '.');
@@ -164,7 +168,7 @@ fnames.forEach(function (fname) {
         }
 
         syntax = esprima.parse(content, { tolerant: true });
-       
+
         name = fname;
         if (name.lastIndexOf('/') >= 0) {
             name = name.slice(name.lastIndexOf('/') + 1);
