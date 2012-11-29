@@ -412,7 +412,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function getEscapedIdentifier() {
-        var ch, id, restore, type;
+        var ch, id, type;
 
         ch = id = source[index++];
         if (ch === '\\') {
@@ -420,17 +420,11 @@ parseStatement: true, parseSourceElement: true */
                 throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
             }
             ++index;
-            restore = index;
             ch = scanHexEscape('u');
-            if (ch) {
-                if (ch === '\\' || !isIdentifierStart(ch)) {
-                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                }
-                id = ch;
-            } else {
-                index = restore;
-                id = 'u';
+            if (!ch || ch === '\\' || !isIdentifierStart(ch)) {
+                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
             }
+            id = ch;
         }
 
         while (index < length) {
@@ -446,17 +440,11 @@ parseStatement: true, parseSourceElement: true */
                     throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                 }
                 ++index;
-                restore = index;
                 ch = scanHexEscape('u');
-                if (ch) {
-                    if (ch === '\\' || !isIdentifierPart(ch)) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                    id += ch;
-                } else {
-                    index = restore;
-                    id += 'u';
+                if (!ch || ch === '\\' || !isIdentifierPart(ch)) {
+                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                 }
+                id += ch;
             }
         }
 
