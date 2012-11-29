@@ -10409,44 +10409,7 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 7 }
             }
-        },
-
-        '\\ua': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'Identifier',
-                name: 'ua',
-                range: [0, 3],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 3 }
-                }
-            },
-            range: [0, 3],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 3 }
-            }
-        },
-
-        'a\\u': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'Identifier',
-                name: 'au',
-                range: [0, 3],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 3 }
-                }
-            },
-            range: [0, 3],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 3 }
-            }
         }
-
     },
 
     'If Statement': {
@@ -15546,6 +15509,20 @@ var testFixture = {
             lineNumber: 1,
             column: 14,
             message: 'Error: Line 1: Invalid regular expression'
+        },
+
+        'a\\u': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '\\ua': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
         '/': {
