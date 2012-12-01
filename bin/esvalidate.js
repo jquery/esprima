@@ -29,20 +29,34 @@
 var fs, system, esprima, options, fnames, count;
 
 if (typeof esprima === 'undefined') {
+    var tryGet = function (method) {
+        var valueToGet, args, path;
+        valueToGet = null;
+        args = [].slice.apply(arguments);
+
+        if (args.length > 2) {
+            args.unshift();
+            path = args.splice(2, 1)[0];
+
+            try {
+                valueToGet = method(path);
+            } catch (e) {
+                return tryGet.apply(this, args);
+            }
+        }
+        return valueToGet;
+    };
+
     // PhantomJS can only require() relative files
     if (typeof phantom === 'object') {
         fs = require('fs');
         system = require('system');
-        esprima = require('./esprima');
+        esprima = tryGet(require, './esprima', '../esprima');
     } else if (typeof require === 'function') {
         fs = require('fs');
-        esprima = require('esprima');
+        esprima = tryGet(require, 'esprima', './esprima.js', '../esprima.js');
     } else if (typeof load === 'function') {
-        try {
-            load('esprima.js');
-        } catch (e) {
-            load('../esprima.js');
-        }
+        esprima = tryGet(load, 'esprima.js', '../esprima.js');
     }
 }
 
