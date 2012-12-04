@@ -3386,6 +3386,9 @@ parseStatement: true, parseSourceElement: true */
                 column: index - lineStart
             }
         };
+        if (extra.loc && extra.loc.source) {
+            marker.loc.source = extra.loc.source
+        };
 
         marker.end = function () {
             this.range[1] = index;
@@ -3408,6 +3411,9 @@ parseStatement: true, parseSourceElement: true */
                         column: this.loc.end.column
                     }
                 };
+                if (extra.loc.source) {
+                    node.groupLoc.source = extra.loc.source
+                };
             }
         };
 
@@ -3425,6 +3431,9 @@ parseStatement: true, parseSourceElement: true */
                         line: this.loc.end.line,
                         column: this.loc.end.column
                     }
+                };
+                if (extra.loc.source) {
+                    node.loc.source = extra.loc.source
                 };
             }
         };
@@ -3559,10 +3568,16 @@ parseStatement: true, parseSourceElement: true */
                             start: start,
                             end: end
                         };
+                        if (loc.source) {
+                            node.groupLoc.source = loc.source
+                        };
                     } else if (typeof node.loc === 'undefined') {
                         node.loc = {
                             start: node.left.loc.start,
                             end: node.right.loc.end
+                        };
+                        if (loc.source) {
+                            node.loc.source = loc.source
                         };
                     }
                 }
@@ -3765,7 +3780,9 @@ parseStatement: true, parseSourceElement: true */
         extra = {};
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
-            extra.loc = (typeof options.loc === 'boolean') && options.loc;
+            // allowing options.loc to contain the filename template for SourceMap & ESCodeGen
+            // options.loc.source = "name of source file" 
+            extra.loc = (typeof options.loc === 'undefined') ? false : options.loc;
 
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
