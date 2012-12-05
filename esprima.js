@@ -3387,8 +3387,8 @@ parseStatement: true, parseSourceElement: true */
             }
         };
         if (extra.loc && extra.loc.source) {
-            marker.loc.source = extra.loc.source
-        };
+            marker.loc.source = extra.loc.source;
+        }
 
         marker.end = function () {
             this.range[1] = index;
@@ -3412,8 +3412,8 @@ parseStatement: true, parseSourceElement: true */
                     }
                 };
                 if (extra.loc.source) {
-                    node.groupLoc.source = extra.loc.source
-                };
+                    node.groupLoc.source = extra.loc.source;
+                }
             }
         };
 
@@ -3433,8 +3433,8 @@ parseStatement: true, parseSourceElement: true */
                     }
                 };
                 if (extra.loc.source) {
-                    node.loc.source = extra.loc.source
-                };
+                    node.loc.source = extra.loc.source;
+                }
             }
         };
 
@@ -3569,16 +3569,16 @@ parseStatement: true, parseSourceElement: true */
                             end: end
                         };
                         if (loc.source) {
-                            node.groupLoc.source = loc.source
-                        };
+                            node.loc.source = loc.source;
+                        }
                     } else if (typeof node.loc === 'undefined') {
                         node.loc = {
                             start: node.left.loc.start,
                             end: node.right.loc.end
                         };
                         if (loc.source) {
-                            node.loc.source = loc.source
-                        };
+                            node.loc.source = loc.source;
+                        }
                     }
                 }
             }
