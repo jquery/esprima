@@ -30,6 +30,7 @@ var fs, system, esprima, options, fnames, count;
 
 if (typeof esprima === 'undefined') {
     var tryGet = function (method) {
+        'use strict';
         var args = [].slice.apply(arguments), 
             valueToGet = null, 
             path = null;
@@ -79,6 +80,7 @@ if (typeof console === 'undefined' && typeof process === 'undefined') {
 }
 
 function showUsage() {
+    'use strict';
     console.log('Usage:');
     console.log('   esvalidate [options] file.js');
     console.log();
@@ -101,6 +103,7 @@ options = {
 fnames = [];
 
 process.argv.splice(2).forEach(function (entry) {
+    'use strict';
 
     if (entry === '-h' || entry === '--help') {
         showUsage();
@@ -134,6 +137,7 @@ if (options.format === 'junit') {
 
 count = 0;
 fnames.forEach(function (fname) {
+    'use strict';
     var content, timestamp, syntax, name;
     try {
         content = fs.readFileSync(fname, 'utf-8');
