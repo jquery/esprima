@@ -30,13 +30,12 @@ var fs, system, esprima, options, fnames, count;
 
 if (typeof esprima === 'undefined') {
     var tryGet = function (method) {
-        var valueToGet, args, path;
-        valueToGet = null;
-        args = [].slice.apply(arguments);
+        var args = [].slice.apply(arguments), 
+            valueToGet = null, 
+            path = null;
 
-        if (args.length > 2) {
-            args.unshift();
-            path = args.splice(2, 1)[0];
+        if (args.length > 1) {
+            path = args.splice(1, 1)[0];
 
             try {
                 valueToGet = method(path);
