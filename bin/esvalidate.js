@@ -26,23 +26,9 @@
 /*jslint sloppy:true plusplus:true node:true rhino:true */
 /*global phantom:true */
 
-var fs, system, esprima, options, fnames, count, formatter, dieLoudly, log;
-
-//shims console & print to generic 'log' method
-if ((log === undefined) && (typeof console !== 'undefined') && (typeof console.log === 'function')) {
-    log = console.log;
-}
-
-if ((log === undefined) && (typeof print === 'function')) {
-    log = print;
-}
-
-if(log === undefined) {
-    throw "Cannot find system to write output to.";
-}
+var fs, system, esprima, options, fnames, count, formatter, dieLoudly;
 
 function tryGetDependency() {
-    'use strict';
     var method, args = null;
     
     if (typeof require === 'function') {
@@ -55,7 +41,7 @@ function tryGetDependency() {
     args.unshift(method);
 
     return tryGet.apply(this, args);
-}
+};
 
 function tryGet (method) {
     'use strict';
@@ -69,11 +55,11 @@ function tryGet (method) {
         try {
             valueToGet = method(path);
         } catch (e) {
-            valueToGet = tryGet.apply(this, args);
+            return tryGet.apply(this, args);
         }
     }
     return valueToGet;
-}
+};
 
 if (typeof esprima === 'undefined') {
     // PhantomJS can only require() relative files
@@ -100,7 +86,8 @@ if (typeof phantom === 'object') {
 }
 
 // Shims to Node.js objects when running under Rhino.
-if (typeof process === 'undefined') {
+if (typeof console === 'undefined' && typeof process === 'undefined') {
+    console = { log: print };
     fs = { readFileSync: readFile };
     process = { argv: arguments, exit: quit };
     process.argv.unshift('esvalidate.js');
@@ -181,7 +168,6 @@ formatter.startLog();
 
 count = 0;
 fnames.forEach(function (fname) {
-    'use strict';
     var content, timestamp, syntax, name, errors, failures, tests, time;
 
     timestamp = Date.now();
