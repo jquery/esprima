@@ -17,10 +17,12 @@ var formatter;
 
   formatter = {
     startLog: function() { },
-    startSection: function(fileName, failures, tests, time) { 
+    startSection: function(fileName, errors, failures, tests, time) { 
       console.log("[esvalidate file:" + fileName + "]");
-      if(failures > 0) {
-        console.log(failures + " Error" + (failures > 1 ? "s" : "") + ":");
+      errors = errors + failures;
+      
+      if(errors > 0) {
+        console.log(errors + " Error" + (errors > 1 ? "s" : "") + ":");
       }
     },
     writeError: function(fileName, error, errorType) {        

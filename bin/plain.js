@@ -5,7 +5,7 @@ var formatter;
 
   formatter = {
     startLog: function() { },
-    startSection: function(fileName, failures, tests, time) { },
+    startSection: function(fileName, errors, failures, tests, time) { },
     writeError: function(fileName, error, errorType) {
       var msg = error.message;
       msg = msg.replace(removeLineNumRegEx, '');
