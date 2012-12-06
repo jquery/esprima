@@ -52,6 +52,7 @@ function tryGet (method) {
     if (args.length > 1) {
         path = args.splice(1, 1)[0];
 
+        //TODO: this doesn't work in Rhino. Can you detect files exist in Rhino, instead of try/catch?
         try {
             valueToGet = method(path);
         } catch (e) {
@@ -96,16 +97,16 @@ if (typeof console === 'undefined' && typeof process === 'undefined') {
 
 function showUsage() {
     'use strict';
-    console.log('Usage:');
-    console.log('   esvalidate [options] file.js');
-    console.log();
-    console.log('Available options:');
-    console.log();
-    console.log('  --format=type  Set the report format, plain (default) or junit');
-    console.log('  --formatter=file  Path to a formatter.js file');
-    console.log('  -v, --version  Print program version');
-    console.log('  -q, --quiet    If an error occurs during parsing, do not return an error code');
-    console.log();
+    log('Usage:');
+    log('   esvalidate [options] file.js');
+    log();
+    log('Available options:');
+    log();
+    log('  --format=type  Set the report format, plain (default) or junit');
+    log('  --formatter=file  Path to a formatter.js file');
+    log('  -v, --version  Print program version');
+    log('  -q, --quiet    If an error occurs during parsing, do not return an error code');
+    log();
     process.exit(1);
 }
 
@@ -126,21 +127,21 @@ process.argv.splice(2).forEach(function (entry) {
     if (entry === '-h' || entry === '--help') {
         showUsage();
     } else if (entry === '-v' || entry === '--version') {
-        console.log('ECMAScript Validator (using Esprima version', esprima.version, ')');
-        console.log();
+        log('ECMAScript Validator (using Esprima version', esprima.version, ')');
+        log();
         process.exit(0);
     } else if (entry === '-q' || entry === '--quiet') {
         dieLoudly = false;
     } else if (entry.slice(0, 9) === '--format=') {
         options.format = entry.slice(9);
         if (options.format !== 'plain' && options.format !== 'junit') {
-            console.log('Error: unknown report format ' + options.format);
+            log('Error: unknown report format ' + options.format);
             process.exit(1);
         }
     } else if (entry.slice(0, 12) === '--formatter=') {
         options.format = entry.slice(12);
     } else if (entry.slice(0, 2) === '--') {
-        console.log('Error: unknown option ' + entry + '.');
+        log('Error: unknown option ' + entry + '.');
         process.exit(1);
     } else {
         fnames.push(entry);
@@ -155,12 +156,12 @@ if (options.format.slice(options.format.length - 3) !== '.js') {
 formatter = tryGetDependency(options.format, './' + options.format + '.js', 'bin/' + options.format + '.js');
 
 if (!formatter) {
-    console.log('Error: unknown report format ' + options.format + '.');
+    log('Error: unknown report format ' + options.format + '.');
     process.exit(1);
 }
 
 if (fnames.length === 0) {
-    console.log('Error: no input file.');
+    log('Error: no input file.');
     process.exit(1);
 }
 
