@@ -26,7 +26,7 @@
 /*jslint sloppy:true plusplus:true node:true rhino:true */
 /*global phantom:true */
 
-var fs, system, esprima, options, fnames, count;
+var fs, system, esprima, options, fnames, count, dieLoudly;
 
 if (typeof esprima === 'undefined') {
     var tryGet = function (method) {
@@ -88,6 +88,7 @@ function showUsage() {
     console.log();
     console.log('  --format=type  Set the report format, plain (default) or junit');
     console.log('  -v, --version  Print program version');
+    console.log('  -q, --quiet    If an error occurs during parsing, do not return an error code');
     console.log();
     process.exit(1);
 }
@@ -101,6 +102,7 @@ options = {
 };
 
 fnames = [];
+dieLoudly = true;
 
 process.argv.splice(2).forEach(function (entry) {
     'use strict';
@@ -111,6 +113,8 @@ process.argv.splice(2).forEach(function (entry) {
         console.log('ECMAScript Validator (using Esprima version', esprima.version, ')');
         console.log();
         process.exit(0);
+    } else if (entry === '-q' || entry === '--quiet') {
+        dieLoudly = false;
     } else if (entry.slice(0, 9) === '--format=') {
         options.format = entry.slice(9);
         if (options.format !== 'plain' && options.format !== 'junit') {
@@ -207,7 +211,7 @@ if (options.format === 'junit') {
     console.log('</testsuites>');
 }
 
-if (count > 0) {
+if ((count > 0) && dieLoudly) {
     process.exit(1);
 }
 
