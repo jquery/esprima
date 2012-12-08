@@ -2073,17 +2073,8 @@ parseStatement: true, parseSourceElement: true */
     // 11.10 Binary Bitwise Operators
     // 11.11 Binary Logical Operators
 
-    // Reduce: make a binary expression from the three topmost entries.
-    function reduceBinary(stack) {
-        var right = stack.pop(),
-            operator = stack.pop().value,
-            left = stack.pop();
-
-        stack.push(delegate.createBinaryExpression(operator, left, right));
-    }
-
     function parseBinaryExpression() {
-        var expr, token, prec, previousAllowIn, stack, i;
+        var expr, token, prec, previousAllowIn, stack, right, operator, left, i;
 
         previousAllowIn = state.allowIn;
         state.allowIn = true;
@@ -2102,9 +2093,12 @@ parseStatement: true, parseSourceElement: true */
 
         while ((prec = binaryPrecedence(lookahead, previousAllowIn)) > 0) {
 
-            // Reduce.
+            // Reduce: make a binary expression from the three topmost entries.
             while ((stack.length > 2) && (prec <= stack[stack.length - 2].prec)) {
-                reduceBinary(stack);
+                right = stack.pop();
+                operator = stack.pop().value;
+                left = stack.pop();
+                stack.push(delegate.createBinaryExpression(operator, left, right));
             }
 
             // Shift.
