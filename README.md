@@ -32,7 +32,7 @@ Esprima serves as the basis for many popular JavaScript development tools:
 - ES6/Harmony transpiler: [Six](https://github.com/matthewrobb/six), [Harmonizr](https://github.com/jdiamond/harmonizr)
 - Eclipse Orion smart editing ([outline view](https://github.com/aclement/esprima-outline), [content assist](http://contraptionsforprogramming.blogspot.com/2012/02/better-javascript-content-assist-in.html))
 - Source code modification: [Esmorph](https://github.com/ariya/esmorph), [Code Painter](https://github.com/fawek/codepainter),
-- Source transformation: [node-falafel](https://github.com/substack/node-falafel),
+- Source transformation: [node-falafel](https://github.com/substack/node-falafel), [Rocambole](https://github.com/millermedeiros/rocambole/),
   [Esmangle](https://github.com/Constellation/esmangle), [escodegen](https://github.com/Constellation/escodegen), [redeyed](https://github.com/thlorenz/redeyed)
 
 ### Questions?

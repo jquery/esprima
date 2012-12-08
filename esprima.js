@@ -1118,8 +1118,10 @@ parseStatement: true, parseSourceElement: true */
         },
 
         createBinaryExpression: function (operator, left, right) {
+            var type = (operator === '||' || operator === '&&') ? Syntax.LogicalExpression :
+                        Syntax.BinaryExpression;
             return {
-                type: Syntax.BinaryExpression,
+                type: type,
                 operator: operator,
                 left: left,
                 right: right
@@ -1274,15 +1276,6 @@ parseStatement: true, parseSourceElement: true */
                 type: Syntax.Literal,
                 value: token.value,
                 raw: source.slice(token.range[0], token.range[1])
-            };
-        },
-
-        createLogicalExpression: function (operator, left, right) {
-            return {
-                type: Syntax.LogicalExpression,
-                operator: operator,
-                left: left,
-                right: right
             };
         },
 
@@ -2080,22 +2073,8 @@ parseStatement: true, parseSourceElement: true */
     // 11.10 Binary Bitwise Operators
     // 11.11 Binary Logical Operators
 
-    // Reduce: make a binary expression from the three topmost entries.
-    function reduceBinary(stack) {
-        var right = stack.pop(),
-            operator = stack.pop().value,
-            left = stack.pop();
-
-
-        if (operator === '||' || operator === '&&') {
-            stack.push(delegate.createLogicalExpression(operator, left, right));
-        } else {
-            stack.push(delegate.createBinaryExpression(operator, left, right));
-        }
-    }
-
     function parseBinaryExpression() {
-        var expr, token, prec, previousAllowIn, stack;
+        var expr, token, prec, previousAllowIn, stack, right, operator, left, i;
 
         previousAllowIn = state.allowIn;
         state.allowIn = true;
@@ -2114,9 +2093,12 @@ parseStatement: true, parseSourceElement: true */
 
         while ((prec = binaryPrecedence(lookahead, previousAllowIn)) > 0) {
 
-            // Reduce.
+            // Reduce: make a binary expression from the three topmost entries.
             while ((stack.length > 2) && (prec <= stack[stack.length - 2].prec)) {
-                reduceBinary(stack);
+                right = stack.pop();
+                operator = stack.pop().value;
+                left = stack.pop();
+                stack.push(delegate.createBinaryExpression(operator, left, right));
             }
 
             // Shift.
@@ -2126,13 +2108,20 @@ parseStatement: true, parseSourceElement: true */
             stack.push(parseUnaryExpression());
         }
 
-        // Final reduce to clean-up the stack.
-        while (stack.length > 1) {
-            reduceBinary(stack);
+        state.allowIn = previousAllowIn;
+
+        if (stack.length === 1) {
+            return stack[0];
         }
 
-        state.allowIn = previousAllowIn;
-        return stack[0];
+        // Final reduce to clean-up the stack.
+        i = stack.length - 1;
+        expr = stack[i];
+        while (i > 1) {
+            expr = delegate.createBinaryExpression(stack[i - 1].value, stack[i - 2], expr);
+            i -= 2;
+        }
+        return expr;
     }
 
 
