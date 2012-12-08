@@ -2083,7 +2083,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseBinaryExpression() {
-        var expr, token, prec, previousAllowIn, stack;
+        var expr, token, prec, previousAllowIn, stack, i;
 
         previousAllowIn = state.allowIn;
         state.allowIn = true;
@@ -2114,13 +2114,20 @@ parseStatement: true, parseSourceElement: true */
             stack.push(parseUnaryExpression());
         }
 
-        // Final reduce to clean-up the stack.
-        while (stack.length > 1) {
-            reduceBinary(stack);
+        state.allowIn = previousAllowIn;
+
+        if (stack.length === 1) {
+            return stack[0];
         }
 
-        state.allowIn = previousAllowIn;
-        return stack[0];
+        // Final reduce to clean-up the stack.
+        i = stack.length - 1;
+        expr = stack[i];
+        while (i > 1) {
+            expr = delegate.createBinaryExpression(stack[i - 1].value, stack[i - 2], expr);
+            i -= 2;
+        }
+        return expr;
     }
 
 
