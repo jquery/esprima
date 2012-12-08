@@ -1118,8 +1118,10 @@ parseStatement: true, parseSourceElement: true */
         },
 
         createBinaryExpression: function (operator, left, right) {
+            var type = (operator === '||' || operator === '&&') ? Syntax.LogicalExpression :
+                        Syntax.BinaryExpression;
             return {
-                type: Syntax.BinaryExpression,
+                type: type,
                 operator: operator,
                 left: left,
                 right: right
@@ -1274,15 +1276,6 @@ parseStatement: true, parseSourceElement: true */
                 type: Syntax.Literal,
                 value: token.value,
                 raw: source.slice(token.range[0], token.range[1])
-            };
-        },
-
-        createLogicalExpression: function (operator, left, right) {
-            return {
-                type: Syntax.LogicalExpression,
-                operator: operator,
-                left: left,
-                right: right
             };
         },
 
@@ -2086,12 +2079,7 @@ parseStatement: true, parseSourceElement: true */
             operator = stack.pop().value,
             left = stack.pop();
 
-
-        if (operator === '||' || operator === '&&') {
-            stack.push(delegate.createLogicalExpression(operator, left, right));
-        } else {
-            stack.push(delegate.createBinaryExpression(operator, left, right));
-        }
+        stack.push(delegate.createBinaryExpression(operator, left, right));
     }
 
     function parseBinaryExpression() {
