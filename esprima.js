@@ -1706,7 +1706,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseObjectInitialiser() {
-        var properties = [], property, name, kind, map = {}, toString = String;
+        var properties = [], property, name, key, kind, map = {}, toString = String;
 
         expect('{');
 
@@ -1719,8 +1719,10 @@ parseStatement: true, parseSourceElement: true */
                 name = toString(property.key.value);
             }
             kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
-            if (Object.prototype.hasOwnProperty.call(map, name)) {
-                if (map[name] === PropertyKind.Data) {
+
+            key = '$' + name;
+            if (Object.prototype.hasOwnProperty.call(map, key)) {
+                if (map[key] === PropertyKind.Data) {
                     if (strict && kind === PropertyKind.Data) {
                         throwErrorTolerant({}, Messages.StrictDuplicateProperty);
                     } else if (kind !== PropertyKind.Data) {
@@ -1729,13 +1731,13 @@ parseStatement: true, parseSourceElement: true */
                 } else {
                     if (kind === PropertyKind.Data) {
                         throwErrorTolerant({}, Messages.AccessorDataProperty);
-                    } else if (map[name] & kind) {
+                    } else if (map[key] & kind) {
                         throwErrorTolerant({}, Messages.AccessorGetSet);
                     }
                 }
-                map[name] |= kind;
+                map[key] |= kind;
             } else {
-                map[name] = kind;
+                map[key] = kind;
             }
 
             properties.push(property);
@@ -2472,7 +2474,7 @@ parseStatement: true, parseSourceElement: true */
     // 12.7 The continue statement
 
     function parseContinueStatement() {
-        var label = null;
+        var label = null, key;
 
         expectKeyword('continue');
 
@@ -2498,7 +2500,8 @@ parseStatement: true, parseSourceElement: true */
         if (lookahead.type === Token.Identifier) {
             label = parseVariableIdentifier();
 
-            if (!Object.prototype.hasOwnProperty.call(state.labelSet, label.name)) {
+            key = '$' + label.name;
+            if (!Object.prototype.hasOwnProperty.call(state.labelSet, key)) {
                 throwError({}, Messages.UnknownLabel, label.name);
             }
         }
@@ -2515,7 +2518,7 @@ parseStatement: true, parseSourceElement: true */
     // 12.8 The break statement
 
     function parseBreakStatement() {
-        var label = null;
+        var label = null, key;
 
         expectKeyword('break');
 
@@ -2541,7 +2544,8 @@ parseStatement: true, parseSourceElement: true */
         if (lookahead.type === Token.Identifier) {
             label = parseVariableIdentifier();
 
-            if (!Object.prototype.hasOwnProperty.call(state.labelSet, label.name)) {
+            key = '$' + label.name;
+            if (!Object.prototype.hasOwnProperty.call(state.labelSet, key)) {
                 throwError({}, Messages.UnknownLabel, label.name);
             }
         }
@@ -2763,7 +2767,8 @@ parseStatement: true, parseSourceElement: true */
     function parseStatement() {
         var type = lookahead.type,
             expr,
-            labeledBody;
+            labeledBody,
+            key;
 
         if (type === Token.EOF) {
             throwUnexpected(lookahead);
@@ -2823,13 +2828,14 @@ parseStatement: true, parseSourceElement: true */
         if ((expr.type === Syntax.Identifier) && match(':')) {
             lex();
 
-            if (Object.prototype.hasOwnProperty.call(state.labelSet, expr.name)) {
+            key = '$' + expr.name;
+            if (Object.prototype.hasOwnProperty.call(state.labelSet, key)) {
                 throwError({}, Messages.Redeclaration, 'Label', expr.name);
             }
 
-            state.labelSet[expr.name] = true;
+            state.labelSet[key] = true;
             labeledBody = parseStatement();
-            delete state.labelSet[expr.name];
+            delete state.labelSet[key];
             return delegate.createLabeledStatement(expr, labeledBody);
         }
 
@@ -2903,7 +2909,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseParams(firstRestricted) {
-        var param, params = [], token, stricted, paramSet, message;
+        var param, params = [], token, stricted, paramSet, key, message;
         expect('(');
 
         if (!match(')')) {
@@ -2911,12 +2917,13 @@ parseStatement: true, parseSourceElement: true */
             while (index < length) {
                 token = lookahead;
                 param = parseVariableIdentifier();
+                key = '$' + token.value;
                 if (strict) {
                     if (isRestrictedWord(token.value)) {
                         stricted = token;
                         message = Messages.StrictParamName;
                     }
-                    if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
+                    if (Object.prototype.hasOwnProperty.call(paramSet, key)) {
                         stricted = token;
                         message = Messages.StrictParamDupe;
                     }
@@ -2927,13 +2934,13 @@ parseStatement: true, parseSourceElement: true */
                     } else if (isStrictModeReservedWord(token.value)) {
                         firstRestricted = token;
                         message = Messages.StrictReservedWord;
-                    } else if (Object.prototype.hasOwnProperty.call(paramSet, token.value)) {
+                    } else if (Object.prototype.hasOwnProperty.call(paramSet, key)) {
                         firstRestricted = token;
                         message = Messages.StrictParamDupe;
                     }
                 }
                 params.push(param);
-                paramSet[param.name] = true;
+                paramSet[key] = true;
                 if (match(')')) {
                     break;
                 }
