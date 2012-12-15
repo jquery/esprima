@@ -2112,10 +2112,6 @@ parseStatement: true, parseSourceElement: true */
 
         state.allowIn = previousAllowIn;
 
-        if (stack.length === 1) {
-            return stack[0];
-        }
-
         // Final reduce to clean-up the stack.
         i = stack.length - 1;
         expr = stack[i];
