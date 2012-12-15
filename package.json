@@ -29,8 +29,9 @@
         "istanbul": "~0.1.22"
     },
     "scripts": {
-        "test": "npm run-script lint && node test/run.js && node node_modules/istanbul/lib/cli.js cover test/runner.js",
+        "test": "npm run-script lint && node test/run.js && npm run-script coverage",
         "lint": "node_modules/jslint/bin/jslint.js esprima.js",
+        "coverage": "node node_modules/istanbul/lib/cli.js cover test/runner.js",
         "benchmark": "node test/benchmarks.js",
         "benchmark-quick": "node test/benchmarks.js quick"
     }
