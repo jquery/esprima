@@ -3708,26 +3708,6 @@ parseStatement: true, parseSourceElement: true */
         }
     }
 
-    // This is used to modify the delegate.
-
-    function extend(object, properties) {
-        var entry, result = {};
-
-        for (entry in object) {
-            if (object.hasOwnProperty(entry)) {
-                result[entry] = object[entry];
-            }
-        }
-
-        for (entry in properties) {
-            if (properties.hasOwnProperty(entry)) {
-                result[entry] = properties[entry];
-            }
-        }
-
-        return result;
-    }
-
     function parse(code, options) {
         var program, toString;
 
