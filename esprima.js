@@ -2633,9 +2633,6 @@ parseStatement: true, parseSourceElement: true */
                 break;
             }
             statement = parseStatement();
-            if (typeof statement === 'undefined') {
-                break;
-            }
             consequent.push(statement);
         }
 
