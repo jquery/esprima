@@ -1,6 +1,6 @@
 {
     "name": "esprima",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "main": "./esprima.js",
     "dependencies": {},
     "repository": {

@@ -1,3 +1,9 @@
+2012-11-02: Version 1.0.2
+
+    Improvement:
+
+      * Fix esvalidate JUnit output upon a syntax error (issue 374)
+
 2012-10-28: Version 1.0.1
 
     Improvements:
