@@ -411,7 +411,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function getEscapedIdentifier() {
-        var ch, id, type;
+        var ch, id;
 
         ch = source.charCodeAt(index++);
         id = String.fromCharCode(ch);
