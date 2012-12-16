@@ -3256,6 +3256,61 @@ var testFixture = {
             }]
         },
 
+        '42 /* the * answer */': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 42,
+                raw: '42',
+                range: [0, 2],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 2 }
+                }
+            },
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            }
+        },
+
+        '42 /* The * answer */': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [0, 2],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 2 }
+                    }
+                },
+                range: [0, 21],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 21 }
+                }
+            }],
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            },
+            comments: [{
+                type: 'Block',
+                value: ' The * answer ',
+                range: [3, 21],
+                loc: {
+                    start: { line: 1, column: 3 },
+                    end: { line: 1, column: 21 }
+                }
+            }]
+        },
+
         '/* multiline\ncomment\nshould\nbe\nignored */ 42': {
             type: 'ExpressionStatement',
             expression: {
