@@ -16275,6 +16275,13 @@ var testFixture = {
             message: 'Error: Line 1: Unexpected token if'
         },
 
+        'i #= 42': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
         'i + 2 = 42': {
             index: 5,
             lineNumber: 1,

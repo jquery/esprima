@@ -646,20 +646,17 @@ parseStatement: true, parseSourceElement: true */
             };
         }
 
-        // 2-character punctuators: <= >= == != ++ -- << >> && ||
-        // += -= *= %= &= |= ^= /=
+        // Other 2-character punctuators: ++ -- << >> && ||
 
         if (ch1 === ch2 && ('+-<>&|'.indexOf(ch1) >= 0)) {
-            if ('+-<>&|'.indexOf(ch2) >= 0) {
-                index += 2;
-                return {
-                    type: Token.Punctuator,
-                    value: ch1 + ch2,
-                    lineNumber: lineNumber,
-                    lineStart: lineStart,
-                    range: [start, index]
-                };
-            }
+            index += 2;
+            return {
+                type: Token.Punctuator,
+                value: ch1 + ch2,
+                lineNumber: lineNumber,
+                lineStart: lineStart,
+                range: [start, index]
+            };
         }
 
         if ('<>=!+-*%&|^/'.indexOf(ch1) >= 0) {
