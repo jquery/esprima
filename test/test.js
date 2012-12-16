@@ -3256,6 +3256,61 @@ var testFixture = {
             }]
         },
 
+        '42 /* the * answer */': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 42,
+                raw: '42',
+                range: [0, 2],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 2 }
+                }
+            },
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            }
+        },
+
+        '42 /* The * answer */': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [0, 2],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 2 }
+                    }
+                },
+                range: [0, 21],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 21 }
+                }
+            }],
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            },
+            comments: [{
+                type: 'Block',
+                value: ' The * answer ',
+                range: [3, 21],
+                loc: {
+                    start: { line: 1, column: 3 },
+                    end: { line: 1, column: 21 }
+                }
+            }]
+        },
+
         '/* multiline\ncomment\nshould\nbe\nignored */ 42': {
             type: 'ExpressionStatement',
             expression: {
@@ -10738,6 +10793,42 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 7 }
             }
+        },
+
+        '\\u0061a': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Identifier',
+                name: 'aa',
+                range: [0, 7],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            range: [0, 7],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 7 }
+            }
+        },
+
+        '\\u0061a ': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Identifier',
+                name: 'aa',
+                range: [0, 7],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            range: [0, 8],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 8 }
+            }
         }
     },
 
@@ -16182,6 +16273,13 @@ var testFixture = {
             lineNumber: 1,
             column: 5,
             message: 'Error: Line 1: Unexpected token if'
+        },
+
+        'i #= 42': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
         'i + 2 = 42': {
