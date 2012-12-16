@@ -7,7 +7,7 @@ if [ `command -v istanbul` ]; then
 
     echo "Running coverage analysis..."
     istanbul cover test/runner.js
-    grep -v 'class="path' coverage/lcov-report/esprima/esprima.js.html > test/esprima.js.html
+    grep -v 'class="path' coverage/lcov-report/esprima/esprima.js.html | grep -v "class='meta" > test/esprima.js.html
 
 else
     echo "Please install Istanbul first!"
