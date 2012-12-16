@@ -27,6 +27,7 @@
 /*jslint sloppy:true node:true rhino:true */
 
 var fs, esprima, fname, content, options, syntax;
+var adjustRegexLiteral = null;
 
 if (typeof require === 'function') {
     fs = require('fs');
@@ -91,6 +92,8 @@ process.argv.splice(2).forEach(function (entry) {
         options.tokens = true;
     } else if (entry === '--tolerant') {
         options.tolerant = true;
+    } else if (entry === '--regexp') {
+        adjustRegexLiteral = esprima.adjustRegexLiteral;
     } else if (entry.slice(0, 2) === '--') {
         console.log('Error: unknown option ' + entry + '.');
         process.exit(1);
@@ -110,7 +113,7 @@ if (typeof fname !== 'string') {
 try {
     content = fs.readFileSync(fname, 'utf-8');
     syntax = esprima.parse(content, options);
-    console.log(JSON.stringify(syntax, null, 4));
+    console.log(JSON.stringify(syntax, adjustRegexLiteral, 4));
 } catch (e) {
     console.log('Error: ' + e.message);
     process.exit(1);
