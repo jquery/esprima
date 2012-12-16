@@ -1468,6 +1468,7 @@ parseStatement: true, parseSourceElement: true */
             error.column = index - lineStart + 1;
         }
 
+        error.description = msg;
         throw error;
     }
 
