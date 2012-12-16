@@ -10793,6 +10793,42 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 7 }
             }
+        },
+
+        '\\u0061a': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Identifier',
+                name: 'aa',
+                range: [0, 7],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            range: [0, 7],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 7 }
+            }
+        },
+
+        '\\u0061a ': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Identifier',
+                name: 'aa',
+                range: [0, 7],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            range: [0, 8],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 8 }
+            }
         }
     },
 
