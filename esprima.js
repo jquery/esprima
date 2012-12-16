@@ -1461,11 +1461,13 @@ parseStatement: true, parseSourceElement: true */
             error.index = token.range[0];
             error.lineNumber = token.lineNumber;
             error.column = token.range[0] - lineStart + 1;
+            error.string = msg;
         } else {
             error = new Error('Line ' + lineNumber + ': ' + msg);
             error.index = index;
             error.lineNumber = lineNumber;
             error.column = index - lineStart + 1;
+            error.string = msg;
         }
 
         error.description = msg;
