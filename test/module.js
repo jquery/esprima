@@ -47,6 +47,7 @@ function runTests() {
         variables = {
             'version': 'string',
             'parse': 'function',
+            'adjustRegexLiteral': 'function',
             'Syntax': 'object',
             'Syntax.AssignmentExpression': 'string',
             'Syntax.ArrayExpression': 'string',

@@ -1011,6 +1011,17 @@ parseStatement: true, parseSourceElement: true */
             range: [start, index]
         };
     }
+// Special handling for regular expression literal since we need to
+// convert it to a string literal, otherwise it will be decoded
+// as object "{}" and the regular expression would be lost.
+
+    function adjustRegexLiteral(key, value) {
+        if (value && value.type === 'Literal' && value.value instanceof RegExp) {
+            value.type  = 'RegularExpression';
+            value.value = value.value.toString();
+        }
+        return value;
+    }
 
     function isIdentifierName(token) {
         return token.type === Token.Identifier ||
@@ -3787,7 +3798,7 @@ parseStatement: true, parseSourceElement: true */
     exports.version = '1.1.0-dev';
 
     exports.parse = parse;
-
+    exports.adjustRegexLiteral = adjustRegexLiteral;
     // Deep copy.
     exports.Syntax = (function () {
         var name, types = {};
