@@ -84,7 +84,8 @@ function testParse(esprima, code, syntax) {
         loc: true,
         tokens: (typeof syntax.tokens !== 'undefined'),
         raw: true,
-        tolerant: (typeof syntax.errors !== 'undefined')
+        tolerant: (typeof syntax.errors !== 'undefined'),
+        source: null
     };
 
     if (typeof syntax.tokens !== 'undefined') {
@@ -99,6 +100,10 @@ function testParse(esprima, code, syntax) {
             options.range = (typeof syntax.comments[0].range !== 'undefined');
             options.loc = (typeof syntax.comments[0].loc !== 'undefined');
         }
+    }
+
+    if (options.loc) {
+        options.source = syntax.loc.source;
     }
 
     expected = JSON.stringify(syntax, null, 4);

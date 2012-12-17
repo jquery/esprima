@@ -3386,9 +3386,6 @@ parseStatement: true, parseSourceElement: true */
                 column: index - lineStart
             }
         };
-        if (extra.loc && extra.loc.source) {
-            marker.loc.source = extra.loc.source;
-        }
 
         marker.end = function () {
             this.range[1] = index;
@@ -3411,8 +3408,8 @@ parseStatement: true, parseSourceElement: true */
                         column: this.loc.end.column
                     }
                 };
-                if (extra.loc.source) {
-                    node.groupLoc.source = extra.loc.source;
+                if (extra.appendSource) {
+                    node.groupLoc.source = extra.source;
                 }
             }
         };
@@ -3432,8 +3429,8 @@ parseStatement: true, parseSourceElement: true */
                         column: this.loc.end.column
                     }
                 };
-                if (extra.loc.source) {
-                    node.loc.source = extra.loc.source;
+                if (extra.appendSource) {
+                    node.loc.source = extra.source;
                 }
             }
         };
@@ -3530,7 +3527,7 @@ parseStatement: true, parseSourceElement: true */
         return n;
     }
 
-    function wrapTrackingFunction(range, loc) {
+    function wrapTrackingFunction(range, loc, appendSource) {
 
         return function (parseFunction) {
 
@@ -3568,16 +3565,16 @@ parseStatement: true, parseSourceElement: true */
                             start: start,
                             end: end
                         };
-                        if (loc.source) {
-                            node.loc.source = loc.source;
+                        if (appendSource) {
+                            node.loc.source = extra.source;
                         }
                     } else if (typeof node.loc === 'undefined') {
                         node.loc = {
                             start: node.left.loc.start,
                             end: node.right.loc.end
                         };
-                        if (loc.source) {
-                            node.loc.source = loc.source;
+                        if (appendSource) {
+                            node.loc.source = extra.source;
                         }
                     }
                 }
@@ -3627,7 +3624,7 @@ parseStatement: true, parseSourceElement: true */
             parseLeftHandSideExpression = trackLeftHandSideExpression;
             parseLeftHandSideExpressionAllowCall = trackLeftHandSideExpressionAllowCall;
 
-            wrapTracking = wrapTrackingFunction(extra.range, extra.loc);
+            wrapTracking = wrapTrackingFunction(extra.range, extra.loc, extra.appendSource);
 
             extra.parseAssignmentExpression = parseAssignmentExpression;
             extra.parseBinaryExpression = parseBinaryExpression;
@@ -3780,9 +3777,10 @@ parseStatement: true, parseSourceElement: true */
         extra = {};
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
-            // allowing options.loc to contain the filename template for SourceMap & ESCodeGen
-            // options.loc.source = "name of source file" 
-            extra.loc = (typeof options.loc === 'undefined') ? false : options.loc;
+            extra.loc = (typeof options.loc === 'boolean') && options.loc;
+
+            extra.appendSource = options.source !== null && options.source !== undefined;
+            extra.source = toString(options.source);
 
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
