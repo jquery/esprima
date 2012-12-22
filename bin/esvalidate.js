@@ -153,7 +153,7 @@ if (options.format.slice(options.format.length - 3) !== '.js') {
     options.format = options.format + '.js';
 }
 
-formatter = tryGetDependency(options.format, './' + options.format + '.js', 'bin/' + options.format + '.js');
+formatter = tryGetDependency('bin/' + options.format, options.format, './' + options.format);
 
 if (!formatter) {
     log('Error: unknown report format ' + options.format + '.');
