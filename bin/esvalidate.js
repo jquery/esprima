@@ -26,7 +26,20 @@
 /*jslint sloppy:true plusplus:true node:true rhino:true */
 /*global phantom:true */
 
-var fs, system, esprima, options, fnames, count, formatter, dieLoudly;
+var fs, system, esprima, options, fnames, count, formatter, dieLoudly, log, formatter;
+
+//shims console & print to generic 'log' method
+if ((log === undefined) && (typeof console !== 'undefined') && (typeof console.log === 'function')) {
+    log = console.log;
+}
+
+if ((log === undefined) && (typeof print === 'function')) {
+    log = print;
+}
+
+if(log === undefined) {
+    throw "Cannot find system to write output to.";
+}
 
 function tryGetDependency() {
     var method, args = null;
@@ -87,8 +100,7 @@ if (typeof phantom === 'object') {
 }
 
 // Shims to Node.js objects when running under Rhino.
-if (typeof console === 'undefined' && typeof process === 'undefined') {
-    console = { log: print };
+if (typeof process === 'undefined') {
     fs = { readFileSync: readFile };
     process = { argv: arguments, exit: quit };
     process.argv.unshift('esvalidate.js');
@@ -134,10 +146,6 @@ process.argv.splice(2).forEach(function (entry) {
         dieLoudly = false;
     } else if (entry.slice(0, 9) === '--format=') {
         options.format = entry.slice(9);
-        if (options.format !== 'plain' && options.format !== 'junit') {
-            log('Error: unknown report format ' + options.format);
-            process.exit(1);
-        }
     } else if (entry.slice(0, 12) === '--formatter=') {
         options.format = entry.slice(12);
     } else if (entry.slice(0, 2) === '--') {
@@ -148,16 +156,21 @@ process.argv.splice(2).forEach(function (entry) {
     }
 });
 
-//TODO: toLower
-if (options.format.slice(options.format.length - 3) !== '.js') {
+if (options.format.slice(options.format.length - 3).toLowerCase() !== '.js') {
     options.format = options.format + '.js';
 }
 
-formatter = tryGetDependency('bin/' + options.format, options.format, './' + options.format);
+var tempFormatter = tryGetDependency('bin/' + options.format, options.format, './' + options.format );
+
+if(!formatter && tempFormatter) {
+    formatter = tempFormatter;
+}
 
 if (!formatter) {
-    log('Error: unknown report format ' + options.format + '.');
+    log('Error: unknown report format ' + options.format);
     process.exit(1);
+} else {
+    formatter = formatter(log);
 }
 
 if (fnames.length === 0) {
