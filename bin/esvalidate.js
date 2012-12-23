@@ -26,11 +26,41 @@
 /*jslint sloppy:true plusplus:true node:true rhino:true */
 /*global phantom:true */
 
-var fs, system, esprima, options, fnames, count, formatter, dieLoudly;
+var fs, system, esprima, options, fnames, count, formatter, dieLoudly, log, formatter;
+
+//shims console & print to generic 'log' method
+if ((log === undefined) && (typeof console !== 'undefined') && (typeof console.log === 'function')) {
+    log = console.log;
+}
+
+if ((log === undefined) && (typeof print === 'function')) {
+    log = print;
+}
+
+if (log === undefined) {
+    throw "Cannot find system to write output to.";
+}
+
+function tryGet(method) {
+    var args = [].slice.apply(arguments),
+        valueToGet = null,
+        path = null;
+
+    if (args.length > 1) {
+        path = args.splice(1, 1)[0];
+
+        try {
+            valueToGet = method(path);
+        } catch (e) {
+            return tryGet.apply(this, args);
+        }
+    }
+    return valueToGet;
+}
 
 function tryGetDependency() {
     var method, args = null;
-    
+
     if (typeof require === 'function') {
         method = require;
     } else {
@@ -41,26 +71,7 @@ function tryGetDependency() {
     args.unshift(method);
 
     return tryGet.apply(this, args);
-};
-
-function tryGet (method) {
-    'use strict';
-    var args = [].slice.apply(arguments), 
-        valueToGet = null, 
-        path = null;
-
-    if (args.length > 1) {
-        path = args.splice(1, 1)[0];
-
-        //TODO: this doesn't work in Rhino. Can you detect files exist in Rhino, instead of try/catch?
-        try {
-            valueToGet = method(path);
-        } catch (e) {
-            return tryGet.apply(this, args);
-        }
-    }
-    return valueToGet;
-};
+}
 
 if (typeof esprima === 'undefined') {
     // PhantomJS can only require() relative files
@@ -87,8 +98,7 @@ if (typeof phantom === 'object') {
 }
 
 // Shims to Node.js objects when running under Rhino.
-if (typeof console === 'undefined' && typeof process === 'undefined') {
-    console = { log: print };
+if (typeof process === 'undefined') {
     fs = { readFileSync: readFile };
     process = { argv: arguments, exit: quit };
     process.argv.unshift('esvalidate.js');
@@ -134,10 +144,6 @@ process.argv.splice(2).forEach(function (entry) {
         dieLoudly = false;
     } else if (entry.slice(0, 9) === '--format=') {
         options.format = entry.slice(9);
-        if (options.format !== 'plain' && options.format !== 'junit') {
-            log('Error: unknown report format ' + options.format);
-            process.exit(1);
-        }
     } else if (entry.slice(0, 12) === '--formatter=') {
         options.format = entry.slice(12);
     } else if (entry.slice(0, 2) === '--') {
@@ -148,16 +154,21 @@ process.argv.splice(2).forEach(function (entry) {
     }
 });
 
-//TODO: toLower
-if (options.format.slice(options.format.length - 3) !== '.js') {
+if (options.format.slice(options.format.length - 3).toLowerCase() !== '.js') {
     options.format = options.format + '.js';
 }
 
-formatter = tryGetDependency('bin/' + options.format, options.format, './' + options.format);
+var tempFormatter = tryGetDependency('bin/' + options.format, options.format, './' + options.format);
+
+if (!formatter && tempFormatter) {
+    formatter = tempFormatter;
+}
 
 if (!formatter) {
-    log('Error: unknown report format ' + options.format + '.');
+    log('Error: unknown report format ' + options.format);
     process.exit(1);
+} else {
+    formatter = formatter(log);
 }
 
 if (fnames.length === 0) {
@@ -169,6 +180,7 @@ formatter.startLog();
 
 count = 0;
 fnames.forEach(function (fname) {
+    'use strict';
     var content, timestamp, syntax, name, errors, failures, tests, time;
 
     timestamp = Date.now();
