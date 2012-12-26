@@ -5254,6 +5254,61 @@ var testFixture = {
                     end: { line: 1, column: 18 }
                 }
             }]
+        },
+
+        'var x = /42/g.test': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                init: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'Literal',
+                        value: '/42/g',
+                        raw: '/42/g',
+                        range: [8, 13],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 13 }
+                        }
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'test',
+                        range: [14, 18],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    range: [8, 18],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                range: [4, 18],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 18 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
         }
 
     },
