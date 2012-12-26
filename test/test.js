@@ -16882,6 +16882,27 @@ var testFixture = {
             lineNumber: 1,
             column: 13,
             message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'var': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'let': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'const': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Unexpected end of input'
         }
 
     },
