@@ -1468,6 +1468,7 @@ parseStatement: true, parseSourceElement: true */
             error.column = index - lineStart + 1;
         }
 
+        error.description = msg;
         throw error;
     }
 
@@ -2256,13 +2257,13 @@ parseStatement: true, parseSourceElement: true */
     function parseVariableDeclarationList(kind) {
         var list = [];
 
-        while (index < length) {
+        do {
             list.push(parseVariableDeclaration(kind));
             if (!match(',')) {
                 break;
             }
             lex();
-        }
+        } while (index < length);
 
         return list;
     }
@@ -2707,13 +2708,16 @@ parseStatement: true, parseSourceElement: true */
         expectKeyword('catch');
 
         expect('(');
-        if (!match(')')) {
-            param = parseExpression();
-            // 12.14.1
-            if (strict && param.type === Syntax.Identifier && isRestrictedWord(param.name)) {
-                throwErrorTolerant({}, Messages.StrictCatchVariable);
-            }
+        if (match(')')) {
+            throwUnexpected(lookahead);
         }
+
+        param = parseExpression();
+        // 12.14.1
+        if (strict && param.type === Syntax.Identifier && isRestrictedWord(param.name)) {
+            throwErrorTolerant({}, Messages.StrictCatchVariable);
+        }
+
         expect(')');
         body = parseBlock();
         return delegate.createCatchClause(param, body);

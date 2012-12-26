@@ -4081,6 +4081,44 @@ var testFixture = {
             }
         },
 
+        '0x0;': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0,
+                raw: '0x0',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            },
+            range: [0, 4],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 4 }
+            }
+        },
+
+        '0e+100 ': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0,
+                raw: '0e+100',
+                range: [0, 6],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 6 }
+                }
+            },
+            range: [0, 7],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 7 }
+            }
+        },
+
         '0e+100': {
             type: 'ExpressionStatement',
             expression: {
@@ -5216,6 +5254,61 @@ var testFixture = {
                     end: { line: 1, column: 18 }
                 }
             }]
+        },
+
+        'var x = /42/g.test': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                init: {
+                    type: 'MemberExpression',
+                    computed: false,
+                    object: {
+                        type: 'Literal',
+                        value: '/42/g',
+                        raw: '/42/g',
+                        range: [8, 13],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 13 }
+                        }
+                    },
+                    property: {
+                        type: 'Identifier',
+                        name: 'test',
+                        range: [14, 18],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    range: [8, 18],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                range: [4, 18],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 18 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
         }
 
     },
@@ -7035,6 +7128,44 @@ var testFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 5 }
+            }
+        },
+
+        '"use strict" + 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'BinaryExpression',
+                operator: '+',
+                left: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                right: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [15, 17],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
             }
         }
 
@@ -15130,6 +15261,74 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 32 }
             }
+        },
+
+        'function test() { "use strict" + 42; }': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'test',
+                range: [9, 13],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            params: [],
+            defaults: [],
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'BinaryExpression',
+                        operator: '+',
+                        left: {
+                            type: 'Literal',
+                            value: 'use strict',
+                            raw: '"use strict"',
+                            range: [18, 30],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 30 }
+                            }
+                        },
+                        right: {
+                            type: 'Literal',
+                            value: 42,
+                            raw: '42',
+                            range: [33, 35],
+                            loc: {
+                                start: { line: 1, column: 33 },
+                                end: { line: 1, column: 35 }
+                            }
+                        },
+                        range: [18, 35],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 35 }
+                        }
+                    },
+                    range: [18, 36],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 36 }
+                    }
+                }],
+                range: [16, 38],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 38 }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            range: [0, 38],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            }
         }
 
     },
@@ -16850,6 +17049,13 @@ var testFixture = {
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
+        'try { } catch() {}': {
+            index: 14,
+            lineNumber: 1,
+            column: 15,
+            message: 'Error: Line 1: Unexpected token )'
+        },
+
         'return': {
             index: 6,
             lineNumber: 1,
@@ -17415,6 +17621,41 @@ var testFixture = {
             lineNumber: 1,
             column: 55,
             message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        'var': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'let': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'const': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        '{ ;  ;  ': {
+            index: 8,
+            lineNumber: 1,
+            column: 9,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'function t() { ;  ;  ': {
+            index: 21,
+            lineNumber: 1,
+            column: 22,
+            message: 'Error: Line 1: Unexpected end of input'
         }
 
     },
