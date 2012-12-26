@@ -17460,6 +17460,13 @@ var testFixture = {
             lineNumber: 1,
             column: 55,
             message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+        },
+
+        '{ ;  ;  ': {
+            index: 8,
+            lineNumber: 1,
+            column: 9,
+            message: 'Error: Line 1: Unexpected end of input'
         }
 
     },
