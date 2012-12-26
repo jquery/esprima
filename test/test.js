@@ -17536,6 +17536,13 @@ var testFixture = {
             lineNumber: 1,
             column: 6,
             message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        '{ ;  ;  ': {
+            index: 8,
+            lineNumber: 1,
+            column: 9,
+            message: 'Error: Line 1: Unexpected end of input'
         }
 
     },
