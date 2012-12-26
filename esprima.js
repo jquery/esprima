@@ -1452,7 +1452,8 @@ parseStatement: true, parseSourceElement: true */
             msg = messageFormat.replace(
                 /%(\d)/g,
                 function (whole, index) {
-                    return args[index] || '';
+                    assert(index < args.length, 'Message reference must be in range');
+                    return args[index];
                 }
             );
 
