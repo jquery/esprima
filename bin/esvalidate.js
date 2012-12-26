@@ -26,23 +26,64 @@
 /*jslint sloppy:true plusplus:true node:true rhino:true */
 /*global phantom:true */
 
-var fs, system, esprima, options, fnames, count;
+var fs, system, esprima, options, fnames, count, formatter, dieLoudly, log, formatter;
+
+//shims console & print to generic 'log' method
+if ((log === undefined) && (typeof console !== 'undefined') && (typeof console.log === 'function')) {
+    log = console.log;
+}
+
+if ((log === undefined) && (typeof print === 'function')) {
+    log = print;
+}
+
+if (log === undefined) {
+    throw "Cannot find system to write output to.";
+}
+
+function tryGet(method) {
+    var args = [].slice.apply(arguments),
+        valueToGet = null,
+        path = null;
+
+    if (args.length > 1) {
+        path = args.splice(1, 1)[0];
+
+        try {
+            valueToGet = method(path);
+        } catch (e) {
+            return tryGet.apply(this, args);
+        }
+    }
+    return valueToGet;
+}
+
+function tryGetDependency() {
+    var method, args = null;
+
+    if (typeof require === 'function') {
+        method = require;
+    } else {
+        method = load;
+    }
+
+    args = [].slice.apply(arguments);
+    args.unshift(method);
+
+    return tryGet.apply(this, args);
+}
 
 if (typeof esprima === 'undefined') {
     // PhantomJS can only require() relative files
     if (typeof phantom === 'object') {
         fs = require('fs');
         system = require('system');
-        esprima = require('./esprima');
+        esprima = tryGet(require, './esprima', '../esprima');
     } else if (typeof require === 'function') {
         fs = require('fs');
-        esprima = require('esprima');
+        esprima = tryGet(require, 'esprima', './esprima.js', '../esprima.js');
     } else if (typeof load === 'function') {
-        try {
-            load('esprima.js');
-        } catch (e) {
-            load('../esprima.js');
-        }
+        tryGet(load, 'esprima.js', '../esprima.js');
     }
 }
 
@@ -57,8 +98,7 @@ if (typeof phantom === 'object') {
 }
 
 // Shims to Node.js objects when running under Rhino.
-if (typeof console === 'undefined' && typeof process === 'undefined') {
-    console = { log: print };
+if (typeof process === 'undefined') {
     fs = { readFileSync: readFile };
     process = { argv: arguments, exit: quit };
     process.argv.unshift('esvalidate.js');
@@ -66,14 +106,17 @@ if (typeof console === 'undefined' && typeof process === 'undefined') {
 }
 
 function showUsage() {
-    console.log('Usage:');
-    console.log('   esvalidate [options] file.js');
-    console.log();
-    console.log('Available options:');
-    console.log();
-    console.log('  --format=type  Set the report format, plain (default) or junit');
-    console.log('  -v, --version  Print program version');
-    console.log();
+    'use strict';
+    log('Usage:');
+    log('   esvalidate [options] file.js');
+    log();
+    log('Available options:');
+    log();
+    log('  --format=type  Set the report format, plain (default) or junit');
+    log('  --formatter=file  Path to a formatter.js file');
+    log('  -v, --version  Print program version');
+    log('  -q, --quiet    If an error occurs during parsing, do not return an error code');
+    log();
     process.exit(1);
 }
 
@@ -86,42 +129,62 @@ options = {
 };
 
 fnames = [];
+dieLoudly = true;
 
 process.argv.splice(2).forEach(function (entry) {
+    'use strict';
 
     if (entry === '-h' || entry === '--help') {
         showUsage();
     } else if (entry === '-v' || entry === '--version') {
-        console.log('ECMAScript Validator (using Esprima version', esprima.version, ')');
-        console.log();
+        log('ECMAScript Validator (using Esprima version', esprima.version, ')');
+        log();
         process.exit(0);
+    } else if (entry === '-q' || entry === '--quiet') {
+        dieLoudly = false;
     } else if (entry.slice(0, 9) === '--format=') {
         options.format = entry.slice(9);
-        if (options.format !== 'plain' && options.format !== 'junit') {
-            console.log('Error: unknown report format ' + options.format + '.');
-            process.exit(1);
-        }
+    } else if (entry.slice(0, 12) === '--formatter=') {
+        options.format = entry.slice(12);
     } else if (entry.slice(0, 2) === '--') {
-        console.log('Error: unknown option ' + entry + '.');
+        log('Error: unknown option ' + entry + '.');
         process.exit(1);
     } else {
         fnames.push(entry);
     }
 });
 
+if (options.format.slice(options.format.length - 3).toLowerCase() !== '.js') {
+    options.format = options.format + '.js';
+}
+
+var tempFormatter = tryGetDependency('bin/' + options.format, options.format, './' + options.format);
+
+if (!formatter && tempFormatter) {
+    formatter = tempFormatter;
+}
+
+if (!formatter) {
+    log('Error: unknown report format ' + options.format);
+    process.exit(1);
+} else {
+    formatter = formatter(log);
+}
+
 if (fnames.length === 0) {
-    console.log('Error: no input file.');
+    log('Error: no input file.');
     process.exit(1);
 }
 
-if (options.format === 'junit') {
-    console.log('<?xml version="1.0" encoding="UTF-8"?>');
-    console.log('<testsuites>');
-}
+formatter.startLog();
 
 count = 0;
 fnames.forEach(function (fname) {
-    var content, timestamp, syntax, name;
+    'use strict';
+    var content, timestamp, syntax, name, errors, failures, tests, time;
+
+    timestamp = Date.now();
+
     try {
         content = fs.readFileSync(fname, 'utf-8');
 
@@ -129,68 +192,44 @@ fnames.forEach(function (fname) {
             content = '//' + content.substr(2, content.length);
         }
 
-        timestamp = Date.now();
         syntax = esprima.parse(content, { tolerant: true });
 
-        if (options.format === 'junit') {
-
-            name = fname;
-            if (name.lastIndexOf('/') >= 0) {
-                name = name.slice(name.lastIndexOf('/') + 1);
-            }
-
-            console.log('<testsuite name="' + fname + '" errors="0" ' +
-                ' failures="' + syntax.errors.length + '" ' +
-                ' tests="' + syntax.errors.length + '" ' +
-                ' time="' + Math.round((Date.now() - timestamp) / 1000) +
-                '">');
-
-            syntax.errors.forEach(function (error) {
-                var msg = error.message;
-                msg = msg.replace(/^Line\ [0-9]*\:\ /, '');
-                console.log('  <testcase name="Line ' + error.lineNumber + ': ' + msg + '" ' +
-                    ' time="0">');
-                console.log('    <error type="SyntaxError" message="' + error.message + '">' +
-                    error.message + '(' + name + ':' + error.lineNumber + ')' +
-                    '</error>');
-                console.log('  </testcase>');
-            });
-
-            console.log('</testsuite>');
-
-        } else if (options.format === 'plain') {
-
-            syntax.errors.forEach(function (error) {
-                var msg = error.message;
-                msg = msg.replace(/^Line\ [0-9]*\:\ /, '');
-                msg = fname + ':' + error.lineNumber + ': ' + msg;
-                console.log(msg);
-                ++count;
-            });
-
+        name = fname;
+        if (name.lastIndexOf('/') >= 0) {
+            name = name.slice(name.lastIndexOf('/') + 1);
         }
+
+        errors = 0;
+        failures = syntax.errors.length;
+        tests =  syntax.errors.length;
+        time = Math.round((Date.now() - timestamp) / 1000);
+
+        formatter.startSection(name, errors, failures, tests, time);
+
+        syntax.errors.forEach(function (error) {
+            formatter.writeError(name, error, "SyntaxError");
+            ++count;
+        });
+
+        formatter.endSection();
+
     } catch (e) {
         ++count;
-        if (options.format === 'junit') {
-            console.log('<testsuite name="' + fname + '" errors="1" failures="0" tests="1" ' +
-                ' time="' + Math.round((Date.now() - timestamp) / 1000) + '">');
-            console.log(' <testcase name="' + e.message + '" ' + ' time="0">');
-            console.log(' <error type="ParseError" message="' + e.message + '">' +
-                e.message + '(' + fname + ((e.lineNumber) ? ':' + e.lineNumber : '') +
-                ')</error>');
-            console.log(' </testcase>');
-            console.log('</testsuite>');
-        } else {
-            console.log('Error: ' + e.message);
-        }
+
+        errors = 1;
+        failures = 0;
+        tests = 1;
+        time = Math.round((Date.now() - timestamp) / 1000);
+
+        formatter.startSection(fname, errors, failures, tests, time);
+        formatter.writeError(fname, e, "ParseError");
+        formatter.endSection();
     }
 });
 
-if (options.format === 'junit') {
-    console.log('</testsuites>');
-}
+formatter.endLog();
 
-if (count > 0) {
+if ((count > 0) && dieLoudly) {
     process.exit(1);
 }
 
