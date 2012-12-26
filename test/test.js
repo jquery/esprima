@@ -15223,6 +15223,74 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 32 }
             }
+        },
+
+        'function test() { "use strict" + 42; }': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'test',
+                range: [9, 13],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            params: [],
+            defaults: [],
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'BinaryExpression',
+                        operator: '+',
+                        left: {
+                            type: 'Literal',
+                            value: 'use strict',
+                            raw: '"use strict"',
+                            range: [18, 30],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 30 }
+                            }
+                        },
+                        right: {
+                            type: 'Literal',
+                            value: 42,
+                            raw: '42',
+                            range: [33, 35],
+                            loc: {
+                                start: { line: 1, column: 33 },
+                                end: { line: 1, column: 35 }
+                            }
+                        },
+                        range: [18, 35],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 35 }
+                        }
+                    },
+                    range: [18, 36],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 36 }
+                    }
+                }],
+                range: [16, 38],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 38 }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            range: [0, 38],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            }
         }
 
     },
@@ -17542,6 +17610,13 @@ var testFixture = {
             index: 8,
             lineNumber: 1,
             column: 9,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'function t() { ;  ;  ': {
+            index: 21,
+            lineNumber: 1,
+            column: 22,
             message: 'Error: Line 1: Unexpected end of input'
         }
 
