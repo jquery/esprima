@@ -17518,6 +17518,20 @@ var testFixture = {
             message: 'Error: Line 1: Use of future reserved word in strict mode'
         },
 
+        'function eval(a) { "use strict"; }': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+        },
+
+        'function arguments(a) { "use strict"; }': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+        },
+
         'var yield': {
             index: 4,
             lineNumber: 1,
