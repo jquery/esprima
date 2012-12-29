@@ -349,23 +349,15 @@ npm install
 
 <p>Note: you need to use Node.js 0.6 or later version.</p>
 
-<p>Install node-cover:</p>
+<p>Install istanbul:</p>
 
-<pre class="prettyprint lang-bsh">sudo npm install -g cover</pre>
+<pre class="prettyprint lang-bsh">sudo npm install -g istanbul</pre>
 
 <p>Run it in Esprima source tree:</p>
 
-<pre class="prettyprint lang-bsh">cover run test/runner.js</pre>
+<pre class="prettyprint lang-bsh">istanbul cover test/runner.js</pre>
 
-<p>Check the quick report:</p>
-
-<pre class="prettyprint lang-bsh">cover report</pre>
-
-<p>To get the detailed report:</p>
-
-<pre class="prettyprint lang-bsh">cover report html</pre>
-
-<p>and then open <code>cover_html/index.html</code> file and choose <code>esprima.js</code> from the list.</p>
+<p>To get the detailed report, open <code>coverage/lcov-report/index.html</code> file and choose <code>esprima.js</code> from the list.</p>
 
 <h4 id="benchmark">Benchmark tests</h4>
 
