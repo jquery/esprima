@@ -161,7 +161,7 @@ function testParse(esprima, code, syntax) {
 
 function testError(esprima, code, exception) {
     'use strict';
-    var i, options, expected, actual, handleInvalidRegexFlag;
+    var i, options, expected, actual, err, handleInvalidRegexFlag;
 
     // Different parsing options should give the same error.
     options = [
@@ -181,6 +181,8 @@ function testError(esprima, code, exception) {
         handleInvalidRegexFlag = true;
     }
 
+    exception.description = exception.message.replace(/Error: Line [0-9]+: /, '');
+
     expected = JSON.stringify(exception);
 
     for (i = 0; i < options.length; i += 1) {
@@ -188,7 +190,9 @@ function testError(esprima, code, exception) {
         try {
             esprima.parse(code, options[i]);
         } catch (e) {
-            actual = JSON.stringify(errorToObject(e));
+            err = errorToObject(e);
+            err.description = e.description;
+            actual = JSON.stringify(err);
         }
 
         if (expected !== actual) {

@@ -1244,7 +1244,132 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 17 }
             }
+        },
+
+        '([a, , b]) => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'ArrayPattern',
+                    elements: [{
+                        type: 'Identifier',
+                        name: 'a',
+                        range: [2, 3],
+                        loc: {
+                            start: { line: 1, column: 2 },
+                            end: { line: 1, column: 3 }
+                        }
+                    }, null, {
+                        type: 'Identifier',
+                        name: 'b',
+                        range: [7, 8],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 8 }
+                        }
+                    }],
+                    range: [1, 9],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 9 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [14, 16],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            },
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
+        },
+
+        '([a.a]) => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'ArrayPattern',
+                    elements: [{
+                        type: 'MemberExpression',
+                        computed: false,
+                        object: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [2, 3],
+                            loc: {
+                                start: { line: 1, column: 2 },
+                                end: { line: 1, column: 3 }
+                            }
+                        },
+                        property: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [4, 5],
+                            loc: {
+                                start: { line: 1, column: 4 },
+                                end: { line: 1, column: 5 }
+                            }
+                        },
+                        range: [2, 5],
+                        loc: {
+                            start: { line: 1, column: 2 },
+                            end: { line: 1, column: 5 }
+                        }
+                    }],
+                    range: [1, 6],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 6 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [11, 13],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 13 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 13 }
+            }
         }
+
     },
 
 
@@ -1304,6 +1429,7 @@ var harmonyTestFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 18],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1389,6 +1515,7 @@ var harmonyTestFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 22],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1467,6 +1594,7 @@ var harmonyTestFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 20],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1544,6 +1672,7 @@ var harmonyTestFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 15],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1621,6 +1750,7 @@ var harmonyTestFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 15],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1699,6 +1829,7 @@ var harmonyTestFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 17],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1776,6 +1907,8 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'get',
+                        method: false,
+                        shorthand: false,
                         range: [6, 21],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1878,6 +2011,8 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'set',
+                        method: false,
+                        shorthand: false,
                         range: [6, 29],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2386,6 +2521,7 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
                         shorthand: true,
                         range: [6, 7],
                         loc: {
@@ -2413,6 +2549,7 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
                         shorthand: true,
                         range: [9, 10],
                         loc: {
@@ -2541,6 +2678,8 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
+                        shorthand: false,
                         range: [3, 21],
                         loc: {
                             start: { line: 1, column: 3 },
@@ -2602,6 +2741,7 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
                         shorthand: true,
                         range: [7, 8],
                         loc: {
@@ -2699,6 +2839,7 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
                         shorthand: true,
                         range: [5, 6],
                         loc: {
@@ -2796,6 +2937,7 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
                         shorthand: true,
                         range: [5, 6],
                         loc: {
@@ -2893,6 +3035,8 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
+                        shorthand: false,
                         range: [7, 10],
                         loc: {
                             start: { line: 1, column: 7 },
@@ -2950,6 +3094,8 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
+                        shorthand: false,
                         range: [5, 8],
                         loc: {
                             start: { line: 1, column: 5 },
@@ -3007,6 +3153,8 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
+                        shorthand: false,
                         range: [5, 8],
                         loc: {
                             start: { line: 1, column: 5 },
@@ -3056,6 +3204,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 15 }
                 }
             },
+            from: null,
             body: {
                 type: 'BlockStatement',
                 body: [{
@@ -3069,6 +3218,7 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 33 }
                         }
                     },
+                    from: null,
                     body: {
                         type: 'BlockStatement',
                         body: [],
@@ -3118,6 +3268,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 37 }
                 }
             },
+            body: null,
             range: [0, 37],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3169,6 +3320,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 45 }
                 }
             },
+            body: null,
             range: [0, 45],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3204,6 +3356,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 27 }
                 }
             },
+            body: null,
             range: [0, 27],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3240,6 +3393,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 19 }
                 }
             },
+            specifiers: null,
             range: [ 0, 19 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3284,6 +3438,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 25 }
                 }
             },
+            specifiers: null,
             range: [ 0, 25 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3320,6 +3475,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 19 }
                 }
             },
+            specifiers: null,
             range: [ 0, 19 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3364,6 +3520,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 25 }
                 }
             },
+            specifiers: null,
             range: [ 0, 25 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3408,6 +3565,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 27 }
                 }
             },
+            specifiers: null,
             range: [ 0, 27 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3448,6 +3606,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 27 }
                 }
             },
+            specifiers: null,
             range: [ 0, 27 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3485,12 +3644,14 @@ var harmonyTestFixture = {
                         end: { line: 1, column: 34 }
                     }
                 },
+                body: null,
                 range: [7, 34],
                 loc: {
                     start: { line: 1, column: 7 },
                     end: { line: 1, column: 34 }
                 }
             },
+            specifiers: null,
             range: [ 0, 34 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3501,6 +3662,7 @@ var harmonyTestFixture = {
         'export class Class {}': {
             type: 'ExportDeclaration',
             declaration: {
+                type: 'ClassDeclaration',
                 id: {
                     type: 'Identifier',
                     name: 'Class',
@@ -3510,7 +3672,7 @@ var harmonyTestFixture = {
                         end: { line: 1, column: 18 }
                     }
                 },
-                type: 'ClassDeclaration',
+                superClass: null,
                 body: {
                     type: 'ClassBody',
                     body: [],
@@ -3526,6 +3688,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 21 }
                 }
             },
+            specifiers: null,
             range: [ 0, 21 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3535,6 +3698,7 @@ var harmonyTestFixture = {
 
         'export SolarSystem': {
             type: 'ExportDeclaration',
+            declaration: null,
             specifiers: [{
                 type: 'ExportSpecifier',
                 id: {
@@ -3562,6 +3726,7 @@ var harmonyTestFixture = {
 
         'export Mercury, Venus, Earth': {
             type: 'ExportDeclaration',
+            declaration: null,
             specifiers: [{
                 type: 'ExportSpecifier',
                 id: {
@@ -3623,6 +3788,7 @@ var harmonyTestFixture = {
 
         'export *': {
             type: 'ExportDeclaration',
+            declaration: null,
             specifiers: [{
                 type: 'ExportSpecifier',
                 id: {
@@ -3649,6 +3815,7 @@ var harmonyTestFixture = {
 
         'export * from SolarSystem': {
             type: 'ExportDeclaration',
+            declaration: null,
             specifiers: [{
                 type: 'ExportSpecifier',
                 id: {
@@ -3689,8 +3856,84 @@ var harmonyTestFixture = {
             }
         },
 
+        'export * from Earth, * from Mercury;': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Glob',
+                    range: [7, 8],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 8 }
+                    }
+                },
+                from: {
+                    type: 'Path',
+                    body: [{
+                        type: 'Identifier',
+                        name: 'Earth',
+                        range: [14, 19],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 19 }
+                        }
+                    }],
+                    range: [14, 19],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 19 }
+                    }
+                },
+                range: [7, 19],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 19 }
+                }
+            }, {
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Glob',
+                    range: [21, 22],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                from: {
+                    type: 'Path',
+                    body: [{
+                        type: 'Identifier',
+                        name: 'Mercury',
+                        range: [28, 35],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 35 }
+                        }
+                    }],
+                    range: [28, 35],
+                    loc: {
+                        start: { line: 1, column: 28 },
+                        end: { line: 1, column: 35 }
+                    }
+                },
+                range: [21, 35],
+                loc: {
+                    start: { line: 1, column: 21 },
+                    end: { line: 1, column: 35 }
+                }
+            }],
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            }
+        },
+
         'export { Mercury: SolarSystem.Mercury, Earth: SolarSystem.Earth }': {
             type: 'ExportDeclaration',
+            declaration: null,
             specifiers: [{
                 type: 'ExportSpecifierSet',
                 specifiers: [
@@ -3798,6 +4041,42 @@ var harmonyTestFixture = {
             }
         },
 
+        'export { SolarSystem }': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            specifiers: [{
+                type: 'ExportSpecifierSet',
+                specifiers: [{
+                    type: 'ExportSpecifier',
+                    id: {
+                        type: 'Identifier',
+                        name: 'SolarSystem',
+                        range: [9, 20],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 20 }
+                        }
+                    },
+                    from: null,
+                    range: [9, 20],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 20 }
+                    }
+                }],
+                range: [7, 22],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 22 }
+                }
+            }],
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
         'module foo {\n module bar = baz }': {
             type: "ModuleDeclaration",
             id: {
@@ -3809,6 +4088,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 10 }
                 }
             },
+            from: null,
             body: {
                 type: "BlockStatement",
                 body: [
@@ -3842,6 +4122,7 @@ var harmonyTestFixture = {
                                 end: { line: 2, column: 17 }
                             }
                         },
+                        body: null,
                         range: [14, 31],
                         loc: {
                             start: { line: 2, column: 1 },
@@ -4419,6 +4700,7 @@ var harmonyTestFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [10, 31],
                         loc: {
                             start: { line: 1, column: 10 },
@@ -4783,15 +5065,6 @@ var harmonyTestFixture = {
                     },
                     init: {
                         type: "ClassExpression",
-                        body: {
-                            type: "ClassBody",
-                            body: [],
-                            range: [24, 26],
-                            loc: {
-                                start: { line: 1, column: 24 },
-                                end: { line: 1, column: 26 }
-                            }
-                        },
                         superClass: {
                             type: "Identifier",
                             name: "B",
@@ -4799,6 +5072,15 @@ var harmonyTestFixture = {
                             loc: {
                                 start: { line: 1, column: 22 },
                                 end: { line: 1, column: 23 }
+                            }
+                        },
+                        body: {
+                            type: "ClassBody",
+                            body: [],
+                            range: [24, 26],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 26 }
                             }
                         },
                         range: [8, 26],
@@ -4823,6 +5105,7 @@ var harmonyTestFixture = {
         },
 
         'class A extends class B extends C {} {}': {
+            type: "ClassDeclaration",
             id: {
                 type: "Identifier",
                 name: "A",
@@ -4832,17 +5115,8 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
-            type: "ClassDeclaration",
-            body: {
-                type: "ClassBody",
-                body: [],
-                range: [37, 39],
-                loc: {
-                    start: { line: 1, column: 37 },
-                    end: { line: 1, column: 39 }
-                }
-            },
             superClass: {
+                type: "ClassExpression",
                 id: {
                     type: "Identifier",
                     name: "B",
@@ -4852,7 +5126,7 @@ var harmonyTestFixture = {
                         end: { line: 1, column: 23 }
                     }
                 },
-                type: "ClassExpression",
+                superClass: null,
                 body: {
                     type: "ClassBody",
                     body: [],
@@ -4877,6 +5151,15 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 36 }
                 }
             },
+            body: {
+                type: "ClassBody",
+                body: [],
+                range: [37, 39],
+                loc: {
+                    start: { line: 1, column: 37 },
+                    end: { line: 1, column: 39 }
+                }
+            },
             range: [0, 39],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4885,6 +5168,7 @@ var harmonyTestFixture = {
         },
 
         'class A {get() {}}': {
+            type: "ClassDeclaration",
             id: {
                 type: "Identifier",
                 name: "A",
@@ -4894,7 +5178,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
-            type: "ClassDeclaration",
+            superClass: null,
             body: {
                 type: "ClassBody",
                 body: [
@@ -4954,6 +5238,7 @@ var harmonyTestFixture = {
         },
 
         'class A extends B {get foo() {}}': {
+            type: "ClassDeclaration",
             id: {
                 type: "Identifier",
                 name: "A",
@@ -4963,7 +5248,15 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
-            type: "ClassDeclaration",
+            superClass: {
+                type: "Identifier",
+                name: "B",
+                range: [16, 17],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 17 }
+                }
+            },
             body: {
                 type: "ClassBody",
                 body: [{
@@ -5013,15 +5306,6 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 32 }
                 }
             },
-            superClass: {
-                type: "Identifier",
-                name: "B",
-                range: [16, 17],
-                loc: {
-                    start: { line: 1, column: 16 },
-                    end: { line: 1, column: 17 }
-                }
-            },
             range: [0, 32],
             loc: {
                 start: { line: 1, column: 0 },
@@ -5030,6 +5314,7 @@ var harmonyTestFixture = {
         },
 
         'class A {set a(v) {}}': {
+            type: "ClassDeclaration",
             id: {
                 type: "Identifier",
                 name: "A",
@@ -5039,7 +5324,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
-            type: "ClassDeclaration",
+            superClass: null,
             body: {
                 type: "ClassBody",
                 body: [
@@ -5107,6 +5392,7 @@ var harmonyTestFixture = {
         },
 
         'class A {set(v) {};}': {
+            type: "ClassDeclaration",
             id: {
                 type: "Identifier",
                 name: "A",
@@ -5116,7 +5402,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
-            type: "ClassDeclaration",
+            superClass: null,
             body: {
                 type: "ClassBody",
                 body: [
@@ -5184,6 +5470,7 @@ var harmonyTestFixture = {
         },
 
         'class A {*gen(v) { yield v; }}': {
+            type: "ClassDeclaration",
             id: {
                 type: "Identifier",
                 name: "A",
@@ -5193,7 +5480,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 7 }
                 }
             },
-            type: "ClassDeclaration",
+            superClass: null,
             body: {
                 type: "ClassBody",
                 body: [
@@ -5309,6 +5596,7 @@ var harmonyTestFixture = {
                 {
                     type: "ExpressionStatement",
                     expression: {
+                        type: "ClassExpression",
                         id: {
                             type: "Identifier",
                             name: "A",
@@ -5318,7 +5606,7 @@ var harmonyTestFixture = {
                                 end: { line: 1, column: 22 }
                             }
                         },
-                        type: "ClassExpression",
+                        superClass: null,
                         body: {
                             type: "ClassBody",
                             body: [
@@ -5681,6 +5969,7 @@ var harmonyTestFixture = {
                         }
                     },
                     kind: 'init',
+                    method: false,
                     shorthand: true,
                     range: [13, 14],
                     loc: {
@@ -5708,6 +5997,7 @@ var harmonyTestFixture = {
                         }
                     },
                     kind: 'init',
+                    method: false,
                     shorthand: true,
                     range: [16, 17],
                     loc: {
@@ -5779,6 +6069,7 @@ var harmonyTestFixture = {
                         }
                     },
                     kind: 'init',
+                    method: false,
                     shorthand: true,
                     range: [16, 17],
                     loc: {
@@ -5905,6 +6196,7 @@ var harmonyTestFixture = {
                                 }
                             },
                             kind: 'init',
+                            method: false,
                             shorthand: true,
                             range: [18, 19],
                             loc: {
@@ -5932,6 +6224,7 @@ var harmonyTestFixture = {
                                 }
                             },
                             kind: 'init',
+                            method: false,
                             shorthand: true,
                             range: [21, 22],
                             loc: {
@@ -5946,6 +6239,8 @@ var harmonyTestFixture = {
                         }
                     },
                     kind: 'init',
+                    method: false,
+                    shorthand: false,
                     range: [13, 24],
                     loc: {
                         start: { line: 1, column: 13 },
@@ -5988,6 +6283,8 @@ var harmonyTestFixture = {
                         }
                     },
                     kind: 'init',
+                    method: false,
+                    shorthand: false,
                     range: [26, 35],
                     loc: {
                         start: { line: 1, column: 26 },
@@ -6137,6 +6434,7 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
                         shorthand: true,
                         range: [14, 15],
                         loc: {
@@ -6164,6 +6462,7 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
                         shorthand: true,
                         range: [17, 18],
                         loc: {
@@ -6306,6 +6605,7 @@ var harmonyTestFixture = {
                                     }
                                 },
                                 kind: 'init',
+                                method: false,
                                 shorthand: true,
                                 range: [19, 20],
                                 loc: {
@@ -6333,6 +6633,7 @@ var harmonyTestFixture = {
                                     }
                                 },
                                 kind: 'init',
+                                method: false,
                                 shorthand: true,
                                 range: [22, 23],
                                 loc: {
@@ -6347,6 +6648,8 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
+                        shorthand: false,
                         range: [14, 25],
                         loc: {
                             start: { line: 1, column: 14 },
@@ -6389,6 +6692,8 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
+                        shorthand: false,
                         range: [27, 36],
                         loc: {
                             start: { line: 1, column: 27 },
@@ -6508,6 +6813,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'init',
                     method: true,
+                    shorthand: false,
                     range: [3, 16],
                     loc: {
                         start: { line: 1, column: 3 },
@@ -6586,6 +6892,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'init',
                     method: true,
+                    shorthand: false,
                     range: [3, 19],
                     loc: {
                         start: { line: 1, column: 3 },
@@ -6659,6 +6966,7 @@ var harmonyTestFixture = {
                                             }
                                         },
                                         kind: 'init',
+                                        method: false,
                                         shorthand: true,
                                         range: [12, 13],
                                         loc: {
@@ -6686,6 +6994,7 @@ var harmonyTestFixture = {
                                             }
                                         },
                                         kind: 'init',
+                                        method: false,
                                         shorthand: true,
                                         range: [15, 16],
                                         loc: {
@@ -6700,6 +7009,8 @@ var harmonyTestFixture = {
                                     }
                                 },
                                 kind: 'init',
+                                method: false,
+                                shorthand: false,
                                 range: [7, 18],
                                 loc: {
                                     start: { line: 1, column: 7 },
@@ -6742,6 +7053,8 @@ var harmonyTestFixture = {
                                     }
                                 },
                                 kind: 'init',
+                                method: false,
+                                shorthand: false,
                                 range: [20, 29],
                                 loc: {
                                     start: { line: 1, column: 20 },
@@ -6797,6 +7110,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'init',
                     method: true,
+                    shorthand: false,
                     range: [3, 48],
                     loc: {
                         start: { line: 1, column: 3 },
@@ -6931,6 +7245,7 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
                         shorthand: true,
                         range: [3, 4],
                         loc: {
@@ -6998,6 +7313,7 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
                         shorthand: true,
                         range: [3, 4],
                         loc: {
@@ -7193,6 +7509,8 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
+                        shorthand: false,
                         range: [3, 12],
                         loc: {
                             start: { line: 1, column: 3 },
@@ -7266,6 +7584,8 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
+                        shorthand: false,
                         range: [3, 7],
                         loc: {
                             start: { line: 1, column: 3 },
@@ -7292,6 +7612,7 @@ var harmonyTestFixture = {
                             }
                         },
                         kind: 'init',
+                        method: false,
                         shorthand: true,
                         range: [9, 10],
                         loc: {
@@ -7508,6 +7829,7 @@ var harmonyTestFixture = {
                                 }
                             },
                             kind: 'init',
+                            method: false,
                             shorthand: true,
                             range: [3, 4],
                             loc: {
@@ -7535,6 +7857,7 @@ var harmonyTestFixture = {
                                 }
                             },
                             kind: 'init',
+                            method: false,
                             shorthand: true,
                             range: [6, 7],
                             loc: {
@@ -7799,6 +8122,7 @@ var harmonyTestFixture = {
                                 }
                             },
                             kind: 'init',
+                            method: false,
                             shorthand: true,
                             range: [7, 8],
                             loc: {
@@ -7826,6 +8150,7 @@ var harmonyTestFixture = {
                                 }
                             },
                             kind: 'init',
+                            method: false,
                             shorthand: true,
                             range: [10, 11],
                             loc: {
@@ -8682,7 +9007,71 @@ var harmonyTestFixture = {
             lineNumber: 1,
             column: 10,
             message: 'Error: Line 1: Spread must be the final element of an element list'
+        },
+
+        '({ t(eval) { "use strict"; } });': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        '"use strict"; `${test}\\02`;': {
+            index: 21,
+            lineNumber: 1,
+            column: 22,
+            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+        },
+
+        '[...a, ] = b': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Spread must be the final element of an element list'
+        },
+
+        'if (b,...a, );': {
+            index: 10,
+            lineNumber: 1,
+            column: 11,
+            message: 'Error: Line 1: Spread must be the final element of an element list'
+        },
+
+        '(b, ...a)': {
+            index: 8,
+            lineNumber: 1,
+            column: 9,
+            message: 'Error: Line 1: Illegal spread element'
+        },
+
+        'module Universe { ;  ;  ': {
+            index: 24,
+            lineNumber: 1,
+            column: 25,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'switch (cond) { case 10: let a = 20; ': {
+            index: 37,
+            lineNumber: 1,
+            column: 38,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        '"use strict"; (eval)=> 42': {
+            index: 20,
+            lineNumber: 1,
+            column: 21,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        '({ get test() { } }) => 42': {
+            index: 20,
+            lineNumber: 1,
+            column: 21,
+            message: 'Error: Line 1: Invalid left-hand side in formals list'
         }
+
     }
 };
 
