@@ -35,6 +35,7 @@ Esprima serves as the basis for many popular JavaScript development tools:
 - Source transformation: [node-falafel](https://github.com/substack/node-falafel), [Rocambole](https://github.com/millermedeiros/rocambole/),
   [Esmangle](https://github.com/Constellation/esmangle), [escodegen](https://github.com/Constellation/escodegen), [redeyed](https://github.com/thlorenz/redeyed)
 - Code navigation: [esgoggles](http://keeyipchan.github.com/esgoggles)
+- AMD module tree assembler tools: [r.js](https://github.com/jrburke/r.js), [Prune.js](http://dvdotsenko.github.com/prunejs/)
 
 ### Questions?
 - [Documentation](http://esprima.org/doc)
