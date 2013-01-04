@@ -38,7 +38,7 @@
 
         "complexity": "npm run-script analyze-complexity && npm run-script check-complexity",
         "analyze-complexity": "node tools/list-complexity.js",
-        "check-complexity": "node node_modules/complexity-report/src/cli.js --maxcc 21 --silent -l -w esprima.js",
+        "check-complexity": "node node_modules/complexity-report/src/cli.js --maxcc 31 --silent -l -w esprima.js",
 
         "benchmark": "node test/benchmarks.js",
         "benchmark-quick": "node test/benchmarks.js quick"
