@@ -783,6 +783,56 @@ parseYieldExpression: true
 
     // 7.8.3 Numeric Literals
 
+    function scanHexLiteral(start) {
+        var number = '';
+
+        while (index < length) {
+            if (!isHexDigit(source[index])) {
+                break;
+            }
+            number += source[index++];
+        }
+
+        if (number.length === 0) {
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        }
+
+        if (isIdentifierStart(source.charCodeAt(index))) {
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        }
+
+        return {
+            type: Token.NumericLiteral,
+            value: parseInt('0x' + number, 16),
+            lineNumber: lineNumber,
+            lineStart: lineStart,
+            range: [start, index]
+        };
+    }
+
+    function scanOctalLiteral(start) {
+        var number = '0' + source[index++];
+        while (index < length) {
+            if (!isOctalDigit(source[index])) {
+                break;
+            }
+            number += source[index++];
+        }
+
+        if (isIdentifierStart(source.charCodeAt(index)) || isDecimalDigit(source.charCodeAt(index))) {
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        }
+
+        return {
+            type: Token.NumericLiteral,
+            value: parseInt(number, 8),
+            octal: true,
+            lineNumber: lineNumber,
+            lineStart: lineStart,
+            range: [start, index]
+        };
+    }
+
     function scanNumericLiteral() {
         var number, start, ch, octal;
 
@@ -802,33 +852,8 @@ parseYieldExpression: true
             // Binary number in ES6 starts with '0b'.
             if (number === '0') {
                 if (ch === 'x' || ch === 'X') {
-                    number += source[index++];
-                    while (index < length) {
-                        ch = source[index];
-                        if (!isHexDigit(ch)) {
-                            break;
-                        }
-                        number += source[index++];
-                    }
-
-                    if (number.length <= 2) {
-                        // only 0x
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-
-                    if (index < length) {
-                        ch = source[index];
-                        if (isIdentifierStart(ch.charCodeAt(0))) {
-                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                        }
-                    }
-                    return {
-                        type: Token.NumericLiteral,
-                        value: parseInt(number, 16),
-                        lineNumber: lineNumber,
-                        lineStart: lineStart,
-                        range: [start, index]
-                    };
+                    ++index;
+                    return scanHexLiteral(start);
                 }
                 if (ch === 'b' || ch === 'B') {
                     ++index;
@@ -1943,6 +1968,7 @@ parseYieldExpression: true
             msg = messageFormat.replace(
                 /%(\d)/g,
                 function (whole, index) {
+                    assert(index < args.length, 'Message reference must be in range');
                     return args[index];
                 }
             );

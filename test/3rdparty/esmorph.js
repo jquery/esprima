@@ -141,7 +141,7 @@
                         if (typeof parent.left.range !== 'undefined') {
                             functionList.push({
                                 name: code.slice(parent.left.range[0],
-                                          parent.left.range[1] + 1),
+                                          parent.left.range[1]).replace(/"/g, '\\"'),
                                 range: node.range,
                                 loc: node.loc,
                                 blockStart: node.body.range[0]
