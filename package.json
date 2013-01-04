@@ -26,7 +26,7 @@
     }],
     "devDependencies": {
         "jslint": "~0.1.9",
-        "istanbul": "~0.1.22",
+        "istanbul": "~0.1.27",
         "complexity-report": "~0.6.1"
     },
     "scripts": {
@@ -34,7 +34,7 @@
         "lint": "node_modules/jslint/bin/jslint.js esprima.js",
         "coverage": "npm run-script analyze-coverage && npm run-script check-coverage",
         "analyze-coverage": "node node_modules/istanbul/lib/cli.js cover test/runner.js",
-        "check-coverage": "node node_modules/istanbul/lib/cli.js check-coverage --statement 99.72 --branch 98.49 --function 100",
+        "check-coverage": "node node_modules/istanbul/lib/cli.js check-coverage --statement -5 --branch -17 --function 100",
         "complexity": "node node_modules/complexity-report/src/cli.js --maxcc 30 --silent -l -w esprima.js",
         "benchmark": "node test/benchmarks.js",
         "benchmark-quick": "node test/benchmarks.js quick"
