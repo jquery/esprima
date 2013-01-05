@@ -3402,6 +3402,9 @@ parseStatement: true, parseSourceElement: true */
                         column: this.loc.end.column
                     }
                 };
+                if (extra.appendSource) {
+                    node.groupLoc.source = extra.source;
+                }
             }
         };
 
@@ -3420,6 +3423,9 @@ parseStatement: true, parseSourceElement: true */
                         column: this.loc.end.column
                     }
                 };
+                if (extra.appendSource) {
+                    node.loc.source = extra.source;
+                }
             }
         };
 
@@ -3515,7 +3521,7 @@ parseStatement: true, parseSourceElement: true */
         return n;
     }
 
-    function wrapTrackingFunction(range, loc) {
+    function wrapTrackingFunction(range, loc, appendSource) {
 
         return function (parseFunction) {
 
@@ -3553,11 +3559,17 @@ parseStatement: true, parseSourceElement: true */
                             start: start,
                             end: end
                         };
+                        if (appendSource) {
+                            node.loc.source = extra.source;
+                        }
                     } else if (typeof node.loc === 'undefined') {
                         node.loc = {
                             start: node.left.loc.start,
                             end: node.right.loc.end
                         };
+                        if (appendSource) {
+                            node.loc.source = extra.source;
+                        }
                     }
                 }
             }
@@ -3606,7 +3618,7 @@ parseStatement: true, parseSourceElement: true */
             parseLeftHandSideExpression = trackLeftHandSideExpression;
             parseLeftHandSideExpressionAllowCall = trackLeftHandSideExpressionAllowCall;
 
-            wrapTracking = wrapTrackingFunction(extra.range, extra.loc);
+            wrapTracking = wrapTrackingFunction(extra.range, extra.loc, extra.appendSource);
 
             extra.parseAssignmentExpression = parseAssignmentExpression;
             extra.parseBinaryExpression = parseBinaryExpression;
@@ -3740,6 +3752,9 @@ parseStatement: true, parseSourceElement: true */
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
+
+            extra.appendSource = options.source !== null && options.source !== undefined;
+            extra.source = toString(options.source);
 
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
