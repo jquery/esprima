@@ -755,24 +755,18 @@ parseStatement: true, parseSourceElement: true */
                 }
             }
 
-            while (index < length) {
-                if (!isDecimalDigit(source.charCodeAt(index))) {
-                    ch = source[index];
-                    break;
-                }
+            while (isDecimalDigit(source.charCodeAt(index))) {
                 number += source[index++];
             }
+            ch = source[index];
         }
 
         if (ch === '.') {
             number += source[index++];
-            while (index < length) {
-                if (!isDecimalDigit(source.charCodeAt(index))) {
-                    ch = source[index];
-                    break;
-                }
+            while (isDecimalDigit(source.charCodeAt(index))) {
                 number += source[index++];
             }
+            ch = source[index];
         }
 
         if (ch === 'e' || ch === 'E') {
@@ -782,30 +776,17 @@ parseStatement: true, parseSourceElement: true */
             if (ch === '+' || ch === '-') {
                 number += source[index++];
             }
-
-            ch = source[index];
-            if (ch && isDecimalDigit(ch.charCodeAt(0))) {
-                number += source[index++];
-                while (index < length) {
-                    if (!isDecimalDigit(source.charCodeAt(index))) {
-                        ch = source[index];
-                        break;
-                    }
+            if (isDecimalDigit(source.charCodeAt(index))) {
+                while (isDecimalDigit(source.charCodeAt(index))) {
                     number += source[index++];
                 }
             } else {
-                ch = 'character ' + ch;
-                if (index >= length) {
-                    ch = '<end>';
-                }
                 throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
             }
         }
 
-        if (index < length) {
-            if (isIdentifierStart(source.charCodeAt(index))) {
-                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-            }
+        if (isIdentifierStart(source.charCodeAt(index))) {
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
         }
 
         return {
