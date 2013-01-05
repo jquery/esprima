@@ -34,7 +34,7 @@
         "lint": "node_modules/jslint/bin/jslint.js esprima.js",
         "coverage": "npm run-script analyze-coverage && npm run-script check-coverage",
         "analyze-coverage": "node node_modules/istanbul/lib/cli.js cover test/runner.js",
-        "check-coverage": "node node_modules/istanbul/lib/cli.js check-coverage --statement -5 --branch -17 --function 100",
+        "check-coverage": "node node_modules/istanbul/lib/cli.js check-coverage --statement -5 --branch -19 --function 100",
 
         "complexity": "npm run-script analyze-complexity && npm run-script check-complexity",
         "analyze-complexity": "node tools/list-complexity.js",
