@@ -932,24 +932,18 @@ parseYieldExpression: true
                 }
             }
 
-            while (index < length) {
-                if (!isDecimalDigit(source.charCodeAt(index))) {
-                    ch = source[index];
-                    break;
-                }
+            while (isDecimalDigit(source.charCodeAt(index))) {
                 number += source[index++];
             }
+            ch = source[index];
         }
 
         if (ch === '.') {
             number += source[index++];
-            while (index < length) {
-                if (!isDecimalDigit(source.charCodeAt(index))) {
-                    ch = source[index];
-                    break;
-                }
+            while (isDecimalDigit(source.charCodeAt(index))) {
                 number += source[index++];
             }
+            ch = source[index];
         }
 
         if (ch === 'e' || ch === 'E') {
@@ -959,30 +953,17 @@ parseYieldExpression: true
             if (ch === '+' || ch === '-') {
                 number += source[index++];
             }
-
-            ch = source[index];
-            if (ch && isDecimalDigit(ch.charCodeAt(0))) {
-                number += source[index++];
-                while (index < length) {
-                    if (!isDecimalDigit(source.charCodeAt(index))) {
-                        ch = source[index];
-                        break;
-                    }
+            if (isDecimalDigit(source.charCodeAt(index))) {
+                while (isDecimalDigit(source.charCodeAt(index))) {
                     number += source[index++];
                 }
             } else {
-                ch = 'character ' + ch;
-                if (index >= length) {
-                    ch = '<end>';
-                }
                 throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
             }
         }
 
-        if (index < length) {
-            if (isIdentifierStart(source.charCodeAt(index))) {
-                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-            }
+        if (isIdentifierStart(source.charCodeAt(index))) {
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
         }
 
         return {
@@ -1453,6 +1434,10 @@ parseYieldExpression: true
     SyntaxTreeDelegate = {
 
         name: 'SyntaxTree',
+
+        postProcess: function (node) {
+            return node;
+        },
 
         createArrayExpression: function (elements) {
             return {
@@ -4738,6 +4723,7 @@ parseYieldExpression: true
                         column: this.loc.end.column
                     }
                 };
+                node = delegate.postProcess(node);
             }
         };
 
@@ -4756,6 +4742,7 @@ parseYieldExpression: true
                         column: this.loc.end.column
                     }
                 };
+                node = delegate.postProcess(node);
             }
         };
 
@@ -4901,11 +4888,13 @@ parseYieldExpression: true
                             start: start,
                             end: end
                         };
+                        node = delegate.postProcess(node);
                     } else if (typeof node.loc === 'undefined') {
                         node.loc = {
                             start: node.left.loc.start,
                             end: node.right.loc.end
                         };
+                        node = delegate.postProcess(node);
                     }
                 }
             }
@@ -5114,6 +5103,26 @@ parseYieldExpression: true
         }
     }
 
+    // This is used to modify the delegate.
+
+    function extend(object, properties) {
+        var entry, result = {};
+
+        for (entry in object) {
+            if (object.hasOwnProperty(entry)) {
+                result[entry] = object[entry];
+            }
+        }
+
+        for (entry in properties) {
+            if (properties.hasOwnProperty(entry)) {
+                result[entry] = properties[entry];
+            }
+        }
+
+        return result;
+    }
+
     function parse(code, options) {
         var program, toString;
 
@@ -5144,6 +5153,15 @@ parseYieldExpression: true
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
+
+            if (extra.loc && options.source !== null && options.source !== undefined) {
+                delegate = extend(delegate, {
+                    'postProcess': function (node) {
+                        node.loc.source = toString(options.source);
+                        return node;
+                    }
+                });
+            }
 
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
