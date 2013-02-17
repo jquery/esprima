@@ -18139,6 +18139,78 @@ var testFixture = {
             }
         },
 
+        'tokenize()': {
+          call: 'tokenize',
+          args: [],
+          result: [{
+            type: 'Identifier',
+            value: 'undefined'
+          }]
+        },
+
+        'tokenize(null)': {
+          call: 'tokenize',
+          args: [null],
+          result: [{
+            type: 'Null',
+            value: 'null'
+          }]
+        },
+
+        'tokenize(42)': {
+          call: 'tokenize',
+          args: [42],
+          result: [{
+            type: 'Numeric',
+            value: '42'
+          }]
+        },
+
+        'tokenize(true)': {
+          call: 'tokenize',
+          args: [true],
+          result: [{
+            type: 'Boolean',
+            value: 'true'
+          }]
+        },
+
+        'tokenize(undefined)': {
+          call: 'tokenize',
+          args: [void 0],
+          result: [{
+            type: 'Identifier',
+            value: 'undefined'
+          }]
+        },
+
+        'tokenize(new String("test"))': {
+          call: 'tokenize',
+          args: [new String('test')],
+          result: [{
+            type: 'Identifier',
+            value: 'test'
+          }]
+        },
+
+        'tokenize(new Number(42))': {
+          call: 'tokenize',
+          args: [new Number(42)],
+          result: [{
+            type: 'Numeric',
+            value: '42'
+          }]
+        },
+
+        'tokenize(new Boolean(true))': {
+          call: 'tokenize',
+          args: [new Boolean(true)],
+          result: [{
+            type: 'Boolean',
+            value: 'true'
+          }]
+        },
+
         'Syntax': {
             property: 'Syntax',
             result: {
