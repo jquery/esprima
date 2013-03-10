@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Esprima: Editing Autocomplete</title>
+<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+<link rel="stylesheet" type="text/css" href="../assets/orion/built-editor.css"/>
+<style>
+.textviewContainer { background-color: white; }
+.textviewContainer, .contentassist {
+   font-family: 'Droid Sans Mono', Menlo, Consolas, 'Courier New', Courier, monospace, sans-serif;
+}
+.contentassist { font-size: 10pt; width: 400px; }
+pre { border: 1px solid #ccc; height: 500px }
+tbody tr:nth-child(odd) td { background-color: white; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="topbar">
+<ul class="nav">
+<li><a href="../index.html">&larr; Home</a></li>
+<li><a href="http://github.com/ariya/esprima">Code</a></li>
+<li><a href="../doc/index.html">Documentation</a></li>
+<li><a href="http://issues.esprima.org">Issues</a></li>
+</ul>
+</div>
+
+<h1>Editing Autocomplete <small>makes coding tasks fun again</small></h1>
+
+<p>In the following code editor (based on <a href="http://wiki.eclipse.org/Orion">Eclipse Orion</a>), autocompletion is provided
+by a <a href="https://github.com/scripted-editor/scripted/wiki/Architecture#wiki-Inferencing">type inferencer</a>
+(part of Scripted's <a href="http://ariya.ofilabs.com/2013/02/javascript-editing-with-vmware-scripted.html">Content Assist</a>)
+which supports both static code analysis and JSDoc-style type annotation.</p>
+
+<pre id="editor">var capitalDb = {
+    Indonesia: 'Jakarta',
+    Germany: 'Berlin',
+    Norway: 'Oslo'
+};
+
+var constants = [3.1415926535, 2.7182818284];
+
+// Property completion: type "capitalDb." and press Ctrl+Space.
+
+
+// Array inferencing: type "constants[0]." and press Ctrl+Space
+// to list possible number conversion (e.g "toFixed").
+
+
+
+/**
+ * Find the greatest common divisor of two numbers.
+ * @param {number} a
+ * @param {number} b
+ * @return {number}
+ */
+function gcd(a, b) {
+    return (b === 0) ? a : gcd(b, a % b);
+}
+
+// Type "gc" and press Ctrl+Space to show the function signature.
+ 
+</pre>
+</div>
+
+<script src="../assets/orion/built-editor.min.js"></script>
+
+<script src="../assets/orion/contentassist/doctrine.js"></script>
+<script src="../assets/orion/contentassist/esprima.js"></script>
+<script src="../assets/orion/contentassist/types.js"></script>
+<script src="../assets/orion/contentassist/esprimaJsContentAssist.js"></script>
+<script src="../assets/orion/contentassist/esprimaVisitor.js"></script>
+<script src="../assets/orion/contentassist/proposalUtils.js"></script>
+
+<script src="../assets/orion/customeditor.js"></script>
+
+<script>
+require(['custom/editor'], function (editor) {
+    var e = editor({ parent: 'editor', lang: 'js' });
+    e.onGotoLine(9, 0);
+});
+</script>
+
+</body>
+</html>
