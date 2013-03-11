@@ -3,17 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>Esprima: Full Source Rewrite Demo</title>
-<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
 <link rel="stylesheet" type="text/css" href="../assets/orion/built-editor.css"/>
 <link rel="stylesheet" type="text/css" href="../assets/style.css"/>
-<style>
-.textviewContainer { background-color: white; }
-.textviewContainer {
-   font-family: 'Droid Sans Mono', Menlo, Consolas, 'Courier New', Courier, monospace, sans-serif;
-}
-pre { border: 1px solid #ccc; height: 300px }
-tbody tr:nth-child(odd) td { background-color: white; }
-</style>
 </head>
 <body>
 <div class="container">
@@ -32,7 +23,7 @@ tbody tr:nth-child(odd) td { background-color: white; }
 <p>Type ECMAScript code in the editor. Press <b>Rewrite</b> button to get the code
 regenerated according to the specified settings.</p>
 
-<div><pre id="editor" autofocus="autofocus" cols="70" rows="25" spellcheck="false">
+<div><pre id="editor" autofocus="autofocus" cols="70" rows="25" spellcheck="false" style="height: 300px">
     // Example of messy code with confusing and inconsistent indentations
 
 function bubbleSort    (list) {
@@ -79,6 +70,7 @@ For more information on Escodegen, please check <a href="https://github.com/Cons
 <script src="../esprima.js"></script>
 <script src="../test/3rdparty/escodegen.browser.js"></script>
 <script src="../assets/orion/built-editor.min.js"></script>
+<script src="../assets/orion/customeditor.js"></script>
 <script src="rewrite.js"></script>
 </div>
 </body>

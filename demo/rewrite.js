@@ -111,7 +111,7 @@ window.onload = function () {
     id('rewrite').onclick = sourceRewrite;
 
     try {
-        require(['orion/editor/edit'], function (editor) {
+        require(['custom/editor'], function (editor) {
             window.editor = editor({ parent: 'editor', lang: 'js' });
         });
     } catch (e) {
