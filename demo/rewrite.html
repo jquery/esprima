@@ -3,19 +3,16 @@
 <head>
 <meta charset="utf-8">
 <title>Esprima: Full Source Rewrite Demo</title>
-<script src="../test/3rdparty/platform.js"></script>
-<script src="../test/3rdparty/escodegen.browser.js"></script>
-<script src="checkenv.js"></script>
-<script src="rewrite.js"></script>
-<script src="../esprima.js"></script>
-<script src="../assets/codemirror/codemirror.js"></script>
-<script src="../assets/codemirror/javascript.js"></script>
-<link rel="stylesheet" type="text/css" href="../assets/codemirror/codemirror.css"/>
+<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+<link rel="stylesheet" type="text/css" href="../assets/orion/built-editor.css"/>
 <link rel="stylesheet" type="text/css" href="../assets/style.css"/>
 <style>
-.CodeMirror-scroll {
-    height: 300px;
+.textviewContainer { background-color: white; }
+.textviewContainer {
+   font-family: 'Droid Sans Mono', Menlo, Consolas, 'Courier New', Courier, monospace, sans-serif;
 }
+pre { border: 1px solid #ccc; height: 300px }
+tbody tr:nth-child(odd) td { background-color: white; }
 </style>
 </head>
 <body>
@@ -33,9 +30,9 @@
 <h1>Source Rewrite <small>cleans up and reformats everything</small></h1>
 
 <p>Type ECMAScript code in the editor. Press <b>Rewrite</b> button to get the code
-rewritten using <a href="https://github.com/Constellation/escodegen">Escodegen project</a>.</p>
+regenerated according to the specified settings.</p>
 
-<div><textarea id="code" autofocus="autofocus" cols="70" rows="25" spellcheck="false">
+<div><pre id="editor" autofocus="autofocus" cols="70" rows="25" spellcheck="false">
     // Example of messy code with confusing and inconsistent indentations
 
 function bubbleSort    (list) {
@@ -54,7 +51,7 @@ var items = list.slice(0), swapped =false,
     }
        return items; alert("Finish");
 }
-</textarea></div>
+</pre></div>
 
 <p>Indent with:
  <label><input type="radio" name="indent" id="onetab" value="onetab"> tab</label>
@@ -70,22 +67,19 @@ var items = list.slice(0), swapped =false,
 
 <p><input type="button" value="Rewrite" id="rewrite"></p>
 
-<p id="codemirror" align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
-
 <p id="error"></p>
 
-<p><b>Notes</b>:</p>
-<ul>
-    <li>Only valid syntax is accepted.</li>
-</ul>
-
-<p style="margin-top: 50px;" id="version"></p>
+<p style="margin-top: 50px;"><span id="version"></span><br/>
+For more information on Escodegen, please check <a href="https://github.com/Constellation/escodegen">github.com/Constellation/escodegen</a>.</p>
 
 <div class="footer"><strong>Esprima</strong> is created by
 <a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
 </div>
 
-<div id="testbox" style="visibility: hidden;"><textarea id="test"></textarea></div>
+<script src="../esprima.js"></script>
+<script src="../test/3rdparty/escodegen.browser.js"></script>
+<script src="../assets/orion/built-editor.min.js"></script>
+<script src="rewrite.js"></script>
 </div>
 </body>
 </html>
