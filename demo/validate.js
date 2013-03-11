@@ -27,7 +27,6 @@ function validate(delay) {
             } else {
                 str = 'No syntax error.';
             }
-            console.log(str);
         } catch (e) {
             window.editor.addErrorMarker(e.index, e.description);
             str = 'Found a critical issue.';

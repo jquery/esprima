@@ -177,3 +177,9 @@ tbody tr:nth-child(even) td {
 pre#editor {
     border: 1px solid #ccc;
 }
+
+.textviewTooltip {
+    color: black;
+    background-color: #ffffcc;
+    border-color: #aaa;
+}
