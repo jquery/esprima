@@ -158,7 +158,22 @@ table td {
     border-top: 1px solid #ccc;
 }
 
-tbody tr:nth-child(odd) td {
+tbody tr:nth-child(even) td {
     background-color: #eee;
 }
 
+.textviewContainer {
+    background-color: white;
+}
+
+.textviewContainer, .contentassist {
+    font-family: 'Droid Sans Mono', Menlo, Consolas, 'Courier New', Courier, monospace, sans-serif;
+    font-size: 10pt;
+}
+.contentassist {
+    width: 400px;
+}
+
+pre#editor {
+    border: 1px solid #ccc;
+}

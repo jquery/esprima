@@ -1,5 +1,5 @@
 /*jslint sloppy:true browser:true */
-/*global esprima:true, CodeMirror:true */
+/*global esprima:true, require:true */
 var validateId;
 
 function validate(delay) {
@@ -11,64 +11,41 @@ function validate(delay) {
         var code, result, i, str;
 
         if (typeof window.editor === 'undefined') {
-            code = document.getElementById('code').value;
+            code = document.getElementById('editor').value;
         } else {
-            code = window.editor.getValue();
+            code = window.editor.getText();
+            window.editor.removeAllErrorMarkers();
         }
 
         try {
             result = esprima.parse(code, { tolerant: true, loc: true }).errors;
             if (result.length > 0) {
-                str = '<p>Found <b>' + result.length + '</b>:</p>';
+                str = 'Found <b>' + result.length + '</b> issues.';
                 for (i = 0; i < result.length; i += 1) {
-                    str += '<p>' + result[i].message + '</p>';
+                    window.editor.addErrorMarker(result[i].index, result[i].description);
                 }
             } else {
-                str = '<p>No syntax error.</p>';
+                str = 'No syntax error.';
             }
+            console.log(str);
         } catch (e) {
-            str = e.name + ': ' + e.message;
+            window.editor.addErrorMarker(e.index, e.description);
+            str = 'Found a critical issue.';
+        } finally {
+            document.getElementById('result').innerHTML = str;
         }
-        document.getElementById('result').innerHTML = str;
 
         validateId = undefined;
     }, delay || 811);
 }
 
 window.onload = function () {
-    var id, el;
-
-    id = function (i) {
-        return document.getElementById(i);
-    };
-
-    el = id('version');
-    if (typeof el.innerText === 'string') {
-        el.innerText = esprima.version;
-    } else {
-        el.textContent = esprima.version;
-    }
     try {
-        validate(1);
-    } catch (e) { }
+        require(['custom/editor'], function (editor) {
+            window.editor = editor({ parent: 'editor', lang: 'js' });
+            window.editor.getTextView().getModel().addEventListener("Changed", validate);
+        });
+        validate(55);
+    } catch (e) {
+    }
 };
-
-try {
-    window.checkEnv();
-
-    // This is just testing, to detect whether CodeMirror would fail or not
-    window.editor = CodeMirror.fromTextArea(document.getElementById("test"));
-
-    window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true,
-        matchBrackets: true,
-        onChange: validate
-    });
-} catch (e) {
-    // CodeMirror failed to initialize, possible in e.g. old IE.
-    document.getElementById('codemirror').innerHTML = '';
-    document.getElementById('code').onchange = validate;
-    document.getElementById('code').onkeydown = validate;
-} finally {
-    document.getElementById('testbox').parentNode.removeChild(document.getElementById('testbox'));
-}

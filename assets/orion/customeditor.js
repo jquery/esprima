@@ -29,10 +29,9 @@ define('custom/editor', [ //$NON-NLS-0$
 	"orion/editor/editorFeatures", //$NON-NLS-0$
 	
 	"orion/editor/contentAssist", //$NON-NLS-0$
-	"plugins/esprima/esprimaJsContentAssist",
 	
 	"examples/editor/textStyler" //$NON-NLS-0$
-], function(mTextView, mTextModel, mProjModel, mEventTarget, mKeyBinding, mRulers, mAnnotations, mTooltip, mUndoStack, mTextDND, mEditor, mEditorFeatures, mContentAssist, mJSContentAssist, mTextStyler) {
+], function(mTextView, mTextModel, mProjModel, mEventTarget, mKeyBinding, mRulers, mAnnotations, mTooltip, mUndoStack, mTextDND, mEditor, mEditorFeatures, mContentAssist, mTextStyler) {
 
 	/**	@private */
 	function getTextFromElement(element) {
@@ -121,7 +120,7 @@ define('custom/editor', [ //$NON-NLS-0$
 		};
 
 		var contentAssist, contentAssistFactory;
-		if (!options.readonly) {
+		if (!options.readonly && options.contentassist) {
 			contentAssistFactory = {
 				createContentAssistMode: function(editor) {
 					contentAssist = new mContentAssist.ContentAssist(editor.getTextView());
@@ -187,11 +186,23 @@ define('custom/editor', [ //$NON-NLS-0$
 		editor.setInput(options.title, null, contents);
 		syntaxHighlighter.highlight(options.lang, editor);
 		if (contentAssist) {
+			var mJSContentAssist = require("plugins/esprima/esprimaJsContentAssist");
 			var jsTemplateContentAssistProvider = new mJSContentAssist.EsprimaJavaScriptContentAssistProvider();
 			contentAssist.addEventListener("Activating", function() { //$NON-NLS-0$
 				contentAssist.setProviders([jsTemplateContentAssistProvider]);
 			});
 		}
+
+        editor.addErrorMarker = function (pos, description) {
+            var annotationModel = editor.getAnnotationModel();
+            var marker = mAnnotations.AnnotationType.createAnnotation(mAnnotations.AnnotationType.ANNOTATION_WARNING, pos, pos, description);
+            annotationModel.addAnnotation(marker);
+        };
+
+        editor.removeAllErrorMarkers = function () {
+            var annotationModel = editor.getAnnotationModel();
+            annotationModel.removeAnnotations(mAnnotations.AnnotationType.ANNOTATION_WARNING);
+        };
 
 		return editor;
 	}
