@@ -71,6 +71,7 @@ function sourceRewrite() {
     }
 
     option = {
+        comment: true,
         format: {
             indent: {
                 style: indent
@@ -80,7 +81,8 @@ function sourceRewrite() {
     };
 
     try {
-        syntax = window.esprima.parse(code, { raw: true });
+        syntax = window.esprima.parse(code, { raw: true, tokens: true, range: true, comment: true });
+        syntax = window.escodegen.attachComments(syntax, syntax.comments, syntax.tokens);
         code = window.escodegen.generate(syntax, option);
     } catch (e) {
         setText('error', e.toString());
