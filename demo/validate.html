@@ -3,27 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>Esprima: Syntax Validator</title>
-<script src="../test/3rdparty/platform.js"></script>
-<script src="checkenv.js"></script>
-<script src="../esprima.js"></script>
-<script src="../assets/codemirror/codemirror.js"></script>
-<script src="../assets/codemirror/javascript.js"></script>
-<link rel="stylesheet" type="text/css" href="../assets/codemirror/codemirror.css"/>
+<link rel="stylesheet" type="text/css" href="../assets/orion/built-editor.css"/>
 <link rel="stylesheet" type="text/css" href="../assets/style.css"/>
-<style>
-table th, table td {
-    text-align: left;
-    background-color: white;
-}
-
-tbody tr:nth-child(odd) td {
-    background-color: white;
-}
-
-tbody td {
-    background-color: white;
-}
-</style>
 </head>
 <body>
 <div class="container">
@@ -42,7 +23,7 @@ tbody td {
 <p>Esprima version <span id="version"></span>.</p>
 
 <p>Type ECMAScript code:</p>
-<div><textarea id="code" autofocus="autofocus" cols="70" rows="15" spellcheck="false">
+<div><pre id="editor" autofocus="autofocus" cols="70" rows="25" spellcheck="false" style="height: 300px">
 return 42; // Return statement not inside a function
 
 function f() {
@@ -58,8 +39,7 @@ function f() {
   with (z) {}
 
 }
-</textarea></div>
-<p id="codemirror" align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
+</pre></div>
 
 <div id="result"><p>No result yet.</p></div>
 
@@ -67,8 +47,12 @@ function f() {
     <a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
 </div>
 
-<div id="testbox"><textarea id="test"></textarea></div>
 </div>
+
+<script src="../esprima.js"></script>
+<script src="../test/3rdparty/escodegen.browser.js"></script>
+<script src="../assets/orion/built-editor.min.js"></script>
+<script src="../assets/orion/customeditor.js"></script>
 <script src="validate.js"></script>
 </body>
 </html>
