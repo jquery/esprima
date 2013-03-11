@@ -193,6 +193,17 @@ define('custom/editor', [ //$NON-NLS-0$
 			});
 		}
 
+        editor.addErrorMarker = function (pos, description) {
+            var annotationModel = editor.getAnnotationModel();
+            var marker = mAnnotations.AnnotationType.createAnnotation(mAnnotations.AnnotationType.ANNOTATION_WARNING, pos, pos, description);
+            annotationModel.addAnnotation(marker);
+        };
+
+        editor.removeAllErrorMarkers = function () {
+            var annotationModel = editor.getAnnotationModel();
+            annotationModel.removeAnnotations(mAnnotations.AnnotationType.ANNOTATION_WARNING);
+        };
+
 		return editor;
 	}
 	
