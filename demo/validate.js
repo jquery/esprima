@@ -1,5 +1,5 @@
 /*jslint sloppy:true browser:true */
-/*global esprima:true, CodeMirror:true */
+/*global esprima:true, require:true */
 var validateId;
 
 function validate(delay) {
@@ -11,9 +11,9 @@ function validate(delay) {
         var code, result, i, str;
 
         if (typeof window.editor === 'undefined') {
-            code = document.getElementById('code').value;
+            code = document.getElementById('editor').value;
         } else {
-            code = window.editor.getValue();
+            code = window.editor.getText();
         }
 
         try {
@@ -48,27 +48,12 @@ window.onload = function () {
     } else {
         el.textContent = esprima.version;
     }
+
     try {
-        validate(1);
-    } catch (e) { }
+        require(['custom/editor'], function (editor) {
+            window.editor = editor({ parent: 'editor', lang: 'js' });
+        });
+        validate(55);
+    } catch (e) {
+    }
 };
-
-try {
-    window.checkEnv();
-
-    // This is just testing, to detect whether CodeMirror would fail or not
-    window.editor = CodeMirror.fromTextArea(document.getElementById("test"));
-
-    window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true,
-        matchBrackets: true,
-        onChange: validate
-    });
-} catch (e) {
-    // CodeMirror failed to initialize, possible in e.g. old IE.
-    document.getElementById('codemirror').innerHTML = '';
-    document.getElementById('code').onchange = validate;
-    document.getElementById('code').onkeydown = validate;
-} finally {
-    document.getElementById('testbox').parentNode.removeChild(document.getElementById('testbox'));
-}
