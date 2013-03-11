@@ -3,17 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>Esprima: Editing Autocomplete</title>
-<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
 <link rel="stylesheet" type="text/css" href="../assets/orion/built-editor.css"/>
-<style>
-.textviewContainer { background-color: white; }
-.textviewContainer, .contentassist {
-   font-family: 'Droid Sans Mono', Menlo, Consolas, 'Courier New', Courier, monospace, sans-serif;
-}
-.contentassist { font-size: 10pt; width: 400px; }
-pre { border: 1px solid #ccc; height: 500px }
-tbody tr:nth-child(odd) td { background-color: white; }
-</style>
+<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
 </head>
 <body>
 <div class="container">
@@ -34,7 +25,7 @@ by a <a href="https://github.com/scripted-editor/scripted/wiki/Architecture#wiki
 (part of Scripted's <a href="http://ariya.ofilabs.com/2013/02/javascript-editing-with-vmware-scripted.html">Content Assist</a>)
 which supports both static code analysis and JSDoc-style type annotation.</p>
 
-<pre id="editor">var capitalDb = {
+<pre id="editor" style="height: 500px">var capitalDb = {
     Indonesia: 'Jakarta',
     Germany: 'Berlin',
     Norway: 'Oslo'
@@ -78,7 +69,7 @@ function gcd(a, b) {
 
 <script>
 require(['custom/editor'], function (editor) {
-    var e = editor({ parent: 'editor', lang: 'js' });
+    var e = editor({ parent: 'editor', lang: 'js', contentassist: true });
     e.onGotoLine(9, 0);
 });
 </script>
