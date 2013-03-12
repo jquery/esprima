@@ -26,6 +26,12 @@
 /*jslint browser:true */
 /*global require:true */
 
+function obfuscate(syntax) {
+    var result = window.esmangle.optimize(syntax);
+    result = window.esmangle.mangle(result);
+    return result;
+}
+
 function minify() {
     var code, syntax, option, before, after;
 
@@ -48,7 +54,8 @@ function minify() {
 
     try {
         before = code.length;
-        syntax = window.esprima.parse(code, { raw: true });
+        syntax = window.esprima.parse(code, { raw: true, loc: true });
+        syntax = obfuscate(syntax);
         code = window.escodegen.generate(syntax, option);
         after = code.length;
         if (before > after) {
