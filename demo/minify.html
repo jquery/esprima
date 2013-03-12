@@ -43,12 +43,18 @@ var items = list.slice(0), swapped =false,
 <p><input type="button" value="Minify" id="minify"></p>
 
 <p>
-<label><input type="checkbox" id="mangle">Shorten variable names</label>
+<label><input type="checkbox" id="mangle">Shorten variable names</label><br/>
+<label><input type="checkbox" id="remove-unreachable-branch">Remove unreachable branches</label><br/>
+<label><input type="checkbox" id="remove-unused-vars">Remove unused variable definitions</label><br/>
+<label><input type="checkbox" id="fold-constant">Fold (literal) constants</label><br/>
+<label><input type="checkbox" id="eliminate-dead-code">Eliminate dead code</label><br/>
 </p>
 
 <p id="error"></p>
 
-<p style="margin-top: 50px">Minification is done using <a href="https://github.com/Constellation/escodegen">Escodegen</a>.</p>
+<p style="margin-top: 50px">Minification is done using <a href="https://github.com/Constellation/escodegen">Escodegen</a>
+and <a href="https://github.com/Constellation/esmangle">Esmangle</a>.</p>
+
 
 <div class="footer"><strong>Esprima</strong> is created by
 <a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
