@@ -26,9 +26,18 @@
 /*jslint browser:true */
 /*global require:true */
 
+function id(i) {
+    'use strict';
+    return document.getElementById(i);
+}
+
 function obfuscate(syntax) {
     var result = window.esmangle.optimize(syntax);
-    result = window.esmangle.mangle(result);
+
+    if (id('mangle').checked) {
+        result = window.esmangle.mangle(result);
+    }
+
     return result;
 }
 
