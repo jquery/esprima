@@ -23,16 +23,74 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint browser:true */
+/*jslint sloppy: true browser:true */
 /*global require:true */
 
 function id(i) {
-    'use strict';
     return document.getElementById(i);
 }
 
+function createPipeline() {
+    var passes, pipeline, inputs, i, el, optimizer;
+
+    passes = {
+        'eliminate-dead-code': 'pass/dead-code-elimination',
+        'fold-constant': 'pass/tree-based-constant-folding',
+        'remove-unreachable-branch': 'pass/remove-unreachable-branch',
+        'remove-unused-vars': 'pass/drop-variable-definition'
+    };
+
+    pipeline = [
+        'pass/hoist-variable-to-arguments',
+        'pass/transform-dynamic-to-static-property-access',
+        'pass/transform-dynamic-to-static-property-definition',
+        'pass/transform-immediate-function-call',
+        'pass/transform-logical-association',
+        'pass/reordering-function-declarations',
+        'pass/remove-unused-label',
+        'pass/remove-empty-statement',
+        'pass/remove-wasted-blocks',
+        'pass/transform-to-compound-assignment',
+        'pass/transform-to-sequence-expression',
+        'pass/transform-branch-to-expression',
+        'pass/transform-typeof-undefined',
+        'pass/reduce-sequence-expression',
+        'pass/reduce-branch-jump',
+        'pass/reduce-multiple-if-statements',
+        'pass/dead-code-elimination',
+        'pass/remove-side-effect-free-expressions',
+        'pass/remove-context-sensitive-expressions',
+        'pass/tree-based-constant-folding',
+        'pass/drop-variable-definition',
+        'pass/remove-unreachable-branch'
+    ];
+
+    inputs = document.getElementsByTagName('input');
+    for (i = 0; i < inputs.length; i += 1) {
+        el = inputs[i];
+        optimizer = passes[el.id];
+        if (optimizer && el.checked === false) {
+            pipeline.splice(pipeline.indexOf(optimizer), 1);
+        }
+    }
+
+    pipeline = pipeline.map(window.esmangle.require);
+    pipeline = [pipeline];
+    pipeline.push({
+        once: true,
+        pass: [
+            'post/transform-static-to-dynamic-property-access',
+            'post/transform-infinity',
+            'post/rewrite-boolean',
+            'post/rewrite-conditional-expression'
+        ].map(window.esmangle.require)
+    });
+
+    return pipeline;
+}
+
 function obfuscate(syntax) {
-    var result = window.esmangle.optimize(syntax);
+    var result = window.esmangle.optimize(syntax, createPipeline());
 
     if (id('mangle').checked) {
         result = window.esmangle.mangle(result);
@@ -42,7 +100,7 @@ function obfuscate(syntax) {
 }
 
 function minify() {
-    var code, syntax, option, before, after;
+    var code, syntax, option, str, before, after;
 
     if (typeof window.editor === 'undefined') {
         code = document.getElementById('editor').value;
@@ -60,6 +118,8 @@ function minify() {
             compact: true
         }
     };
+
+    str = '';
 
     try {
         before = code.length;
