@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
 
   Redistribution and use in source and binary forms, with or without
@@ -23,35 +24,16 @@
 */
 
 /*jslint browser:true */
-/*global esprima:true, escodegen:true */
-
-function id(i) {
-    'use strict';
-    return document.getElementById(i);
-}
-
-function setText(id, str) {
-    'use strict';
-    var el = document.getElementById(id);
-    if (typeof el.innerText === 'string') {
-        el.innerText = str;
-    } else {
-        el.textContent = str;
-    }
-}
+/*global require:true */
 
 function minify() {
-    'use strict';
-
     var code, syntax, option, before, after;
 
-    setText('error', '');
-    if (typeof window.editor !== 'undefined') {
-        // Using CodeMirror.
-        code = window.editor.getValue();
+    if (typeof window.editor === 'undefined') {
+        code = document.getElementById('editor').value;
     } else {
-        // Plain textarea, likely in a situation where CodeMirror does not work.
-        code = id('code').value;
+        code = window.editor.getText();
+        window.editor.removeAllErrorMarkers();
     }
 
     option = {
@@ -66,57 +48,29 @@ function minify() {
 
     try {
         before = code.length;
-        syntax = window.esprima.parse(code, { raw: true, range: true });
+        syntax = window.esprima.parse(code, { raw: true });
         code = window.escodegen.generate(syntax, option);
-        if (typeof window.editor !== 'undefined') {
-            window.editor.setValue(code);
-        } else {
-            id('code').value = code;
-        }
         after = code.length;
         if (before > after) {
-            setText('error', 'No error. Minifying ' + before + ' bytes to ' + after + ' bytes.');
+            str = 'No error. Minifying ' + before + ' bytes to ' + after + ' bytes.';
+            window.editor.setText(code);
         } else {
-            setText('error', 'Can not minify further, code is already optimized.');
+            str = 'Can not minify further, code is already optimized.';
         }
     } catch (e) {
-        setText('error', e.toString());
+        window.editor.addErrorMarker(e.index, e.description);
+        str = 'Found a critical issue: ' + e.toString();
     } finally {
+        document.getElementById('error').innerHTML = str;
     }
 }
 
-/*jslint sloppy:true browser:true */
-/*global minify:true, CodeMirror:true */
 window.onload = function () {
-    var version, el;
-
-    version = 'Using Esprima version ' + esprima.version;
-    version += ' and Escodegen version ' + escodegen.version + '.';
-
-    el = id('version');
-    if (typeof el.innerText === 'string') {
-        el.innerText = version;
-    } else {
-        el.textContent = version;
-    }
-
-    id('minify').onclick = minify;
-
+    document.getElementById('minify').onclick = minify;
     try {
-        window.checkEnv();
-
-        // This is just testing, to detect whether CodeMirror would fail or not
-        window.editor = CodeMirror.fromTextArea(id("test"));
-
-        window.editor = CodeMirror.fromTextArea(id("code"), {
-            lineNumbers: true,
-            matchBrackets: true,
-            lineWrapping: true
+        require(['custom/editor'], function (editor) {
+            window.editor = editor({ parent: 'editor', lang: 'js', wrapMode: true });
         });
     } catch (e) {
-        // CodeMirror failed to initialize, possible in e.g. old IE.
-        id('codemirror').innerHTML = '';
-    } finally {
-        id('testbox').parentNode.removeChild(id('testbox'));
     }
 };
