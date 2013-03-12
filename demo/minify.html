@@ -3,20 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>Esprima: Code Minify Demo</title>
-<script src="../test/3rdparty/platform.js"></script>
-<script src="../test/3rdparty/escodegen.browser.js"></script>
-<script src="checkenv.js"></script>
-<script src="minify.js"></script>
-<script src="../esprima.js"></script>
-<script src="../assets/codemirror/codemirror.js"></script>
-<script src="../assets/codemirror/javascript.js"></script>
-<link rel="stylesheet" type="text/css" href="../assets/codemirror/codemirror.css"/>
+<link rel="stylesheet" type="text/css" href="../assets/orion/built-editor.css"/>
 <link rel="stylesheet" type="text/css" href="../assets/style.css"/>
-<style>
-.CodeMirror-scroll {
-    height: 300px;
-}
-</style>
 </head>
 <body>
 <div class="container">
@@ -32,10 +20,8 @@
 
 <h1>Minify <small>compacts everything</small></h1>
 
-<p>Type ECMAScript code in the editor. Press <b>Minify</b> button to shorten the code
-using <a href="https://github.com/Constellation/escodegen">Escodegen project</a>.</p>
+<div><pre id="editor" autofocus="autofocus" spellcheck="false" style="height: 300px">// Straightforward bubble sorting...
 
-<div><textarea id="code" autofocus="autofocus" cols="70" rows="25" spellcheck="false">
 function bubbleSort    (list) {
 var items = list.slice(0), swapped =false,
         p,   q;
@@ -52,21 +38,23 @@ var items = list.slice(0), swapped =false,
     }
        return items;
 }
-</textarea></div>
+</pre></div>
 
 <p><input type="button" value="Minify" id="minify"></p>
 
-<p id="codemirror" align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
-
 <p id="error"></p>
 
-<p style="margin-top: 50px;" id="version"></p>
+<p style="margin-top: 50px">Minification is done using <a href="https://github.com/Constellation/escodegen">Escodegen</a>.</p>
 
 <div class="footer"><strong>Esprima</strong> is created by
 <a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
 </div>
 
-<div id="testbox" style="visibility: hidden;"><textarea id="test"></textarea></div>
 </div>
+<script src="../esprima.js"></script>
+<script src="../test/3rdparty/escodegen.browser.js"></script>
+<script src="../assets/orion/built-editor.min.js"></script>
+<script src="../assets/orion/customeditor.js"></script>
+<script src="minify.js"></script>
 </body>
 </html>
