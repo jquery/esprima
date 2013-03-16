@@ -25,152 +25,134 @@
 */
 
 /*jslint sloppy:true browser:true */
-/*global esprima:true, require:true */
+/*global esprima:true, YUI:true, require:true */
 
-var parseId;
+var parseId, tree;
 
 function id(i) {
     return document.getElementById(i);
 }
 
-function updateTree(syntax) {
+YUI({ gallery: 'gallery-2013.01.09-23-24' }).use('gallery-sm-treeview', function (Y) {
 
-    if (window.tree) {
-        window.tree.destroy();
-        window.tree = null;
-    }
+    window.updateTree = function (syntax) {
 
-    if (typeof syntax === 'undefined') {
-        return;
-    }
+        if (typeof syntax === 'undefined') {
+            return;
+        }
 
-    if (id('tab_tree').className !== 'active') {
-        return;
-    }
+        if (id('tab_tree').className !== 'active') {
+            return;
+        }
 
-    window.tree = new YAHOO.widget.TreeView("treeview");
-    id('collapse').onclick = function () { window.tree.collapseAll(); };
-    id('expand').onclick = function () { window.tree.expandAll(); };
+        if (typeof tree === 'undefined') {
+            tree = new Y.TreeView({
+                lazyRender: false,
+                container: '#treeview'
+            });
+            tree.render();
+        }
 
-    function isArray(o) {
-        return (typeof Array.isArray === 'function') ? Array.isArray(o) :
-            Object.prototype.toString.apply(o) === '[object Array]';
-    }
+        function collapseAll() {
+            Y.all('.yui3-treeview-can-have-children').each(function () {
+                tree.getNodeById(this.get('id')).close();
+            });
+        }
 
-    function convert(name, node) {
-        var result, i, key, value, child;
+        function expandAll() {
+            Y.all('.yui3-treeview-can-have-children').each(function () {
+                tree.getNodeById(this.get('id')).open();
+            });
+        }
 
-        switch (typeof node) {
-        case 'string':
-            return {
-                type: 'Text',
-                label: name + ': ' + node
-            };
+        id('collapse').onclick = collapseAll;
+        id('expand').onclick = expandAll;
 
-        case 'number':
-        case 'boolean':
-            return {
-                type: 'Text',
-                label: name + ': ' + String(node)
-            };
+        function isArray(o) {
+            return (typeof Array.isArray === 'function') ? Array.isArray(o) :
+                Object.prototype.toString.apply(o) === '[object Array]';
+        }
 
-        case 'object':
-            if (!node) {
-                return {
-                    type: 'Text',
-                    label: name + ': null'
-                };
-            }
-            if (node instanceof RegExp) {
-                return {
-                    type: 'Text',
-                    label: name + ': ' + node.toString()
-                };
-            }
-            result = {
-                type: 'Text',
-                label: name,
-                expanded: true,
-                children: []
-            };
-            if (isArray(node)) {
-                if (node.length === 2 && name === 'range') {
-                    result.label = name + ': [' + node[0] + ', ' + node[1] + ']';
-                } else {
-                    result.label = result.label + ' [' + node.length + ']';
-                    for (i = 0; i < node.length; i += 1) {
-                        key = String(i);
-                        value = node[i];
-                        child = convert(key, value);
-                        if (isArray(child.children) && child.children.length === 1) {
-                            result.children.push(child.children[0]);
-                        } else {
-                            result.children.push(convert(key, value));
-                        }
-                    }
+        function convert(name, node) {
+            var i, key, item, subitem;
+
+            item = tree.createNode();
+
+            switch (typeof node) {
+
+            case 'string':
+            case 'number':
+            case 'boolean':
+                item.label = name + ': ' + node.toString();
+                break;
+
+            case 'object':
+                if (!node) {
+                    item.label = name + ': null';
+                    return item;
                 }
-            } else {
-                if (typeof node.type !== 'undefined') {
-                    result.children.push({
-                        type: 'Text',
-                        label: node.type,
-                        expanded: true,
-                        children: [],
-                        data: node
-                    });
-                    for (key in node) {
-                        if (Object.prototype.hasOwnProperty.call(node, key)) {
-                            if (key !== 'type') {
-                                value = node[key];
-                                result.children[0].children.push(convert(key, value));
+                if (node instanceof RegExp) {
+                    item.label = name + ': ' + node.toString();
+                    return item;
+                }
+                item.label = name;
+                if (isArray(node)) {
+                    if (node.length === 2 && name === 'range') {
+                        item.label = name + ': [' + node[0] + ', ' + node[1] + ']';
+                    } else {
+                        item.label = item.label + ' [' + node.length + ']';
+                        for (i = 0; i < node.length; i += 1) {
+                            subitem = convert(String(i), node[i]);
+                            if (subitem.children.length === 1) {
+                                item.append(subitem.children[0]);
+                            } else {
+                                item.append(subitem);
                             }
                         }
                     }
+
                 } else {
-                    for (key in node) {
-                        if (Object.prototype.hasOwnProperty.call(node, key)) {
-                            value = node[key];
-                            result.children.push(convert(key, value));
+                    if (typeof node.type !== 'undefined') {
+                        item.label = name;
+                        subitem = tree.createNode();
+                        subitem.label = node.type;
+                        item.append(subitem);
+                        for (key in node) {
+                            if (Object.prototype.hasOwnProperty.call(node, key)) {
+                                if (key !== 'type') {
+                                    subitem.append(convert(key, node[key]));
+                                }
+                            }
+                        }
+                    } else {
+                        for (key in node) {
+                            if (Object.prototype.hasOwnProperty.call(node, key)) {
+                                item.append(convert(key, node[key]));
+                            }
                         }
                     }
                 }
+                break;
+
+            default:
+                item.label = '[Unknown]';
+                break;
             }
-            return result;
 
-        default:
-            break;
+            return item;
         }
 
-        return {
-            type: 'Text',
-            label: '?'
-        };
-    }
 
-    window.tree.subscribe('focusChanged', function (args) {
-        var from, to;
+        tree.clear();
+        document.getElementById('treeview').innerHTML = '';
+        tree.rootNode.append(convert('Program body', syntax.body));
+        tree.render();
 
-        function convert(loc) {
-            return {
-                line: loc.line - 1,
-                ch:   loc.column
-            };
-        }
+        expandAll();
+    };
 
-        if (window.editorMark) {
-            window.editorMark.clear();
-            delete window.editorMark;
-        }
-        if (args.newNode && args.newNode.data && args.newNode.data.loc) {
-            from = convert(args.newNode.data.loc.start);
-            to = convert(args.newNode.data.loc.end);
-            window.editorMark = window.editor.markText(from, to, 'highlight');
-        }
-    });
+});
 
-    window.tree.buildTreeFromObject(convert('Program body', syntax.body));
-    window.tree.render();
-}
 
 function parse(delay) {
     if (parseId) {
@@ -207,10 +189,10 @@ function parse(delay) {
             options.tokens = true;
             id('tokens').value = JSON.stringify(esprima.parse(code, options).tokens,
                 adjustRegexLiteral, 4);
-            updateTree(result);
+            window.updateTree(result);
             id('info').innerHTML = 'No error';
         } catch (e) {
-            updateTree();
+            window.updateTree();
             str = e.name + ': ' + e.message;
             id('info').innerHTML  = str;
             id('info').className = 'alert-box alert';

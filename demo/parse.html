@@ -9,19 +9,17 @@
   <link rel="stylesheet" type="text/css" href="../assets/orion/built-editor.css"/>
   <link rel="stylesheet" type="text/css" href="../assets/style.css"/>
   <link rel="stylesheet" href="../assets/foundation/foundation.min.css">
-  <script src="../assets/yui/yahoo-dom-event.js"></script>
-  <script src="../assets/yui/treeview-min.js"></script>
-  <link rel="stylesheet" type="text/css" href="../assets/yui/treeview.css"/>
+  <script src="http://yui.yahooapis.com/3.9.0/build/yui/yui-min.js"></script>
 <style>
-.ygtvfocus .ygtvlabel,
-.ygtvfocus .ygtvlabel:link,
-.ygtvfocus .ygtvlabel:visited,
-.ygtvfocus .ygtvlabel:hover {
-    background-color: #eee;
-}
 textarea {
+    white-space: pre;
+    overflow: scroll;
     font-size: 10pt;
     font-family: 'Droid Sans Mono', Menlo, Consolas, 'Courier New', Courier, monospace, sans-serif;
+}
+
+.yui3-treeview-icon {
+    display: none;
 }
 </style>
 </head>
@@ -115,11 +113,11 @@ var answer = 6 * 7;
         <dd id="show_tokens"><a href="#">Tokens</a></dd>
       </dl>
       <ul class="tabs-content">
-        <li class="active" id="tab_syntax"><textarea id="syntax" rows="30" readonly></textarea><li>
+        <li class="active" id="tab_syntax"><textarea wrap="off" id="syntax" rows="30" readonly></textarea><li>
         <li id="tab_tree" style="display:none">
           <input class="small radius button secondary right" type="button" value="Collapse All" id="collapse">&nbsp;
           <input class="small radius button secondary right" type="button" value="Expand All" id="expand">
-          <div id="treeview">
+          <div class="yui3-skin-sam"><div id="treeview"></div>
         </li>
         <li id="tab_tokens" style="display:none"><textarea id="tokens" rows="30" readonly></textarea><li>
       </ul>
