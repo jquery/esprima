@@ -23,6 +23,7 @@
 */
 
 /*jslint browser:true evil:true */
+/*global require:true */
 
 (function (global) {
     'use strict';
@@ -33,103 +34,14 @@
         return document.getElementById(i);
     }
 
-    function escaped(str) {
-        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    }
-
-    function setText(id, str) {
-        var el = document.getElementById(id);
-        if (typeof el.innerText === 'string') {
-            el.innerText = str;
-        } else {
-            el.textContent = str;
-        }
-    }
-
-    function isLineTerminator(ch) {
-        return (ch === '\n' || ch === '\r' || ch === '\u2028' || ch === '\u2029');
-    }
-
-    // Remove all previous tracing.
-    function untrace(code) {
-
-        var i, trace, traces = [];
-
-        // Executes visitor on the object and its children (recursively).
-        function traverse(object, visitor, master) {
-            var key, child, parent, path;
-
-            parent = (typeof master === 'undefined') ? [] : master;
-
-            if (visitor.call(null, object, parent) === false) {
-                return;
-            }
-            for (key in object) {
-                if (object.hasOwnProperty(key)) {
-                    child = object[key];
-                    path = [ object ];
-                    path.push(parent);
-                    if (typeof child === 'object' && child !== null) {
-                        traverse(child, visitor, path);
-                    }
-                }
-            }
-        }
-
-        // In order to remove all previous tracing, we need to find the syntax
-        // nodes associated with the tracing.
-        traverse(global.esprima.parse(code, { range: true }), function (node, parent) {
-            var n = node;
-
-            if (n.type !== 'CallExpression') {
-                return;
-            }
-            n = n.callee;
-
-            if (!n || n.type !== 'MemberExpression') {
-                return;
-            }
-            if (n.property.type !== 'Identifier' || n.property.name !== 'enterFunction') {
-                return;
-            }
-
-            n = n.object;
-            if (!n || n.type !== 'MemberExpression') {
-                return;
-            }
-            if (n.object.type !== 'Identifier' || n.object.name !== 'window') {
-                return;
-            }
-            if (n.property.type !== 'Identifier' || n.property.name !== 'TRACE') {
-                return;
-            }
-
-            traces.push({ start: parent[0].range[0], end: parent[0].range[1] });
-        });
-
-        // Remove the farther trace first, this is to avoid changing the range
-        // info for each trace node.
-        for (i = traces.length - 1; i >= 0; i -= 1) {
-            trace = traces[i];
-            if (code[trace.end] === '\n') {
-                trace.end = trace.end + 1;
-            }
-            code = code.slice(0, trace.start) + code.slice(trace.end, code.length);
-        }
-
-        return code;
-    }
-
-    global.traceInstrument = function () {
+    function traceInstrument() {
         var tracer, code, i, functionList, signature, pos;
 
         if (typeof window.editor === 'undefined') {
             code = document.getElementById('code').value;
         } else {
-            code = window.editor.getValue();
+            code = window.editor.getText();
         }
-
-        code = untrace(code);
 
         tracer = window.esmorph.Tracer.FunctionEntrance(function (fn) {
             signature = 'window.TRACE.enterFunction({ ';
@@ -142,41 +54,33 @@
 
         code = window.esmorph.modify(code, tracer);
 
-        if (typeof window.editor === 'undefined') {
-            document.getElementById('code').value = code;
-        } else {
-            window.editor.setValue(code);
-        }
-
         // Enclose in IIFE.
         code = '(function() {\n' + code + '\n}())';
 
         return code;
-    };
+    }
+
+    function count(x, s, p) {
+        return (x === 1) ? (x + ' ' + s) : (x + ' ' + p);
+    }
 
     function showResult() {
-        var i, str, histogram, entry;
+        var i, histogram, entry, name, pos;
 
         histogram = window.TRACE.getHistogram();
-
-        str = '<table><thead><tr><td>Function</td><td>Hits</td></tr></thead>';
         for (i = 0; i < histogram.length; i += 1) {
             entry = histogram[i];
-            str += '<tr>';
-            str += '<td>' + entry.name + '</td>';
-            str += '<td>' + entry.count + '</td>';
-            str += '</tr>';
+            name = entry.name.split(':')[0];
+            pos = parseInt(entry.name.split(':')[1], 10);
+            window.editor.addErrorMarker(pos, name + ' is called ' + count(entry.count, 'time', 'times'));
         }
-        str += '</table>';
-
-        id('result').innerHTML = str;
     }
 
     function createTraceCollector() {
         global.TRACE = {
             hits: {},
             enterFunction: function (info) {
-                var key = info.name + ' at line ' + info.lineNumber;
+                var key = info.name + ':' + info.range[0];
                 if (this.hits.hasOwnProperty(key)) {
                     this.hits[key] = this.hits[key] + 1;
                 } else {
@@ -200,15 +104,42 @@
     }
 
     global.traceRun = function () {
-        var code;
+        var code, timestamp;
         try {
-            code = global.traceInstrument();
+            id('info').setAttribute('class', 'alert-box secondary');
+            id('info').innerHTML = 'Executing...';
+            window.editor.removeAllErrorMarkers();
+
             createTraceCollector();
+            code = traceInstrument();
+
+            timestamp = +new Date();
             eval(code);
+            timestamp = (+new Date()) - timestamp;
+            id('info').innerHTML = 'Tracing completed in ' + (1 + timestamp) + ' ms.';
+
             showResult();
         } catch (e) {
-            id('result').innerText = e.toString();
+            id('info').innerHTML = e.toString();
+            id('info').setAttribute('class', 'alert-box alert');
         }
     };
 }(window));
-/* vim: set sw=4 ts=4 et tw=80 : */
+
+window.onload = function () {
+    'use strict';
+
+    document.getElementById('run').onclick = window.traceRun;
+
+    try {
+        require(['custom/editor'], function (editor) {
+            window.editor = editor({ parent: 'editor', lang: 'js' });
+            window.editor.getModel().addEventListener("Changed", function () {
+                window.editor.removeAllErrorMarkers();
+                document.getElementById('info').setAttribute('class', 'alert-box secondary');
+                document.getElementById('info').innerHTML = 'Ready.';
+            });
+        });
+    } catch (e) {
+    }
+};

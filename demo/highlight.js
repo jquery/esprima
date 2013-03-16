@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
 
   Redistribution and use in source and binary forms, with or without
@@ -23,15 +24,18 @@
 */
 
 /*jslint browser:true */
-/*global esprima:true */
+/*global esprima:true, require:true */
 
-var parseTimer,
-    syntax = null,
-    markers = [];
+var parseTimer, syntax = null;
+
+function id(i) {
+    'use strict';
+    return document.getElementById(i);
+}
 
 function parse() {
     'use strict';
-    var code = window.editor.getValue();
+    var code = window.editor.getText();
     syntax = null;
     try {
         syntax = esprima.parse(code, {
@@ -39,7 +43,12 @@ function parse() {
             range: true,
             tolerant: true
         });
+        id('info').innerHTML = 'Ready';
+        id('info').setAttribute('class', 'alert-box secondary');
     } catch (e) {
+        id('info').innerHTML = e.toString();
+        id('info').setAttribute('class', 'alert-box alert');
+        window.editor.showOccurrences([]);
     }
 }
 
@@ -50,32 +59,26 @@ function triggerParse(delay) {
         window.clearTimeout(parseTimer);
     }
 
-    markers.forEach(function (marker) {
-        marker.clear();
-    });
-    markers = [];
-
     parseTimer = window.setTimeout(parse, delay || 811);
 }
-function trackCursor(editor) {
+
+function trackCursor() {
     'use strict';
 
-    var pos, code, node, id;
-
-    markers.forEach(function (marker) {
-        marker.clear();
-    });
-    markers = [];
+    var occurrences, model, pos, code, node, identifier;
 
     if (syntax === null) {
         parse();
         if (syntax === null) {
+            window.editor.showOccurrences([]);
             return;
         }
     }
 
-    pos = editor.indexFromPos(editor.getCursor());
-    code = editor.getValue();
+    occurrences = [];
+    model = window.editor.getModel();
+    pos = window.editor.getCaretOffset();
+    code = window.editor.getText();
 
     // Executes visitor on the object and its children (recursively).
     function traverse(object, visitor, master) {
@@ -104,39 +107,54 @@ function trackCursor(editor) {
             return;
         }
         if (pos >= node.range[0] && pos <= node.range[1]) {
-            start = {
-                line: node.loc.start.line - 1,
-                ch: node.loc.start.column
-            };
-            end = {
-                line: node.loc.end.line - 1,
-                ch: node.loc.end.column
-            };
-            markers.push(editor.markText(start, end, 'identifier'));
-            id = node;
+            identifier = node;
+            occurrences.push({
+                line: node.loc.start.line,
+                start: 1 + node.range[0] - model.getLineStart(node.loc.start.line - 1),
+                end: node.range[1] - model.getLineStart(node.loc.start.line - 1),
+                readAccess: false,
+                description: node.name
+            });
         }
     });
 
-    if (typeof id === 'undefined') {
+    window.editor.showOccurrences(occurrences);
+    if (typeof identifier === 'undefined') {
+        id('info').innerHTML = 'Ready';
         return;
     }
+
+    id('info').innerHTML = 'Tracking identifier: ' + identifier.name;
 
     traverse(syntax, function (node, path) {
         var start, end;
         if (node.type !== esprima.Syntax.Identifier) {
             return;
         }
-        if (node !== id && node.name === id.name) {
-            start = {
-                line: node.loc.start.line - 1,
-                ch: node.loc.start.column
-            };
-            end = {
-                line: node.loc.end.line - 1,
-                ch: node.loc.end.column
-            };
-            markers.push(editor.markText(start, end, 'highlight'));
+        if (node !== identifier && node.name === identifier.name) {
+            occurrences.push({
+                line: node.loc.start.line,
+                start: 1 + node.range[0] - model.getLineStart(node.loc.start.line - 1),
+                end: node.range[1] - model.getLineStart(node.loc.start.line - 1),
+                readAccess: true,
+                description: node.name
+            });
         }
     });
+    window.editor.showOccurrences(occurrences);
 }
 
+window.onload = function () {
+    'use strict';
+
+    try {
+        require(['custom/editor'], function (editor) {
+            window.editor = editor({ parent: 'editor', lang: 'js' });
+            window.editor.getTextView().getModel().addEventListener("Changed", triggerParse);
+            window.editor.getTextView().addEventListener("Selection", trackCursor);
+            window.editor.onGotoLine(9, 12, 12);
+            triggerParse(50);
+        });
+    } catch (e) {
+    }
+};
