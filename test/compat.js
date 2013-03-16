@@ -183,13 +183,15 @@ if (typeof window !== 'undefined') {
             tick = (new Date()) - tick;
 
             if (failures > 0) {
+                document.getElementById('status').className = 'alert-box alert';
                 setText(document.getElementById('status'), total + ' tests. ' +
                     'Failures: ' + failures + '. ' + tick + ' ms');
             } else {
+                document.getElementById('status').className = 'alert-box success';
                 setText(document.getElementById('status'), total + ' tests. ' +
                     'No failure. ' + tick + ' ms');
             }
-        }, 513);
+        }, 11);
     };
 } else {
     (function (global) {
