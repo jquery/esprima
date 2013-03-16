@@ -1,17 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+
 <head>
-<meta charset="utf-8">
-<title>Esprima: Operator Precedence Demo</title>
-<script src="../esprima.js"></script>
-<script src="../assets/json2.js"></script>
-<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+  <meta charset="utf-8" />
+  <title>Esprima: Operator Precedence</title>
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/foundation/foundation.min.css">
 <style>
 #a, #b, #expr {
     font-size: 16px;
     padding: 5px;
     margin: 5px;
     border: 1px solid #ccc;
+    background-color: white;
+}
+
+#a {
+    border: 2px solid #99ccff;
+}
+
+#b {
+    border: 2px solid #00cc00;
 }
 
 #expr {
@@ -36,190 +47,104 @@
     background-color: #FFC0CB;
 }
 </style>
-<script>
-/*jslint sloppy:true browser:true */
-/*global esprima:true */
-var compareId;
-function compare() {
-    if (compareId) {
-        window.clearTimeout(compareId);
-    }
-
-    function stringify(node) {
-        var result;
-
-        if (typeof node !== 'object') {
-            throw new Error('Node is not valid');
-        }
-        if (typeof node.type !== 'string') {
-            throw new Error('Node does not have type property');
-        }
-
-        switch (node.type) {
-
-        case 'Program':
-            if (node.body.length !== 1) {
-                throw new Error('Expression is too complex');
-            }
-            result = stringify(node.body[0]);
-            if (result[0] === '(' && result[result.length - 1] === ')') {
-                result = result.substr(1, result.length - 2);
-            }
-            break;
-
-        case 'ExpressionStatement':
-            result = stringify(node.expression);
-            break;
-
-        case 'BinaryExpression':
-        case 'LogicalExpression':
-            result = '(' + stringify(node.left) + ' ' + node.operator + ' ' + stringify(node.right) + ')';
-            break;
-
-        case 'UnaryExpression':
-            result = '(' + node.operator;
-            if (node.operator.length > 2) {
-                // delete void typeof
-                result += ' ';
-            }
-            result += stringify(node.argument) + ')';
-            break;
-
-        case 'UpdateExpression':
-            result = stringify(node.argument);
-            if (node.prefix) {
-                result = node.operator + result;
-            } else {
-                result = result + node.operator;
-            }
-            result = '(' + result + ')';
-            break;
-
-        case 'Literal':
-            result = node.value.toString();
-            if (typeof node.value === 'string') {
-                result = '"' + node.value + '"';
-            }
-            break;
-
-        case 'Identifier':
-            result = node.name;
-            break;
-
-        default:
-            break;
-        }
-
-        if (!result) {
-            throw new Error('Unknown node type: ' + node.type);
-        }
-
-        return result;
-    }
-
-    function setText(el, str) {
-        if (typeof el.innerText === 'string') {
-            el.innerText = str;
-        } else {
-            el.textContent = str;
-        }
-    }
-
-    compareId = window.setTimeout(function () {
-        var a, b, answer, status, expr, left, right, suggest;
-
-        a = document.getElementById('a');
-        b = document.getElementById('b');
-        answer = document.getElementById('answer');
-        status = document.getElementById('status');
-        expr = document.getElementById('expr');
-
-        a.setAttribute('class', '');
-        b.setAttribute('class', '');
-        answer.setAttribute('class', '');
-
-        setText(answer, '');
-        setText(status, '');
-        setText(expr, '');
-
-        try {
-            left = esprima.parse((typeof a.innerText === 'string') ? a.innerText : a.textContent);
-        } catch (e_left) {
-            a.setAttribute('class', 'lightred');
-        }
-
-        try {
-            right = esprima.parse((typeof b.innerText === 'string') ? b.innerText : b.textContent);
-        } catch (e_right) {
-            b.setAttribute('class', 'lightred');
-        }
-
-        try {
-            suggest = stringify(left);
-        } catch (e_suggest) {
-            a.setAttribute('class', 'lightred');
-        }
-
-        if (left && right) {
-            if (JSON.stringify(left) === JSON.stringify(right)) {
-                setText(answer, 'Yes');
-                answer.setAttribute('class', 'yes');
-            } else {
-                setText(answer, 'No');
-                answer.setAttribute('class', 'no');
-                setText(status, suggest ? 'It is more like ' : '');
-                setText(expr, suggest || '');
-            }
-        } else {
-            answer.setAttribute('class', '');
-        }
-
-        compareId = undefined;
-    }, 57);
-}
-</script>
 </head>
+
 <body>
-<div class="container">
 
-<div class="topbar">
-<ul class="nav">
-<li><a href="../index.html">&larr; Home</a></li>
-<li><a href="http://github.com/ariya/esprima">Code</a></li>
-<li><a href="../doc/index.html">Documentation</a></li>
-<li><a href="http://issues.esprima.org">Issues</a></li>
-</ul>
-</div>
+  <!-- Navigation bar -->
+  <div class="row">
+    <div class="twelve columns">
+      <nav class="top-bar">
+        <ul>
+          <li class="name">
+             <h1><a href="../index.html">Esprima</a></h1>
+          </li>
+        </ul>
+        <section>
+          <ul class="right">
+            <li class="divider show-for-medium-and-up"></li>
+            <li class="has-dropdown">
+              <a href="#">Demo</a>
+              <ul class="dropdown">
+                <li><label>Static Analysis</label></li>
+                <li><a href="../demo/parse.html">Online Parsing</a></li>
+                <li><a href="../demo/validate.html">Syntax Validator</a></li>
+                <li><a href="../demo/precedence.html">Operator Precedence</a></li>
+                <li><a href="../demo/collector.html">Regex Collector</a></li>
+                <li><label>Dynamic Tracing</label></li>
+                <li><a href="../demo/functiontrace.html">Function Instrumentation</a></li>
+                <li><label>Code Transformation</label></li>
+                <li><a href="../demo/rewrite.html">Source Rewrite</a></li>
+                <li><a href="../demo/minify.html">Minifiy &amp; Obfuscate</a></li>
+                <li><label>Editing Tools</label></li>
+                <li><a href="../demo/highlight.html">Identifier Highlight</a></li>
+                <li><a href="../demo/autocomplete.html">Autocomplete</a></li>
+              </ul>
+            </li>
+            <li class="has-dropdown">
+              <a href="#">Project</a>
+              <ul class="dropdown">
+                <li><a href="http://github.com/ariya/esprima">Git Repository</a></li>
+                <li><a href="http://groups.google.com/group/esprima">Mailing List</a></li>
+                <li><a href="http://issues.esprima.org/">Issue Tracker</a></li>
+                <li class="divider"></li>
+                <li><label>QA</label></li>
+                <li><a href="../test/index.html">Unit Tests</a></li>
+                <li><a href="../test/benchmarks.html">Benchmarks Suite</a></li>
+                <li><a href="../test/compat.html">Compatibility Tests</a></li>
+                <li><a href="../test/compare.html">Speed Comparison</a></li>
+                <li><a href="../test/module.html">Module Loading</a></li>
+                <li><a href="../test/coverage.html">Coverage Analysis</a></li>
+              </ul>
+            </li>
+            <li><a href="../doc/index.html">Documentation</a></li>
+          </ul>
+        </section>
+      </nav>
+    </div>
+  </div>
 
-<h1>Operator precedence <small>is not always easy</small></h1>
+  <!-- Title and subtitle -->
+  <div class="row">
+    <div class="twelve columns">
+       <h3 class="subheader"><strong>Operator Precedence</strong> is not always easy</h3>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="row">
+      <div class="eight columns">
+
+<p></p>
 <p>Is <code id="a" contenteditable="true">1 &lt;&lt; 2 * 3</code> semantically equivalent to
 <code id="b" contenteditable="true">(1 &lt;&lt; 2) * 3</code>?  <span id="answer"></span></p>
 <p style="margin-top: 40px;"><span id="status"></span> <code id="expr"></code></p>
-<p style="margin-top: 60px;">This demo is inspired by <a href="http://mothereff.in/operator-precedence">mothereff.in/operator-precedence</a>.</p>
-<div class="footer"><strong>Esprima</strong> is created by
-<a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
-</div>
-</div>
-<script>
-if (typeof document.body.attachEvent === 'object') {
-    // Workaround for old Internet Explorer.
-    // Until there is a reliable way to track the modification to the editable
-    // inputs, manually track the change periodically.
-    window.setInterval(compare, 500);
-}
+    </div>
 
-// See http://mathiasbynens.be/notes/oninput for details.
-document.getElementById('a').onkeyup = compare;
-document.getElementById('a').oninput = function () {
-    this.onkeyup = null;
-    compare();
-};
-document.getElementById('b').onkeyup = compare;
-document.getElementById('b').oninput = function () {
-    this.onkeyup = null;
-    compare();
-};
-compare();
-</script>
+    <div class="four columns">
+      <div class="panel">
+        <p>Deciphering a convoluted expression is far from trivial. The expression
+        in the <strong>blue box</strong> is compared to the expression in
+        the <strong>green box</strong> to determine if they are syntatically equivalent.</p>
+        <p>This demo is inspired by <a href="http://mothereff.in/operator-precedence">mothereff.in/operator-precedence</a>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="row copyright">
+    <div class="six columns">
+      <p>Esprima is created and mantained by <a href="http://ariya.ofilabs.com/about">Ariya Hidayat</a>.</p>
+    </div>
+    <div class="six columns">
+      <ul class="link-list right">
+        <li><a href="http://twitter.com/esprima">@Esprima</a></li>
+        <li><a href="https://github.com/ariya/esprima">GitHub</a></li>
+      </ul>
+    </div>
+  </div>
+
+<script src="../esprima.js"></script>
+<script src="precedence.js"></script>
 </body>
 </html>

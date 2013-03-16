@@ -135,9 +135,9 @@ function minify() {
         }
     } catch (e) {
         window.editor.addErrorMarker(e.index, e.description);
-        str = 'Found a critical issue: ' + e.toString();
+        str = e.toString();
     } finally {
-        document.getElementById('error').innerHTML = str;
+        document.getElementById('info').innerHTML = str;
     }
 }
 
@@ -146,6 +146,9 @@ window.onload = function () {
     try {
         require(['custom/editor'], function (editor) {
             window.editor = editor({ parent: 'editor', lang: 'js', wrapMode: true });
+            window.editor.getTextView().getModel().addEventListener("Changed", function () {
+                document.getElementById('info').innerHTML = 'Ready.';
+            });
         });
     } catch (e) {
     }

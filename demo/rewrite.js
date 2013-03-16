@@ -45,7 +45,6 @@ function sourceRewrite() {
 
     var code, syntax, indent, quotes, option;
 
-    setText('error', '');
     if (typeof window.editor !== 'undefined') {
         code = window.editor.getText();
     } else {
@@ -82,37 +81,26 @@ function sourceRewrite() {
         syntax = window.esprima.parse(code, { raw: true, tokens: true, range: true, comment: true });
         syntax = window.escodegen.attachComments(syntax, syntax.comments, syntax.tokens);
         code = window.escodegen.generate(syntax, option);
+        window.editor.setText(code);
+        setText('info', 'Rewriting was successful.');
     } catch (e) {
-        setText('error', e.toString());
-    } finally {
-        if (typeof window.editor !== 'undefined') {
-            window.editor.setText(code);
-        } else {
-            id('code').value = code;
-        }
+        id('info').innerHTML = e.toString();
+        setText('info', e.toString());
     }
 }
 
 /*jslint sloppy:true browser:true */
 /*global sourceRewrite:true */
 window.onload = function () {
-    var version, el;
-
-    version = 'Using Esprima version ' + esprima.version;
-    version += ' and Escodegen version ' + escodegen.version + '.';
-
-    el = id('version');
-    if (typeof el.innerText === 'string') {
-        el.innerText = version;
-    } else {
-        el.textContent = version;
-    }
 
     id('rewrite').onclick = sourceRewrite;
 
     try {
         require(['custom/editor'], function (editor) {
             window.editor = editor({ parent: 'editor', lang: 'js' });
+            window.editor.getTextView().getModel().addEventListener("Changed", function () {
+                document.getElementById('info').innerHTML = 'Ready.';
+            });
         });
     } catch (e) {
     }
