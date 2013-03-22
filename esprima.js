@@ -941,7 +941,7 @@ parseStatement: true, parseSourceElement: true */
             ch = source[index++];
             str += ch;
             if (classMarker) {
-                if (ch === ']') {
+                if (ch === ']' && ( source[ index - 2 ] !== '\\' || source[ index - 3 ] === '\\') ) {
                     classMarker = false;
                 }
             } else {
