@@ -4511,7 +4511,7 @@ var testFixture = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: '\n\r\t\v\b\f\\\'"\x00',
+                value: '\n\r\t\x0B\b\f\\\'"\x00',
                 raw: '"\\n\\r\\t\\v\\b\\f\\\\\\\'\\"\\0"',
                 range: [0, 22],
                 loc: {
