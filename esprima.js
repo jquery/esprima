@@ -4235,6 +4235,12 @@ parseYieldExpression: true
             expect(')');
             return delegate.createMethodDefinition('set', key, parsePropertyFunction({ params: param, generator: false, name: token }));
         }
+        if (token.value === 'static' && !match('(')) {
+            key = parseObjectPropertyKey();
+            expect('(');
+            expect(')');
+            return delegate.createMethodDefinition('static', key, parsePropertyFunction({ generator: false }));
+        }
         return delegate.createMethodDefinition('', key, parsePropertyMethodFunction({ generator: false }));
     }
 
