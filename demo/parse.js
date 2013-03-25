@@ -189,10 +189,14 @@ function parse(delay) {
             options.tokens = true;
             id('tokens').value = JSON.stringify(esprima.parse(code, options).tokens,
                 adjustRegexLiteral, 4);
-            window.updateTree(result);
+            if (window.updateTree) {
+                window.updateTree(result);
+            }
             id('info').innerHTML = 'No error';
         } catch (e) {
-            window.updateTree();
+            if (window.updateTree) {
+                window.updateTree();
+            }
             str = e.name + ': ' + e.message;
             id('info').innerHTML  = str;
             id('info').className = 'alert-box alert';
@@ -270,6 +274,7 @@ window.onload = function () {
                 code = queries.code;
                 if (code) {
                     window.editor.setText(code);
+                    quickParse();
                 }
             }
         });
