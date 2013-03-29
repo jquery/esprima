@@ -1827,7 +1827,7 @@ parseYieldExpression: true
                 type: Syntax.MethodDefinition,
                 key: key,
                 value: value,
-                kind: kind,
+                kind: kind
             };
         },
 
@@ -4687,73 +4687,47 @@ parseYieldExpression: true
         extra.tokens = tokens;
     }
 
-    function createLocationMarker() {
-        var marker = {};
+    function endMarker(pos, line, col, node) {
+        if (extra.range) {
+            node.range = [pos, index];
+        }
+        if (extra.loc) {
+            node.loc = {
+                start: {
+                    line: line,
+                    column: col
+                },
+                end: {
+                    line: lineNumber,
+                    column: index - lineStart
+                }
+            };
+            delegate.postProcess(node);
+        }
+    }
 
-        marker.range = [index, index];
-        marker.loc = {
+    function endMarkerGroup(pos, line, col, node) {
+        node.groupRange = [pos, index];
+        node.groupLoc = {
             start: {
-                line: lineNumber,
-                column: index - lineStart
+                line: line,
+                column: col
             },
             end: {
                 line: lineNumber,
                 column: index - lineStart
             }
         };
-
-        marker.end = function () {
-            this.range[1] = index;
-            this.loc.end.line = lineNumber;
-            this.loc.end.column = index - lineStart;
-        };
-
-        marker.applyGroup = function (node) {
-            if (extra.range) {
-                node.groupRange = [this.range[0], this.range[1]];
-            }
-            if (extra.loc) {
-                node.groupLoc = {
-                    start: {
-                        line: this.loc.start.line,
-                        column: this.loc.start.column
-                    },
-                    end: {
-                        line: this.loc.end.line,
-                        column: this.loc.end.column
-                    }
-                };
-                node = delegate.postProcess(node);
-            }
-        };
-
-        marker.apply = function (node) {
-            if (extra.range) {
-                node.range = [this.range[0], this.range[1]];
-            }
-            if (extra.loc) {
-                node.loc = {
-                    start: {
-                        line: this.loc.start.line,
-                        column: this.loc.start.column
-                    },
-                    end: {
-                        line: this.loc.end.line,
-                        column: this.loc.end.column
-                    }
-                };
-                node = delegate.postProcess(node);
-            }
-        };
-
-        return marker;
+        delegate.postProcess(node);
     }
 
     function trackGroupExpression() {
-        var marker, expr;
+        var pos, line, col, expr;
 
         skipComment();
-        marker = createLocationMarker();
+        pos = index;
+        line = lineNumber;
+        col = index - lineStart;
         expect('(');
 
         ++state.parenthesizedCount;
@@ -4763,38 +4737,35 @@ parseYieldExpression: true
         state.allowArrowFunction = false;
 
         if (expr.type === 'ArrowFunctionExpression') {
-            marker.end();
-            marker.apply(expr);
+            endMarker(pos, line, col, expr);
         } else {
             expect(')');
-            marker.end();
-            marker.applyGroup(expr);
+            endMarkerGroup(pos, line, col, expr);
         }
 
         return expr;
     }
 
     function trackLeftHandSideExpression() {
-        var marker, expr;
+        var pos, line, col, expr;
 
         skipComment();
-        marker = createLocationMarker();
+        pos = index;
+        line = lineNumber;
+        col = index - lineStart;
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
         while (match('.') || match('[') || lookahead.type === Token.Template) {
             if (match('[')) {
                 expr = delegate.createMemberExpression('[', expr, parseComputedMember());
-                marker.end();
-                marker.apply(expr);
+                endMarker(pos, line, col, expr);
             } else if (match('.')) {
                 expr = delegate.createMemberExpression('.', expr, parseNonComputedMember());
-                marker.end();
-                marker.apply(expr);
+                endMarker(pos, line, col, expr);
             } else {
                 expr = delegate.createTaggedTemplateExpression(expr, parseTemplateLiteral());
-                marker.end();
-                marker.apply(expr);
+                endMarker(pos, line, col, expr);
             }
         }
 
@@ -4802,10 +4773,12 @@ parseYieldExpression: true
     }
 
     function trackLeftHandSideExpressionAllowCall() {
-        var marker, expr, args;
+        var pos, line, col, expr, args;
 
         skipComment();
-        marker = createLocationMarker();
+        pos = index;
+        line = lineNumber;
+        col = index - lineStart;
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
@@ -4813,20 +4786,16 @@ parseYieldExpression: true
             if (match('(')) {
                 args = parseArguments();
                 expr = delegate.createCallExpression(expr, args);
-                marker.end();
-                marker.apply(expr);
+                endMarker(pos, line, col, expr);
             } else if (match('[')) {
                 expr = delegate.createMemberExpression('[', expr, parseComputedMember());
-                marker.end();
-                marker.apply(expr);
+                endMarker(pos, line, col, expr);
             } else if (match('.')) {
                 expr = delegate.createMemberExpression('.', expr, parseNonComputedMember());
-                marker.end();
-                marker.apply(expr);
+                endMarker(pos, line, col, expr);
             } else {
                 expr = delegate.createTaggedTemplateExpression(expr, parseTemplateLiteral());
-                marker.end();
-                marker.apply(expr);
+                endMarker(pos, line, col, expr);
             }
         }
 
@@ -4900,20 +4869,18 @@ parseYieldExpression: true
             }
 
             return function () {
-                var marker, node;
+                var pos, line, col, node;
 
                 skipComment();
 
-                marker = createLocationMarker();
+                pos = index;
+                line = lineNumber;
+                col = index - lineStart;
                 node = parseFunction.apply(null, arguments);
-                marker.end();
 
-                if (range && typeof node.range === 'undefined') {
-                    marker.apply(node);
-                }
-
-                if (loc && typeof node.loc === 'undefined') {
-                    marker.apply(node);
+                if ((range && typeof node.range === 'undefined') ||
+                        (loc && typeof node.loc === 'undefined')) {
+                    endMarker(pos, line, col, node);
                 }
 
                 if (isBinary(node)) {
