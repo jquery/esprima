@@ -3585,22 +3585,23 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function filterGroup(node) {
-        var n, i, entry;
-
-        n = (Object.prototype.toString.apply(node) === '[object Array]') ? [] : {};
-        for (i in node) {
-            if (node.hasOwnProperty(i) && i !== 'groupRange' && i !== 'groupLoc') {
-                entry = node[i];
-                if (entry === null || typeof entry !== 'object' || entry instanceof RegExp) {
-                    n[i] = entry;
-                } else {
-                    n[i] = filterGroup(entry);
+        if (!node) {
+          return;
+        }
+    
+        delete node.groupRange;
+        delete node.groupLoc;
+        for (var name in node) {
+            if (node.hasOwnProperty(name)) {
+                if (typeof node[name] === 'object' && node[name]) {
+                    if (node[name].type || node[name].length && ! node[name].substr) {
+                       filterGroup(node[name]);
+                    }
                 }
             }
         }
-        return n;
     }
-
+    
     function wrapTrackingFunction(range, loc) {
 
         return function (parseFunction) {
@@ -3997,7 +3998,7 @@ parseStatement: true, parseSourceElement: true */
                 program.errors = extra.errors;
             }
             if (extra.range || extra.loc) {
-                program.body = filterGroup(program.body);
+                filterGroup(program.body);
             }
         } catch (e) {
             throw e;

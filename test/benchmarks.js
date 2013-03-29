@@ -222,7 +222,7 @@ if (typeof window !== 'undefined') {
                 window.tree = [];
 
                 benchmark = new window.Benchmark(test, function (o) {
-                    var syntax = window.esprima.parse(source);
+                    var syntax = window.esprima.parse(source, {loc: true});
                     window.tree.push(syntax.body.length);
                 }, {
                     'onComplete': function () {
@@ -269,7 +269,8 @@ if (typeof window !== 'undefined') {
         var Benchmark,
             esprima,
             dirname,
-            option,
+            quick,
+            loc = false,
             fs,
             readFileSync,
             log;
@@ -288,7 +289,8 @@ if (typeof window !== 'undefined') {
             Benchmark = require('./3rdparty/benchmark');
             esprima = require('../esprima');
             fs = require('fs');
-            option = process.argv[2];
+            quick = process.argv[2] === 'quick' || process.argv[3] === 'quick';
+            loc = process.argv[2] === 'loc' || process.argv[3] === 'loc'; 
             readFileSync = function readFileSync(filename) {
                 return fs.readFileSync(filename, 'utf-8');
             };
@@ -307,7 +309,7 @@ if (typeof window !== 'undefined') {
                     size = source.length;
                 totalSize += size;
                 return suite.add(filename, function () {
-                    var syntax = esprima.parse(source);
+                    var syntax = esprima.parse(source, {loc: loc});
                     tree.push(syntax.body.length);
                 }, {
                     'onComplete': function (event, bench) {
@@ -324,7 +326,7 @@ if (typeof window !== 'undefined') {
             }).run();
         }
 
-        if (option === 'quick') {
+        if (quick) {
             runTests(quickFixture);
         } else {
             runTests(fullFixture);
