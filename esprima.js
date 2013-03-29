@@ -3585,20 +3585,17 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function filterGroup(node) {
-        var n, i, entry;
+        var name;
 
-        n = (Object.prototype.toString.apply(node) === '[object Array]') ? [] : {};
-        for (i in node) {
-            if (node.hasOwnProperty(i) && i !== 'groupRange' && i !== 'groupLoc') {
-                entry = node[i];
-                if (entry === null || typeof entry !== 'object' || entry instanceof RegExp) {
-                    n[i] = entry;
-                } else {
-                    n[i] = filterGroup(entry);
+        delete node.groupRange;
+        delete node.groupLoc;
+        for (name in node) {
+            if (node.hasOwnProperty(name) && typeof node[name] === 'object' && node[name]) {
+                if (node[name].type || (node[name].length && !node[name].substr)) {
+                    filterGroup(node[name]);
                 }
             }
         }
-        return n;
     }
 
     function wrapTrackingFunction(range, loc) {
@@ -3997,7 +3994,7 @@ parseStatement: true, parseSourceElement: true */
                 program.errors = extra.errors;
             }
             if (extra.range || extra.loc) {
-                program.body = filterGroup(program.body);
+                filterGroup(program.body);
             }
         } catch (e) {
             throw e;
