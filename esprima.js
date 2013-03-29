@@ -3450,90 +3450,67 @@ parseStatement: true, parseSourceElement: true */
         extra.tokens = tokens;
     }
 
-    function createLocationMarker() {
-        var marker = {};
+    function endMarker(pos, line, col, node) {
+        if (extra.range && typeof node.range === 'undefined') {
+            node.range = [pos, index];
+        }
+        if (extra.loc && typeof node.loc === 'undefined') {
+            node.loc = {
+                start: {
+                    line: line,
+                    column: col
+                },
+                end: {
+                    line: lineNumber,
+                    column: index - lineStart
+                }
+            };
+            delegate.postProcess(node);
+        }
+    }
 
-        marker.range = [index, index];
-        marker.loc = {
+    function endMarkerGroup(pos, line, col, node) {
+        // endMarkerGroup is only called when either range
+        // or loc option is set.
+        node.groupRange = [pos, index];
+        node.groupLoc = {
             start: {
-                line: lineNumber,
-                column: index - lineStart
+                line: line,
+                column: col
             },
             end: {
                 line: lineNumber,
                 column: index - lineStart
             }
         };
-
-        marker.end = function () {
-            this.range[1] = index;
-            this.loc.end.line = lineNumber;
-            this.loc.end.column = index - lineStart;
-        };
-
-        marker.applyGroup = function (node) {
-            if (extra.range) {
-                node.groupRange = [this.range[0], this.range[1]];
-            }
-            if (extra.loc) {
-                node.groupLoc = {
-                    start: {
-                        line: this.loc.start.line,
-                        column: this.loc.start.column
-                    },
-                    end: {
-                        line: this.loc.end.line,
-                        column: this.loc.end.column
-                    }
-                };
-                node = delegate.postProcess(node);
-            }
-        };
-
-        marker.apply = function (node) {
-            if (extra.range) {
-                node.range = [this.range[0], this.range[1]];
-            }
-            if (extra.loc) {
-                node.loc = {
-                    start: {
-                        line: this.loc.start.line,
-                        column: this.loc.start.column
-                    },
-                    end: {
-                        line: this.loc.end.line,
-                        column: this.loc.end.column
-                    }
-                };
-                node = delegate.postProcess(node);
-            }
-        };
-
-        return marker;
+        delegate.postProcess(node);
     }
 
     function trackGroupExpression() {
-        var marker, expr;
+        var pos, line, col, expr;
 
         skipComment();
-        marker = createLocationMarker();
+        pos = index;
+        line = lineNumber;
+        col = index - lineStart;
         expect('(');
 
         expr = parseExpression();
 
         expect(')');
 
-        marker.end();
-        marker.applyGroup(expr);
+        endMarkerGroup(pos, line, col, expr);
 
         return expr;
     }
 
     function trackLeftHandSideExpression() {
-        var marker, expr, property;
+        var pos, line, col, expr, property;
 
         skipComment();
-        marker = createLocationMarker();
+        pos = index;
+        line = lineNumber;
+        col = index - lineStart;
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
@@ -3541,13 +3518,11 @@ parseStatement: true, parseSourceElement: true */
             if (match('[')) {
                 property = parseComputedMember();
                 expr = delegate.createMemberExpression('[', expr, property);
-                marker.end();
-                marker.apply(expr);
+                endMarker(pos, line, col, expr);
             } else {
                 property = parseNonComputedMember();
                 expr = delegate.createMemberExpression('.', expr, property);
-                marker.end();
-                marker.apply(expr);
+                endMarker(pos, line, col, expr);
             }
         }
 
@@ -3555,10 +3530,12 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function trackLeftHandSideExpressionAllowCall() {
-        var marker, expr, args, property;
+        var pos, line, col, expr, args, property;
 
         skipComment();
-        marker = createLocationMarker();
+        pos = index;
+        line = lineNumber;
+        col = index - lineStart;
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
@@ -3566,18 +3543,15 @@ parseStatement: true, parseSourceElement: true */
             if (match('(')) {
                 args = parseArguments();
                 expr = delegate.createCallExpression(expr, args);
-                marker.end();
-                marker.apply(expr);
+                endMarker(pos, line, col, expr);
             } else if (match('[')) {
                 property = parseComputedMember();
                 expr = delegate.createMemberExpression('[', expr, property);
-                marker.end();
-                marker.apply(expr);
+                endMarker(pos, line, col, expr);
             } else {
                 property = parseNonComputedMember();
                 expr = delegate.createMemberExpression('.', expr, property);
-                marker.end();
-                marker.apply(expr);
+                endMarker(pos, line, col, expr);
             }
         }
 
@@ -3585,23 +3559,20 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function filterGroup(node) {
-        if (!node) {
-          return;
-        }
-    
+        var name;
         delete node.groupRange;
         delete node.groupLoc;
-        for (var name in node) {
+        for (name in node) {
             if (node.hasOwnProperty(name)) {
                 if (typeof node[name] === 'object' && node[name]) {
-                    if (node[name].type || node[name].length && ! node[name].substr) {
-                       filterGroup(node[name]);
+                    if (node[name].type || (node[name].length && !node[name].substr)) {
+                        filterGroup(node[name]);
                     }
                 }
             }
         }
     }
-    
+
     function wrapTrackingFunction(range, loc) {
 
         return function (parseFunction) {
@@ -3652,20 +3623,19 @@ parseStatement: true, parseSourceElement: true */
             }
 
             return function () {
-                var marker, node;
+                var pos, line, col, node;
 
                 skipComment();
 
-                marker = createLocationMarker();
+                pos = index;
+                line = lineNumber;
+                col = index - lineStart;
+
                 node = parseFunction.apply(null, arguments);
-                marker.end();
 
-                if (range && typeof node.range === 'undefined') {
-                    marker.apply(node);
-                }
-
-                if (loc && typeof node.loc === 'undefined') {
-                    marker.apply(node);
+                if ((range && typeof node.range === 'undefined') ||
+                        (loc && typeof node.loc === 'undefined')) {
+                    endMarker(pos, line, col, node);
                 }
 
                 if (isBinary(node)) {

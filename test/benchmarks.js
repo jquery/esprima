@@ -222,7 +222,7 @@ if (typeof window !== 'undefined') {
                 window.tree = [];
 
                 benchmark = new window.Benchmark(test, function (o) {
-                    var syntax = window.esprima.parse(source, {loc: true});
+                    var syntax = window.esprima.parse(source);
                     window.tree.push(syntax.body.length);
                 }, {
                     'onComplete': function () {
