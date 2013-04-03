@@ -22618,7 +22618,7 @@ var testFixture = {
             index: 3,
             lineNumber: 1,
             column: 4,
-            message: 'Error: Line 1: Unexpected end of input'
+            message: 'Error: Line 1: Unexpected token '
         },
 
         '<a></b>': {
@@ -22647,6 +22647,80 @@ var testFixture = {
             lineNumber: 1,
             column: 9,
             message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        '<div>@test content</div>': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'XJSElement',
+                name: {
+                    type: 'XJSIdentifier',
+                    name: 'div',
+                    range: [1, 4],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 4 }
+                    }
+                },
+                selfClosing: false,
+                openingElement: {
+                    type: 'XJSOpeningElement',
+                    name: {
+                        type: 'XJSIdentifier',
+                        name: 'div',
+                        range: [1, 4],
+                        loc: {
+                            start: { line: 1, column: 1 },
+                            end: { line: 1, column: 4 }
+                        }
+                    },
+                    selfClosing: false,
+                    attributes: [],
+                    range: [0, 5],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                closingElement: {
+                    type: 'XJSClosingElement',
+                    name: {
+                        type: 'XJSIdentifier',
+                        name: 'div',
+                        range: [20, 23],
+                        loc: {
+                            start: { line: 1, column: 20 },
+                            end: { line: 1, column: 23 }
+                        }
+                    },
+                    range: [18, 24],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                attributes: [],
+                children: [{
+                    type: 'Literal',
+                    value: '@test content',
+                    raw: '@test content',
+                    range: [5, 18],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 18 }
+                    }
+                }],
+                range: [0, 24],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 24 }
+                }
+            },
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 24 }
+            }
         }
     }
 };
