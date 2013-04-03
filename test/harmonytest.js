@@ -5704,6 +5704,144 @@ var harmonyTestFixture = {
                 end: { line: 1, column: 51 }
             },
             comments: []
+        },
+
+        'class A {static foo() {}}': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7}
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [16, 19],
+                        loc: {
+                            start: { line: 1, column: 16 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [22, 24],
+                            loc: {
+                                start: { line: 1, column: 22 },
+                                end: { line: 1, column: 24}
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [22, 24],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 24 }
+                        }
+                    },
+                    kind: 'static',
+                    range: [9, 24],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 24 }
+                    }
+                }],
+                range: [8, 25],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'class A {static() {}}': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'static',
+                            range: [9, 15],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 15 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [18, 20],
+                                loc: {
+                                    start: { line: 1, column: 18 },
+                                    end: { line: 1, column: 20 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [18, 20],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 20 }
+                            }
+                        },
+                        kind: '',
+                        range: [9, 20],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 20 }
+                        }
+                    }
+                ],
+                range: [8, 21],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            }
         }
 
     },
