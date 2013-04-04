@@ -1897,12 +1897,13 @@ parseYieldExpression: true
             };
         },
 
-        createMethodDefinition: function (kind, key, value) {
+        createMethodDefinition: function (isStatic, kind, key, value) {
             return {
                 type: Syntax.MethodDefinition,
                 key: key,
                 value: value,
                 kind: kind,
+                'static': isStatic
             };
         },
 
@@ -4279,11 +4280,17 @@ parseYieldExpression: true
     // 14 Classes
 
     function parseMethodDefinition() {
-        var token, key, param;
+        var token, key, param, isStatic;
+
+        isStatic = false;
+        if (strict ? matchKeyword('static') : matchContextualKeyword('static')) {
+            isStatic = true;
+            lex();
+        }
 
         if (match('*')) {
             lex();
-            return delegate.createMethodDefinition('', parseObjectPropertyKey(), parsePropertyMethodFunction({ generator: true }));
+            return delegate.createMethodDefinition(isStatic, '', parseObjectPropertyKey(), parsePropertyMethodFunction({ generator: true }));
         }
 
         token = lookahead;
@@ -4293,7 +4300,7 @@ parseYieldExpression: true
             key = parseObjectPropertyKey();
             expect('(');
             expect(')');
-            return delegate.createMethodDefinition('get', key, parsePropertyFunction({ generator: false }));
+            return delegate.createMethodDefinition(isStatic, 'get', key, parsePropertyFunction({ generator: false }));
         }
         if (token.value === 'set' && !match('(')) {
             key = parseObjectPropertyKey();
@@ -4301,15 +4308,9 @@ parseYieldExpression: true
             token = lookahead;
             param = [ parseVariableIdentifier() ];
             expect(')');
-            return delegate.createMethodDefinition('set', key, parsePropertyFunction({ params: param, generator: false, name: token }));
+            return delegate.createMethodDefinition(isStatic, 'set', key, parsePropertyFunction({ params: param, generator: false, name: token }));
         }
-        if (token.value === 'static' && !match('(')) {
-            key = parseObjectPropertyKey();
-            expect('(');
-            expect(')');
-            return delegate.createMethodDefinition('static', key, parsePropertyFunction({ generator: false }));
-        }
-        return delegate.createMethodDefinition('', key, parsePropertyMethodFunction({ generator: false }));
+        return delegate.createMethodDefinition(isStatic, '', key, parsePropertyMethodFunction({ generator: false }));
     }
 
     function parseClassElement() {
