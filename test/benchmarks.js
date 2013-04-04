@@ -314,7 +314,7 @@ if (typeof window !== 'undefined') {
                         log(this.name +
                             ' size ' + kb(size) +
                             ' time ' + (1000 * this.stats.mean).toFixed(1) +
-                            ' variance ' + (1000 * this.stats.variance).toFixed(1));
+                            ' variance ' + (1000 * 1000 * this.stats.variance).toFixed(1));
                         totalTime += this.stats.mean;
                     }
                 });

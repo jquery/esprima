@@ -1,39 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+
 <head>
-<meta charset="utf-8">
-<title>Esprima: Function Trace Demo</title>
-<script src="../test/3rdparty/platform.js"></script>
-<script src="checkenv.js"></script>
-<script src="functiontrace.js"></script>
-<script src="../esprima.js"></script>
-<script src="../test/3rdparty/esmorph.js"></script>
-<script src="../assets/codemirror/codemirror.js"></script>
-<script src="../assets/codemirror/javascript.js"></script>
-<link rel="stylesheet" type="text/css" href="../assets/codemirror/codemirror.css"/>
-<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
-<style>
-.CodeMirror-scroll {
-    height: 320px;
-}
-</style>
+  <meta charset="utf-8" />
+  <title>Esprima: Function Instrumentation</title>
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" href="../assets/orion/built-editor.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/foundation/foundation.min.css">
 </head>
+
 <body>
-<div class="container">
 
-<div class="topbar">
-<ul class="nav">
-<li><a href="../index.html">&larr; Home</a></li>
-<li><a href="http://github.com/ariya/esprima">Code</a></li>
-<li><a href="../doc/index.html">Documentation</a></li>
-<li><a href="http://issues.esprima.org">Issues</a></li>
-</ul>
-</div>
+  <!-- Navigation bar -->
+  <div class="row">
+    <div class="twelve columns">
+      <nav class="top-bar">
+        <ul>
+          <li class="name">
+             <h1><a href="../index.html">Esprima</a></h1>
+          </li>
+        </ul>
+        <section>
+          <ul class="right">
+            <li class="divider show-for-medium-and-up"></li>
+            <li class="has-dropdown">
+              <a href="../demo/index.html">Demo</a>
+              <ul class="dropdown">
+                <li><label>Static Analysis</label></li>
+                <li><a href="../demo/parse.html">Online Parsing</a></li>
+                <li><a href="../demo/validate.html">Syntax Validator</a></li>
+                <li><a href="../demo/precedence.html">Operator Precedence</a></li>
+                <li><a href="../demo/collector.html">Regex Collector</a></li>
+                <li><label>Dynamic Tracing</label></li>
+                <li><a href="../demo/functiontrace.html">Function Instrumentation</a></li>
+                <li><label>Code Transformation</label></li>
+                <li><a href="../demo/rewrite.html">Source Rewrite</a></li>
+                <li><a href="../demo/minify.html">Minifiy &amp; Obfuscate</a></li>
+                <li><label>Editing Tools</label></li>
+                <li><a href="../demo/highlight.html">Identifier Highlight</a></li>
+                <li><a href="../demo/autocomplete.html">Autocomplete</a></li>
+              </ul>
+            </li>
+            <li class="has-dropdown">
+              <a href="#">Project</a>
+              <ul class="dropdown">
+                <li><a href="http://github.com/ariya/esprima">Git Repository</a></li>
+                <li><a href="https://travis-ci.org/ariya/esprima">Continuous Integration</a></li>
+                <li><a href="http://groups.google.com/group/esprima">Mailing List</a></li>
+                <li><a href="http://issues.esprima.org/">Issue Tracker</a></li>
+                <li class="divider"></li>
+                <li><label>QA</label></li>
+                <li><a href="../test/index.html">Unit Tests</a></li>
+                <li><a href="../test/benchmarks.html">Benchmarks Suite</a></li>
+                <li><a href="../test/compat.html">Compatibility Tests</a></li>
+                <li><a href="../test/compare.html">Speed Comparison</a></li>
+                <li><a href="../test/module.html">Module Loading</a></li>
+                <li><a href="../test/coverage.html">Coverage Analysis</a></li>
+              </ul>
+            </li>
+            <li><a href="../doc/index.html">Documentation</a></li>
+          </ul>
+        </section>
+      </nav>
+    </div>
+  </div>
 
-<h1>Function Trace <small>reveals what is being called</small></h1>
+  <!-- Title and subtitle -->
+  <div class="row">
+    <div class="twelve columns">
+       <h3 class="subheader"><strong>Function Instrumentation</strong> traces and reveals what is being called</h3>
+    </div>
+  </div>
 
-<p>Type ECMAScript code:</p>
-<div><textarea id="code" autofocus="autofocus" cols="70" rows="25" spellcheck="false">
+  <!-- Main content -->
+  <div class="row">
+    <div class="eight columns">
+
+<pre id="editor" spellcheck="false" style="height: 350px">
 Array.prototype.swap = function (i, j) {
     var k = this[i]; this[i] = this[j]; this[j] = k;
 }
@@ -53,59 +98,48 @@ function bubbleSort(list) {
 }
 
 var N = 100, data = []; while (N &gt; 0) data.push(N--);
-
 bubbleSort(data);
-</textarea></div>
-<p id="codemirror" align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
+</pre>
 
-<p><input type="button" value="Insert tracing" id="instrument">
-<span style="margin-left: 50px;">&nbsp;</span>
-<input type="button" value="Run" id="run"></p>
+      <div id="info" class="alert-box secondary">Ready.</div>
 
-<p>Instrumentation for each function will be added with the <i>Insert tracing</i> button. Pressing the <i>Run</i> button will execute the code (using JavaScript <code>eval</code>) with the instrumentation, and then call counts for each function will be displayed (sorted by the number of calls). <b>Warning</b>: do not run untrusted code!</p>
+      <div class="eight columns">
+      </div>
+      <div class="four columns">
+        <p><input class="medium radius button right" type="button" value="Run" id="run"></p>
+      </div>
 
-<div id="result"><p>No result yet.</p></div>
+    </div>
 
-<p style="margin-top: 50px;">Using Esprima version <span id="version"></span>.</p>
-<div class="footer"><strong>Esprima</strong> is created by
-<a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
-</div>
+    <div class="four columns">
+      <div class="panel">
+        <p>Pressing <strong>Run</strong> button will execute
+        (using <tt>eval</tt>) the code with some extra instrumentation
+        injected to track the execution. Placing the mouse cursor
+        on the indicator next to every function will show the number
+        of calls for that particular function.</p>
+        <p>Warning: <strong>Never run untrusted code!</strong></p>
+      </div>
+    </div>
+  </div>
 
-<div id="testbox" style="visibility: hidden;"><textarea id="test"></textarea></div>
-</div>
-<script>
-/*jslint sloppy:true browser:true */
-/*global traceInstrument: true, traceRun:true, CodeMirror:true */
-window.onload = function () {
-    var el;
+  <!-- Footer -->
+  <div class="row copyright">
+    <div class="six columns">
+      <p>Esprima is created and mantained by <a href="http://ariya.ofilabs.com/about">Ariya Hidayat</a>.</p>
+    </div>
+    <div class="six columns">
+      <ul class="link-list right">
+        <li><a href="http://twitter.com/esprima">@Esprima</a></li>
+        <li><a href="https://github.com/ariya/esprima">GitHub</a></li>
+      </ul>
+    </div>
+  </div>
 
-    el = document.getElementById('version');
-    if (typeof el.innerText === 'string') {
-        el.innerText = window.esprima.version;
-    } else {
-        el.textContent = window.esprima.version;
-    }
-
-    document.getElementById('instrument').onclick = traceInstrument;
-    document.getElementById('run').onclick = traceRun;
-};
-
-try {
-    window.checkEnv();
-
-    // This is just testing, to detect whether CodeMirror would fail or not
-    window.editor = CodeMirror.fromTextArea(document.getElementById("test"));
-
-    window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true,
-        matchBrackets: true
-    });
-} catch (e) {
-    // CodeMirror failed to initialize, possible in e.g. old IE.
-    document.getElementById('codemirror').innerHTML = '';
-} finally {
-    document.getElementById('testbox').parentNode.removeChild(document.getElementById('testbox'));
-}
-</script>
+<script src="../esprima.js"></script>
+<script src="../test/3rdparty/esmorph.js"></script>
+<script src="../assets/orion/built-editor.min.js"></script>
+<script src="../assets/orion/customeditor.js"></script>
+<script src="functiontrace.js"></script>
 </body>
 </html>

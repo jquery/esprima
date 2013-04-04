@@ -1,5 +1,5 @@
 /*jslint sloppy:true browser:true */
-/*global esprima:true, CodeMirror:true */
+/*global esprima:true, require:true */
 var validateId;
 
 function validate(delay) {
@@ -8,67 +8,49 @@ function validate(delay) {
     }
 
     validateId = window.setTimeout(function () {
-        var code, result, i, str;
+        var code, result, syntax, errors, i, str;
 
         if (typeof window.editor === 'undefined') {
-            code = document.getElementById('code').value;
+            code = document.getElementById('editor').value;
         } else {
-            code = window.editor.getValue();
+            code = window.editor.getText();
+            window.editor.removeAllErrorMarkers();
         }
+        result = document.getElementById('info');
 
         try {
-            result = esprima.parse(code, { tolerant: true, loc: true }).errors;
-            if (result.length > 0) {
-                str = '<p>Found <b>' + result.length + '</b>:</p>';
-                for (i = 0; i < result.length; i += 1) {
-                    str += '<p>' + result[i].message + '</p>';
+            syntax = esprima.parse(code, { tolerant: true, loc: true });
+            errors = syntax.errors;
+            if (errors.length > 0) {
+                result.innerHTML = 'Invalid code. Total issues: ' + errors.length;
+                for (i = 0; i < errors.length; i += 1) {
+                    window.editor.addErrorMarker(errors[i].index, errors[i].description);
                 }
+                result.setAttribute('class', 'alert-box alert');
             } else {
-                str = '<p>No syntax error.</p>';
+                result.innerHTML = 'Code is syntatically valid.';
+                result.setAttribute('class', 'alert-box success');
+                if (syntax.body.length === 0) {
+                    result.innerHTML = 'Empty code. Nothing to validate.';
+                }
             }
         } catch (e) {
-            str = e.name + ': ' + e.message;
+            window.editor.addErrorMarker(e.index, e.description);
+            result.innerHTML = e.toString();
+            result.setAttribute('class', 'alert-box alert');
         }
-        document.getElementById('result').innerHTML = str;
 
         validateId = undefined;
     }, delay || 811);
 }
 
 window.onload = function () {
-    var id, el;
-
-    id = function (i) {
-        return document.getElementById(i);
-    };
-
-    el = id('version');
-    if (typeof el.innerText === 'string') {
-        el.innerText = esprima.version;
-    } else {
-        el.textContent = esprima.version;
-    }
     try {
-        validate(1);
-    } catch (e) { }
+        require(['custom/editor'], function (editor) {
+            window.editor = editor({ parent: 'editor', lang: 'js' });
+            window.editor.getTextView().getModel().addEventListener("Changed", validate);
+        });
+        validate(55);
+    } catch (e) {
+    }
 };
-
-try {
-    window.checkEnv();
-
-    // This is just testing, to detect whether CodeMirror would fail or not
-    window.editor = CodeMirror.fromTextArea(document.getElementById("test"));
-
-    window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true,
-        matchBrackets: true,
-        onChange: validate
-    });
-} catch (e) {
-    // CodeMirror failed to initialize, possible in e.g. old IE.
-    document.getElementById('codemirror').innerHTML = '';
-    document.getElementById('code').onchange = validate;
-    document.getElementById('code').onkeydown = validate;
-} finally {
-    document.getElementById('testbox').parentNode.removeChild(document.getElementById('testbox'));
-}

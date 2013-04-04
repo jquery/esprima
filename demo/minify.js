@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
 
   Redistribution and use in source and binary forms, with or without
@@ -22,36 +23,90 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint browser:true */
-/*global esprima:true, escodegen:true */
+/*jslint sloppy: true browser:true */
+/*global require:true */
 
 function id(i) {
-    'use strict';
     return document.getElementById(i);
 }
 
-function setText(id, str) {
-    'use strict';
-    var el = document.getElementById(id);
-    if (typeof el.innerText === 'string') {
-        el.innerText = str;
-    } else {
-        el.textContent = str;
+function createPipeline() {
+    var passes, pipeline, inputs, i, el, optimizer;
+
+    passes = {
+        'eliminate-dead-code': 'pass/dead-code-elimination',
+        'fold-constant': 'pass/tree-based-constant-folding',
+        'remove-unreachable-branch': 'pass/remove-unreachable-branch',
+        'remove-unused-vars': 'pass/drop-variable-definition'
+    };
+
+    pipeline = [
+        'pass/hoist-variable-to-arguments',
+        'pass/transform-dynamic-to-static-property-access',
+        'pass/transform-dynamic-to-static-property-definition',
+        'pass/transform-immediate-function-call',
+        'pass/transform-logical-association',
+        'pass/reordering-function-declarations',
+        'pass/remove-unused-label',
+        'pass/remove-empty-statement',
+        'pass/remove-wasted-blocks',
+        'pass/transform-to-compound-assignment',
+        'pass/transform-to-sequence-expression',
+        'pass/transform-branch-to-expression',
+        'pass/transform-typeof-undefined',
+        'pass/reduce-sequence-expression',
+        'pass/reduce-branch-jump',
+        'pass/reduce-multiple-if-statements',
+        'pass/dead-code-elimination',
+        'pass/remove-side-effect-free-expressions',
+        'pass/remove-context-sensitive-expressions',
+        'pass/tree-based-constant-folding',
+        'pass/drop-variable-definition',
+        'pass/remove-unreachable-branch'
+    ];
+
+    inputs = document.getElementsByTagName('input');
+    for (i = 0; i < inputs.length; i += 1) {
+        el = inputs[i];
+        optimizer = passes[el.id];
+        if (optimizer && el.checked === false) {
+            pipeline.splice(pipeline.indexOf(optimizer), 1);
+        }
     }
+
+    pipeline = pipeline.map(window.esmangle.require);
+    pipeline = [pipeline];
+    pipeline.push({
+        once: true,
+        pass: [
+            'post/transform-static-to-dynamic-property-access',
+            'post/transform-infinity',
+            'post/rewrite-boolean',
+            'post/rewrite-conditional-expression'
+        ].map(window.esmangle.require)
+    });
+
+    return pipeline;
+}
+
+function obfuscate(syntax) {
+    var result = window.esmangle.optimize(syntax, createPipeline());
+
+    if (id('mangle').checked) {
+        result = window.esmangle.mangle(result);
+    }
+
+    return result;
 }
 
 function minify() {
-    'use strict';
+    var code, syntax, option, str, before, after;
 
-    var code, syntax, option, before, after;
-
-    setText('error', '');
-    if (typeof window.editor !== 'undefined') {
-        // Using CodeMirror.
-        code = window.editor.getValue();
+    if (typeof window.editor === 'undefined') {
+        code = document.getElementById('editor').value;
     } else {
-        // Plain textarea, likely in a situation where CodeMirror does not work.
-        code = id('code').value;
+        code = window.editor.getText();
+        window.editor.removeAllErrorMarkers();
     }
 
     option = {
@@ -64,59 +119,37 @@ function minify() {
         }
     };
 
+    str = '';
+
     try {
         before = code.length;
-        syntax = window.esprima.parse(code, { raw: true, range: true });
+        syntax = window.esprima.parse(code, { raw: true, loc: true });
+        syntax = obfuscate(syntax);
         code = window.escodegen.generate(syntax, option);
-        if (typeof window.editor !== 'undefined') {
-            window.editor.setValue(code);
-        } else {
-            id('code').value = code;
-        }
         after = code.length;
         if (before > after) {
-            setText('error', 'No error. Minifying ' + before + ' bytes to ' + after + ' bytes.');
+            str = 'No error. Minifying ' + before + ' bytes to ' + after + ' bytes.';
+            window.editor.setText(code);
         } else {
-            setText('error', 'Can not minify further, code is already optimized.');
+            str = 'Can not minify further, code is already optimized.';
         }
     } catch (e) {
-        setText('error', e.toString());
+        window.editor.addErrorMarker(e.index, e.description);
+        str = e.toString();
     } finally {
+        document.getElementById('info').innerHTML = str;
     }
 }
 
-/*jslint sloppy:true browser:true */
-/*global minify:true, CodeMirror:true */
 window.onload = function () {
-    var version, el;
-
-    version = 'Using Esprima version ' + esprima.version;
-    version += ' and Escodegen version ' + escodegen.version + '.';
-
-    el = id('version');
-    if (typeof el.innerText === 'string') {
-        el.innerText = version;
-    } else {
-        el.textContent = version;
-    }
-
-    id('minify').onclick = minify;
-
+    document.getElementById('minify').onclick = minify;
     try {
-        window.checkEnv();
-
-        // This is just testing, to detect whether CodeMirror would fail or not
-        window.editor = CodeMirror.fromTextArea(id("test"));
-
-        window.editor = CodeMirror.fromTextArea(id("code"), {
-            lineNumbers: true,
-            matchBrackets: true,
-            lineWrapping: true
+        require(['custom/editor'], function (editor) {
+            window.editor = editor({ parent: 'editor', lang: 'js', wrapMode: true });
+            window.editor.getTextView().getModel().addEventListener("Changed", function () {
+                document.getElementById('info').innerHTML = 'Ready.';
+            });
         });
     } catch (e) {
-        // CodeMirror failed to initialize, possible in e.g. old IE.
-        id('codemirror').innerHTML = '';
-    } finally {
-        id('testbox').parentNode.removeChild(id('testbox'));
     }
 };

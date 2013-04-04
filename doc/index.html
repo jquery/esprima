@@ -1,54 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+
 <head>
-<meta charset="utf-8">
-<title>Esprima Documentation</title>
-<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
-<link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css"/>
-<script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+  <meta charset="utf-8" />
+  <title>Esprima Documentation</title>
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" type="text/css" href="../assets/style.css"/>
+  <link rel="stylesheet" href="../assets/foundation/foundation.min.css">
+  <link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css"/>
+  <script type="text/javascript" src="../assets/prettify/prettify.js"></script>
 <style>
 pre.prettyprint {
     border: 1px solid #ccc;
     background-color: #f8f8f8;
     border-radius: 3px;
     padding: 6px 10px;
-    font-size: 13px;
-    line-height: 19px;
-}
-
-table td {
-    text-align: left;
+    xfont-size: 13px;
+    xline-height: 19px;
+    margin-bottom: 14px;
 }
 </style>
 </head>
+
 <body onload="prettyPrint()">
 
-<div class="container">
+  <!-- Navigation bar -->
+  <div class="row">
+    <div class="twelve columns">
+      <nav class="top-bar">
+        <ul>
+          <li class="name">
+             <h1><a href="../index.html">Esprima</a></h1>
+          </li>
+        </ul>
+        <section>
+          <ul class="right">
+            <li class="divider show-for-medium-and-up"></li>
+            <li class="has-dropdown">
+              <a href="../demo/index.html">Demo</a>
+              <ul class="dropdown">
+                <li><label>Static Analysis</label></li>
+                <li><a href="../demo/parse.html">Online Parsing</a></li>
+                <li><a href="../demo/validate.html">Syntax Validator</a></li>
+                <li><a href="../demo/precedence.html">Operator Precedence</a></li>
+                <li><a href="../demo/collector.html">Regex Collector</a></li>
+                <li><label>Dynamic Tracing</label></li>
+                <li><a href="../demo/functiontrace.html">Function Instrumentation</a></li>
+                <li><label>Code Transformation</label></li>
+                <li><a href="../demo/rewrite.html">Source Rewrite</a></li>
+                <li><a href="../demo/minify.html">Minifiy &amp; Obfuscate</a></li>
+                <li><label>Editing Tools</label></li>
+                <li><a href="../demo/highlight.html">Identifier Highlight</a></li>
+                <li><a href="../demo/autocomplete.html">Autocomplete</a></li>
+              </ul>
+            </li>
+            <li class="has-dropdown">
+              <a href="#">Project</a>
+              <ul class="dropdown">
+                <li><a href="http://github.com/ariya/esprima">Git Repository</a></li>
+                <li><a href="https://travis-ci.org/ariya/esprima">Continuous Integration</a></li>
+                <li><a href="http://groups.google.com/group/esprima">Mailing List</a></li>
+                <li><a href="http://issues.esprima.org/">Issue Tracker</a></li>
+                <li class="divider"></li>
+                <li><label>QA</label></li>
+                <li><a href="../test/index.html">Unit Tests</a></li>
+                <li><a href="../test/benchmarks.html">Benchmarks Suite</a></li>
+                <li><a href="../test/compat.html">Compatibility Tests</a></li>
+                <li><a href="../test/compare.html">Speed Comparison</a></li>
+                <li><a href="../test/module.html">Module Loading</a></li>
+                <li><a href="../test/coverage.html">Coverage Analysis</a></li>
+              </ul>
+            </li>
+            <li><a href="../doc/index.html">Documentation</a></li>
+          </ul>
+        </section>
+      </nav>
+    </div>
+  </div>
 
-<div class="topbar">
-<ul class="nav">
-<li><a href="../index.html">&larr; Home</a></li>
-<li><a href="http://github.com/ariya/esprima">Code</a></li>
-<li><a href="index.html">Documentation</a></li>
-<li><a href="http://issues.esprima.org">Issues</a></li>
-</ul>
-</div>
+  <!-- Title and subtitle -->
+  <div class="row">
+    <div class="twelve columns">
+       <h3 class="subheader"><strong>Documentation</strong> on using Esprima</h3>
+    </div>
+  </div>
 
-<h1>Esprima Documentation</h1>
+  <!-- Main content -->
+  <div class="row">
+    <div class="eight columns">
 
-<div class="main">
-
-<h2 id="usage">Basic Usage</h2>
+<h4 id="usage">Basic Usage</h4>
 
 <p>Esprima runs on web browsers (IE 6+, Firefox 1+, Safari 3+, Chrome 1+, Konqueror 4.6+, Opera 8+) as well as
 <a href="http://www.mozilla.org/rhino">Rhino</a> and <a href="http://nodejs.org">Node.js</a>.</p>
 
-<h3>In a web browser</h3>
+<h5>In a web browser</h5>
 
 <p>Just include the source file:</p>
 
 <pre class="prettyprint lang-html">
-&lt;script src=&quot;esparse.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;esprima.js&quot;&gt;&lt;/script&gt;
 </pre>
 
 <p>The module <code>esprima</code> will be available as part of the global window object:</p>
@@ -79,7 +131,7 @@ bower install esprima
 yeoman install esprima
 </pre>
 
-<h3>With Node.js</h3>
+<h5>With Node.js</h5>
 
 <p>Esprima is available as a Node.js <a href="https://npmjs.org/package/esprima">package</a>, install it using npm:</p>
 
@@ -94,7 +146,7 @@ var esprima = require('esprima');
 console.log(JSON.stringify(esprima.parse('var answer = 42'), null, 4));
 </pre>
 
-<h3>With Rhino</h3>
+<h5>With Rhino</h5>
 
 <p>Load the source file from another script:</p>
 
@@ -109,7 +161,7 @@ var syntax = esprima.parse('42');
 print(JSON.stringify(syntax, null, 2));
 </pre>
 
-<h3>Parsing Interface</h3>
+<h5>Parsing Interface</h5>
 
 <p>Basic usage:
 
@@ -158,9 +210,9 @@ esprima.parse(code, options);
 
 <p><b>Note</b>: In version > 1.0, <code>raw</code> is ignored since literals always include the verbatim source.</p>
 
-<h2 id="examples">Examples</h2>
+<h4 id="examples">Examples</h4>
 
-<h3 id="nestedternary">Detect Nested Ternary Conditionals</h3>
+<h5 id="nestedternary">Detect Nested Ternary Conditionals</h5>
 
 <p>The script <code>detectnestedternary.js</code> in the <code>examples/</code> subdirectory is using Esprima to look for a ternary conditional, i.e. <a href="http://en.wikipedia.org/wiki/%3F:">operator ?:</a>, which is immediately followed (in one of its code paths) by another ternary conditional. The script can be invoked from the command-line with Node.js:</p>
 
@@ -183,7 +235,7 @@ var str = (age < 1) ? "baby" :
   Line 2 : Nested ternary for "age &lt 5"
 </pre>
 
-<h3 id="booleantrap">Find Possible Boolean Traps</h3>
+<h5 id="booleantrap">Find Possible Boolean Traps</h5>
 
 <p>The script <code>findbooleantrap.js</code> in the <code>examples/</code> subdirectory is using Esprima to detect some possible cases of Boolean trap, i.e. the use of Boolean literal which may lead to ambiguities and lack of readability. The script can be invoked from command-line with Node.js:</p>
 
@@ -209,7 +261,7 @@ It will search for all files (recursively) in the given path, try to parse each 
 
 For some more info, read also the blog post on <a href="http://ariya.ofilabs.com/2011/08/hall-of-api-shame-boolean-trap.html">Boolean trap</a>.
 
-<h2 id="ast">Syntax Tree Format</h2>
+<h4 id="ast">Syntax Tree Format</h4>
 
 <p>The output of the parser is expected to be compatible with Mozilla SpiderMonkey <a href="https://developer.mozilla.org/en/SpiderMonkey/Parser_API">Parser API</a>.
 The best way to understand various different constructs is the online <a href="../demo/parse.html">parser demo</a> which shows the syntax tree (formatted with JSON.stringify) corresponding to the typed code.
@@ -247,9 +299,9 @@ then the return value will be (JSON formatted):
 }
 </pre>
 
-<h2 id="contribution">Contribution Guide</h2>
+<h4 id="contribution">Contribution Guide</h4>
 
-<h3>Guidelines</h3>
+<h5>Guidelines</h5>
 
 <p>Contributors are mandated to follow the guides described in the following sections. Any contribution which do not conform to the guides may be rejected.</p>
 
@@ -329,7 +381,7 @@ node tools/generate-test-fixture.js "var answer = 42"
 
 The syntax tree will be printed out to the console. This can be used in the test fixture.
 
-<h3 id="tests">Test Workflow</h3>
+<h5 id="tests">Test Workflow</h5>
 
 <p>Before running the tests, prepare the tools via:</p>
 
@@ -383,75 +435,46 @@ npm install
 
 <p><strong>Warning</strong>: Since each parser has a different format for the syntax tree, the speed is not fully comparable (the cost of constructing different result is not taken into account). These tests exist only to ensure that Esprima parser is not ridiculously slow, e.g. one magnitude slower compare to other parsers.</p>
 
-<h4>Manual tests</h4>
-
-<p><strong>Code parser</strong></p>
-
-<p>Available by opening <code>demo/parse.html</code>.
-
-<p>In this demo, whatever is typed in the editor will be parsed. If it is a valid code, the syntax tree will be shown formatted using JSON.stringify.</p>
-
-<p><strong>Operator precedence</strong></p>
-
-<p>Available by opening <code>demo/precedence.html</code>.
-
-<p>The demo compares two expression and decides whether they are semantically equivalent or not. If not, the expression will be rewritten, with extra parentheses, to following the intended semantic of the original.</p>
-
-<p><strong>Regular expression collector</strong></p>
-
-<p>Available by opening <code>demo/collector.html</code>.
-
-<p>The demo finds all the regular expressions in the given code, along with the location for each regular expression.</p>
-
-<p><strong>Function tracing</strong></p>
-
-<p>Available by opening <code>demo/functiontrace.html</code>.
-
-<p>The demo inserts a function call at the beginning of every function block to log the number of times the function is executed.</p>
-
-<h2 id="related">Related Projects</h2>
-
-<h3>Sister projects</h3>
-
-<p><a href="https://github.com/Constellation/escodegen">Escodegen</a> is a code generator which supports Esprima syntax tree. This is useful for source code transformation. The source can be parsed by Esprima and then regenerated using escodegen. Between the process, the syntax tree can be transformed.</p>
-
-<p><a href="https://github.com/ariya/esmorph">Esmorph</a> is a non-destructive source code morphing tool. It can tweak <em>portions</em> of the code without affecting the rest (hence the term non-destructive).</p>
-
-<h3>Similar parsers</h3>
-
-<p>Narcissus is a metacircular implementation of JavaScript. Obviously it has a parsing capability. Check more at the code repo: <a href="https://github.com/mozilla/narcissus">github.com/mozilla/narcissus</a>. Narcissus is likely the oldest JavaScript parser written in JavaScript.</p>
-
-<p>UglifyJS is a minifier and obfuscator which has a parser called parse-js. It is pretty popular and widely used. Read more at its project page: <a href="https://github.com/mishoo/UglifyJS">github.com/mishoo/UglifyJS</a>.</p>
-
-<p>ZeParser, see <a href="https://github.com/qfox/ZeParser">github.com/qfox/ZeParser</a>.</p>
-
-<h2 id="license">License</h2>
+<h4 id="license">License</h4>
 
 <p>Copyright (C) 2012, 2011 Ariya Hidayat and other contributors.</p>
 
 <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-<ul>
+<ul class="square">
 <li>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</li>
 <li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</li>
 </ul>
 
 <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
 
-</div>
+    </div>
 
-<div class="sidebar">
-    <p><b>Contents</b></p>
-    <ol>
+    <div class="four columns">
+      <div class="panel">
+        <p><b>Contents</b></p>
+        <ol>
         <li><a href="#usage">Basic Usage</a></li>
         <li><a href="#examples">Examples</a></li>
         <li><a href="#ast">Syntax Tree Format</a></li>
         <li><a href="#contribution">Contribution Guide</a></li>
-        <li><a href="#related">Related Projects</a></li>
         <li><a href="#license">License</a></li>
-    </ol>
-</div>
+        </ol>
+      </div>
+    </div>
+  </div>
 
-</div>
+  <!-- Footer -->
+  <div class="row copyright">
+    <div class="six columns">
+      <p>Esprima is created and mantained by <a href="http://ariya.ofilabs.com/about">Ariya Hidayat</a>.</p>
+    </div>
+    <div class="six columns">
+      <ul class="link-list right">
+        <li><a href="http://twitter.com/esprima">@Esprima</a></li>
+        <li><a href="https://github.com/ariya/esprima">GitHub</a></li>
+      </ul>
+    </div>
+  </div>
 
 </body>
 </html>
