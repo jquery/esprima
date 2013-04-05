@@ -338,7 +338,7 @@ parseYieldExpression: true
 
         switch (id.length) {
         case 2:
-            return (id === 'if') || (id === 'in') || (id === 'do');
+            return (id === 'if') || (id === 'in') || (id === 'do') || (id === 'as');
         case 3:
             return (id === 'var') || (id === 'for') || (id === 'new') ||
                 (id === 'try') || (id === 'let');
@@ -1900,11 +1900,12 @@ parseYieldExpression: true
             };
         },
 
-        createImportDeclaration: function (specifiers, from) {
+        createImportDeclaration: function (specifiers, from, asIdentifier) {
             return {
                 type: Syntax.ImportDeclaration,
                 specifiers: specifiers,
-                from: from
+                from: from,
+                as: asIdentifier
             };
         },
 
@@ -3290,40 +3291,47 @@ parseYieldExpression: true
     }
 
     function parseImportDeclaration() {
-        var specifiers, from;
+        var specifiers, from, asIdentifier;
 
         expectKeyword('import');
 
-        if (match('*')) {
-            specifiers = [parseGlob()];
-        } else if (match('{')) {
-            lex();
-            specifiers = [];
-
-            do {
-                specifiers.push(parseImportSpecifier());
-            } while (match(',') && lex());
-
-            expect('}');
-        } else {
-            specifiers = [parseVariableIdentifier()];
-        }
-
-        if (!matchContextualKeyword('from')) {
-            throwError({}, Messages.NoFromAfterImport);
-        }
-
-        lex();
-
         if (lookahead.type === Token.StringLiteral) {
             from = parsePrimaryExpression();
+            expectKeyword('as');
+            asIdentifier = parseVariableIdentifier();
         } else {
-            from = parsePath();
+            // import * from "foo" is no longer in the draft spec, remove this
+            if (match('*')) {
+                specifiers = [parseGlob()];
+            } else if (match('{')) {
+                lex();
+                specifiers = [];
+
+                do {
+                    specifiers.push(parseImportSpecifier());
+                } while (match(',') && lex());
+
+                expect('}');
+            } else {
+                specifiers = [parseVariableIdentifier()];
+            }
+
+            if (!matchContextualKeyword('from')) {
+                throwError({}, Messages.NoFromAfterImport);
+            }
+
+            lex();
+
+            if (lookahead.type === Token.StringLiteral) {
+                from = parsePrimaryExpression();
+            } else {
+                from = parsePath();
+            }
         }
 
         consumeSemicolon();
 
-        return delegate.createImportDeclaration(specifiers, from);
+        return delegate.createImportDeclaration(specifiers, from, asIdentifier);
     }
 
     function parseImportSpecifier() {

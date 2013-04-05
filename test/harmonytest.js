@@ -4143,6 +4143,34 @@ var harmonyTestFixture = {
             }
         },
 
+        'import "foo" as foo': {
+            type: 'ImportDeclaration',
+            from: {
+                type: 'Literal',
+                value: "foo",
+                raw: "\"foo\"",
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            as: {
+                type: 'Identifier',
+                name: 'foo',
+                range: [16, 19],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 19 }
+                }
+            },
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        },
+
         'import * from foo': {
             type: 'ImportDeclaration',
             specifiers: [{
