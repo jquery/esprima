@@ -37,8 +37,7 @@ fullFixture = [
     'MooTools 1.4.1',
     'jQuery 1.8.2',
     'jQuery.Mobile 1.2.0',
-    'Angular 1.0.2',
-    'three.js r51'
+    'Angular 1.0.2'
 ];
 
 quickFixture = [
