@@ -694,6 +694,60 @@ var testFixture = {
             }
         },
 
+        'x = [ "finally", "for" ]': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [{
+                        type: 'Literal',
+                        value: 'finally',
+                        raw: '"finally"',
+                        range: [6, 15],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 15 }
+                        }
+                    }, {
+                        type: 'Literal',
+                        value: 'for',
+                        raw: '"for"',
+                        range: [17, 22],
+                        loc: {
+                            start: { line: 1, column: 17 },
+                            end: { line: 1, column: 22 }
+                        }
+                    }],
+                    range: [4, 24],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                range: [0, 24],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 24 }
+                }
+            },
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 24 }
+            }
+        },
+
         '日本語 = []': {
             type: 'ExpressionStatement',
             expression: {

@@ -2208,8 +2208,8 @@ parseYieldExpression: true
 
         expect('[');
         while (!match(']')) {
-            switch (lookahead.value) {
-            case 'for':
+            if (lookahead.value === 'for' &&
+                    lookahead.type !== Token.StringLiteral) {
                 if (!possiblecomprehension) {
                     throwError({}, Messages.ComprehensionError);
                 }
@@ -2221,8 +2221,8 @@ parseYieldExpression: true
                     throwError({}, Messages.ComprehensionError);
                 }
                 blocks.push(tmp);
-                break;
-            case 'if':
+            } else if (lookahead.value === 'if' &&
+                           lookahead.type !== Token.StringLiteral) {
                 if (!possiblecomprehension) {
                     throwError({}, Messages.ComprehensionError);
                 }
@@ -2230,13 +2230,11 @@ parseYieldExpression: true
                 expect('(');
                 filter = parseExpression();
                 expect(')');
-                break;
-            case ',':
+            } else if (lookahead.value === ',') {
                 possiblecomprehension = false; // no longer allowed.
                 lex();
                 elements.push(null);
-                break;
-            default:
+            } else {
                 tmp = parseSpreadOrAssignmentExpression();
                 elements.push(tmp);
                 if (tmp && tmp.type === Syntax.SpreadElement) {
