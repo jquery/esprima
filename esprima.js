@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2013 Thaddee Tyl <thaddee.tyl@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2012 Mathias Bynens <mathias@qiwi.be>
   Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
@@ -60,6 +61,7 @@ parseYieldExpression: true
 
     var Token,
         TokenName,
+        FnExprTokens,
         Syntax,
         PropertyKind,
         Messages,
@@ -85,7 +87,8 @@ parseYieldExpression: true
         NumericLiteral: 6,
         Punctuator: 7,
         StringLiteral: 8,
-        Template: 9
+        RegularExpression: 9,
+        Template: 10
     };
 
     TokenName = {};
@@ -97,6 +100,18 @@ parseYieldExpression: true
     TokenName[Token.NumericLiteral] = 'Numeric';
     TokenName[Token.Punctuator] = 'Punctuator';
     TokenName[Token.StringLiteral] = 'String';
+    TokenName[Token.RegularExpression] = 'RegularExpression';
+
+    // A function following one of those tokens is an expression.
+    FnExprTokens = ["(", "{", "[", "in", "typeof", "instanceof", "new",
+                    "return", "case", "delete", "throw", "void",
+                    // assignment operators
+                    "=", "+=", "-=", "*=", "/=", "%=", "<<=", ">>=", ">>>=",
+                    "&=", "|=", "^=", ",",
+                    // binary/unary operators
+                    "+", "-", "*", "/", "%", "++", "--", "<<", ">>", ">>>", "&",
+                    "|", "^", "!", "~", "&&", "||", "?", ":", "===", "==", ">=",
+                    "<=", "<", ">", "!=", "!=="];
 
     Syntax = {
         ArrayExpression: 'ArrayExpression',
@@ -610,6 +625,13 @@ parseYieldExpression: true
         case 63:   // ?
         case 126:  // ~
             ++index;
+            if (extra.tokenize) {
+                if (code === 40) {
+                    extra.openParenToken = extra.tokens.length;
+                } else if (code === 123) {
+                    extra.openCurlyToken = extra.tokens.length;
+                }
+            }
             return {
                 type: Token.Punctuator,
                 value: String.fromCharCode(code),
@@ -810,13 +832,28 @@ parseYieldExpression: true
         };
     }
 
-    function scanOctalLiteral(start) {
-        var number = '0' + source[index++];
+    function scanOctalLiteral(prefix, start) {
+        var number, octal;
+
+        if (isOctalDigit(prefix)) {
+            octal = true;
+            number = '0' + source[index++];
+        } else {
+            octal = false;
+            ++index;
+            number = '';
+        }
+
         while (index < length) {
             if (!isOctalDigit(source[index])) {
                 break;
             }
             number += source[index++];
+        }
+
+        if (!octal && number.length === 0) {
+            // only 0o or 0O
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
         }
 
         if (isIdentifierStart(source.charCodeAt(index)) || isDecimalDigit(source.charCodeAt(index))) {
@@ -826,7 +863,7 @@ parseYieldExpression: true
         return {
             type: Token.NumericLiteral,
             value: parseInt(number, 8),
-            octal: true,
+            octal: octal,
             lineNumber: lineNumber,
             lineStart: lineStart,
             range: [start, index]
@@ -887,45 +924,8 @@ parseYieldExpression: true
                     };
                 }
                 if (ch === 'o' || ch === 'O' || isOctalDigit(ch)) {
-                    if (isOctalDigit(ch)) {
-                        octal = true;
-                        number = source[index++];
-                    } else {
-                        octal = false;
-                        ++index;
-                        number = '';
-                    }
-
-                    while (index < length) {
-                        ch = source[index];
-                        if (!isOctalDigit(ch)) {
-                            break;
-                        }
-                        number += source[index++];
-                    }
-
-                    if (number.length === 0) {
-                        // only 0o or 0O
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-
-                    if (index < length) {
-                        ch = source.charCodeAt(index);
-                        if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
-                            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                        }
-                    }
-
-                    return {
-                        type: Token.NumericLiteral,
-                        value: parseInt(number, 8),
-                        octal: octal,
-                        lineNumber: lineNumber,
-                        lineStart: lineStart,
-                        range: [start, index]
-                    };
+                    return scanOctalLiteral(ch, start);
                 }
-
                 // decimal number starts with '0' such as '09' is illegal.
                 if (ch && isDecimalDigit(ch.charCodeAt(0))) {
                     throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
@@ -1029,7 +1029,7 @@ parseYieldExpression: true
                         str += '\f';
                         break;
                     case 'v':
-                        str += '\v';
+                        str += '\x0B';
                         break;
 
                     default:
@@ -1312,6 +1312,16 @@ parseYieldExpression: true
 
         peek();
 
+
+        if (extra.tokenize) {
+            return {
+                type: Token.RegularExpression,
+                value: value,
+                lineNumber: lineNumber,
+                lineStart: lineStart,
+                range: [start, index]
+            };
+        }
         return {
             literal: str,
             value: value,
@@ -1324,6 +1334,66 @@ parseYieldExpression: true
             token.type === Token.Keyword ||
             token.type === Token.BooleanLiteral ||
             token.type === Token.NullLiteral;
+    }
+
+    function advanceSlash() {
+        var prevToken,
+            checkToken;
+        // Using the following algorithm:
+        // https://github.com/mozilla/sweet.js/wiki/design
+        prevToken = extra.tokens[extra.tokens.length - 1];
+        if (!prevToken) {
+            // Nothing before that: it cannot be a division.
+            return scanRegExp();
+        }
+        if (prevToken.type === "Punctuator") {
+            if (prevToken.value === ")") {
+                checkToken = extra.tokens[extra.openParenToken - 1];
+                if (checkToken &&
+                        checkToken.type === "Keyword" &&
+                        (checkToken.value === "if" ||
+                         checkToken.value === "while" ||
+                         checkToken.value === "for" ||
+                         checkToken.value === "with")) {
+                    return scanRegExp();
+                }
+                return scanPunctuator();
+            }
+            if (prevToken.value === "}") {
+                // Dividing a function by anything makes little sense,
+                // but we have to check for that.
+                if (extra.tokens[extra.openCurlyToken - 3] &&
+                        extra.tokens[extra.openCurlyToken - 3].type === "Keyword") {
+                    // Anonymous function.
+                    checkToken = extra.tokens[extra.openCurlyToken - 4];
+                    if (!checkToken) {
+                        return scanPunctuator();
+                    }
+                } else if (extra.tokens[extra.openCurlyToken - 4] &&
+                        extra.tokens[extra.openCurlyToken - 4].type === "Keyword") {
+                    // Named function.
+                    checkToken = extra.tokens[extra.openCurlyToken - 5];
+                    if (!checkToken) {
+                        return scanRegExp();
+                    }
+                } else {
+                    return scanPunctuator();
+                }
+                // checkToken determines whether the function is
+                // a declaration or an expression.
+                if (FnExprTokens.indexOf(checkToken.value) >= 0) {
+                    // It is an expression.
+                    return scanPunctuator();
+                }
+                // It is a declaration.
+                return scanRegExp();
+            }
+            return scanRegExp();
+        }
+        if (prevToken.type === "Keyword") {
+            return scanRegExp();
+        }
+        return scanPunctuator();
     }
 
     function advance() {
@@ -1370,6 +1440,11 @@ parseYieldExpression: true
 
         if (isDecimalDigit(ch)) {
             return scanNumericLiteral();
+        }
+
+        // Slash (/) char #47 can also start a regex.
+        if (extra.tokenize && ch === 47) {
+            return advanceSlash();
         }
 
         return scanPunctuator();
@@ -4652,22 +4727,24 @@ parseYieldExpression: true
             column: index - lineStart
         };
 
-        // Pop the previous token, which is likely '/' or '/='
-        if (extra.tokens.length > 0) {
-            token = extra.tokens[extra.tokens.length - 1];
-            if (token.range[0] === pos && token.type === 'Punctuator') {
-                if (token.value === '/' || token.value === '/=') {
-                    extra.tokens.pop();
+        if (!extra.tokenize) {
+            // Pop the previous token, which is likely '/' or '/='
+            if (extra.tokens.length > 0) {
+                token = extra.tokens[extra.tokens.length - 1];
+                if (token.range[0] === pos && token.type === 'Punctuator') {
+                    if (token.value === '/' || token.value === '/=') {
+                        extra.tokens.pop();
+                    }
                 }
             }
-        }
 
-        extra.tokens.push({
-            type: 'RegularExpression',
-            value: regex.literal,
-            range: [pos, index],
-            loc: loc
-        });
+            extra.tokens.push({
+                type: 'RegularExpression',
+                value: regex.literal,
+                range: [pos, index],
+                loc: loc
+            });
+        }
 
         return regex;
     }
@@ -5129,6 +5206,108 @@ parseYieldExpression: true
         return result;
     }
 
+    function tokenize(code, options) {
+        var toString,
+            token,
+            tokens;
+
+        toString = String;
+        if (typeof code !== 'string' && !(code instanceof String)) {
+            code = toString(code);
+        }
+
+        delegate = SyntaxTreeDelegate;
+        source = code;
+        index = 0;
+        lineNumber = (source.length > 0) ? 1 : 0;
+        lineStart = 0;
+        length = source.length;
+        lookahead = null;
+        state = {
+            allowIn: true,
+            labelSet: {},
+            inFunctionBody: false,
+            inIteration: false,
+            inSwitch: false
+        };
+
+        extra = {};
+
+        // Options matching.
+        options = options || {};
+
+        // Of course we collect tokens here.
+        options.tokens = true;
+        extra.tokens = [];
+        extra.tokenize = true;
+        // The following two fields are necessary to compute the Regex tokens.
+        extra.openParenToken = -1;
+        extra.openCurlyToken = -1;
+
+        extra.range = (typeof options.range === 'boolean') && options.range;
+        extra.loc = (typeof options.loc === 'boolean') && options.loc;
+
+        if (typeof options.comment === 'boolean' && options.comment) {
+            extra.comments = [];
+        }
+        if (typeof options.tolerant === 'boolean' && options.tolerant) {
+            extra.errors = [];
+        }
+
+        if (length > 0) {
+            if (typeof source[0] === 'undefined') {
+                // Try first to convert to a string. This is good as fast path
+                // for old IE which understands string indexing for string
+                // literals only and not for string object.
+                if (code instanceof String) {
+                    source = code.valueOf();
+                }
+            }
+        }
+
+        patch();
+
+        try {
+            peek();
+            if (lookahead.type === Token.EOF) {
+                return extra.tokens;
+            }
+
+            token = lex();
+            while (lookahead.type !== Token.EOF) {
+                try {
+                    token = lex();
+                } catch (lexError) {
+                    token = lookahead;
+                    if (extra.errors) {
+                        extra.errors.push(lexError);
+                        // We have to break on the first error
+                        // to avoid infinite loops.
+                        break;
+                    } else {
+                        throw lexError;
+                    }
+                }
+            }
+
+            filterTokenLocation();
+            tokens = extra.tokens;
+            if (typeof extra.comments !== 'undefined') {
+                filterCommentLocation();
+                tokens.comments = extra.comments;
+            }
+            if (typeof extra.errors !== 'undefined') {
+                tokens.errors = extra.errors;
+            }
+        } catch (e) {
+            throw e;
+        } finally {
+            unpatch();
+            extra = {};
+        }
+        return tokens;
+    }
+
     function parse(code, options) {
         var program, toString;
 
@@ -5220,6 +5399,8 @@ parseYieldExpression: true
 
     // Sync with package.json and component.json.
     exports.version = '1.1.0-dev-harmony';
+
+    exports.tokenize = tokenize;
 
     exports.parse = parse;
 

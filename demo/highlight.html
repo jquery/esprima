@@ -1,49 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+
 <head>
-<meta charset="utf-8">
-<title>Esprima: Identifier Highlight</title>
-<script src="../test/3rdparty/platform.js"></script>
-<script src="checkenv.js"></script>
-<script src="highlight.js"></script>
-<script src="../esprima.js"></script>
-<script src="../assets/codemirror/codemirror.js"></script>
-<script src="../assets/codemirror/javascript.js"></script>
-<link rel="stylesheet" type="text/css" href="../assets/codemirror/codemirror.css"/>
-<link rel="stylesheet" type="text/css" href="../assets/style.css"/>
-<style>
-.CodeMirror-scroll {
-    height: 300px;
-}
-.identifier {
-    background-color: #ffffcc;
-    border: 1px solid #ffcc99;
-    margin: -1px;
-    border-radius: 4px;
-}
-.highlight {
-    background-color: #ffffcc;
-}
-</style>
+  <meta charset="utf-8" />
+  <title>Esprima: Identifier Highlight</title>
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" href="../assets/orion/built-editor.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/foundation/foundation.min.css">
 </head>
+
 <body>
-<div class="container">
 
-<div class="topbar">
-<ul class="nav">
-<li><a href="../index.html">&larr; Home</a></li>
-<li><a href="http://github.com/ariya/esprima">Code</a></li>
-<li><a href="../doc/index.html">Documentation</a></li>
-<li><a href="http://issues.esprima.org">Issues</a></li>
-</ul>
-</div>
+  <!-- Navigation bar -->
+  <div class="row">
+    <div class="twelve columns">
+      <nav class="top-bar">
+        <ul>
+          <li class="name">
+             <h1><a href="../index.html">Esprima</a></h1>
+          </li>
+        </ul>
+        <section>
+          <ul class="right">
+            <li class="divider show-for-medium-and-up"></li>
+            <li class="has-dropdown">
+              <a href="../demo/index.html">Demo</a>
+              <ul class="dropdown">
+                <li><label>Static Analysis</label></li>
+                <li><a href="../demo/parse.html">Online Parsing</a></li>
+                <li><a href="../demo/validate.html">Syntax Validator</a></li>
+                <li><a href="../demo/precedence.html">Operator Precedence</a></li>
+                <li><a href="../demo/collector.html">Regex Collector</a></li>
+                <li><label>Dynamic Tracing</label></li>
+                <li><a href="../demo/functiontrace.html">Function Instrumentation</a></li>
+                <li><label>Code Transformation</label></li>
+                <li><a href="../demo/rewrite.html">Source Rewrite</a></li>
+                <li><a href="../demo/minify.html">Minifiy &amp; Obfuscate</a></li>
+                <li><label>Editing Tools</label></li>
+                <li><a href="../demo/highlight.html">Identifier Highlight</a></li>
+                <li><a href="../demo/autocomplete.html">Autocomplete</a></li>
+              </ul>
+            </li>
+            <li class="has-dropdown">
+              <a href="#">Project</a>
+              <ul class="dropdown">
+                <li><a href="http://github.com/ariya/esprima">Git Repository</a></li>
+                <li><a href="https://travis-ci.org/ariya/esprima">Continuous Integration</a></li>
+                <li><a href="http://groups.google.com/group/esprima">Mailing List</a></li>
+                <li><a href="http://issues.esprima.org/">Issue Tracker</a></li>
+                <li class="divider"></li>
+                <li><label>QA</label></li>
+                <li><a href="../test/index.html">Unit Tests</a></li>
+                <li><a href="../test/benchmarks.html">Benchmarks Suite</a></li>
+                <li><a href="../test/compat.html">Compatibility Tests</a></li>
+                <li><a href="../test/compare.html">Speed Comparison</a></li>
+                <li><a href="../test/module.html">Module Loading</a></li>
+                <li><a href="../test/coverage.html">Coverage Analysis</a></li>
+              </ul>
+            </li>
+            <li><a href="../doc/index.html">Documentation</a></li>
+          </ul>
+        </section>
+      </nav>
+    </div>
+  </div>
 
-<h1>Identifier Highlight <small>to spot everything</small></h1>
+  <!-- Title and subtitle -->
+  <div class="row">
+    <div class="twelve columns">
+       <h3 class="subheader"><strong>Identifier Highlight</strong> to spot everything</h3>
+    </div>
+  </div>
 
-<p>Type ECMAScript code and place the cursor in an identifier.<br>
-<strong>Note</strong>: Scope is not handled properly yet, see <a href="http://code.google.com/p/esprima/issues/detail?id=98">issue 98</a>.</p>
+  <!-- Main content -->
+  <div class="row">
+    <div class="eight columns">
 
-<div><textarea id="code" autofocus="autofocus" cols="70" rows="25" spellcheck="false">
+<pre id="editor" spellcheck="false" style="height: 350px">
 // Array shuffling code from Underscore.js.
 
 _.shuffle = function(obj) {
@@ -55,40 +90,35 @@ _.shuffle = function(obj) {
     });
     return shuffled;
 };
-</textarea></div>
+</pre>
 
-<p id="codemirror" align="right"><small>The above code editor is based on <a href="http://codemirror.net" target="_blank">CodeMirror</a>.</small></p>
+    <div id="info" class="alert-box secondary">Ready.</div>
+    </div>
 
-<p id="error"></p>
+    <div class="four columns">
+      <div class="panel">
+          <p>When the cursor is placed on a variable or a function,
+          all other <strong>identical references</strong> will be highlighted.</p>
+      </div>
+    </div>
+  </div>
 
-<p style="margin-top: 50px;">Using Esprima version <span id="version"></span>.</p>
+  <!-- Footer -->
+  <div class="row copyright">
+    <div class="six columns">
+      <p>Esprima is created and mantained by <a href="http://ariya.ofilabs.com/about">Ariya Hidayat</a>.</p>
+    </div>
+    <div class="six columns">
+      <ul class="link-list right">
+        <li><a href="http://twitter.com/esprima">@Esprima</a></li>
+        <li><a href="https://github.com/ariya/esprima">GitHub</a></li>
+      </ul>
+    </div>
+  </div>
 
-<div class="footer"><strong>Esprima</strong> is created by
-<a href="http://ariya.ofilabs.com/about" target="_blank">Ariya Hidayat</a>. Follow <a href="http://twitter.com/ariyahidayat">@ariyahidayat</a> on Twitter.
-</div>
-
-<div id="testbox" style="visibility: hidden;"><textarea id="test"></textarea></div>
-</div>
-<script>
-/*jslint sloppy:true browser:true */
-/*global trackCursor: true, triggerParse: true, CodeMirror:true */
-window.onload = function () {
-    var el;
-
-    el = document.getElementById('version');
-    if (typeof el.innerText === 'string') {
-        el.innerText = window.esprima.version;
-    } else {
-        el.textContent = window.esprima.version;
-    }
-
-    window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true,
-        matchBrackets: true,
-        onCursorActivity: trackCursor,
-        onChange: triggerParse
-    });
-};
-</script>
+<script src="../esprima.js"></script>
+<script src="../assets/orion/built-editor.min.js"></script>
+<script src="../assets/orion/customeditor.js"></script>
+<script src="highlight.js"></script>
 </body>
 </html>

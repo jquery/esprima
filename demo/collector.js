@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
 
   Redistribution and use in source and binary forms, with or without
@@ -23,6 +24,7 @@
 */
 
 /*jslint browser:true */
+/*global esprima:true, require:true */
 
 var timerId;
 
@@ -56,12 +58,12 @@ function collectRegex() {
         }
 
         timerId = window.setTimeout(function () {
-            var code, result, i, str;
+            var code, result, occurrences, model, i, str;
 
             if (typeof window.editor === 'undefined') {
                 code = document.getElementById('code').value;
             } else {
-                code = window.editor.getValue();
+                code = window.editor.getText();
             }
 
             // Executes f on the object and its children (recursively).
@@ -102,7 +104,8 @@ function collectRegex() {
                                 type: 'Literal',
                                 value: node.value,
                                 line: node.loc.start.line,
-                                column: node.loc.start.column
+                                column: node.loc.start.column,
+                                range: node.range
                             });
                         }
                     }
@@ -118,7 +121,8 @@ function collectRegex() {
                                         type: 'Literal',
                                         value: value,
                                         line: node.loc.start.line,
-                                        column: node.loc.start.column
+                                        column: node.loc.start.column,
+                                        range: node.range
                                     });
                                 }
                             }
@@ -131,7 +135,8 @@ function collectRegex() {
                                         type: 'Literal',
                                         value: value,
                                         line: node.loc.start.line,
-                                        column: node.loc.start.column
+                                        column: node.loc.start.column,
+                                        range: node.range
                                     });
                                 }
                             }
@@ -140,31 +145,52 @@ function collectRegex() {
                 }
             }
 
+            occurrences = [];
             try {
                 result = [];
-                visit(window.esprima.parse(code, { loc: true }), collect);
+                visit(window.esprima.parse(code, { loc: true, range: true }), collect);
 
                 if (result.length > 0) {
-                    str = '<p>Found <b>' + result.length + '</b> regex(s):</p>';
+                    id('info').innerHTML = 'Total regular expressions: ' + result.length;
+                    id('info').setAttribute('class', 'alert-box success');
+                    model = window.editor.getModel();
                     for (i = 0; i < result.length; i += 1) {
-                        str += '<p>' + 'Line ' + result[i].line;
-                        str += ' column ' + (1 + result[i].column);
-                        str += ': <code>'; str += escaped(result[i].value.toString()) + '</code>';
-                        str += '</p>';
+                        occurrences.push({
+                            line: result[i].line,
+                            start: 1 + result[i].range[0] - model.getLineStart(result[i].line - 1),
+                            end: result[i].range[1] - model.getLineStart(result[i].line - 1),
+                            readAccess: true,
+                            description: result[i].value.toString()
+                        });
                     }
-                    id('result').innerHTML = str;
                 } else {
-                    setText('result', 'No regex.');
+                    setText('info', 'No regex found.');
+                    id('info').setAttribute('class', 'alert-box secondary');
                 }
             } catch (e) {
-                setText('result', e.toString());
+                setText('info', e.toString());
+                id('info').setAttribute('class', 'alert-box alert');
+            } finally {
+                window.editor.showOccurrences(occurrences);
             }
 
             timerId = undefined;
         }, delay || 811);
     }
 
-    setText('version', window.esprima.version);
     process(1);
 }
-/* vim: set sw=4 ts=4 et tw=80 : */
+
+window.onload = function () {
+    'use strict';
+
+    try {
+        require(['custom/editor'], function (editor) {
+            window.editor = editor({ parent: 'editor', lang: 'js' });
+            window.editor.onGotoLine(3, 0);
+            window.editor.getTextView().getModel().addEventListener("Changed", collectRegex);
+            collectRegex();
+        });
+    } catch (e) {
+    }
+};
