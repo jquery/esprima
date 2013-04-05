@@ -32,19 +32,18 @@ var setupBenchmarks,
 
 fullFixture = [
     'Underscore 1.4.1',
-    'Backbone 0.9.2',
+    'Backbone 1.0.0',
     'CodeMirror 2.34',
     'MooTools 1.4.1',
-    'jQuery 1.8.2',
+    'jQuery 1.9.1',
     'jQuery.Mobile 1.2.0',
-    'Angular 1.0.2',
-    'three.js r51'
+    'Angular 1.0.6'
 ];
 
 quickFixture = [
-    'Backbone 0.9.2',
-    'jQuery 1.8.2',
-    'Angular 1.0.2'
+    'Backbone 1.0.0',
+    'jQuery 1.9.1',
+    'Angular 1.0.6'
 ];
 
 function slug(name) {
@@ -269,7 +268,8 @@ if (typeof window !== 'undefined') {
         var Benchmark,
             esprima,
             dirname,
-            option,
+            quick,
+            loc = false,
             fs,
             readFileSync,
             log;
@@ -288,7 +288,8 @@ if (typeof window !== 'undefined') {
             Benchmark = require('./3rdparty/benchmark');
             esprima = require('../esprima');
             fs = require('fs');
-            option = process.argv[2];
+            quick = process.argv[2] === 'quick' || process.argv[3] === 'quick';
+            loc = process.argv[2] === 'loc' || process.argv[3] === 'loc';
             readFileSync = function readFileSync(filename) {
                 return fs.readFileSync(filename, 'utf-8');
             };
@@ -307,7 +308,7 @@ if (typeof window !== 'undefined') {
                     size = source.length;
                 totalSize += size;
                 return suite.add(filename, function () {
-                    var syntax = esprima.parse(source);
+                    var syntax = esprima.parse(source, {loc: loc});
                     tree.push(syntax.body.length);
                 }, {
                     'onComplete': function (event, bench) {
@@ -324,7 +325,7 @@ if (typeof window !== 'undefined') {
             }).run();
         }
 
-        if (option === 'quick') {
+        if (quick) {
             runTests(quickFixture);
         } else {
             runTests(fullFixture);

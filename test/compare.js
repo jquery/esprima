@@ -38,9 +38,9 @@ parsers = [
 
 fixtureList = [
     'Underscore 1.4.1',
-    'Backbone 0.9.2',
+    'Backbone 1.0.0',
     'CodeMirror 2.34',
-    'jQuery 1.8.2'
+    'jQuery 1.9.1'
 ];
 
 function slug(name) {
