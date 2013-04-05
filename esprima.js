@@ -70,7 +70,9 @@ parseStatement: true, parseSourceElement: true */
         delegate,
         lookahead,
         state,
-        extra;
+        extra,
+        lastCommentEnd,
+        lastTokenStart;
 
     Token = {
         BooleanLiteral: 1,
@@ -534,6 +536,7 @@ parseStatement: true, parseSourceElement: true */
             ch3,
             ch4;
 
+        lastTokenStart = start;
         switch (code) {
 
         // Check for most common single-character punctuators.
@@ -1512,6 +1515,23 @@ parseStatement: true, parseSourceElement: true */
         }
     };
 
+    function createLocationRange(startLine, startCol, endLine, endCol) {
+        var result = {
+            start: {
+                line: startLine,
+                column: startCol
+            },
+            end: {
+                line: endLine,
+                column: endCol
+            }
+        };
+        if (extra.source) {
+            result.source = extra.source;
+        }
+        return result;
+    }
+
     // Return true if there is a line terminator before the next token.
 
     function peekLineTerminator() {
@@ -2158,40 +2178,100 @@ parseStatement: true, parseSourceElement: true */
     // 11.9 Equality Operators
     // 11.10 Binary Bitwise Operators
     // 11.11 Binary Logical Operators
-
+    function combineBinaryExpression(operator, left, right) {
+        var result = delegate.createBinaryExpression(operator, left, right);
+        if (extra.range) {
+            result.range = [
+                left.startRange,
+                index
+            ];
+            result.startRange = left.startRange;
+            delete left.startRange;
+            delete right.startRange;
+        }
+        if (extra.loc) {
+            result.loc = createLocationRange(left.startLine, left.startCol, lineNumber, index - lineStart);
+            result.startLine = left.startLine;
+            result.startCol = left.startCol;
+            delete left.startLine;
+            delete left.startCol;
+            delete right.startLine;
+            delete right.startCol;
+        }
+        return result;
+    }
     function parseBinaryExpression() {
-        var expr, token, prec, previousAllowIn, stack, right, operator, left, i;
+        var expr, token, prec, previousAllowIn, stack, right, rightMost, operator, left, i,
+            startRange, startLine, startCol;
 
         previousAllowIn = state.allowIn;
         state.allowIn = true;
-
+        if (extra.range) {
+            startRange = lookahead.range[0];
+        }
+        if (extra.loc) {
+            startLine = lookahead.lineNumber;
+            startCol = lookahead.range[0] - lookahead.lineStart;
+        }
         expr = parseUnaryExpression();
-
         token = lookahead;
         prec = binaryPrecedence(token, previousAllowIn);
         if (prec === 0) {
             return expr;
         }
+        if (extra.range) {
+            expr.startRange = startRange;
+        }
+        if (extra.loc) {
+            expr.startLine = startLine;
+            expr.startCol = startCol;
+        }
         token.prec = prec;
         lex();
 
-        stack = [expr, token, parseUnaryExpression()];
-
+        if (extra.range) {
+            startRange = lookahead.range[0];
+        }
+        if (extra.loc) {
+            startLine = lookahead.lineNumber;
+            startCol = lookahead.range[0] - lookahead.lineStart;
+        }
+        stack = [expr, token, rightMost = parseUnaryExpression()];
+        if (extra.range) {
+            rightMost.startRange = startRange;
+        }
+        if (extra.loc) {
+            rightMost.startLine = startLine;
+            rightMost.startCol = startCol;
+        }
         while ((prec = binaryPrecedence(lookahead, previousAllowIn)) > 0) {
-
             // Reduce: make a binary expression from the three topmost entries.
             while ((stack.length > 2) && (prec <= stack[stack.length - 2].prec)) {
                 right = stack.pop();
                 operator = stack.pop().value;
                 left = stack.pop();
-                stack.push(delegate.createBinaryExpression(operator, left, right));
+                stack.push(combineBinaryExpression(operator, left, right));
             }
 
             // Shift.
             token = lex();
             token.prec = prec;
             stack.push(token);
-            stack.push(parseUnaryExpression());
+            if (extra.range) {
+                startRange = lookahead.range[0];
+            }
+            if (extra.loc) {
+                startLine = lookahead.lineNumber;
+                startCol = lookahead.range[0] - lookahead.lineStart;
+            }
+            stack.push(rightMost = parseUnaryExpression());
+            if (extra.range) {
+                rightMost.startRange = startRange;
+            }
+            if (extra.loc) {
+                rightMost.startLine = startLine;
+                rightMost.startCol = startCol;
+            }
         }
 
         state.allowIn = previousAllowIn;
@@ -2200,9 +2280,12 @@ parseStatement: true, parseSourceElement: true */
         i = stack.length - 1;
         expr = stack[i];
         while (i > 1) {
-            expr = delegate.createBinaryExpression(stack[i - 1].value, stack[i - 2], expr);
+            expr = combineBinaryExpression(stack[i - 1].value, stack[i - 2], expr);
             i -= 2;
         }
+        delete expr.startRange;
+        delete expr.startLine;
+        delete expr.startCol;
         return expr;
     }
 
@@ -3192,7 +3275,7 @@ parseStatement: true, parseSourceElement: true */
     // The following functions are needed only when the option to preserve
     // the comments is active.
 
-    function addComment(type, value, start, end, loc) {
+    function addComment(type, value, start, startLine, startCol, end, endLine, endCol) {
         assert(typeof start === 'number', 'Comment must have valid position');
 
         // Because the way the actual token is scanned, often the comments
@@ -3200,21 +3283,27 @@ parseStatement: true, parseSourceElement: true */
         // Thus, we need to skip adding a comment if the comment array already
         // handled it.
         if (extra.comments.length > 0) {
-            if (extra.comments[extra.comments.length - 1].range[1] > start) {
+            if (lastCommentEnd > start) {
                 return;
             }
         }
 
-        extra.comments.push({
+        var result = {
             type: type,
-            value: value,
-            range: [start, end],
-            loc: loc
-        });
+            value: value
+        };
+        lastCommentEnd = end;
+        if (extra.range) {
+            result.range = [start, end];
+        }
+        if (extra.loc) {
+            result.loc = createLocationRange(startLine, startCol, endLine, endCol);
+        }
+        extra.comments.push(result);
     }
 
     function scanComment() {
-        var comment, ch, loc, start, blockComment, lineComment;
+        var comment, ch, start, startLine, startCol, blockComment, lineComment;
 
         comment = '';
         blockComment = false;
@@ -3226,12 +3315,8 @@ parseStatement: true, parseSourceElement: true */
             if (lineComment) {
                 ch = source[index++];
                 if (isLineTerminator(ch.charCodeAt(0))) {
-                    loc.end = {
-                        line: lineNumber,
-                        column: index - lineStart - 1
-                    };
                     lineComment = false;
-                    addComment('Line', comment, start, index - 1, loc);
+                    addComment('Line', comment, start, startLine, startCol, index - 1, lineNumber, index - lineStart - 1);
                     if (ch === '\r' && source[index] === '\n') {
                         ++index;
                     }
@@ -3241,11 +3326,7 @@ parseStatement: true, parseSourceElement: true */
                 } else if (index >= length) {
                     lineComment = false;
                     comment += ch;
-                    loc.end = {
-                        line: lineNumber,
-                        column: length - lineStart
-                    };
-                    addComment('Line', comment, start, length, loc);
+                    addComment('Line', comment, start, startLine, startCol, index, lineNumber, index - lineStart);
                 } else {
                     comment += ch;
                 }
@@ -3275,11 +3356,7 @@ parseStatement: true, parseSourceElement: true */
                             comment = comment.substr(0, comment.length - 1);
                             blockComment = false;
                             ++index;
-                            loc.end = {
-                                line: lineNumber,
-                                column: index - lineStart
-                            };
-                            addComment('Block', comment, start, index, loc);
+                            addComment('Block', comment, start, startLine, startCol, index, lineNumber, index - lineStart);
                             comment = '';
                         }
                     }
@@ -3287,33 +3364,21 @@ parseStatement: true, parseSourceElement: true */
             } else if (ch === '/') {
                 ch = source[index + 1];
                 if (ch === '/') {
-                    loc = {
-                        start: {
-                            line: lineNumber,
-                            column: index - lineStart
-                        }
-                    };
                     start = index;
+                    startLine = lineNumber;
+                    startCol = index - lineStart;
                     index += 2;
                     lineComment = true;
                     if (index >= length) {
-                        loc.end = {
-                            line: lineNumber,
-                            column: index - lineStart
-                        };
                         lineComment = false;
-                        addComment('Line', comment, start, index, loc);
+                        addComment('Line', comment, start, startLine, startCol, index, lineNumber, index - lineStart);
                     }
                 } else if (ch === '*') {
                     start = index;
+                    startLine = lineNumber;
+                    startCol = index - lineStart;
                     index += 2;
                     blockComment = true;
-                    loc = {
-                        start: {
-                            line: lineNumber,
-                            column: index - lineStart - 2
-                        }
-                    };
                     if (index >= length) {
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
@@ -3335,205 +3400,90 @@ parseStatement: true, parseSourceElement: true */
         }
     }
 
-    function filterCommentLocation() {
-        var i, entry, comment, comments = [];
-
-        for (i = 0; i < extra.comments.length; ++i) {
-            entry = extra.comments[i];
-            comment = {
-                type: entry.type,
-                value: entry.value
-            };
-            if (extra.range) {
-                comment.range = entry.range;
-            }
-            if (extra.loc) {
-                comment.loc = entry.loc;
-            }
-            comments.push(comment);
-        }
-
-        extra.comments = comments;
-    }
-
     function collectToken() {
-        var start, loc, token, range, value;
+        var start, startLine, startCol, token, output, value;
 
         skipComment();
         start = index;
-        loc = {
-            start: {
-                line: lineNumber,
-                column: index - lineStart
-            }
-        };
+        startLine = lineNumber;
+        startCol = index - lineStart;
 
         token = extra.advance();
-        loc.end = {
-            line: lineNumber,
-            column: index - lineStart
-        };
 
         if (token.type !== Token.EOF) {
-            range = [token.range[0], token.range[1]];
             value = source.slice(token.range[0], token.range[1]);
-            extra.tokens.push({
+            output = {
                 type: TokenName[token.type],
-                value: value,
-                range: range,
-                loc: loc
-            });
+                value: value
+            };
+            if (extra.range) {
+                output.range = [token.range[0], token.range[1]];
+            }
+            if (extra.loc) {
+                output.loc = createLocationRange(startLine, startCol, lineNumber, index - lineStart);
+            }
+            extra.tokens.push(output);
         }
 
         return token;
     }
 
     function collectRegex() {
-        var pos, loc, regex, token;
+        var start, startLine, startCol, regex, lastToken, output;
 
         skipComment();
 
-        pos = index;
-        loc = {
-            start: {
-                line: lineNumber,
-                column: index - lineStart
-            }
-        };
+        start = index;
+        startLine = lineNumber;
+        startCol = index - lineStart;
 
         regex = extra.scanRegExp();
-        loc.end = {
-            line: lineNumber,
-            column: index - lineStart
-        };
 
         if (!extra.tokenize) {
             // Pop the previous token, which is likely '/' or '/='
             if (extra.tokens.length > 0) {
-                token = extra.tokens[extra.tokens.length - 1];
-                if (token.range[0] === pos && token.type === 'Punctuator') {
-                    if (token.value === '/' || token.value === '/=') {
+                lastToken = extra.tokens[extra.tokens.length - 1];
+                if (lastTokenStart === start && lastToken.type === 'Punctuator') {
+                    if (lastToken.value === '/' || lastToken.value === '/=') {
                         extra.tokens.pop();
                     }
                 }
             }
 
-            extra.tokens.push({
+            output = {
                 type: 'RegularExpression',
-                value: regex.literal,
-                range: [pos, index],
-                loc: loc
-            });
+                value: regex.literal
+            };
+
+            if (extra.range) {
+                output.range = [start, index];
+            }
+            if (extra.loc) {
+                output.loc = createLocationRange(startLine, startCol, lineNumber, index - lineStart);
+            }
+            extra.tokens.push(output);
         }
 
         return regex;
     }
 
-    function filterTokenLocation() {
-        var i, entry, token, tokens = [];
-
-        for (i = 0; i < extra.tokens.length; ++i) {
-            entry = extra.tokens[i];
-            token = {
-                type: entry.type,
-                value: entry.value
-            };
-            if (extra.range) {
-                token.range = entry.range;
-            }
-            if (extra.loc) {
-                token.loc = entry.loc;
-            }
-            tokens.push(token);
+    function endMarker(startRange, startLine, startColumn, node) {
+        if (extra.range && typeof node.range === 'undefined') {
+            node.range = [startRange, index];
         }
-
-        extra.tokens = tokens;
-    }
-
-    function createLocationMarker() {
-        var marker = {};
-
-        marker.range = [index, index];
-        marker.loc = {
-            start: {
-                line: lineNumber,
-                column: index - lineStart
-            },
-            end: {
-                line: lineNumber,
-                column: index - lineStart
-            }
-        };
-
-        marker.end = function () {
-            this.range[1] = index;
-            this.loc.end.line = lineNumber;
-            this.loc.end.column = index - lineStart;
-        };
-
-        marker.applyGroup = function (node) {
-            if (extra.range) {
-                node.groupRange = [this.range[0], this.range[1]];
-            }
-            if (extra.loc) {
-                node.groupLoc = {
-                    start: {
-                        line: this.loc.start.line,
-                        column: this.loc.start.column
-                    },
-                    end: {
-                        line: this.loc.end.line,
-                        column: this.loc.end.column
-                    }
-                };
-                node = delegate.postProcess(node);
-            }
-        };
-
-        marker.apply = function (node) {
-            if (extra.range) {
-                node.range = [this.range[0], this.range[1]];
-            }
-            if (extra.loc) {
-                node.loc = {
-                    start: {
-                        line: this.loc.start.line,
-                        column: this.loc.start.column
-                    },
-                    end: {
-                        line: this.loc.end.line,
-                        column: this.loc.end.column
-                    }
-                };
-                node = delegate.postProcess(node);
-            }
-        };
-
-        return marker;
-    }
-
-    function trackGroupExpression() {
-        var marker, expr;
-
-        skipComment();
-        marker = createLocationMarker();
-        expect('(');
-
-        expr = parseExpression();
-
-        expect(')');
-
-        marker.end();
-        marker.applyGroup(expr);
-
-        return expr;
+        if (extra.loc && typeof node.loc === 'undefined') {
+            node.loc = createLocationRange(startLine, startColumn, lineNumber, index - lineStart);
+            delegate.postProcess(node);
+        }
     }
 
     function trackLeftHandSideExpression() {
-        var marker, expr, property;
+        var start, startLine, startCol, expr, property;
 
         skipComment();
-        marker = createLocationMarker();
+        start = index;
+        startLine = lineNumber;
+        startCol = index - lineStart;
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
@@ -3541,24 +3491,23 @@ parseStatement: true, parseSourceElement: true */
             if (match('[')) {
                 property = parseComputedMember();
                 expr = delegate.createMemberExpression('[', expr, property);
-                marker.end();
-                marker.apply(expr);
             } else {
                 property = parseNonComputedMember();
                 expr = delegate.createMemberExpression('.', expr, property);
-                marker.end();
-                marker.apply(expr);
             }
+            endMarker(start, startLine, startCol, expr);
         }
 
         return expr;
     }
 
     function trackLeftHandSideExpressionAllowCall() {
-        var marker, expr, args, property;
+        var start, startLine, startCol, expr, args, property;
 
         skipComment();
-        marker = createLocationMarker();
+        start = index;
+        startLine = lineNumber;
+        startCol = index - lineStart;
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
@@ -3566,116 +3515,37 @@ parseStatement: true, parseSourceElement: true */
             if (match('(')) {
                 args = parseArguments();
                 expr = delegate.createCallExpression(expr, args);
-                marker.end();
-                marker.apply(expr);
             } else if (match('[')) {
                 property = parseComputedMember();
                 expr = delegate.createMemberExpression('[', expr, property);
-                marker.end();
-                marker.apply(expr);
             } else {
                 property = parseNonComputedMember();
                 expr = delegate.createMemberExpression('.', expr, property);
-                marker.end();
-                marker.apply(expr);
             }
+            endMarker(start, startLine, startCol, expr);
         }
 
         return expr;
     }
 
-    function filterGroup(node) {
-        var name;
+    function wrapTrackingFunction(parseFunction) {
+        return function () {
+            var start, startLine, startCol, node;
 
-        delete node.groupRange;
-        delete node.groupLoc;
-        for (name in node) {
-            if (node.hasOwnProperty(name) && typeof node[name] === 'object' && node[name]) {
-                if (node[name].type || (node[name].length && !node[name].substr)) {
-                    filterGroup(node[name]);
-                }
-            }
-        }
-    }
+            skipComment();
 
-    function wrapTrackingFunction(range, loc) {
+            start = index;
+            startLine = lineNumber;
+            startCol = index - lineStart;
 
-        return function (parseFunction) {
+            node = parseFunction.apply(null, arguments);
+            endMarker(start, startLine, startCol, node);
 
-            function isBinary(node) {
-                return node.type === Syntax.LogicalExpression ||
-                    node.type === Syntax.BinaryExpression;
-            }
-
-            function visit(node) {
-                var start, end;
-
-                if (isBinary(node.left)) {
-                    visit(node.left);
-                }
-                if (isBinary(node.right)) {
-                    visit(node.right);
-                }
-
-                if (range) {
-                    if (node.left.groupRange || node.right.groupRange) {
-                        start = node.left.groupRange ? node.left.groupRange[0] : node.left.range[0];
-                        end = node.right.groupRange ? node.right.groupRange[1] : node.right.range[1];
-                        node.range = [start, end];
-                    } else if (typeof node.range === 'undefined') {
-                        start = node.left.range[0];
-                        end = node.right.range[1];
-                        node.range = [start, end];
-                    }
-                }
-                if (loc) {
-                    if (node.left.groupLoc || node.right.groupLoc) {
-                        start = node.left.groupLoc ? node.left.groupLoc.start : node.left.loc.start;
-                        end = node.right.groupLoc ? node.right.groupLoc.end : node.right.loc.end;
-                        node.loc = {
-                            start: start,
-                            end: end
-                        };
-                        node = delegate.postProcess(node);
-                    } else if (typeof node.loc === 'undefined') {
-                        node.loc = {
-                            start: node.left.loc.start,
-                            end: node.right.loc.end
-                        };
-                        node = delegate.postProcess(node);
-                    }
-                }
-            }
-
-            return function () {
-                var marker, node;
-
-                skipComment();
-
-                marker = createLocationMarker();
-                node = parseFunction.apply(null, arguments);
-                marker.end();
-
-                if (range && typeof node.range === 'undefined') {
-                    marker.apply(node);
-                }
-
-                if (loc && typeof node.loc === 'undefined') {
-                    marker.apply(node);
-                }
-
-                if (isBinary(node)) {
-                    visit(node);
-                }
-
-                return node;
-            };
+            return node;
         };
     }
 
     function patch() {
-
-        var wrapTracking;
 
         if (extra.comments) {
             extra.skipComment = skipComment;
@@ -3687,11 +3557,8 @@ parseStatement: true, parseSourceElement: true */
             extra.parseGroupExpression = parseGroupExpression;
             extra.parseLeftHandSideExpression = parseLeftHandSideExpression;
             extra.parseLeftHandSideExpressionAllowCall = parseLeftHandSideExpressionAllowCall;
-            parseGroupExpression = trackGroupExpression;
             parseLeftHandSideExpression = trackLeftHandSideExpression;
             parseLeftHandSideExpressionAllowCall = trackLeftHandSideExpressionAllowCall;
-
-            wrapTracking = wrapTrackingFunction(extra.range, extra.loc);
 
             extra.parseAssignmentExpression = parseAssignmentExpression;
             extra.parseBinaryExpression = parseBinaryExpression;
@@ -3719,32 +3586,32 @@ parseStatement: true, parseSourceElement: true */
             extra.parseVariableDeclaration = parseVariableDeclaration;
             extra.parseVariableIdentifier = parseVariableIdentifier;
 
-            parseAssignmentExpression = wrapTracking(extra.parseAssignmentExpression);
-            parseBinaryExpression = wrapTracking(extra.parseBinaryExpression);
-            parseBlock = wrapTracking(extra.parseBlock);
-            parseFunctionSourceElements = wrapTracking(extra.parseFunctionSourceElements);
-            parseCatchClause = wrapTracking(extra.parseCatchClause);
-            parseComputedMember = wrapTracking(extra.parseComputedMember);
-            parseConditionalExpression = wrapTracking(extra.parseConditionalExpression);
-            parseConstLetDeclaration = wrapTracking(extra.parseConstLetDeclaration);
-            parseExpression = wrapTracking(extra.parseExpression);
-            parseForVariableDeclaration = wrapTracking(extra.parseForVariableDeclaration);
-            parseFunctionDeclaration = wrapTracking(extra.parseFunctionDeclaration);
-            parseFunctionExpression = wrapTracking(extra.parseFunctionExpression);
-            parseLeftHandSideExpression = wrapTracking(parseLeftHandSideExpression);
-            parseNewExpression = wrapTracking(extra.parseNewExpression);
-            parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
-            parseObjectProperty = wrapTracking(extra.parseObjectProperty);
-            parseObjectPropertyKey = wrapTracking(extra.parseObjectPropertyKey);
-            parsePostfixExpression = wrapTracking(extra.parsePostfixExpression);
-            parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
-            parseProgram = wrapTracking(extra.parseProgram);
-            parsePropertyFunction = wrapTracking(extra.parsePropertyFunction);
-            parseStatement = wrapTracking(extra.parseStatement);
-            parseSwitchCase = wrapTracking(extra.parseSwitchCase);
-            parseUnaryExpression = wrapTracking(extra.parseUnaryExpression);
-            parseVariableDeclaration = wrapTracking(extra.parseVariableDeclaration);
-            parseVariableIdentifier = wrapTracking(extra.parseVariableIdentifier);
+            parseAssignmentExpression = wrapTrackingFunction(extra.parseAssignmentExpression);
+            parseBinaryExpression = wrapTrackingFunction(extra.parseBinaryExpression);
+            parseBlock = wrapTrackingFunction(extra.parseBlock);
+            parseFunctionSourceElements = wrapTrackingFunction(extra.parseFunctionSourceElements);
+            parseCatchClause = wrapTrackingFunction(extra.parseCatchClause);
+            parseComputedMember = wrapTrackingFunction(extra.parseComputedMember);
+            parseConditionalExpression = wrapTrackingFunction(extra.parseConditionalExpression);
+            parseConstLetDeclaration = wrapTrackingFunction(extra.parseConstLetDeclaration);
+            parseExpression = wrapTrackingFunction(extra.parseExpression);
+            parseForVariableDeclaration = wrapTrackingFunction(extra.parseForVariableDeclaration);
+            parseFunctionDeclaration = wrapTrackingFunction(extra.parseFunctionDeclaration);
+            parseFunctionExpression = wrapTrackingFunction(extra.parseFunctionExpression);
+            parseLeftHandSideExpression = wrapTrackingFunction(parseLeftHandSideExpression);
+            parseNewExpression = wrapTrackingFunction(extra.parseNewExpression);
+            parseNonComputedProperty = wrapTrackingFunction(extra.parseNonComputedProperty);
+            parseObjectProperty = wrapTrackingFunction(extra.parseObjectProperty);
+            parseObjectPropertyKey = wrapTrackingFunction(extra.parseObjectPropertyKey);
+            parsePostfixExpression = wrapTrackingFunction(extra.parsePostfixExpression);
+            parsePrimaryExpression = wrapTrackingFunction(extra.parsePrimaryExpression);
+            parseProgram = wrapTrackingFunction(extra.parseProgram);
+            parsePropertyFunction = wrapTrackingFunction(extra.parsePropertyFunction);
+            parseStatement = wrapTrackingFunction(extra.parseStatement);
+            parseSwitchCase = wrapTrackingFunction(extra.parseSwitchCase);
+            parseUnaryExpression = wrapTrackingFunction(extra.parseUnaryExpression);
+            parseVariableDeclaration = wrapTrackingFunction(extra.parseVariableDeclaration);
+            parseVariableIdentifier = wrapTrackingFunction(extra.parseVariableIdentifier);
         }
 
         if (typeof extra.tokens !== 'undefined') {
@@ -3798,6 +3665,7 @@ parseStatement: true, parseSourceElement: true */
         }
     }
 
+    /*
     // This is used to modify the delegate.
 
     function extend(object, properties) {
@@ -3817,6 +3685,7 @@ parseStatement: true, parseSourceElement: true */
 
         return result;
     }
+     */
 
     function tokenize(code, options) {
         var toString,
@@ -3835,6 +3704,8 @@ parseStatement: true, parseSourceElement: true */
         lineStart = 0;
         length = source.length;
         lookahead = null;
+        lastCommentEnd = 0;
+        lastTokenStart = -1;
         state = {
             allowIn: true,
             labelSet: {},
@@ -3902,10 +3773,8 @@ parseStatement: true, parseSourceElement: true */
                 }
             }
 
-            filterTokenLocation();
             tokens = extra.tokens;
             if (typeof extra.comments !== 'undefined') {
-                filterCommentLocation();
                 tokens.comments = extra.comments;
             }
             if (typeof extra.errors !== 'undefined') {
@@ -3935,6 +3804,8 @@ parseStatement: true, parseSourceElement: true */
         lineStart = 0;
         length = source.length;
         lookahead = null;
+        lastCommentEnd = 0;
+        lastTokenStart = -1;
         state = {
             allowIn: true,
             labelSet: {},
@@ -3949,12 +3820,7 @@ parseStatement: true, parseSourceElement: true */
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
 
             if (extra.loc && options.source !== null && options.source !== undefined) {
-                delegate = extend(delegate, {
-                    'postProcess': function (node) {
-                        node.loc.source = toString(options.source);
-                        return node;
-                    }
-                });
+                extra.source = options.source;
             }
 
             if (typeof options.tokens === 'boolean' && options.tokens) {
@@ -3983,18 +3849,13 @@ parseStatement: true, parseSourceElement: true */
         try {
             program = parseProgram();
             if (typeof extra.comments !== 'undefined') {
-                filterCommentLocation();
                 program.comments = extra.comments;
             }
             if (typeof extra.tokens !== 'undefined') {
-                filterTokenLocation();
                 program.tokens = extra.tokens;
             }
             if (typeof extra.errors !== 'undefined') {
                 program.errors = extra.errors;
-            }
-            if (extra.range || extra.loc) {
-                filterGroup(program.body);
             }
         } catch (e) {
             throw e;
