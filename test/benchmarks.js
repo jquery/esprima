@@ -60,6 +60,36 @@ if (typeof window !== 'undefined') {
     // Run all tests in a browser environment.
     setupBenchmarks = function () {
         'use strict';
+        var options = {};
+
+        function saveOptions() {
+            var hash = [];
+            for (var name in options) {
+                if (options.hasOwnProperty(name) && options[name]) {
+                    hash.push(name);
+                }
+            }
+            // The extra '>' is to prevent the page from scrolling
+            // when the list is empty
+            location.hash = '#>' + hash.join(',');
+        }
+
+        function parseOptions() {
+            options = {};
+            var hash = location.hash;
+            if (hash.length > 2) {
+                hash = hash.substr(2); // Remove the #> tag.
+                var argv = hash.split(',');
+                for (var i = 0, ln = argv.length; i < ln; i++) {
+                    if (argv[i].indexOf('=') != -1) {
+                        var pair = argv[i].split('=', 2);
+                        options[pair[0]] = pair[1];
+                    } else {
+                        options[argv[i]] = true;
+                    }
+                }
+            }
+        }
 
         function id(i) {
             return document.getElementById(i);
@@ -221,7 +251,7 @@ if (typeof window !== 'undefined') {
                 window.tree = [];
 
                 benchmark = new window.Benchmark(test, function (o) {
-                    var syntax = window.esprima.parse(source);
+                    var syntax = window.esprima.parse(source, options);
                     window.tree.push(syntax.body.length);
                 }, {
                     'onComplete': function () {
@@ -247,12 +277,40 @@ if (typeof window !== 'undefined') {
         }
 
         id('runquick').onclick = function () {
+            parseOptions();
             runBenchmarks(quickFixture);
         };
 
         id('runfull').onclick = function () {
+            parseOptions();
             runBenchmarks(fullFixture);
         };
+
+        parseOptions();
+
+        id('_range').onclick = function () {
+            options.range = id('_range').checked;
+            saveOptions();
+        };
+        id('_range').checked = !!options.range;
+
+        id('_loc').onclick = function () {
+            options.loc = id('_loc').checked;
+            saveOptions();
+        };
+        id('_loc').checked = !!options.loc;
+
+        id('_comments').onclick = function () {
+            options.comments = id('_comments').checked;
+            saveOptions();
+        };
+        id('_comments').checked = !!options.comments;
+
+        id('_tokens').onclick = function () {
+            options.tokens = id('_tokens').checked;
+            saveOptions();
+        };
+        id('_tokens').checked = !!options.tokens;
 
         setText('benchmarkjs-version', ' version ' + window.Benchmark.version);
         setText('version', window.esprima.version);
@@ -268,8 +326,9 @@ if (typeof window !== 'undefined') {
         var Benchmark,
             esprima,
             dirname,
-            quick,
-            loc = false,
+            options = {},
+            quick = false,
+            argv,
             fs,
             readFileSync,
             log;
@@ -288,8 +347,19 @@ if (typeof window !== 'undefined') {
             Benchmark = require('./3rdparty/benchmark');
             esprima = require('../esprima');
             fs = require('fs');
-            quick = process.argv[2] === 'quick' || process.argv[3] === 'quick';
-            loc = process.argv[2] === 'loc' || process.argv[3] === 'loc';
+            argv = process.argv;
+            for (var i = 2, ln = argv.length; i < ln; i++) {
+                if (argv[i] === 'quick') {
+                    quick = true;
+                } else {
+                    if (argv[i].indexOf('=') != -1) {
+                        var pair = argv[i].split('=', 2);
+                        options[pair[0]] = pair[1];
+                    } else {
+                        options[argv[i]] = true;
+                    }
+                }
+            }
             readFileSync = function readFileSync(filename) {
                 return fs.readFileSync(filename, 'utf-8');
             };
@@ -308,7 +378,7 @@ if (typeof window !== 'undefined') {
                     size = source.length;
                 totalSize += size;
                 return suite.add(filename, function () {
-                    var syntax = esprima.parse(source, {loc: loc});
+                    var syntax = esprima.parse(source, options);
                     tree.push(syntax.body.length);
                 }, {
                     'onComplete': function (event, bench) {
@@ -325,7 +395,7 @@ if (typeof window !== 'undefined') {
             }).run();
         }
 
-        if (quick) {
+        if (quick === true) {
             runTests(quickFixture);
         } else {
             runTests(fullFixture);
