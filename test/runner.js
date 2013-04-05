@@ -106,7 +106,7 @@ function testParse(esprima, code, syntax) {
         options.source = syntax.loc.source;
     }
 
-    expected = JSON.stringify(syntax, null, 4);
+    expected = JSON.stringify(syntax, null );
     try {
         tree = esprima.parse(code, options);
         tree = (options.comment || options.tokens || options.tolerant) ? tree : tree.body[0];
@@ -117,7 +117,7 @@ function testParse(esprima, code, syntax) {
             }
         }
 
-        actual = JSON.stringify(tree, adjustRegexLiteral, 4);
+        actual = JSON.stringify(tree, adjustRegexLiteral);
 
         // Only to ensure that there is no error when using string object.
         esprima.parse(new StringObject(code), options);
