@@ -8,7 +8,6 @@
   <meta name="viewport" content="width=device-width" />
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="../assets/foundation/foundation.min.css">
-</style>
 </head>
 
 <body>
@@ -81,6 +80,18 @@
 <p>
 <input id="runquick" class="medium radius button secondary" type="submit" value="Run quick benchmarks" disabled/>
 <input id="runfull" class="medium radius button" type="submit" value="Run full benchmarks" disabled/>
+</p>
+<p>
+<div style="display: inline-block;" >
+  <label selectable="false"><input type="checkbox" id="_range">Include index-based
+    range</label>
+  <label selectable="false"><input type="checkbox" id="_loc">Include line and column-based</label>
+</div>
+<div style="display: inline-block;">
+  <label selectable="false"><input type="checkbox" id="_comments">Include comments</label>
+  <label selectable="false"><input type="checkbox" id="_tokens">Include
+    tokens</label>
+</div>
 </p>
 
 <p id="result"></p>
