@@ -67,18 +67,7 @@
         var node, scope, i, v;
 
         if (ref.resolved && ref.resolved.defs.length) {
-            node = ref.resolved.defs[ref.resolved.defs.length - 1].node;
-            if (node.type === 'VariableDeclarator') {
-                return node.id;
-            }
-            if (node.type === 'FunctionExpression' || node.type === 'FunctionDeclaration') {
-                for (i = 0; i < node.params.length; ++i) {
-                    v = node.params[i];
-                    if (v.name === ref.identifier.name) {
-                        return v;
-                    }
-                }
-            }
+            return ref.resolved.defs[ref.resolved.defs.length - 1].name;
         }
 
         if (!ref.resolved) {
@@ -87,7 +76,7 @@
                 for (i = 0; i < scope.variables.length; ++i) {
                     v = scope.variables[i];
                     if (v.name === ref.identifier.name && v.defs.length) {
-                        return v.defs[v.defs.length - 1].node.id;
+                        return v.defs[v.defs.length - 1].name;
                     }
                 }
                 scope = scope.upper;
@@ -129,7 +118,7 @@
     };
 
     Context.prototype.identify = function (pos) {
-        var identifier, scopeManager, lookup, result;
+        var identifier, scopeManager, lookup, result, scope;
 
         if (!this._syntax) {
             throw new Error('Unable to identify anything without a syntax tree');
@@ -138,43 +127,31 @@
             throw new Error('Unable to identify anything without a valid scope manager');
         }
 
-        estraverse.traverse(this._syntax, {
-            enter: function (node) {
-                if (node.type === esprima.Syntax.Identifier) {
-                    if (node.range[0] <= pos && node.range[1] >= pos) {
-                        identifier = node;
-                        return estraverse.VisitorOption.Break;
-                    }
-                }
-            }
-        });
-
-        if (!identifier) {
-            return;
-        }
-
         scopeManager = this._scopeManager;
         lookup = this._lookup;
 
         scopeManager.attach();
         estraverse.traverse(this._syntax, {
             enter: function (node) {
-                var scope, range;
-                scope = scopeManager.acquire(node);
-                range = scope ? scope.block.range : [0, 0];
-                if (scope && range[0] <= pos && range[1] > pos) {
-                    result = lookup(scope, identifier);
-                    if (result) {
-                        scopeManager.release(node);
+                scope = scopeManager.acquire(node) || scope;
+                if (node.type === esprima.Syntax.Identifier) {
+                    if (node.range[0] <= pos && node.range[1] >= pos) {
+                        identifier = node;
                         return estraverse.VisitorOption.Break;
                     }
                 }
             },
             leave: function (node) {
-                scopeManager.release(node);
+                scope = scopeManager.release(node) || scope;
             }
         });
         scopeManager.detach();
+
+        if (!identifier) {
+            return;
+        }
+
+        result = lookup(scope, identifier);
 
         if (result) {
             // Search for all other identical references (same scope).
@@ -193,9 +170,6 @@
                             }
                         }
                     }
-                },
-                leave: function (node) {
-                    scopeManager.release(node);
                 }
             });
             scopeManager.detach();
