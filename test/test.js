@@ -6943,6 +6943,7 @@ var testFixture = {
                         end: { line: 1, column: 2 }
                     }
                 },
+                prefix: true,
                 range: [0, 2],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -6970,6 +6971,7 @@ var testFixture = {
                         end: { line: 1, column: 2 }
                     }
                 },
+                prefix: true,
                 range: [0, 2],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -6997,6 +6999,7 @@ var testFixture = {
                         end: { line: 1, column: 2 }
                     }
                 },
+                prefix: true,
                 range: [0, 2],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -7024,6 +7027,7 @@ var testFixture = {
                         end: { line: 1, column: 2 }
                     }
                 },
+                prefix: true,
                 range: [0, 2],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -7051,6 +7055,7 @@ var testFixture = {
                         end: { line: 1, column: 6 }
                     }
                 },
+                prefix: true,
                 range: [0, 6],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -7078,6 +7083,7 @@ var testFixture = {
                         end: { line: 1, column: 8 }
                     }
                 },
+                prefix: true,
                 range: [0, 8],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -7105,6 +7111,7 @@ var testFixture = {
                         end: { line: 1, column: 8 }
                     }
                 },
+                prefix: true,
                 range: [0, 8],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -19711,6 +19718,7 @@ var testFixture = {
                             end: { line: 1, column: 22 }
                         }
                     },
+                    prefix: true,
                     range: [14, 22],
                     loc: {
                         start: { line: 1, column: 14 },
