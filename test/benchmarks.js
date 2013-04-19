@@ -33,10 +33,10 @@ var setupBenchmarks,
 fullFixture = [
     'Underscore 1.4.1',
     'Backbone 1.0.0',
-    'CodeMirror 2.34',
     'MooTools 1.4.5',
     'jQuery 1.9.1',
-    'jQuery.Mobile 1.2.0',
+    'YUI 3.9.1',
+    'jQuery.Mobile 1.3.1',
     'Angular 1.0.6'
 ];
 
