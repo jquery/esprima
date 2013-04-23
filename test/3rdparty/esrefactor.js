@@ -231,7 +231,7 @@
     // code will be `var y; y = 42'.
 
     Context.prototype.rename = function (identification, name) {
-        var result, list, i, id, entry;
+        var result, list, set, i, id, entry;
 
         if (!this._code) {
             throw new Error('Unable to rename without the original source');
@@ -254,12 +254,18 @@
         // shifting all the ranges.
         list.sort(function (a, b) { return b[0] - a[0]; });
 
-        id = identification.identifier.name;
-        for (i = 0; i < list.length; ++i) {
-            entry = list[i];
-            if (result.substr(entry[0], id.length) === id) {
-                result = result.slice(0, entry[0]) + name + result.slice(entry[1]);
+        // Prevent double renaming, get the unique set.
+        set = [];
+        set.push(list[0]);
+        for (i = 1; i < list.length; ++i) {
+            if (list[i][0] !== list[i - 1][0]) {
+                set.push(list[i]);
             }
+        }
+
+        id = identification.identifier.name;
+        for (i = 0; i < set.length; ++i) {
+            result = result.slice(0, set[i][0]) + name + result.slice(set[i][1]);
         }
 
         return result;
