@@ -42,6 +42,7 @@
     'use strict';
 
     function Context(code) {
+        this._code = null;
         this._syntax = null;
         this._scopeManager = null;
         if (code) {
@@ -50,9 +51,11 @@
     }
 
     Context.prototype.setCode = function (code) {
+        this._code = null;
         this._syntax = null;
         this._scopeManager = null;
         if (typeof code === 'string') {
+            this._code = code;
             this._syntax = esprima.parse(code, { range: true });
         } else if (typeof code === 'object' && code.type === 'Program') {
             if (typeof code.range !== 'object' || code.range.length !== 2) {
@@ -66,22 +69,20 @@
     function locateDeclaration(ref) {
         var node, scope, i, v;
 
-        if (ref.resolved && ref.resolved.defs.length) {
+        if (ref.resolved) {
             return ref.resolved.defs[ref.resolved.defs.length - 1].name;
         }
 
-        if (!ref.resolved) {
-            scope = ref.from;
-            do {
-                for (i = 0; i < scope.variables.length; ++i) {
-                    v = scope.variables[i];
-                    if (v.name === ref.identifier.name && v.defs.length) {
-                        return v.defs[v.defs.length - 1].name;
-                    }
+        scope = ref.from;
+        do {
+            for (i = 0; i < scope.variables.length; ++i) {
+                v = scope.variables[i];
+                if (v.name === ref.identifier.name && v.defs.length) {
+                    return v.defs[v.defs.length - 1].name;
                 }
-                scope = scope.upper;
-            } while (scope);
-        }
+            }
+            scope = scope.upper;
+        } while (scope);
 
         return null;
     }
@@ -116,6 +117,44 @@
         }
 
     };
+
+    // Given the cursor position, locate the identifier in that position.
+    // If there is no identifier in that position, undefined will be returned.
+    //
+    // The returned object will have the following property:
+    //    identifier: the syntax node associated with the identifier
+    //   declaration: the syntax node where the identifier is declared
+    //    references: an array of the references of the identifier
+    //
+    // Note that the references array also includes the identifier but it
+    // does exclude the declaration.
+    //
+    // Example:
+    //     var ctx = new esrefactor.Context('var x; x; x = 42');
+    //     var id = ctx.identify(10);
+    //
+    //  id will have the value of:
+    //      {
+    //        identifier: {
+    //          type: 'Identifier',
+    //          name: 'x',
+    //          range: [10, 11]
+    //        },
+    //        declaration: {
+    //          type: 'Identifier',
+    //          name: 'x',
+    //          range: [4, 5]
+    //        },
+    //        references: [{
+    //          type: 'Identifier',
+    //          name: 'x',
+    //          range: [7, 8]
+    //        }, {
+    //          type: 'Identifier',
+    //          name: 'x',
+    //          range: [10, 11]
+    //        }]
+    //      }
 
     Context.prototype.identify = function (pos) {
         var identifier, scopeManager, lookup, result, scope;
@@ -179,6 +218,58 @@
         return result;
     };
 
+    // Rename the identifier and its reference to a new specific name.
+    // The return value is the new code after the identifier is renamed.
+    //
+    // This functions needs identification, which is obtain using identify() function.
+    //
+    // Example:
+    //   var ctx = new esrefactor.Context('var x; x = 42');
+    //   var id = ctx.identify(4);
+    //   var code = ctx.rename(id, 'y');
+    //
+    // code will be `var y; y = 42'.
+
+    Context.prototype.rename = function (identification, name) {
+        var result, list, set, i, id, entry;
+
+        if (!this._code) {
+            throw new Error('Unable to rename without the original source');
+        }
+
+        result = this._code;
+        if (typeof identification === 'undefined') {
+            return result;
+        }
+
+        list = [identification.identifier.range];
+        if (identification.declaration) {
+            list.push(identification.declaration.range);
+        }
+        for (i = 0; i < identification.references.length; ++i) {
+            list.push(identification.references[i].range);
+        }
+
+        // Sort the references based on the position to prevent
+        // shifting all the ranges.
+        list.sort(function (a, b) { return b[0] - a[0]; });
+
+        // Prevent double renaming, get the unique set.
+        set = [];
+        set.push(list[0]);
+        for (i = 1; i < list.length; ++i) {
+            if (list[i][0] !== list[i - 1][0]) {
+                set.push(list[i]);
+            }
+        }
+
+        id = identification.identifier.name;
+        for (i = 0; i < set.length; ++i) {
+            result = result.slice(0, set[i][0]) + name + result.slice(set[i][1]);
+        }
+
+        return result;
+    };
 
     exports.Context = Context;
 }));
