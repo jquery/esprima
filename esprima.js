@@ -67,6 +67,7 @@ parseYieldExpression: true
         Messages,
         Regex,
         SyntaxTreeDelegate,
+        ClassPropertyType,
         source,
         strict,
         index,
@@ -186,6 +187,11 @@ parseYieldExpression: true
         Set: 4
     };
 
+    ClassPropertyType = {
+        static: 1,
+        prototype: 2
+    };
+
     // Error messages should be identical to V8.
     Messages = {
         UnexpectedToken:  'Unexpected token %0',
@@ -207,6 +213,7 @@ parseYieldExpression: true
         Redeclaration: '%0 \'%1\' has already been declared',
         IllegalContinue: 'Illegal continue statement',
         IllegalBreak: 'Illegal break statement',
+        IllegalDuplicateClassProperty: 'Illegal duplicate property in class definition',
         IllegalReturn: 'Illegal return statement',
         IllegalYield: 'Illegal yield expression',
         IllegalSpread: 'Illegal spread element',
@@ -1897,13 +1904,13 @@ parseYieldExpression: true
             };
         },
 
-        createMethodDefinition: function (isStatic, kind, key, value) {
+        createMethodDefinition: function (propertyType, kind, key, value) {
             return {
                 type: Syntax.MethodDefinition,
                 key: key,
                 value: value,
                 kind: kind,
-                'static': isStatic
+                'static': propertyType === ClassPropertyType.static
             };
         },
 
@@ -4279,18 +4286,24 @@ parseYieldExpression: true
 
     // 14 Classes
 
-    function parseMethodDefinition() {
-        var token, key, param, isStatic;
+    function parseMethodDefinition(existingPropNames) {
+        var token, key, param, propType, isValidDuplicateProp = false;
 
-        isStatic = false;
         if (strict ? matchKeyword('static') : matchContextualKeyword('static')) {
-            isStatic = true;
+            propType = ClassPropertyType.static;
             lex();
+        } else {
+            propType = ClassPropertyType.prototype;
         }
 
         if (match('*')) {
             lex();
-            return delegate.createMethodDefinition(isStatic, '', parseObjectPropertyKey(), parsePropertyMethodFunction({ generator: true }));
+            return delegate.createMethodDefinition(
+                propType,
+                '',
+                parseObjectPropertyKey(),
+                parsePropertyMethodFunction({ generator: true })
+            );
         }
 
         token = lookahead;
@@ -4298,31 +4311,97 @@ parseYieldExpression: true
 
         if (token.value === 'get' && !match('(')) {
             key = parseObjectPropertyKey();
+
+            // It is a syntax error if any other properties have a name
+            // duplicating this one unless they are a setter
+            if (existingPropNames[propType].hasOwnProperty(key.name)) {
+                isValidDuplicateProp =
+                    // There isn't already a getter for this prop
+                    existingPropNames[propType][key.name].get === undefined
+                    // There isn't already a data prop by this name
+                    && existingPropNames[propType][key.name].data === undefined
+                    // The only existing prop by this name is a setter
+                    && existingPropNames[propType][key.name].set !== undefined;
+                if (!isValidDuplicateProp) {
+                    throwError(key, Messages.IllegalDuplicateClassProperty);
+                }
+            } else {
+                existingPropNames[propType][key.name] = {};
+            }
+            existingPropNames[propType][key.name].get = true;
+
             expect('(');
             expect(')');
-            return delegate.createMethodDefinition(isStatic, 'get', key, parsePropertyFunction({ generator: false }));
+            return delegate.createMethodDefinition(
+                propType,
+                'get',
+                key,
+                parsePropertyFunction({ generator: false })
+            );
         }
         if (token.value === 'set' && !match('(')) {
             key = parseObjectPropertyKey();
+
+            // It is a syntax error if any other properties have a name
+            // duplicating this one unless they are a getter
+            if (existingPropNames[propType].hasOwnProperty(key.name)) {
+                isValidDuplicateProp =
+                    // There isn't already a setter for this prop
+                    existingPropNames[propType][key.name].set === undefined
+                    // There isn't already a data prop by this name
+                    && existingPropNames[propType][key.name].data === undefined
+                    // The only existing prop by this name is a getter
+                    && existingPropNames[propType][key.name].get !== undefined;
+                if (!isValidDuplicateProp) {
+                    throwError(key, Messages.IllegalDuplicateClassProperty);
+                }
+            } else {
+                existingPropNames[propType][key.name] = {};
+            }
+            existingPropNames[propType][key.name].set = true;
+
             expect('(');
             token = lookahead;
             param = [ parseVariableIdentifier() ];
             expect(')');
-            return delegate.createMethodDefinition(isStatic, 'set', key, parsePropertyFunction({ params: param, generator: false, name: token }));
+            return delegate.createMethodDefinition(
+                propType,
+                'set',
+                key,
+                parsePropertyFunction({ params: param, generator: false, name: token })
+            );
         }
-        return delegate.createMethodDefinition(isStatic, '', key, parsePropertyMethodFunction({ generator: false }));
+
+        // It is a syntax error if any other properties have the same name as a
+        // non-getter, non-setter method
+        if (existingPropNames[propType].hasOwnProperty(key.name)) {
+            throwError(key, Messages.IllegalDuplicateClassProperty);
+        } else {
+            existingPropNames[propType][key.name] = {};
+        }
+        existingPropNames[propType][key.name].data = true;
+
+        return delegate.createMethodDefinition(
+            propType,
+            '',
+            key,
+            parsePropertyMethodFunction({ generator: false })
+        );
     }
 
-    function parseClassElement() {
+    function parseClassElement(existingProps) {
         if (match(';')) {
             lex();
             return;
         }
-        return parseMethodDefinition();
+        return parseMethodDefinition(existingProps);
     }
 
     function parseClassBody() {
-        var classElement, classElements = [];
+        var classElement, classElements = [], existingProps = {};
+
+        existingProps[ClassPropertyType.static] = {};
+        existingProps[ClassPropertyType.prototype] = {};
 
         expect('{');
 
@@ -4330,7 +4409,8 @@ parseYieldExpression: true
             if (match('}')) {
                 break;
             }
-            classElement = parseClassElement();
+            classElement = parseClassElement(existingProps);
+
             if (typeof classElement !== 'undefined') {
                 classElements.push(classElement);
             }
