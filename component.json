@@ -2,6 +2,9 @@
     "name": "esprima",
     "version": "1.1.0-dev",
     "main": "./esprima.js",
+    "scripts": [
+        "esprima.js"
+    ],
     "dependencies": {},
     "repository": {
         "type": "git",
