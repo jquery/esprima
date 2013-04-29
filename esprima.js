@@ -1755,7 +1755,8 @@ parseStatement: true, parseSourceElement: true */
             expr = {
                 type: Syntax.UnaryExpression,
                 operator: lex().value,
-                argument: parseUnaryExpression()
+                argument: parseUnaryExpression(),
+                prefix: true
             };
             return expr;
         }
@@ -1764,7 +1765,8 @@ parseStatement: true, parseSourceElement: true */
             expr = {
                 type: Syntax.UnaryExpression,
                 operator: lex().value,
-                argument: parseUnaryExpression()
+                argument: parseUnaryExpression(),
+                prefix: true
             };
             if (strict && expr.operator === 'delete' && expr.argument.type === Syntax.Identifier) {
                 throwErrorTolerant({}, Messages.StrictDelete);
