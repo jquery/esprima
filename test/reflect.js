@@ -88,7 +88,7 @@ function genFunExpr(id, args, body) { return Pattern({ type: "FunctionExpression
                                               expression: false
                                               }) }
 
-function unExpr(op, arg) { return Pattern({ type: "UnaryExpression", operator: op, argument: arg }) }
+function unExpr(op, arg) { return Pattern({ type: "UnaryExpression", operator: op, argument: arg, prefix: true }) }
 function binExpr(op, left, right) { return Pattern({ type: "BinaryExpression", operator: op, left: left, right: right }) }
 function aExpr(op, left, right) { return Pattern({ type: "AssignmentExpression", operator: op, left: left, right: right }) }
 function updExpr(op, arg, prefix) { return Pattern({ type: "UpdateExpression", operator: op, argument: arg, prefix: prefix }) }
