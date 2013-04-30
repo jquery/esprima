@@ -99,15 +99,15 @@ parseStatement: true, parseSourceElement: true */
     TokenName[Token.RegularExpression] = 'RegularExpression';
 
     // A function following one of those tokens is an expression.
-    FnExprTokens = ["(", "{", "[", "in", "typeof", "instanceof", "new",
-                    "return", "case", "delete", "throw", "void",
+    FnExprTokens = ['(', '{', '[', 'in', 'typeof', 'instanceof', 'new',
+                    'return', 'case', 'delete', 'throw', 'void',
                     // assignment operators
-                    "=", "+=", "-=", "*=", "/=", "%=", "<<=", ">>=", ">>>=",
-                    "&=", "|=", "^=", ",",
+                    '=', '+=', '-=', '*=', '/=', '%=', '<<=', '>>=', '>>>=',
+                    '&=', '|=', '^=', ',',
                     // binary/unary operators
-                    "+", "-", "*", "/", "%", "++", "--", "<<", ">>", ">>>", "&",
-                    "|", "^", "!", "~", "&&", "||", "?", ":", "===", "==", ">=",
-                    "<=", "<", ">", "!=", "!=="];
+                    '+', '-', '*', '/', '%', '++', '--', '<<', '>>', '>>>', '&',
+                    '|', '^', '!', '~', '&&', '||', '?', ':', '===', '==', '>=',
+                    '<=', '<', '>', '!=', '!=='];
 
     Syntax = {
         AssignmentExpression: 'AssignmentExpression',
@@ -1048,31 +1048,31 @@ parseStatement: true, parseSourceElement: true */
             // Nothing before that: it cannot be a division.
             return scanRegExp();
         }
-        if (prevToken.type === "Punctuator") {
-            if (prevToken.value === ")") {
+        if (prevToken.type === 'Punctuator') {
+            if (prevToken.value === ')') {
                 checkToken = extra.tokens[extra.openParenToken - 1];
                 if (checkToken &&
-                        checkToken.type === "Keyword" &&
-                        (checkToken.value === "if" ||
-                         checkToken.value === "while" ||
-                         checkToken.value === "for" ||
-                         checkToken.value === "with")) {
+                        checkToken.type === 'Keyword' &&
+                        (checkToken.value === 'if' ||
+                         checkToken.value === 'while' ||
+                         checkToken.value === 'for' ||
+                         checkToken.value === 'with')) {
                     return scanRegExp();
                 }
                 return scanPunctuator();
             }
-            if (prevToken.value === "}") {
+            if (prevToken.value === '}') {
                 // Dividing a function by anything makes little sense,
                 // but we have to check for that.
                 if (extra.tokens[extra.openCurlyToken - 3] &&
-                        extra.tokens[extra.openCurlyToken - 3].type === "Keyword") {
+                        extra.tokens[extra.openCurlyToken - 3].type === 'Keyword') {
                     // Anonymous function.
                     checkToken = extra.tokens[extra.openCurlyToken - 4];
                     if (!checkToken) {
                         return scanPunctuator();
                     }
                 } else if (extra.tokens[extra.openCurlyToken - 4] &&
-                        extra.tokens[extra.openCurlyToken - 4].type === "Keyword") {
+                        extra.tokens[extra.openCurlyToken - 4].type === 'Keyword') {
                     // Named function.
                     checkToken = extra.tokens[extra.openCurlyToken - 5];
                     if (!checkToken) {
@@ -1092,7 +1092,7 @@ parseStatement: true, parseSourceElement: true */
             }
             return scanRegExp();
         }
-        if (prevToken.type === "Keyword") {
+        if (prevToken.type === 'Keyword') {
             return scanRegExp();
         }
         return scanPunctuator();
