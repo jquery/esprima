@@ -2182,22 +2182,26 @@ parseStatement: true, parseSourceElement: true */
     // 11.11 Binary Logical Operators
 
     function parseBinaryExpression() {
-        var expr, token, prec, previousAllowIn, stack, right, operator, left, i;
+        var marker, markers, expr, token, prec, previousAllowIn, stack, right, operator, left, i;
 
         previousAllowIn = state.allowIn;
         state.allowIn = true;
 
-        expr = parseUnaryExpression();
+        marker = createLocationMarker();
+        left = parseUnaryExpression();
 
         token = lookahead;
         prec = binaryPrecedence(token, previousAllowIn);
         if (prec === 0) {
-            return expr;
+            return left;
         }
         token.prec = prec;
         lex();
 
-        stack = [expr, token, parseUnaryExpression()];
+        markers = [marker, createLocationMarker()];
+        right = parseUnaryExpression();
+
+        stack = [left, token, right];
 
         while ((prec = binaryPrecedence(lookahead, previousAllowIn)) > 0) {
 
@@ -2206,14 +2210,24 @@ parseStatement: true, parseSourceElement: true */
                 right = stack.pop();
                 operator = stack.pop().value;
                 left = stack.pop();
-                stack.push(delegate.createBinaryExpression(operator, left, right));
+                expr = delegate.createBinaryExpression(operator, left, right);
+                markers.pop();
+                marker = markers.pop();
+                if (marker) {
+                    marker.end();
+                    marker.apply(expr);
+                }
+                stack.push(expr);
+                markers.push(marker);
             }
 
             // Shift.
             token = lex();
             token.prec = prec;
             stack.push(token);
-            stack.push(parseUnaryExpression());
+            markers.push(createLocationMarker());
+            expr = parseUnaryExpression();
+            stack.push(expr);
         }
 
         state.allowIn = previousAllowIn;
@@ -2221,10 +2235,17 @@ parseStatement: true, parseSourceElement: true */
         // Final reduce to clean-up the stack.
         i = stack.length - 1;
         expr = stack[i];
+        markers.pop();
         while (i > 1) {
             expr = delegate.createBinaryExpression(stack[i - 1].value, stack[i - 2], expr);
             i -= 2;
+            marker = markers.pop();
+            if (marker) {
+                marker.end();
+                marker.apply(expr);
+            }
         }
+
         return expr;
     }
 
@@ -3577,95 +3598,11 @@ parseStatement: true, parseSourceElement: true */
         }
     }
 
-    function wrapTrackingFunction(range, loc) {
-
-        return function (parseFunction) {
-
-            function isBinary(node) {
-                return node.type === Syntax.LogicalExpression ||
-                    node.type === Syntax.BinaryExpression;
-            }
-
-            function visit(node) {
-                var start, end;
-
-                if (isBinary(node.left)) {
-                    visit(node.left);
-                }
-                if (isBinary(node.right)) {
-                    visit(node.right);
-                }
-
-                if (range) {
-                    if (node.left.groupRange || node.right.groupRange) {
-                        start = node.left.groupRange ? node.left.groupRange[0] : node.left.range[0];
-                        end = node.right.groupRange ? node.right.groupRange[1] : node.right.range[1];
-                        node.range = [start, end];
-                    } else if (typeof node.range === 'undefined') {
-                        start = node.left.range[0];
-                        end = node.right.range[1];
-                        node.range = [start, end];
-                    }
-                }
-                if (loc) {
-                    if (node.left.groupLoc || node.right.groupLoc) {
-                        start = node.left.groupLoc ? node.left.groupLoc.start : node.left.loc.start;
-                        end = node.right.groupLoc ? node.right.groupLoc.end : node.right.loc.end;
-                        node.loc = {
-                            start: start,
-                            end: end
-                        };
-                        node = delegate.postProcess(node);
-                    } else if (typeof node.loc === 'undefined') {
-                        node.loc = {
-                            start: node.left.loc.start,
-                            end: node.right.loc.end
-                        };
-                        node = delegate.postProcess(node);
-                    }
-                }
-            }
-
-            return function () {
-                var marker, node;
-
-                marker = createLocationMarker();
-                node = parseFunction.apply(null, arguments);
-                marker.end();
-
-                if (range && typeof node.range === 'undefined') {
-                    marker.apply(node);
-                }
-
-                if (loc && typeof node.loc === 'undefined') {
-                    marker.apply(node);
-                }
-
-                if (isBinary(node)) {
-                    visit(node);
-                }
-
-                return node;
-            };
-        };
-    }
-
     function patch() {
-
-        var wrapTracking;
 
         if (extra.comments) {
             extra.skipComment = skipComment;
             skipComment = scanComment;
-        }
-
-        if (extra.range || extra.loc) {
-
-            wrapTracking = wrapTrackingFunction(extra.range, extra.loc);
-
-            extra.parseBinaryExpression = parseBinaryExpression;
-
-            parseBinaryExpression = wrapTracking(extra.parseBinaryExpression);
         }
 
         if (typeof extra.tokens !== 'undefined') {
@@ -3680,10 +3617,6 @@ parseStatement: true, parseSourceElement: true */
     function unpatch() {
         if (typeof extra.skipComment === 'function') {
             skipComment = extra.skipComment;
-        }
-
-        if (extra.range || extra.loc) {
-            parseBinaryExpression = extra.parseBinaryExpression;
         }
 
         if (typeof extra.scanRegExp === 'function') {
