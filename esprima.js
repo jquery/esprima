@@ -1184,7 +1184,6 @@ parseStatement: true, parseSourceElement: true */
 
         markStart: function () {},
         markEnd: function (node) { return node; },
-        markGroupEnd: function (node) { return node; },
         postProcess: function (node) { return node; },
 
         createArrayExpression: function (elements) {
@@ -1851,15 +1850,13 @@ parseStatement: true, parseSourceElement: true */
     function parseGroupExpression() {
         var expr;
 
-        delegate.markStart();
-
         expect('(');
 
         expr = parseExpression();
 
         expect(')');
 
-        return delegate.markGroupEnd(expr);
+        return expr;
     }
 
 
@@ -3584,20 +3581,6 @@ parseStatement: true, parseSourceElement: true */
         };
     }
 
-    function filterGroup(node) {
-        var name;
-
-        delete node.groupRange;
-        delete node.groupLoc;
-        for (name in node) {
-            if (node.hasOwnProperty(name) && typeof node[name] === 'object' && node[name]) {
-                if (node[name].type || (node[name].length && !node[name].substr)) {
-                    filterGroup(node[name]);
-                }
-            }
-        }
-    }
-
     function patch() {
 
         if (extra.comments) {
@@ -3826,24 +3809,6 @@ parseStatement: true, parseSourceElement: true */
                         return node;
                     }
                 });
-
-                delegate = extend(delegate, {
-                    'markGroupEnd': function (node) {
-                        if (state.rangeStack) {
-                            node.groupRange = [state.rangeStack.pop(), index];
-                        }
-                        node.groupLoc = {};
-                        node.groupLoc.start = state.locStack.pop();
-                        node.groupLoc.end = {
-                            line: lineNumber,
-                            column: index - lineStart
-                        };
-                        if (options.source !== null && options.source !== undefined) {
-                            node.groupLoc.source = toString(options.source);
-                        }
-                        return node;
-                    }
-                });
             }
 
             if (extra.loc && options.source !== null && options.source !== undefined) {
@@ -3890,9 +3855,6 @@ parseStatement: true, parseSourceElement: true */
             }
             if (typeof extra.errors !== 'undefined') {
                 program.errors = extra.errors;
-            }
-            if (extra.range || extra.loc) {
-                filterGroup(program.body);
             }
         } catch (e) {
             throw e;
