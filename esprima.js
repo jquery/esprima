@@ -1182,9 +1182,44 @@ parseStatement: true, parseSourceElement: true */
 
         name: 'SyntaxTree',
 
-        markStart: function () {},
-        markEnd: function (node) { return node; },
-        postProcess: function (node) { return node; },
+        markStart: function () {
+            skipComment();
+            if (extra.range) {
+                state.rangeStack.push(index);
+            }
+            if (extra.loc) {
+                state.locStack.push({
+                    line: lineNumber,
+                    column: index - lineStart
+                });
+            }
+        },
+
+        markEnd: function (node) {
+            if (extra.range) {
+                node.range = [state.rangeStack.pop(), index];
+            }
+            if (extra.loc) {
+                node.loc = {
+                    start: state.locStack.pop(),
+                    end: {
+                        line: lineNumber,
+                        column: index - lineStart
+                    }
+                };
+                if (extra.source) {
+                    node.loc.source = extra.source;
+                }
+            }
+            return node;
+        },
+
+        postProcess: function (node) {
+            if (extra.source) {
+                node.loc.source = extra.source;
+            }
+            return node;
+        },
 
         createArrayExpression: function (elements) {
             return {
@@ -3608,26 +3643,6 @@ parseStatement: true, parseSourceElement: true */
         }
     }
 
-    // This is used to modify the delegate.
-
-    function extend(object, properties) {
-        var entry, result = {};
-
-        for (entry in object) {
-            if (object.hasOwnProperty(entry)) {
-                result[entry] = object[entry];
-            }
-        }
-
-        for (entry in properties) {
-            if (properties.hasOwnProperty(entry)) {
-                result[entry] = properties[entry];
-            }
-        }
-
-        return result;
-    }
-
     function tokenize(code, options) {
         var toString,
             token,
@@ -3750,7 +3765,9 @@ parseStatement: true, parseSourceElement: true */
             labelSet: {},
             inFunctionBody: false,
             inIteration: false,
-            inSwitch: false
+            inSwitch: false,
+            rangeStack: [],
+            locStack: []
         };
 
         extra = {};
@@ -3758,66 +3775,8 @@ parseStatement: true, parseSourceElement: true */
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
 
-            if ((typeof options.range === 'boolean') && options.range) {
-                state.rangeStack = [];
-
-                delegate = extend(delegate, {
-                    'markStart': function () {
-                        skipComment();
-                        state.rangeStack.push(index);
-                    }
-                });
-
-                delegate = extend(delegate, {
-                    'markEnd': function (node) {
-                        node.range = [state.rangeStack.pop(), index];
-                        return node;
-                    }
-                });
-            }
-
-            if ((typeof options.loc === 'boolean') && options.loc) {
-                state.locStack = [];
-
-                delegate = extend(delegate, {
-                    'markStart': function () {
-                        skipComment();
-                        state.locStack.push({
-                            line: lineNumber,
-                            column: index - lineStart
-                        });
-                        if (state.rangeStack) {
-                            state.rangeStack.push(index);
-                        }
-                    }
-                });
-
-                delegate = extend(delegate, {
-                    'markEnd': function (node) {
-                        if (state.rangeStack) {
-                            node.range = [state.rangeStack.pop(), index];
-                        }
-                        node.loc = {};
-                        node.loc.start = state.locStack.pop();
-                        node.loc.end = {
-                            line: lineNumber,
-                            column: index - lineStart
-                        };
-                        if (options.source !== null && options.source !== undefined) {
-                            node.loc.source = toString(options.source);
-                        }
-                        return node;
-                    }
-                });
-            }
-
             if (extra.loc && options.source !== null && options.source !== undefined) {
-                delegate = extend(delegate, {
-                    'postProcess': function (node) {
-                        node.loc.source = toString(options.source);
-                        return node;
-                    }
-                });
+                extra.source = toString(options.source);
             }
 
             if (typeof options.tokens === 'boolean' && options.tokens) {

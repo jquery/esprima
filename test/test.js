@@ -17494,9 +17494,9 @@ var testFixture = {
         },
 
         '(function () { \'use strict\'; with (i); }())': {
-            index: 28,
+            index: 29,
             lineNumber: 1,
-            column: 29,
+            column: 30,
             message: 'Error: Line 1: Strict mode code may not include a with statement'
         },
 
