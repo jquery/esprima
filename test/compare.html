@@ -104,13 +104,15 @@ window.onload = function () {
     <div class="four columns">
       <div class="panel">
 
-        <p>More comparison variants will be added in the near future.</p>
-        <p>Esprima version: <strong><span id="version"></span></strong>.</p>
+        <p>More info on the parsers:<br/>
+        <a href="https://github.com/google/traceur-compiler">github.com/google/traceur-compiler</a><br/>
+        <a href="https://github.com/mishoo/UglifyJS2">github.com/mishoo/UglifyJS2</a><br/>
+        <a href="https://github.com/marijnh/acorn">github.com/marijnh/acorn</a><br/>
+        </p>
+        <p>Each parser produces the syntax tree with location marking in every syntax node.</p>
       </div>
-<p><strong>parse-js</strong> is the parser used in <a href="https://github.com/mishoo/UglifyJS">UglifyJS v1</a>. It's a JavaScript port of the Common LISP version. This test uses <tt>parse-js</tt> from UglifyJS version 1.3.2 (June 26 2012).</p>
 
-<p><strong><a href="https://github.com/marijnh/acorn">Acorn</a></strong> is a compact stand-alone JavaScript parser. This test uses Acorn revision 48bbcd94 (dated Oct 19 2012).</p>
-
+      <p><strong>Note</strong>: Esprima is not completely optimized for location tracking parsing yet. It still receives on-going, continuous performance tweaks.</p>
       <p>Time measurement is carried out using <a href="http://benchmarkjs.com" target="_blank">Benchmark.js</a><span id="benchmarkjs-version"></span>.</p>
     </div>
   </div>
@@ -128,14 +130,13 @@ window.onload = function () {
     </div>
   </div>
 
-<script src="3rdparty/acorn.js"></script>
+<script src="https://raw.github.com/google/traceur-compiler/master/bin/traceur.js"></script>
 
-<!-- parse-js, part of UglifyJS -->
-<script>
-/*global exports:true*/
-exports = window.parseJS = {};
-</script>
-<script src="3rdparty/parse-js.js"></script>
+<script src="https://raw.github.com/marijnh/acorn/master/acorn.js"></script>
+
+<script src="https://raw.github.com/mishoo/UglifyJS2/master/lib/utils.js"></script>
+<script src="https://raw.github.com/mishoo/UglifyJS2/master/lib/ast.js"></script>
+<script src="https://raw.github.com/mishoo/UglifyJS2/master/lib/parse.js"></script>
 
 </body>
 </html>

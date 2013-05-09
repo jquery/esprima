@@ -32,15 +32,15 @@ var setupBenchmarks,
 
 parsers = [
     'Esprima',
-    'parse-js',
-    'Acorn'
+    'UglifyJS2',
+    'Traceur',
+    'Acorn',
 ];
 
 fixtureList = [
     'Underscore 1.4.1',
     'Backbone 1.0.0',
-    'jQuery 1.9.1',
-    'YUI 3.9.1'
+    'jQuery 1.9.1'
 ];
 
 function slug(name) {
@@ -255,24 +255,37 @@ if (typeof window !== 'undefined') {
                 // possible "dead code elimination" optimization.
                 window.tree = [];
 
+                // Poor man's error reporter for Traceur.
+                console.reportError = console.error;
+
                 switch (parser) {
                 case 'Esprima':
                     fn = function () {
-                        var syntax = window.esprima.parse(source);
+                        var syntax = window.esprima.parse(source, { range: true, loc: true });
                         window.tree.push(syntax.body.length);
                     };
                     break;
 
-                case 'parse-js':
+                case 'UglifyJS2':
                     fn = function () {
-                        var syntax = window.parseJS.parse(source);
+                        var syntax = window.parse(source);
                         window.tree.push(syntax.length);
+                    };
+                    break;
+
+                case 'Traceur':
+                    fn = function () {
+                        var file, parser, tree;
+                        file = new traceur.syntax.SourceFile('name', source);
+                        parser = new traceur.syntax.Parser(console, file);
+                        tree = parser.parseProgram();
+                        window.tree.push(tree.programElements.length);
                     };
                     break;
 
                 case 'Acorn':
                     fn = function () {
-                        var syntax = window.acorn.parse(source);
+                        var syntax = window.acorn.parse(source, { ranges: true, locations: true });
                         window.tree.push(syntax.body.length);
                     };
                     break;
@@ -313,7 +326,6 @@ if (typeof window !== 'undefined') {
         };
 
         setText('benchmarkjs-version', ' version ' + window.Benchmark.version);
-        setText('version', window.esprima.version);
 
         setupParser();
         createTable();
