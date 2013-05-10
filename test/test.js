@@ -16113,6 +16113,28 @@ var testFixture = {
             message: 'Error: Line 1: Missing catch or finally after try'
         },
 
+        'try {} catch (42) {} ': {
+            index: 14,
+            lineNumber: 1,
+            column: 15,
+            message: 'Error: Line 1: Unexpected number'
+        },
+
+        'try {} catch (answer()) {} ': {
+            index: 20,
+            lineNumber: 1,
+            column: 21,
+            message: 'Error: Line 1: Unexpected token ('
+        },
+
+        'try {} catch (-x) {} ': {
+            index: 14,
+            lineNumber: 1,
+            column: 15,
+            message: 'Error: Line 1: Unexpected token -'
+        },
+
+
         '\u203F = 10': {
             index: 0,
             lineNumber: 1,
