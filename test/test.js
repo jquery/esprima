@@ -6943,6 +6943,7 @@ var testFixture = {
                         end: { line: 1, column: 2 }
                     }
                 },
+                prefix: true,
                 range: [0, 2],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -6970,6 +6971,7 @@ var testFixture = {
                         end: { line: 1, column: 2 }
                     }
                 },
+                prefix: true,
                 range: [0, 2],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -6997,6 +6999,7 @@ var testFixture = {
                         end: { line: 1, column: 2 }
                     }
                 },
+                prefix: true,
                 range: [0, 2],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -7024,6 +7027,7 @@ var testFixture = {
                         end: { line: 1, column: 2 }
                     }
                 },
+                prefix: true,
                 range: [0, 2],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -7051,6 +7055,7 @@ var testFixture = {
                         end: { line: 1, column: 6 }
                     }
                 },
+                prefix: true,
                 range: [0, 6],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -7078,6 +7083,7 @@ var testFixture = {
                         end: { line: 1, column: 8 }
                     }
                 },
+                prefix: true,
                 range: [0, 8],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -7105,6 +7111,7 @@ var testFixture = {
                         end: { line: 1, column: 8 }
                     }
                 },
+                prefix: true,
                 range: [0, 8],
                 loc: {
                     start: { line: 1, column: 0 },
@@ -17156,6 +17163,28 @@ var testFixture = {
             message: 'Error: Line 1: Missing catch or finally after try'
         },
 
+        'try {} catch (42) {} ': {
+            index: 14,
+            lineNumber: 1,
+            column: 15,
+            message: 'Error: Line 1: Unexpected number'
+        },
+
+        'try {} catch (answer()) {} ': {
+            index: 20,
+            lineNumber: 1,
+            column: 21,
+            message: 'Error: Line 1: Unexpected token ('
+        },
+
+        'try {} catch (-x) {} ': {
+            index: 14,
+            lineNumber: 1,
+            column: 15,
+            message: 'Error: Line 1: Unexpected token -'
+        },
+
+
         '\u203F = 10': {
             index: 0,
             lineNumber: 1,
@@ -17487,9 +17516,9 @@ var testFixture = {
         },
 
         '(function () { \'use strict\'; with (i); }())': {
-            index: 28,
+            index: 29,
             lineNumber: 1,
-            column: 29,
+            column: 30,
             message: 'Error: Line 1: Strict mode code may not include a with statement'
         },
 
@@ -19711,6 +19740,7 @@ var testFixture = {
                             end: { line: 1, column: 22 }
                         }
                     },
+                    prefix: true,
                     range: [14, 22],
                     loc: {
                         start: { line: 1, column: 14 },
