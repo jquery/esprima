@@ -223,7 +223,7 @@ if (typeof window !== 'undefined') {
                 }, {
                     'onComplete': function () {
                         setText(this.name + '-time', (1000 * this.stats.mean).toFixed(1));
-                        setText(this.name + '-variance', (1000 * this.stats.variance).toFixed(1));
+                        setText(this.name + '-variance', (1000 * 1000 * this.stats.variance).toFixed(1));
                         totalTime += this.stats.mean;
                     }
                 });
