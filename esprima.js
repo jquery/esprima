@@ -2902,9 +2902,9 @@ parseStatement: true, parseSourceElement: true */
             throwUnexpected(lookahead);
         }
 
-        param = parseExpression();
+        param = parseVariableIdentifier();
         // 12.14.1
-        if (strict && param.type === Syntax.Identifier && isRestrictedWord(param.name)) {
+        if (strict && isRestrictedWord(param.name)) {
             throwErrorTolerant({}, Messages.StrictCatchVariable);
         }
 
