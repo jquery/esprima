@@ -296,13 +296,17 @@ if (typeof window !== 'undefined') {
 
                 benchmark = new window.Benchmark(test, fn, {
                     'onComplete': function () {
-                        setText(this.name + '-time', (1000 * this.stats.mean).toFixed(1));
+                        var str = '';
+                        str += (1000 * this.stats.mean).toFixed(1) + ' \xb1';
+                        str += this.stats.rme.toFixed(1) + '%';
+                        setText(this.name + '-time', str);
+
                         if (!totalTime[parser]) {
                             totalTime[parser] = this.stats.mean;
                         } else {
                             totalTime[parser] += this.stats.mean;
                         }
-                        setText(slug(parser) + '-total', (1000 * totalTime[parser]).toFixed(1));
+                        setText(slug(parser) + '-total', (1000 * totalTime[parser]).toFixed(1) + ' ms');
                     }
                 });
 
