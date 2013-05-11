@@ -98,7 +98,7 @@ if (typeof window !== 'undefined') {
                 name;
 
             str += '<table>';
-            str += '<thead><tr><th>Source</th><th>Size (KiB)</th>';
+            str += '<thead><tr><th>Source</th>';
             for (i = 0; i < parsers.length; i += 1) {
                 str += '<th>' + parsers[i] + '</th>';
             }
@@ -109,18 +109,12 @@ if (typeof window !== 'undefined') {
                 name = slug(test);
                 str += '<tr>';
                 str += '<td>' + test + '</td>';
-                if (window.data && window.data[name]) {
-                    str += '<td id="' + name + '-size">' + kb(window.data[name].length) + '</td>';
-                } else {
-                    str += '<td id="' + name + '-size"></td>';
-                }
                 for (i = 0; i < parsers.length; i += 1) {
                     str += '<td id="' + name + '-' + slug(parsers[i]) + '-time"></td>';
                 }
                 str += '</tr>';
             }
             str += '<tr><td><b>Total</b></td>';
-            str += '<td id="total-size"></td>';
             for (i = 0; i < parsers.length; i += 1) {
                 str += '<td id="' + slug(parsers[i]) + '-total"></td>';
             }
@@ -165,11 +159,8 @@ if (typeof window !== 'undefined') {
                             }
                         }
 
-                        if (success) {
-                            setText(test + '-size', kb(size));
-                        } else {
+                        if (!success) {
                             setText('status', 'Please wait. Error loading ' + src);
-                            setText(test + '-size', 'Error');
                         }
 
                         callback.apply();
@@ -194,7 +185,6 @@ if (typeof window !== 'undefined') {
                         load(slug(test), loadNextTest);
                     }, 100);
                 } else {
-                    setText('total-size', kb(totalSize));
                     setText('status', 'Ready.');
                     enableRunButtons();
                 }
