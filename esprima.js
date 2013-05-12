@@ -1399,16 +1399,24 @@ parseStatement: true, parseSourceElement: true */
                 expect('(');
                 token = lookahead();
                 if (token.type !== Token.Identifier) {
-                    throwUnexpected(lex());
+                    expect(')');
+                    throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
+                    return {
+                        type: Syntax.Property,
+                        key: key,
+                        value: parsePropertyFunction([]),
+                        kind: 'set'
+                    };
+                } else {
+                    param = [ parseVariableIdentifier() ];
+                    expect(')');
+                    return {
+                        type: Syntax.Property,
+                        key: key,
+                        value: parsePropertyFunction(param, token),
+                        kind: 'set'
+                    };
                 }
-                param = [ parseVariableIdentifier() ];
-                expect(')');
-                return {
-                    type: Syntax.Property,
-                    key: key,
-                    value: parsePropertyFunction(param, token),
-                    kind: 'set'
-                };
             } else {
                 expect(':');
                 return {
