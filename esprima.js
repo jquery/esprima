@@ -1812,11 +1812,14 @@ parseStatement: true, parseSourceElement: true */
                 expect('(');
                 token = lookahead;
                 if (token.type !== Token.Identifier) {
-                    throwUnexpected(lex());
+                    expect(')');
+                    throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
+                    value = parsePropertyFunction([]);
+                } else {
+                    param = [ parseVariableIdentifier() ];
+                    expect(')');
+                    value = parsePropertyFunction(param, token);
                 }
-                param = [ parseVariableIdentifier() ];
-                expect(')');
-                value = parsePropertyFunction(param, token);
                 return delegate.markEnd(delegate.createProperty('set', key, value));
             }
             expect(':');
