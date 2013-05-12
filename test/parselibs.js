@@ -22,10 +22,7 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint node: true */
-/*global esprima: true */
-
-var esprima, N, fixture;
+var esprima, N, fixture, readFile;
 
 // Loops for parsing, useful for stress-testing/profiling.
 N = 1;
@@ -40,14 +37,23 @@ fixture = [
     'Angular 1.0.6'
 ];
 
-esprima = require('../esprima');
+if (typeof require === 'undefined') {
+    load('esprima.js');
+    readFile = this.read;
+    console = { log: print };
+} else {
+    esprima = require('../esprima');
+    readFile = function (filename) {
+        return require('fs').readFileSync(filename, 'utf-8');
+    };
+}
 
 console.log('Processing libraries...');
 
 fixture.forEach(function (name) {
     var filename, source, i;
     filename = name.toLowerCase().replace(/\.js/g, 'js').replace(/\s/g, '-');
-    source = require('fs').readFileSync('test/3rdparty/' + filename + '.js', 'utf-8');
+    source = readFile('test/3rdparty/' + filename + '.js');
     console.log(' ', name);
     try {
         for (i = 0; i < N; ++i) {
