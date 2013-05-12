@@ -16890,6 +16890,13 @@ var testFixture = {
             message: 'Error: Line 1: Unexpected token .'
         },
 
+        '({ set s() { } })': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token )'
+        },
+
         '({ set: s() { } })': {
             index: 12,
             lineNumber: 1,
@@ -22206,6 +22213,78 @@ var testFixture = {
             }]
 
 
+        },
+
+        '({ set s() { } })': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 's',
+                            range: [7, 8],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 8 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [11, 14],
+                                loc: {
+                                    start: { line: 1, column: 11 },
+                                    end: { line: 1, column: 14 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [11, 14],
+                            loc: {
+                                start: { line: 1, column: 11 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        kind: 'set',
+                        range: [3, 14],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 14 }
+                        }
+                    }],
+                    range: [1, 16],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                }
+            }],
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            },
+            errors: [{
+                index: 9,
+                lineNumber: 1,
+                column: 10,
+                message: 'Error: Line 1: Unexpected token )'
+            }]
         }
 
 
