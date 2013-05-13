@@ -338,67 +338,61 @@ parseStatement: true, parseSourceElement: true */
 
     // 7.4 Comments
 
-    function skipComment() {
-        var ch, blockComment, lineComment;
+    function skipSingleLineComment() {
+        var ch;
 
-        blockComment = false;
-        lineComment = false;
+        while (index < length) {
+            ch = source.charCodeAt(index);
+            ++index;
+            if (isLineTerminator(ch)) {
+                if (ch === 13 && source.charCodeAt(index) === 10) {
+                    ++index;
+                }
+                ++lineNumber;
+                lineStart = index;
+                break;
+            }
+        }
+    }
+
+    function skipMultiLineComment() {
+        var ch;
+
+        while (index < length) {
+            ch = source.charCodeAt(index);
+            if (isLineTerminator(ch)) {
+                if (ch === 13 && source.charCodeAt(index + 1) === 10) {
+                    ++index;
+                }
+                ++lineNumber;
+                ++index;
+                lineStart = index;
+                if (index >= length) {
+                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                }
+            } else if (ch === 42) {
+                // Block comment ends with '*/' (char #42, char #47).
+                if (source.charCodeAt(index + 1) === 47) {
+                    ++index;
+                    ++index;
+                    return;
+                }
+                ++index;
+            } else {
+                ++index;
+            }
+        }
+
+        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+    }
+
+    function skipComment() {
+        var ch;
 
         while (index < length) {
             ch = source.charCodeAt(index);
 
-            if (lineComment) {
-                ++index;
-                if (isLineTerminator(ch)) {
-                    lineComment = false;
-                    if (ch === 13 && source.charCodeAt(index) === 10) {
-                        ++index;
-                    }
-                    ++lineNumber;
-                    lineStart = index;
-                }
-            } else if (blockComment) {
-                if (isLineTerminator(ch)) {
-                    if (ch === 13 && source.charCodeAt(index + 1) === 10) {
-                        ++index;
-                    }
-                    ++lineNumber;
-                    ++index;
-                    lineStart = index;
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                } else {
-                    ch = source.charCodeAt(index++);
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                    // Block comment ends with '*/' (char #42, char #47).
-                    if (ch === 42) {
-                        ch = source.charCodeAt(index);
-                        if (ch === 47) {
-                            ++index;
-                            blockComment = false;
-                        }
-                    }
-                }
-            } else if (ch === 47) {
-                ch = source.charCodeAt(index + 1);
-                // Line comment starts with '//' (char #47, char #47).
-                if (ch === 47) {
-                    index += 2;
-                    lineComment = true;
-                } else if (ch === 42) {
-                    // Block comment starts with '/*' (char #47, char #42).
-                    index += 2;
-                    blockComment = true;
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                } else {
-                    break;
-                }
-            } else if (isWhiteSpace(ch)) {
+            if (isWhiteSpace(ch)) {
                 ++index;
             } else if (isLineTerminator(ch)) {
                 ++index;
@@ -407,6 +401,19 @@ parseStatement: true, parseSourceElement: true */
                 }
                 ++lineNumber;
                 lineStart = index;
+            } else if (ch === 47) { // 47 is '/'
+                ch = source.charCodeAt(index + 1);
+                if (ch === 47) {
+                    ++index;
+                    ++index;
+                    skipSingleLineComment();
+                } else if (ch === 42) {  // 42 is '*'
+                    ++index;
+                    ++index;
+                    skipMultiLineComment();
+                } else {
+                    break;
+                }
             } else {
                 break;
             }
