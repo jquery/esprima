@@ -1191,32 +1191,31 @@ parseStatement: true, parseSourceElement: true */
 
         markStart: function () {
             skipComment();
-            if (extra.range) {
-                state.rangeStack.push(index);
-            }
             if (extra.loc) {
-                state.locStack.push({
-                    line: lineNumber,
-                    column: index - lineStart
-                });
+                state.markerStack.push(index - lineStart);
+                state.markerStack.push(lineNumber);
+            }
+            if (extra.range) {
+                state.markerStack.push(index);
             }
         },
 
         markEnd: function (node) {
             if (extra.range) {
-                node.range = [state.rangeStack.pop(), index];
+                node.range = [state.markerStack.pop(), index];
             }
             if (extra.loc) {
                 node.loc = {
-                    start: state.locStack.pop(),
+                    start: {
+                        line: state.markerStack.pop(),
+                        column: state.markerStack.pop()
+                    },
                     end: {
                         line: lineNumber,
                         column: index - lineStart
                     }
                 };
-                if (extra.source) {
-                    node.loc.source = extra.source;
-                }
+                this.postProcess(node);
             }
             return node;
         },
@@ -3577,37 +3576,30 @@ parseStatement: true, parseSourceElement: true */
         skipComment();
 
         return {
-            range: [index, index],
-
-            loc: {
-                start: {
-                    line: lineNumber,
-                    column: index - lineStart
-                },
-                end: {
-                    line: lineNumber,
-                    column: index - lineStart
-                }
-            },
+            marker: [index, lineNumber, index - lineStart, 0, 0, 0],
 
             end: function () {
-                this.range[1] = index;
-                this.loc.end.line = lineNumber;
-                this.loc.end.column = index - lineStart;
+                this.marker[3] = index;
+                this.marker[4] = lineNumber;
+                this.marker[5] = index - lineStart;
             },
 
             apply: function (node) {
-                node.range = [this.range[0], this.range[1]];
-                node.loc = {
-                    start: {
-                        line: this.loc.start.line,
-                        column: this.loc.start.column
-                    },
-                    end: {
-                        line: this.loc.end.line,
-                        column: this.loc.end.column
-                    }
-                };
+                if (extra.range) {
+                    node.range = [this.marker[0], this.marker[3]];
+                }
+                if (extra.loc) {
+                    node.loc = {
+                        start: {
+                            line: this.marker[1],
+                            column: this.marker[2]
+                        },
+                        end: {
+                            line: this.marker[4],
+                            column: this.marker[5]
+                        }
+                    };
+                }
                 node = delegate.postProcess(node);
             },
 
@@ -3773,8 +3765,7 @@ parseStatement: true, parseSourceElement: true */
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
-            rangeStack: [],
-            locStack: []
+            markerStack: []
         };
 
         extra = {};
