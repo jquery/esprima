@@ -1220,6 +1220,21 @@ parseStatement: true, parseSourceElement: true */
             return node;
         },
 
+        markEndIf: function (node) {
+            if (node.range || node.loc) {
+                if (extra.loc) {
+                    state.markerStack.pop();
+                    state.markerStack.pop();
+                }
+                if (extra.range) {
+                    state.markerStack.pop();
+                }
+            } else {
+                this.markEnd(node);
+            }
+            return node;
+        },
+
         postProcess: function (node) {
             if (extra.source) {
                 node.loc.source = extra.source;
@@ -2071,9 +2086,9 @@ parseStatement: true, parseSourceElement: true */
     // 11.3 Postfix Expressions
 
     function parsePostfixExpression() {
-        var marker, expr, token;
+        var expr, token;
 
-        marker = createLocationMarker();
+        delegate.markStart();
         expr = parseLeftHandSideExpressionAllowCall();
 
         if (lookahead.type === Token.Punctuator) {
@@ -2092,19 +2107,15 @@ parseStatement: true, parseSourceElement: true */
             }
         }
 
-        if (marker) {
-            marker.end();
-            return marker.applyIf(expr);
-        }
-        return expr;
+        return delegate.markEndIf(expr);
     }
 
     // 11.4 Unary Operators
 
     function parseUnaryExpression() {
-        var marker, token, expr;
+        var token, expr;
 
-        marker = createLocationMarker();
+        delegate.markStart();
 
         if (lookahead.type !== Token.Punctuator && lookahead.type !== Token.Keyword) {
             expr = parsePostfixExpression();
@@ -2136,11 +2147,7 @@ parseStatement: true, parseSourceElement: true */
             expr = parsePostfixExpression();
         }
 
-        if (marker) {
-            marker.end();
-            expr = marker.applyIf(expr);
-        }
-        return expr;
+        return delegate.markEndIf(expr);
     }
 
     function binaryPrecedence(token, allowIn) {
@@ -2319,10 +2326,10 @@ parseStatement: true, parseSourceElement: true */
     // 11.13 Assignment Operators
 
     function parseAssignmentExpression() {
-        var token, marker, left, right, node;
+        var token, left, right, node;
 
         token = lookahead;
-        marker = createLocationMarker();
+        delegate.markStart();
         node = left = parseConditionalExpression();
 
         if (matchAssign()) {
@@ -2341,19 +2348,15 @@ parseStatement: true, parseSourceElement: true */
             node = delegate.createAssignmentExpression(token.value, left, right);
         }
 
-        if (marker) {
-            marker.end();
-            return marker.applyIf(node);
-        }
-        return node;
+        return delegate.markEndIf(node);
     }
 
     // 11.14 Comma Operator
 
     function parseExpression() {
-        var marker, expr;
+        var expr;
 
-        marker = createLocationMarker();
+        delegate.markStart();
         expr = parseAssignmentExpression();
 
         if (match(',')) {
@@ -2366,14 +2369,9 @@ parseStatement: true, parseSourceElement: true */
                 lex();
                 expr.expressions.push(parseAssignmentExpression());
             }
-
         }
 
-        if (marker) {
-            marker.end();
-            return marker.applyIf(expr);
-        }
-        return expr;
+        return delegate.markEndIf(expr);
     }
 
     // 12.1 Block
@@ -3604,16 +3602,6 @@ parseStatement: true, parseSourceElement: true */
                     };
                 }
                 node = delegate.postProcess(node);
-            },
-
-            applyIf: function (node) {
-                if (extra.range && !node.range) {
-                    this.apply(node);
-                }
-                if (extra.loc && !node.loc) {
-                    this.apply(node);
-                }
-                return node;
             }
         };
     }
