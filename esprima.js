@@ -1190,7 +1190,6 @@ parseStatement: true, parseSourceElement: true */
         name: 'SyntaxTree',
 
         markStart: function () {
-            skipComment();
             if (extra.loc) {
                 state.markerStack.push(index - lineStart);
                 state.markerStack.push(lineNumber);
@@ -1781,6 +1780,7 @@ parseStatement: true, parseSourceElement: true */
         var previousStrict, body;
 
         previousStrict = strict;
+        skipComment();
         delegate.markStart();
         body = parseFunctionSourceElements();
         if (first && strict && isRestrictedWord(param[0].name)) {
@@ -1793,6 +1793,7 @@ parseStatement: true, parseSourceElement: true */
     function parseObjectPropertyKey() {
         var token;
 
+        skipComment();
         delegate.markStart();
         token = lex();
 
@@ -1813,6 +1814,7 @@ parseStatement: true, parseSourceElement: true */
         var token, key, id, value, param;
 
         token = lookahead;
+        skipComment();
         delegate.markStart();
 
         if (token.type === Token.Identifier) {
@@ -2397,6 +2399,7 @@ parseStatement: true, parseSourceElement: true */
     function parseBlock() {
         var block;
 
+        skipComment();
         delegate.markStart();
         expect('{');
 
@@ -2412,6 +2415,7 @@ parseStatement: true, parseSourceElement: true */
     function parseVariableIdentifier() {
         var token;
 
+        skipComment();
         delegate.markStart();
         token = lex();
 
@@ -2425,6 +2429,7 @@ parseStatement: true, parseSourceElement: true */
     function parseVariableDeclaration(kind) {
         var init = null, id;
 
+        skipComment();
         delegate.markStart();
         id = parseVariableIdentifier();
 
@@ -2477,6 +2482,7 @@ parseStatement: true, parseSourceElement: true */
     function parseConstLetDeclaration(kind) {
         var declarations;
 
+        skipComment();
         delegate.markStart();
 
         expectKeyword(kind);
@@ -2812,6 +2818,7 @@ parseStatement: true, parseSourceElement: true */
             consequent = [],
             statement;
 
+        skipComment();
         delegate.markStart();
         if (matchKeyword('default')) {
             lex();
@@ -2901,6 +2908,7 @@ parseStatement: true, parseSourceElement: true */
     function parseCatchClause() {
         var param, body;
 
+        skipComment();
         delegate.markStart();
         expectKeyword('catch');
 
@@ -2965,6 +2973,7 @@ parseStatement: true, parseSourceElement: true */
             throwUnexpected(lookahead);
         }
 
+        skipComment();
         delegate.markStart();
 
         if (type === Token.Punctuator) {
@@ -3043,6 +3052,7 @@ parseStatement: true, parseSourceElement: true */
         var sourceElement, sourceElements = [], token, directive, firstRestricted,
             oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody;
 
+        skipComment();
         delegate.markStart();
         expect('{');
 
@@ -3155,6 +3165,7 @@ parseStatement: true, parseSourceElement: true */
     function parseFunctionDeclaration() {
         var id, params = [], body, token, stricted, tmp, firstRestricted, message, previousStrict;
 
+        skipComment();
         delegate.markStart();
 
         expectKeyword('function');
@@ -3300,6 +3311,8 @@ parseStatement: true, parseSourceElement: true */
 
     function parseProgram() {
         var body;
+
+        skipComment();
         delegate.markStart();
         strict = false;
         peek();
