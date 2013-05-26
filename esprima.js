@@ -339,24 +339,30 @@ parseStatement: true, parseSourceElement: true */
     // 7.4 Comments
 
     function addComment(type, value, start, end, loc) {
+        var comment;
+
         assert(typeof start === 'number', 'Comment must have valid position');
 
         // Because the way the actual token is scanned, often the comments
         // (if any) are skipped twice during the lexical analysis.
         // Thus, we need to skip adding a comment if the comment array already
         // handled it.
-        if (extra.comments.length > 0) {
-            if (extra.comments[extra.comments.length - 1].range[1] > start) {
-                return;
-            }
+        if (state.lastCommentStart >= start) {
+            return;
         }
+        state.lastCommentStart = start;
 
-        extra.comments.push({
+        comment = {
             type: type,
-            value: value,
-            range: [start, end],
-            loc: loc
-        });
+            value: value
+        };
+        if (extra.range) {
+            comment.range = [start, end];
+        }
+        if (extra.loc) {
+            comment.loc = loc;
+        }
+        extra.comments.push(comment);
     }
 
     function skipSingleLineComment() {
@@ -3384,27 +3390,6 @@ parseStatement: true, parseSourceElement: true */
         return delegate.markEnd(delegate.createProgram(body));
     }
 
-    function filterCommentLocation() {
-        var i, entry, comment, comments = [];
-
-        for (i = 0; i < extra.comments.length; ++i) {
-            entry = extra.comments[i];
-            comment = {
-                type: entry.type,
-                value: entry.value
-            };
-            if (extra.range) {
-                comment.range = entry.range;
-            }
-            if (extra.loc) {
-                comment.loc = entry.loc;
-            }
-            comments.push(comment);
-        }
-
-        extra.comments = comments;
-    }
-
     function collectToken() {
         var start, loc, token, range, value;
 
@@ -3576,7 +3561,8 @@ parseStatement: true, parseSourceElement: true */
             labelSet: {},
             inFunctionBody: false,
             inIteration: false,
-            inSwitch: false
+            inSwitch: false,
+            lastCommentStart: -1,
         };
 
         extra = {};
@@ -3641,7 +3627,6 @@ parseStatement: true, parseSourceElement: true */
             filterTokenLocation();
             tokens = extra.tokens;
             if (typeof extra.comments !== 'undefined') {
-                filterCommentLocation();
                 tokens.comments = extra.comments;
             }
             if (typeof extra.errors !== 'undefined') {
@@ -3677,6 +3662,7 @@ parseStatement: true, parseSourceElement: true */
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
+            lastCommentStart: -1,
             markerStack: []
         };
 
@@ -3715,7 +3701,6 @@ parseStatement: true, parseSourceElement: true */
         try {
             program = parseProgram();
             if (typeof extra.comments !== 'undefined') {
-                filterCommentLocation();
                 program.comments = extra.comments;
             }
             if (typeof extra.tokens !== 'undefined') {
