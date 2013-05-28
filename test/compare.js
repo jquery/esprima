@@ -258,7 +258,7 @@ if (typeof window !== 'undefined') {
 
                 case 'UglifyJS2':
                     fn = function () {
-                        var syntax = window.parse(source);
+                        var syntax = window.UglifyJS.parse(source);
                         window.tree.push(syntax.length);
                     };
                     break;
