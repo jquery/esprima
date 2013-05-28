@@ -1,6 +1,5 @@
 /*
-  Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
-  Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
+  Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
@@ -23,45 +22,46 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint node:true */
+var esprima, N, fixture, readFile;
 
-(function () {
-    'use strict';
+// Loops for parsing, useful for stress-testing/profiling.
+N = 1;
 
-    var child = require('child_process'),
-        nodejs = '"' + process.execPath + '"',
-        ret = 0,
-        suites,
-        index;
+fixture = [
+    'Underscore 1.4.1',
+    'Backbone 1.0.0',
+    'MooTools 1.4.5',
+    'jQuery 1.9.1',
+    'YUI 3.9.1',
+    'jQuery.Mobile 1.3.1',
+    'Angular 1.0.6'
+];
 
-    suites = [
-        'runner',
-        'compat',
-        'parselibs'
-    ];
+if (typeof require === 'undefined') {
+    load('esprima.js');
+    readFile = this.read;
+    console = { log: print };
+} else {
+    esprima = require('../esprima');
+    readFile = function (filename) {
+        return require('fs').readFileSync(filename, 'utf-8');
+    };
+}
 
-    function nextTest() {
-        var suite = suites[index];
+console.log('Processing libraries...');
 
-        if (index < suites.length) {
-            child.exec(nodejs + ' ./test/' + suite + '.js', function (err, stdout, stderr) {
-                if (stdout) {
-                    process.stdout.write(suite + ': ' + stdout);
-                }
-                if (stderr) {
-                    process.stderr.write(suite + ': ' + stderr);
-                }
-                if (err) {
-                    ret = err.code;
-                }
-                index += 1;
-                nextTest();
-            });
-        } else {
-            process.exit(ret);
+fixture.forEach(function (name) {
+    var filename, source, i;
+    filename = name.toLowerCase().replace(/\.js/g, 'js').replace(/\s/g, '-');
+    source = readFile('test/3rdparty/' + filename + '.js');
+    console.log(' ', name);
+    try {
+        for (i = 0; i < N; ++i) {
+            esprima.parse(source, { range: true, loc: true });
         }
+    } catch (e) {
+        console.log('FATAL', e.toString());
+        process.exit(1);
     }
+});
 
-    index = 0;
-    nextTest();
-}());

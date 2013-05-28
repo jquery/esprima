@@ -92,7 +92,7 @@ if (typeof window !== 'undefined') {
 
             str += '<table>';
             str += '<thead><tr><th>Source</th><th>Size (KiB)</th>';
-            str += '<th>Time (ms)</th><th>Variance</th></tr></thead>';
+            str += '<th>Time (ms)</th></tr></thead>';
             str += '<tbody>';
             for (index = 0; index < fullFixture.length; index += 1) {
                 test = fullFixture[index];
@@ -101,13 +101,12 @@ if (typeof window !== 'undefined') {
                 str += '<td>' + test + '</td>';
                 str += '<td id="' + name + '-size"></td>';
                 str += '<td id="' + name + '-time"></td>';
-                str += '<td id="' + name + '-variance"></td>';
                 str += '</tr>';
             }
             str += '<tr><td><b>Total</b></td>';
             str += '<td id="total-size"></td>';
             str += '<td id="total-time"></td>';
-            str += '<td></td></tr>';
+            str += '</tr>';
             str += '</tbody>';
             str += '</table>';
 
@@ -196,7 +195,6 @@ if (typeof window !== 'undefined') {
                 for (i = 0; i < fullFixture.length; i += 1) {
                     name = slug(fullFixture[i]);
                     setText(name + '-time', '');
-                    setText(name + '-variance', '');
                 }
                 setText('total-time', '');
             }
@@ -205,7 +203,7 @@ if (typeof window !== 'undefined') {
                 var el, test, source, benchmark;
 
                 if (index >= suite.length) {
-                    setText('total-time', (1000 * totalTime).toFixed(1));
+                    setText('total-time', (1000 * totalTime).toFixed(1) + ' ms');
                     setText('status', 'Ready.');
                     enableRunButtons();
                     return;
@@ -221,12 +219,14 @@ if (typeof window !== 'undefined') {
                 window.tree = [];
 
                 benchmark = new window.Benchmark(test, function (o) {
-                    var syntax = window.esprima.parse(source);
+                    var syntax = window.esprima.parse(source, { range: true, loc: true });
                     window.tree.push(syntax.body.length);
                 }, {
                     'onComplete': function () {
-                        setText(this.name + '-time', (1000 * this.stats.mean).toFixed(1));
-                        setText(this.name + '-variance', (1000 * 1000 * this.stats.variance).toFixed(1));
+                        var str = '';
+                        str += (1000 * this.stats.mean).toFixed(1) + ' ms \xb1 ';
+                        str += this.stats.rme.toFixed(1) + '%';
+                        setText(this.name + '-time', str);
                         totalTime += this.stats.mean;
                     }
                 });
@@ -269,7 +269,6 @@ if (typeof window !== 'undefined') {
             esprima,
             dirname,
             quick,
-            loc = false,
             fs,
             readFileSync,
             log;
@@ -289,7 +288,6 @@ if (typeof window !== 'undefined') {
             esprima = require('../esprima');
             fs = require('fs');
             quick = process.argv[2] === 'quick' || process.argv[3] === 'quick';
-            loc = process.argv[2] === 'loc' || process.argv[3] === 'loc';
             readFileSync = function readFileSync(filename) {
                 return fs.readFileSync(filename, 'utf-8');
             };
@@ -303,25 +301,35 @@ if (typeof window !== 'undefined') {
                 totalTime = 0,
                 totalSize = 0;
 
+            function pad(str, len) {
+              var result = str;
+              while (result.length < len) {
+                result = ' ' + result;
+              }
+              return result;
+            }
+
             tests.reduce(function (suite, filename) {
                 var source = readFileSync(dirname + '/3rdparty/' + slug(filename) + '.js'),
                     size = source.length;
                 totalSize += size;
                 return suite.add(filename, function () {
-                    var syntax = esprima.parse(source, {loc: loc});
+                    var syntax = esprima.parse(source, { range: true, loc: true });
                     tree.push(syntax.body.length);
                 }, {
                     'onComplete': function (event, bench) {
-                        log(this.name +
-                            ' size ' + kb(size) +
-                            ' time ' + (1000 * this.stats.mean).toFixed(1) +
-                            ' variance ' + (1000 * 1000 * this.stats.variance).toFixed(1));
+                        var result = pad(this.name, 20);
+                        result += pad(kb(size) + ' KiB', 12);
+                        result += pad((1000 * this.stats.mean).toFixed(2), 10);
+                        result += ' ms \xb1 ' + this.stats.rme.toFixed(2) + '%';
+                        log(result);
                         totalTime += this.stats.mean;
                     }
                 });
             }, new Benchmark.Suite()).on('complete', function () {
-                log('Total size ' + kb(totalSize) +
-                    ' time ' + (1000 * totalTime).toFixed(1));
+                log('                     ------------------------');
+                log(pad(kb(totalSize) + ' KiB', 32) +
+                    pad((1000 * totalTime).toFixed(2), 10) + ' ms');
             }).run();
         }
 

@@ -108,6 +108,11 @@ function testParse(esprima, code, syntax) {
 
     expected = JSON.stringify(syntax, null, 4);
     try {
+        // Some variations of the options.
+        tree = esprima.parse(code, { tolerant: options.tolerant });
+        tree = esprima.parse(code, { tolerant: options.tolerant, range: true });
+        tree = esprima.parse(code, { tolerant: options.tolerant, loc: true });
+
         tree = esprima.parse(code, options);
         tree = (options.comment || options.tokens || options.tolerant) ? tree : tree.body[0];
 

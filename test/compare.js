@@ -32,15 +32,15 @@ var setupBenchmarks,
 
 parsers = [
     'Esprima',
-    'parse-js',
-    'Acorn'
+    'UglifyJS2',
+    'Traceur',
+    'Acorn',
 ];
 
 fixtureList = [
     'Underscore 1.4.1',
     'Backbone 1.0.0',
-    'jQuery 1.9.1',
-    'YUI 3.9.1'
+    'jQuery 1.9.1'
 ];
 
 function slug(name) {
@@ -98,7 +98,7 @@ if (typeof window !== 'undefined') {
                 name;
 
             str += '<table>';
-            str += '<thead><tr><th>Source</th><th>Size (KiB)</th>';
+            str += '<thead><tr><th>Source</th>';
             for (i = 0; i < parsers.length; i += 1) {
                 str += '<th>' + parsers[i] + '</th>';
             }
@@ -109,18 +109,12 @@ if (typeof window !== 'undefined') {
                 name = slug(test);
                 str += '<tr>';
                 str += '<td>' + test + '</td>';
-                if (window.data && window.data[name]) {
-                    str += '<td id="' + name + '-size">' + kb(window.data[name].length) + '</td>';
-                } else {
-                    str += '<td id="' + name + '-size"></td>';
-                }
                 for (i = 0; i < parsers.length; i += 1) {
                     str += '<td id="' + name + '-' + slug(parsers[i]) + '-time"></td>';
                 }
                 str += '</tr>';
             }
             str += '<tr><td><b>Total</b></td>';
-            str += '<td id="total-size"></td>';
             for (i = 0; i < parsers.length; i += 1) {
                 str += '<td id="' + slug(parsers[i]) + '-total"></td>';
             }
@@ -165,11 +159,8 @@ if (typeof window !== 'undefined') {
                             }
                         }
 
-                        if (success) {
-                            setText(test + '-size', kb(size));
-                        } else {
+                        if (!success) {
                             setText('status', 'Please wait. Error loading ' + src);
-                            setText(test + '-size', 'Error');
                         }
 
                         callback.apply();
@@ -194,7 +185,6 @@ if (typeof window !== 'undefined') {
                         load(slug(test), loadNextTest);
                     }, 100);
                 } else {
-                    setText('total-size', kb(totalSize));
                     setText('status', 'Ready.');
                     enableRunButtons();
                 }
@@ -255,24 +245,37 @@ if (typeof window !== 'undefined') {
                 // possible "dead code elimination" optimization.
                 window.tree = [];
 
+                // Poor man's error reporter for Traceur.
+                console.reportError = console.error;
+
                 switch (parser) {
                 case 'Esprima':
                     fn = function () {
-                        var syntax = window.esprima.parse(source);
+                        var syntax = window.esprima.parse(source, { range: true, loc: true });
                         window.tree.push(syntax.body.length);
                     };
                     break;
 
-                case 'parse-js':
+                case 'UglifyJS2':
                     fn = function () {
-                        var syntax = window.parseJS.parse(source);
+                        var syntax = window.UglifyJS.parse(source);
                         window.tree.push(syntax.length);
+                    };
+                    break;
+
+                case 'Traceur':
+                    fn = function () {
+                        var file, parser, tree;
+                        file = new traceur.syntax.SourceFile('name', source);
+                        parser = new traceur.syntax.Parser(console, file);
+                        tree = parser.parseProgram();
+                        window.tree.push(tree.programElements.length);
                     };
                     break;
 
                 case 'Acorn':
                     fn = function () {
-                        var syntax = window.acorn.parse(source);
+                        var syntax = window.acorn.parse(source, { ranges: true, locations: true });
                         window.tree.push(syntax.body.length);
                     };
                     break;
@@ -283,13 +286,17 @@ if (typeof window !== 'undefined') {
 
                 benchmark = new window.Benchmark(test, fn, {
                     'onComplete': function () {
-                        setText(this.name + '-time', (1000 * this.stats.mean).toFixed(1));
+                        var str = '';
+                        str += (1000 * this.stats.mean).toFixed(1) + ' \xb1';
+                        str += this.stats.rme.toFixed(1) + '%';
+                        setText(this.name + '-time', str);
+
                         if (!totalTime[parser]) {
                             totalTime[parser] = this.stats.mean;
                         } else {
                             totalTime[parser] += this.stats.mean;
                         }
-                        setText(slug(parser) + '-total', (1000 * totalTime[parser]).toFixed(1));
+                        setText(slug(parser) + '-total', (1000 * totalTime[parser]).toFixed(1) + ' ms');
                     }
                 });
 
@@ -313,7 +320,6 @@ if (typeof window !== 'undefined') {
         };
 
         setText('benchmarkjs-version', ' version ' + window.Benchmark.version);
-        setText('version', window.esprima.version);
 
         setupParser();
         createTable();

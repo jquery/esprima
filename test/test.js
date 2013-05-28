@@ -16353,6 +16353,174 @@ var testFixture = {
 
     },
 
+    'Directive Prolog': {
+
+        '(function () { \'use\\x20strict\'; with (i); }())': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'FunctionExpression',
+                    id: null,
+                    params: [],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [{
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'Literal',
+                                value: 'use strict',
+                                raw: '\'use\\x20strict\'',
+                                range: [15, 30],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 30 }
+                                }
+                            },
+                            range: [15, 31],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 31 }
+                            }
+                        }, {
+                            type: 'WithStatement',
+                            object: {
+                                type: 'Identifier',
+                                name: 'i',
+                                range: [38, 39],
+                                loc: {
+                                    start: { line: 1, column: 38 },
+                                    end: { line: 1, column: 39 }
+                                }
+                            },
+                            body: {
+                                type: 'EmptyStatement',
+                                range: [40, 41],
+                                loc: {
+                                    start: { line: 1, column: 40 },
+                                    end: { line: 1, column: 41 }
+                                }
+                            },
+                            range: [32, 41],
+                            loc: {
+                                start: { line: 1, column: 32 },
+                                end: { line: 1, column: 41 }
+                            }
+                        }],
+                        range: [13, 43],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 43 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [1, 43],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 43 }
+                    }
+                },
+                'arguments': [],
+                range: [1, 45],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 45 }
+                }
+            },
+            range: [0, 46],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 46 }
+            }
+        },
+
+        '(function () { \'use\\nstrict\'; with (i); }())': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'FunctionExpression',
+                    id: null,
+                    params: [],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [{
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'Literal',
+                                value: 'use\nstrict',
+                                raw: '\'use\\nstrict\'',
+                                range: [15, 28],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 28 }
+                                }
+                            },
+                            range: [15, 29],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 29 }
+                            }
+                        }, {
+                            type: 'WithStatement',
+                            object: {
+                                type: 'Identifier',
+                                name: 'i',
+                                range: [36, 37],
+                                loc: {
+                                    start: { line: 1, column: 36 },
+                                    end: { line: 1, column: 37 }
+                                }
+                            },
+                            body: {
+                                type: 'EmptyStatement',
+                                range: [38, 39],
+                                loc: {
+                                    start: { line: 1, column: 38 },
+                                    end: { line: 1, column: 39 }
+                                }
+                            },
+                            range: [30, 39],
+                            loc: {
+                                start: { line: 1, column: 30 },
+                                end: { line: 1, column: 39 }
+                            }
+                        }],
+                        range: [13, 41],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 41 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [1, 41],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 41 }
+                    }
+                },
+                'arguments': [],
+                range: [1, 43],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 43 }
+                }
+            },
+            range: [0, 44],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 44 }
+            }
+        }
+
+    },
+
     'Source elements': {
 
         '': {
@@ -16888,6 +17056,13 @@ var testFixture = {
             lineNumber: 1,
             column: 10,
             message: 'Error: Line 1: Unexpected token .'
+        },
+
+        '({ set s() { } })': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token )'
         },
 
         '({ set: s() { } })': {
@@ -22206,6 +22381,78 @@ var testFixture = {
             }]
 
 
+        },
+
+        '({ set s() { } })': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 's',
+                            range: [7, 8],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 8 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [11, 14],
+                                loc: {
+                                    start: { line: 1, column: 11 },
+                                    end: { line: 1, column: 14 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [11, 14],
+                            loc: {
+                                start: { line: 1, column: 11 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        kind: 'set',
+                        range: [3, 14],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 14 }
+                        }
+                    }],
+                    range: [1, 16],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                }
+            }],
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            },
+            errors: [{
+                index: 9,
+                lineNumber: 1,
+                column: 10,
+                message: 'Error: Line 1: Unexpected token )'
+            }]
         }
 
 

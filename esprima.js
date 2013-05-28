@@ -338,67 +338,131 @@ parseStatement: true, parseSourceElement: true */
 
     // 7.4 Comments
 
-    function skipComment() {
-        var ch, blockComment, lineComment;
+    function addComment(type, value, start, end, loc) {
+        var comment;
 
-        blockComment = false;
-        lineComment = false;
+        assert(typeof start === 'number', 'Comment must have valid position');
+
+        // Because the way the actual token is scanned, often the comments
+        // (if any) are skipped twice during the lexical analysis.
+        // Thus, we need to skip adding a comment if the comment array already
+        // handled it.
+        if (state.lastCommentStart >= start) {
+            return;
+        }
+        state.lastCommentStart = start;
+
+        comment = {
+            type: type,
+            value: value
+        };
+        if (extra.range) {
+            comment.range = [start, end];
+        }
+        if (extra.loc) {
+            comment.loc = loc;
+        }
+        extra.comments.push(comment);
+    }
+
+    function skipSingleLineComment() {
+        var start, loc, ch, comment;
+
+        start = index - 2;
+        loc = {
+            start: {
+                line: lineNumber,
+                column: index - lineStart - 2
+            }
+        };
+
+        while (index < length) {
+            ch = source.charCodeAt(index);
+            ++index;
+            if (isLineTerminator(ch)) {
+                if (extra.comments) {
+                    comment = source.slice(start + 2, index - 1);
+                    loc.end = {
+                        line: lineNumber,
+                        column: index - lineStart - 1
+                    };
+                    addComment('Line', comment, start, index - 1, loc);
+                }
+                if (ch === 13 && source.charCodeAt(index) === 10) {
+                    ++index;
+                }
+                ++lineNumber;
+                lineStart = index;
+                return;
+            }
+        }
+
+        if (extra.comments) {
+            comment = source.slice(start + 2, index);
+            loc.end = {
+                line: lineNumber,
+                column: index - lineStart
+            };
+            addComment('Line', comment, start, index, loc);
+        }
+    }
+
+    function skipMultiLineComment() {
+        var start, loc, ch, comment;
+
+        if (extra.comments) {
+            start = index - 2;
+            loc = {
+                start: {
+                    line: lineNumber,
+                    column: index - lineStart - 2
+                }
+            };
+        }
+
+        while (index < length) {
+            ch = source.charCodeAt(index);
+            if (isLineTerminator(ch)) {
+                if (ch === 13 && source.charCodeAt(index + 1) === 10) {
+                    ++index;
+                }
+                ++lineNumber;
+                ++index;
+                lineStart = index;
+                if (index >= length) {
+                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                }
+            } else if (ch === 42) {
+                // Block comment ends with '*/' (char #42, char #47).
+                if (source.charCodeAt(index + 1) === 47) {
+                    ++index;
+                    ++index;
+                    if (extra.comments) {
+                        comment = source.slice(start + 2, index - 2);
+                        loc.end = {
+                            line: lineNumber,
+                            column: index - lineStart
+                        };
+                        addComment('Block', comment, start, index, loc);
+                    }
+                    return;
+                }
+                ++index;
+            } else {
+                ++index;
+            }
+        }
+
+        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+    }
+
+    function skipComment() {
+        var ch;
 
         while (index < length) {
             ch = source.charCodeAt(index);
 
-            if (lineComment) {
-                ++index;
-                if (isLineTerminator(ch)) {
-                    lineComment = false;
-                    if (ch === 13 && source.charCodeAt(index) === 10) {
-                        ++index;
-                    }
-                    ++lineNumber;
-                    lineStart = index;
-                }
-            } else if (blockComment) {
-                if (isLineTerminator(ch)) {
-                    if (ch === 13 && source.charCodeAt(index + 1) === 10) {
-                        ++index;
-                    }
-                    ++lineNumber;
-                    ++index;
-                    lineStart = index;
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                } else {
-                    ch = source.charCodeAt(index++);
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                    // Block comment ends with '*/' (char #42, char #47).
-                    if (ch === 42) {
-                        ch = source.charCodeAt(index);
-                        if (ch === 47) {
-                            ++index;
-                            blockComment = false;
-                        }
-                    }
-                }
-            } else if (ch === 47) {
-                ch = source.charCodeAt(index + 1);
-                // Line comment starts with '//' (char #47, char #47).
-                if (ch === 47) {
-                    index += 2;
-                    lineComment = true;
-                } else if (ch === 42) {
-                    // Block comment starts with '/*' (char #47, char #42).
-                    index += 2;
-                    blockComment = true;
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                } else {
-                    break;
-                }
-            } else if (isWhiteSpace(ch)) {
+            if (isWhiteSpace(ch)) {
                 ++index;
             } else if (isLineTerminator(ch)) {
                 ++index;
@@ -407,6 +471,19 @@ parseStatement: true, parseSourceElement: true */
                 }
                 ++lineNumber;
                 lineStart = index;
+            } else if (ch === 47) { // 47 is '/'
+                ch = source.charCodeAt(index + 1);
+                if (ch === 47) {
+                    ++index;
+                    ++index;
+                    skipSingleLineComment();
+                } else if (ch === 42) {  // 42 is '*'
+                    ++index;
+                    ++index;
+                    skipMultiLineComment();
+                } else {
+                    break;
+                }
             } else {
                 break;
             }
@@ -1183,33 +1260,46 @@ parseStatement: true, parseSourceElement: true */
         name: 'SyntaxTree',
 
         markStart: function () {
-            skipComment();
-            if (extra.range) {
-                state.rangeStack.push(index);
-            }
             if (extra.loc) {
-                state.locStack.push({
-                    line: lineNumber,
-                    column: index - lineStart
-                });
+                state.markerStack.push(index - lineStart);
+                state.markerStack.push(lineNumber);
+            }
+            if (extra.range) {
+                state.markerStack.push(index);
             }
         },
 
         markEnd: function (node) {
             if (extra.range) {
-                node.range = [state.rangeStack.pop(), index];
+                node.range = [state.markerStack.pop(), index];
             }
             if (extra.loc) {
                 node.loc = {
-                    start: state.locStack.pop(),
+                    start: {
+                        line: state.markerStack.pop(),
+                        column: state.markerStack.pop()
+                    },
                     end: {
                         line: lineNumber,
                         column: index - lineStart
                     }
                 };
-                if (extra.source) {
-                    node.loc.source = extra.source;
+                this.postProcess(node);
+            }
+            return node;
+        },
+
+        markEndIf: function (node) {
+            if (node.range || node.loc) {
+                if (extra.loc) {
+                    state.markerStack.pop();
+                    state.markerStack.pop();
                 }
+                if (extra.range) {
+                    state.markerStack.pop();
+                }
+            } else {
+                this.markEnd(node);
             }
             return node;
         },
@@ -1760,6 +1850,7 @@ parseStatement: true, parseSourceElement: true */
         var previousStrict, body;
 
         previousStrict = strict;
+        skipComment();
         delegate.markStart();
         body = parseFunctionSourceElements();
         if (first && strict && isRestrictedWord(param[0].name)) {
@@ -1772,6 +1863,7 @@ parseStatement: true, parseSourceElement: true */
     function parseObjectPropertyKey() {
         var token;
 
+        skipComment();
         delegate.markStart();
         token = lex();
 
@@ -1792,6 +1884,7 @@ parseStatement: true, parseSourceElement: true */
         var token, key, id, value, param;
 
         token = lookahead;
+        skipComment();
         delegate.markStart();
 
         if (token.type === Token.Identifier) {
@@ -1812,11 +1905,14 @@ parseStatement: true, parseSourceElement: true */
                 expect('(');
                 token = lookahead;
                 if (token.type !== Token.Identifier) {
-                    throwUnexpected(lex());
+                    expect(')');
+                    throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
+                    value = parsePropertyFunction([]);
+                } else {
+                    param = [ parseVariableIdentifier() ];
+                    expect(')');
+                    value = parsePropertyFunction(param, token);
                 }
-                param = [ parseVariableIdentifier() ];
-                expect(')');
-                value = parsePropertyFunction(param, token);
                 return delegate.markEnd(delegate.createProperty('set', key, value));
             }
             expect(':');
@@ -2062,9 +2158,9 @@ parseStatement: true, parseSourceElement: true */
     // 11.3 Postfix Expressions
 
     function parsePostfixExpression() {
-        var marker, expr, token;
+        var expr, token;
 
-        marker = createLocationMarker();
+        delegate.markStart();
         expr = parseLeftHandSideExpressionAllowCall();
 
         if (lookahead.type === Token.Punctuator) {
@@ -2083,19 +2179,15 @@ parseStatement: true, parseSourceElement: true */
             }
         }
 
-        if (marker) {
-            marker.end();
-            return marker.applyIf(expr);
-        }
-        return expr;
+        return delegate.markEndIf(expr);
     }
 
     // 11.4 Unary Operators
 
     function parseUnaryExpression() {
-        var marker, token, expr;
+        var token, expr;
 
-        marker = createLocationMarker();
+        delegate.markStart();
 
         if (lookahead.type !== Token.Punctuator && lookahead.type !== Token.Keyword) {
             expr = parsePostfixExpression();
@@ -2127,11 +2219,7 @@ parseStatement: true, parseSourceElement: true */
             expr = parsePostfixExpression();
         }
 
-        if (marker) {
-            marker.end();
-            expr = marker.applyIf(expr);
-        }
-        return expr;
+        return delegate.markEndIf(expr);
     }
 
     function binaryPrecedence(token, allowIn) {
@@ -2310,10 +2398,10 @@ parseStatement: true, parseSourceElement: true */
     // 11.13 Assignment Operators
 
     function parseAssignmentExpression() {
-        var token, marker, left, right, node;
+        var token, left, right, node;
 
         token = lookahead;
-        marker = createLocationMarker();
+        delegate.markStart();
         node = left = parseConditionalExpression();
 
         if (matchAssign()) {
@@ -2332,19 +2420,15 @@ parseStatement: true, parseSourceElement: true */
             node = delegate.createAssignmentExpression(token.value, left, right);
         }
 
-        if (marker) {
-            marker.end();
-            return marker.applyIf(node);
-        }
-        return node;
+        return delegate.markEndIf(node);
     }
 
     // 11.14 Comma Operator
 
     function parseExpression() {
-        var marker, expr;
+        var expr;
 
-        marker = createLocationMarker();
+        delegate.markStart();
         expr = parseAssignmentExpression();
 
         if (match(',')) {
@@ -2357,14 +2441,9 @@ parseStatement: true, parseSourceElement: true */
                 lex();
                 expr.expressions.push(parseAssignmentExpression());
             }
-
         }
 
-        if (marker) {
-            marker.end();
-            return marker.applyIf(expr);
-        }
-        return expr;
+        return delegate.markEndIf(expr);
     }
 
     // 12.1 Block
@@ -2390,6 +2469,7 @@ parseStatement: true, parseSourceElement: true */
     function parseBlock() {
         var block;
 
+        skipComment();
         delegate.markStart();
         expect('{');
 
@@ -2405,6 +2485,7 @@ parseStatement: true, parseSourceElement: true */
     function parseVariableIdentifier() {
         var token;
 
+        skipComment();
         delegate.markStart();
         token = lex();
 
@@ -2418,6 +2499,7 @@ parseStatement: true, parseSourceElement: true */
     function parseVariableDeclaration(kind) {
         var init = null, id;
 
+        skipComment();
         delegate.markStart();
         id = parseVariableIdentifier();
 
@@ -2470,6 +2552,7 @@ parseStatement: true, parseSourceElement: true */
     function parseConstLetDeclaration(kind) {
         var declarations;
 
+        skipComment();
         delegate.markStart();
 
         expectKeyword(kind);
@@ -2805,6 +2888,7 @@ parseStatement: true, parseSourceElement: true */
             consequent = [],
             statement;
 
+        skipComment();
         delegate.markStart();
         if (matchKeyword('default')) {
             lex();
@@ -2894,6 +2978,7 @@ parseStatement: true, parseSourceElement: true */
     function parseCatchClause() {
         var param, body;
 
+        skipComment();
         delegate.markStart();
         expectKeyword('catch');
 
@@ -2958,6 +3043,7 @@ parseStatement: true, parseSourceElement: true */
             throwUnexpected(lookahead);
         }
 
+        skipComment();
         delegate.markStart();
 
         if (type === Token.Punctuator) {
@@ -3036,6 +3122,7 @@ parseStatement: true, parseSourceElement: true */
         var sourceElement, sourceElements = [], token, directive, firstRestricted,
             oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody;
 
+        skipComment();
         delegate.markStart();
         expect('{');
 
@@ -3148,6 +3235,7 @@ parseStatement: true, parseSourceElement: true */
     function parseFunctionDeclaration() {
         var id, params = [], body, token, stricted, tmp, firstRestricted, message, previousStrict;
 
+        skipComment();
         delegate.markStart();
 
         expectKeyword('function');
@@ -3293,178 +3381,13 @@ parseStatement: true, parseSourceElement: true */
 
     function parseProgram() {
         var body;
+
+        skipComment();
         delegate.markStart();
         strict = false;
         peek();
         body = parseSourceElements();
         return delegate.markEnd(delegate.createProgram(body));
-    }
-
-    // The following functions are needed only when the option to preserve
-    // the comments is active.
-
-    function addComment(type, value, start, end, loc) {
-        assert(typeof start === 'number', 'Comment must have valid position');
-
-        // Because the way the actual token is scanned, often the comments
-        // (if any) are skipped twice during the lexical analysis.
-        // Thus, we need to skip adding a comment if the comment array already
-        // handled it.
-        if (extra.comments.length > 0) {
-            if (extra.comments[extra.comments.length - 1].range[1] > start) {
-                return;
-            }
-        }
-
-        extra.comments.push({
-            type: type,
-            value: value,
-            range: [start, end],
-            loc: loc
-        });
-    }
-
-    function scanComment() {
-        var comment, ch, loc, start, blockComment, lineComment;
-
-        comment = '';
-        blockComment = false;
-        lineComment = false;
-
-        while (index < length) {
-            ch = source[index];
-
-            if (lineComment) {
-                ch = source[index++];
-                if (isLineTerminator(ch.charCodeAt(0))) {
-                    loc.end = {
-                        line: lineNumber,
-                        column: index - lineStart - 1
-                    };
-                    lineComment = false;
-                    addComment('Line', comment, start, index - 1, loc);
-                    if (ch === '\r' && source[index] === '\n') {
-                        ++index;
-                    }
-                    ++lineNumber;
-                    lineStart = index;
-                    comment = '';
-                } else if (index >= length) {
-                    lineComment = false;
-                    comment += ch;
-                    loc.end = {
-                        line: lineNumber,
-                        column: length - lineStart
-                    };
-                    addComment('Line', comment, start, length, loc);
-                } else {
-                    comment += ch;
-                }
-            } else if (blockComment) {
-                if (isLineTerminator(ch.charCodeAt(0))) {
-                    if (ch === '\r' && source[index + 1] === '\n') {
-                        ++index;
-                        comment += '\r\n';
-                    } else {
-                        comment += ch;
-                    }
-                    ++lineNumber;
-                    ++index;
-                    lineStart = index;
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                } else {
-                    ch = source[index++];
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                    comment += ch;
-                    if (ch === '*') {
-                        ch = source[index];
-                        if (ch === '/') {
-                            comment = comment.substr(0, comment.length - 1);
-                            blockComment = false;
-                            ++index;
-                            loc.end = {
-                                line: lineNumber,
-                                column: index - lineStart
-                            };
-                            addComment('Block', comment, start, index, loc);
-                            comment = '';
-                        }
-                    }
-                }
-            } else if (ch === '/') {
-                ch = source[index + 1];
-                if (ch === '/') {
-                    loc = {
-                        start: {
-                            line: lineNumber,
-                            column: index - lineStart
-                        }
-                    };
-                    start = index;
-                    index += 2;
-                    lineComment = true;
-                    if (index >= length) {
-                        loc.end = {
-                            line: lineNumber,
-                            column: index - lineStart
-                        };
-                        lineComment = false;
-                        addComment('Line', comment, start, index, loc);
-                    }
-                } else if (ch === '*') {
-                    start = index;
-                    index += 2;
-                    blockComment = true;
-                    loc = {
-                        start: {
-                            line: lineNumber,
-                            column: index - lineStart - 2
-                        }
-                    };
-                    if (index >= length) {
-                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
-                    }
-                } else {
-                    break;
-                }
-            } else if (isWhiteSpace(ch.charCodeAt(0))) {
-                ++index;
-            } else if (isLineTerminator(ch.charCodeAt(0))) {
-                ++index;
-                if (ch ===  '\r' && source[index] === '\n') {
-                    ++index;
-                }
-                ++lineNumber;
-                lineStart = index;
-            } else {
-                break;
-            }
-        }
-    }
-
-    function filterCommentLocation() {
-        var i, entry, comment, comments = [];
-
-        for (i = 0; i < extra.comments.length; ++i) {
-            entry = extra.comments[i];
-            comment = {
-                type: entry.type,
-                value: entry.value
-            };
-            if (extra.range) {
-                comment.range = entry.range;
-            }
-            if (extra.loc) {
-                comment.loc = entry.loc;
-            }
-            comments.push(comment);
-        }
-
-        extra.comments = comments;
     }
 
     function collectToken() {
@@ -3570,59 +3493,36 @@ parseStatement: true, parseSourceElement: true */
         skipComment();
 
         return {
-            range: [index, index],
-
-            loc: {
-                start: {
-                    line: lineNumber,
-                    column: index - lineStart
-                },
-                end: {
-                    line: lineNumber,
-                    column: index - lineStart
-                }
-            },
+            marker: [index, lineNumber, index - lineStart, 0, 0, 0],
 
             end: function () {
-                this.range[1] = index;
-                this.loc.end.line = lineNumber;
-                this.loc.end.column = index - lineStart;
+                this.marker[3] = index;
+                this.marker[4] = lineNumber;
+                this.marker[5] = index - lineStart;
             },
 
             apply: function (node) {
-                node.range = [this.range[0], this.range[1]];
-                node.loc = {
-                    start: {
-                        line: this.loc.start.line,
-                        column: this.loc.start.column
-                    },
-                    end: {
-                        line: this.loc.end.line,
-                        column: this.loc.end.column
-                    }
-                };
+                if (extra.range) {
+                    node.range = [this.marker[0], this.marker[3]];
+                }
+                if (extra.loc) {
+                    node.loc = {
+                        start: {
+                            line: this.marker[1],
+                            column: this.marker[2]
+                        },
+                        end: {
+                            line: this.marker[4],
+                            column: this.marker[5]
+                        }
+                    };
+                }
                 node = delegate.postProcess(node);
-            },
-
-            applyIf: function (node) {
-                if (extra.range && !node.range) {
-                    this.apply(node);
-                }
-                if (extra.loc && !node.loc) {
-                    this.apply(node);
-                }
-                return node;
             }
         };
     }
 
     function patch() {
-
-        if (extra.comments) {
-            extra.skipComment = skipComment;
-            skipComment = scanComment;
-        }
-
         if (typeof extra.tokens !== 'undefined') {
             extra.advance = advance;
             extra.scanRegExp = scanRegExp;
@@ -3633,10 +3533,6 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function unpatch() {
-        if (typeof extra.skipComment === 'function') {
-            skipComment = extra.skipComment;
-        }
-
         if (typeof extra.scanRegExp === 'function') {
             advance = extra.advance;
             scanRegExp = extra.scanRegExp;
@@ -3665,7 +3561,8 @@ parseStatement: true, parseSourceElement: true */
             labelSet: {},
             inFunctionBody: false,
             inIteration: false,
-            inSwitch: false
+            inSwitch: false,
+            lastCommentStart: -1,
         };
 
         extra = {};
@@ -3730,7 +3627,6 @@ parseStatement: true, parseSourceElement: true */
             filterTokenLocation();
             tokens = extra.tokens;
             if (typeof extra.comments !== 'undefined') {
-                filterCommentLocation();
                 tokens.comments = extra.comments;
             }
             if (typeof extra.errors !== 'undefined') {
@@ -3766,8 +3662,8 @@ parseStatement: true, parseSourceElement: true */
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
-            rangeStack: [],
-            locStack: []
+            lastCommentStart: -1,
+            markerStack: []
         };
 
         extra = {};
@@ -3805,7 +3701,6 @@ parseStatement: true, parseSourceElement: true */
         try {
             program = parseProgram();
             if (typeof extra.comments !== 'undefined') {
-                filterCommentLocation();
                 program.comments = extra.comments;
             }
             if (typeof extra.tokens !== 'undefined') {
