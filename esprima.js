@@ -4885,6 +4885,11 @@ parseYieldExpression: true
         };
 
         marker.apply = function (node) {
+            var nodeType = typeof node;
+            assert(nodeType === "object",
+                "Applying location marker to an unexpected node type: " +
+                    nodeType);
+
             if (extra.range) {
                 node.range = [this.range[0], this.range[1]];
             }
