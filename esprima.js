@@ -4844,11 +4844,9 @@ parseYieldExpression: true
         extra.tokens = tokens;
     }
 
-    function createLocationMarker() {
-        var marker = {};
-
-        marker.range = [index, index];
-        marker.loc = {
+    function LocationMarker() {
+        this.range = [index, index];
+        this.loc = {
             start: {
                 line: lineNumber,
                 column: index - lineStart
@@ -4858,14 +4856,18 @@ parseYieldExpression: true
                 column: index - lineStart
             }
         };
+    }
 
-        marker.end = function () {
+    LocationMarker.prototype = {
+        constructor: LocationMarker,
+
+        end: function () {
             this.range[1] = index;
             this.loc.end.line = lineNumber;
             this.loc.end.column = index - lineStart;
-        };
+        },
 
-        marker.applyGroup = function (node) {
+        applyGroup: function (node) {
             if (extra.range) {
                 node.groupRange = [this.range[0], this.range[1]];
             }
@@ -4882,9 +4884,9 @@ parseYieldExpression: true
                 };
                 node = delegate.postProcess(node);
             }
-        };
+        },
 
-        marker.apply = function (node) {
+        apply: function (node) {
             var nodeType = typeof node;
             assert(nodeType === "object",
                 "Applying location marker to an unexpected node type: " +
@@ -4906,9 +4908,11 @@ parseYieldExpression: true
                 };
                 node = delegate.postProcess(node);
             }
-        };
+        }
+    };
 
-        return marker;
+    function createLocationMarker() {
+        return new LocationMarker();
     }
 
     function trackGroupExpression() {
