@@ -3484,42 +3484,47 @@ parseStatement: true, parseSourceElement: true */
         extra.tokens = tokens;
     }
 
-    function createLocationMarker() {
+    function LocationMarker() {
+        this.marker = [index, lineNumber, index - lineStart, 0, 0, 0];
+    }
 
+    LocationMarker.prototype = {
+        constructor: LocationMarker,
+
+        end: function () {
+            this.marker[3] = index;
+            this.marker[4] = lineNumber;
+            this.marker[5] = index - lineStart;
+        },
+
+        apply: function (node) {
+            if (extra.range) {
+                node.range = [this.marker[0], this.marker[3]];
+            }
+            if (extra.loc) {
+                node.loc = {
+                    start: {
+                        line: this.marker[1],
+                        column: this.marker[2]
+                    },
+                    end: {
+                        line: this.marker[4],
+                        column: this.marker[5]
+                    }
+                };
+            }
+            node = delegate.postProcess(node);
+        }
+    };
+
+    function createLocationMarker() {
         if (!extra.loc && !extra.range) {
             return null;
         }
 
         skipComment();
 
-        return {
-            marker: [index, lineNumber, index - lineStart, 0, 0, 0],
-
-            end: function () {
-                this.marker[3] = index;
-                this.marker[4] = lineNumber;
-                this.marker[5] = index - lineStart;
-            },
-
-            apply: function (node) {
-                if (extra.range) {
-                    node.range = [this.marker[0], this.marker[3]];
-                }
-                if (extra.loc) {
-                    node.loc = {
-                        start: {
-                            line: this.marker[1],
-                            column: this.marker[2]
-                        },
-                        end: {
-                            line: this.marker[4],
-                            column: this.marker[5]
-                        }
-                    };
-                }
-                node = delegate.postProcess(node);
-            }
-        };
+        return new LocationMarker();
     }
 
     function patch() {
