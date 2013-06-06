@@ -6104,6 +6104,116 @@ var harmonyTestFixture = {
             }
         },
 
+        'class A {foo() {} static bar() {}}': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [9, 12],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 12 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [15, 17],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 17 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [15, 17],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 17 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    range: [9, 17],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 17 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'bar',
+                        range: [25, 28],
+                        loc: {
+                            start: { line: 1, column: 25 },
+                            end: { line: 1, column: 28 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [31, 33],
+                            loc: {
+                                start: { line: 1, column: 31 },
+                                end: { line: 1, column: 33 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [31, 33],
+                        loc: {
+                            start: { line: 1, column: 31 },
+                            end: { line: 1, column: 33 }
+                        }
+                    },
+                    kind: '',
+                    'static': true,
+                    range: [18, 33],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 33 }
+                    }
+                }],
+                range: [8, 34],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 34 }
+                }
+            },
+            range: [0, 34],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 34 }
+            }
+        },
+
         '"use strict"; (class A { static constructor() { super() }})': {
             type: 'Program',
             body: [{
