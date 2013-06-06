@@ -188,8 +188,8 @@ parseYieldExpression: true
     };
 
     ClassPropertyType = {
-        static: 1,
-        prototype: 2
+        static: 'static',
+        prototype: 'prototype'
     };
 
     // Error messages should be identical to V8.
@@ -4289,7 +4289,7 @@ parseYieldExpression: true
     function parseMethodDefinition(existingPropNames) {
         var token, key, param, propType, isValidDuplicateProp = false;
 
-        if (strict ? matchKeyword('static') : matchContextualKeyword('static')) {
+        if (lookahead.value === 'static') {
             propType = ClassPropertyType.static;
             lex();
         } else {
