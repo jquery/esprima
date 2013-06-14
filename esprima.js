@@ -1581,12 +1581,12 @@ parseStatement: true, parseSourceElement: true */
             };
         },
 
-        createTryStatement: function (block, guardedHandlers, handlers, finalizer) {
+        createTryStatement: function (block, guardedHandlers, handler, finalizer) {
             return {
                 type: Syntax.TryStatement,
                 block: block,
                 guardedHandlers: guardedHandlers,
-                handlers: handlers,
+                handler: handler,
                 finalizer: finalizer
             };
         },
@@ -2999,14 +2999,14 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseTryStatement() {
-        var block, handlers = [], finalizer = null;
+        var block, handler = null, finalizer = null;
 
         expectKeyword('try');
 
         block = parseBlock();
 
         if (matchKeyword('catch')) {
-            handlers.push(parseCatchClause());
+            handler = parseCatchClause();
         }
 
         if (matchKeyword('finally')) {
@@ -3014,11 +3014,11 @@ parseStatement: true, parseSourceElement: true */
             finalizer = parseBlock();
         }
 
-        if (handlers.length === 0 && !finalizer) {
+        if (!handler && !finalizer) {
             throwError({}, Messages.NoCatchOrFinally);
         }
 
-        return delegate.createTryStatement(block, [], handlers, finalizer);
+        return delegate.createTryStatement(block, [], handler, finalizer);
     }
 
     // 12.15 The debugger statement
