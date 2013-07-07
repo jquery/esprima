@@ -1108,6 +1108,47 @@ parseStatement: true, parseSourceElement: true */
         };
     }
 
+    function collectRegex() {
+        var pos, loc, regex, token;
+
+        skipComment();
+
+        pos = index;
+        loc = {
+            start: {
+                line: lineNumber,
+                column: index - lineStart
+            }
+        };
+
+        regex = scanRegExp();
+        loc.end = {
+            line: lineNumber,
+            column: index - lineStart
+        };
+
+        if (!extra.tokenize) {
+            // Pop the previous token, which is likely '/' or '/='
+            if (extra.tokens.length > 0) {
+                token = extra.tokens[extra.tokens.length - 1];
+                if (token.range[0] === pos && token.type === 'Punctuator') {
+                    if (token.value === '/' || token.value === '/=') {
+                        extra.tokens.pop();
+                    }
+                }
+            }
+
+            extra.tokens.push({
+                type: 'RegularExpression',
+                value: regex.literal,
+                range: [pos, index],
+                loc: loc
+            });
+        }
+
+        return regex;
+    }
+
     function isIdentifierName(token) {
         return token.type === Token.Identifier ||
             token.type === Token.Keyword ||
@@ -1123,7 +1164,7 @@ parseStatement: true, parseSourceElement: true */
         prevToken = extra.tokens[extra.tokens.length - 1];
         if (!prevToken) {
             // Nothing before that: it cannot be a division.
-            return scanRegExp();
+            return collectRegex();
         }
         if (prevToken.type === 'Punctuator') {
             if (prevToken.value === ')') {
@@ -1134,7 +1175,7 @@ parseStatement: true, parseSourceElement: true */
                          checkToken.value === 'while' ||
                          checkToken.value === 'for' ||
                          checkToken.value === 'with')) {
-                    return scanRegExp();
+                    return collectRegex();
                 }
                 return scanPunctuator();
             }
@@ -1153,7 +1194,7 @@ parseStatement: true, parseSourceElement: true */
                     // Named function.
                     checkToken = extra.tokens[extra.openCurlyToken - 5];
                     if (!checkToken) {
-                        return scanRegExp();
+                        return collectRegex();
                     }
                 } else {
                     return scanPunctuator();
@@ -1165,12 +1206,12 @@ parseStatement: true, parseSourceElement: true */
                     return scanPunctuator();
                 }
                 // It is a declaration.
-                return scanRegExp();
+                return collectRegex();
             }
-            return scanRegExp();
+            return collectRegex();
         }
         if (prevToken.type === 'Keyword') {
-            return scanRegExp();
+            return collectRegex();
         }
         return scanPunctuator();
     }
@@ -1226,6 +1267,38 @@ parseStatement: true, parseSourceElement: true */
         return scanPunctuator();
     }
 
+    function collectToken() {
+        var start, loc, token, range, value;
+
+        skipComment();
+        start = index;
+        loc = {
+            start: {
+                line: lineNumber,
+                column: index - lineStart
+            }
+        };
+
+        token = advance();
+        loc.end = {
+            line: lineNumber,
+            column: index - lineStart
+        };
+
+        if (token.type !== Token.EOF) {
+            range = [token.range[0], token.range[1]];
+            value = source.slice(token.range[0], token.range[1]);
+            extra.tokens.push({
+                type: TokenName[token.type],
+                value: value,
+                range: range,
+                loc: loc
+            });
+        }
+
+        return token;
+    }
+
     function lex() {
         var token;
 
@@ -1234,7 +1307,7 @@ parseStatement: true, parseSourceElement: true */
         lineNumber = token.lineNumber;
         lineStart = token.lineStart;
 
-        lookahead = advance();
+        lookahead = (typeof extra.tokens !== 'undefined') ? collectToken() : advance();
 
         index = token.range[1];
         lineNumber = token.lineNumber;
@@ -1249,7 +1322,7 @@ parseStatement: true, parseSourceElement: true */
         pos = index;
         line = lineNumber;
         start = lineStart;
-        lookahead = advance();
+        lookahead = (typeof extra.tokens !== 'undefined') ? collectToken() : advance();
         index = pos;
         lineNumber = line;
         lineStart = start;
@@ -2030,7 +2103,11 @@ parseStatement: true, parseSourceElement: true */
         } else if (match('{')) {
             expr = parseObjectInitialiser();
         } else if (match('/') || match('/=')) {
-            expr = delegate.createLiteral(scanRegExp());
+            if (typeof extra.tokens !== 'undefined') {
+                expr = delegate.createLiteral(collectRegex());
+            } else {
+                expr = delegate.createLiteral(scanRegExp());
+            }
         }
 
         if (expr) {
@@ -3390,79 +3467,6 @@ parseStatement: true, parseSourceElement: true */
         return delegate.markEnd(delegate.createProgram(body));
     }
 
-    function collectToken() {
-        var start, loc, token, range, value;
-
-        skipComment();
-        start = index;
-        loc = {
-            start: {
-                line: lineNumber,
-                column: index - lineStart
-            }
-        };
-
-        token = extra.advance();
-        loc.end = {
-            line: lineNumber,
-            column: index - lineStart
-        };
-
-        if (token.type !== Token.EOF) {
-            range = [token.range[0], token.range[1]];
-            value = source.slice(token.range[0], token.range[1]);
-            extra.tokens.push({
-                type: TokenName[token.type],
-                value: value,
-                range: range,
-                loc: loc
-            });
-        }
-
-        return token;
-    }
-
-    function collectRegex() {
-        var pos, loc, regex, token;
-
-        skipComment();
-
-        pos = index;
-        loc = {
-            start: {
-                line: lineNumber,
-                column: index - lineStart
-            }
-        };
-
-        regex = extra.scanRegExp();
-        loc.end = {
-            line: lineNumber,
-            column: index - lineStart
-        };
-
-        if (!extra.tokenize) {
-            // Pop the previous token, which is likely '/' or '/='
-            if (extra.tokens.length > 0) {
-                token = extra.tokens[extra.tokens.length - 1];
-                if (token.range[0] === pos && token.type === 'Punctuator') {
-                    if (token.value === '/' || token.value === '/=') {
-                        extra.tokens.pop();
-                    }
-                }
-            }
-
-            extra.tokens.push({
-                type: 'RegularExpression',
-                value: regex.literal,
-                range: [pos, index],
-                loc: loc
-            });
-        }
-
-        return regex;
-    }
-
     function filterTokenLocation() {
         var i, entry, token, tokens = [];
 
@@ -3527,23 +3531,6 @@ parseStatement: true, parseSourceElement: true */
         return new LocationMarker();
     }
 
-    function patch() {
-        if (typeof extra.tokens !== 'undefined') {
-            extra.advance = advance;
-            extra.scanRegExp = scanRegExp;
-
-            advance = collectToken;
-            scanRegExp = collectRegex;
-        }
-    }
-
-    function unpatch() {
-        if (typeof extra.scanRegExp === 'function') {
-            advance = extra.advance;
-            scanRegExp = extra.scanRegExp;
-        }
-    }
-
     function tokenize(code, options) {
         var toString,
             token,
@@ -3604,8 +3591,6 @@ parseStatement: true, parseSourceElement: true */
             }
         }
 
-        patch();
-
         try {
             peek();
             if (lookahead.type === Token.EOF) {
@@ -3640,7 +3625,6 @@ parseStatement: true, parseSourceElement: true */
         } catch (e) {
             throw e;
         } finally {
-            unpatch();
             extra = {};
         }
         return tokens;
@@ -3702,7 +3686,6 @@ parseStatement: true, parseSourceElement: true */
             }
         }
 
-        patch();
         try {
             program = parseProgram();
             if (typeof extra.comments !== 'undefined') {
@@ -3718,7 +3701,6 @@ parseStatement: true, parseSourceElement: true */
         } catch (e) {
             throw e;
         } finally {
-            unpatch();
             extra = {};
         }
 
