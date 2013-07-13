@@ -11324,6 +11324,72 @@ var harmonyTestFixture = {
             errors: []
         },
 
+        '(function a(a = "defaultValue") {})' : {
+            type: "Program",
+            body: [{
+				type: "ExpressionStatement",
+            	expression: {
+                    type: "FunctionExpression",
+                    id: {
+                        type: "Identifier",
+                        name: "a",
+                        range: [10, 11],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 11 }
+                        }
+                    },
+                    params: [{
+                        type: "Identifier",
+                        name: "a",
+                        range: [12, 13],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 13 }
+                        }
+                    }],
+                    defaults: [{
+                        type: "Literal",
+                        value: "defaultValue",
+                        raw: "\"defaultValue\"",
+                        range: [16, 30],
+                        loc: {
+                            start: { line: 1, column: 16 },
+                            end: { line: 1, column: 30 }
+                        }
+                    }],
+                    body: {
+                        type: "BlockStatement",
+                        body: [],
+                        range: [32, 34],
+                        loc: {
+                            start: { line: 1, column: 32 },
+                            end: { line: 1, column: 34 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [1, 34],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 34 }
+                    }
+                },
+				range: [0, 35],
+				loc: {
+					start: { line: 1, column: 0 },
+					end: { line: 1, column: 35 }
+				}
+			}],
+            range: [0, 35],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 35 }
+            },
+            errors: []
+        },
+
         'function a(a, b = "defaultValue") {}' : {
             type: "Program",
             body: [
