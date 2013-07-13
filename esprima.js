@@ -4083,7 +4083,7 @@ parseYieldExpression: true
     }
 
     function parseParam(options) {
-        var token, rest, param;
+        var token, rest, param, def;
 
         token = lookahead;
         if (token.value === '...') {
@@ -4103,6 +4103,11 @@ parseYieldExpression: true
         } else {
             param = parseVariableIdentifier();
             validateParam(options, token, token.value);
+            if (match('=')) {
+                lex();
+                def = parseAssignmentExpression();
+                ++options.defaultCount;
+            }
         }
 
         if (rest) {
@@ -4114,6 +4119,7 @@ parseYieldExpression: true
         }
 
         options.params.push(param);
+        options.defaults.push(def);
         return !match(')');
     }
 
@@ -4122,6 +4128,8 @@ parseYieldExpression: true
 
         options = {
             params: [],
+            defaultCount: 0,
+            defaults: [],
             rest: null,
             firstRestricted: firstRestricted
         };
@@ -4139,6 +4147,10 @@ parseYieldExpression: true
         }
 
         expect(')');
+
+        if (options.defaultCount === 0) {
+            options.defaults = [];
+        }
 
         return options;
     }
@@ -4197,7 +4209,7 @@ parseYieldExpression: true
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createFunctionDeclaration(id, tmp.params, [], body, tmp.rest, generator, expression);
+        return delegate.createFunctionDeclaration(id, tmp.params, tmp.defaults, body, tmp.rest, generator, expression);
     }
 
     function parseFunctionExpression() {
