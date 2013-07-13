@@ -241,7 +241,9 @@ parseYieldExpression: true
         NoUnintializedConst: 'Const must be initialized',
         ComprehensionRequiresBlock: 'Comprehension must have at least one block',
         ComprehensionError:  'Comprehension Error',
-        EachNotAllowed:  'Each is not supported'
+        EachNotAllowed:  'Each is not supported',
+        ParameterAfterDefaultParameter: 'function parameter %0 defined without default value after parameters with default value',
+        RestParameterWithDefaultValue: 'rest parameter %0 may not have a default'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -2275,24 +2277,22 @@ parseYieldExpression: true
     // 11.1.5 Object Initialiser
 
     function parsePropertyFunction(options) {
-        var previousStrict, previousYieldAllowed, params, body;
+        var previousStrict, previousYieldAllowed, params, defaults, body;
 
         previousStrict = strict;
         previousYieldAllowed = state.yieldAllowed;
         state.yieldAllowed = options.generator;
         params = options.params || [];
+        defaults = options.defaults || [];
 
         body = parseConciseBody();
-        if (options.name && strict && isRestrictedWord(params[0].name)) {
-            throwErrorTolerant(options.name, Messages.StrictParamName);
-        }
         if (state.yieldAllowed && !state.yieldFound) {
             throwError({}, Messages.NoYieldInGenerator);
         }
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createFunctionExpression(null, params, [], body, options.rest || null, options.generator, body.type !== Syntax.BlockStatement);
+        return delegate.createFunctionExpression(null, params, defaults, body, options.rest || null, options.generator, body.type !== Syntax.BlockStatement);
     }
 
 
@@ -2311,6 +2311,7 @@ parseYieldExpression: true
 
         method = parsePropertyFunction({
             params: tmp.params,
+            defaults: tmp.defaults,
             rest: tmp.rest,
             generator: options.generator
         });
@@ -2357,10 +2358,19 @@ parseYieldExpression: true
             if (token.value === 'set' && !(match(':') || match('('))) {
                 key = parseObjectPropertyKey();
                 expect('(');
-                token = lookahead;
-                param = [ parseVariableIdentifier() ];
+                param = {
+                    params: [],
+                    defaults: [],
+                    generator: false,
+                    paramSet: {}
+                };
+                parseParam(param);
+                if (strict && param.stricted) {
+                    throwErrorTolerant(param.stricted, param.message);
+                }
+                parseParamDefault(param);
                 expect(')');
-                return delegate.createProperty('set', key, parsePropertyFunction({ params: param, generator: false, name: token }), false, false);
+                return delegate.createProperty('set', key, parsePropertyFunction(param), false, false);
             }
             if (match(':')) {
                 lex();
@@ -2964,9 +2974,10 @@ parseYieldExpression: true
     }
 
     function reinterpretAsCoverFormalsList(expressions) {
-        var i, len, param, params, options, rest;
+        var i, len, param, params, defaults, options, rest, shouldBeAssignmentExpression = false;
 
         params = [];
+        defaults = [];
         rest = null;
         options = {
             paramSet: {}
@@ -2974,16 +2985,28 @@ parseYieldExpression: true
 
         for (i = 0, len = expressions.length; i < len; i += 1) {
             param = expressions[i];
+
             if (param.type === Syntax.Identifier) {
+                if( shouldBeAssignmentExpression ) {
+                    throwErrorTolerant({}, Messages.UnexpectedToken, "=>");
+                }
                 params.push(param);
                 validateParam(options, param, param.name);
             } else if (param.type === Syntax.ObjectExpression || param.type === Syntax.ArrayExpression) {
+                if( shouldBeAssignmentExpression ) {
+                    throwErrorTolerant({}, Messages.UnexpectedToken, "=>");
+                }
                 reinterpretAsDestructuredParameter(options, param);
                 params.push(param);
             } else if (param.type === Syntax.SpreadElement) {
                 assert(i === len - 1, "It is guaranteed that SpreadElement is last element by parseExpression");
                 reinterpretAsDestructuredParameter(options, param.argument);
                 rest = param.argument;
+            } else if (param.type === Syntax.AssignmentExpression && param.operator === "=") {
+                shouldBeAssignmentExpression = true;
+
+                params.push(param.left);
+                defaults.push(param.right);
             } else {
                 return null;
             }
@@ -2996,7 +3019,7 @@ parseYieldExpression: true
             throwErrorTolerant(options.stricted, options.message);
         }
 
-        return { params: params, rest: rest };
+        return { params: params, rest: rest, defaults: defaults };
     }
 
     function parseArrowFunctionExpression(options) {
@@ -3012,7 +3035,7 @@ parseYieldExpression: true
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createArrowFunctionExpression(options.params, [], body, options.rest, body.type !== Syntax.BlockStatement);
+        return delegate.createArrowFunctionExpression(options.params, options.defaults, body, options.rest, body.type !== Syntax.BlockStatement);
     }
 
     function parseAssignmentExpression() {
@@ -3043,7 +3066,7 @@ parseYieldExpression: true
                 if (isRestrictedWord(expr.name)) {
                     throwError({}, Messages.StrictParamName);
                 }
-                return parseArrowFunctionExpression({ params: [ expr ], rest: null });
+                return parseArrowFunctionExpression({ params: [ expr ], defaults: [], rest: null });
             }
         }
 
@@ -4083,7 +4106,7 @@ parseYieldExpression: true
     }
 
     function parseParam(options) {
-        var token, rest, param;
+        var token, rest, param, hasDefaults = options.defaults.length;
 
         token = lookahead;
         if (token.value === '...') {
@@ -4102,10 +4125,18 @@ parseYieldExpression: true
             reinterpretAsDestructuredParameter(options, param);
         } else {
             param = parseVariableIdentifier();
+
+            if( hasDefaults && !match('=') && !rest ) {
+                throwErrorTolerant({}, Messages.ParameterAfterDefaultParameter, param.name);
+            }
+
             validateParam(options, token, token.value);
         }
 
         if (rest) {
+            if (match('=')) {
+                throwErrorTolerant({}, Messages.RestParameterWithDefaultValue, param.name);
+            }
             if (!match(')')) {
                 throwError({}, Messages.ParameterAfterRestParameter);
             }
@@ -4117,13 +4148,23 @@ parseYieldExpression: true
         return !match(')');
     }
 
+    function parseParamDefault(options) {
+        if (match('=')) {
+            lex();
+
+            options.defaults.push(parsePostfixExpression());
+        }
+        return !match(')');
+    }
+
     function parseParams(firstRestricted) {
         var options;
 
         options = {
             params: [],
             rest: null,
-            firstRestricted: firstRestricted
+            firstRestricted: firstRestricted,
+            defaults: []
         };
 
         expect('(');
@@ -4133,6 +4174,11 @@ parseYieldExpression: true
             while (index < length) {
                 if (!parseParam(options)) {
                     break;
+                }
+                if (match('=')) {
+                    if (!parseParamDefault(options)) {
+                        break;
+                    }
                 }
                 expect(',');
             }
@@ -4197,7 +4243,7 @@ parseYieldExpression: true
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createFunctionDeclaration(id, tmp.params, [], body, tmp.rest, generator, expression);
+        return delegate.createFunctionDeclaration(id, tmp.params, tmp.defaults, body, tmp.rest, generator, expression);
     }
 
     function parseFunctionExpression() {
@@ -4361,14 +4407,23 @@ parseYieldExpression: true
             existingPropNames[propType][key.name].set = true;
 
             expect('(');
-            token = lookahead;
-            param = [ parseVariableIdentifier() ];
+            param = {
+                params: [],
+                defaults: [],
+                generator: false,
+                paramSet: {}
+            };
+            parseParam(param);
+            if (strict && param.stricted) {
+                throwErrorTolerant(param.stricted, param.message);
+            }
+            parseParamDefault(param);
             expect(')');
             return delegate.createMethodDefinition(
                 propType,
                 'set',
                 key,
-                parsePropertyFunction({ params: param, generator: false, name: token })
+                parsePropertyFunction(param)
             );
         }
 
@@ -5229,6 +5284,7 @@ parseYieldExpression: true
             parseForVariableDeclaration = extra.parseForVariableDeclaration;
             parseFunctionDeclaration = extra.parseFunctionDeclaration;
             parseFunctionExpression = extra.parseFunctionExpression;
+            parseParams = extra.parseParams;
             parseGlob = extra.parseGlob;
             parseImportDeclaration = extra.parseImportDeclaration;
             parseImportSpecifier = extra.parseImportSpecifier;

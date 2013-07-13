@@ -1289,10 +1289,218 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 13 }
             }
+        },
+
+        '([a] = ["defaultValue"]) => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'ArrayPattern',
+                    elements: [{
+                        type: 'Identifier',
+                        name: 'a',
+                        range: [2, 3],
+                        loc: {
+                            start: { line: 1, column: 2 },
+                            end: { line: 1, column: 3 }
+                        }
+                    }],
+                    range: [1, 4],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 4 }
+                    }
+                }],
+                defaults: [{
+                    type: "ArrayExpression",
+                    elements: [{
+                        type: "Literal",
+                        value: "defaultValue",
+                        raw: "\"defaultValue\"",
+                        range: [ 8, 22 ],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 22 }
+                        }
+                    }],
+                    range: [7, 23],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 23 }
+                    }
+                }],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [28, 30],
+                    loc: {
+                        start: { line: 1, column: 28 },
+                        end: { line: 1, column: 30 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 30],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 30 }
+                }
+            },
+            range: [0, 30],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 30 }
+            }
+        },
+
+        '(a = "defaultValue") => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }],
+                defaults: [{
+                    type: "Literal",
+                    value: "defaultValue",
+                    raw: "\"defaultValue\"",
+                    range: [ 5, 19 ],
+                    loc: {
+                        start: {
+                            line: 1,
+                            column: 5
+                        },
+                        end: {
+                            line: 1,
+                            column: 19
+                        }
+                    }
+                }],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [24, 26],
+                    loc: {
+                        start: { line: 1, column: 24 },
+                        end: { line: 1, column: 26 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 26],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 26 }
+                }
+            },
+            range: [0, 26],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 26 }
+            }
+        },
+
+        '(a = "defaultValue", ...rest) => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }],
+                defaults: [{
+                    type: "Literal",
+                    value: "defaultValue",
+                    raw: "\"defaultValue\"",
+                    range: [ 5, 19 ],
+                    loc: {
+                        start: {
+                            line: 1,
+                            column: 5
+                        },
+                        end: {
+                            line: 1,
+                            column: 19
+                        }
+                    }
+                }],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [33, 35],
+                    loc: {
+                        start: { line: 1, column: 33 },
+                        end: { line: 1, column: 35 }
+                    }
+                },
+                rest: {
+                    type: "Identifier",
+                    name: "rest",
+                    range: [24, 28],
+                    loc: {
+                        start: { line: 1, column: 24 },
+                        end: { line: 1, column: 28 }
+                    }
+                },
+                generator: false,
+                expression: true,
+                range: [0, 35],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 35 }
+                }
+            },
+            range: [0, 35],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 35 }
+            }
+        },
+
+        '(a = "defaultValue", bar) => 42': {
+            index: 25,
+            lineNumber: 1,
+            column: 26,
+            message: 'Error: Line 1: Unexpected token =>',
+            description: 'Unexpected token =>'
+        },
+
+        '(a = "defaultValue", [bar]) => 42': {
+            index: 27,
+            lineNumber: 1,
+            column: 28,
+            message: 'Error: Line 1: Unexpected token =>',
+            description: 'Unexpected token =>'
+        },
+
+        '(a = "defaultValue", bar + 1) => 42': {
+            index: 30,
+            lineNumber: 1,
+            column: 31,
+            message: 'Error: Line 1: Unexpected token =>',
+            description: 'Unexpected token =>'
         }
-
     },
-
 
     // ECMAScript 6th Syntax, 13.13 Method Definitions
 
@@ -1697,6 +1905,102 @@ var harmonyTestFixture = {
             }
         },
 
+        'x = { set(value = "defaultValue") { } }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'set',
+                            range: [6, 9],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 9 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: "Identifier",
+                                name: "value",
+                                range: [ 10, 15 ],
+                                loc: {
+                                    start: { line: 1, column: 10 },
+                                    end: { line: 1, column: 15 }
+                                }
+                            }],
+                            defaults: [{
+                                type: "Literal",
+                                value: "defaultValue",
+                                raw: "\"defaultValue\"",
+                                range: [ 18, 32 ],
+                                loc: {
+                                    start: { line: 1, column: 18 },
+                                    end: {
+                                        line: 1, column: 32 }
+                                }
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [34, 37],
+                                loc: {
+                                    start: { line: 1, column: 34 },
+                                    end: { line: 1, column: 37 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [34, 37],
+                            loc: {
+                                start: { line: 1, column: 34 },
+                                end: { line: 1, column: 37 }
+                            }
+                        },
+                        kind: 'init',
+                        method: true,
+                        shorthand: false,
+                        range: [6, 37],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 37 }
+                        }
+                    }],
+                    range: [4, 39],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 39 }
+                    }
+                },
+                range: [0, 39],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 39 }
+                }
+            },
+            range: [0, 39],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 39 }
+            }
+        },
+
         'x = { method() 42 }': {
             type: 'ExpressionStatement',
             expression: {
@@ -1773,6 +2077,102 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 19 }
+            }
+        },
+
+        'x = { method(a = "defaultValue") 42 }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'method',
+                            range: [6, 12],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 12 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: "Identifier",
+                                name: "a",
+                                range: [ 13, 14 ],
+                                loc: {
+                                    start: { line: 1, column: 13 },
+                                    end: { line: 1, column: 14 }
+                                }
+                            }],
+                            defaults: [{
+                                type: "Literal",
+                                value: "defaultValue",
+                                raw: "\"defaultValue\"",
+                                range: [ 17, 31 ],
+                                loc: {
+                                    start: { line: 1, column: 17 },
+                                    end: { line: 1, column: 31 }
+                                }
+                            }],
+                            body: {
+                                type: 'Literal',
+                                value: 42,
+                                raw: '42',
+                                range: [33, 35],
+                                loc: {
+                                    start: { line: 1, column: 33 },
+                                    end: { line: 1, column: 35 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: true,
+                            range: [33, 35],
+                            loc: {
+                                start: { line: 1, column: 33 },
+                                end: { line: 1, column: 35 }
+                            }
+                        },
+                        kind: 'init',
+                        method: true,
+                        shorthand: false,
+                        range: [6, 35],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 35 }
+                        }
+                    }],
+                    range: [4, 37],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 37 }
+                    }
+                },
+                range: [0, 37],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 37 }
+                }
+            },
+            range: [0, 37],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 37 }
             }
         },
 
@@ -1956,6 +2356,119 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 31 }
+            }
+        },
+
+        'x = { set method(val = "defaultValue") v = val }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'method',
+                            range: [10, 16],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 16 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'val',
+                                range: [17, 20],
+                                loc: {
+                                    start: { line: 1, column: 17 },
+                                    end: { line: 1, column: 20 }
+                                }
+                            }],
+                            defaults: [{
+                                type: "Literal",
+                                value: "defaultValue",
+                                raw: "\"defaultValue\"",
+                                range: [ 23, 37 ],
+                                loc: {
+                                    start: { line: 1, column: 23 },
+                                    end: { line: 1, column: 37 }
+                                }
+                            }],
+                            body: {
+                                type: 'AssignmentExpression',
+                                operator: '=',
+                                left: {
+                                    type: 'Identifier',
+                                    name: 'v',
+                                    range: [39, 40],
+                                    loc: {
+                                        start: { line: 1, column: 39 },
+                                        end: { line: 1, column: 40 }
+                                    }
+                                },
+                                right: {
+                                    type: 'Identifier',
+                                    name: 'val',
+                                    range: [43, 46],
+                                    loc: {
+                                        start: { line: 1, column: 43 },
+                                        end: { line: 1, column: 46 }
+                                    }
+                                },
+                                range: [39, 46],
+                                loc: {
+                                    start: { line: 1, column: 39 },
+                                    end: { line: 1, column: 46 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: true,
+                            range: [39, 46],
+                            loc: {
+                                start: { line: 1, column: 39 },
+                                end: { line: 1, column: 46 }
+                            }
+                        },
+                        kind: 'set',
+                        method: false,
+                        shorthand: false,
+                        range: [6, 46],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 46 }
+                        }
+                    }],
+                    range: [4, 48],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 48 }
+                    }
+                },
+                range: [0, 48],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 48 }
+                }
+            },
+            range: [0, 48],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 48 }
             }
         }
 
@@ -3535,6 +4048,64 @@ var harmonyTestFixture = {
             }
         },
 
+        'export function parse(a = "defaultValue") { }': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'parse',
+                    range: [ 16, 21 ],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 21 }
+                    }
+                },
+                params: [{
+                    type: "Identifier",
+                    name: "a",
+                    range: [ 22, 23 ],
+                    loc: {
+                        start: { line: 1, column: 22 },
+                        end: { line: 1, column: 23 }
+                    }
+                }],
+                defaults: [{
+                    type: "Literal",
+                    value: "defaultValue",
+                    raw: "\"defaultValue\"",
+                    range: [ 26, 40 ],
+                    loc: {
+                        start: { line: 1, column: 26 },
+                        end: { line: 1, column: 40 }
+                    }
+                }],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [ 42, 45 ],
+                    loc: {
+                        start: { line: 1, column: 42 },
+                        end: { line: 1, column: 45 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [ 7, 45 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 45 }
+                }
+            },
+            specifiers: null,
+            range: [ 0, 45 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 45 }
+            }
+        },
+
         'export module System = SolarSystem': {
             type: 'ExportDeclaration',
             declaration: {
@@ -4542,6 +5113,80 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 30 }
+            }
+        },
+
+        'function* test (a = "defaultValue") { yield *v }': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'test',
+                range: [10, 14],
+                loc: {
+                    start: { line: 1, column: 10 },
+                    end: { line: 1, column: 14}
+                }
+            },
+            params: [{
+                type: "Identifier",
+                name: "a",
+                range: [ 16, 17 ],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 17 }
+                }
+            }],
+            defaults: [{
+                type: "Literal",
+                value: "defaultValue",
+                raw: "\"defaultValue\"",
+                range: [ 20, 34 ],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 34 }
+                }
+            }],
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'YieldExpression',
+                        argument: {
+                            type: 'Identifier',
+                            name: 'v',
+                            range: [45, 46],
+                            loc: {
+                                start: { line: 1, column: 45 },
+                                end: { line: 1, column: 46 }
+                            }
+                        },
+                        delegate: true,
+                        range: [38, 46],
+                        loc: {
+                            start: { line: 1, column: 38 },
+                            end: { line: 1, column: 46 }
+                        }
+                    },
+                    range: [38, 47],
+                    loc: {
+                        start: { line: 1, column: 38 },
+                        end: { line: 1, column: 47 }
+                    }
+                }],
+                range: [36, 48],
+                loc: {
+                    start: { line: 1, column: 36 },
+                    end: { line: 1, column: 48 }
+                }
+            },
+            rest: null,
+            generator: true,
+            expression: false,
+            range: [0, 48],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 48 }
             }
         },
 
@@ -6214,6 +6859,174 @@ var harmonyTestFixture = {
             }
         },
 
+        'class A {foo(a = "defaultValue") {} static bar(a = "defaultValue") {}}': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [9, 12],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 12 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [{
+                            type: "Identifier",
+                            name: "a",
+                            range: [ 13, 14 ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 13
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 14
+                                }
+                            }
+                        }],
+                        defaults: [{
+                            type: "Literal",
+                            value: "defaultValue",
+                            raw: "\"defaultValue\"",
+                            range: [ 17, 31 ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 17
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 31
+                                }
+                            }
+                        }],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [33, 35],
+                            loc: {
+                                start: { line: 1, column: 33 },
+                                end: { line: 1, column: 35 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [33, 35],
+                        loc: {
+                            start: { line: 1, column: 33 },
+                            end: { line: 1, column: 35 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    range: [9, 35],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 35 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'bar',
+                        range: [43, 46],
+                        loc: {
+                            start: { line: 1, column: 43 },
+                            end: { line: 1, column: 46 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [{
+                            type: "Identifier",
+                            name: "a",
+                            range: [ 47, 48 ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 47
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 48
+                                }
+                            }
+                        }],
+                        defaults: [{
+                            type: "Literal",
+                            value: "defaultValue",
+                            raw: "\"defaultValue\"",
+                            range: [ 51, 65 ],
+                            loc: {
+                                start: {
+                                    line: 1,
+                                    column: 51
+                                },
+                                end: {
+                                    line: 1,
+                                    column: 65
+                                }
+                            }
+                        }],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [67, 69],
+                            loc: {
+                                start: { line: 1, column: 67 },
+                                end: { line: 1, column: 69 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [67, 69],
+                        loc: {
+                            start: { line: 1, column: 67 },
+                            end: { line: 1, column: 69 }
+                        }
+                    },
+                    kind: '',
+                    'static': true,
+                    range: [36, 69],
+                    loc: {
+                        start: { line: 1, column: 36 },
+                        end: { line: 1, column: 69 }
+                    }
+                }],
+                range: [8, 70],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 70 }
+                }
+            },
+            range: [0, 70],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 70 }
+            }
+        },
+
         '"use strict"; (class A { static constructor() { super() }})': {
             type: 'Program',
             body: [{
@@ -6338,6 +7151,163 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 59 }
+            },
+            comments: []
+        },
+
+        '"use strict"; (class A { static constructor(a = "defaultValue") { super() }})': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 'use strict',
+                    raw: '"use strict"',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'ClassExpression',
+                    id: {
+                        type: 'Identifier',
+                        name: 'A',
+                        range: [21, 22],
+                        loc: {
+                            start: { line: 1, column: 21 },
+                            end: { line: 1, column: 22 }
+                        }
+                    },
+                    superClass: null,
+                    body: {
+                        type: 'ClassBody',
+                        body: [{
+                            type: 'MethodDefinition',
+                            key: {
+                                type: 'Identifier',
+                                name: 'constructor',
+                                range: [32, 43],
+                                loc: {
+                                    start: { line: 1, column: 32 },
+                                    end: { line: 1, column: 43 }
+                                }
+                            },
+                            value: {
+                                type: 'FunctionExpression',
+                                id: null,
+                                params: [{
+                                    type: "Identifier",
+                                    name: "a",
+                                    range: [ 44, 45 ],
+                                    loc: {
+                                        start: {
+                                            line: 1,
+                                            column: 44
+                                        },
+                                        end: {
+                                            line: 1,
+                                            column: 45
+                                        }
+                                    }
+                                }],
+                                defaults: [{
+                                    type: "Literal",
+                                    value: "defaultValue",
+                                    raw: "\"defaultValue\"",
+                                    range: [ 48, 62 ],
+                                    loc: {
+                                        start: {
+                                            line: 1,
+                                            column: 48
+                                        },
+                                        end: {
+                                            line: 1,
+                                            column: 62
+                                        }
+                                    }
+                                }],
+                                body: {
+                                    type: 'BlockStatement',
+                                    body: [{
+                                        type: 'ExpressionStatement',
+                                        expression: {
+                                            type: 'CallExpression',
+                                            callee: {
+                                                type: 'Identifier',
+                                                name: 'super',
+                                                range: [66, 71],
+                                                loc: {
+                                                    start: { line: 1, column: 66 },
+                                                    end: { line: 1, column: 71 }
+                                                }
+                                            },
+                                            'arguments': [],
+                                            range: [66, 73],
+                                            loc: {
+                                                start: { line: 1, column: 66 },
+                                                end: { line: 1, column: 73 }
+                                            }
+                                        },
+                                        range: [66, 74],
+                                        loc: {
+                                            start: { line: 1, column: 66 },
+                                            end: { line: 1, column: 74 }
+                                        }
+                                    }],
+                                    range: [64, 75],
+                                    loc: {
+                                        start: { line: 1, column: 64 },
+                                        end: { line: 1, column: 75 }
+                                    }
+                                },
+                                rest: null,
+                                generator: false,
+                                expression: false,
+                                range: [64, 75],
+                                loc: {
+                                    start: { line: 1, column: 64 },
+                                    end: { line: 1, column: 75 }
+                                }
+                            },
+                            kind: '',
+                            'static': true,
+                            range: [25, 75],
+                            loc: {
+                                start: { line: 1, column: 25 },
+                                end: { line: 1, column: 75 }
+                            }
+                        }],
+                        range: [23, 76],
+                        loc: {
+                            start: { line: 1, column: 23 },
+                            end: { line: 1, column: 76 }
+                        }
+                    },
+                    range: [15, 76],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 76 }
+                    }
+                },
+                range: [14, 77],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 77 }
+                }
+            }],
+            range: [0, 77],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 77 }
             },
             comments: []
         },
@@ -7164,6 +8134,22 @@ var harmonyTestFixture = {
             description: 'Illegal duplicate property in class definition'
         },
 
+        '"use strict"; (class A { set foo(eval) { }})': {
+            index: 33,
+            lineNumber: 1,
+            column: 34,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode',
+            description: 'Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        '"use strict"; (class A { foo(eval) { }})': {
+            index: 29,
+            lineNumber: 1,
+            column: 30,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode',
+            description: 'Parameter name eval or arguments is not allowed in strict mode'
+        }
+
     },
 
     'Expression Closures': {
@@ -7228,6 +8214,380 @@ var harmonyTestFixture = {
             }
         },
 
+        'function a(a = "defaultValue") 1' : {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'a',
+                range: [
+                    9,
+                    10
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 9
+                    },
+                    end: {
+                        line: 1,
+                        column: 10
+                    }
+                }
+            },
+            params: [{
+                type: "Identifier",
+                name: "a",
+                range: [ 11, 12 ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 11
+                    },
+                    end: {
+                        line: 1,
+                        column: 12
+                    }
+                }
+            }],
+            defaults: [{
+                type: "Literal",
+                value: "defaultValue",
+                raw: "\"defaultValue\"",
+                range: [ 15, 29 ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 15
+                    },
+                    end: {
+                        line: 1,
+                        column: 29
+                    }
+                }
+            }],
+            body: {
+                type: 'Literal',
+                value: 1,
+                raw: '1',
+                range: [
+                    31,
+                    32
+                ],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 31
+                    },
+                    end: {
+                        line: 1,
+                        column: 32
+                    }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: true,
+            range: [
+                0,
+                32
+            ],
+            loc: {
+                start: {
+                    line: 1,
+                    column: 0
+                },
+                end: {
+                    line: 1,
+                    column: 32
+                }
+            }
+        },
+
+        'function a(a, {b} = {b: "defaultValue"}) a' : {
+            type: "Program",
+            body: [
+                {
+                    type: "FunctionDeclaration",
+                    id: {
+                        type: "Identifier",
+                        name: "a",
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    params: [{
+                        type: "Identifier",
+                        name: "a",
+                        range: [11, 12],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 12 }
+                        }
+                    }, {
+                        type: "ObjectPattern",
+                        properties: [{
+                            type: "Property",
+                            key: {
+                                type: "Identifier",
+                                name: "b",
+                                range: [15, 16],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 16 }
+                                }
+                            },
+                            value: {
+                                type: "Identifier",
+                                name: "b",
+                                range: [15, 16],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 16 }
+                                }
+                            },
+                            kind: "init",
+                            method: false,
+                            shorthand: true,
+                            range: [15, 16],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 16 }
+                            }
+                        }]
+                    }],
+                    defaults: [{
+                        type: "ObjectExpression",
+                        properties: [{
+                                type: "Property",
+                                key: {
+                                    type: "Identifier",
+                                    name: "b",
+                                    range: [21, 22],
+                                    loc: {
+                                        start: { line: 1, column: 21 },
+                                        end: { line: 1, column: 22 }
+                                    }
+                                },
+                                value: {
+                                    type: "Literal",
+                                    value: "defaultValue",
+                                    raw: "\"defaultValue\"",
+                                    range: [24, 38],
+                                    loc: {
+                                        start: { line: 1, column: 24 },
+                                        end: { line: 1, column: 38 }
+                                    }
+                                },
+                                kind: "init",
+                                method: false,
+                                shorthand: false,
+                                range: [21, 38],
+                                loc: {
+                                    start: { line: 1, column: 21 },
+                                    end: { line: 1, column: 38 }
+                                }
+                        }],
+                        range: [20, 39],
+                        loc: {
+                            start: { line: 1, column: 20 },
+                            end: { line: 1, column: 39 }
+                        }
+                    }],
+                    body: {
+                        type: "Identifier",
+                        name: "a",
+                        range: [41, 42],
+                        loc: {
+                            start: { line: 1, column: 41 },
+                            end: { line: 1, column: 42 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: true,
+                    range: [0, 42],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 42 }
+                    }
+                }
+            ],
+            range: [0, 42],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 42 }
+            },
+            errors: []
+        },
+
+        'function a(a, [b] = ["defaultValue"]) a' : {
+            type: "Program",
+            body: [
+                {
+                    type: "FunctionDeclaration",
+                    id: {
+                        type: "Identifier",
+                        name: "a",
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    params: [{
+                        type: "Identifier",
+                        name: "a",
+                        range: [11, 12],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 12 }
+                        }
+                    }, {
+                        type: "ArrayPattern",
+                        elements: [{
+                            type: "Identifier",
+                            name: "b",
+                            range: [15, 16],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 16 }
+                            }
+                        }]
+                    }],
+                    defaults: [{
+                        type: "ArrayExpression",
+                        elements: [{
+                            type: "Literal",
+                            value: "defaultValue",
+                            raw: "\"defaultValue\"",
+                            range: [21, 35],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 35 }
+                            }
+                        }],
+                        range: [20, 36],
+                        loc: {
+                            start: { line: 1, column: 20 },
+                            end: { line: 1, column: 36 }
+                        }
+                    }],
+                    body: {
+                        type: "Identifier",
+                        name: "a",
+                        range: [38, 39],
+                        loc: {
+                            start: { line: 1, column: 38 },
+                            end: { line: 1, column: 39 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: true,
+                    range: [0, 39],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 39 }
+                    }
+                }
+            ],
+            range: [0, 39],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 39 }
+            },
+            errors: []
+        },
+
+        'function a(a, [b] = ["defaultValue"], ...rest) a' : {
+            type: "Program",
+            body: [
+                {
+                    type: "FunctionDeclaration",
+                    id: {
+                        type: "Identifier",
+                        name: "a",
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    params: [{
+                        type: "Identifier",
+                        name: "a",
+                        range: [11, 12],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 12 }
+                        }
+                    }, {
+                        type: "ArrayPattern",
+                        elements: [{
+                            type: "Identifier",
+                            name: "b",
+                            range: [15, 16],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 16 }
+                            }
+                        }]
+                    }],
+                    defaults: [{
+                        type: "ArrayExpression",
+                        elements: [{
+                            type: "Literal",
+                            value: "defaultValue",
+                            raw: "\"defaultValue\"",
+                            range: [21, 35],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 35 }
+                            }
+                        }],
+                        range: [20, 36],
+                        loc: {
+                            start: { line: 1, column: 20 },
+                            end: { line: 1, column: 36 }
+                        }
+                    }],
+                    body: {
+                        type: "Identifier",
+                        name: "a",
+                        range: [47, 48],
+                        loc: {
+                            start: { line: 1, column: 47 },
+                            end: { line: 1, column: 48 }
+                        }
+                    },
+                    rest: {
+                        type: "Identifier",
+                        name: "rest",
+                        range: [41, 45],
+                        loc: {
+                            start: { line: 1, column: 41 },
+                            end: { line: 1, column: 45 }
+                        }
+                    },
+                    generator: false,
+                    expression: true,
+                    range: [0, 48],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 48 }
+                    }
+                }
+            ],
+            range: [0, 48],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 48 }
+            },
+            errors: []
+        },
+
         'function a() {} // not an expression': {
             type: 'FunctionDeclaration',
             id: {
@@ -7285,6 +8645,14 @@ var harmonyTestFixture = {
                     column: 15
                 }
             }
+        },
+
+        'function a(a = "defaultValue", b) 1': {
+            index: 32,
+            lineNumber: 1,
+            column: 33,
+            message: 'Error: Line 1: function parameter b defined without default value after parameters with default value',
+            description: 'function parameter b defined without default value after parameters with default value'
         }
     },
 
@@ -7337,6 +8705,72 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 22 }
             }
+        },
+
+
+        'function f(a = "defaultValue", ...b) {}': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'f',
+                range: [9, 10],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            params: [{
+                type: 'Identifier',
+                name: 'a',
+                range: [11, 12],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 12 }
+                }
+            }],
+            defaults: [{
+                type: "Literal",
+                value: "defaultValue",
+                raw: "\"defaultValue\"",
+                range: [15, 29],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 29 }
+                }
+            }],
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [37, 39],
+                loc: {
+                    start: { line: 1, column: 37 },
+                    end: { line: 1, column: 39 }
+                }
+            },
+            rest: {
+                type: 'Identifier',
+                name: 'b',
+                range: [34, 35],
+                loc: {
+                    start: { line: 1, column: 34 },
+                    end: { line: 1, column: 35 }
+                }
+            },
+            generator: false,
+            expression: false,
+            range: [0, 39],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 39 }
+            }
+        },
+
+        'function f(a, ...b = ["defaultValue"]) {}': {
+            index: 18,
+            lineNumber: 1,
+            column: 19,
+            message: 'Error: Line 1: rest parameter b may not have a default',
+            description: 'rest parameter b may not have a default'
         }
     },
 
@@ -9828,6 +11262,343 @@ var harmonyTestFixture = {
         }
     },
 
+    'ES6: Function default parameter': {
+
+        'function a(a = "defaultValue") {}' : {
+            type: "Program",
+            body: [
+                {
+                    type: "FunctionDeclaration",
+                    id: {
+                        type: "Identifier",
+                        name: "a",
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    params: [{
+                        type: "Identifier",
+                        name: "a",
+                        range: [11, 12],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 12 }
+                        }
+                    }],
+                    defaults: [{
+                        type: "Literal",
+                        value: "defaultValue",
+                        raw: "\"defaultValue\"",
+                        range: [15, 29],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 29 }
+                        }
+                    }],
+                    body: {
+                        type: "BlockStatement",
+                        body: [],
+                        range: [31, 33],
+                        loc: {
+                            start: { line: 1, column: 31 },
+                            end: { line: 1, column: 33 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [0, 33],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 33 }
+                    }
+                }
+            ],
+            range: [0, 33],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 33 }
+            },
+            errors: []
+        },
+
+        'function a(a, b = "defaultValue") {}' : {
+            type: "Program",
+            body: [
+                {
+                    type: "FunctionDeclaration",
+                    id: {
+                        type: "Identifier",
+                        name: "a",
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    params: [{
+                        type: "Identifier",
+                        name: "a",
+                        range: [11, 12],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 12 }
+                        }
+                    }, {
+                        type: "Identifier",
+                        name: "b",
+                        range: [14, 15],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 15 }
+                        }
+                    }],
+                    defaults: [{
+                        type: "Literal",
+                        value: "defaultValue",
+                        raw: "\"defaultValue\"",
+                        range: [18, 32],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 32 }
+                        }
+                    }],
+                    body: {
+                        type: "BlockStatement",
+                        body: [],
+                        range: [34, 36],
+                        loc: {
+                            start: { line: 1, column: 34 },
+                            end: { line: 1, column: 36 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [0, 36],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 36 }
+                    }
+                }
+            ],
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            },
+            errors: []
+        },
+
+        'function a(a, {b} = {b: "defaultValue"}) {}' : {
+            type: "Program",
+            body: [
+                {
+                    type: "FunctionDeclaration",
+                    id: {
+                        type: "Identifier",
+                        name: "a",
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    params: [{
+                        type: "Identifier",
+                        name: "a",
+                        range: [11, 12],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 12 }
+                        }
+                    }, {
+                        type: "ObjectPattern",
+                        properties: [{
+                            type: "Property",
+                            key: {
+                                type: "Identifier",
+                                name: "b",
+                                range: [15, 16],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 16 }
+                                }
+                            },
+                            value: {
+                                type: "Identifier",
+                                name: "b",
+                                range: [15, 16],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 16 }
+                                }
+                            },
+                            kind: "init",
+                            method: false,
+                            shorthand: true,
+                            range: [15, 16],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 16 }
+                            }
+                        }]
+                    }],
+                    defaults: [{
+                        type: "ObjectExpression",
+                        properties: [{
+                                type: "Property",
+                                key: {
+                                    type: "Identifier",
+                                    name: "b",
+                                    range: [21, 22],
+                                    loc: {
+                                        start: { line: 1, column: 21 },
+                                        end: { line: 1, column: 22 }
+                                    }
+                                },
+                                value: {
+                                    type: "Literal",
+                                    value: "defaultValue",
+                                    raw: "\"defaultValue\"",
+                                    range: [24, 38],
+                                    loc: {
+                                        start: { line: 1, column: 24 },
+                                        end: { line: 1, column: 38 }
+                                    }
+                                },
+                                kind: "init",
+                                method: false,
+                                shorthand: false,
+                                range: [21, 38],
+                                loc: {
+                                    start: { line: 1, column: 21 },
+                                    end: { line: 1, column: 38 }
+                                }
+                        }],
+                        range: [20, 39],
+                        loc: {
+                            start: { line: 1, column: 20 },
+                            end: { line: 1, column: 39 }
+                        }
+                    }],
+                    body: {
+                        type: "BlockStatement",
+                        body: [],
+                        range: [41, 43],
+                        loc: {
+                            start: { line: 1, column: 41 },
+                            end: { line: 1, column: 43 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [0, 43],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 43 }
+                    }
+                }
+            ],
+            range: [0, 43],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 43 }
+            },
+            errors: []
+        },
+
+        'function a(a, [b] = ["defaultValue"]) {}' : {
+            type: "Program",
+            body: [
+                {
+                    type: "FunctionDeclaration",
+                    id: {
+                        type: "Identifier",
+                        name: "a",
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    params: [{
+                        type: "Identifier",
+                        name: "a",
+                        range: [11, 12],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 12 }
+                        }
+                    }, {
+                        type: "ArrayPattern",
+                        elements: [{
+                            type: "Identifier",
+                            name: "b",
+                            range: [15, 16],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 16 }
+                            }
+                        }]
+                    }],
+                    defaults: [{
+                        type: "ArrayExpression",
+                        elements: [{
+                            type: "Literal",
+                            value: "defaultValue",
+                            raw: "\"defaultValue\"",
+                            range: [21, 35],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 35 }
+                            }
+                        }],
+                        range: [20, 36],
+                        loc: {
+                            start: { line: 1, column: 20 },
+                            end: { line: 1, column: 36 }
+                        }
+                    }],
+                    body: {
+                        type: "BlockStatement",
+                        body: [],
+                        range: [38, 40],
+                        loc: {
+                            start: { line: 1, column: 38 },
+                            end: { line: 1, column: 40 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [0, 40],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 40 }
+                    }
+                }
+            ],
+            range: [0, 40],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 40 }
+            },
+            errors: []
+        },
+
+        'function a(a = "defaultValue", b) { }': {
+            index: 32,
+            lineNumber: 1,
+            column: 33,
+            message: 'Error: Line 1: function parameter b defined without default value after parameters with default value',
+            description: 'function parameter b defined without default value after parameters with default value'
+        }
+    },
+
 
     'Harmony Invalid syntax': {
 
@@ -10528,6 +12299,13 @@ var harmonyTestFixture = {
             lineNumber: 1,
             column: 21,
             message: 'Error: Line 1: Invalid left-hand side in formals list'
+        },
+
+        '"use strict"; a = { set test(eval) { } }': {
+            index: 29,
+            lineNumber: 1,
+            column: 30,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         }
 
     }
