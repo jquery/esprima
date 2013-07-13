@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2013 Thaddee Tyl <thaddee.tyl@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2012 Mathias Bynens <mathias@qiwi.be>
@@ -136,15 +137,14 @@ parseYieldExpression: true
         DoWhileStatement: 'DoWhileStatement',
         EmptyStatement: 'EmptyStatement',
         ExportDeclaration: 'ExportDeclaration',
+        ExportBatchSpecifier: 'ExportBatchSpecifier',
         ExportSpecifier: 'ExportSpecifier',
-        ExportSpecifierSet: 'ExportSpecifierSet',
         ExpressionStatement: 'ExpressionStatement',
         ForInStatement: 'ForInStatement',
         ForOfStatement: 'ForOfStatement',
         ForStatement: 'ForStatement',
         FunctionDeclaration: 'FunctionDeclaration',
         FunctionExpression: 'FunctionExpression',
-        Glob: 'Glob',
         Identifier: 'Identifier',
         IfStatement: 'IfStatement',
         ImportDeclaration: 'ImportDeclaration',
@@ -1948,24 +1948,18 @@ parseYieldExpression: true
             };
         },
 
-        createGlob: function () {
-            return {
-                type: Syntax.Glob
-            };
-        },
-
-        createExportSpecifier: function (id, from) {
+        createExportSpecifier: function (id, name) {
             return {
                 type: Syntax.ExportSpecifier,
                 id: id,
-                from: from
+                name: name
             };
         },
 
-        createExportSpecifierSet: function (specifiers) {
+        createExportBatchSpecifier: function (source) {
             return {
-                type: Syntax.ExportSpecifierSet,
-                specifiers: specifiers
+                type: Syntax.ExportBatchSpecifier,
+                source: source
             };
         },
 
@@ -3254,11 +3248,6 @@ parseYieldExpression: true
         return delegate.createPath(body);
     }
 
-    function parseGlob() {
-        expect('*');
-        return delegate.createGlob();
-    }
-
     function parseModuleDeclaration() {
         var id, token, from = null;
 
@@ -3284,51 +3273,36 @@ parseYieldExpression: true
         return delegate.createModuleDeclaration(id, from, null);
     }
 
-    function parseExportSpecifierSetProperty() {
-        var id, from = null;
+    function parseExportBatchSpecifier() {
+        var src;
 
-        id = parseVariableIdentifier();
-
-        if (match(':')) {
+        expect('*');
+        src = null;
+        if (matchContextualKeyword('from')) {
             lex();
-            from = parsePath();
+            src = parsePrimaryExpression();
+            if (src.type !== Syntax.Literal) {
+                throwError({}, Messages.InvalidModuleSpecifier);
+            }
         }
 
-        return delegate.createExportSpecifier(id, from);
+        return delegate.createExportBatchSpecifier(src);
     }
 
     function parseExportSpecifier() {
-        var specifiers, id, from;
+        var id, name = null;
 
-        if (match('{')) {
+        id = parseVariableIdentifier();
+        if (matchContextualKeyword('as')) {
             lex();
-            specifiers = [];
-
-            do {
-                specifiers.push(parseExportSpecifierSetProperty());
-            } while (match(',') && lex());
-
-            expect('}');
-
-            return delegate.createExportSpecifierSet(specifiers);
+            name = parseVariableIdentifier();
         }
 
-        from = null;
-
-        if (match('*')) {
-            id = parseGlob();
-            if (matchContextualKeyword('from')) {
-                lex();
-                from = parsePath();
-            }
-        } else {
-            id = parseVariableIdentifier();
-        }
-        return delegate.createExportSpecifier(id, from);
+        return delegate.createExportSpecifier(id, name);
     }
 
     function parseExportDeclaration() {
-        var token, specifiers;
+        var token, def, id, src, specifiers;
 
         expectKeyword('export');
 
@@ -3336,6 +3310,11 @@ parseYieldExpression: true
 
         if (token.type === Token.Keyword || (token.type === Token.Identifier && token.value === 'module')) {
             switch (token.value) {
+            case 'default':
+                lex();
+                def = parseAssignmentExpression();
+                expect(';');
+                return delegate.createExportDeclaration(def, null);
             case 'function':
                 return delegate.createExportDeclaration(parseFunctionDeclaration(), null);
             case 'module':
@@ -3351,15 +3330,16 @@ parseYieldExpression: true
             throwUnexpected(lex());
         }
 
-        specifiers = [ parseExportSpecifier() ];
-        if (match(',')) {
-            while (index < length) {
-                if (!match(',')) {
-                    break;
-                }
-                lex();
+        specifiers = [];
+
+        if (match('*')) {
+            specifiers.push(parseExportBatchSpecifier());
+        } else {
+            expect('{');
+            do {
                 specifiers.push(parseExportSpecifier());
-            }
+            } while (match(',') && lex());
+            expect('}');
         }
 
         consumeSemicolon();
@@ -5133,15 +5113,14 @@ parseYieldExpression: true
             extra.parseComputedMember = parseComputedMember;
             extra.parseConditionalExpression = parseConditionalExpression;
             extra.parseConstLetDeclaration = parseConstLetDeclaration;
+            extra.parseExportBatchSpecifier = parseExportBatchSpecifier;
             extra.parseExportDeclaration = parseExportDeclaration;
             extra.parseExportSpecifier = parseExportSpecifier;
-            extra.parseExportSpecifierSetProperty = parseExportSpecifierSetProperty;
             extra.parseExpression = parseExpression;
             extra.parseForVariableDeclaration = parseForVariableDeclaration;
             extra.parseFunctionDeclaration = parseFunctionDeclaration;
             extra.parseFunctionExpression = parseFunctionExpression;
             extra.parseParams = parseParams;
-            extra.parseGlob = parseGlob;
             extra.parseImportDeclaration = parseImportDeclaration;
             extra.parseImportSpecifier = parseImportSpecifier;
             extra.parseModuleDeclaration = parseModuleDeclaration;
@@ -5176,15 +5155,14 @@ parseYieldExpression: true
             parseComputedMember = wrapTracking(extra.parseComputedMember);
             parseConditionalExpression = wrapTracking(extra.parseConditionalExpression);
             parseConstLetDeclaration = wrapTracking(extra.parseConstLetDeclaration);
+            parseExportBatchSpecifier = wrapTracking(parseExportBatchSpecifier);
             parseExportDeclaration = wrapTracking(parseExportDeclaration);
             parseExportSpecifier = wrapTracking(parseExportSpecifier);
-            parseExportSpecifierSetProperty = wrapTracking(parseExportSpecifierSetProperty);
             parseExpression = wrapTracking(extra.parseExpression);
             parseForVariableDeclaration = wrapTracking(extra.parseForVariableDeclaration);
             parseFunctionDeclaration = wrapTracking(extra.parseFunctionDeclaration);
             parseFunctionExpression = wrapTracking(extra.parseFunctionExpression);
             parseParams = wrapTracking(extra.parseParams);
-            parseGlob = wrapTracking(extra.parseGlob);
             parseImportDeclaration = wrapTracking(extra.parseImportDeclaration);
             parseImportSpecifier = wrapTracking(extra.parseImportSpecifier);
             parseModuleDeclaration = wrapTracking(extra.parseModuleDeclaration);
@@ -5236,14 +5214,13 @@ parseYieldExpression: true
             parseComputedMember = extra.parseComputedMember;
             parseConditionalExpression = extra.parseConditionalExpression;
             parseConstLetDeclaration = extra.parseConstLetDeclaration;
+            parseExportBatchSpecifier = extra.parseExportBatchSpecifier;
             parseExportDeclaration = extra.parseExportDeclaration;
             parseExportSpecifier = extra.parseExportSpecifier;
-            parseExportSpecifierSetProperty = extra.parseExportSpecifierSetProperty;
             parseExpression = extra.parseExpression;
             parseForVariableDeclaration = extra.parseForVariableDeclaration;
             parseFunctionDeclaration = extra.parseFunctionDeclaration;
             parseFunctionExpression = extra.parseFunctionExpression;
-            parseGlob = extra.parseGlob;
             parseImportDeclaration = extra.parseImportDeclaration;
             parseImportSpecifier = extra.parseImportSpecifier;
             parseGroupExpression = extra.parseGroupExpression;

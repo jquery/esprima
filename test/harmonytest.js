@@ -3285,6 +3285,25 @@ var harmonyTestFixture = {
             }
         },
 
+        'export default answer;': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'Identifier',
+                name: 'answer',
+                range: [15, 21],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            specifiers: null,
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
         'export var document': {
             type: 'ExportDeclaration',
             declaration: {
@@ -3617,110 +3636,12 @@ var harmonyTestFixture = {
             }
         },
 
-        'export SolarSystem': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Identifier',
-                    name: 'SolarSystem',
-                    range: [7, 18],
-                    loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 18 }
-                    }
-                },
-                from: null,
-                range: [7, 18],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 18 }
-                }
-            }],
-            range: [ 0, 18 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 18 }
-            }
-        },
-
-        'export Mercury, Venus, Earth': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Identifier',
-                    name: 'Mercury',
-                    range: [7, 14],
-                    loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 14 }
-                    }
-                },
-                from: null,
-                range: [7, 14],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 14 }
-                }
-            }, {
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Identifier',
-                    name: 'Venus',
-                    range: [16, 21],
-                    loc: {
-                        start: { line: 1, column: 16 },
-                        end: { line: 1, column: 21 }
-                    }
-                },
-                from: null,
-                range: [16, 21],
-                loc: {
-                    start: { line: 1, column: 16 },
-                    end: { line: 1, column: 21 }
-                }
-            }, {
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Identifier',
-                    name: 'Earth',
-                    range: [23, 28],
-                    loc: {
-                        start: { line: 1, column: 23 },
-                        end: { line: 1, column: 28 }
-                    }
-                },
-                from: null,
-                range: [23, 28],
-                loc: {
-                    start: { line: 1, column: 23 },
-                    end: { line: 1, column: 28 }
-                }
-            }],
-            range: [ 0, 28 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 28 }
-            }
-        },
-
         'export *': {
             type: 'ExportDeclaration',
             declaration: null,
             specifiers: [{
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Glob',
-                    range: [7, 8],
-                    loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 8 }
-                    }
-                },
-                from: null,
+                type: 'ExportBatchSpecifier',
+                source: null,
                 range: [7, 8],
                 loc: {
                     start: { line: 1, column: 7 },
@@ -3734,257 +3655,21 @@ var harmonyTestFixture = {
             }
         },
 
-        'export * from SolarSystem': {
+        'export * from "crypto"': {
             type: 'ExportDeclaration',
             declaration: null,
             specifiers: [{
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Glob',
-                    range: [7, 8],
-                    loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 8 }
-                    }
-                },
-                from: {
-                    type: 'Path',
-                    body: [{
-                        type: 'Identifier',
-                        name: 'SolarSystem',
-                        range: [ 14, 25 ],
-                        loc: {
-                            start: { line: 1, column: 14 },
-                            end: { line: 1, column: 25 }
-                        }
-                    }],
-                    range: [ 14, 25 ],
+                type: 'ExportBatchSpecifier',
+                source: {
+                    type: 'Literal',
+                    value: 'crypto',
+                    raw: '"crypto"',
+                    range: [14, 22],
                     loc: {
                         start: { line: 1, column: 14 },
-                        end: { line: 1, column: 25 }
-                    }
-                },
-                range: [ 7, 25 ],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 25 }
-                }
-            }],
-            range: [ 0, 25 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 25 }
-            }
-        },
-
-        'export * from Earth, * from Mercury;': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Glob',
-                    range: [7, 8],
-                    loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 8 }
-                    }
-                },
-                from: {
-                    type: 'Path',
-                    body: [{
-                        type: 'Identifier',
-                        name: 'Earth',
-                        range: [14, 19],
-                        loc: {
-                            start: { line: 1, column: 14 },
-                            end: { line: 1, column: 19 }
-                        }
-                    }],
-                    range: [14, 19],
-                    loc: {
-                        start: { line: 1, column: 14 },
-                        end: { line: 1, column: 19 }
-                    }
-                },
-                range: [7, 19],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 19 }
-                }
-            }, {
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Glob',
-                    range: [21, 22],
-                    loc: {
-                        start: { line: 1, column: 21 },
                         end: { line: 1, column: 22 }
                     }
                 },
-                from: {
-                    type: 'Path',
-                    body: [{
-                        type: 'Identifier',
-                        name: 'Mercury',
-                        range: [28, 35],
-                        loc: {
-                            start: { line: 1, column: 28 },
-                            end: { line: 1, column: 35 }
-                        }
-                    }],
-                    range: [28, 35],
-                    loc: {
-                        start: { line: 1, column: 28 },
-                        end: { line: 1, column: 35 }
-                    }
-                },
-                range: [21, 35],
-                loc: {
-                    start: { line: 1, column: 21 },
-                    end: { line: 1, column: 35 }
-                }
-            }],
-            range: [0, 36],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 36 }
-            }
-        },
-
-        'export { Mercury: SolarSystem.Mercury, Earth: SolarSystem.Earth }': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifierSet',
-                specifiers: [
-                    {
-                        type: 'ExportSpecifier',
-                        id: {
-                            type: 'Identifier',
-                            name: 'Mercury',
-                            range: [ 9, 16 ],
-                            loc: {
-                                start: { line: 1, column: 9 },
-                                end: { line: 1, column: 16 }
-                            }
-                        },
-                        from: {
-                            type: 'Path',
-                            body: [
-                                {
-                                    type: 'Identifier',
-                                    name: 'SolarSystem',
-                                    range: [ 18, 29 ],
-                                    loc: {
-                                        start: { line: 1, column: 18 },
-                                        end: { line: 1, column: 29 }
-                                    }
-                                },
-                                {
-                                    type: 'Identifier',
-                                    name: 'Mercury',
-                                    range: [ 30, 37 ],
-                                    loc: {
-                                        start: { line: 1, column: 30 },
-                                        end: { line: 1, column: 37 }
-                                    }
-                                }
-                            ],
-                            range: [ 18, 37 ],
-                            loc: {
-                                start: { line: 1, column: 18 },
-                                end: { line: 1, column: 37 }
-                            }
-                        },
-                        range: [ 9, 37 ],
-                        loc: {
-                            start: { line: 1, column: 9 },
-                            end: { line: 1, column: 37 }
-                        }
-                    },
-                    {
-                        type: 'ExportSpecifier',
-                        id: {
-                            type: 'Identifier',
-                            name: 'Earth',
-                            range: [ 39, 44 ],
-                            loc: {
-                                start: { line: 1, column: 39 },
-                                end: { line: 1, column: 44 }
-                            }
-                        },
-                        from: {
-                            type: 'Path',
-                            body: [
-                                {
-                                    type: 'Identifier',
-                                    name: 'SolarSystem',
-                                    range: [ 46, 57 ],
-                                    loc: {
-                                        start: { line: 1, column: 46 },
-                                        end: { line: 1, column: 57 }
-                                    }
-                                },
-                                {
-                                    type: 'Identifier',
-                                    name: 'Earth',
-                                    range: [ 58, 63 ],
-                                    loc: {
-                                        start: { line: 1, column: 58 },
-                                        end: { line: 1, column: 63 }
-                                    }
-                                }
-                            ],
-                            range: [ 46, 63 ],
-                            loc: {
-                                start: { line: 1, column: 46 },
-                                end: { line: 1, column: 63 }
-                            }
-                        },
-                        range: [ 39, 63 ],
-                        loc: {
-                            start: { line: 1, column: 39 },
-                            end: { line: 1, column: 63 }
-                        }
-                    }
-                ],
-                range: [7, 65],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 65 }
-                }
-            }],
-            range: [0, 65],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 65 }
-            }
-        },
-
-        'export { SolarSystem }': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifierSet',
-                specifiers: [{
-                    type: 'ExportSpecifier',
-                    id: {
-                        type: 'Identifier',
-                        name: 'SolarSystem',
-                        range: [9, 20],
-                        loc: {
-                            start: { line: 1, column: 9 },
-                            end: { line: 1, column: 20 }
-                        }
-                    },
-                    from: null,
-                    range: [9, 20],
-                    loc: {
-                        start: { line: 1, column: 9 },
-                        end: { line: 1, column: 20 }
-                    }
-                }],
                 range: [7, 22],
                 loc: {
                     start: { line: 1, column: 7 },
@@ -3995,6 +3680,132 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 22 }
+            }
+        },
+
+        'export { encrypt }': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [9, 16],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                name: null,
+                range: [9, 16],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
+        'export { encrypt, decrypt }': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [9, 16],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                name: null,
+                range: [9, 16],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 16 }
+                }
+            }, {
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'decrypt',
+                    range: [18, 25],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                name: null,
+                range: [18, 25],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 25 }
+                }
+            }],
+            range: [0, 27],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
+            }
+        },
+
+        'export { encrypt, decrypt as dec }': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [9, 16],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                name: null,
+                range: [9, 16],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 16 }
+                }
+            }, {
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'decrypt',
+                    range: [18, 25],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                name: {
+                    type: 'Identifier',
+                    name: 'dec',
+                    range: [29, 32],
+                    loc: {
+                        start: { line: 1, column: 29 },
+                        end: { line: 1, column: 32 }
+                    }
+                },
+                range: [18, 32],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 32 }
+                }
+            }],
+            range: [0, 34],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 34 }
             }
         },
 
@@ -10198,6 +10009,20 @@ var harmonyTestFixture = {
             lineNumber: 1,
             column: 10,
             message: 'Error: Line 1: Unexpected identifier'
+        },
+
+        'export default x': {
+            index: 16,
+            lineNumber: 1,
+            column: 17,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'export * from foo': {
+            index: 17,
+            lineNumber: 1,
+            column: 18,
+            message: 'Error: Line 1: Invalid module specifier'
         },
 
         'export for': {
