@@ -4136,8 +4136,9 @@ parseYieldExpression: true
         if (rest) {
             if (match('=')) {
                 throwErrorTolerant({}, Messages.RestParameterWithDefaultValue, param.name);
+                parseParamDefault(options);
             }
-            if (!match(')')) {
+            else if (!match(')')) {
                 throwError({}, Messages.ParameterAfterRestParameter);
             }
             options.rest = param;
