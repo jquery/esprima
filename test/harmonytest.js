@@ -11262,7 +11262,7 @@ var harmonyTestFixture = {
         }
     },
 
-    'ES6: Function default parameter': {
+    'ES6: Default parameters': {
 
         'function a(a = "defaultValue") {}' : {
             type: "Program",
