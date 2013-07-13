@@ -238,6 +238,7 @@ parseYieldExpression: true
         StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
         StrictReservedWord:  'Use of future reserved word in strict mode',
         NoFromAfterImport: 'Missing from after import',
+        InvalidModuleSpecifier: 'Invalid module specifier',
         NoYieldInGenerator: 'Missing yield in generator',
         NoUnintializedConst: 'Const must be initialized',
         ComprehensionRequiresBlock: 'Comprehension must have at least one block',
@@ -1976,19 +1977,19 @@ parseYieldExpression: true
             };
         },
 
-        createImportSpecifier: function (id, from) {
+        createImportSpecifier: function (id, name) {
             return {
                 type: Syntax.ImportSpecifier,
                 id: id,
-                from: from
+                name: name
             };
         },
 
-        createImportDeclaration: function (specifiers, from) {
+        createImportDeclaration: function (specifiers, source) {
             return {
                 type: Syntax.ImportDeclaration,
                 specifiers: specifiers,
-                from: from
+                source: source
             };
         },
 
@@ -3367,54 +3368,51 @@ parseYieldExpression: true
     }
 
     function parseImportDeclaration() {
-        var specifiers, from;
+        var specifiers, src;
 
         expectKeyword('import');
+        specifiers = [];
 
-        if (match('*')) {
-            specifiers = [parseGlob()];
+        if (lookahead.type === Token.Identifier) {
+            specifiers.push(parseImportSpecifier());
+
+            if (!matchContextualKeyword('from')) {
+                throwError({}, Messages.NoFromAfterImport);
+            }
+            lex();
         } else if (match('{')) {
             lex();
-            specifiers = [];
-
             do {
                 specifiers.push(parseImportSpecifier());
             } while (match(',') && lex());
-
             expect('}');
-        } else {
-            specifiers = [parseVariableIdentifier()];
+
+            if (!matchContextualKeyword('from')) {
+                throwError({}, Messages.NoFromAfterImport);
+            }
+            lex();
         }
 
-        if (!matchContextualKeyword('from')) {
-            throwError({}, Messages.NoFromAfterImport);
-        }
-
-        lex();
-
-        if (lookahead.type === Token.StringLiteral) {
-            from = parsePrimaryExpression();
-        } else {
-            from = parsePath();
+        src = parsePrimaryExpression();
+        if (src.type !== Syntax.Literal) {
+            throwError({}, Messages.InvalidModuleSpecifier);
         }
 
         consumeSemicolon();
 
-        return delegate.createImportDeclaration(specifiers, from);
+        return delegate.createImportDeclaration(specifiers, src);
     }
 
     function parseImportSpecifier() {
-        var id, from;
+        var id, name = null;
 
         id = parseVariableIdentifier();
-        from = null;
-
-        if (match(':')) {
+        if (matchContextualKeyword('as')) {
             lex();
-            from = parsePath();
+            name = parseVariableIdentifier();
         }
 
-        return delegate.createImportSpecifier(id, from);
+        return delegate.createImportSpecifier(id, name);
     }
 
     // 12.3 Empty Statement
