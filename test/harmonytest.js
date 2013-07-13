@@ -10441,6 +10441,13 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Rest parameter must be final parameter of an argument list'
         },
 
+        'function f(a, ...b = 0)': {
+            index: 19,
+            lineNumber: 1,
+            column: 20,
+            message: 'Error: Line 1: Rest parameter can not have a default value'
+        },
+
         'function x(...{ a }){}': {
             index: 14,
             lineNumber: 1,

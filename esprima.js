@@ -223,6 +223,7 @@ parseYieldExpression: true
         StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
         StrictParamDupe: 'Strict mode function may not have duplicate parameter names',
         ParameterAfterRestParameter: 'Rest parameter must be final parameter of an argument list',
+        DefaultRestParameter: 'Rest parameter can not have a default value',
         ElementAfterSpreadElement: 'Spread must be the final element of an element list',
         ObjectPatternAsRestParameter: 'Invalid rest parameter',
         ObjectPatternAsSpread: 'Invalid spread argument',
@@ -4104,6 +4105,9 @@ parseYieldExpression: true
             param = parseVariableIdentifier();
             validateParam(options, token, token.value);
             if (match('=')) {
+                if (rest) {
+                    throwErrorTolerant(lookahead, Messages.DefaultRestParameter);
+                }
                 lex();
                 def = parseAssignmentExpression();
                 ++options.defaultCount;
