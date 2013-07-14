@@ -3142,62 +3142,6 @@ var harmonyTestFixture = {
             }
         },
 
-        'module "crypto" { module "e" {} }': {
-            type: 'ModuleDeclaration',
-            id: {
-                type: 'Literal',
-                value: 'crypto',
-                raw: '"crypto"',
-                range: [7, 15],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 15 }
-                }
-            },
-            source: null,
-            body: {
-                type: 'BlockStatement',
-                body: [{
-                    type: 'ModuleDeclaration',
-                    id: {
-                        type: 'Literal',
-                        value: 'e',
-                        raw: '"e"',
-                        range: [25, 28],
-                        loc: {
-                            start: { line: 1, column: 25 },
-                            end: { line: 1, column: 28 }
-                        }
-                    },
-                    source: null,
-                    body: {
-                        type: 'BlockStatement',
-                        body: [],
-                        range: [29, 31],
-                        loc: {
-                            start: { line: 1, column: 29 },
-                            end: { line: 1, column: 31 }
-                        }
-                    },
-                    range: [18, 32],
-                    loc: {
-                        start: { line: 1, column: 18 },
-                        end: { line: 1, column: 32 }
-                    }
-                }],
-                range: [16, 33],
-                loc: {
-                    start: { line: 1, column: 16 },
-                    end: { line: 1, column: 33 }
-                }
-            },
-            range: [0, 33],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 33 }
-            }
-        },
-
         'module crypto from "crypto";': {
             type: 'ModuleDeclaration',
             id: {
@@ -3227,6 +3171,34 @@ var harmonyTestFixture = {
             }
         },
 
+        'module "crypto/e" {}': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'crypto/e',
+                raw: '"crypto/e"',
+                range: [7, 17],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [18, 20],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 20 }
+                }
+            },
+            range: [0, 20],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 20 }
+            }
+        },
 
         'export default answer;': {
             type: 'ExportDeclaration',
@@ -10614,6 +10586,13 @@ var harmonyTestFixture = {
             lineNumber: 1,
             column: 12,
             message: 'Error: Line 1: Unexpected identifier'
+        },
+
+        'module "crypto" { module "e" {} }': {
+            index: 17,
+            lineNumber: 1,
+            column: 18,
+            message: 'Error: Line 1: Module declaration can not be nested'
         },
 
         'module "x" { export * from foo }': {

@@ -239,6 +239,7 @@ parseYieldExpression: true
         NewlineAfterModule:  'Illegal newline after module',
         NoFromAfterImport: 'Missing from after import',
         InvalidModuleSpecifier: 'Invalid module specifier',
+        NestedModule: 'Module declaration can not be nested',
         NoYieldInGenerator: 'Missing yield in generator',
         NoUnintializedConst: 'Const must be initialized',
         ComprehensionRequiresBlock: 'Comprehension must have at least one block',
@@ -4454,9 +4455,17 @@ parseYieldExpression: true
                 return parseConstLetDeclaration(lookahead.value);
             case 'function':
                 return parseFunctionDeclaration();
+            case 'export':
+                return parseExportDeclaration();
+            case 'import':
+                return parseImportDeclaration();
             default:
                 return parseStatement();
             }
+        }
+
+        if (matchContextualKeyword('module')) {
+            throwError({}, Messages.NestedModule);
         }
 
         if (lookahead.type !== Token.EOF) {
@@ -4520,7 +4529,7 @@ parseYieldExpression: true
     }
 
     function parseModuleElement() {
-        return parseProgramElement();
+        return parseSourceElement();
     }
 
     function parseModuleElements() {
