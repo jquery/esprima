@@ -3113,175 +3113,117 @@ var harmonyTestFixture = {
 
     'Harmony: Modules': {
 
-
-        'module Universe { module MilkyWay {} }': {
+        'module "crypto" {}': {
             type: 'ModuleDeclaration',
             id: {
-                type: 'Identifier',
-                name: 'Universe',
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
                 range: [7, 15],
                 loc: {
                     start: { line: 1, column: 7 },
                     end: { line: 1, column: 15 }
                 }
             },
-            from: null,
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [16, 18],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
+        'module "crypto" { module "e" {} }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [7, 15],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            source: null,
             body: {
                 type: 'BlockStatement',
                 body: [{
                     type: 'ModuleDeclaration',
                     id: {
-                        type: 'Identifier',
-                        name: 'MilkyWay',
-                        range: [25, 33],
+                        type: 'Literal',
+                        value: 'e',
+                        raw: '"e"',
+                        range: [25, 28],
                         loc: {
                             start: { line: 1, column: 25 },
-                            end: { line: 1, column: 33 }
+                            end: { line: 1, column: 28 }
                         }
                     },
-                    from: null,
+                    source: null,
                     body: {
                         type: 'BlockStatement',
                         body: [],
-                        range: [34, 36],
+                        range: [29, 31],
                         loc: {
-                            start: { line: 1, column: 34 },
-                            end: { line: 1, column: 36 }
+                            start: { line: 1, column: 29 },
+                            end: { line: 1, column: 31 }
                         }
                     },
-                    range: [18, 36],
+                    range: [18, 32],
                     loc: {
                         start: { line: 1, column: 18 },
-                        end: { line: 1, column: 36 }
+                        end: { line: 1, column: 32 }
                     }
                 }],
-                range: [16, 38],
+                range: [16, 33],
                 loc: {
                     start: { line: 1, column: 16 },
-                    end: { line: 1, column: 38 }
+                    end: { line: 1, column: 33 }
                 }
             },
-            range: [0, 38],
+            range: [0, 33],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 38 }
+                end: { line: 1, column: 33 }
             }
         },
 
-        'module MilkyWay = "Universe/MilkyWay"': {
+        'module crypto from "crypto";': {
             type: 'ModuleDeclaration',
             id: {
                 type: 'Identifier',
-                name: 'MilkyWay',
-                range: [7, 15],
+                name: 'crypto',
+                range: [7, 13],
                 loc: {
                     start: { line: 1, column: 7 },
-                    end: { line: 1, column: 15 }
+                    end: { line: 1, column: 13 }
                 }
             },
-            from: {
+            source: {
                 type: 'Literal',
-                value: 'Universe/MilkyWay',
-                raw: '"Universe/MilkyWay"',
-                range: [18, 37],
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [19, 27],
                 loc: {
-                    start: { line: 1, column: 18 },
-                    end: { line: 1, column: 37 }
-                }
-            },
-            body: null,
-            range: [0, 37],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 37 }
-            }
-        },
-
-        'module System = Universe.MilkyWay.SolarSystem': {
-            type: 'ModuleDeclaration',
-            id: {
-                type: 'Identifier',
-                name: 'System',
-                range: [7, 13],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 13 }
-                }
-            },
-            from: {
-                type: 'Path',
-                body: [{
-                    type: 'Identifier',
-                    name: 'Universe',
-                    range: [16, 24],
-                    loc: {
-                        start: { line: 1, column: 16 },
-                        end: { line: 1, column: 24 }
-                    }
-                }, {
-                    type: 'Identifier',
-                    name: 'MilkyWay',
-                    range: [25, 33],
-                    loc: {
-                        start: { line: 1, column: 25 },
-                        end: { line: 1, column: 33 }
-                    }
-                }, {
-                    type: 'Identifier',
-                    name: 'SolarSystem',
-                    range: [34, 45],
-                    loc: {
-                        start: { line: 1, column: 34 },
-                        end: { line: 1, column: 45 }
-                    }
-                }],
-                range: [16, 45],
-                loc: {
-                    start: { line: 1, column: 16 },
-                    end: { line: 1, column: 45 }
-                }
-            },
-            body: null,
-            range: [0, 45],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 45 }
-            }
-        },
-
-        'module System = SolarSystem': {
-            type: 'ModuleDeclaration',
-            id: {
-                type: 'Identifier',
-                name: 'System',
-                range: [7, 13],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 13 }
-                }
-            },
-            from: {
-                type: 'Path',
-                body: [{
-                    type: 'Identifier',
-                    name: 'SolarSystem',
-                    range: [16, 27],
-                    loc: {
-                        start: { line: 1, column: 16 },
-                        end: { line: 1, column: 27 }
-                    }
-                }],
-                range: [16, 27],
-                loc: {
-                    start: { line: 1, column: 16 },
+                    start: { line: 1, column: 19 },
                     end: { line: 1, column: 27 }
                 }
             },
             body: null,
-            range: [0, 27],
+            range: [0, 28],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 27 }
+                end: { line: 1, column: 28 }
             }
         },
 
@@ -3551,51 +3493,6 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 27 }
-            }
-        },
-
-        'export module System = SolarSystem': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'ModuleDeclaration',
-                id: {
-                    type: 'Identifier',
-                    name: 'System',
-                    range: [14, 20],
-                    loc: {
-                        start: { line: 1, column: 14 },
-                        end: { line: 1, column: 20 }
-                    }
-                },
-                from: {
-                    type: 'Path',
-                    body: [{
-                        type: 'Identifier',
-                        name: 'SolarSystem',
-                        range: [23, 34],
-                        loc: {
-                            start: { line: 1, column: 23 },
-                            end: { line: 1, column: 34 }
-                        }
-                    }],
-                    range: [23, 34],
-                    loc: {
-                        start: { line: 1, column: 23 },
-                        end: { line: 1, column: 34 }
-                    }
-                },
-                body: null,
-                range: [7, 34],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 34 }
-                }
-            },
-            specifiers: null,
-            range: [ 0, 34 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 34 }
             }
         },
 
@@ -4025,145 +3922,8 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 48 }
             }
-        },
-
-        'module foo {\n module bar = baz }': {
-            type: "ModuleDeclaration",
-            id: {
-                type: "Identifier",
-                name: "foo",
-                range: [7, 10],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 10 }
-                }
-            },
-            from: null,
-            body: {
-                type: "BlockStatement",
-                body: [
-                    {
-                        type: "ModuleDeclaration",
-                        id: {
-                            type: "Identifier",
-                            name: "bar",
-                            range: [21, 24],
-                            loc: {
-                                start: { line: 2, column: 8 },
-                                end: { line: 2, column: 11 }
-                            }
-                        },
-                        from: {
-                            type: "Path",
-                            body: [
-                                {
-                                    type: "Identifier",
-                                    name: "baz",
-                                    range: [27, 30],
-                                    loc: {
-                                        start: { line: 2, column: 14 },
-                                        end: { line: 2, column: 17 }
-                                    }
-                                }
-                            ],
-                            range: [27, 30],
-                            loc: {
-                                start: { line: 2, column: 14 },
-                                end: { line: 2, column: 17 }
-                            }
-                        },
-                        body: null,
-                        range: [14, 31],
-                        loc: {
-                            start: { line: 2, column: 1 },
-                            end: { line: 2, column: 18 }
-                        }
-                    }
-                ],
-                range: [11, 32],
-                loc: {
-                    start: { line: 1, column: 11 },
-                    end: { line: 2, column: 19 }
-                }
-            },
-            range: [0, 32],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 2, column: 19 }
-            }
-        },
-
-        'module\n X = Y': {
-            type: "ExpressionStatement",
-            expression: {
-                type: "Identifier",
-                name: "module",
-                range: [0, 6],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 6 }
-                }
-            },
-            range: [0, 8],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 2, column: 1 }
-            }
-        },
-
-        'module.export = Foo': {
-            type: "ExpressionStatement",
-            expression: {
-                type: "AssignmentExpression",
-                operator: "=",
-                left: {
-                    type: "MemberExpression",
-                    computed: false,
-                    object: {
-                        type: "Identifier",
-                        name: "module",
-                        range: [0, 6],
-                        loc: {
-                            start: { line: 1, column: 0 },
-                            end: { line: 1, column: 6 }
-                        }
-                    },
-                    property: {
-                        type: "Identifier",
-                        name: "export",
-                        range: [7, 13],
-                        loc: {
-                            start: { line: 1, column: 7 },
-                            end: { line: 1, column: 13 }
-                        }
-                    },
-                    range: [0, 13],
-                    loc: {
-                        start: { line: 1, column: 0 },
-                        end: { line: 1, column: 13 }
-                    }
-                },
-                right: {
-                    type: "Identifier",
-                    name: "Foo",
-                    range: [16, 19],
-                    loc: {
-                        start: { line: 1, column: 16 },
-                        end: { line: 1, column: 19 }
-                    }
-                },
-                range: [0, 19],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 19 }
-                }
-            },
-            range: [0, 19],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 19 }
-            }
         }
+
     },
 
 
@@ -9997,17 +9757,31 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Unexpected identifier'
         },
 
-        'module X 0': {
-            index: 9,
+        'module\n"crypto" {}': {
+            index: 6,
             lineNumber: 1,
-            column: 10,
+            column: 7,
+            message: 'Error: Line 1: Illegal newline after module'
+        },
+
+        'module foo from bar': {
+            index: 19,
+            lineNumber: 1,
+            column: 20,
+            message: 'Error: Line 1: Invalid module specifier'
+        },
+
+        'module 42': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
             message: 'Error: Line 1: Unexpected number'
         },
 
-        'module X at Y': {
-            index: 9,
+        'module foo bar': {
+            index: 11,
             lineNumber: 1,
-            column: 10,
+            column: 12,
             message: 'Error: Line 1: Unexpected identifier'
         },
 
@@ -10452,10 +10226,10 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Illegal spread element'
         },
 
-        'module Universe { ;  ;  ': {
-            index: 24,
+        'module "Universe" { ;  ;  ': {
+            index: 26,
             lineNumber: 1,
-            column: 25,
+            column: 27,
             message: 'Error: Line 1: Unexpected end of input'
         },
 

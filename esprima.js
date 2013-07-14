@@ -158,7 +158,6 @@ parseYieldExpression: true
         NewExpression: 'NewExpression',
         ObjectExpression: 'ObjectExpression',
         ObjectPattern: 'ObjectPattern',
-        Path:  'Path',
         Program: 'Program',
         Property: 'Property',
         ReturnStatement: 'ReturnStatement',
@@ -237,6 +236,7 @@ parseYieldExpression: true
         StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',
         StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
         StrictReservedWord:  'Use of future reserved word in strict mode',
+        NewlineAfterModule:  'Illegal newline after module',
         NoFromAfterImport: 'Missing from after import',
         InvalidModuleSpecifier: 'Invalid module specifier',
         NoYieldInGenerator: 'Missing yield in generator',
@@ -1941,13 +1941,6 @@ parseYieldExpression: true
             };
         },
 
-        createPath: function (body) {
-            return {
-                type: Syntax.Path,
-                body: body
-            };
-        },
-
         createExportSpecifier: function (id, name) {
             return {
                 type: Syntax.ExportSpecifier,
@@ -1995,11 +1988,11 @@ parseYieldExpression: true
             };
         },
 
-        createModuleDeclaration: function (id, from, body) {
+        createModuleDeclaration: function (id, source, body) {
             return {
                 type: Syntax.ModuleDeclaration,
                 id: id,
-                from: from,
+                source: source,
                 body: body
             };
         }
@@ -3234,43 +3227,43 @@ parseYieldExpression: true
 
     // http://wiki.ecmascript.org/doku.php?id=harmony:modules
 
-    function parsePath() {
-        var body = [];
+    function parseModuleDeclaration() {
+        var id, src, body;
 
-        while (true) {
-            body.push(parseVariableIdentifier());
-            if (!match('.')) {
-                break;
+        lex();   // 'module'
+
+        if (peekLineTerminator()) {
+            throwError({}, Messages.NewlineAfterModule);
+        }
+
+        switch (lookahead.type) {
+
+        case Token.StringLiteral:
+            id = parsePrimaryExpression();
+            body = parseModuleBlock();
+            src = null;
+            consumeSemicolon();
+            break;
+
+        case Token.Identifier:
+            id = parseVariableIdentifier();
+            body = null;
+            if (!matchContextualKeyword('from')) {
+                throwUnexpected(lex());
             }
             lex();
+            src = parsePrimaryExpression();
+            if (src.type !== Syntax.Literal) {
+                throwError({}, Messages.InvalidModuleSpecifier);
+            }
+            expect(';');
+            break;
+
+        default:
+            throwUnexpected(lex());
         }
 
-        return delegate.createPath(body);
-    }
-
-    function parseModuleDeclaration() {
-        var id, token, from = null;
-
-        lex();
-
-        id = parseVariableIdentifier();
-
-        if (match('{')) {
-            return delegate.createModuleDeclaration(id, from, parseModuleBlock());
-        }
-
-        expect('=');
-
-        token = lookahead;
-        if (token.type === Token.StringLiteral) {
-            from = parsePrimaryExpression();
-        } else {
-            from = parsePath();
-        }
-
-        consumeSemicolon();
-
-        return delegate.createModuleDeclaration(id, from, null);
+        return delegate.createModuleDeclaration(id, src, body);
     }
 
     function parseExportBatchSpecifier() {
@@ -3308,7 +3301,7 @@ parseYieldExpression: true
 
         token = lookahead;
 
-        if (token.type === Token.Keyword || (token.type === Token.Identifier && token.value === 'module')) {
+        if (token.type === Token.Keyword) {
             switch (token.value) {
             case 'default':
                 lex();
@@ -3317,8 +3310,6 @@ parseYieldExpression: true
                 return delegate.createExportDeclaration(def, null);
             case 'function':
                 return delegate.createExportDeclaration(parseFunctionDeclaration(), null);
-            case 'module':
-                return delegate.createExportDeclaration(parseModuleDeclaration(), null);
             case 'let':
             case 'const':
                 return delegate.createExportDeclaration(parseConstLetDeclaration(token.value), null);
@@ -4475,8 +4466,6 @@ parseYieldExpression: true
     }
 
     function parseProgramElement() {
-        var lineNumber, token;
-
         if (lookahead.type === Token.Keyword) {
             switch (lookahead.value) {
             case 'export':
@@ -4486,12 +4475,8 @@ parseYieldExpression: true
             }
         }
 
-        if (lookahead.value === 'module' && lookahead.type === Token.Identifier) {
-            lineNumber = lookahead.lineNumber;
-            token = lookahead2();
-            if (token.type === Token.Identifier && token.lineNumber === lineNumber) {
-                return parseModuleDeclaration();
-            }
+        if (matchContextualKeyword('module')) {
+            return parseModuleDeclaration();
         }
 
         return parseSourceElement();
@@ -5129,7 +5114,6 @@ parseYieldExpression: true
             extra.parseNonComputedProperty = parseNonComputedProperty;
             extra.parseObjectProperty = parseObjectProperty;
             extra.parseObjectPropertyKey = parseObjectPropertyKey;
-            extra.parsePath = parsePath;
             extra.parsePostfixExpression = parsePostfixExpression;
             extra.parsePrimaryExpression = parsePrimaryExpression;
             extra.parseProgram = parseProgram;
@@ -5172,7 +5156,6 @@ parseYieldExpression: true
             parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
             parseObjectProperty = wrapTracking(extra.parseObjectProperty);
             parseObjectPropertyKey = wrapTracking(extra.parseObjectPropertyKey);
-            parsePath = wrapTracking(extra.parsePath);
             parsePostfixExpression = wrapTracking(extra.parsePostfixExpression);
             parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
             parseProgram = wrapTracking(extra.parseProgram);
@@ -5232,7 +5215,6 @@ parseYieldExpression: true
             parseNonComputedProperty = extra.parseNonComputedProperty;
             parseObjectProperty = extra.parseObjectProperty;
             parseObjectPropertyKey = extra.parseObjectPropertyKey;
-            parsePath = extra.parsePath;
             parsePostfixExpression = extra.parsePostfixExpression;
             parsePrimaryExpression = extra.parsePrimaryExpression;
             parseProgram = extra.parseProgram;
