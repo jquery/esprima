@@ -2592,15 +2592,16 @@ parseStatement: true, parseSourceElement: true */
 
         expect('{');
 
+        cases = [];
+
         if (match('}')) {
             lex();
             return {
                 type: Syntax.SwitchStatement,
-                discriminant: discriminant
+                discriminant: discriminant,
+                cases: cases
             };
         }
-
-        cases = [];
 
         oldInSwitch = state.inSwitch;
         state.inSwitch = true;

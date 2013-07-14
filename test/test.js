@@ -12981,6 +12981,7 @@ var testFixture = {
                     end: { line: 1, column: 9 }
                 }
             },
+            cases:[],
             range: [0, 13],
             loc: {
                 start: { line: 1, column: 0 },
