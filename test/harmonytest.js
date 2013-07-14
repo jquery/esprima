@@ -9785,13 +9785,6 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Unexpected identifier'
         },
 
-        'export default x': {
-            index: 16,
-            lineNumber: 1,
-            column: 17,
-            message: 'Error: Line 1: Unexpected end of input'
-        },
-
         'export * from foo': {
             index: 17,
             lineNumber: 1,

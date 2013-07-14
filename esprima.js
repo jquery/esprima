@@ -3242,7 +3242,6 @@ parseYieldExpression: true
             id = parsePrimaryExpression();
             body = parseModuleBlock();
             src = null;
-            consumeSemicolon();
             break;
 
         case Token.Identifier:
@@ -3256,13 +3255,13 @@ parseYieldExpression: true
             if (src.type !== Syntax.Literal) {
                 throwError({}, Messages.InvalidModuleSpecifier);
             }
-            expect(';');
             break;
 
         default:
             throwUnexpected(lex());
         }
 
+        consumeSemicolon();
         return delegate.createModuleDeclaration(id, src, body);
     }
 
@@ -3306,7 +3305,7 @@ parseYieldExpression: true
             case 'default':
                 lex();
                 def = parseAssignmentExpression();
-                expect(';');
+                consumeSemicolon();
                 return delegate.createExportDeclaration(def, null);
             case 'function':
                 return delegate.createExportDeclaration(parseFunctionDeclaration(), null);
