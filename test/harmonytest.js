@@ -3227,482 +3227,833 @@ var harmonyTestFixture = {
             }
         },
 
-        'export default answer;': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'Identifier',
-                name: 'answer',
-                range: [15, 21],
-                loc: {
-                    start: { line: 1, column: 15 },
-                    end: { line: 1, column: 21 }
-                }
-            },
-            specifiers: null,
-            range: [0, 22],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 22 }
-            }
-        },
-
-        'export var document': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'document',
-                        range: [ 11, 19 ],
-                        loc: {
-                            start: { line: 1, column: 11 },
-                            end: { line: 1, column: 19 }
-                        }
-                    },
-                    init: null,
-                    range: [ 11, 19 ],
-                    loc: {
-                        start: { line: 1, column: 11 },
-                        end: { line: 1, column: 19 }
-                    }
-                }],
-                kind: 'var',
-                range: [ 7, 19 ],
+        'module "a" { export default answer }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'a',
+                raw: '"a"',
+                range: [7, 10],
                 loc: {
                     start: { line: 1, column: 7 },
-                    end: { line: 1, column: 19 }
+                    end: { line: 1, column: 10 }
                 }
             },
-            specifiers: null,
-            range: [ 0, 19 ],
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'Identifier',
+                        name: 'answer',
+                        range: [28, 34],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 34 }
+                        }
+                    },
+                    specifiers: null,
+                    range: [13, 35],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 35 }
+                    }
+                }],
+                range: [11, 36],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            range: [0, 36],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 19 }
+                end: { line: 1, column: 36 }
             }
         },
 
-        'export var document = { }': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'document',
-                        range: [ 11, 19 ],
-                        loc: {
-                            start: { line: 1, column: 11 },
-                            end: { line: 1, column: 19 }
-                        }
-                    },
-                    init: {
-                        type: 'ObjectExpression',
-                        properties: [],
-                        range: [ 22, 25 ],
+        'module "lib" { export var document }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'VariableDeclaration',
+                        declarations: [{
+                            type: 'VariableDeclarator',
+                            id: {
+                                type: 'Identifier',
+                                name: 'document',
+                                range: [26, 34],
+                                loc: {
+                                    start: { line: 1, column: 26 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            init: null,
+                            range: [26, 34],
+                            loc: {
+                                start: { line: 1, column: 26 },
+                                end: { line: 1, column: 34 }
+                            }
+                        }],
+                        kind: 'var',
+                        range: [22, 35],
                         loc: {
                             start: { line: 1, column: 22 },
-                            end: { line: 1, column: 25 }
+                            end: { line: 1, column: 35 }
                         }
                     },
-                    range: [ 11, 25 ],
+                    specifiers: null,
+                    range: [15, 35],
                     loc: {
-                        start: { line: 1, column: 11 },
-                        end: { line: 1, column: 25 }
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 35 }
                     }
                 }],
-                kind: 'var',
-                range: [ 7, 25 ],
+                range: [13, 36],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            }
+        },
+
+        'module "lib" { export var document = { } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
                 loc: {
                     start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'VariableDeclaration',
+                        declarations: [{
+                            type: 'VariableDeclarator',
+                            id: {
+                                type: 'Identifier',
+                                name: 'document',
+                                range: [26, 34],
+                                loc: {
+                                    start: { line: 1, column: 26 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            init: {
+                                type: 'ObjectExpression',
+                                properties: [],
+                                range: [37, 40],
+                                loc: {
+                                    start: { line: 1, column: 37 },
+                                    end: { line: 1, column: 40 }
+                                }
+                            },
+                            range: [26, 40],
+                            loc: {
+                                start: { line: 1, column: 26 },
+                                end: { line: 1, column: 40 }
+                            }
+                        }],
+                        kind: 'var',
+                        range: [22, 41],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 41 }
+                        }
+                    },
+                    specifiers: null,
+                    range: [15, 41],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 41 }
+                    }
+                }],
+                range: [13, 42],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 42 }
+                }
+            },
+            range: [0, 42],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 42 }
+            }
+        },
+
+        'module "lib" { export let document }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'VariableDeclaration',
+                        declarations: [{
+                            type: 'VariableDeclarator',
+                            id: {
+                                type: 'Identifier',
+                                name: 'document',
+                                range: [26, 34],
+                                loc: {
+                                    start: { line: 1, column: 26 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            init: null,
+                            range: [26, 34],
+                            loc: {
+                                start: { line: 1, column: 26 },
+                                end: { line: 1, column: 34 }
+                            }
+                        }],
+                        kind: 'let',
+                        range: [22, 35],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 35 }
+                        }
+                    },
+                    specifiers: null,
+                    range: [15, 35],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 35 }
+                    }
+                }],
+                range: [13, 36],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            }
+        },
+
+        'module "lib" { export let document = { } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'VariableDeclaration',
+                        declarations: [{
+                            type: 'VariableDeclarator',
+                            id: {
+                                type: 'Identifier',
+                                name: 'document',
+                                range: [26, 34],
+                                loc: {
+                                    start: { line: 1, column: 26 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            init: {
+                                type: 'ObjectExpression',
+                                properties: [],
+                                range: [37, 40],
+                                loc: {
+                                    start: { line: 1, column: 37 },
+                                    end: { line: 1, column: 40 }
+                                }
+                            },
+                            range: [26, 40],
+                            loc: {
+                                start: { line: 1, column: 26 },
+                                end: { line: 1, column: 40 }
+                            }
+                        }],
+                        kind: 'let',
+                        range: [22, 41],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 41 }
+                        }
+                    },
+                    specifiers: null,
+                    range: [15, 41],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 41 }
+                    }
+                }],
+                range: [13, 42],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 42 }
+                }
+            },
+            range: [0, 42],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 42 }
+            }
+        },
+
+        'module "lib" { export const document = { } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'VariableDeclaration',
+                        declarations: [{
+                            type: 'VariableDeclarator',
+                            id: {
+                                type: 'Identifier',
+                                name: 'document',
+                                range: [28, 36],
+                                loc: {
+                                    start: { line: 1, column: 28 },
+                                    end: { line: 1, column: 36 }
+                                }
+                            },
+                            init: {
+                                type: 'ObjectExpression',
+                                properties: [],
+                                range: [39, 42],
+                                loc: {
+                                    start: { line: 1, column: 39 },
+                                    end: { line: 1, column: 42 }
+                                }
+                            },
+                            range: [28, 42],
+                            loc: {
+                                start: { line: 1, column: 28 },
+                                end: { line: 1, column: 42 }
+                            }
+                        }],
+                        kind: 'const',
+                        range: [22, 43],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 43 }
+                        }
+                    },
+                    specifiers: null,
+                    range: [15, 43],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 43 }
+                    }
+                }],
+                range: [13, 44],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 44 }
+                }
+            },
+            range: [0, 44],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 44 }
+            }
+        },
+
+        'module "lib" { export function parse() { } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'FunctionDeclaration',
+                        id: {
+                            type: 'Identifier',
+                            name: 'parse',
+                            range: [31, 36],
+                            loc: {
+                                start: { line: 1, column: 31 },
+                                end: { line: 1, column: 36 }
+                            }
+                        },
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [39, 42],
+                            loc: {
+                                start: { line: 1, column: 39 },
+                                end: { line: 1, column: 42 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [22, 42],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 42 }
+                        }
+                    },
+                    specifiers: null,
+                    range: [15, 42],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 42 }
+                    }
+                }],
+                range: [13, 44],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 44 }
+                }
+            },
+            range: [0, 44],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 44 }
+            }
+        },
+
+        'module "lib" { export class Class {} }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'ClassDeclaration',
+                        id: {
+                            type: 'Identifier',
+                            name: 'Class',
+                            range: [28, 33],
+                            loc: {
+                                start: { line: 1, column: 28 },
+                                end: { line: 1, column: 33 }
+                            }
+                        },
+                        superClass: null,
+                        body: {
+                            type: 'ClassBody',
+                            body: [],
+                            range: [34, 36],
+                            loc: {
+                                start: { line: 1, column: 34 },
+                                end: { line: 1, column: 36 }
+                            }
+                        },
+                        range: [22, 36],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 36 }
+                        }
+                    },
+                    specifiers: null,
+                    range: [15, 36],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 36 }
+                    }
+                }],
+                range: [13, 38],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 38 }
+                }
+            },
+            range: [0, 38],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            }
+        },
+
+        'module "lib" { export * }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: null,
+                    specifiers: [{
+                        type: 'ExportBatchSpecifier',
+                        source: null,
+                        range: [22, 23],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 23 }
+                        }
+                    }],
+                    range: [15, 24],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 24 }
+                    }
+                }],
+                range: [13, 25],
+                loc: {
+                    start: { line: 1, column: 13 },
                     end: { line: 1, column: 25 }
                 }
             },
-            specifiers: null,
-            range: [ 0, 25 ],
+            range: [0, 25],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 25 }
             }
         },
 
-        'export let document': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'document',
-                        range: [ 11, 19 ],
+        'module "security" { export * from "crypto" }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'security',
+                raw: '"security"',
+                range: [7, 17],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: null,
+                    specifiers: [{
+                        type: 'ExportBatchSpecifier',
+                        source: {
+                            type: 'Literal',
+                            value: 'crypto',
+                            raw: '"crypto"',
+                            range: [34, 42],
+                            loc: {
+                                start: { line: 1, column: 34 },
+                                end: { line: 1, column: 42 }
+                            }
+                        },
+                        range: [27, 42],
                         loc: {
-                            start: { line: 1, column: 11 },
-                            end: { line: 1, column: 19 }
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 42 }
                         }
-                    },
-                    init: null,
-                    range: [ 11, 19 ],
+                    }],
+                    range: [20, 43],
                     loc: {
-                        start: { line: 1, column: 11 },
-                        end: { line: 1, column: 19 }
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 43 }
                     }
                 }],
-                kind: 'let',
-                range: [ 7, 19 ],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 19 }
-                }
-            },
-            specifiers: null,
-            range: [ 0, 19 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 19 }
-            }
-        },
-
-        'export let document = { }': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'document',
-                        range: [ 11, 19 ],
-                        loc: {
-                            start: { line: 1, column: 11 },
-                            end: { line: 1, column: 19 }
-                        }
-                    },
-                    init: {
-                        type: 'ObjectExpression',
-                        properties: [],
-                        range: [ 22, 25 ],
-                        loc: {
-                            start: { line: 1, column: 22 },
-                            end: { line: 1, column: 25 }
-                        }
-                    },
-                    range: [ 11, 25 ],
-                    loc: {
-                        start: { line: 1, column: 11 },
-                        end: { line: 1, column: 25 }
-                    }
-                }],
-                kind: 'let',
-                range: [ 7, 25 ],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 25 }
-                }
-            },
-            specifiers: null,
-            range: [ 0, 25 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 25 }
-            }
-        },
-
-        'export const document = { }': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'document',
-                        range: [ 13, 21 ],
-                        loc: {
-                            start: { line: 1, column: 13 },
-                            end: { line: 1, column: 21 }
-                        }
-                    },
-                    init: {
-                        type: 'ObjectExpression',
-                        properties: [],
-                        range: [ 24, 27 ],
-                        loc: {
-                            start: { line: 1, column: 24 },
-                            end: { line: 1, column: 27 }
-                        }
-                    },
-                    range: [ 13, 27 ],
-                    loc: {
-                        start: { line: 1, column: 13 },
-                        end: { line: 1, column: 27 }
-                    }
-                }],
-                kind: 'const',
-                range: [ 7, 27 ],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 27 }
-                }
-            },
-            specifiers: null,
-            range: [ 0, 27 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 27 }
-            }
-        },
-
-        'export function parse() { }': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'FunctionDeclaration',
-                id: {
-                    type: 'Identifier',
-                    name: 'parse',
-                    range: [ 16, 21 ],
-                    loc: {
-                        start: { line: 1, column: 16 },
-                        end: { line: 1, column: 21 }
-                    }
-                },
-                params: [],
-                defaults: [],
-                body: {
-                    type: 'BlockStatement',
-                    body: [],
-                    range: [ 24, 27 ],
-                    loc: {
-                        start: { line: 1, column: 24 },
-                        end: { line: 1, column: 27 }
-                    }
-                },
-                rest: null,
-                generator: false,
-                expression: false,
-                range: [ 7, 27 ],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 27 }
-                }
-            },
-            specifiers: null,
-            range: [ 0, 27 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 27 }
-            }
-        },
-
-        'export class Class {}': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'ClassDeclaration',
-                id: {
-                    type: 'Identifier',
-                    name: 'Class',
-                    range: [ 13, 18 ],
-                    loc: {
-                        start: { line: 1, column: 13 },
-                        end: { line: 1, column: 18 }
-                    }
-                },
-                superClass: null,
-                body: {
-                    type: 'ClassBody',
-                    body: [],
-                    range: [ 19, 21 ],
-                    loc: {
-                        start: { line: 1, column: 19 },
-                        end: { line: 1, column: 21 }
-                    }
-                },
-                range: [ 7, 21 ],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 21 }
-                }
-            },
-            specifiers: null,
-            range: [ 0, 21 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 21 }
-            }
-        },
-
-        'export *': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportBatchSpecifier',
-                source: null,
-                range: [7, 8],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 8 }
-                }
-            }],
-            range: [ 0, 8 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 8 }
-            }
-        },
-
-        'export * from "crypto"': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportBatchSpecifier',
-                source: {
-                    type: 'Literal',
-                    value: 'crypto',
-                    raw: '"crypto"',
-                    range: [14, 22],
-                    loc: {
-                        start: { line: 1, column: 14 },
-                        end: { line: 1, column: 22 }
-                    }
-                },
-                range: [7, 22],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 22 }
-                }
-            }],
-            range: [0, 22],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 22 }
-            }
-        },
-
-        'export { encrypt }': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Identifier',
-                    name: 'encrypt',
-                    range: [9, 16],
-                    loc: {
-                        start: { line: 1, column: 9 },
-                        end: { line: 1, column: 16 }
-                    }
-                },
-                name: null,
-                range: [9, 16],
-                loc: {
-                    start: { line: 1, column: 9 },
-                    end: { line: 1, column: 16 }
-                }
-            }],
-            range: [0, 18],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 18 }
-            }
-        },
-
-        'export { encrypt, decrypt }': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Identifier',
-                    name: 'encrypt',
-                    range: [9, 16],
-                    loc: {
-                        start: { line: 1, column: 9 },
-                        end: { line: 1, column: 16 }
-                    }
-                },
-                name: null,
-                range: [9, 16],
-                loc: {
-                    start: { line: 1, column: 9 },
-                    end: { line: 1, column: 16 }
-                }
-            }, {
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Identifier',
-                    name: 'decrypt',
-                    range: [18, 25],
-                    loc: {
-                        start: { line: 1, column: 18 },
-                        end: { line: 1, column: 25 }
-                    }
-                },
-                name: null,
-                range: [18, 25],
+                range: [18, 44],
                 loc: {
                     start: { line: 1, column: 18 },
-                    end: { line: 1, column: 25 }
+                    end: { line: 1, column: 44 }
                 }
-            }],
-            range: [0, 27],
+            },
+            range: [0, 44],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 27 }
+                end: { line: 1, column: 44 }
             }
         },
 
-        'export { encrypt, decrypt as dec }': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Identifier',
-                    name: 'encrypt',
-                    range: [9, 16],
-                    loc: {
-                        start: { line: 1, column: 9 },
-                        end: { line: 1, column: 16 }
-                    }
-                },
-                name: null,
-                range: [9, 16],
+        'module "crypto" { export { encrypt } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [7, 15],
                 loc: {
-                    start: { line: 1, column: 9 },
-                    end: { line: 1, column: 16 }
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 15 }
                 }
-            }, {
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Identifier',
-                    name: 'decrypt',
-                    range: [18, 25],
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: null,
+                    specifiers: [{
+                        type: 'ExportSpecifier',
+                        id: {
+                            type: 'Identifier',
+                            name: 'encrypt',
+                            range: [27, 34],
+                            loc: {
+                                start: { line: 1, column: 27 },
+                                end: { line: 1, column: 34 }
+                            }
+                        },
+                        name: null,
+                        range: [27, 34],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 34 }
+                        }
+                    }],
+                    range: [18, 37],
                     loc: {
                         start: { line: 1, column: 18 },
-                        end: { line: 1, column: 25 }
+                        end: { line: 1, column: 37 }
                     }
-                },
-                name: {
-                    type: 'Identifier',
-                    name: 'dec',
-                    range: [29, 32],
-                    loc: {
-                        start: { line: 1, column: 29 },
-                        end: { line: 1, column: 32 }
-                    }
-                },
-                range: [18, 32],
+                }],
+                range: [16, 38],
                 loc: {
-                    start: { line: 1, column: 18 },
-                    end: { line: 1, column: 32 }
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 38 }
                 }
-            }],
-            range: [0, 34],
+            },
+            range: [0, 38],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 34 }
+                end: { line: 1, column: 38 }
+            }
+        },
+
+        'module "crypto" { export { encrypt, decrypt } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [7, 15],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: null,
+                    specifiers: [{
+                        type: 'ExportSpecifier',
+                        id: {
+                            type: 'Identifier',
+                            name: 'encrypt',
+                            range: [27, 34],
+                            loc: {
+                                start: { line: 1, column: 27 },
+                                end: { line: 1, column: 34 }
+                            }
+                        },
+                        name: null,
+                        range: [27, 34],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 34 }
+                        }
+                    }, {
+                        type: 'ExportSpecifier',
+                        id: {
+                            type: 'Identifier',
+                            name: 'decrypt',
+                            range: [36, 43],
+                            loc: {
+                                start: { line: 1, column: 36 },
+                                end: { line: 1, column: 43 }
+                            }
+                        },
+                        name: null,
+                        range: [36, 43],
+                        loc: {
+                            start: { line: 1, column: 36 },
+                            end: { line: 1, column: 43 }
+                        }
+                    }],
+                    range: [18, 46],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 46 }
+                    }
+                }],
+                range: [16, 47],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 47 }
+                }
+            },
+            range: [0, 47],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 47 }
+            }
+        },
+
+        'module "crypto" { export { encrypt, decrypt as dec } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [7, 15],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: null,
+                    specifiers: [{
+                        type: 'ExportSpecifier',
+                        id: {
+                            type: 'Identifier',
+                            name: 'encrypt',
+                            range: [27, 34],
+                            loc: {
+                                start: { line: 1, column: 27 },
+                                end: { line: 1, column: 34 }
+                            }
+                        },
+                        name: null,
+                        range: [27, 34],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 34 }
+                        }
+                    }, {
+                        type: 'ExportSpecifier',
+                        id: {
+                            type: 'Identifier',
+                            name: 'decrypt',
+                            range: [36, 43],
+                            loc: {
+                                start: { line: 1, column: 36 },
+                                end: { line: 1, column: 43 }
+                            }
+                        },
+                        name: {
+                            type: 'Identifier',
+                            name: 'dec',
+                            range: [47, 50],
+                            loc: {
+                                start: { line: 1, column: 47 },
+                                end: { line: 1, column: 50 }
+                            }
+                        },
+                        range: [36, 50],
+                        loc: {
+                            start: { line: 1, column: 36 },
+                            end: { line: 1, column: 50 }
+                        }
+                    }],
+                    range: [18, 53],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 53 }
+                    }
+                }],
+                range: [16, 54],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 54 }
+                }
+            },
+            range: [0, 54],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 54 }
             }
         },
 
@@ -9785,17 +10136,17 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Unexpected identifier'
         },
 
-        'export * from foo': {
-            index: 17,
+        'module "x" { export * from foo }': {
+            index: 30,
             lineNumber: 1,
-            column: 18,
+            column: 31,
             message: 'Error: Line 1: Invalid module specifier'
         },
 
-        'export for': {
-            index: 7,
+        'module "x" { export for }': {
+            index: 20,
             lineNumber: 1,
-            column: 8,
+            column: 21,
             message: 'Error: Line 1: Unexpected token for'
         },
 
