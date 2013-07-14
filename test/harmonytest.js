@@ -4725,6 +4725,53 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 48 }
             }
+        },
+
+        'module "security" { import "cryto" }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'security',
+                raw: '"security"',
+                range: [7, 17],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ImportDeclaration',
+                    specifiers: [],
+                    source: {
+                        type: 'Literal',
+                        value: 'cryto',
+                        raw: '"cryto"',
+                        range: [27, 34],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 34 }
+                        }
+                    },
+                    range: [20, 35],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 35 }
+                    }
+                }],
+                range: [18, 36],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            }
         }
 
     },
