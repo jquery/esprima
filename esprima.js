@@ -4467,6 +4467,8 @@ parseYieldExpression: true
     function parseProgramElement() {
         if (lookahead.type === Token.Keyword) {
             switch (lookahead.value) {
+            case 'export':
+                return parseExportDeclaration();
             case 'import':
                 return parseImportDeclaration();
             }
@@ -4518,9 +4520,6 @@ parseYieldExpression: true
     }
 
     function parseModuleElement() {
-        if (matchKeyword('export')) {
-            return parseExportDeclaration();
-        }
         return parseProgramElement();
     }
 

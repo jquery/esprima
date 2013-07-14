@@ -3227,6 +3227,486 @@ var harmonyTestFixture = {
             }
         },
 
+
+        'export default answer;': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'Identifier',
+                name: 'answer',
+                range: [15, 21],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            specifiers: null,
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        'export var document': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'document',
+                        range: [ 11, 19 ],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: null,
+                    range: [ 11, 19 ],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 19 }
+                    }
+                }],
+                kind: 'var',
+                range: [ 7, 19 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 19 }
+                }
+            },
+            specifiers: null,
+            range: [ 0, 19 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        },
+
+        'export var document = { }': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'document',
+                        range: [ 11, 19 ],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: {
+                        type: 'ObjectExpression',
+                        properties: [],
+                        range: [ 22, 25 ],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    range: [ 11, 25 ],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 25 }
+                    }
+                }],
+                kind: 'var',
+                range: [ 7, 25 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            specifiers: null,
+            range: [ 0, 25 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'export let document': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'document',
+                        range: [ 11, 19 ],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: null,
+                    range: [ 11, 19 ],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 19 }
+                    }
+                }],
+                kind: 'let',
+                range: [ 7, 19 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 19 }
+                }
+            },
+            specifiers: null,
+            range: [ 0, 19 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        },
+
+        'export let document = { }': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'document',
+                        range: [ 11, 19 ],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    init: {
+                        type: 'ObjectExpression',
+                        properties: [],
+                        range: [ 22, 25 ],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    range: [ 11, 25 ],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 25 }
+                    }
+                }],
+                kind: 'let',
+                range: [ 7, 25 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            specifiers: null,
+            range: [ 0, 25 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'export const document = { }': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'document',
+                        range: [ 13, 21 ],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 21 }
+                        }
+                    },
+                    init: {
+                        type: 'ObjectExpression',
+                        properties: [],
+                        range: [ 24, 27 ],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 27 }
+                        }
+                    },
+                    range: [ 13, 27 ],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 27 }
+                    }
+                }],
+                kind: 'const',
+                range: [ 7, 27 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 27 }
+                }
+            },
+            specifiers: null,
+            range: [ 0, 27 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
+            }
+        },
+
+        'export function parse() { }': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'parse',
+                    range: [ 16, 21 ],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 21 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [ 24, 27 ],
+                    loc: {
+                        start: { line: 1, column: 24 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [ 7, 27 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 27 }
+                }
+            },
+            specifiers: null,
+            range: [ 0, 27 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
+            }
+        },
+
+        'export class Class {}': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'ClassDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'Class',
+                    range: [ 13, 18 ],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                superClass: null,
+                body: {
+                    type: 'ClassBody',
+                    body: [],
+                    range: [ 19, 21 ],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 21 }
+                    }
+                },
+                range: [ 7, 21 ],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            specifiers: null,
+            range: [ 0, 21 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            }
+        },
+
+        'export *': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            specifiers: [{
+                type: 'ExportBatchSpecifier',
+                source: null,
+                range: [7, 8],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 8 }
+                }
+            }],
+            range: [ 0, 8 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 8 }
+            }
+        },
+
+        'export * from "crypto"': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            specifiers: [{
+                type: 'ExportBatchSpecifier',
+                source: {
+                    type: 'Literal',
+                    value: 'crypto',
+                    raw: '"crypto"',
+                    range: [14, 22],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                range: [7, 22],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 22 }
+                }
+            }],
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        'export { encrypt }': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [9, 16],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                name: null,
+                range: [9, 16],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
+        'export { encrypt, decrypt }': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [9, 16],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                name: null,
+                range: [9, 16],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 16 }
+                }
+            }, {
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'decrypt',
+                    range: [18, 25],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                name: null,
+                range: [18, 25],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 25 }
+                }
+            }],
+            range: [0, 27],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
+            }
+        },
+
+        'export { encrypt, decrypt as dec }': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [9, 16],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                name: null,
+                range: [9, 16],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 16 }
+                }
+            }, {
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'decrypt',
+                    range: [18, 25],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                name: {
+                    type: 'Identifier',
+                    name: 'dec',
+                    range: [29, 32],
+                    loc: {
+                        start: { line: 1, column: 29 },
+                        end: { line: 1, column: 32 }
+                    }
+                },
+                range: [18, 32],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 32 }
+                }
+            }],
+            range: [0, 34],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 34 }
+            }
+        },
+
         'module "a" { export default answer }': {
             type: 'ModuleDeclaration',
             id: {
