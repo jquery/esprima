@@ -3636,6 +3636,43 @@ var harmonyTestFixture = {
             }
         },
 
+        'export { encrypt as default }': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [9, 16],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                name: {
+                    type: 'Identifier',
+                    name: 'default',
+                    range: [20, 27],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                range: [9, 27],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 27 }
+                }
+            }],
+            source: null,
+            range: [0, 29],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 29 }
+            }
+        },
+
         'export { encrypt, decrypt as dec }': {
             type: 'ExportDeclaration',
             declaration: null,
@@ -4750,6 +4787,90 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 48 }
+            }
+        },
+
+        'import default from "foo"': {
+            type: 'ImportDeclaration',
+            specifiers: [{
+                type: 'ImportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'default',
+                    range: [7, 14],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                name: null,
+                range: [7, 14],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 14 }
+                }
+            }],
+            kind: 'default',
+            source: {
+                type: 'Literal',
+                value: 'foo',
+                raw: '"foo"',
+                range: [20, 25],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'import { null as nil } from "bar"': {
+            type: 'ImportDeclaration',
+            specifiers: [{
+                type: 'ImportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'null',
+                    range: [9, 13],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 13 }
+                    }
+                },
+                name: {
+                    type: 'Identifier',
+                    name: 'nil',
+                    range: [17, 20],
+                    loc: {
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 20 }
+                    }
+                },
+                range: [9, 20],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 20 }
+                }
+            }],
+            kind: 'named',
+            source: {
+                type: 'Literal',
+                value: 'bar',
+                raw: '"bar"',
+                range: [28, 33],
+                loc: {
+                    start: { line: 1, column: 28 },
+                    end: { line: 1, column: 33 }
+                }
+            },
+            range: [0, 33],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 33 }
             }
         },
 

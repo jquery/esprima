@@ -3278,7 +3278,7 @@ parseYieldExpression: true
         id = parseVariableIdentifier();
         if (matchContextualKeyword('as')) {
             lex();
-            name = parseVariableIdentifier();
+            name = parseNonComputedProperty();
         }
 
         return delegate.createExportSpecifier(id, name);
@@ -3343,7 +3343,7 @@ parseYieldExpression: true
         expectKeyword('import');
         specifiers = [];
 
-        if (lookahead.type === Token.Identifier) {
+        if (isIdentifierName(lookahead)) {
             kind = 'default';
             specifiers.push(parseImportSpecifier());
 
@@ -3378,7 +3378,7 @@ parseYieldExpression: true
     function parseImportSpecifier() {
         var id, name = null;
 
-        id = parseVariableIdentifier();
+        id = parseNonComputedProperty();
         if (matchContextualKeyword('as')) {
             lex();
             name = parseVariableIdentifier();
