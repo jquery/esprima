@@ -4571,6 +4571,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 8 }
                 }
             }],
+            kind: 'default',
             source: {
                 type: 'Literal',
                 value: 'jquery',
@@ -4625,6 +4626,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 25 }
                 }
             }],
+            kind: 'named',
             source: {
                 type: 'Literal',
                 value: 'crypto',
@@ -4670,6 +4672,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 23 }
                 }
             }],
+            kind: 'named',
             source: {
                 type: 'Literal',
                 value: 'crypto',
@@ -4732,6 +4735,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 32 }
                 }
             }],
+            kind: 'named',
             source: {
                 type: 'Literal',
                 value: 'crypto',

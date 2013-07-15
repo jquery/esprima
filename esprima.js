@@ -1973,10 +1973,11 @@ parseYieldExpression: true
             };
         },
 
-        createImportDeclaration: function (specifiers, source) {
+        createImportDeclaration: function (specifiers, kind, source) {
             return {
                 type: Syntax.ImportDeclaration,
                 specifiers: specifiers,
+                kind: kind,
                 source: source
             };
         },
@@ -3337,12 +3338,13 @@ parseYieldExpression: true
     }
 
     function parseImportDeclaration() {
-        var specifiers, src;
+        var specifiers, kind, src;
 
         expectKeyword('import');
         specifiers = [];
 
         if (lookahead.type === Token.Identifier) {
+            kind = 'default';
             specifiers.push(parseImportSpecifier());
 
             if (!matchContextualKeyword('from')) {
@@ -3350,6 +3352,7 @@ parseYieldExpression: true
             }
             lex();
         } else if (match('{')) {
+            kind = 'named';
             lex();
             do {
                 specifiers.push(parseImportSpecifier());
@@ -3369,7 +3372,7 @@ parseYieldExpression: true
 
         consumeSemicolon();
 
-        return delegate.createImportDeclaration(specifiers, src);
+        return delegate.createImportDeclaration(specifiers, kind, src);
     }
 
     function parseImportSpecifier() {
