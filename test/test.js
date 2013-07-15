@@ -39,18 +39,21 @@ var testFixture = {
                 type: 'ExpressionStatement',
                 expression: {
                     type: 'ThisExpression',
+                    tokenRange: [0, 1],
                     range: [0, 4],
                     loc: {
                         start: { line: 1, column: 0 },
                         end: { line: 1, column: 4 }
                     }
                 },
+                tokenRange: [0, 1],
                 range: [0, 5],
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 2, column: 0 }
                 }
             }],
+            tokenRange: [0, 1],
             range: [0, 5],
             loc: {
                 start: { line: 1, column: 0 },
@@ -75,18 +78,21 @@ var testFixture = {
                     type: 'Literal',
                     value: null,
                     raw: 'null',
+                    tokenRange: [0, 1],
                     range: [0, 4],
                     loc: {
                         start: { line: 1, column: 0 },
                         end: { line: 1, column: 4 }
                     }
                 },
+                tokenRange: [0, 1],
                 range: [0, 5],
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 2, column: 0 }
                 }
             }],
+            tokenRange: [0, 1],
             range: [0, 5],
             loc: {
                 start: { line: 1, column: 0 },
@@ -111,18 +117,21 @@ var testFixture = {
                     type: 'Literal',
                     value: 42,
                     raw: '42',
+                    tokenRange: [0, 1],
                     range: [5, 7],
                     loc: {
                         start: { line: 2, column: 4 },
                         end: { line: 2, column: 6 }
                     }
                 },
+                tokenRange: [0, 1],
                 range: [5, 9],
                 loc: {
                     start: { line: 2, column: 4 },
                     end: { line: 4, column: 0 }
                 }
             }],
+            tokenRange: [0, 1],
             range: [5, 9],
             loc: {
                 start: { line: 2, column: 4 },

@@ -95,6 +95,7 @@ function testParse(esprima, code, syntax) {
 
     options = {
         comment: (typeof syntax.comments !== 'undefined'),
+        tokenRange: (typeof syntax.tokenRange !== 'undefined'),
         range: true,
         loc: true,
         tokens: (typeof syntax.tokens !== 'undefined'),
