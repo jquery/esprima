@@ -3212,6 +3212,7 @@ var harmonyTestFixture = {
                 }
             },
             specifiers: null,
+            source: null,
             range: [0, 22],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3249,6 +3250,7 @@ var harmonyTestFixture = {
                 }
             },
             specifiers: null,
+            source: null,
             range: [ 0, 19 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3294,6 +3296,7 @@ var harmonyTestFixture = {
                 }
             },
             specifiers: null,
+            source: null,
             range: [ 0, 25 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3331,6 +3334,7 @@ var harmonyTestFixture = {
                 }
             },
             specifiers: null,
+            source: null,
             range: [ 0, 19 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3376,6 +3380,7 @@ var harmonyTestFixture = {
                 }
             },
             specifiers: null,
+            source: null,
             range: [ 0, 25 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3421,6 +3426,7 @@ var harmonyTestFixture = {
                 }
             },
             specifiers: null,
+            source: null,
             range: [ 0, 27 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3462,6 +3468,7 @@ var harmonyTestFixture = {
                 }
             },
             specifiers: null,
+            source: null,
             range: [ 0, 27 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3499,6 +3506,7 @@ var harmonyTestFixture = {
                 }
             },
             specifiers: null,
+            source: null,
             range: [ 0, 21 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3511,13 +3519,13 @@ var harmonyTestFixture = {
             declaration: null,
             specifiers: [{
                 type: 'ExportBatchSpecifier',
-                source: null,
                 range: [7, 8],
                 loc: {
                     start: { line: 1, column: 7 },
                     end: { line: 1, column: 8 }
                 }
             }],
+            source: null,
             range: [ 0, 8 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3530,22 +3538,22 @@ var harmonyTestFixture = {
             declaration: null,
             specifiers: [{
                 type: 'ExportBatchSpecifier',
-                source: {
-                    type: 'Literal',
-                    value: 'crypto',
-                    raw: '"crypto"',
-                    range: [14, 22],
-                    loc: {
-                        start: { line: 1, column: 14 },
-                        end: { line: 1, column: 22 }
-                    }
-                },
-                range: [7, 22],
+                range: [7, 8],
                 loc: {
                     start: { line: 1, column: 7 },
-                    end: { line: 1, column: 22 }
+                    end: { line: 1, column: 8 }
                 }
             }],
+            source: {
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [14, 22],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 22 }
+                }
+            },
             range: [0, 22],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3574,6 +3582,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 16 }
                 }
             }],
+            source: null,
             range: [0, 18],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3619,6 +3628,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 25 }
                 }
             }],
+            source: null,
             range: [0, 27],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3672,6 +3682,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 32 }
                 }
             }],
+            source: null,
             range: [0, 34],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3706,6 +3717,7 @@ var harmonyTestFixture = {
                         }
                     },
                     specifiers: null,
+                    source: null,
                     range: [13, 35],
                     loc: {
                         start: { line: 1, column: 13 },
@@ -3770,6 +3782,7 @@ var harmonyTestFixture = {
                         }
                     },
                     specifiers: null,
+                    source: null,
                     range: [15, 35],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -3842,6 +3855,7 @@ var harmonyTestFixture = {
                         }
                     },
                     specifiers: null,
+                    source: null,
                     range: [15, 41],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -3906,6 +3920,7 @@ var harmonyTestFixture = {
                         }
                     },
                     specifiers: null,
+                    source: null,
                     range: [15, 35],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -3978,6 +3993,7 @@ var harmonyTestFixture = {
                         }
                     },
                     specifiers: null,
+                    source: null,
                     range: [15, 41],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -4050,6 +4066,7 @@ var harmonyTestFixture = {
                         }
                     },
                     specifiers: null,
+                    source: null,
                     range: [15, 43],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -4118,6 +4135,7 @@ var harmonyTestFixture = {
                         }
                     },
                     specifiers: null,
+                    source: null,
                     range: [15, 42],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -4182,6 +4200,7 @@ var harmonyTestFixture = {
                         }
                     },
                     specifiers: null,
+                    source: null,
                     range: [15, 36],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -4221,13 +4240,13 @@ var harmonyTestFixture = {
                     declaration: null,
                     specifiers: [{
                         type: 'ExportBatchSpecifier',
-                        source: null,
                         range: [22, 23],
                         loc: {
                             start: { line: 1, column: 22 },
                             end: { line: 1, column: 23 }
                         }
                     }],
+                    source: null,
                     range: [15, 24],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -4267,22 +4286,22 @@ var harmonyTestFixture = {
                     declaration: null,
                     specifiers: [{
                         type: 'ExportBatchSpecifier',
-                        source: {
-                            type: 'Literal',
-                            value: 'crypto',
-                            raw: '"crypto"',
-                            range: [34, 42],
-                            loc: {
-                                start: { line: 1, column: 34 },
-                                end: { line: 1, column: 42 }
-                            }
-                        },
-                        range: [27, 42],
+                        range: [27, 28],
                         loc: {
                             start: { line: 1, column: 27 },
-                            end: { line: 1, column: 42 }
+                            end: { line: 1, column: 28 }
                         }
                     }],
+                    source: {
+                        type: 'Literal',
+                        value: 'crypto',
+                        raw: '"crypto"',
+                        range: [34, 42],
+                        loc: {
+                            start: { line: 1, column: 34 },
+                            end: { line: 1, column: 42 }
+                        }
+                    },
                     range: [20, 43],
                     loc: {
                         start: { line: 1, column: 20 },
@@ -4338,6 +4357,7 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 34 }
                         }
                     }],
+                    source: null,
                     range: [18, 37],
                     loc: {
                         start: { line: 1, column: 18 },
@@ -4410,6 +4430,7 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 43 }
                         }
                     }],
+                    source: null,
                     range: [18, 46],
                     loc: {
                         start: { line: 1, column: 18 },
@@ -4490,6 +4511,7 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 50 }
                         }
                     }],
+                    source: null,
                     range: [18, 53],
                     loc: {
                         start: { line: 1, column: 18 },

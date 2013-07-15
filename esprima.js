@@ -1950,18 +1950,18 @@ parseYieldExpression: true
             };
         },
 
-        createExportBatchSpecifier: function (source) {
+        createExportBatchSpecifier: function () {
             return {
-                type: Syntax.ExportBatchSpecifier,
-                source: source
+                type: Syntax.ExportBatchSpecifier
             };
         },
 
-        createExportDeclaration: function (declaration, specifiers) {
+        createExportDeclaration: function (declaration, specifiers, source) {
             return {
                 type: Syntax.ExportDeclaration,
                 declaration: declaration,
-                specifiers: specifiers
+                specifiers: specifiers,
+                source: source
             };
         },
 
@@ -3267,19 +3267,8 @@ parseYieldExpression: true
     }
 
     function parseExportBatchSpecifier() {
-        var src;
-
         expect('*');
-        src = null;
-        if (matchContextualKeyword('from')) {
-            lex();
-            src = parsePrimaryExpression();
-            if (src.type !== Syntax.Literal) {
-                throwError({}, Messages.InvalidModuleSpecifier);
-            }
-        }
-
-        return delegate.createExportBatchSpecifier(src);
+        return delegate.createExportBatchSpecifier();
     }
 
     function parseExportSpecifier() {
@@ -3295,7 +3284,7 @@ parseYieldExpression: true
     }
 
     function parseExportDeclaration() {
-        var token, def, id, src, specifiers;
+        var token, def, src, specifiers;
 
         expectKeyword('export');
 
@@ -3307,21 +3296,22 @@ parseYieldExpression: true
                 lex();
                 def = parseAssignmentExpression();
                 consumeSemicolon();
-                return delegate.createExportDeclaration(def, null);
+                return delegate.createExportDeclaration(def, null, null);
             case 'function':
-                return delegate.createExportDeclaration(parseFunctionDeclaration(), null);
+                return delegate.createExportDeclaration(parseFunctionDeclaration(), null, null);
             case 'let':
             case 'const':
-                return delegate.createExportDeclaration(parseConstLetDeclaration(token.value), null);
+                return delegate.createExportDeclaration(parseConstLetDeclaration(token.value), null, null);
             case 'var':
-                return delegate.createExportDeclaration(parseStatement(), null);
+                return delegate.createExportDeclaration(parseStatement(), null, null);
             case 'class':
-                return delegate.createExportDeclaration(parseClassDeclaration(), null);
+                return delegate.createExportDeclaration(parseClassDeclaration(), null, null);
             }
             throwUnexpected(lex());
         }
 
         specifiers = [];
+        src = null;
 
         if (match('*')) {
             specifiers.push(parseExportBatchSpecifier());
@@ -3333,9 +3323,17 @@ parseYieldExpression: true
             expect('}');
         }
 
+        if (matchContextualKeyword('from')) {
+            lex();
+            src = parsePrimaryExpression();
+            if (src.type !== Syntax.Literal) {
+                throwError({}, Messages.InvalidModuleSpecifier);
+            }
+        }
+
         consumeSemicolon();
 
-        return delegate.createExportDeclaration(null, specifiers);
+        return delegate.createExportDeclaration(null, specifiers, src);
     }
 
     function parseImportDeclaration() {
