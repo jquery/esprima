@@ -3164,7 +3164,11 @@ parseYieldExpression: true
             id = parseArrayInitialiser();
             reinterpretAsAssignmentBindingPattern(id);
         } else {
-            id = parseVariableIdentifier();
+            if (state.allowDefault) {
+                id = matchKeyword('default') ? parseNonComputedProperty() : parseVariableIdentifier();
+            } else {
+                id = parseVariableIdentifier();
+            }
             // 12.2.1
             if (strict && isRestrictedWord(id.name)) {
                 throwErrorTolerant({}, Messages.StrictVarName);
@@ -3285,7 +3289,7 @@ parseYieldExpression: true
     }
 
     function parseExportDeclaration() {
-        var token, def, src, specifiers;
+        var token, previousAllowDefault, decl, def, src, specifiers;
 
         expectKeyword('export');
 
@@ -3302,9 +3306,12 @@ parseYieldExpression: true
                 return delegate.createExportDeclaration(parseFunctionDeclaration(), null, null);
             case 'let':
             case 'const':
-                return delegate.createExportDeclaration(parseConstLetDeclaration(token.value), null, null);
             case 'var':
-                return delegate.createExportDeclaration(parseStatement(), null, null);
+                previousAllowDefault = state.allowDefault;
+                state.allowDefault = true;
+                decl = delegate.createExportDeclaration(parseSourceElement(), null, null);
+                state.allowDefault = previousAllowDefault;
+                return decl;
             case 'class':
                 return delegate.createExportDeclaration(parseClassDeclaration(), null, null);
             }
@@ -5286,6 +5293,7 @@ parseYieldExpression: true
         length = source.length;
         lookahead = null;
         state = {
+            allowDefault: true,
             allowIn: true,
             labelSet: {},
             inFunctionBody: false,
@@ -5386,6 +5394,7 @@ parseYieldExpression: true
         length = source.length;
         lookahead = null;
         state = {
+            allowDefault: false,
             allowIn: true,
             labelSet: {},
             parenthesizedCount: 0,
