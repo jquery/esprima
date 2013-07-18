@@ -3473,6 +3473,27 @@ var harmonyTestFixture = {
             }
         },
 
+        'export default = 42': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'Literal',
+                value: 42,
+                raw: '42',
+                range: [17, 19],
+                loc: {
+                    start: { line: 1, column: 17 },
+                    end: { line: 1, column: 19 }
+                }
+            },
+            specifiers: null,
+            source: null,
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        },
+
         'export const document = { }': {
             type: 'ExportDeclaration',
             declaration: {

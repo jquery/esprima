@@ -3299,7 +3299,12 @@ parseYieldExpression: true
             switch (token.value) {
             case 'default':
                 lex();
-                def = parseAssignmentExpression();
+                if (match('=')) {
+                    lex();
+                    def = parseAssignmentExpression();
+                } else {
+                    def = parseAssignmentExpression();
+                }
                 consumeSemicolon();
                 return delegate.createExportDeclaration(def, null, null);
             case 'let':
