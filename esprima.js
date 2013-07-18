@@ -3302,18 +3302,16 @@ parseYieldExpression: true
                 def = parseAssignmentExpression();
                 consumeSemicolon();
                 return delegate.createExportDeclaration(def, null, null);
-            case 'function':
-                return delegate.createExportDeclaration(parseFunctionDeclaration(), null, null);
             case 'let':
             case 'const':
             case 'var':
+            case 'class':
+            case 'function':
                 previousAllowDefault = state.allowDefault;
                 state.allowDefault = true;
                 decl = delegate.createExportDeclaration(parseSourceElement(), null, null);
                 state.allowDefault = previousAllowDefault;
                 return decl;
-            case 'class':
-                return delegate.createExportDeclaration(parseClassDeclaration(), null, null);
             }
             throwUnexpected(lex());
         }
@@ -4149,7 +4147,11 @@ parseYieldExpression: true
 
         token = lookahead;
 
-        id = parseVariableIdentifier();
+        if (state.allowDefault) {
+            id = matchKeyword('default') ? parseNonComputedProperty() : parseVariableIdentifier();
+        } else {
+            id = parseVariableIdentifier();
+        }
         if (strict) {
             if (isRestrictedWord(token.value)) {
                 throwErrorTolerant(token, Messages.StrictFunctionName);
@@ -4435,12 +4437,15 @@ parseYieldExpression: true
     }
 
     function parseClassDeclaration() {
-        var token, id, previousYieldAllowed, superClass = null;
+        var id, previousYieldAllowed, superClass = null;
 
         expectKeyword('class');
 
-        token = lookahead;
-        id = parseVariableIdentifier();
+        if (state.allowDefault) {
+            id = matchKeyword('default') ? parseNonComputedProperty() : parseVariableIdentifier();
+        } else {
+            id = parseVariableIdentifier();
+        }
 
         if (matchKeyword('extends')) {
             expectKeyword('extends');

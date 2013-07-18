@@ -3608,7 +3608,49 @@ var harmonyTestFixture = {
             }
         },
 
-        'export class Class {}': {
+        'export function default() {}': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'default',
+                    range: [16, 23],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 23 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [26, 28],
+                    loc: {
+                        start: { line: 1, column: 26 },
+                        end: { line: 1, column: 28 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [7, 28],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 28 }
+                }
+            },
+            specifiers: null,
+            source: null,
+            range: [0, 28],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
+            }
+      },
+
+      'export class Class {}': {
             type: 'ExportDeclaration',
             declaration: {
                 type: 'ClassDeclaration',
@@ -3643,6 +3685,44 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 21 }
+            }
+        },
+
+        'export class default {}': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'ClassDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'default',
+                    range: [13, 20],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 20 }
+                    }
+                },
+                superClass: null,
+                body: {
+                    type: 'ClassBody',
+                    body: [],
+                    range: [21, 23],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 23 }
+                    }
+                },
+                range: [7, 23],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            specifiers: null,
+            source: null,
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
             }
         },
 
@@ -10831,6 +10911,13 @@ var harmonyTestFixture = {
             message: 'Error: Line 2: Unexpected identifier'
         },
 
+        'function default() {}': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token default'
+        },
+
         'function hello() {\'use strict\'; ({ i: 10, s(eval) { } }); }': {
             index: 44,
             lineNumber: 1,
@@ -11138,6 +11225,13 @@ var harmonyTestFixture = {
             lineNumber: 1,
             column: 22,
             message: 'Error: Line 1: Illegal yield expression'
+        },
+
+        'class default': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Unexpected token default'
         },
 
         '`test': {
