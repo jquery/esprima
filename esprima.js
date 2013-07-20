@@ -1956,10 +1956,11 @@ parseYieldExpression: true
             };
         },
 
-        createExportDeclaration: function (declaration, specifiers, source) {
+        createExportDeclaration: function (def, declaration, specifiers, source) {
             return {
                 type: Syntax.ExportDeclaration,
                 declaration: declaration,
+                default: def,
                 specifiers: specifiers,
                 source: source
             };
@@ -3289,24 +3290,36 @@ parseYieldExpression: true
     }
 
     function parseExportDeclaration() {
-        var token, previousAllowDefault, decl, def, src, specifiers;
+        var previousAllowDefault, decl, def, src, specifiers;
 
         expectKeyword('export');
 
-        token = lookahead;
-
-        if (token.type === Token.Keyword) {
-            switch (token.value) {
-            case 'default':
+        if (matchKeyword('default')) {
+            lex();
+            if (match('=')) {
                 lex();
-                if (match('=')) {
-                    lex();
-                    def = parseAssignmentExpression();
-                } else {
-                    def = parseAssignmentExpression();
+                def = parseAssignmentExpression();
+            } else if (lookahead.type === Token.Keyword) {
+                switch (lookahead.value) {
+                case 'let':
+                case 'const':
+                case 'var':
+                case 'class':
+                case 'function':
+                    def = parseSourceElement();
+                    break;
+                default:
+                    throwUnexpected(lex());
                 }
-                consumeSemicolon();
-                return delegate.createExportDeclaration(def, null, null);
+            } else {
+                def = parseAssignmentExpression();
+            }
+            consumeSemicolon();
+            return delegate.createExportDeclaration(true, def, null, null);
+        }
+
+        if (lookahead.type === Token.Keyword) {
+            switch (lookahead.value) {
             case 'let':
             case 'const':
             case 'var':
@@ -3314,7 +3327,7 @@ parseYieldExpression: true
             case 'function':
                 previousAllowDefault = state.allowDefault;
                 state.allowDefault = true;
-                decl = delegate.createExportDeclaration(parseSourceElement(), null, null);
+                decl = delegate.createExportDeclaration(false, parseSourceElement(), null, null);
                 state.allowDefault = previousAllowDefault;
                 return decl;
             }
@@ -3344,7 +3357,7 @@ parseYieldExpression: true
 
         consumeSemicolon();
 
-        return delegate.createExportDeclaration(null, specifiers, src);
+        return delegate.createExportDeclaration(false, null, specifiers, src);
     }
 
     function parseImportDeclaration() {
