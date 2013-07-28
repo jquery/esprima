@@ -3305,8 +3305,10 @@ parseYieldExpression: true
                 case 'const':
                 case 'var':
                 case 'class':
-                case 'function':
                     def = parseSourceElement();
+                    break;
+                case 'function':
+                    def = parseFunctionExpression();
                     break;
                 default:
                     throwUnexpected(lex());

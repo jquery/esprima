@@ -3899,7 +3899,7 @@ var harmonyTestFixture = {
         'export default function answer(){}': {
             type: 'ExportDeclaration',
             declaration: {
-                type: 'FunctionDeclaration',
+                type: 'FunctionExpression',
                 id: {
                     type: 'Identifier',
                     name: 'answer',
@@ -3936,6 +3936,41 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 34 }
+            }
+        },
+
+        'export default function() {}': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [26, 28],
+                    loc: {
+                        start: { line: 1, column: 26 },
+                        end: { line: 1, column: 28 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [15, 28],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 28 }
+                }
+            },
+            'default': true,
+            specifiers: null,
+            source: null,
+            range: [0, 28],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
             }
         },
 
