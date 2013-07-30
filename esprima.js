@@ -2304,6 +2304,7 @@ parseYieldExpression: true
 
         method = parsePropertyFunction({
             params: tmp.params,
+            defaults: tmp.defaults,
             rest: tmp.rest,
             generator: options.generator
         });
