@@ -2267,12 +2267,13 @@ parseYieldExpression: true
     // 11.1.5 Object Initialiser
 
     function parsePropertyFunction(options) {
-        var previousStrict, previousYieldAllowed, params, body;
+        var previousStrict, previousYieldAllowed, params, defaults, body;
 
         previousStrict = strict;
         previousYieldAllowed = state.yieldAllowed;
         state.yieldAllowed = options.generator;
         params = options.params || [];
+        defaults = options.defaults || [];
 
         body = parseConciseBody();
         if (options.name && strict && isRestrictedWord(params[0].name)) {
@@ -2284,7 +2285,7 @@ parseYieldExpression: true
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createFunctionExpression(null, params, [], body, options.rest || null, options.generator, body.type !== Syntax.BlockStatement);
+        return delegate.createFunctionExpression(null, params, defaults, body, options.rest || null, options.generator, body.type !== Syntax.BlockStatement);
     }
 
 
