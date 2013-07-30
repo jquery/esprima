@@ -2958,9 +2958,11 @@ parseYieldExpression: true
     }
 
     function reinterpretAsCoverFormalsList(expressions) {
-        var i, len, param, params, options, rest;
+        var i, len, param, params, defaults, defaultCount, options, rest;
 
         params = [];
+        defaults = [];
+        defaultCount = 0;
         rest = null;
         options = {
             paramSet: {}
@@ -2970,14 +2972,20 @@ parseYieldExpression: true
             param = expressions[i];
             if (param.type === Syntax.Identifier) {
                 params.push(param);
+                defaults.push(null);
                 validateParam(options, param, param.name);
             } else if (param.type === Syntax.ObjectExpression || param.type === Syntax.ArrayExpression) {
                 reinterpretAsDestructuredParameter(options, param);
                 params.push(param);
+                defaults.push(null);
             } else if (param.type === Syntax.SpreadElement) {
                 assert(i === len - 1, "It is guaranteed that SpreadElement is last element by parseExpression");
                 reinterpretAsDestructuredParameter(options, param.argument);
                 rest = param.argument;
+            } else if (param.type === Syntax.AssignmentExpression) {
+                params.push(param.left);
+                defaults.push(param.right);
+                ++defaultCount;
             } else {
                 return null;
             }
@@ -2990,7 +2998,11 @@ parseYieldExpression: true
             throwErrorTolerant(options.stricted, options.message);
         }
 
-        return { params: params, rest: rest };
+        if (defaultCount === 0) {
+            defaults = [];
+        }
+
+        return { params: params, defaults: defaults, rest: rest };
     }
 
     function parseArrowFunctionExpression(options) {
@@ -3006,7 +3018,7 @@ parseYieldExpression: true
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createArrowFunctionExpression(options.params, [], body, options.rest, body.type !== Syntax.BlockStatement);
+        return delegate.createArrowFunctionExpression(options.params, options.defaults, body, options.rest, body.type !== Syntax.BlockStatement);
     }
 
     function parseAssignmentExpression() {
@@ -3037,7 +3049,7 @@ parseYieldExpression: true
                 if (isRestrictedWord(expr.name)) {
                     throwError({}, Messages.StrictParamName);
                 }
-                return parseArrowFunctionExpression({ params: [ expr ], rest: null });
+                return parseArrowFunctionExpression({ params: [ expr ], defaults: [], rest: null });
             }
         }
 
