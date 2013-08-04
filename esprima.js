@@ -3277,9 +3277,6 @@ parseYieldExpression: true
                 throwError({}, Messages.InvalidModuleSpecifier);
             }
             break;
-
-        default:
-            throwUnexpected(lex());
         }
 
         consumeSemicolon();
@@ -4494,6 +4491,15 @@ parseYieldExpression: true
 
     // 15 Program
 
+    function matchModuleDeclaration() {
+        var id;
+        if (matchContextualKeyword('module')) {
+            id = lookahead2();
+            return id.type === Token.StringLiteral || id.type === Token.Identifier;
+        }
+        return false;
+    }
+
     function parseSourceElement() {
         if (lookahead.type === Token.Keyword) {
             switch (lookahead.value) {
@@ -4511,7 +4517,7 @@ parseYieldExpression: true
             }
         }
 
-        if (matchContextualKeyword('module')) {
+        if (matchModuleDeclaration()) {
             throwError({}, Messages.NestedModule);
         }
 
@@ -4530,7 +4536,7 @@ parseYieldExpression: true
             }
         }
 
-        if (matchContextualKeyword('module')) {
+        if (matchModuleDeclaration()) {
             return parseModuleDeclaration();
         }
 
