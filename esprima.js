@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2013 Thaddee Tyl <thaddee.tyl@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2012 Mathias Bynens <mathias@qiwi.be>
@@ -136,15 +137,14 @@ parseYieldExpression: true
         DoWhileStatement: 'DoWhileStatement',
         EmptyStatement: 'EmptyStatement',
         ExportDeclaration: 'ExportDeclaration',
+        ExportBatchSpecifier: 'ExportBatchSpecifier',
         ExportSpecifier: 'ExportSpecifier',
-        ExportSpecifierSet: 'ExportSpecifierSet',
         ExpressionStatement: 'ExpressionStatement',
         ForInStatement: 'ForInStatement',
         ForOfStatement: 'ForOfStatement',
         ForStatement: 'ForStatement',
         FunctionDeclaration: 'FunctionDeclaration',
         FunctionExpression: 'FunctionExpression',
-        Glob: 'Glob',
         Identifier: 'Identifier',
         IfStatement: 'IfStatement',
         ImportDeclaration: 'ImportDeclaration',
@@ -158,7 +158,6 @@ parseYieldExpression: true
         NewExpression: 'NewExpression',
         ObjectExpression: 'ObjectExpression',
         ObjectPattern: 'ObjectPattern',
-        Path:  'Path',
         Program: 'Program',
         Property: 'Property',
         ReturnStatement: 'ReturnStatement',
@@ -223,6 +222,7 @@ parseYieldExpression: true
         StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
         StrictParamDupe: 'Strict mode function may not have duplicate parameter names',
         ParameterAfterRestParameter: 'Rest parameter must be final parameter of an argument list',
+        DefaultRestParameter: 'Rest parameter can not have a default value',
         ElementAfterSpreadElement: 'Spread must be the final element of an element list',
         ObjectPatternAsRestParameter: 'Invalid rest parameter',
         ObjectPatternAsSpread: 'Invalid spread argument',
@@ -236,7 +236,10 @@ parseYieldExpression: true
         StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',
         StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
         StrictReservedWord:  'Use of future reserved word in strict mode',
+        NewlineAfterModule:  'Illegal newline after module',
         NoFromAfterImport: 'Missing from after import',
+        InvalidModuleSpecifier: 'Invalid module specifier',
+        NestedModule: 'Module declaration can not be nested',
         NoYieldInGenerator: 'Missing yield in generator',
         NoUnintializedConst: 'Const must be initialized',
         ComprehensionRequiresBlock: 'Comprehension must have at least one block',
@@ -1939,55 +1942,44 @@ parseYieldExpression: true
             };
         },
 
-        createPath: function (body) {
-            return {
-                type: Syntax.Path,
-                body: body
-            };
-        },
-
-        createGlob: function () {
-            return {
-                type: Syntax.Glob
-            };
-        },
-
-        createExportSpecifier: function (id, from) {
+        createExportSpecifier: function (id, name) {
             return {
                 type: Syntax.ExportSpecifier,
                 id: id,
-                from: from
+                name: name
             };
         },
 
-        createExportSpecifierSet: function (specifiers) {
+        createExportBatchSpecifier: function () {
             return {
-                type: Syntax.ExportSpecifierSet,
-                specifiers: specifiers
+                type: Syntax.ExportBatchSpecifier
             };
         },
 
-        createExportDeclaration: function (declaration, specifiers) {
+        createExportDeclaration: function (def, declaration, specifiers, source) {
             return {
                 type: Syntax.ExportDeclaration,
                 declaration: declaration,
-                specifiers: specifiers
+                default: def,
+                specifiers: specifiers,
+                source: source
             };
         },
 
-        createImportSpecifier: function (id, from) {
+        createImportSpecifier: function (id, name) {
             return {
                 type: Syntax.ImportSpecifier,
                 id: id,
-                from: from
+                name: name
             };
         },
 
-        createImportDeclaration: function (specifiers, from) {
+        createImportDeclaration: function (specifiers, kind, source) {
             return {
                 type: Syntax.ImportDeclaration,
                 specifiers: specifiers,
-                from: from
+                kind: kind,
+                source: source
             };
         },
 
@@ -1999,11 +1991,11 @@ parseYieldExpression: true
             };
         },
 
-        createModuleDeclaration: function (id, from, body) {
+        createModuleDeclaration: function (id, source, body) {
             return {
                 type: Syntax.ModuleDeclaration,
                 id: id,
-                from: from,
+                source: source,
                 body: body
             };
         }
@@ -2275,24 +2267,25 @@ parseYieldExpression: true
     // 11.1.5 Object Initialiser
 
     function parsePropertyFunction(options) {
-        var previousStrict, previousYieldAllowed, params, body;
+        var previousStrict, previousYieldAllowed, params, defaults, body;
 
         previousStrict = strict;
         previousYieldAllowed = state.yieldAllowed;
         state.yieldAllowed = options.generator;
         params = options.params || [];
+        defaults = options.defaults || [];
 
         body = parseConciseBody();
         if (options.name && strict && isRestrictedWord(params[0].name)) {
             throwErrorTolerant(options.name, Messages.StrictParamName);
         }
         if (state.yieldAllowed && !state.yieldFound) {
-            throwError({}, Messages.NoYieldInGenerator);
+            throwErrorTolerant({}, Messages.NoYieldInGenerator);
         }
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createFunctionExpression(null, params, [], body, options.rest || null, options.generator, body.type !== Syntax.BlockStatement);
+        return delegate.createFunctionExpression(null, params, defaults, body, options.rest || null, options.generator, body.type !== Syntax.BlockStatement);
     }
 
 
@@ -2311,6 +2304,7 @@ parseYieldExpression: true
 
         method = parsePropertyFunction({
             params: tmp.params,
+            defaults: tmp.defaults,
             rest: tmp.rest,
             generator: options.generator
         });
@@ -2964,9 +2958,11 @@ parseYieldExpression: true
     }
 
     function reinterpretAsCoverFormalsList(expressions) {
-        var i, len, param, params, options, rest;
+        var i, len, param, params, defaults, defaultCount, options, rest;
 
         params = [];
+        defaults = [];
+        defaultCount = 0;
         rest = null;
         options = {
             paramSet: {}
@@ -2976,14 +2972,20 @@ parseYieldExpression: true
             param = expressions[i];
             if (param.type === Syntax.Identifier) {
                 params.push(param);
+                defaults.push(null);
                 validateParam(options, param, param.name);
             } else if (param.type === Syntax.ObjectExpression || param.type === Syntax.ArrayExpression) {
                 reinterpretAsDestructuredParameter(options, param);
                 params.push(param);
+                defaults.push(null);
             } else if (param.type === Syntax.SpreadElement) {
                 assert(i === len - 1, "It is guaranteed that SpreadElement is last element by parseExpression");
                 reinterpretAsDestructuredParameter(options, param.argument);
                 rest = param.argument;
+            } else if (param.type === Syntax.AssignmentExpression) {
+                params.push(param.left);
+                defaults.push(param.right);
+                ++defaultCount;
             } else {
                 return null;
             }
@@ -2996,7 +2998,11 @@ parseYieldExpression: true
             throwErrorTolerant(options.stricted, options.message);
         }
 
-        return { params: params, rest: rest };
+        if (defaultCount === 0) {
+            defaults = [];
+        }
+
+        return { params: params, defaults: defaults, rest: rest };
     }
 
     function parseArrowFunctionExpression(options) {
@@ -3012,7 +3018,7 @@ parseYieldExpression: true
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createArrowFunctionExpression(options.params, [], body, options.rest, body.type !== Syntax.BlockStatement);
+        return delegate.createArrowFunctionExpression(options.params, options.defaults, body, options.rest, body.type !== Syntax.BlockStatement);
     }
 
     function parseAssignmentExpression() {
@@ -3043,7 +3049,7 @@ parseYieldExpression: true
                 if (isRestrictedWord(expr.name)) {
                     throwError({}, Messages.StrictParamName);
                 }
-                return parseArrowFunctionExpression({ params: [ expr ], rest: null });
+                return parseArrowFunctionExpression({ params: [ expr ], defaults: [], rest: null });
             }
         }
 
@@ -3173,7 +3179,11 @@ parseYieldExpression: true
             id = parseArrayInitialiser();
             reinterpretAsAssignmentBindingPattern(id);
         } else {
-            id = parseVariableIdentifier();
+            if (state.allowDefault) {
+                id = matchKeyword('default') ? parseNonComputedProperty() : parseVariableIdentifier();
+            } else {
+                id = parseVariableIdentifier();
+            }
             // 12.2.1
             if (strict && isRestrictedWord(id.name)) {
                 throwErrorTolerant({}, Messages.StrictVarName);
@@ -3238,182 +3248,182 @@ parseYieldExpression: true
 
     // http://wiki.ecmascript.org/doku.php?id=harmony:modules
 
-    function parsePath() {
-        var body = [];
+    function parseModuleDeclaration() {
+        var id, src, body;
 
-        while (true) {
-            body.push(parseVariableIdentifier());
-            if (!match('.')) {
-                break;
+        lex();   // 'module'
+
+        if (peekLineTerminator()) {
+            throwError({}, Messages.NewlineAfterModule);
+        }
+
+        switch (lookahead.type) {
+
+        case Token.StringLiteral:
+            id = parsePrimaryExpression();
+            body = parseModuleBlock();
+            src = null;
+            break;
+
+        case Token.Identifier:
+            id = parseVariableIdentifier();
+            body = null;
+            if (!matchContextualKeyword('from')) {
+                throwUnexpected(lex());
             }
             lex();
-        }
+            src = parsePrimaryExpression();
+            if (src.type !== Syntax.Literal) {
+                throwError({}, Messages.InvalidModuleSpecifier);
+            }
+            break;
 
-        return delegate.createPath(body);
-    }
-
-    function parseGlob() {
-        expect('*');
-        return delegate.createGlob();
-    }
-
-    function parseModuleDeclaration() {
-        var id, token, from = null;
-
-        lex();
-
-        id = parseVariableIdentifier();
-
-        if (match('{')) {
-            return delegate.createModuleDeclaration(id, from, parseModuleBlock());
-        }
-
-        expect('=');
-
-        token = lookahead;
-        if (token.type === Token.StringLiteral) {
-            from = parsePrimaryExpression();
-        } else {
-            from = parsePath();
+        default:
+            throwUnexpected(lex());
         }
 
         consumeSemicolon();
-
-        return delegate.createModuleDeclaration(id, from, null);
+        return delegate.createModuleDeclaration(id, src, body);
     }
 
-    function parseExportSpecifierSetProperty() {
-        var id, from = null;
-
-        id = parseVariableIdentifier();
-
-        if (match(':')) {
-            lex();
-            from = parsePath();
-        }
-
-        return delegate.createExportSpecifier(id, from);
+    function parseExportBatchSpecifier() {
+        expect('*');
+        return delegate.createExportBatchSpecifier();
     }
 
     function parseExportSpecifier() {
-        var specifiers, id, from;
+        var id, name = null;
 
-        if (match('{')) {
+        id = parseVariableIdentifier();
+        if (matchContextualKeyword('as')) {
             lex();
-            specifiers = [];
-
-            do {
-                specifiers.push(parseExportSpecifierSetProperty());
-            } while (match(',') && lex());
-
-            expect('}');
-
-            return delegate.createExportSpecifierSet(specifiers);
+            name = parseNonComputedProperty();
         }
 
-        from = null;
-
-        if (match('*')) {
-            id = parseGlob();
-            if (matchContextualKeyword('from')) {
-                lex();
-                from = parsePath();
-            }
-        } else {
-            id = parseVariableIdentifier();
-        }
-        return delegate.createExportSpecifier(id, from);
+        return delegate.createExportSpecifier(id, name);
     }
 
     function parseExportDeclaration() {
-        var token, specifiers;
+        var previousAllowDefault, decl, def, src, specifiers;
 
         expectKeyword('export');
 
-        token = lookahead;
+        if (matchKeyword('default')) {
+            lex();
+            if (match('=')) {
+                lex();
+                def = parseAssignmentExpression();
+            } else if (lookahead.type === Token.Keyword) {
+                switch (lookahead.value) {
+                case 'let':
+                case 'const':
+                case 'var':
+                case 'class':
+                    def = parseSourceElement();
+                    break;
+                case 'function':
+                    def = parseFunctionExpression();
+                    break;
+                default:
+                    throwUnexpected(lex());
+                }
+            } else {
+                def = parseAssignmentExpression();
+            }
+            consumeSemicolon();
+            return delegate.createExportDeclaration(true, def, null, null);
+        }
 
-        if (token.type === Token.Keyword || (token.type === Token.Identifier && token.value === 'module')) {
-            switch (token.value) {
-            case 'function':
-                return delegate.createExportDeclaration(parseFunctionDeclaration(), null);
-            case 'module':
-                return delegate.createExportDeclaration(parseModuleDeclaration(), null);
+        if (lookahead.type === Token.Keyword) {
+            switch (lookahead.value) {
             case 'let':
             case 'const':
-                return delegate.createExportDeclaration(parseConstLetDeclaration(token.value), null);
             case 'var':
-                return delegate.createExportDeclaration(parseStatement(), null);
             case 'class':
-                return delegate.createExportDeclaration(parseClassDeclaration(), null);
+            case 'function':
+                previousAllowDefault = state.allowDefault;
+                state.allowDefault = true;
+                decl = delegate.createExportDeclaration(false, parseSourceElement(), null, null);
+                state.allowDefault = previousAllowDefault;
+                return decl;
             }
             throwUnexpected(lex());
         }
 
-        specifiers = [ parseExportSpecifier() ];
-        if (match(',')) {
-            while (index < length) {
-                if (!match(',')) {
-                    break;
-                }
-                lex();
+        specifiers = [];
+        src = null;
+
+        if (match('*')) {
+            specifiers.push(parseExportBatchSpecifier());
+        } else {
+            expect('{');
+            do {
                 specifiers.push(parseExportSpecifier());
+            } while (match(',') && lex());
+            expect('}');
+        }
+
+        if (matchContextualKeyword('from')) {
+            lex();
+            src = parsePrimaryExpression();
+            if (src.type !== Syntax.Literal) {
+                throwError({}, Messages.InvalidModuleSpecifier);
             }
         }
 
         consumeSemicolon();
 
-        return delegate.createExportDeclaration(null, specifiers);
+        return delegate.createExportDeclaration(false, null, specifiers, src);
     }
 
     function parseImportDeclaration() {
-        var specifiers, from;
+        var specifiers, kind, src;
 
         expectKeyword('import');
+        specifiers = [];
 
-        if (match('*')) {
-            specifiers = [parseGlob()];
-        } else if (match('{')) {
+        if (isIdentifierName(lookahead)) {
+            kind = 'default';
+            specifiers.push(parseImportSpecifier());
+
+            if (!matchContextualKeyword('from')) {
+                throwError({}, Messages.NoFromAfterImport);
+            }
             lex();
-            specifiers = [];
-
+        } else if (match('{')) {
+            kind = 'named';
+            lex();
             do {
                 specifiers.push(parseImportSpecifier());
             } while (match(',') && lex());
-
             expect('}');
-        } else {
-            specifiers = [parseVariableIdentifier()];
+
+            if (!matchContextualKeyword('from')) {
+                throwError({}, Messages.NoFromAfterImport);
+            }
+            lex();
         }
 
-        if (!matchContextualKeyword('from')) {
-            throwError({}, Messages.NoFromAfterImport);
-        }
-
-        lex();
-
-        if (lookahead.type === Token.StringLiteral) {
-            from = parsePrimaryExpression();
-        } else {
-            from = parsePath();
+        src = parsePrimaryExpression();
+        if (src.type !== Syntax.Literal) {
+            throwError({}, Messages.InvalidModuleSpecifier);
         }
 
         consumeSemicolon();
 
-        return delegate.createImportDeclaration(specifiers, from);
+        return delegate.createImportDeclaration(specifiers, kind, src);
     }
 
     function parseImportSpecifier() {
-        var id, from;
+        var id, name = null;
 
-        id = parseVariableIdentifier();
-        from = null;
-
-        if (match(':')) {
+        id = parseNonComputedProperty();
+        if (matchContextualKeyword('as')) {
             lex();
-            from = parsePath();
+            name = parseVariableIdentifier();
         }
 
-        return delegate.createImportSpecifier(id, from);
+        return delegate.createImportSpecifier(id, name);
     }
 
     // 12.3 Empty Statement
@@ -3792,12 +3802,12 @@ parseYieldExpression: true
 
         expect('{');
 
+        cases = [];
+
         if (match('}')) {
             lex();
-            return delegate.createSwitchStatement(discriminant);
+            return delegate.createSwitchStatement(discriminant, cases);
         }
-
-        cases = [];
 
         oldInSwitch = state.inSwitch;
         state.inSwitch = true;
@@ -4083,7 +4093,7 @@ parseYieldExpression: true
     }
 
     function parseParam(options) {
-        var token, rest, param;
+        var token, rest, param, def;
 
         token = lookahead;
         if (token.value === '...') {
@@ -4103,6 +4113,14 @@ parseYieldExpression: true
         } else {
             param = parseVariableIdentifier();
             validateParam(options, token, token.value);
+            if (match('=')) {
+                if (rest) {
+                    throwErrorTolerant(lookahead, Messages.DefaultRestParameter);
+                }
+                lex();
+                def = parseAssignmentExpression();
+                ++options.defaultCount;
+            }
         }
 
         if (rest) {
@@ -4114,6 +4132,7 @@ parseYieldExpression: true
         }
 
         options.params.push(param);
+        options.defaults.push(def);
         return !match(')');
     }
 
@@ -4122,6 +4141,8 @@ parseYieldExpression: true
 
         options = {
             params: [],
+            defaultCount: 0,
+            defaults: [],
             rest: null,
             firstRestricted: firstRestricted
         };
@@ -4140,6 +4161,10 @@ parseYieldExpression: true
 
         expect(')');
 
+        if (options.defaultCount === 0) {
+            options.defaults = [];
+        }
+
         return options;
     }
 
@@ -4156,7 +4181,11 @@ parseYieldExpression: true
 
         token = lookahead;
 
-        id = parseVariableIdentifier();
+        if (state.allowDefault) {
+            id = matchKeyword('default') ? parseNonComputedProperty() : parseVariableIdentifier();
+        } else {
+            id = parseVariableIdentifier();
+        }
         if (strict) {
             if (isRestrictedWord(token.value)) {
                 throwErrorTolerant(token, Messages.StrictFunctionName);
@@ -4192,12 +4221,12 @@ parseYieldExpression: true
             throwErrorTolerant(tmp.stricted, message);
         }
         if (state.yieldAllowed && !state.yieldFound) {
-            throwError({}, Messages.NoYieldInGenerator);
+            throwErrorTolerant({}, Messages.NoYieldInGenerator);
         }
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createFunctionDeclaration(id, tmp.params, [], body, tmp.rest, generator, expression);
+        return delegate.createFunctionDeclaration(id, tmp.params, tmp.defaults, body, tmp.rest, generator, expression);
     }
 
     function parseFunctionExpression() {
@@ -4251,12 +4280,12 @@ parseYieldExpression: true
             throwErrorTolerant(tmp.stricted, message);
         }
         if (state.yieldAllowed && !state.yieldFound) {
-            throwError({}, Messages.NoYieldInGenerator);
+            throwErrorTolerant({}, Messages.NoYieldInGenerator);
         }
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createFunctionExpression(id, tmp.params, [], body, tmp.rest, generator, expression);
+        return delegate.createFunctionExpression(id, tmp.params, tmp.defaults, body, tmp.rest, generator, expression);
     }
 
     function parseYieldExpression() {
@@ -4442,12 +4471,15 @@ parseYieldExpression: true
     }
 
     function parseClassDeclaration() {
-        var token, id, previousYieldAllowed, superClass = null;
+        var id, previousYieldAllowed, superClass = null;
 
         expectKeyword('class');
 
-        token = lookahead;
-        id = parseVariableIdentifier();
+        if (state.allowDefault) {
+            id = matchKeyword('default') ? parseNonComputedProperty() : parseVariableIdentifier();
+        } else {
+            id = parseVariableIdentifier();
+        }
 
         if (matchKeyword('extends')) {
             expectKeyword('extends');
@@ -4470,9 +4502,17 @@ parseYieldExpression: true
                 return parseConstLetDeclaration(lookahead.value);
             case 'function':
                 return parseFunctionDeclaration();
+            case 'export':
+                return parseExportDeclaration();
+            case 'import':
+                return parseImportDeclaration();
             default:
                 return parseStatement();
             }
+        }
+
+        if (matchContextualKeyword('module')) {
+            throwError({}, Messages.NestedModule);
         }
 
         if (lookahead.type !== Token.EOF) {
@@ -4481,8 +4521,6 @@ parseYieldExpression: true
     }
 
     function parseProgramElement() {
-        var lineNumber, token;
-
         if (lookahead.type === Token.Keyword) {
             switch (lookahead.value) {
             case 'export':
@@ -4492,12 +4530,8 @@ parseYieldExpression: true
             }
         }
 
-        if (lookahead.value === 'module' && lookahead.type === Token.Identifier) {
-            lineNumber = lookahead.lineNumber;
-            token = lookahead2();
-            if (token.type === Token.Identifier && token.lineNumber === lineNumber) {
-                return parseModuleDeclaration();
-            }
+        if (matchContextualKeyword('module')) {
+            return parseModuleDeclaration();
         }
 
         return parseSourceElement();
@@ -4542,7 +4576,7 @@ parseYieldExpression: true
     }
 
     function parseModuleElement() {
-        return parseProgramElement();
+        return parseSourceElement();
     }
 
     function parseModuleElements() {
@@ -4844,11 +4878,9 @@ parseYieldExpression: true
         extra.tokens = tokens;
     }
 
-    function createLocationMarker() {
-        var marker = {};
-
-        marker.range = [index, index];
-        marker.loc = {
+    function LocationMarker() {
+        this.range = [index, index];
+        this.loc = {
             start: {
                 line: lineNumber,
                 column: index - lineStart
@@ -4858,14 +4890,18 @@ parseYieldExpression: true
                 column: index - lineStart
             }
         };
+    }
 
-        marker.end = function () {
+    LocationMarker.prototype = {
+        constructor: LocationMarker,
+
+        end: function () {
             this.range[1] = index;
             this.loc.end.line = lineNumber;
             this.loc.end.column = index - lineStart;
-        };
+        },
 
-        marker.applyGroup = function (node) {
+        applyGroup: function (node) {
             if (extra.range) {
                 node.groupRange = [this.range[0], this.range[1]];
             }
@@ -4882,9 +4918,9 @@ parseYieldExpression: true
                 };
                 node = delegate.postProcess(node);
             }
-        };
+        },
 
-        marker.apply = function (node) {
+        apply: function (node) {
             var nodeType = typeof node;
             assert(nodeType === "object",
                 "Applying location marker to an unexpected node type: " +
@@ -4906,9 +4942,11 @@ parseYieldExpression: true
                 };
                 node = delegate.postProcess(node);
             }
-        };
+        }
+    };
 
-        return marker;
+    function createLocationMarker() {
+        return new LocationMarker();
     }
 
     function trackGroupExpression() {
@@ -5115,15 +5153,14 @@ parseYieldExpression: true
             extra.parseComputedMember = parseComputedMember;
             extra.parseConditionalExpression = parseConditionalExpression;
             extra.parseConstLetDeclaration = parseConstLetDeclaration;
+            extra.parseExportBatchSpecifier = parseExportBatchSpecifier;
             extra.parseExportDeclaration = parseExportDeclaration;
             extra.parseExportSpecifier = parseExportSpecifier;
-            extra.parseExportSpecifierSetProperty = parseExportSpecifierSetProperty;
             extra.parseExpression = parseExpression;
             extra.parseForVariableDeclaration = parseForVariableDeclaration;
             extra.parseFunctionDeclaration = parseFunctionDeclaration;
             extra.parseFunctionExpression = parseFunctionExpression;
             extra.parseParams = parseParams;
-            extra.parseGlob = parseGlob;
             extra.parseImportDeclaration = parseImportDeclaration;
             extra.parseImportSpecifier = parseImportSpecifier;
             extra.parseModuleDeclaration = parseModuleDeclaration;
@@ -5132,7 +5169,6 @@ parseYieldExpression: true
             extra.parseNonComputedProperty = parseNonComputedProperty;
             extra.parseObjectProperty = parseObjectProperty;
             extra.parseObjectPropertyKey = parseObjectPropertyKey;
-            extra.parsePath = parsePath;
             extra.parsePostfixExpression = parsePostfixExpression;
             extra.parsePrimaryExpression = parsePrimaryExpression;
             extra.parseProgram = parseProgram;
@@ -5158,15 +5194,14 @@ parseYieldExpression: true
             parseComputedMember = wrapTracking(extra.parseComputedMember);
             parseConditionalExpression = wrapTracking(extra.parseConditionalExpression);
             parseConstLetDeclaration = wrapTracking(extra.parseConstLetDeclaration);
+            parseExportBatchSpecifier = wrapTracking(parseExportBatchSpecifier);
             parseExportDeclaration = wrapTracking(parseExportDeclaration);
             parseExportSpecifier = wrapTracking(parseExportSpecifier);
-            parseExportSpecifierSetProperty = wrapTracking(parseExportSpecifierSetProperty);
             parseExpression = wrapTracking(extra.parseExpression);
             parseForVariableDeclaration = wrapTracking(extra.parseForVariableDeclaration);
             parseFunctionDeclaration = wrapTracking(extra.parseFunctionDeclaration);
             parseFunctionExpression = wrapTracking(extra.parseFunctionExpression);
             parseParams = wrapTracking(extra.parseParams);
-            parseGlob = wrapTracking(extra.parseGlob);
             parseImportDeclaration = wrapTracking(extra.parseImportDeclaration);
             parseImportSpecifier = wrapTracking(extra.parseImportSpecifier);
             parseModuleDeclaration = wrapTracking(extra.parseModuleDeclaration);
@@ -5176,7 +5211,6 @@ parseYieldExpression: true
             parseNonComputedProperty = wrapTracking(extra.parseNonComputedProperty);
             parseObjectProperty = wrapTracking(extra.parseObjectProperty);
             parseObjectPropertyKey = wrapTracking(extra.parseObjectPropertyKey);
-            parsePath = wrapTracking(extra.parsePath);
             parsePostfixExpression = wrapTracking(extra.parsePostfixExpression);
             parsePrimaryExpression = wrapTracking(extra.parsePrimaryExpression);
             parseProgram = wrapTracking(extra.parseProgram);
@@ -5218,14 +5252,13 @@ parseYieldExpression: true
             parseComputedMember = extra.parseComputedMember;
             parseConditionalExpression = extra.parseConditionalExpression;
             parseConstLetDeclaration = extra.parseConstLetDeclaration;
+            parseExportBatchSpecifier = extra.parseExportBatchSpecifier;
             parseExportDeclaration = extra.parseExportDeclaration;
             parseExportSpecifier = extra.parseExportSpecifier;
-            parseExportSpecifierSetProperty = extra.parseExportSpecifierSetProperty;
             parseExpression = extra.parseExpression;
             parseForVariableDeclaration = extra.parseForVariableDeclaration;
             parseFunctionDeclaration = extra.parseFunctionDeclaration;
             parseFunctionExpression = extra.parseFunctionExpression;
-            parseGlob = extra.parseGlob;
             parseImportDeclaration = extra.parseImportDeclaration;
             parseImportSpecifier = extra.parseImportSpecifier;
             parseGroupExpression = extra.parseGroupExpression;
@@ -5237,7 +5270,6 @@ parseYieldExpression: true
             parseNonComputedProperty = extra.parseNonComputedProperty;
             parseObjectProperty = extra.parseObjectProperty;
             parseObjectPropertyKey = extra.parseObjectPropertyKey;
-            parsePath = extra.parsePath;
             parsePostfixExpression = extra.parsePostfixExpression;
             parsePrimaryExpression = extra.parsePrimaryExpression;
             parseProgram = extra.parseProgram;
@@ -5300,6 +5332,7 @@ parseYieldExpression: true
         length = source.length;
         lookahead = null;
         state = {
+            allowDefault: true,
             allowIn: true,
             labelSet: {},
             inFunctionBody: false,
@@ -5400,6 +5433,7 @@ parseYieldExpression: true
         length = source.length;
         lookahead = null;
         state = {
+            allowDefault: false,
             allowIn: true,
             labelSet: {},
             parenthesizedCount: 0,

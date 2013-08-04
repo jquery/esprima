@@ -1289,6 +1289,73 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 13 }
             }
+        },
+
+        '(x=1) => x * x': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }],
+                defaults: [{
+                    type: 'Literal',
+                    value: 1,
+                    raw: '1',
+                    range: [3, 4],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 4 }
+                    }
+                }],
+                body: {
+                    type: 'BinaryExpression',
+                    operator: '*',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [13, 14],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    range: [9, 14],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 14],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 14 }
+                }
+            },
+            range: [0, 14],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 14 }
+            }
         }
 
     },
@@ -3113,175 +3180,90 @@ var harmonyTestFixture = {
 
     'Harmony: Modules': {
 
-
-        'module Universe { module MilkyWay {} }': {
+        'module "crypto" {}': {
             type: 'ModuleDeclaration',
             id: {
-                type: 'Identifier',
-                name: 'Universe',
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
                 range: [7, 15],
                 loc: {
                     start: { line: 1, column: 7 },
                     end: { line: 1, column: 15 }
                 }
             },
-            from: null,
+            source: null,
             body: {
                 type: 'BlockStatement',
-                body: [{
-                    type: 'ModuleDeclaration',
-                    id: {
-                        type: 'Identifier',
-                        name: 'MilkyWay',
-                        range: [25, 33],
-                        loc: {
-                            start: { line: 1, column: 25 },
-                            end: { line: 1, column: 33 }
-                        }
-                    },
-                    from: null,
-                    body: {
-                        type: 'BlockStatement',
-                        body: [],
-                        range: [34, 36],
-                        loc: {
-                            start: { line: 1, column: 34 },
-                            end: { line: 1, column: 36 }
-                        }
-                    },
-                    range: [18, 36],
-                    loc: {
-                        start: { line: 1, column: 18 },
-                        end: { line: 1, column: 36 }
-                    }
-                }],
-                range: [16, 38],
+                body: [],
+                range: [16, 18],
                 loc: {
                     start: { line: 1, column: 16 },
-                    end: { line: 1, column: 38 }
+                    end: { line: 1, column: 18 }
                 }
             },
-            range: [0, 38],
+            range: [0, 18],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 38 }
+                end: { line: 1, column: 18 }
             }
         },
 
-        'module MilkyWay = "Universe/MilkyWay"': {
+        'module crypto from "crypto";': {
             type: 'ModuleDeclaration',
             id: {
                 type: 'Identifier',
-                name: 'MilkyWay',
-                range: [7, 15],
+                name: 'crypto',
+                range: [7, 13],
                 loc: {
                     start: { line: 1, column: 7 },
-                    end: { line: 1, column: 15 }
+                    end: { line: 1, column: 13 }
                 }
             },
-            from: {
+            source: {
                 type: 'Literal',
-                value: 'Universe/MilkyWay',
-                raw: '"Universe/MilkyWay"',
-                range: [18, 37],
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [19, 27],
                 loc: {
-                    start: { line: 1, column: 18 },
-                    end: { line: 1, column: 37 }
-                }
-            },
-            body: null,
-            range: [0, 37],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 37 }
-            }
-        },
-
-        'module System = Universe.MilkyWay.SolarSystem': {
-            type: 'ModuleDeclaration',
-            id: {
-                type: 'Identifier',
-                name: 'System',
-                range: [7, 13],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 13 }
-                }
-            },
-            from: {
-                type: 'Path',
-                body: [{
-                    type: 'Identifier',
-                    name: 'Universe',
-                    range: [16, 24],
-                    loc: {
-                        start: { line: 1, column: 16 },
-                        end: { line: 1, column: 24 }
-                    }
-                }, {
-                    type: 'Identifier',
-                    name: 'MilkyWay',
-                    range: [25, 33],
-                    loc: {
-                        start: { line: 1, column: 25 },
-                        end: { line: 1, column: 33 }
-                    }
-                }, {
-                    type: 'Identifier',
-                    name: 'SolarSystem',
-                    range: [34, 45],
-                    loc: {
-                        start: { line: 1, column: 34 },
-                        end: { line: 1, column: 45 }
-                    }
-                }],
-                range: [16, 45],
-                loc: {
-                    start: { line: 1, column: 16 },
-                    end: { line: 1, column: 45 }
-                }
-            },
-            body: null,
-            range: [0, 45],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 45 }
-            }
-        },
-
-        'module System = SolarSystem': {
-            type: 'ModuleDeclaration',
-            id: {
-                type: 'Identifier',
-                name: 'System',
-                range: [7, 13],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 13 }
-                }
-            },
-            from: {
-                type: 'Path',
-                body: [{
-                    type: 'Identifier',
-                    name: 'SolarSystem',
-                    range: [16, 27],
-                    loc: {
-                        start: { line: 1, column: 16 },
-                        end: { line: 1, column: 27 }
-                    }
-                }],
-                range: [16, 27],
-                loc: {
-                    start: { line: 1, column: 16 },
+                    start: { line: 1, column: 19 },
                     end: { line: 1, column: 27 }
                 }
             },
             body: null,
-            range: [0, 27],
+            range: [0, 28],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 27 }
+                end: { line: 1, column: 28 }
+            }
+        },
+
+        'module "crypto/e" {}': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'crypto/e',
+                raw: '"crypto/e"',
+                range: [7, 17],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [18, 20],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 20 }
+                }
+            },
+            range: [0, 20],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 20 }
             }
         },
 
@@ -3314,7 +3296,9 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 19 }
                 }
             },
+            default: false,
             specifiers: null,
+            source: null,
             range: [ 0, 19 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3359,11 +3343,52 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 25 }
                 }
             },
+            default: false,
             specifiers: null,
+            source: null,
             range: [ 0, 25 ],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 25 }
+            }
+        },
+
+        'export var default': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'default',
+                        range: [11, 18],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    init: null,
+                    range: [11, 18],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 18 }
+                    }
+                }],
+                kind: 'var',
+                range: [7, 18],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            default: false,
+            specifiers: null,
+            source: null,
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
             }
         },
 
@@ -3396,7 +3421,9 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 19 }
                 }
             },
+            default: false,
             specifiers: null,
+            source: null,
             range: [ 0, 19 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3441,11 +3468,61 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 25 }
                 }
             },
+            default: false,
             specifiers: null,
+            source: null,
             range: [ 0, 25 ],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 25 }
+            }
+        },
+
+        'export let default = 0': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'default',
+                        range: [11, 18],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0',
+                        range: [21, 22],
+                        loc: {
+                            start: { line: 1, column: 21 },
+                            end: { line: 1, column: 22 }
+                        }
+                    },
+                    range: [11, 22],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 22 }
+                    }
+                }],
+                kind: 'let',
+                range: [7, 22],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            default: false,
+            specifiers: null,
+            source: null,
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
             }
         },
 
@@ -3486,11 +3563,61 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 27 }
                 }
             },
+            default: false,
             specifiers: null,
+            source: null,
             range: [ 0, 27 ],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 27 }
+            }
+        },
+
+        'export const default = 0': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'default',
+                        range: [13, 20],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 20 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0',
+                        range: [23, 24],
+                        loc: {
+                            start: { line: 1, column: 23 },
+                            end: { line: 1, column: 24 }
+                        }
+                    },
+                    range: [13, 24],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 24 }
+                    }
+                }],
+                kind: 'const',
+                range: [7, 24],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 24 }
+                }
+            },
+            default: false,
+            specifiers: null,
+            source: null,
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 24 }
             }
         },
 
@@ -3527,7 +3654,9 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 27 }
                 }
             },
+            default: false,
             specifiers: null,
+            source: null,
             range: [ 0, 27 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3535,48 +3664,46 @@ var harmonyTestFixture = {
             }
         },
 
-        'export module System = SolarSystem': {
+        'export function default() {}': {
             type: 'ExportDeclaration',
             declaration: {
-                type: 'ModuleDeclaration',
+                type: 'FunctionDeclaration',
                 id: {
                     type: 'Identifier',
-                    name: 'System',
-                    range: [14, 20],
+                    name: 'default',
+                    range: [16, 23],
                     loc: {
-                        start: { line: 1, column: 14 },
-                        end: { line: 1, column: 20 }
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 23 }
                     }
                 },
-                from: {
-                    type: 'Path',
-                    body: [{
-                        type: 'Identifier',
-                        name: 'SolarSystem',
-                        range: [23, 34],
-                        loc: {
-                            start: { line: 1, column: 23 },
-                            end: { line: 1, column: 34 }
-                        }
-                    }],
-                    range: [23, 34],
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [26, 28],
                     loc: {
-                        start: { line: 1, column: 23 },
-                        end: { line: 1, column: 34 }
+                        start: { line: 1, column: 26 },
+                        end: { line: 1, column: 28 }
                     }
                 },
-                body: null,
-                range: [7, 34],
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [7, 28],
                 loc: {
                     start: { line: 1, column: 7 },
-                    end: { line: 1, column: 34 }
+                    end: { line: 1, column: 28 }
                 }
             },
+            default: false,
             specifiers: null,
-            range: [ 0, 34 ],
+            source: null,
+            range: [0, 28],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 34 }
+                end: { line: 1, column: 28 }
             }
         },
 
@@ -3609,7 +3736,9 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 21 }
                 }
             },
+            default: false,
             specifiers: null,
+            source: null,
             range: [ 0, 21 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -3617,586 +3746,38 @@ var harmonyTestFixture = {
             }
         },
 
-        'export SolarSystem': {
+        'export class default {}': {
             type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifier',
+            declaration: {
+                type: 'ClassDeclaration',
                 id: {
                     type: 'Identifier',
-                    name: 'SolarSystem',
-                    range: [7, 18],
+                    name: 'default',
+                    range: [13, 20],
                     loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 18 }
-                    }
-                },
-                from: null,
-                range: [7, 18],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 18 }
-                }
-            }],
-            range: [ 0, 18 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 18 }
-            }
-        },
-
-        'export Mercury, Venus, Earth': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Identifier',
-                    name: 'Mercury',
-                    range: [7, 14],
-                    loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 14 }
-                    }
-                },
-                from: null,
-                range: [7, 14],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 14 }
-                }
-            }, {
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Identifier',
-                    name: 'Venus',
-                    range: [16, 21],
-                    loc: {
-                        start: { line: 1, column: 16 },
-                        end: { line: 1, column: 21 }
-                    }
-                },
-                from: null,
-                range: [16, 21],
-                loc: {
-                    start: { line: 1, column: 16 },
-                    end: { line: 1, column: 21 }
-                }
-            }, {
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Identifier',
-                    name: 'Earth',
-                    range: [23, 28],
-                    loc: {
-                        start: { line: 1, column: 23 },
-                        end: { line: 1, column: 28 }
-                    }
-                },
-                from: null,
-                range: [23, 28],
-                loc: {
-                    start: { line: 1, column: 23 },
-                    end: { line: 1, column: 28 }
-                }
-            }],
-            range: [ 0, 28 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 28 }
-            }
-        },
-
-        'export *': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Glob',
-                    range: [7, 8],
-                    loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 8 }
-                    }
-                },
-                from: null,
-                range: [7, 8],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 8 }
-                }
-            }],
-            range: [ 0, 8 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 8 }
-            }
-        },
-
-        'export * from SolarSystem': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Glob',
-                    range: [7, 8],
-                    loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 8 }
-                    }
-                },
-                from: {
-                    type: 'Path',
-                    body: [{
-                        type: 'Identifier',
-                        name: 'SolarSystem',
-                        range: [ 14, 25 ],
-                        loc: {
-                            start: { line: 1, column: 14 },
-                            end: { line: 1, column: 25 }
-                        }
-                    }],
-                    range: [ 14, 25 ],
-                    loc: {
-                        start: { line: 1, column: 14 },
-                        end: { line: 1, column: 25 }
-                    }
-                },
-                range: [ 7, 25 ],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 25 }
-                }
-            }],
-            range: [ 0, 25 ],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 25 }
-            }
-        },
-
-        'export * from Earth, * from Mercury;': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Glob',
-                    range: [7, 8],
-                    loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 8 }
-                    }
-                },
-                from: {
-                    type: 'Path',
-                    body: [{
-                        type: 'Identifier',
-                        name: 'Earth',
-                        range: [14, 19],
-                        loc: {
-                            start: { line: 1, column: 14 },
-                            end: { line: 1, column: 19 }
-                        }
-                    }],
-                    range: [14, 19],
-                    loc: {
-                        start: { line: 1, column: 14 },
-                        end: { line: 1, column: 19 }
-                    }
-                },
-                range: [7, 19],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 19 }
-                }
-            }, {
-                type: 'ExportSpecifier',
-                id: {
-                    type: 'Glob',
-                    range: [21, 22],
-                    loc: {
-                        start: { line: 1, column: 21 },
-                        end: { line: 1, column: 22 }
-                    }
-                },
-                from: {
-                    type: 'Path',
-                    body: [{
-                        type: 'Identifier',
-                        name: 'Mercury',
-                        range: [28, 35],
-                        loc: {
-                            start: { line: 1, column: 28 },
-                            end: { line: 1, column: 35 }
-                        }
-                    }],
-                    range: [28, 35],
-                    loc: {
-                        start: { line: 1, column: 28 },
-                        end: { line: 1, column: 35 }
-                    }
-                },
-                range: [21, 35],
-                loc: {
-                    start: { line: 1, column: 21 },
-                    end: { line: 1, column: 35 }
-                }
-            }],
-            range: [0, 36],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 36 }
-            }
-        },
-
-        'export { Mercury: SolarSystem.Mercury, Earth: SolarSystem.Earth }': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifierSet',
-                specifiers: [
-                    {
-                        type: 'ExportSpecifier',
-                        id: {
-                            type: 'Identifier',
-                            name: 'Mercury',
-                            range: [ 9, 16 ],
-                            loc: {
-                                start: { line: 1, column: 9 },
-                                end: { line: 1, column: 16 }
-                            }
-                        },
-                        from: {
-                            type: 'Path',
-                            body: [
-                                {
-                                    type: 'Identifier',
-                                    name: 'SolarSystem',
-                                    range: [ 18, 29 ],
-                                    loc: {
-                                        start: { line: 1, column: 18 },
-                                        end: { line: 1, column: 29 }
-                                    }
-                                },
-                                {
-                                    type: 'Identifier',
-                                    name: 'Mercury',
-                                    range: [ 30, 37 ],
-                                    loc: {
-                                        start: { line: 1, column: 30 },
-                                        end: { line: 1, column: 37 }
-                                    }
-                                }
-                            ],
-                            range: [ 18, 37 ],
-                            loc: {
-                                start: { line: 1, column: 18 },
-                                end: { line: 1, column: 37 }
-                            }
-                        },
-                        range: [ 9, 37 ],
-                        loc: {
-                            start: { line: 1, column: 9 },
-                            end: { line: 1, column: 37 }
-                        }
-                    },
-                    {
-                        type: 'ExportSpecifier',
-                        id: {
-                            type: 'Identifier',
-                            name: 'Earth',
-                            range: [ 39, 44 ],
-                            loc: {
-                                start: { line: 1, column: 39 },
-                                end: { line: 1, column: 44 }
-                            }
-                        },
-                        from: {
-                            type: 'Path',
-                            body: [
-                                {
-                                    type: 'Identifier',
-                                    name: 'SolarSystem',
-                                    range: [ 46, 57 ],
-                                    loc: {
-                                        start: { line: 1, column: 46 },
-                                        end: { line: 1, column: 57 }
-                                    }
-                                },
-                                {
-                                    type: 'Identifier',
-                                    name: 'Earth',
-                                    range: [ 58, 63 ],
-                                    loc: {
-                                        start: { line: 1, column: 58 },
-                                        end: { line: 1, column: 63 }
-                                    }
-                                }
-                            ],
-                            range: [ 46, 63 ],
-                            loc: {
-                                start: { line: 1, column: 46 },
-                                end: { line: 1, column: 63 }
-                            }
-                        },
-                        range: [ 39, 63 ],
-                        loc: {
-                            start: { line: 1, column: 39 },
-                            end: { line: 1, column: 63 }
-                        }
-                    }
-                ],
-                range: [7, 65],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 65 }
-                }
-            }],
-            range: [0, 65],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 65 }
-            }
-        },
-
-        'export { SolarSystem }': {
-            type: 'ExportDeclaration',
-            declaration: null,
-            specifiers: [{
-                type: 'ExportSpecifierSet',
-                specifiers: [{
-                    type: 'ExportSpecifier',
-                    id: {
-                        type: 'Identifier',
-                        name: 'SolarSystem',
-                        range: [9, 20],
-                        loc: {
-                            start: { line: 1, column: 9 },
-                            end: { line: 1, column: 20 }
-                        }
-                    },
-                    from: null,
-                    range: [9, 20],
-                    loc: {
-                        start: { line: 1, column: 9 },
+                        start: { line: 1, column: 13 },
                         end: { line: 1, column: 20 }
                     }
-                }],
-                range: [7, 22],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 22 }
-                }
-            }],
-            range: [0, 22],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 22 }
-            }
-        },
-
-        'module foo {\n module bar = baz }': {
-            type: "ModuleDeclaration",
-            id: {
-                type: "Identifier",
-                name: "foo",
-                range: [7, 10],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 10 }
-                }
-            },
-            from: null,
-            body: {
-                type: "BlockStatement",
-                body: [
-                    {
-                        type: "ModuleDeclaration",
-                        id: {
-                            type: "Identifier",
-                            name: "bar",
-                            range: [21, 24],
-                            loc: {
-                                start: { line: 2, column: 8 },
-                                end: { line: 2, column: 11 }
-                            }
-                        },
-                        from: {
-                            type: "Path",
-                            body: [
-                                {
-                                    type: "Identifier",
-                                    name: "baz",
-                                    range: [27, 30],
-                                    loc: {
-                                        start: { line: 2, column: 14 },
-                                        end: { line: 2, column: 17 }
-                                    }
-                                }
-                            ],
-                            range: [27, 30],
-                            loc: {
-                                start: { line: 2, column: 14 },
-                                end: { line: 2, column: 17 }
-                            }
-                        },
-                        body: null,
-                        range: [14, 31],
-                        loc: {
-                            start: { line: 2, column: 1 },
-                            end: { line: 2, column: 18 }
-                        }
-                    }
-                ],
-                range: [11, 32],
-                loc: {
-                    start: { line: 1, column: 11 },
-                    end: { line: 2, column: 19 }
-                }
-            },
-            range: [0, 32],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 2, column: 19 }
-            }
-        },
-
-        'import * from foo': {
-            type: 'ImportDeclaration',
-            specifiers: [{
-                type: 'Glob',
-                range: [7, 8],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 8 }
-                }
-            }],
-            from: {
-                type: 'Path',
-                body: [{
-                    type: 'Identifier',
-                    name: 'foo',
-                    range: [14, 17],
-                    loc: {
-                        start: { line: 1, column: 14 },
-                        end: { line: 1, column: 17 }
-                    }
-                }],
-                range: [14, 17],
-                loc: {
-                    start: { line: 1, column: 14 },
-                    end: { line: 1, column: 17 }
-                }
-            },
-            range: [0, 17],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 17 }
-            }
-        },
-
-        'import * from \'SolarSystem.js\'': {
-            type: 'ImportDeclaration',
-            specifiers: [{
-                type: 'Glob',
-                range: [7, 8],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 8 }
-                }
-            }],
-            from: {
-                type: 'Literal',
-                value: 'SolarSystem.js',
-                raw: '\'SolarSystem.js\'',
-                range: [14, 30],
-                loc: {
-                    start: { line: 1, column: 14 },
-                    end: { line: 1, column: 30 }
-                }
-            },
-            range: [0, 30],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 30 }
-            }
-        },
-
-        'import foo from bar': {
-            type: 'ImportDeclaration',
-            specifiers: [{
-                type: 'Identifier',
-                name: 'foo',
-                range: [7, 10],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 10 }
-                }
-            }],
-            from: {
-                type: 'Path',
-                body: [{
-                    type: 'Identifier',
-                    name: 'bar',
-                    range: [16, 19],
-                    loc: {
-                        start: { line: 1, column: 16 },
-                        end: { line: 1, column: 19 }
-                    }
-                }],
-                range: [16, 19],
-                loc: {
-                    start: { line: 1, column: 16 },
-                    end: { line: 1, column: 19 }
-                }
-            },
-            range: [0, 19],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 19 }
-            }
-        },
-
-        'import { foo } from bar': {
-            type: 'ImportDeclaration',
-            specifiers: [{
-                type: 'ImportSpecifier',
-                id: {
-                    type: 'Identifier',
-                    name: 'foo',
-                    range: [9, 12],
-                    loc: {
-                        start: { line: 1, column: 9 },
-                        end: { line: 1, column: 12 }
-                    }
                 },
-                from: null,
-                range: [9, 12],
-                loc: {
-                    start: { line: 1, column: 9 },
-                    end: { line: 1, column: 12 }
-                }
-            }],
-            from: {
-                type: 'Path',
-                body: [{
-                    type: 'Identifier',
-                    name: 'bar',
-                    range: [20, 23],
+                superClass: null,
+                body: {
+                    type: 'ClassBody',
+                    body: [],
+                    range: [21, 23],
                     loc: {
-                        start: { line: 1, column: 20 },
+                        start: { line: 1, column: 21 },
                         end: { line: 1, column: 23 }
                     }
-                }],
-                range: [20, 23],
+                },
+                range: [7, 23],
                 loc: {
-                    start: { line: 1, column: 20 },
+                    start: { line: 1, column: 7 },
                     end: { line: 1, column: 23 }
                 }
             },
+            default: false,
+            specifiers: null,
+            source: null,
             range: [0, 23],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4204,89 +3785,1477 @@ var harmonyTestFixture = {
             }
         },
 
-        'import { foo: bar, baz: quux } from quuux': {
+        'export default answer;': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'Identifier',
+                name: 'answer',
+                range: [15, 21],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            default: true,
+            specifiers: null,
+            source: null,
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        'export default = 42': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'Literal',
+                value: 42,
+                raw: '42',
+                range: [17, 19],
+                loc: {
+                    start: { line: 1, column: 17 },
+                    end: { line: 1, column: 19 }
+                }
+            },
+            default: true,
+            specifiers: null,
+            source: null,
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        },
+
+        'export default var answer': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'answer',
+                        range: [19, 25],
+                        loc: {
+                            start: { line: 1, column: 19 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    init: null,
+                    range: [19, 25],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 25 }
+                    }
+                }],
+                kind: 'var',
+                range: [15, 25],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            'default': true,
+            specifiers: null,
+            source: null,
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'export default let answer = 42': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'answer',
+                        range: [19, 25],
+                        loc: {
+                            start: { line: 1, column: 19 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42',
+                        range: [28, 30],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 30 }
+                        }
+                    },
+                    range: [19, 30],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 30 }
+                    }
+                }],
+                kind: 'let',
+                range: [15, 30],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 30 }
+                }
+            },
+            'default': true,
+            specifiers: null,
+            source: null,
+            range: [0, 30],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 30 }
+            }
+        },
+
+        'export default const answer = 42': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'answer',
+                        range: [21, 27],
+                        loc: {
+                            start: { line: 1, column: 21 },
+                            end: { line: 1, column: 27 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42',
+                        range: [30, 32],
+                        loc: {
+                            start: { line: 1, column: 30 },
+                            end: { line: 1, column: 32 }
+                        }
+                    },
+                    range: [21, 32],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 32 }
+                    }
+                }],
+                kind: 'const',
+                range: [15, 32],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 32 }
+                }
+            },
+            'default': true,
+            specifiers: null,
+            source: null,
+            range: [0, 32],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 32 }
+            }
+        },
+
+        'export default function answer(){}': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'FunctionExpression',
+                id: {
+                    type: 'Identifier',
+                    name: 'answer',
+                    range: [24, 30],
+                    loc: {
+                        start: { line: 1, column: 24 },
+                        end: { line: 1, column: 30 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [32, 34],
+                    loc: {
+                        start: { line: 1, column: 32 },
+                        end: { line: 1, column: 34 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [15, 34],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 34 }
+                }
+            },
+            'default': true,
+            specifiers: null,
+            source: null,
+            range: [0, 34],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 34 }
+            }
+        },
+
+        'export default function() {}': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'FunctionExpression',
+                id: null,
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [26, 28],
+                    loc: {
+                        start: { line: 1, column: 26 },
+                        end: { line: 1, column: 28 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [15, 28],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 28 }
+                }
+            },
+            'default': true,
+            specifiers: null,
+            source: null,
+            range: [0, 28],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
+            }
+        },
+
+        'export default class Universe {}': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'ClassDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'Universe',
+                    range: [21, 29],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 29 }
+                    }
+                },
+                superClass: null,
+                body: {
+                    type: 'ClassBody',
+                    body: [],
+                    range: [30, 32],
+                    loc: {
+                        start: { line: 1, column: 30 },
+                        end: { line: 1, column: 32 }
+                    }
+                },
+                range: [15, 32],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 32 }
+                }
+            },
+            'default': true,
+            specifiers: null,
+            source: null,
+            range: [0, 32],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 32 }
+            }
+        },
+
+        'export *': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            default: false,
+            specifiers: [{
+                type: 'ExportBatchSpecifier',
+                range: [7, 8],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 8 }
+                }
+            }],
+            source: null,
+            range: [ 0, 8 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 8 }
+            }
+        },
+
+        'export * from "crypto"': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            default: false,
+            specifiers: [{
+                type: 'ExportBatchSpecifier',
+                range: [7, 8],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 8 }
+                }
+            }],
+            source: {
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [14, 22],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        'export { encrypt }': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            default: false,
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [9, 16],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                name: null,
+                range: [9, 16],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            source: null,
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
+        'export { encrypt, decrypt }': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            default: false,
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [9, 16],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                name: null,
+                range: [9, 16],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 16 }
+                }
+            }, {
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'decrypt',
+                    range: [18, 25],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                name: null,
+                range: [18, 25],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 25 }
+                }
+            }],
+            source: null,
+            range: [0, 27],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
+            }
+        },
+
+        'export { encrypt as default }': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            default: false,
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [9, 16],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                name: {
+                    type: 'Identifier',
+                    name: 'default',
+                    range: [20, 27],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                range: [9, 27],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 27 }
+                }
+            }],
+            source: null,
+            range: [0, 29],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 29 }
+            }
+        },
+
+        'export { encrypt, decrypt as dec }': {
+            type: 'ExportDeclaration',
+            declaration: null,
+            default: false,
+            specifiers: [{
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [9, 16],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                name: null,
+                range: [9, 16],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 16 }
+                }
+            }, {
+                type: 'ExportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'decrypt',
+                    range: [18, 25],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                name: {
+                    type: 'Identifier',
+                    name: 'dec',
+                    range: [29, 32],
+                    loc: {
+                        start: { line: 1, column: 29 },
+                        end: { line: 1, column: 32 }
+                    }
+                },
+                range: [18, 32],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 32 }
+                }
+            }],
+            source: null,
+            range: [0, 34],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 34 }
+            }
+        },
+
+        'module "a" { export default answer }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'a',
+                raw: '"a"',
+                range: [7, 10],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'Identifier',
+                        name: 'answer',
+                        range: [28, 34],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 34 }
+                        }
+                    },
+                    default: true,
+                    specifiers: null,
+                    source: null,
+                    range: [13, 35],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 35 }
+                    }
+                }],
+                range: [11, 36],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            }
+        },
+
+        'module "lib" { export var document }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'VariableDeclaration',
+                        declarations: [{
+                            type: 'VariableDeclarator',
+                            id: {
+                                type: 'Identifier',
+                                name: 'document',
+                                range: [26, 34],
+                                loc: {
+                                    start: { line: 1, column: 26 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            init: null,
+                            range: [26, 34],
+                            loc: {
+                                start: { line: 1, column: 26 },
+                                end: { line: 1, column: 34 }
+                            }
+                        }],
+                        kind: 'var',
+                        range: [22, 35],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 35 }
+                        }
+                    },
+                    default: false,
+                    specifiers: null,
+                    source: null,
+                    range: [15, 35],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 35 }
+                    }
+                }],
+                range: [13, 36],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            }
+        },
+
+        'module "lib" { export var document = { } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'VariableDeclaration',
+                        declarations: [{
+                            type: 'VariableDeclarator',
+                            id: {
+                                type: 'Identifier',
+                                name: 'document',
+                                range: [26, 34],
+                                loc: {
+                                    start: { line: 1, column: 26 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            init: {
+                                type: 'ObjectExpression',
+                                properties: [],
+                                range: [37, 40],
+                                loc: {
+                                    start: { line: 1, column: 37 },
+                                    end: { line: 1, column: 40 }
+                                }
+                            },
+                            range: [26, 40],
+                            loc: {
+                                start: { line: 1, column: 26 },
+                                end: { line: 1, column: 40 }
+                            }
+                        }],
+                        kind: 'var',
+                        range: [22, 41],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 41 }
+                        }
+                    },
+                    default: false,
+                    specifiers: null,
+                    source: null,
+                    range: [15, 41],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 41 }
+                    }
+                }],
+                range: [13, 42],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 42 }
+                }
+            },
+            range: [0, 42],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 42 }
+            }
+        },
+
+        'module "lib" { export let document }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'VariableDeclaration',
+                        declarations: [{
+                            type: 'VariableDeclarator',
+                            id: {
+                                type: 'Identifier',
+                                name: 'document',
+                                range: [26, 34],
+                                loc: {
+                                    start: { line: 1, column: 26 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            init: null,
+                            range: [26, 34],
+                            loc: {
+                                start: { line: 1, column: 26 },
+                                end: { line: 1, column: 34 }
+                            }
+                        }],
+                        kind: 'let',
+                        range: [22, 35],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 35 }
+                        }
+                    },
+                    default: false,
+                    specifiers: null,
+                    source: null,
+                    range: [15, 35],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 35 }
+                    }
+                }],
+                range: [13, 36],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            }
+        },
+
+        'module "lib" { export let document = { } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'VariableDeclaration',
+                        declarations: [{
+                            type: 'VariableDeclarator',
+                            id: {
+                                type: 'Identifier',
+                                name: 'document',
+                                range: [26, 34],
+                                loc: {
+                                    start: { line: 1, column: 26 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            init: {
+                                type: 'ObjectExpression',
+                                properties: [],
+                                range: [37, 40],
+                                loc: {
+                                    start: { line: 1, column: 37 },
+                                    end: { line: 1, column: 40 }
+                                }
+                            },
+                            range: [26, 40],
+                            loc: {
+                                start: { line: 1, column: 26 },
+                                end: { line: 1, column: 40 }
+                            }
+                        }],
+                        kind: 'let',
+                        range: [22, 41],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 41 }
+                        }
+                    },
+                    default: false,
+                    specifiers: null,
+                    source: null,
+                    range: [15, 41],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 41 }
+                    }
+                }],
+                range: [13, 42],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 42 }
+                }
+            },
+            range: [0, 42],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 42 }
+            }
+        },
+
+        'module "lib" { export const document = { } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'VariableDeclaration',
+                        declarations: [{
+                            type: 'VariableDeclarator',
+                            id: {
+                                type: 'Identifier',
+                                name: 'document',
+                                range: [28, 36],
+                                loc: {
+                                    start: { line: 1, column: 28 },
+                                    end: { line: 1, column: 36 }
+                                }
+                            },
+                            init: {
+                                type: 'ObjectExpression',
+                                properties: [],
+                                range: [39, 42],
+                                loc: {
+                                    start: { line: 1, column: 39 },
+                                    end: { line: 1, column: 42 }
+                                }
+                            },
+                            range: [28, 42],
+                            loc: {
+                                start: { line: 1, column: 28 },
+                                end: { line: 1, column: 42 }
+                            }
+                        }],
+                        kind: 'const',
+                        range: [22, 43],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 43 }
+                        }
+                    },
+                    default: false,
+                    specifiers: null,
+                    source: null,
+                    range: [15, 43],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 43 }
+                    }
+                }],
+                range: [13, 44],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 44 }
+                }
+            },
+            range: [0, 44],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 44 }
+            }
+        },
+
+        'module "lib" { export function parse() { } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'FunctionDeclaration',
+                        id: {
+                            type: 'Identifier',
+                            name: 'parse',
+                            range: [31, 36],
+                            loc: {
+                                start: { line: 1, column: 31 },
+                                end: { line: 1, column: 36 }
+                            }
+                        },
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [39, 42],
+                            loc: {
+                                start: { line: 1, column: 39 },
+                                end: { line: 1, column: 42 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [22, 42],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 42 }
+                        }
+                    },
+                    default: false,
+                    specifiers: null,
+                    source: null,
+                    range: [15, 42],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 42 }
+                    }
+                }],
+                range: [13, 44],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 44 }
+                }
+            },
+            range: [0, 44],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 44 }
+            }
+        },
+
+        'module "lib" { export class Class {} }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: {
+                        type: 'ClassDeclaration',
+                        id: {
+                            type: 'Identifier',
+                            name: 'Class',
+                            range: [28, 33],
+                            loc: {
+                                start: { line: 1, column: 28 },
+                                end: { line: 1, column: 33 }
+                            }
+                        },
+                        superClass: null,
+                        body: {
+                            type: 'ClassBody',
+                            body: [],
+                            range: [34, 36],
+                            loc: {
+                                start: { line: 1, column: 34 },
+                                end: { line: 1, column: 36 }
+                            }
+                        },
+                        range: [22, 36],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 36 }
+                        }
+                    },
+                    default: false,
+                    specifiers: null,
+                    source: null,
+                    range: [15, 36],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 36 }
+                    }
+                }],
+                range: [13, 38],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 38 }
+                }
+            },
+            range: [0, 38],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            }
+        },
+
+        'module "lib" { export * }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'lib',
+                raw: '"lib"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: null,
+                    default: false,
+                    specifiers: [{
+                        type: 'ExportBatchSpecifier',
+                        range: [22, 23],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 23 }
+                        }
+                    }],
+                    source: null,
+                    range: [15, 24],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 24 }
+                    }
+                }],
+                range: [13, 25],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'module "security" { export * from "crypto" }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'security',
+                raw: '"security"',
+                range: [7, 17],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: null,
+                    default: false,
+                    specifiers: [{
+                        type: 'ExportBatchSpecifier',
+                        range: [27, 28],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 28 }
+                        }
+                    }],
+                    source: {
+                        type: 'Literal',
+                        value: 'crypto',
+                        raw: '"crypto"',
+                        range: [34, 42],
+                        loc: {
+                            start: { line: 1, column: 34 },
+                            end: { line: 1, column: 42 }
+                        }
+                    },
+                    range: [20, 43],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 43 }
+                    }
+                }],
+                range: [18, 44],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 44 }
+                }
+            },
+            range: [0, 44],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 44 }
+            }
+        },
+
+        'module "crypto" { export { encrypt } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [7, 15],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: null,
+                    default: false,
+                    specifiers: [{
+                        type: 'ExportSpecifier',
+                        id: {
+                            type: 'Identifier',
+                            name: 'encrypt',
+                            range: [27, 34],
+                            loc: {
+                                start: { line: 1, column: 27 },
+                                end: { line: 1, column: 34 }
+                            }
+                        },
+                        name: null,
+                        range: [27, 34],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 34 }
+                        }
+                    }],
+                    source: null,
+                    range: [18, 37],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 37 }
+                    }
+                }],
+                range: [16, 38],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 38 }
+                }
+            },
+            range: [0, 38],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            }
+        },
+
+        'module "crypto" { export { encrypt, decrypt } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [7, 15],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: null,
+                    default: false,
+                    specifiers: [{
+                        type: 'ExportSpecifier',
+                        id: {
+                            type: 'Identifier',
+                            name: 'encrypt',
+                            range: [27, 34],
+                            loc: {
+                                start: { line: 1, column: 27 },
+                                end: { line: 1, column: 34 }
+                            }
+                        },
+                        name: null,
+                        range: [27, 34],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 34 }
+                        }
+                    }, {
+                        type: 'ExportSpecifier',
+                        id: {
+                            type: 'Identifier',
+                            name: 'decrypt',
+                            range: [36, 43],
+                            loc: {
+                                start: { line: 1, column: 36 },
+                                end: { line: 1, column: 43 }
+                            }
+                        },
+                        name: null,
+                        range: [36, 43],
+                        loc: {
+                            start: { line: 1, column: 36 },
+                            end: { line: 1, column: 43 }
+                        }
+                    }],
+                    source: null,
+                    range: [18, 46],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 46 }
+                    }
+                }],
+                range: [16, 47],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 47 }
+                }
+            },
+            range: [0, 47],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 47 }
+            }
+        },
+
+        'module "crypto" { export { encrypt, decrypt as dec } }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [7, 15],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExportDeclaration',
+                    declaration: null,
+                    default: false,
+                    specifiers: [{
+                        type: 'ExportSpecifier',
+                        id: {
+                            type: 'Identifier',
+                            name: 'encrypt',
+                            range: [27, 34],
+                            loc: {
+                                start: { line: 1, column: 27 },
+                                end: { line: 1, column: 34 }
+                            }
+                        },
+                        name: null,
+                        range: [27, 34],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 34 }
+                        }
+                    }, {
+                        type: 'ExportSpecifier',
+                        id: {
+                            type: 'Identifier',
+                            name: 'decrypt',
+                            range: [36, 43],
+                            loc: {
+                                start: { line: 1, column: 36 },
+                                end: { line: 1, column: 43 }
+                            }
+                        },
+                        name: {
+                            type: 'Identifier',
+                            name: 'dec',
+                            range: [47, 50],
+                            loc: {
+                                start: { line: 1, column: 47 },
+                                end: { line: 1, column: 50 }
+                            }
+                        },
+                        range: [36, 50],
+                        loc: {
+                            start: { line: 1, column: 36 },
+                            end: { line: 1, column: 50 }
+                        }
+                    }],
+                    source: null,
+                    range: [18, 53],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 53 }
+                    }
+                }],
+                range: [16, 54],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 54 }
+                }
+            },
+            range: [0, 54],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 54 }
+            }
+        },
+
+        'import "jquery"': {
+            type: 'ImportDeclaration',
+            specifiers: [],
+            source: {
+                type: 'Literal',
+                value: 'jquery',
+                raw: '"jquery"',
+                range: [7, 15],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            range: [0, 15],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 15 }
+            }
+        },
+
+        'import $ from "jquery"': {
             type: 'ImportDeclaration',
             specifiers: [{
                 type: 'ImportSpecifier',
                 id: {
                     type: 'Identifier',
-                    name: 'foo',
-                    range: [9, 12],
+                    name: '$',
+                    range: [7, 8],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 8 }
+                    }
+                },
+                name: null,
+                range: [7, 8],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 8 }
+                }
+            }],
+            kind: 'default',
+            source: {
+                type: 'Literal',
+                value: 'jquery',
+                raw: '"jquery"',
+                range: [14, 22],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        'import { encrypt, decrypt } from "crypto"': {
+            type: 'ImportDeclaration',
+            specifiers: [{
+                type: 'ImportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [9, 16],
                     loc: {
                         start: { line: 1, column: 9 },
-                        end: { line: 1, column: 12 }
+                        end: { line: 1, column: 16 }
                     }
                 },
-                from: {
-                    type: 'Path',
-                    body: [{
-                        type: 'Identifier',
-                        name: 'bar',
-                        range: [14, 17],
-                        loc: {
-                            start: { line: 1, column: 14 },
-                            end: { line: 1, column: 17 }
-                        }
-                    }],
-                    range: [14, 17],
-                    loc: {
-                        start: { line: 1, column: 14 },
-                        end: { line: 1, column: 17 }
-                    }
-                },
-                range: [9, 17],
+                name: null,
+                range: [9, 16],
                 loc: {
                     start: { line: 1, column: 9 },
-                    end: { line: 1, column: 17 }
+                    end: { line: 1, column: 16 }
                 }
             }, {
                 type: 'ImportSpecifier',
                 id: {
                     type: 'Identifier',
-                    name: 'baz',
-                    range: [19, 22],
+                    name: 'decrypt',
+                    range: [18, 25],
                     loc: {
-                        start: { line: 1, column: 19 },
-                        end: { line: 1, column: 22 }
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 25 }
                     }
                 },
-                from: {
-                    type: 'Path',
-                    body: [{
-                        type: 'Identifier',
-                        name: 'quux',
-                        range: [24, 28],
-                        loc: {
-                            start: { line: 1, column: 24 },
-                            end: { line: 1, column: 28 }
-                        }
-                    }],
-                    range: [24, 28],
-                    loc: {
-                        start: { line: 1, column: 24 },
-                        end: { line: 1, column: 28 }
-                    }
-                },
-                range: [19, 28],
+                name: null,
+                range: [18, 25],
                 loc: {
-                    start: { line: 1, column: 19 },
-                    end: { line: 1, column: 28 }
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 25 }
                 }
             }],
-            from: {
-                type: 'Path',
-                body: [{
-                    type: 'Identifier',
-                    name: 'quuux',
-                    range: [36, 41],
-                    loc: {
-                        start: { line: 1, column: 36 },
-                        end: { line: 1, column: 41 }
-                    }
-                }],
-                range: [36, 41],
+            kind: 'named',
+            source: {
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [33, 41],
                 loc: {
-                    start: { line: 1, column: 36 },
+                    start: { line: 1, column: 33 },
                     end: { line: 1, column: 41 }
                 }
             },
@@ -4297,77 +5266,246 @@ var harmonyTestFixture = {
             }
         },
 
-        'module\n X = Y': {
-            type: "ExpressionStatement",
-            expression: {
-                type: "Identifier",
-                name: "module",
-                range: [0, 6],
+        'import { encrypt as enc } from "crypto"': {
+            type: 'ImportDeclaration',
+            specifiers: [{
+                type: 'ImportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [9, 16],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                name: {
+                    type: 'Identifier',
+                    name: 'enc',
+                    range: [20, 23],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 23 }
+                    }
+                },
+                range: [9, 23],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 6 }
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 23 }
+                }
+            }],
+            kind: 'named',
+            source: {
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [31, 39],
+                loc: {
+                    start: { line: 1, column: 31 },
+                    end: { line: 1, column: 39 }
                 }
             },
-            range: [0, 8],
+            range: [0, 39],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 2, column: 1 }
+                end: { line: 1, column: 39 }
             }
         },
 
-        'module.export = Foo': {
-            type: "ExpressionStatement",
-            expression: {
-                type: "AssignmentExpression",
-                operator: "=",
-                left: {
-                    type: "MemberExpression",
-                    computed: false,
-                    object: {
-                        type: "Identifier",
-                        name: "module",
-                        range: [0, 6],
-                        loc: {
-                            start: { line: 1, column: 0 },
-                            end: { line: 1, column: 6 }
-                        }
-                    },
-                    property: {
-                        type: "Identifier",
-                        name: "export",
-                        range: [7, 13],
-                        loc: {
-                            start: { line: 1, column: 7 },
-                            end: { line: 1, column: 13 }
-                        }
-                    },
-                    range: [0, 13],
+        'import { decrypt, encrypt as enc } from "crypto"': {
+            type: 'ImportDeclaration',
+            specifiers: [{
+                type: 'ImportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'decrypt',
+                    range: [9, 16],
                     loc: {
-                        start: { line: 1, column: 0 },
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                name: null,
+                range: [9, 16],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 16 }
+                }
+            }, {
+                type: 'ImportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'encrypt',
+                    range: [18, 25],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 25 }
+                    }
+                },
+                name: {
+                    type: 'Identifier',
+                    name: 'enc',
+                    range: [29, 32],
+                    loc: {
+                        start: { line: 1, column: 29 },
+                        end: { line: 1, column: 32 }
+                    }
+                },
+                range: [18, 32],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 32 }
+                }
+            }],
+            kind: 'named',
+            source: {
+                type: 'Literal',
+                value: 'crypto',
+                raw: '"crypto"',
+                range: [40, 48],
+                loc: {
+                    start: { line: 1, column: 40 },
+                    end: { line: 1, column: 48 }
+                }
+            },
+            range: [0, 48],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 48 }
+            }
+        },
+
+        'import default from "foo"': {
+            type: 'ImportDeclaration',
+            specifiers: [{
+                type: 'ImportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'default',
+                    range: [7, 14],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                name: null,
+                range: [7, 14],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 14 }
+                }
+            }],
+            kind: 'default',
+            source: {
+                type: 'Literal',
+                value: 'foo',
+                raw: '"foo"',
+                range: [20, 25],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'import { null as nil } from "bar"': {
+            type: 'ImportDeclaration',
+            specifiers: [{
+                type: 'ImportSpecifier',
+                id: {
+                    type: 'Identifier',
+                    name: 'null',
+                    range: [9, 13],
+                    loc: {
+                        start: { line: 1, column: 9 },
                         end: { line: 1, column: 13 }
                     }
                 },
-                right: {
-                    type: "Identifier",
-                    name: "Foo",
-                    range: [16, 19],
+                name: {
+                    type: 'Identifier',
+                    name: 'nil',
+                    range: [17, 20],
                     loc: {
-                        start: { line: 1, column: 16 },
-                        end: { line: 1, column: 19 }
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 20 }
                     }
                 },
-                range: [0, 19],
+                range: [9, 20],
                 loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 19 }
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 20 }
+                }
+            }],
+            kind: 'named',
+            source: {
+                type: 'Literal',
+                value: 'bar',
+                raw: '"bar"',
+                range: [28, 33],
+                loc: {
+                    start: { line: 1, column: 28 },
+                    end: { line: 1, column: 33 }
                 }
             },
-            range: [0, 19],
+            range: [0, 33],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 19 }
+                end: { line: 1, column: 33 }
+            }
+        },
+
+        'module "security" { import "cryto" }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'security',
+                raw: '"security"',
+                range: [7, 17],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ImportDeclaration',
+                    specifiers: [],
+                    source: {
+                        type: 'Literal',
+                        value: 'cryto',
+                        raw: '"cryto"',
+                        range: [27, 34],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 34 }
+                        }
+                    },
+                    range: [20, 35],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 35 }
+                    }
+                }],
+                range: [18, 36],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
             }
         }
+
     },
 
 
@@ -4646,6 +5784,52 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 34 }
             }
+        },
+
+        'function* t() {}': {
+            type: 'Program',
+            body: [{
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 't',
+                    range: [10, 11],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 11 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [14, 16],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                rest: null,
+                generator: true,
+                expression: false,
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            },
+            errors: [{
+                index: 16,
+                lineNumber: 1,
+                column: 17,
+                message: 'Error: Line 1: Missing yield in generator'
+            }]
         }
 
     },
@@ -7286,6 +8470,316 @@ var harmonyTestFixture = {
                 }
             }
         }
+    },
+
+    'ES6: Default parameters': {
+
+        'x = function(y = 1) {}': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'FunctionExpression',
+                    id: null,
+                    params: [{
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [13, 14],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 14 }
+                        }
+                    }],
+                    defaults: [{
+                        type: 'Literal',
+                        value: 1,
+                        raw: '1',
+                        range: [17, 18],
+                        loc: {
+                            start: { line: 1, column: 17 },
+                            end: { line: 1, column: 18 }
+                        }
+                    }],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [20, 22],
+                        loc: {
+                            start: { line: 1, column: 20 },
+                            end: { line: 1, column: 22 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [4, 22],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                range: [0, 22],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        'function f(a = 1) {}': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'f',
+                range: [9, 10],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            params: [{
+                type: 'Identifier',
+                name: 'a',
+                range: [11, 12],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 12 }
+                }
+            }],
+            defaults: [{
+                type: 'Literal',
+                value: 1,
+                raw: '1',
+                range: [15, 16],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [18, 20],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 20 }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            range: [0, 20],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 20 }
+            }
+        },
+
+        'x = { f: function(a=1) {} }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'f',
+                            range: [6, 7],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 7 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'a',
+                                range: [18, 19],
+                                loc: {
+                                    start: { line: 1, column: 18 },
+                                    end: { line: 1, column: 19 }
+                                }
+                            }],
+                            defaults: [{
+                                type: 'Literal',
+                                value: 1,
+                                raw: '1',
+                                range: [20, 21],
+                                loc: {
+                                    start: { line: 1, column: 20 },
+                                    end: { line: 1, column: 21 }
+                                }
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [23, 25],
+                                loc: {
+                                    start: { line: 1, column: 23 },
+                                    end: { line: 1, column: 25 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [9, 25],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 25 }
+                            }
+                        },
+                        kind: 'init',
+                        method: false,
+                        shorthand: false,
+                        range: [6, 25],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 25 }
+                        }
+                    }],
+                    range: [4, 27],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                range: [0, 27],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 27 }
+                }
+            },
+            range: [0, 27],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
+            }
+        },
+
+        'x = { f(a=1) {} }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'f',
+                            range: [6, 7],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 7 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'a',
+                                range: [8, 9],
+                                loc: {
+                                    start: { line: 1, column: 8 },
+                                    end: { line: 1, column: 9 }
+                                }
+                            }],
+                            defaults: [{
+                                type: 'Literal',
+                                value: 1,
+                                raw: '1',
+                                range: [10, 11],
+                                loc: {
+                                    start: { line: 1, column: 10 },
+                                    end: { line: 1, column: 11 }
+                                }
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [13, 15],
+                                loc: {
+                                    start: { line: 1, column: 13 },
+                                    end: { line: 1, column: 15 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [13, 15],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 15 }
+                            }
+                        },
+                        kind: 'init',
+                        method: true,
+                        shorthand: false,
+                        range: [6, 15],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 15 }
+                        }
+                    }],
+                    range: [4, 17],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            }
+        }
+
     },
 
     // ECMAScript 6th Syntax, 13 - Rest parameters
@@ -10027,6 +11521,13 @@ var harmonyTestFixture = {
             message: 'Error: Line 2: Unexpected identifier'
         },
 
+        'function default() {}': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token default'
+        },
+
         'function hello() {\'use strict\'; ({ i: 10, s(eval) { } }); }': {
             index: 44,
             lineNumber: 1,
@@ -10047,6 +11548,29 @@ var harmonyTestFixture = {
             column: 5,
             message: 'Error: Line 1: Unexpected reserved word'
         },
+
+        'var default': {
+            index: 4,
+            lineNumber: 1,
+            column: 5,
+            message: 'Error: Line 1: Unexpected token default'
+        },
+
+        'let default': {
+            index: 4,
+            lineNumber: 1,
+            column: 5,
+            message: 'Error: Line 1: Unexpected token default'
+        },
+
+        'const default': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Unexpected token default'
+        },
+
+
 
         '({ v: eval }) = obj': {
             index: 13,
@@ -10082,32 +11606,82 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Unexpected identifier'
         },
 
-        'module X 0': {
-            index: 9,
+        'module\n"crypto" {}': {
+            index: 6,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected number'
+            column: 7,
+            message: 'Error: Line 1: Illegal newline after module'
         },
 
-        'module X at Y': {
-            index: 9,
+        'module foo from bar': {
+            index: 19,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected identifier'
+            column: 20,
+            message: 'Error: Line 1: Invalid module specifier'
         },
 
-        'export for': {
+        'module 42': {
             index: 7,
             lineNumber: 1,
             column: 8,
+            message: 'Error: Line 1: Unexpected number'
+        },
+
+        'module foo bar': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Unexpected identifier'
+        },
+
+        'module "crypto" { module "e" {} }': {
+            index: 17,
+            lineNumber: 1,
+            column: 18,
+            message: 'Error: Line 1: Module declaration can not be nested'
+        },
+
+        'module "x" { export * from foo }': {
+            index: 30,
+            lineNumber: 1,
+            column: 31,
+            message: 'Error: Line 1: Invalid module specifier'
+        },
+
+        'module "x" { export for }': {
+            index: 20,
+            lineNumber: 1,
+            column: 21,
             message: 'Error: Line 1: Unexpected token for'
         },
+
+        'export default while': {
+            index: 15,
+            lineNumber: 1,
+            column: 16,
+            message: 'Error: Line 1: Unexpected token while'
+        },
+
 
         'import foo': {
             index: 10,
             lineNumber: 1,
             column: 11,
             message: 'Error: Line 1: Missing from after import'
+        },
+
+        'import { foo, bar }': {
+            index: 19,
+            lineNumber: 1,
+            column: 20,
+            message: 'Error: Line 1: Missing from after import'
+        },
+
+        'import foo from bar': {
+            index: 19,
+            lineNumber: 1,
+            column: 20,
+            message: 'Error: Line 1: Invalid module specifier'
         },
 
         '((a)) => 42': {
@@ -10271,6 +11845,13 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Illegal yield expression'
         },
 
+        'class default': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Unexpected token default'
+        },
+
         '`test': {
             index: 5,
             lineNumber: 1,
@@ -10390,6 +11971,13 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Rest parameter must be final parameter of an argument list'
         },
 
+        'function f(a, ...b = 0)': {
+            index: 19,
+            lineNumber: 1,
+            column: 20,
+            message: 'Error: Line 1: Rest parameter can not have a default value'
+        },
+
         'function x(...{ a }){}': {
             index: 14,
             lineNumber: 1,
@@ -10502,10 +12090,10 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Illegal spread element'
         },
 
-        'module Universe { ;  ;  ': {
-            index: 24,
+        'module "Universe" { ;  ;  ': {
+            index: 26,
             lineNumber: 1,
-            column: 25,
+            column: 27,
             message: 'Error: Line 1: Unexpected end of input'
         },
 

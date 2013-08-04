@@ -13789,6 +13789,7 @@ var testFixture = {
                     end: { line: 1, column: 9 }
                 }
             },
+            cases:[],
             range: [0, 13],
             loc: {
                 start: { line: 1, column: 0 },
@@ -19467,15 +19468,14 @@ var testFixture = {
                 DoWhileStatement: 'DoWhileStatement',
                 EmptyStatement: 'EmptyStatement',
                 ExportDeclaration: 'ExportDeclaration',
+                ExportBatchSpecifier: 'ExportBatchSpecifier',
                 ExportSpecifier: 'ExportSpecifier',
-                ExportSpecifierSet: 'ExportSpecifierSet',
                 ExpressionStatement: 'ExpressionStatement',
                 ForInStatement: 'ForInStatement',
                 ForOfStatement: 'ForOfStatement',
                 ForStatement: 'ForStatement',
                 FunctionDeclaration: 'FunctionDeclaration',
                 FunctionExpression: 'FunctionExpression',
-                Glob: 'Glob',
                 Identifier: 'Identifier',
                 IfStatement: 'IfStatement',
                 ImportDeclaration: 'ImportDeclaration',
@@ -19489,7 +19489,6 @@ var testFixture = {
                 NewExpression: 'NewExpression',
                 ObjectExpression: 'ObjectExpression',
                 ObjectPattern: 'ObjectPattern',
-                Path:  'Path',
                 Program: 'Program',
                 Property: 'Property',
                 ReturnStatement: 'ReturnStatement',
