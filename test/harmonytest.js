@@ -5504,6 +5504,87 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 36 }
             }
+        },
+
+        'module()': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'Identifier',
+                    name: 'module',
+                    range: [0, 6],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 6 }
+                    }
+                },
+                'arguments': [],
+                range: [0, 8],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 8 }
+                }
+            },
+            range: [0, 8],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 8 }
+            }
+        },
+
+        'module "foo" { module() }': {
+            type: 'ModuleDeclaration',
+            id: {
+                type: 'Literal',
+                value: 'foo',
+                raw: '"foo"',
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            source: null,
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'module',
+                            range: [15, 21],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 21 }
+                            }
+                        },
+                        'arguments': [],
+                        range: [15, 23],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 23 }
+                        }
+                    },
+                    range: [15, 24],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 24 }
+                    }
+                }],
+                range: [13, 25],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
         }
 
     },
