@@ -19893,6 +19893,264 @@ var testFixture = {
                 column: 10,
                 message: 'Error: Line 1: Unexpected token )'
             }]
+        },
+
+        'foo("bar") = baz': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'foo',
+                            range: [0, 3],
+                            loc: {
+                                start: { line: 1, column: 0 },
+                                end: { line: 1, column: 3 }
+                            }
+                        },
+                        'arguments': [{
+                            type: 'Literal',
+                            value: 'bar',
+                            raw: '"bar"',
+                            range: [4, 9],
+                            loc: {
+                                start: { line: 1, column: 4 },
+                                end: { line: 1, column: 9 }
+                            }
+                        }],
+                        range: [0, 10],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'baz',
+                        range: [13, 16],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 16 }
+                        }
+                    },
+                    range: [0, 16],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            },
+            errors: [{
+                index: 10,
+                lineNumber: 1,
+                column: 11,
+                message: 'Error: Line 1: Invalid left-hand side in assignment'
+            }]
+        },
+
+        '1 = 2': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Literal',
+                        value: 1,
+                        raw: '1',
+                        range: [0, 1],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 1 }
+                        }
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 2,
+                        raw: '2',
+                        range: [4, 5],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    },
+                    range: [0, 5],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 5 }
+                }
+            }],
+            range: [0, 5],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 5 }
+            },
+            errors: [{
+                index: 1,
+                lineNumber: 1,
+                column: 2,
+                message: 'Error: Line 1: Invalid left-hand side in assignment'
+            }]
+        },
+
+        '3++': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UpdateExpression',
+                    operator: '++',
+                    argument: {
+                        type: 'Literal',
+                        value: 3,
+                        raw: '3',
+                        range: [0, 1],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 1 }
+                        }
+                    },
+                    prefix: false,
+                    range: [0, 3],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 3 }
+                    }
+                },
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            }],
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            },
+            errors: [{
+                index: 1,
+                lineNumber: 1,
+                column: 2,
+                message: 'Error: Line 1: Invalid left-hand side in assignment'
+            }]
+        },
+
+        '--4': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UpdateExpression',
+                    operator: '--',
+                    argument: {
+                        type: 'Literal',
+                        value: 4,
+                        raw: '4',
+                        range: [2, 3],
+                        loc: {
+                            start: { line: 1, column: 2 },
+                            end: { line: 1, column: 3 }
+                        }
+                    },
+                    prefix: true,
+                    range: [0, 3],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 3 }
+                    }
+                },
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            }],
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            },
+            errors: [{
+                index: 3,
+                lineNumber: 1,
+                column: 4,
+                message: 'Error: Line 1: Invalid left-hand side in assignment'
+            }]
+        },
+
+        'for (5 in []) {}': {
+            type: 'Program',
+            body: [{
+                type: 'ForInStatement',
+                left: {
+                    type: 'Literal',
+                    value: 5,
+                    raw: '5',
+                    range: [5, 6],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 6 }
+                    }
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [],
+                    range: [10, 12],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [14, 16],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                each: false,
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            },
+            errors: [{
+                index: 6,
+                lineNumber: 1,
+                column: 7,
+                message: 'Error: Line 1: Invalid left-hand side in for-in'
+            }]
         }
 
 
