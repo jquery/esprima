@@ -2248,7 +2248,7 @@ parseStatement: true, parseSourceElement: true */
                 }
 
                 if (!isLeftHandSide(expr)) {
-                    throwError({}, Messages.InvalidLHSInAssignment);
+                    throwErrorTolerant({}, Messages.InvalidLHSInAssignment);
                 }
 
                 token = lex();
@@ -2277,7 +2277,7 @@ parseStatement: true, parseSourceElement: true */
             }
 
             if (!isLeftHandSide(expr)) {
-                throwError({}, Messages.InvalidLHSInAssignment);
+                throwErrorTolerant({}, Messages.InvalidLHSInAssignment);
             }
 
             expr = delegate.createUnaryExpression(token.value, expr);
@@ -2484,7 +2484,7 @@ parseStatement: true, parseSourceElement: true */
         if (matchAssign()) {
             // LeftHandSideExpression
             if (!isLeftHandSide(left)) {
-                throwError({}, Messages.InvalidLHSInAssignment);
+                throwErrorTolerant({}, Messages.InvalidLHSInAssignment);
             }
 
             // 11.13.1
@@ -2772,7 +2772,7 @@ parseStatement: true, parseSourceElement: true */
                 if (matchKeyword('in')) {
                     // LeftHandSideExpression
                     if (!isLeftHandSide(init)) {
-                        throwError({}, Messages.InvalidLHSInForIn);
+                        throwErrorTolerant({}, Messages.InvalidLHSInForIn);
                     }
 
                     lex();
