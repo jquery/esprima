@@ -881,7 +881,7 @@ parseYieldExpression: true
     }
 
     function scanNumericLiteral() {
-        var number, start, ch, octal;
+        var number, start, ch;
 
         ch = source.charAt(index);
         assert(isDecimalDigit(ch.charCodeAt(0)) || (ch === '.'),
@@ -2199,7 +2199,7 @@ parseYieldExpression: true
     // 11.1.4 Array Initialiser
 
     function parseArrayInitialiser() {
-        var elements = [], blocks = [], filter = null, tmp, possiblecomprehension = true, body;
+        var elements = [], blocks = [], filter = null, tmp, possiblecomprehension = true;
 
         expect('[');
         while (!match(']')) {
@@ -2332,7 +2332,7 @@ parseYieldExpression: true
     }
 
     function parseObjectProperty() {
-        var token, key, id, value, param;
+        var token, key, id, param;
 
         token = lookahead;
 
@@ -2631,7 +2631,7 @@ parseYieldExpression: true
     }
 
     function parseLeftHandSideExpressionAllowCall() {
-        var expr, args, property;
+        var expr, args;
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
@@ -2653,9 +2653,7 @@ parseYieldExpression: true
 
 
     function parseLeftHandSideExpression() {
-        var expr, property;
-
-        expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
+        var expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
         while (match('.') || match('[') || lookahead.type === Token.Template) {
             if (match('[')) {
