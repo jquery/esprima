@@ -42,5 +42,9 @@
 
         "benchmark": "node test/benchmarks.js",
         "benchmark-quick": "node test/benchmarks.js quick"
-    }
+    },
+    "files": [
+        "bin",
+        "esprima.js"
+    ]
 }
