@@ -7,6 +7,15 @@
         "esparse": "./bin/esparse.js",
         "esvalidate": "./bin/esvalidate.js"
     },
+    "files": [
+        "bin",
+        "test/run.js",
+        "test/runner.js",
+        "test/test.js",
+        "test/compat.js",
+        "test/reflect.js",
+        "esprima.js"
+    ],
     "version": "1.0.3",
     "engines": {
         "node": ">=0.4.0"
