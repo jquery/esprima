@@ -6,6 +6,11 @@
         "esprima.js"
     ],
     "dependencies": {},
+    "ignore": [
+        "examples",
+        "test",
+        "tools"
+    ],
     "repository": {
         "type": "git",
         "url": "http://github.com/ariya/esprima.git"
