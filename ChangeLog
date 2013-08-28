@@ -1,3 +1,11 @@
+2013-08-28: Version 1.0.4
+
+      * Support escaped "]" in regexp literal (issue 442)
+      * Parsing empty switch contains 'cases' key (issue 436)
+      * Tolerate invalid left-hand side expression (issue 81)
+      * Minimize the payload for npm and bower (issue 362)
+      * Switch to bower.json for Bower package manifest (issue 342)
+
 2013-05-17: Version 1.0.3
 
       * Variable declaration needs at least one declarator (issue 391)

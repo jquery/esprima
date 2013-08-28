@@ -16,7 +16,7 @@
         "test/reflect.js",
         "esprima.js"
     ],
-    "version": "1.0.3",
+    "version": "1.0.4",
     "engines": {
         "node": ">=0.4.0"
     },

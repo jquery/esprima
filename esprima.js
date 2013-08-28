@@ -3879,7 +3879,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     // Sync with package.json.
-    exports.version = '1.0.3';
+    exports.version = '1.0.4';
 
     exports.parse = parse;
 
