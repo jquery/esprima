@@ -12758,6 +12758,202 @@ var testFixture = {
             }
         },
 
+        'for (var x = y = z in q);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    init: {
+                        type: 'AssignmentExpression',
+                        operator: '=',
+                        left: {
+                            type: 'Identifier',
+                            name: 'y',
+                            range: [13, 14],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        right: {
+                            type: 'Identifier',
+                            name: 'z',
+                            range: [17, 18],
+                            loc: {
+                                start: { line: 1, column: 17 },
+                                end: { line: 1, column: 18 }
+                            }
+                        },
+                        range: [12, 18],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    range: [9, 18],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 18 }
+                    }
+                }],
+                kind: 'var',
+                range: [5, 18],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            right: {
+                type: 'Identifier',
+                name: 'q',
+                range: [22, 23],
+                loc: {
+                    start: { line: 1, column: 22 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            body: {
+                type: 'EmptyStatement',
+                range: [24, 25],
+                loc: {
+                    start: { line: 1, column: 24 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            each: false,
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'for (var a = b = c = (d in e) in z);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'a',
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    init: {
+                        type: 'AssignmentExpression',
+                        operator: '=',
+                        left: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [13, 14],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        right: {
+                            type: 'AssignmentExpression',
+                            operator: '=',
+                            left: {
+                                type: 'Identifier',
+                                name: 'c',
+                                range: [17, 18],
+                                loc: {
+                                    start: { line: 1, column: 17 },
+                                    end: { line: 1, column: 18 }
+                                }
+                            },
+                            right: {
+                                type: 'BinaryExpression',
+                                operator: 'in',
+                                left: {
+                                    type: 'Identifier',
+                                    name: 'd',
+                                    range: [22, 23],
+                                    loc: {
+                                        start: { line: 1, column: 22 },
+                                        end: { line: 1, column: 23 }
+                                    }
+                                },
+                                right: {
+                                    type: 'Identifier',
+                                    name: 'e',
+                                    range: [27, 28],
+                                    loc: {
+                                        start: { line: 1, column: 27 },
+                                        end: { line: 1, column: 28 }
+                                    }
+                                },
+                                range: [22, 28],
+                                loc: {
+                                    start: { line: 1, column: 22 },
+                                    end: { line: 1, column: 28 }
+                                }
+                            },
+                            range: [16, 29],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 29 }
+                            }
+                        },
+                        range: [12, 29],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 29 }
+                        }
+                    },
+                    range: [9, 29],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 29 }
+                    }
+                }],
+                kind: 'var',
+                range: [5, 29],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 29 }
+                }
+            },
+            right: {
+                type: 'Identifier',
+                name: 'z',
+                range: [33, 34],
+                loc: {
+                    start: { line: 1, column: 33 },
+                    end: { line: 1, column: 34 }
+                }
+            },
+            body: {
+                type: 'EmptyStatement',
+                range: [35, 36],
+                loc: {
+                    start: { line: 1, column: 35 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            each: false,
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            }
+        },
+
         'for (var i = function() { return 10 in [] } in list) process(x);': {
             type: 'ForInStatement',
             left: {

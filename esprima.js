@@ -2193,11 +2193,14 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseLeftHandSideExpressionAllowCall() {
-        var marker, expr, args, property;
+        var marker, previousAllowIn, expr, args, property;
 
         marker = createLocationMarker();
 
+        previousAllowIn = state.allowIn;
+        state.allowIn = true;
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
+        state.allowIn = previousAllowIn;
 
         while (match('.') || match('[') || match('(')) {
             if (match('(')) {
@@ -2220,11 +2223,13 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseLeftHandSideExpression() {
-        var marker, expr, property;
+        var marker, previousAllowIn, expr, property;
 
         marker = createLocationMarker();
 
+        previousAllowIn = state.allowIn;
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
+        state.allowIn = previousAllowIn;
 
         while (match('.') || match('[')) {
             if (match('[')) {
@@ -2390,16 +2395,13 @@ parseStatement: true, parseSourceElement: true */
     // 11.11 Binary Logical Operators
 
     function parseBinaryExpression() {
-        var marker, markers, expr, token, prec, previousAllowIn, stack, right, operator, left, i;
-
-        previousAllowIn = state.allowIn;
-        state.allowIn = true;
+        var marker, markers, expr, token, prec, stack, right, operator, left, i;
 
         marker = createLocationMarker();
         left = parseUnaryExpression();
 
         token = lookahead;
-        prec = binaryPrecedence(token, previousAllowIn);
+        prec = binaryPrecedence(token, state.allowIn);
         if (prec === 0) {
             return left;
         }
@@ -2411,7 +2413,7 @@ parseStatement: true, parseSourceElement: true */
 
         stack = [left, token, right];
 
-        while ((prec = binaryPrecedence(lookahead, previousAllowIn)) > 0) {
+        while ((prec = binaryPrecedence(lookahead, state.allowIn)) > 0) {
 
             // Reduce: make a binary expression from the three topmost entries.
             while ((stack.length > 2) && (prec <= stack[stack.length - 2].prec)) {
@@ -2437,8 +2439,6 @@ parseStatement: true, parseSourceElement: true */
             expr = parseUnaryExpression();
             stack.push(expr);
         }
-
-        state.allowIn = previousAllowIn;
 
         // Final reduce to clean-up the stack.
         i = stack.length - 1;
