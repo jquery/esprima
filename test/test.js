@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2013 Mathias Bynens <mathias@qiwi.be>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -22789,6 +22790,39 @@ var testFixture = {
                 lineNumber: 1,
                 column: 7,
                 message: 'Error: Line 1: Invalid left-hand side in for-in'
+            }]
+        },
+
+        '<!-- foo': {
+          type: 'Program',
+          body: [],
+          comments: [{
+              type: 'Line',
+              value: ' foo'
+          }]
+        },
+
+        'var x = 1<!--foo': {
+            type: 'Program',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 1,
+                        raw: '1'
+                    }
+                }],
+                kind: 'var'
+            }],
+            comments: [{
+                type: 'Line',
+                value: 'foo'
             }]
         }
 
