@@ -16797,6 +16797,37 @@ var testFixture = {
 
     },
 
+    'Whitespace': {
+
+        'new\x20\x09\x0B\x0C\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\uFEFFa': {
+            type: "ExpressionStatement",
+            expression: {
+                type: "NewExpression",
+                callee: {
+                    type: "Identifier",
+                    name: "a",
+                    range: [25, 26],
+                    loc: {
+                        start: {line: 1, column: 25},
+                        end: {line: 1, column: 26}
+                    }
+                },
+                arguments: [],
+                range: [0, 26],
+                loc: {
+                    start: {line: 1, column: 0},
+                    end: {line: 1, column: 26}
+                }
+            },
+            range: [0, 26],
+            loc: {
+                start: {line: 1, column: 0},
+                end: {line: 1, column: 26}
+            }
+        }
+
+    },
+
     'Source elements': {
 
         '': {
