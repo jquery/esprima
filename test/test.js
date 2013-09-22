@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2013 Mathias Bynens <mathias@qiwi.be>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
   Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
@@ -5115,6 +5116,84 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 8 },
                     end: { line: 1, column: 17 }
+                }
+            }]
+        },
+
+        'var x = /[\\]/]/': {
+            type: 'Program',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [4, 5],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: new RegExp('[\\]/]').toString(),
+                        raw: '/[\\]/]/',
+                        range: [8, 15],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 15 }
+                        }
+                    },
+                    range: [4, 15],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 15 }
+                    }
+                }],
+                kind: 'var',
+                range: [0, 15],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 15 }
+                }
+            }],
+            range: [0, 15],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 15 }
+            },
+            tokens: [{
+                type: 'Keyword',
+                value: 'var',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            }, {
+                type: 'Identifier',
+                value: 'x',
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
+            }, {
+                type: 'Punctuator',
+                value: '=',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            }, {
+                type: 'RegularExpression',
+                value: '/[\\]/]/',
+                range: [8, 15],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 15 }
                 }
             }]
         },
@@ -12679,6 +12758,202 @@ var testFixture = {
             }
         },
 
+        'for (var x = y = z in q);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    init: {
+                        type: 'AssignmentExpression',
+                        operator: '=',
+                        left: {
+                            type: 'Identifier',
+                            name: 'y',
+                            range: [13, 14],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        right: {
+                            type: 'Identifier',
+                            name: 'z',
+                            range: [17, 18],
+                            loc: {
+                                start: { line: 1, column: 17 },
+                                end: { line: 1, column: 18 }
+                            }
+                        },
+                        range: [12, 18],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    range: [9, 18],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 18 }
+                    }
+                }],
+                kind: 'var',
+                range: [5, 18],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            right: {
+                type: 'Identifier',
+                name: 'q',
+                range: [22, 23],
+                loc: {
+                    start: { line: 1, column: 22 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            body: {
+                type: 'EmptyStatement',
+                range: [24, 25],
+                loc: {
+                    start: { line: 1, column: 24 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            each: false,
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'for (var a = b = c = (d in e) in z);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'a',
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    init: {
+                        type: 'AssignmentExpression',
+                        operator: '=',
+                        left: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [13, 14],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        right: {
+                            type: 'AssignmentExpression',
+                            operator: '=',
+                            left: {
+                                type: 'Identifier',
+                                name: 'c',
+                                range: [17, 18],
+                                loc: {
+                                    start: { line: 1, column: 17 },
+                                    end: { line: 1, column: 18 }
+                                }
+                            },
+                            right: {
+                                type: 'BinaryExpression',
+                                operator: 'in',
+                                left: {
+                                    type: 'Identifier',
+                                    name: 'd',
+                                    range: [22, 23],
+                                    loc: {
+                                        start: { line: 1, column: 22 },
+                                        end: { line: 1, column: 23 }
+                                    }
+                                },
+                                right: {
+                                    type: 'Identifier',
+                                    name: 'e',
+                                    range: [27, 28],
+                                    loc: {
+                                        start: { line: 1, column: 27 },
+                                        end: { line: 1, column: 28 }
+                                    }
+                                },
+                                range: [22, 28],
+                                loc: {
+                                    start: { line: 1, column: 22 },
+                                    end: { line: 1, column: 28 }
+                                }
+                            },
+                            range: [16, 29],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 29 }
+                            }
+                        },
+                        range: [12, 29],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 29 }
+                        }
+                    },
+                    range: [9, 29],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 29 }
+                    }
+                }],
+                kind: 'var',
+                range: [5, 29],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 29 }
+                }
+            },
+            right: {
+                type: 'Identifier',
+                name: 'z',
+                range: [33, 34],
+                loc: {
+                    start: { line: 1, column: 33 },
+                    end: { line: 1, column: 34 }
+                }
+            },
+            body: {
+                type: 'EmptyStatement',
+                range: [35, 36],
+                loc: {
+                    start: { line: 1, column: 35 },
+                    end: { line: 1, column: 36 }
+                }
+            },
+            each: false,
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 36 }
+            }
+        },
+
         'for (var i = function() { return 10 in [] } in list) process(x);': {
             type: 'ForInStatement',
             left: {
@@ -13703,6 +13978,7 @@ var testFixture = {
                     end: { line: 1, column: 9 }
                 }
             },
+            cases:[],
             range: [0, 13],
             loc: {
                 start: { line: 1, column: 0 },
@@ -16516,6 +16792,138 @@ var testFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 44 }
+            }
+        }
+
+    },
+
+    'Whitespace': {
+
+        'new\x20\x09\x0B\x0C\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\uFEFFa': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'NewExpression',
+                callee: {
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [25, 26],
+                    loc: {
+                        start: {line: 1, column: 25},
+                        end: {line: 1, column: 26}
+                    }
+                },
+                arguments: [],
+                range: [0, 26],
+                loc: {
+                    start: {line: 1, column: 0},
+                    end: {line: 1, column: 26}
+                }
+            },
+            range: [0, 26],
+            loc: {
+                start: {line: 1, column: 0},
+                end: {line: 1, column: 26}
+            }
+        },
+
+        '{0\x0A1\x0D2\u20283\u20294}': {
+            type: 'BlockStatement',
+            body: [
+                {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0',
+                        range: [1, 2],
+                        loc: {
+                            start: {line: 1, column: 1},
+                            end: {line: 1, column: 2}
+                        }
+                    },
+                    range: [1, 3],
+                    loc: {
+                        start: {line: 1, column: 1},
+                        end: {line: 2, column: 0}
+                    }
+                },
+                {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: 1,
+                        raw: '1',
+                        range: [3, 4],
+                        loc: {
+                            start: {line: 2, column: 0},
+                            end: {line: 2, column: 1}
+                        }
+                    },
+                    range: [3, 5],
+                    loc: {
+                        start: {line: 2, column: 0},
+                        end: {line: 3, column: 0}
+                    }
+                },
+                {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: 2,
+                        raw: '2',
+                        range: [5, 6],
+                        loc: {
+                            start: {line: 3, column: 0},
+                            end: {line: 3, column: 1}
+                        }
+                    },
+                    range: [5, 7],
+                    loc: {
+                        start: {line: 3, column: 0},
+                        end: {line: 4, column: 0}
+                    }
+                },
+                {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: 3,
+                        raw: '3',
+                        range: [7, 8],
+                        loc: {
+                            start: {line: 4, column: 0},
+                            end: {line: 4, column: 1}
+                        }
+                    },
+                    range: [7, 9],
+                    loc: {
+                        start: {line: 4, column: 0},
+                        end: {line: 5, column: 0}
+                    }
+                },
+                {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: 4,
+                        raw: '4',
+                        range: [9, 10],
+                        loc: {
+                            start: {line: 5, column: 0},
+                            end: {line: 5, column: 1}
+                        }
+                    },
+                    range: [9, 10],
+                    loc: {
+                        start: {line: 5, column: 0},
+                        end: {line: 5, column: 1}
+                    }
+                }
+            ],
+            range: [0, 11],
+            loc: {
+                start: {line: 1, column: 0},
+                end: {line: 5, column: 2}
             }
         }
 
@@ -22452,6 +22860,297 @@ var testFixture = {
                 lineNumber: 1,
                 column: 10,
                 message: 'Error: Line 1: Unexpected token )'
+            }]
+        },
+
+        'foo("bar") = baz': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'foo',
+                            range: [0, 3],
+                            loc: {
+                                start: { line: 1, column: 0 },
+                                end: { line: 1, column: 3 }
+                            }
+                        },
+                        'arguments': [{
+                            type: 'Literal',
+                            value: 'bar',
+                            raw: '"bar"',
+                            range: [4, 9],
+                            loc: {
+                                start: { line: 1, column: 4 },
+                                end: { line: 1, column: 9 }
+                            }
+                        }],
+                        range: [0, 10],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'baz',
+                        range: [13, 16],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 16 }
+                        }
+                    },
+                    range: [0, 16],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            },
+            errors: [{
+                index: 10,
+                lineNumber: 1,
+                column: 11,
+                message: 'Error: Line 1: Invalid left-hand side in assignment'
+            }]
+        },
+
+        '1 = 2': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Literal',
+                        value: 1,
+                        raw: '1',
+                        range: [0, 1],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 1 }
+                        }
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 2,
+                        raw: '2',
+                        range: [4, 5],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    },
+                    range: [0, 5],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 5 }
+                }
+            }],
+            range: [0, 5],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 5 }
+            },
+            errors: [{
+                index: 1,
+                lineNumber: 1,
+                column: 2,
+                message: 'Error: Line 1: Invalid left-hand side in assignment'
+            }]
+        },
+
+        '3++': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UpdateExpression',
+                    operator: '++',
+                    argument: {
+                        type: 'Literal',
+                        value: 3,
+                        raw: '3',
+                        range: [0, 1],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 1 }
+                        }
+                    },
+                    prefix: false,
+                    range: [0, 3],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 3 }
+                    }
+                },
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            }],
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            },
+            errors: [{
+                index: 1,
+                lineNumber: 1,
+                column: 2,
+                message: 'Error: Line 1: Invalid left-hand side in assignment'
+            }]
+        },
+
+        '--4': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'UpdateExpression',
+                    operator: '--',
+                    argument: {
+                        type: 'Literal',
+                        value: 4,
+                        raw: '4',
+                        range: [2, 3],
+                        loc: {
+                            start: { line: 1, column: 2 },
+                            end: { line: 1, column: 3 }
+                        }
+                    },
+                    prefix: true,
+                    range: [0, 3],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 3 }
+                    }
+                },
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            }],
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            },
+            errors: [{
+                index: 3,
+                lineNumber: 1,
+                column: 4,
+                message: 'Error: Line 1: Invalid left-hand side in assignment'
+            }]
+        },
+
+        'for (5 in []) {}': {
+            type: 'Program',
+            body: [{
+                type: 'ForInStatement',
+                left: {
+                    type: 'Literal',
+                    value: 5,
+                    raw: '5',
+                    range: [5, 6],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 6 }
+                    }
+                },
+                right: {
+                    type: 'ArrayExpression',
+                    elements: [],
+                    range: [10, 12],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [14, 16],
+                    loc: {
+                        start: { line: 1, column: 14 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                each: false,
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            },
+            errors: [{
+                index: 6,
+                lineNumber: 1,
+                column: 7,
+                message: 'Error: Line 1: Invalid left-hand side in for-in'
+            }]
+        },
+
+        '<!-- foo': {
+          type: 'Program',
+          body: [],
+          comments: [{
+              type: 'Line',
+              value: ' foo'
+          }]
+        },
+
+        'var x = 1<!--foo': {
+            type: 'Program',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 1,
+                        raw: '1'
+                    }
+                }],
+                kind: 'var'
+            }],
+            comments: [{
+                type: 'Line',
+                value: 'foo'
             }]
         }
 

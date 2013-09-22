@@ -29,6 +29,13 @@
         "istanbul": "~0.1.27",
         "complexity-report": "~0.6.1"
     },
+    "keywords": [
+        "ast",
+        "ecmascript",
+        "javascript",
+        "parser",
+        "syntax"
+    ],
     "scripts": {
         "test": "npm run-script lint && node test/run.js && npm run-script coverage && npm run-script complexity",
         "lint": "node_modules/jslint/bin/jslint.js esprima.js",
