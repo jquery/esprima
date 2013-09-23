@@ -336,7 +336,7 @@ parseStatement: true, parseSourceElement: true */
     // 7.4 Comments
 
     function addComment(type, value, start, end, loc) {
-        var comment;
+        var comment, attacher;
 
         assert(typeof start === 'number', 'Comment must have valid position');
 
@@ -360,6 +360,15 @@ parseStatement: true, parseSourceElement: true */
             comment.loc = loc;
         }
         extra.comments.push(comment);
+
+        if (extra.attachComment) {
+            attacher = {
+                comment: comment,
+                candidate: null,
+                range: [start, end]
+            };
+            extra.pendingComments.push(attacher);
+        }
     }
 
     function skipSingleLineComment() {
@@ -1349,6 +1358,29 @@ parseStatement: true, parseSourceElement: true */
             }
         },
 
+        processComment: function (node) {
+            var i, attacher, comment, pos, len;
+
+            if (typeof node.type === 'undefined') {
+                return;
+            }
+            for (i = 0; i < extra.pendingComments.length; ++i) {
+                attacher = extra.pendingComments[i];
+                comment = attacher.comment;
+                pos = attacher.candidate ? attacher.candidate.range[0] : attacher.range[0];
+                if (node.type !== Syntax.Program && node.range[0] >= pos) {
+                    if (attacher.candidate) {
+                        len = attacher.candidate.range[1] - attacher.candidate.range[0];
+                        if ((node.range[1] - node.range[0]) >= len) {
+                            attacher.candidate = node;
+                        }
+                    } else {
+                        attacher.candidate = node;
+                    }
+                }
+            }
+        },
+
         markEnd: function (node) {
             if (extra.range) {
                 node.range = [state.markerStack.pop(), index];
@@ -1365,6 +1397,9 @@ parseStatement: true, parseSourceElement: true */
                     }
                 };
                 this.postProcess(node);
+            }
+            if (extra.attachComment) {
+                this.processComment(node);
             }
             return node;
         },
@@ -3474,6 +3509,23 @@ parseStatement: true, parseSourceElement: true */
         return delegate.markEnd(delegate.createProgram(body));
     }
 
+    function attachComments() {
+        var i, attacher, comment, node;
+
+        for (i = 0; i < extra.pendingComments.length; ++i) {
+            attacher = extra.pendingComments[i];
+            comment = attacher.comment;
+            node = attacher.candidate;
+            if (node) {
+                if (typeof node.leadingComments === 'undefined') {
+                    node.leadingComments = [];
+                }
+                node.leadingComments.push(attacher.comment);
+            }
+        }
+        extra.pendingComments = [];
+    }
+
     function filterTokenLocation() {
         var i, entry, token, tokens = [];
 
@@ -3666,6 +3718,7 @@ parseStatement: true, parseSourceElement: true */
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
+            extra.attachComment = (typeof options.attachComment === 'boolean') && options.attachComment;
 
             if (extra.loc && options.source !== null && options.source !== undefined) {
                 extra.source = toString(options.source);
@@ -3679,6 +3732,11 @@ parseStatement: true, parseSourceElement: true */
             }
             if (typeof options.tolerant === 'boolean' && options.tolerant) {
                 extra.errors = [];
+            }
+            if (extra.attachComment) {
+                extra.range = true;
+                extra.pendingComments = [];
+                extra.comments = [];
             }
         }
 
@@ -3704,6 +3762,9 @@ parseStatement: true, parseSourceElement: true */
             }
             if (typeof extra.errors !== 'undefined') {
                 program.errors = extra.errors;
+            }
+            if (extra.attachComment) {
+                attachComments();
             }
         } catch (e) {
             throw e;
