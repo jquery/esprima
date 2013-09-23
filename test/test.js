@@ -3524,7 +3524,16 @@ var testFixture = {
                 loc: {
                     start: { line: 2, column: 4 },
                     end: { line: 2, column: 6 }
-                }
+                },
+                leadingComments: [{
+                    type: 'Block',
+                    value: 'a\r\nb',
+                    range: [0, 8],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 2, column: 3 }
+                    }
+                }]
             }],
             range: [9, 11],
             loc: {
@@ -3596,7 +3605,16 @@ var testFixture = {
                 loc: {
                     start: { line: 2, column: 4 },
                     end: { line: 2, column: 6 }
-                }
+                },
+                leadingComments: [{
+                    type: 'Block',
+                    value: 'a\nb',
+                    range: [0, 7],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 2, column: 3 }
+                    }
+                }]
             }],
             range: [8, 10],
             loc: {
@@ -3622,16 +3640,28 @@ var testFixture = {
                     type: 'Literal',
                     value: 42,
                     raw: '42',
+                    range: [8, 10],
                     loc: {
                         start: { line: 2, column: 4 },
                         end: { line: 2, column: 6 }
                     }
                 },
+                range: [8, 10],
                 loc: {
                     start: { line: 2, column: 4 },
                     end: { line: 2, column: 6 }
-                }
+                },
+                leadingComments: [{
+                    type: 'Block',
+                    value: 'a\nc',
+                    range: [0, 7],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 2, column: 3 }
+                    }
+                }]
             }],
+            range: [8, 10],
             loc: {
                 start: { line: 2, column: 4 },
                 end: { line: 2, column: 6 }
@@ -3639,6 +3669,7 @@ var testFixture = {
             comments: [{
                 type: 'Block',
                 value: 'a\nc',
+                range: [0, 7],
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 2, column: 3 }
@@ -3719,7 +3750,16 @@ var testFixture = {
                 loc: {
                     start: { line: 2, column: 0 },
                     end: { line: 2, column: 2 }
-                }
+                },
+                leadingComments: [{
+                    type: 'Line',
+                    value: ' Hello, world!',
+                    range: [0, 16],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 16 }
+                    }
+                }]
             }],
             range: [17, 19],
             loc: {
@@ -3791,7 +3831,16 @@ var testFixture = {
                 loc: {
                     start: { line: 2, column: 0 },
                     end: { line: 2, column: 2 }
-                }
+                },
+                leadingComments: [{
+                    type: 'Line',
+                    value: '',
+                    range: [0, 2],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 2 }
+                    }
+                }]
             }],
             range: [3, 5],
             loc: {
@@ -3857,7 +3906,16 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 4 },
                     end: { line: 1, column: 6 }
-                }
+                },
+                leadingComments: [{
+                    type: 'Block',
+                    value: '',
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 4 }
+                    }
+                }]
             }],
             range: [4, 6],
             loc: {
@@ -3893,7 +3951,24 @@ var testFixture = {
                 loc: {
                     start: { line: 4, column: 0 },
                     end: { line: 4, column: 2 }
-                }
+                },
+                leadingComments: [{
+                    type: 'Line',
+                    value: ' Hello, world!',
+                    range: [0, 16],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 16 }
+                    }
+                }, {
+                    type: 'Line',
+                    value: '   Another hello',
+                    range: [18, 36],
+                    loc: {
+                        start: { line: 3, column: 0 },
+                        end: { line: 3, column: 18 }
+                    }
+                }]
             }],
             range: [37, 39],
             loc: {
@@ -3958,7 +4033,16 @@ var testFixture = {
                         loc: {
                             start: { line: 2, column: 0 },
                             end: { line: 2, column: 9 }
-                        }
+                        },
+                        leadingComments: [{
+                            type: 'Line',
+                            value: ' Some comment',
+                            range: [9, 24],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 24 }
+                            }
+                        }]
                     }],
                     range: [7, 36],
                     loc: {
@@ -3985,6 +4069,85 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 9 },
                     end: { line: 1, column: 24 }
+                }
+            }]
+        },
+
+        'if (x) { /* Some comment */ doThat() }': {
+            type: 'Program',
+            body: [{
+                type: 'IfStatement',
+                test: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                consequent: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'doThat',
+                                range: [28, 34],
+                                loc: {
+                                    start: { line: 1, column: 28 },
+                                    end: { line: 1, column: 34 }
+                                }
+                            },
+                            'arguments': [],
+                            range: [28, 36],
+                            loc: {
+                                start: { line: 1, column: 28 },
+                                end: { line: 1, column: 36 }
+                            }
+                        },
+                        range: [28, 37],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 37 }
+                        },
+                        leadingComments: [{
+                            type: 'Block',
+                            value: ' Some comment ',
+                            range: [9, 27],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 27 }
+                            }
+                        }]
+                    }],
+                    range: [7, 38],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 38 }
+                    }
+                },
+                alternate: null,
+                range: [0, 38],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 38 }
+                }
+            }],
+            range: [0, 38],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            },
+            comments: [{
+                type: 'Block',
+                value: ' Some comment ',
+                range: [9, 27],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 27 }
                 }
             }]
         },
@@ -4038,7 +4201,16 @@ var testFixture = {
                         loc: {
                             start: { line: 1, column: 41 },
                             end: { line: 1, column: 49 }
-                        }
+                        },
+                        leadingComments: [{
+                            type: 'Block',
+                            value: ' perfect ',
+                            range: [27, 40],
+                            loc: {
+                                start: { line: 1, column: 27 },
+                                end: { line: 1, column: 40 }
+                            }
+                        }]
                     }],
                     range: [18, 49],
                     loc: {
