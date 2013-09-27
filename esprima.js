@@ -463,8 +463,9 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function skipComment() {
-        var ch;
+        var ch, start;
 
+        start = (index === 0);
         while (index < length) {
             ch = source.charCodeAt(index);
 
@@ -477,16 +478,27 @@ parseStatement: true, parseSourceElement: true */
                 }
                 ++lineNumber;
                 lineStart = index;
+                start = true;
             } else if (ch === 47) { // 47 is '/'
                 ch = source.charCodeAt(index + 1);
                 if (ch === 47) {
                     ++index;
                     ++index;
                     skipSingleLineComment();
+                    start = true;
                 } else if (ch === 42) {  // 42 is '*'
                     ++index;
                     ++index;
                     skipMultiLineComment();
+                } else {
+                    break;
+                }
+            } else if (start && ch === 45) { // 45 is '-'
+                // 62 is '>'
+                if ((source.charCodeAt(index + 1) === 45) && (source.charCodeAt(index + 2) === 62)) {
+                    // '-->' is a single-line comment
+                    index += 3;
+                    skipSingleLineComment();
                 } else {
                     break;
                 }

@@ -4271,8 +4271,259 @@ var testFixture = {
                 type: 'Line',
                 value: 'foo'
             }]
-        }
+        },
 
+        '--> comment': {
+            type: 'Program',
+            body: [],
+            range: [11, 11],
+            loc: {
+                start: { line: 1, column: 11 },
+                end: { line: 1, column: 11 }
+            },
+            comments: [{
+                type: 'Line',
+                value: ' comment',
+                range: [1, 11],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 11 }
+                }
+            }]
+        },
+
+        ' \t --> comment': {
+            type: 'Program',
+            body: [],
+            range: [14, 14],
+            loc: {
+                start: { line: 1, column: 14 },
+                end: { line: 1, column: 14 }
+            },
+            comments: [{
+                type: 'Line',
+                value: ' comment',
+                range: [4, 14],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 14 }
+                }
+            }]
+        },
+
+        ' \t /* block comment */  --> comment': {
+            type: 'Program',
+            body: [],
+            range: [35, 35],
+            loc: {
+                start: { line: 1, column: 35 },
+                end: { line: 1, column: 35 }
+            },
+            comments: [{
+                type: 'Block',
+                value: ' block comment ',
+                range: [3, 22],
+                loc: {
+                    start: { line: 1, column: 3 },
+                    end: { line: 1, column: 22 }
+                }
+            }, {
+                type: 'Line',
+                value: ' comment',
+                range: [25, 35],
+                loc: {
+                    start: { line: 1, column: 25 },
+                    end: { line: 1, column: 35 }
+                }
+            }]
+        },
+
+        '/* block comment */--> comment': {
+            type: 'Program',
+            body: [],
+            range: [30, 30],
+            loc: {
+                start: { line: 1, column: 30 },
+                end: { line: 1, column: 30 }
+            },
+            comments: [{
+                type: 'Block',
+                value: ' block comment ',
+                range: [0, 19],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 19 }
+                }
+            }, {
+                type: 'Line',
+                value: ' comment',
+                range: [20, 30],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 30 }
+                }
+            }]
+        },
+
+        '/* not comment*/; i-->0': {
+            type: 'Program',
+            body: [{
+                type: 'EmptyStatement',
+                range: [16, 17],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 17 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'BinaryExpression',
+                    operator: '>',
+                    left: {
+                        type: 'UpdateExpression',
+                        operator: '--',
+                        argument: {
+                            type: 'Identifier',
+                            name: 'i',
+                            range: [18, 19],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 19 }
+                            }
+                        },
+                        prefix: false,
+                        range: [18, 21],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 21 }
+                        }
+                    },
+                    right: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0',
+                        range: [22, 23],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 23 }
+                        }
+                    },
+                    range: [18, 23],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 23 }
+                    }
+                },
+                range: [18, 23],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 23 }
+                }
+            }],
+            range: [16, 23],
+            loc: {
+                start: { line: 1, column: 16 },
+                end: { line: 1, column: 23 }
+            },
+            tokens: [{
+                type: 'Punctuator',
+                value: ';',
+                range: [16, 17],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 17 }
+                }
+            }, {
+                type: 'Identifier',
+                value: 'i',
+                range: [18, 19],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 19 }
+                }
+            }, {
+                type: 'Punctuator',
+                value: '--',
+                range: [19, 21],
+                loc: {
+                    start: { line: 1, column: 19 },
+                    end: { line: 1, column: 21 }
+                }
+            }, {
+                type: 'Punctuator',
+                value: '>',
+                range: [21, 22],
+                loc: {
+                    start: { line: 1, column: 21 },
+                    end: { line: 1, column: 22 }
+                }
+            }, {
+                type: 'Numeric',
+                value: '0',
+                range: [22, 23],
+                loc: {
+                    start: { line: 1, column: 22 },
+                    end: { line: 1, column: 23 }
+                }
+            }]
+
+        },
+
+        'while (i-->0) {}': {
+            type: 'WhileStatement',
+            test: {
+                type: 'BinaryExpression',
+                operator: '>',
+                left: {
+                    type: 'UpdateExpression',
+                    operator: '--',
+                    argument: {
+                        type: 'Identifier',
+                        name: 'i',
+                        range: [7, 8],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 8 }
+                        }
+                    },
+                    prefix: false,
+                    range: [7, 10],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 10 }
+                    }
+                },
+                right: {
+                    type: 'Literal',
+                    value: 0,
+                    raw: '0',
+                    range: [11, 12],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [7, 12],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [14, 16],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 16 }
+                }
+            },
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
+        }
     },
 
     'Numeric Literals': {
