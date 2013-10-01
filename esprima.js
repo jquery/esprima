@@ -1055,6 +1055,8 @@ parseStatement: true, parseSourceElement: true */
                     throwError({}, Messages.UnterminatedRegExp);
                 }
                 str += ch;
+            } else if (isLineTerminator(ch.charCodeAt(0))) {
+                throwError({}, Messages.UnterminatedRegExp);
             } else if (classMarker) {
                 if (ch === ']') {
                     classMarker = false;
@@ -1065,8 +1067,6 @@ parseStatement: true, parseSourceElement: true */
                     break;
                 } else if (ch === '[') {
                     classMarker = true;
-                } else if (isLineTerminator(ch.charCodeAt(0))) {
-                    throwError({}, Messages.UnterminatedRegExp);
                 }
             }
         }
