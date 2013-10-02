@@ -679,7 +679,7 @@ var harmonyTestFixture = {
                     type: 'TemplateElement',
                     value: {
                         raw: '\n\r\n',
-                        cooked: ''
+                        cooked: '\n\n'
                     },
                     tail: true,
                     range: [0, 5],
