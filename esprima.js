@@ -1372,9 +1372,9 @@ parseStatement: true, parseSourceElement: true */
         },
 
         processComment: function (node) {
-            var i, attacher, comment, pos, len;
+            var i, attacher, pos, len, candidate;
 
-            if (typeof node.type === 'undefined') {
+            if (typeof node.type === 'undefined' || node.type === Syntax.Program) {
                 return;
             }
 
@@ -1383,23 +1383,24 @@ parseStatement: true, parseSourceElement: true */
 
             for (i = 0; i < extra.pendingComments.length; ++i) {
                 attacher = extra.pendingComments[i];
-                comment = attacher.comment;
-                pos = attacher.leading ? attacher.leading.range[0] : attacher.range[0];
-                if (node.type !== Syntax.Program && node.range[0] >= pos) {
-                    if (attacher.leading) {
-                        len = attacher.leading.range[1] - attacher.leading.range[0];
-                        if ((node.range[1] - node.range[0]) >= len) {
+                if (node.range[0] >= attacher.comment.range[1]) {
+                    candidate = attacher.leading;
+                    if (candidate) {
+                        pos = candidate.range[0];
+                        len = candidate.range[1] - pos;
+                        if (node.range[0] <= pos && (node.range[1] - node.range[0] >= len)) {
                             attacher.leading = node;
                         }
                     } else {
                         attacher.leading = node;
                     }
                 }
-                pos = attacher.trailing ? attacher.trailing.range[0] : attacher.range[0];
-                if (node.type !== Syntax.Program && node.range[1] <= pos) {
-                    if (attacher.trailing) {
-                        len = attacher.trailing.range[1] - attacher.trailing.range[0];
-                        if ((node.range[1] - node.range[0]) >= len) {
+                if (node.range[1] <= attacher.comment.range[0]) {
+                    candidate = attacher.trailing;
+                    if (candidate) {
+                        pos = candidate.range[0];
+                        len = candidate.range[1] - pos;
+                        if (node.range[0] <= pos && (node.range[1] - node.range[0] >= len)) {
                             attacher.trailing = node;
                         }
                     } else {
