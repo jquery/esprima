@@ -364,7 +364,8 @@ parseStatement: true, parseSourceElement: true */
         if (extra.attachComment) {
             attacher = {
                 comment: comment,
-                candidate: null,
+                leading: null,
+                trailing: null,
                 range: [start, end]
             };
             extra.pendingComments.push(attacher);
@@ -1376,18 +1377,33 @@ parseStatement: true, parseSourceElement: true */
             if (typeof node.type === 'undefined') {
                 return;
             }
+
+            // Check for possible additional trailing comments.
+            peek();
+
             for (i = 0; i < extra.pendingComments.length; ++i) {
                 attacher = extra.pendingComments[i];
                 comment = attacher.comment;
-                pos = attacher.candidate ? attacher.candidate.range[0] : attacher.range[0];
+                pos = attacher.leading ? attacher.leading.range[0] : attacher.range[0];
                 if (node.type !== Syntax.Program && node.range[0] >= pos) {
-                    if (attacher.candidate) {
-                        len = attacher.candidate.range[1] - attacher.candidate.range[0];
+                    if (attacher.leading) {
+                        len = attacher.leading.range[1] - attacher.leading.range[0];
                         if ((node.range[1] - node.range[0]) >= len) {
-                            attacher.candidate = node;
+                            attacher.leading = node;
                         }
                     } else {
-                        attacher.candidate = node;
+                        attacher.leading = node;
+                    }
+                }
+                pos = attacher.trailing ? attacher.trailing.range[0] : attacher.range[0];
+                if (node.type !== Syntax.Program && node.range[1] <= pos) {
+                    if (attacher.trailing) {
+                        len = attacher.trailing.range[1] - attacher.trailing.range[0];
+                        if ((node.range[1] - node.range[0]) >= len) {
+                            attacher.trailing = node;
+                        }
+                    } else {
+                        attacher.trailing = node;
                     }
                 }
             }
@@ -3522,17 +3538,24 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function attachComments() {
-        var i, attacher, comment, node;
+        var i, attacher, comment, leading, trailing;
 
         for (i = 0; i < extra.pendingComments.length; ++i) {
             attacher = extra.pendingComments[i];
             comment = attacher.comment;
-            node = attacher.candidate;
-            if (node) {
-                if (typeof node.leadingComments === 'undefined') {
-                    node.leadingComments = [];
+            leading = attacher.leading;
+            if (leading) {
+                if (typeof leading.leadingComments === 'undefined') {
+                    leading.leadingComments = [];
                 }
-                node.leadingComments.push(attacher.comment);
+                leading.leadingComments.push(attacher.comment);
+            }
+            trailing = attacher.trailing;
+            if (trailing) {
+                if (typeof trailing.trailingComments === 'undefined') {
+                    trailing.trailingComments = [];
+                }
+                trailing.trailingComments.push(attacher.comment);
             }
         }
         extra.pendingComments = [];
@@ -3587,8 +3610,11 @@ parseStatement: true, parseSourceElement: true */
                         column: this.marker[5]
                     }
                 };
+                node = delegate.postProcess(node);
             }
-            node = delegate.postProcess(node);
+            if (extra.attachComment) {
+                delegate.processComment(node);
+            }
         }
     };
 
