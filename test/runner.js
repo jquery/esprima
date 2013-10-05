@@ -74,7 +74,7 @@ function errorToObject(e) {
 function hasAttachedComment(syntax) {
     var key;
     for (key in syntax) {
-        if (key === 'leadingComments') {
+        if (key === 'leadingComments' || key === 'trailingComments') {
             return true;
         }
        if (typeof syntax[key] === 'object' && syntax[key] !== null) {

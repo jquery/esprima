@@ -3708,7 +3708,16 @@ var testFixture = {
                     loc: {
                         start: { line: 1, column: 0 },
                         end: { line: 1, column: 2 }
-                    }
+                    },
+                    trailingComments: [{
+                        type: 'Line',
+                        value: ' line comment',
+                        range: [3, 18],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 18 }
+                        }
+                    }]
                 },
                 range: [0, 18],
                 loc: {
@@ -3933,6 +3942,51 @@ var testFixture = {
             }]
         },
 
+        '42/**/': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [0, 2],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 2 }
+                    },
+                    trailingComments: [{
+                        type: 'Block',
+                        value: '',
+                        range: [2, 6],
+                        loc: {
+                            start: { line: 1, column: 2 },
+                            end: { line: 1, column: 6 }
+                        }
+                    }]
+                },
+                range: [0, 6],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 6 }
+                }
+            }],
+            range: [0, 6],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 6 }
+            },
+            comments: [{
+                type: 'Block',
+                value: '',
+                range: [2, 6],
+                loc: {
+                    start: { line: 1, column: 2 },
+                    end: { line: 1, column: 6 }
+                }
+            }]
+        },
+
         '// Hello, world!\n\n//   Another hello\n42': {
             type: 'Program',
             body: [{
@@ -3990,6 +4044,85 @@ var testFixture = {
                 loc: {
                     start: { line: 3, column: 0 },
                     end: { line: 3, column: 18 }
+                }
+            }]
+        },
+
+        'if (x) { doThat() // Some comment\n }': {
+            type: 'Program',
+            body: [{
+                type: 'IfStatement',
+                test: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                consequent: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'doThat',
+                                range: [9, 15],
+                                loc: {
+                                    start: { line: 1, column: 9 },
+                                    end: { line: 1, column: 15 }
+                                }
+                            },
+                            'arguments': [],
+                            range: [9, 17],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 17 }
+                            },
+                            trailingComments: [{
+                                type: 'Line',
+                                value: ' Some comment',
+                                range: [18, 33],
+                                loc: {
+                                    start: { line: 1, column: 18 },
+                                    end: { line: 1, column: 33 }
+                                }
+                            }]
+                        },
+                        range: [9, 35],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 2, column: 1 }
+                        }
+                    }],
+                    range: [7, 36],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 2, column: 2 }
+                    }
+                },
+                alternate: null,
+                range: [0, 36],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 2, column: 2 }
+                }
+            }],
+            range: [0, 36],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 2, column: 2 }
+            },
+            comments: [{
+                type: 'Line',
+                value: ' Some comment',
+                range: [18, 33],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 33 }
                 }
             }]
         },
@@ -4152,6 +4285,85 @@ var testFixture = {
             }]
         },
 
+        'if (x) { doThat() /* Some comment */ }': {
+            type: 'Program',
+            body: [{
+                type: 'IfStatement',
+                test: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                consequent: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'doThat',
+                                range: [9, 15],
+                                loc: {
+                                    start: { line: 1, column: 9 },
+                                    end: { line: 1, column: 15 }
+                                }
+                            },
+                            'arguments': [],
+                            range: [9, 17],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 17 }
+                            },
+                            trailingComments: [{
+                                type: 'Block',
+                                value: ' Some comment ',
+                                range: [18, 36],
+                                loc: {
+                                    start: { line: 1, column: 18 },
+                                    end: { line: 1, column: 36 }
+                                }
+                            }]
+                        },
+                        range: [9, 37],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 37 }
+                        }
+                    }],
+                    range: [7, 38],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 38 }
+                    }
+                },
+                alternate: null,
+                range: [0, 38],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 38 }
+                }
+            }],
+            range: [0, 38],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            },
+            comments: [{
+                type: 'Block',
+                value: ' Some comment ',
+                range: [18, 36],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 36 }
+                }
+            }]
+        },
+
         'switch (answer) { case 42: /* perfect */ bingo() }': {
             type: 'Program',
             body: [{
@@ -4236,6 +4448,94 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 27 },
                     end: { line: 1, column: 40 }
+                }
+            }]
+        },
+
+        'switch (answer) { case 42: bingo() /* perfect */ }': {
+            type: 'Program',
+            body: [{
+                type: 'SwitchStatement',
+                discriminant: {
+                    type: 'Identifier',
+                    name: 'answer',
+                    range: [8, 14],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                cases: [{
+                    type: 'SwitchCase',
+                    test: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42',
+                        range: [23, 25],
+                        loc: {
+                            start: { line: 1, column: 23 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    consequent: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'bingo',
+                                range: [27, 32],
+                                loc: {
+                                    start: { line: 1, column: 27 },
+                                    end: { line: 1, column: 32 }
+                                }
+                            },
+                            'arguments': [],
+                            range: [27, 34],
+                            loc: {
+                                start: { line: 1, column: 27 },
+                                end: { line: 1, column: 34 }
+                            },
+                            trailingComments: [{
+                                type: 'Block',
+                                value: ' perfect ',
+                                range: [35, 48],
+                                loc: {
+                                    start: { line: 1, column: 35 },
+                                    end: { line: 1, column: 48 }
+                                }
+                            }]
+                        },
+                        range: [27, 49],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 49 }
+                        }
+                    }],
+                    range: [18, 49],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 49 }
+                    }
+                }],
+                range: [0, 50],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 50 }
+                }
+            }],
+            range: [0, 50],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 50 }
+            },
+            comments: [{
+                type: 'Block',
+                value: ' perfect ',
+                range: [35, 48],
+                loc: {
+                    start: { line: 1, column: 35 },
+                    end: { line: 1, column: 48 }
                 }
             }]
         },
