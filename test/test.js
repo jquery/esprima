@@ -4540,6 +4540,405 @@ var testFixture = {
             }]
         },
 
+        '/* header */ (function(){ var version = 1; }).call(this)': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'MemberExpression',
+                        computed: false,
+                        object: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'VariableDeclaration',
+                                    declarations: [{
+                                        type: 'VariableDeclarator',
+                                        id: {
+                                            type: 'Identifier',
+                                            name: 'version',
+                                            range: [30, 37],
+                                            loc: {
+                                                start: { line: 1, column: 30 },
+                                                end: { line: 1, column: 37 }
+                                            }
+                                        },
+                                        init: {
+                                            type: 'Literal',
+                                            value: 1,
+                                            raw: '1',
+                                            range: [40, 41],
+                                            loc: {
+                                                start: { line: 1, column: 40 },
+                                                end: { line: 1, column: 41 }
+                                            }
+                                        },
+                                        range: [30, 41],
+                                        loc: {
+                                            start: { line: 1, column: 30 },
+                                            end: { line: 1, column: 41 }
+                                        }
+                                    }],
+                                    kind: 'var',
+                                    range: [26, 42],
+                                    loc: {
+                                        start: { line: 1, column: 26 },
+                                        end: { line: 1, column: 42 }
+                                    }
+                                }],
+                                range: [24, 44],
+                                loc: {
+                                    start: { line: 1, column: 24 },
+                                    end: { line: 1, column: 44 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [14, 44],
+                            loc: {
+                                start: { line: 1, column: 14 },
+                                end: { line: 1, column: 44 }
+                            }
+                        },
+                        property: {
+                            type: 'Identifier',
+                            name: 'call',
+                            range: [46, 50],
+                            loc: {
+                                start: { line: 1, column: 46 },
+                                end: { line: 1, column: 50 }
+                            }
+                        },
+                        range: [13, 50],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 50 }
+                        }
+                    },
+                    'arguments': [{
+                        type: 'ThisExpression',
+                        range: [51, 55],
+                        loc: {
+                            start: { line: 1, column: 51 },
+                            end: { line: 1, column: 55 }
+                        }
+                    }],
+                    range: [13, 56],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 56 }
+                    }
+                },
+                range: [13, 56],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 56 }
+                },
+                leadingComments: [{
+                    type: 'Block',
+                    value: ' header ',
+                    range: [0, 12],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 12 }
+                    }
+                }]
+            }],
+            range: [13, 56],
+            loc: {
+                start: { line: 1, column: 13 },
+                end: { line: 1, column: 56 }
+            },
+            comments: [{
+                type: 'Block',
+                value: ' header ',
+                range: [0, 12],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 12 }
+                }
+            }]
+        },
+
+        '(function(){ var version = 1; /* sync */ }).call(this)': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'MemberExpression',
+                        computed: false,
+                        object: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'VariableDeclaration',
+                                    declarations: [{
+                                        type: 'VariableDeclarator',
+                                        id: {
+                                            type: 'Identifier',
+                                            name: 'version',
+                                            range: [17, 24],
+                                            loc: {
+                                                start: { line: 1, column: 17 },
+                                                end: { line: 1, column: 24 }
+                                            }
+                                        },
+                                        init: {
+                                            type: 'Literal',
+                                            value: 1,
+                                            raw: '1',
+                                            range: [27, 28],
+                                            loc: {
+                                                start: { line: 1, column: 27 },
+                                                end: { line: 1, column: 28 }
+                                            }
+                                        },
+                                        range: [17, 28],
+                                        loc: {
+                                            start: { line: 1, column: 17 },
+                                            end: { line: 1, column: 28 }
+                                        }
+                                    }],
+                                    kind: 'var',
+                                    range: [13, 29],
+                                    loc: {
+                                        start: { line: 1, column: 13 },
+                                        end: { line: 1, column: 29 }
+                                    },
+                                    trailingComments: [{
+                                        type: 'Block',
+                                        value: ' sync ',
+                                        range: [30, 40],
+                                        loc: {
+                                            start: { line: 1, column: 30 },
+                                            end: { line: 1, column: 40 }
+                                        }
+                                    }]
+                                }],
+                                range: [11, 42],
+                                loc: {
+                                    start: { line: 1, column: 11 },
+                                    end: { line: 1, column: 42 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [1, 42],
+                            loc: {
+                                start: { line: 1, column: 1 },
+                                end: { line: 1, column: 42 }
+                            }
+                        },
+                        property: {
+                            type: 'Identifier',
+                            name: 'call',
+                            range: [44, 48],
+                            loc: {
+                                start: { line: 1, column: 44 },
+                                end: { line: 1, column: 48 }
+                            },
+                            leadingComments: [{
+                                type: 'Block',
+                                value: ' sync ',
+                                range: [30, 40],
+                                loc: {
+                                    start: { line: 1, column: 30 },
+                                    end: { line: 1, column: 40 }
+                                }
+                            }]
+                        },
+                        range: [0, 48],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 48 }
+                        }
+                    },
+                    'arguments': [{
+                        type: 'ThisExpression',
+                        range: [49, 53],
+                        loc: {
+                            start: { line: 1, column: 49 },
+                            end: { line: 1, column: 53 }
+                        }
+                    }],
+                    range: [0, 54],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 54 }
+                    }
+                },
+                range: [0, 54],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 54 }
+                }
+            }],
+            range: [0, 54],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 54 }
+            },
+            comments: [{
+                type: 'Block',
+                value: ' sync ',
+                range: [30, 40],
+                loc: {
+                    start: { line: 1, column: 30 },
+                    end: { line: 1, column: 40 }
+                }
+            }]
+        },
+
+        'function f() { /* infinite */ while (true) { } /* bar */ var each; }': {
+            type: 'Program',
+            body: [{
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'f',
+                    range: [9, 10],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 10 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'WhileStatement',
+                        test: {
+                            type: 'Literal',
+                            value: true,
+                            raw: 'true',
+                            range: [37, 41],
+                            loc: {
+                                start: { line: 1, column: 37 },
+                                end: { line: 1, column: 41 }
+                            }
+                        },
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [43, 46],
+                            loc: {
+                                start: { line: 1, column: 43 },
+                                end: { line: 1, column: 46 }
+                            }
+                        },
+                        range: [30, 46],
+                        loc: {
+                            start: { line: 1, column: 30 },
+                            end: { line: 1, column: 46 }
+                        },
+                        leadingComments: [{
+                            type: 'Block',
+                            value: ' infinite ',
+                            range: [15, 29],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 29 }
+                            }
+                        }],
+                        trailingComments: [{
+                            type: 'Block',
+                            value: ' bar ',
+                            range: [47, 56],
+                            loc: {
+                                start: { line: 1, column: 47 },
+                                end: { line: 1, column: 56 }
+                            }
+                        }]
+                    }, {
+                        type: 'VariableDeclaration',
+                        declarations: [{
+                            type: 'VariableDeclarator',
+                            id: {
+                                type: 'Identifier',
+                                name: 'each',
+                                range: [61, 65],
+                                loc: {
+                                    start: { line: 1, column: 61 },
+                                    end: { line: 1, column: 65 }
+                                }
+                            },
+                            init: null,
+                            range: [61, 65],
+                            loc: {
+                                start: { line: 1, column: 61 },
+                                end: { line: 1, column: 65 }
+                            }
+                        }],
+                        kind: 'var',
+                        range: [57, 66],
+                        loc: {
+                            start: { line: 1, column: 57 },
+                            end: { line: 1, column: 66 }
+                        },
+                        leadingComments: [{
+                            type: 'Block',
+                            value: ' bar ',
+                            range: [47, 56],
+                            loc: {
+                                start: { line: 1, column: 47 },
+                                end: { line: 1, column: 56 }
+                            }
+                        }]
+                    }],
+                    range: [13, 68],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 68 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [0, 68],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 68 }
+                }
+            }],
+            range: [0, 68],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 68 }
+            },
+            comments: [{
+                type: 'Block',
+                value: ' infinite ',
+                range: [15, 29],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 29 }
+                }
+            }, {
+                type: 'Block',
+                value: ' bar ',
+                range: [47, 56],
+                loc: {
+                    start: { line: 1, column: 47 },
+                    end: { line: 1, column: 56 }
+                }
+            }]
+        },
+
         '<!-- foo': {
             type: 'Program',
             body: [],
