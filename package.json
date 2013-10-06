@@ -27,7 +27,9 @@
     "devDependencies": {
         "jslint": "~0.1.9",
         "istanbul": "~0.1.27",
-        "complexity-report": "~0.6.1"
+        "complexity-report": "~0.6.1",
+        "regenerate": "~0.5.4",
+        "unicode-6.3.0": "~0.1.0"
     },
     "keywords": [
         "ast",
@@ -37,6 +39,8 @@
         "syntax"
     ],
     "scripts": {
+        "generate-regex": "node tools/generate-identifier-regex.js",
+
         "test": "npm run-script lint && node test/run.js && npm run-script coverage && npm run-script complexity",
         "lint": "node_modules/jslint/bin/jslint.js esprima.js",
         "coverage": "npm run-script analyze-coverage && npm run-script check-coverage",
