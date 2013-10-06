@@ -336,7 +336,7 @@ parseStatement: true, parseSourceElement: true */
     // 7.4 Comments
 
     function addComment(type, value, start, end, loc) {
-        var comment;
+        var comment, attacher;
 
         assert(typeof start === 'number', 'Comment must have valid position');
 
@@ -360,6 +360,16 @@ parseStatement: true, parseSourceElement: true */
             comment.loc = loc;
         }
         extra.comments.push(comment);
+
+        if (extra.attachComment) {
+            attacher = {
+                comment: comment,
+                leading: null,
+                trailing: null,
+                range: [start, end]
+            };
+            extra.pendingComments.push(attacher);
+        }
     }
 
     function skipSingleLineComment() {
@@ -454,8 +464,9 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function skipComment() {
-        var ch;
+        var ch, start;
 
+        start = (index === 0);
         while (index < length) {
             ch = source.charCodeAt(index);
 
@@ -468,16 +479,27 @@ parseStatement: true, parseSourceElement: true */
                 }
                 ++lineNumber;
                 lineStart = index;
+                start = true;
             } else if (ch === 47) { // 47 is '/'
                 ch = source.charCodeAt(index + 1);
                 if (ch === 47) {
                     ++index;
                     ++index;
                     skipSingleLineComment();
+                    start = true;
                 } else if (ch === 42) {  // 42 is '*'
                     ++index;
                     ++index;
                     skipMultiLineComment();
+                } else {
+                    break;
+                }
+            } else if (start && ch === 45) { // 45 is '-'
+                // 62 is '>'
+                if ((source.charCodeAt(index + 1) === 45) && (source.charCodeAt(index + 2) === 62)) {
+                    // '-->' is a single-line comment
+                    index += 3;
+                    skipSingleLineComment();
                 } else {
                     break;
                 }
@@ -1034,6 +1056,8 @@ parseStatement: true, parseSourceElement: true */
                     throwError({}, Messages.UnterminatedRegExp);
                 }
                 str += ch;
+            } else if (isLineTerminator(ch.charCodeAt(0))) {
+                throwError({}, Messages.UnterminatedRegExp);
             } else if (classMarker) {
                 if (ch === ']') {
                     classMarker = false;
@@ -1044,8 +1068,6 @@ parseStatement: true, parseSourceElement: true */
                     break;
                 } else if (ch === '[') {
                     classMarker = true;
-                } else if (isLineTerminator(ch.charCodeAt(0))) {
-                    throwError({}, Messages.UnterminatedRegExp);
                 }
             }
         }
@@ -1349,6 +1371,45 @@ parseStatement: true, parseSourceElement: true */
             }
         },
 
+        processComment: function (node) {
+            var i, attacher, pos, len, candidate;
+
+            if (typeof node.type === 'undefined' || node.type === Syntax.Program) {
+                return;
+            }
+
+            // Check for possible additional trailing comments.
+            peek();
+
+            for (i = 0; i < extra.pendingComments.length; ++i) {
+                attacher = extra.pendingComments[i];
+                if (node.range[0] >= attacher.comment.range[1]) {
+                    candidate = attacher.leading;
+                    if (candidate) {
+                        pos = candidate.range[0];
+                        len = candidate.range[1] - pos;
+                        if (node.range[0] <= pos && (node.range[1] - node.range[0] >= len)) {
+                            attacher.leading = node;
+                        }
+                    } else {
+                        attacher.leading = node;
+                    }
+                }
+                if (node.range[1] <= attacher.comment.range[0]) {
+                    candidate = attacher.trailing;
+                    if (candidate) {
+                        pos = candidate.range[0];
+                        len = candidate.range[1] - pos;
+                        if (node.range[0] <= pos && (node.range[1] - node.range[0] >= len)) {
+                            attacher.trailing = node;
+                        }
+                    } else {
+                        attacher.trailing = node;
+                    }
+                }
+            }
+        },
+
         markEnd: function (node) {
             if (extra.range) {
                 node.range = [state.markerStack.pop(), index];
@@ -1365,6 +1426,9 @@ parseStatement: true, parseSourceElement: true */
                     }
                 };
                 this.postProcess(node);
+            }
+            if (extra.attachComment) {
+                this.processComment(node);
             }
             return node;
         },
@@ -3474,6 +3538,30 @@ parseStatement: true, parseSourceElement: true */
         return delegate.markEnd(delegate.createProgram(body));
     }
 
+    function attachComments() {
+        var i, attacher, comment, leading, trailing;
+
+        for (i = 0; i < extra.pendingComments.length; ++i) {
+            attacher = extra.pendingComments[i];
+            comment = attacher.comment;
+            leading = attacher.leading;
+            if (leading) {
+                if (typeof leading.leadingComments === 'undefined') {
+                    leading.leadingComments = [];
+                }
+                leading.leadingComments.push(attacher.comment);
+            }
+            trailing = attacher.trailing;
+            if (trailing) {
+                if (typeof trailing.trailingComments === 'undefined') {
+                    trailing.trailingComments = [];
+                }
+                trailing.trailingComments.push(attacher.comment);
+            }
+        }
+        extra.pendingComments = [];
+    }
+
     function filterTokenLocation() {
         var i, entry, token, tokens = [];
 
@@ -3523,8 +3611,11 @@ parseStatement: true, parseSourceElement: true */
                         column: this.marker[5]
                     }
                 };
+                node = delegate.postProcess(node);
             }
-            node = delegate.postProcess(node);
+            if (extra.attachComment) {
+                delegate.processComment(node);
+            }
         }
     };
 
@@ -3666,6 +3757,7 @@ parseStatement: true, parseSourceElement: true */
         if (typeof options !== 'undefined') {
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
+            extra.attachComment = (typeof options.attachComment === 'boolean') && options.attachComment;
 
             if (extra.loc && options.source !== null && options.source !== undefined) {
                 extra.source = toString(options.source);
@@ -3679,6 +3771,11 @@ parseStatement: true, parseSourceElement: true */
             }
             if (typeof options.tolerant === 'boolean' && options.tolerant) {
                 extra.errors = [];
+            }
+            if (extra.attachComment) {
+                extra.range = true;
+                extra.pendingComments = [];
+                extra.comments = [];
             }
         }
 
@@ -3704,6 +3801,9 @@ parseStatement: true, parseSourceElement: true */
             }
             if (typeof extra.errors !== 'undefined') {
                 program.errors = extra.errors;
+            }
+            if (extra.attachComment) {
+                attachComments();
             }
         } catch (e) {
             throw e;

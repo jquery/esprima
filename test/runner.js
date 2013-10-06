@@ -71,6 +71,21 @@ function errorToObject(e) {
     };
 }
 
+function hasAttachedComment(syntax) {
+    var key;
+    for (key in syntax) {
+        if (key === 'leadingComments' || key === 'trailingComments') {
+            return true;
+        }
+       if (typeof syntax[key] === 'object' && syntax[key] !== null) {
+           if (hasAttachedComment(syntax[key])) {
+               return true;
+           }
+       }
+    }
+    return false;
+}
+
 function testParse(esprima, code, syntax) {
     'use strict';
     var expected, tree, actual, options, StringObject, i, len, err;
@@ -87,6 +102,10 @@ function testParse(esprima, code, syntax) {
         tolerant: (typeof syntax.errors !== 'undefined'),
         source: null
     };
+
+    if (options.comment) {
+        options.attachComment = hasAttachedComment(syntax);
+    }
 
     if (typeof syntax.tokens !== 'undefined') {
         if (syntax.tokens.length > 0) {
