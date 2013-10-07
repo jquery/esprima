@@ -38,7 +38,7 @@ parsers = [
 ];
 
 fixtureList = [
-    'Underscore 1.4.1',
+    'Underscore 1.5.2',
     'Backbone 1.0.0',
     'jQuery 1.9.1'
 ];
