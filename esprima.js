@@ -1118,7 +1118,6 @@ parseStatement: true, parseSourceElement: true */
             throwError({}, Messages.InvalidRegExp);
         }
 
-        peek();
 
 
         if (extra.tokenize) {
@@ -2179,6 +2178,7 @@ parseStatement: true, parseSourceElement: true */
             } else {
                 expr = delegate.createLiteral(scanRegExp());
             }
+            peek();
         }
 
         if (expr) {
