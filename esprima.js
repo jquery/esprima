@@ -1467,8 +1467,6 @@ parseYieldExpression: true
             value = null;
         }
 
-        peek();
-
         if (extra.tokenize) {
             return {
                 type: Token.RegularExpression,
@@ -2852,7 +2850,9 @@ parseYieldExpression: true
 
         if (match('/') || match('/=')) {
             marker = markerCreate();
-            return markerApply(marker, delegate.createLiteral(scanRegExp()));
+            expr = delegate.createLiteral(scanRegExp());
+            peek();
+            return markerApply(marker, expr);
         }
 
         if (type === Token.Template) {

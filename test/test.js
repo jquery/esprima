@@ -18720,24 +18720,6 @@ var testFixture = {
                 }
             },
             {
-                "type": "Punctuator",
-                "value": ")",
-                "range": [
-                    13,
-                    14
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 13
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 14
-                    }
-                }
-            },
-            {
                 "type": "RegularExpression",
                 "value": "/42/",
                 "regex": {
@@ -18867,24 +18849,6 @@ var testFixture = {
                     "end": {
                         "line": 1,
                         "column": 12
-                    }
-                }
-            },
-            {
-                "type": "Punctuator",
-                "value": "}",
-                "range": [
-                    18,
-                    19
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 18
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 19
                     }
                 }
             },
