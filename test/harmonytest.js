@@ -3296,7 +3296,6 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 19 }
                 }
             },
-            default: false,
             specifiers: null,
             source: null,
             range: [ 0, 19 ],
@@ -3343,52 +3342,12 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 25 }
                 }
             },
-            default: false,
             specifiers: null,
             source: null,
             range: [ 0, 25 ],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 25 }
-            }
-        },
-
-        'export var default': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'default',
-                        range: [11, 18],
-                        loc: {
-                            start: { line: 1, column: 11 },
-                            end: { line: 1, column: 18 }
-                        }
-                    },
-                    init: null,
-                    range: [11, 18],
-                    loc: {
-                        start: { line: 1, column: 11 },
-                        end: { line: 1, column: 18 }
-                    }
-                }],
-                kind: 'var',
-                range: [7, 18],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 18 }
-                }
-            },
-            default: false,
-            specifiers: null,
-            source: null,
-            range: [0, 18],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 18 }
             }
         },
 
@@ -3421,7 +3380,6 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 19 }
                 }
             },
-            default: false,
             specifiers: null,
             source: null,
             range: [ 0, 19 ],
@@ -3468,61 +3426,12 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 25 }
                 }
             },
-            default: false,
             specifiers: null,
             source: null,
             range: [ 0, 25 ],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 25 }
-            }
-        },
-
-        'export let default = 0': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'default',
-                        range: [11, 18],
-                        loc: {
-                            start: { line: 1, column: 11 },
-                            end: { line: 1, column: 18 }
-                        }
-                    },
-                    init: {
-                        type: 'Literal',
-                        value: 0,
-                        raw: '0',
-                        range: [21, 22],
-                        loc: {
-                            start: { line: 1, column: 21 },
-                            end: { line: 1, column: 22 }
-                        }
-                    },
-                    range: [11, 22],
-                    loc: {
-                        start: { line: 1, column: 11 },
-                        end: { line: 1, column: 22 }
-                    }
-                }],
-                kind: 'let',
-                range: [7, 22],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 22 }
-                }
-            },
-            default: false,
-            specifiers: null,
-            source: null,
-            range: [0, 22],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 22 }
             }
         },
 
@@ -3563,61 +3472,12 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 27 }
                 }
             },
-            default: false,
             specifiers: null,
             source: null,
             range: [ 0, 27 ],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 27 }
-            }
-        },
-
-        'export const default = 0': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'default',
-                        range: [13, 20],
-                        loc: {
-                            start: { line: 1, column: 13 },
-                            end: { line: 1, column: 20 }
-                        }
-                    },
-                    init: {
-                        type: 'Literal',
-                        value: 0,
-                        raw: '0',
-                        range: [23, 24],
-                        loc: {
-                            start: { line: 1, column: 23 },
-                            end: { line: 1, column: 24 }
-                        }
-                    },
-                    range: [13, 24],
-                    loc: {
-                        start: { line: 1, column: 13 },
-                        end: { line: 1, column: 24 }
-                    }
-                }],
-                kind: 'const',
-                range: [7, 24],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 24 }
-                }
-            },
-            default: false,
-            specifiers: null,
-            source: null,
-            range: [0, 24],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 24 }
             }
         },
 
@@ -3654,56 +3514,12 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 27 }
                 }
             },
-            default: false,
             specifiers: null,
             source: null,
             range: [ 0, 27 ],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 27 }
-            }
-        },
-
-        'export function default() {}': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'FunctionDeclaration',
-                id: {
-                    type: 'Identifier',
-                    name: 'default',
-                    range: [16, 23],
-                    loc: {
-                        start: { line: 1, column: 16 },
-                        end: { line: 1, column: 23 }
-                    }
-                },
-                params: [],
-                defaults: [],
-                body: {
-                    type: 'BlockStatement',
-                    body: [],
-                    range: [26, 28],
-                    loc: {
-                        start: { line: 1, column: 26 },
-                        end: { line: 1, column: 28 }
-                    }
-                },
-                rest: null,
-                generator: false,
-                expression: false,
-                range: [7, 28],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 28 }
-                }
-            },
-            default: false,
-            specifiers: null,
-            source: null,
-            range: [0, 28],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 28 }
             }
         },
 
@@ -3736,7 +3552,6 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 21 }
                 }
             },
-            default: false,
             specifiers: null,
             source: null,
             range: [ 0, 21 ],
@@ -3746,79 +3561,35 @@ var harmonyTestFixture = {
             }
         },
 
-        'export class default {}': {
+        'export default = 42': {
             type: 'ExportDeclaration',
-            declaration: {
-                type: 'ClassDeclaration',
+            declaration: [{
+                type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
                     name: 'default',
-                    range: [13, 20],
+                    range: [7, 14],
                     loc: {
-                        start: { line: 1, column: 13 },
-                        end: { line: 1, column: 20 }
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 14 }
                     }
                 },
-                superClass: null,
-                body: {
-                    type: 'ClassBody',
-                    body: [],
-                    range: [21, 23],
+                init: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [17, 19],
                     loc: {
-                        start: { line: 1, column: 21 },
-                        end: { line: 1, column: 23 }
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 19 }
                     }
                 },
-                range: [7, 23],
+                range: [7, 19],
                 loc: {
                     start: { line: 1, column: 7 },
-                    end: { line: 1, column: 23 }
-                }
-            },
-            default: false,
-            specifiers: null,
-            source: null,
-            range: [0, 23],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 23 }
-            }
-        },
-
-        'export default answer;': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'Identifier',
-                name: 'answer',
-                range: [15, 21],
-                loc: {
-                    start: { line: 1, column: 15 },
-                    end: { line: 1, column: 21 }
-                }
-            },
-            default: true,
-            specifiers: null,
-            source: null,
-            range: [0, 22],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 22 }
-            }
-        },
-
-        'export default = 42': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'Literal',
-                value: 42,
-                raw: '42',
-                range: [17, 19],
-                loc: {
-                    start: { line: 1, column: 17 },
                     end: { line: 1, column: 19 }
                 }
-            },
-            default: true,
+            }],
             specifiers: null,
             source: null,
             range: [0, 19],
@@ -3828,262 +3599,9 @@ var harmonyTestFixture = {
             }
         },
 
-        'export default var answer': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'answer',
-                        range: [19, 25],
-                        loc: {
-                            start: { line: 1, column: 19 },
-                            end: { line: 1, column: 25 }
-                        }
-                    },
-                    init: null,
-                    range: [19, 25],
-                    loc: {
-                        start: { line: 1, column: 19 },
-                        end: { line: 1, column: 25 }
-                    }
-                }],
-                kind: 'var',
-                range: [15, 25],
-                loc: {
-                    start: { line: 1, column: 15 },
-                    end: { line: 1, column: 25 }
-                }
-            },
-            'default': true,
-            specifiers: null,
-            source: null,
-            range: [0, 25],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 25 }
-            }
-        },
-
-        'export default let answer = 42': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'answer',
-                        range: [19, 25],
-                        loc: {
-                            start: { line: 1, column: 19 },
-                            end: { line: 1, column: 25 }
-                        }
-                    },
-                    init: {
-                        type: 'Literal',
-                        value: 42,
-                        raw: '42',
-                        range: [28, 30],
-                        loc: {
-                            start: { line: 1, column: 28 },
-                            end: { line: 1, column: 30 }
-                        }
-                    },
-                    range: [19, 30],
-                    loc: {
-                        start: { line: 1, column: 19 },
-                        end: { line: 1, column: 30 }
-                    }
-                }],
-                kind: 'let',
-                range: [15, 30],
-                loc: {
-                    start: { line: 1, column: 15 },
-                    end: { line: 1, column: 30 }
-                }
-            },
-            'default': true,
-            specifiers: null,
-            source: null,
-            range: [0, 30],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 30 }
-            }
-        },
-
-        'export default const answer = 42': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'answer',
-                        range: [21, 27],
-                        loc: {
-                            start: { line: 1, column: 21 },
-                            end: { line: 1, column: 27 }
-                        }
-                    },
-                    init: {
-                        type: 'Literal',
-                        value: 42,
-                        raw: '42',
-                        range: [30, 32],
-                        loc: {
-                            start: { line: 1, column: 30 },
-                            end: { line: 1, column: 32 }
-                        }
-                    },
-                    range: [21, 32],
-                    loc: {
-                        start: { line: 1, column: 21 },
-                        end: { line: 1, column: 32 }
-                    }
-                }],
-                kind: 'const',
-                range: [15, 32],
-                loc: {
-                    start: { line: 1, column: 15 },
-                    end: { line: 1, column: 32 }
-                }
-            },
-            'default': true,
-            specifiers: null,
-            source: null,
-            range: [0, 32],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 32 }
-            }
-        },
-
-        'export default function answer(){}': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'FunctionExpression',
-                id: {
-                    type: 'Identifier',
-                    name: 'answer',
-                    range: [24, 30],
-                    loc: {
-                        start: { line: 1, column: 24 },
-                        end: { line: 1, column: 30 }
-                    }
-                },
-                params: [],
-                defaults: [],
-                body: {
-                    type: 'BlockStatement',
-                    body: [],
-                    range: [32, 34],
-                    loc: {
-                        start: { line: 1, column: 32 },
-                        end: { line: 1, column: 34 }
-                    }
-                },
-                rest: null,
-                generator: false,
-                expression: false,
-                range: [15, 34],
-                loc: {
-                    start: { line: 1, column: 15 },
-                    end: { line: 1, column: 34 }
-                }
-            },
-            'default': true,
-            specifiers: null,
-            source: null,
-            range: [0, 34],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 34 }
-            }
-        },
-
-        'export default function() {}': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'FunctionExpression',
-                id: null,
-                params: [],
-                defaults: [],
-                body: {
-                    type: 'BlockStatement',
-                    body: [],
-                    range: [26, 28],
-                    loc: {
-                        start: { line: 1, column: 26 },
-                        end: { line: 1, column: 28 }
-                    }
-                },
-                rest: null,
-                generator: false,
-                expression: false,
-                range: [15, 28],
-                loc: {
-                    start: { line: 1, column: 15 },
-                    end: { line: 1, column: 28 }
-                }
-            },
-            'default': true,
-            specifiers: null,
-            source: null,
-            range: [0, 28],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 28 }
-            }
-        },
-
-        'export default class Universe {}': {
-            type: 'ExportDeclaration',
-            declaration: {
-                type: 'ClassDeclaration',
-                id: {
-                    type: 'Identifier',
-                    name: 'Universe',
-                    range: [21, 29],
-                    loc: {
-                        start: { line: 1, column: 21 },
-                        end: { line: 1, column: 29 }
-                    }
-                },
-                superClass: null,
-                body: {
-                    type: 'ClassBody',
-                    body: [],
-                    range: [30, 32],
-                    loc: {
-                        start: { line: 1, column: 30 },
-                        end: { line: 1, column: 32 }
-                    }
-                },
-                range: [15, 32],
-                loc: {
-                    start: { line: 1, column: 15 },
-                    end: { line: 1, column: 32 }
-                }
-            },
-            'default': true,
-            specifiers: null,
-            source: null,
-            range: [0, 32],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 32 }
-            }
-        },
-
         'export *': {
             type: 'ExportDeclaration',
             declaration: null,
-            default: false,
             specifiers: [{
                 type: 'ExportBatchSpecifier',
                 range: [7, 8],
@@ -4103,7 +3621,6 @@ var harmonyTestFixture = {
         'export * from "crypto"': {
             type: 'ExportDeclaration',
             declaration: null,
-            default: false,
             specifiers: [{
                 type: 'ExportBatchSpecifier',
                 range: [7, 8],
@@ -4132,7 +3649,6 @@ var harmonyTestFixture = {
         'export { encrypt }': {
             type: 'ExportDeclaration',
             declaration: null,
-            default: false,
             specifiers: [{
                 type: 'ExportSpecifier',
                 id: {
@@ -4162,7 +3678,6 @@ var harmonyTestFixture = {
         'export { encrypt, decrypt }': {
             type: 'ExportDeclaration',
             declaration: null,
-            default: false,
             specifiers: [{
                 type: 'ExportSpecifier',
                 id: {
@@ -4209,7 +3724,6 @@ var harmonyTestFixture = {
         'export { encrypt as default }': {
             type: 'ExportDeclaration',
             declaration: null,
-            default: false,
             specifiers: [{
                 type: 'ExportSpecifier',
                 id: {
@@ -4247,7 +3761,6 @@ var harmonyTestFixture = {
         'export { encrypt, decrypt as dec }': {
             type: 'ExportDeclaration',
             declaration: null,
-            default: false,
             specifiers: [{
                 type: 'ExportSpecifier',
                 id: {
@@ -4299,54 +3812,6 @@ var harmonyTestFixture = {
             }
         },
 
-        'module "a" { export default answer }': {
-            type: 'ModuleDeclaration',
-            id: {
-                type: 'Literal',
-                value: 'a',
-                raw: '"a"',
-                range: [7, 10],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 10 }
-                }
-            },
-            source: null,
-            body: {
-                type: 'BlockStatement',
-                body: [{
-                    type: 'ExportDeclaration',
-                    declaration: {
-                        type: 'Identifier',
-                        name: 'answer',
-                        range: [28, 34],
-                        loc: {
-                            start: { line: 1, column: 28 },
-                            end: { line: 1, column: 34 }
-                        }
-                    },
-                    default: true,
-                    specifiers: null,
-                    source: null,
-                    range: [13, 35],
-                    loc: {
-                        start: { line: 1, column: 13 },
-                        end: { line: 1, column: 35 }
-                    }
-                }],
-                range: [11, 36],
-                loc: {
-                    start: { line: 1, column: 11 },
-                    end: { line: 1, column: 36 }
-                }
-            },
-            range: [0, 36],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 36 }
-            }
-        },
-
         'module "lib" { export var document }': {
             type: 'ModuleDeclaration',
             id: {
@@ -4391,7 +3856,6 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 35 }
                         }
                     },
-                    default: false,
                     specifiers: null,
                     source: null,
                     range: [15, 35],
@@ -4465,7 +3929,6 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 41 }
                         }
                     },
-                    default: false,
                     specifiers: null,
                     source: null,
                     range: [15, 41],
@@ -4531,7 +3994,6 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 35 }
                         }
                     },
-                    default: false,
                     specifiers: null,
                     source: null,
                     range: [15, 35],
@@ -4605,7 +4067,6 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 41 }
                         }
                     },
-                    default: false,
                     specifiers: null,
                     source: null,
                     range: [15, 41],
@@ -4679,7 +4140,6 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 43 }
                         }
                     },
-                    default: false,
                     specifiers: null,
                     source: null,
                     range: [15, 43],
@@ -4749,7 +4209,6 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 42 }
                         }
                     },
-                    default: false,
                     specifiers: null,
                     source: null,
                     range: [15, 42],
@@ -4815,7 +4274,6 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 36 }
                         }
                     },
-                    default: false,
                     specifiers: null,
                     source: null,
                     range: [15, 36],
@@ -4855,7 +4313,6 @@ var harmonyTestFixture = {
                 body: [{
                     type: 'ExportDeclaration',
                     declaration: null,
-                    default: false,
                     specifiers: [{
                         type: 'ExportBatchSpecifier',
                         range: [22, 23],
@@ -4902,7 +4359,6 @@ var harmonyTestFixture = {
                 body: [{
                     type: 'ExportDeclaration',
                     declaration: null,
-                    default: false,
                     specifiers: [{
                         type: 'ExportBatchSpecifier',
                         range: [27, 28],
@@ -4958,7 +4414,6 @@ var harmonyTestFixture = {
                 body: [{
                     type: 'ExportDeclaration',
                     declaration: null,
-                    default: false,
                     specifiers: [{
                         type: 'ExportSpecifier',
                         id: {
@@ -5015,7 +4470,6 @@ var harmonyTestFixture = {
                 body: [{
                     type: 'ExportDeclaration',
                     declaration: null,
-                    default: false,
                     specifiers: [{
                         type: 'ExportSpecifier',
                         id: {
@@ -5089,7 +4543,6 @@ var harmonyTestFixture = {
                 body: [{
                     type: 'ExportDeclaration',
                     declaration: null,
-                    default: false,
                     specifiers: [{
                         type: 'ExportSpecifier',
                         id: {
@@ -11728,21 +11181,6 @@ var harmonyTestFixture = {
             column: 31,
             message: 'Error: Line 1: Invalid module specifier'
         },
-
-        'module "x" { export for }': {
-            index: 20,
-            lineNumber: 1,
-            column: 21,
-            message: 'Error: Line 1: Unexpected token for'
-        },
-
-        'export default while': {
-            index: 15,
-            lineNumber: 1,
-            column: 16,
-            message: 'Error: Line 1: Unexpected token while'
-        },
-
 
         'import foo': {
             index: 10,
