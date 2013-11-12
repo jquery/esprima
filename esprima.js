@@ -2470,13 +2470,9 @@ parseYieldExpression: true
 
         ++state.parenthesizedCount;
 
-        state.allowArrowFunction = !state.allowArrowFunction;
         expr = parseExpression();
-        state.allowArrowFunction = false;
 
-        if (expr.type !== Syntax.ArrowFunctionExpression) {
-            expect(')');
-        }
+        expect(')');
 
         return expr;
     }
@@ -3059,13 +3055,15 @@ parseYieldExpression: true
         token = lookahead;
         expr = parseConditionalExpression();
 
-        if (match('=>') && expr.type === Syntax.Identifier) {
-            if (state.parenthesizedCount === oldParenthesizedCount || state.parenthesizedCount === (oldParenthesizedCount + 1)) {
-                params = { params: [ expr ], defaults: [], rest: null };
-                if (isRestrictedWord(expr.name)) {
-                    params.firstRestricted = expr;
-                    params.message = Messages.StrictParamName;
-                }
+        if (match('=>') &&
+                (state.parenthesizedCount === oldParenthesizedCount ||
+                state.parenthesizedCount === (oldParenthesizedCount + 1))) {
+            if (expr.type === Syntax.Identifier) {
+                params = reinterpretAsCoverFormalsList([ expr ]);
+            } else if (expr.type === Syntax.SequenceExpression) {
+                params = reinterpretAsCoverFormalsList(expr.expressions);
+            }
+            if (params) {
                 return parseArrowFunctionExpression(params);
             }
         }
@@ -3092,7 +3090,9 @@ parseYieldExpression: true
     // 11.14 Comma Operator
 
     function parseExpression() {
-        var expr, expressions, sequence, coverFormalsList, spreadFound, token;
+        var expr, expressions, sequence, coverFormalsList, spreadFound, oldParenthesizedCount;
+
+        oldParenthesizedCount = state.parenthesizedCount;
 
         expr = parseAssignmentExpression();
         expressions = [ expr ];
@@ -3119,23 +3119,19 @@ parseYieldExpression: true
             sequence = delegate.createSequenceExpression(expressions);
         }
 
-        if (state.allowArrowFunction && match(')')) {
-            token = lookahead2();
-            if (token.value === '=>') {
-                lex();
-
-                state.allowArrowFunction = false;
-                expr = expressions;
+        if (match('=>')) {
+            // Do not allow nested parentheses on the LHS of the =>.
+            if (state.parenthesizedCount === oldParenthesizedCount || state.parenthesizedCount === (oldParenthesizedCount + 1)) {
+                expr = expr.type === Syntax.SequenceExpression ? expr.expressions : expressions;
                 coverFormalsList = reinterpretAsCoverFormalsList(expr);
                 if (coverFormalsList) {
                     return parseArrowFunctionExpression(coverFormalsList);
                 }
-
-                throwUnexpected(token);
             }
+            throwUnexpected(lex());
         }
 
-        if (spreadFound) {
+        if (spreadFound && lookahead2().value !== '=>') {
             throwError({}, Messages.IllegalSpread);
         }
 
@@ -4946,19 +4942,11 @@ parseYieldExpression: true
         expect('(');
 
         ++state.parenthesizedCount;
-
-        state.allowArrowFunction = !state.allowArrowFunction;
         expr = parseExpression();
-        state.allowArrowFunction = false;
 
-        if (expr.type === 'ArrowFunctionExpression') {
-            marker.end();
-            marker.apply(expr);
-        } else {
-            expect(')');
-            marker.end();
-            marker.applyGroup(expr);
-        }
+        expect(')');
+        marker.end();
+        marker.applyGroup(expr);
 
         return expr;
     }

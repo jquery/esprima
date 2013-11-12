@@ -1642,6 +1642,317 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 20 }
             }
+        },
+
+        '(x => x)': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [6, 7],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 7 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [1, 7],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            range: [0, 8],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 8 }
+            }
+        },
+
+        'x => y => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'ArrowFunctionExpression',
+                    id: null,
+                    params: [{
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [5, 6],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 6 }
+                        }
+                    }],
+                    defaults: [],
+                    body: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42',
+                        range: [10, 12],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 12 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: true,
+                    range: [5, 12],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 12],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        },
+
+        '(x) => ((y, z) => (x, y, z))': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'ArrowFunctionExpression',
+                    id: null,
+                    params: [{
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    }, {
+                        type: 'Identifier',
+                        name: 'z',
+                        range: [12, 13],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 13 }
+                        }
+                    }],
+                    defaults: [],
+                    body: {
+                        type: 'SequenceExpression',
+                        expressions: [{
+                            type: 'Identifier',
+                            name: 'x',
+                            range: [19, 20],
+                            loc: {
+                                start: { line: 1, column: 19 },
+                                end: { line: 1, column: 20 }
+                            }
+                        }, {
+                            type: 'Identifier',
+                            name: 'y',
+                            range: [22, 23],
+                            loc: {
+                                start: { line: 1, column: 22 },
+                                end: { line: 1, column: 23 }
+                            }
+                        }, {
+                            type: 'Identifier',
+                            name: 'z',
+                            range: [25, 26],
+                            loc: {
+                                start: { line: 1, column: 25 },
+                                end: { line: 1, column: 26 }
+                            }
+                        }],
+                        range: [19, 26],
+                        loc: {
+                            start: { line: 1, column: 19 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: true,
+                    range: [8, 27],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 28],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 28 }
+                }
+            },
+            range: [0, 28],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
+            }
+        },
+
+        'foo(() => {})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'Identifier',
+                    name: 'foo',
+                    range: [0, 3],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 3 }
+                    }
+                },
+                'arguments': [{
+                    type: 'ArrowFunctionExpression',
+                    id: null,
+                    params: [],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [10, 12],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 12 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [4, 12],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 12 }
+                    }
+                }],
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 13 }
+            }
+        },
+
+        'foo((x, y) => {})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'Identifier',
+                    name: 'foo',
+                    range: [0, 3],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 3 }
+                    }
+                },
+                'arguments': [{
+                    type: 'ArrowFunctionExpression',
+                    id: null,
+                    params: [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [5, 6],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 6 }
+                        }
+                    }, {
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [8, 9],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 9 }
+                        }
+                    }],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [14, 16],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 16 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [4, 16],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 16 }
+                    }
+                }],
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            }
         }
 
     },
