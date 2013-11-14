@@ -3652,7 +3652,7 @@ parseStatement: true, parseSourceElement: true */
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
-            lastCommentStart: -1,
+            lastCommentStart: -1
         };
 
         extra = {};
