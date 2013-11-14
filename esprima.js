@@ -187,7 +187,7 @@ parseYieldExpression: true
     };
 
     ClassPropertyType = {
-        static: 'static',
+        'static': 'static',
         prototype: 'prototype'
     };
 
