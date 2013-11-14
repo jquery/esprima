@@ -3014,7 +3014,7 @@ parseYieldExpression: true
     }
 
     function parseArrowFunctionExpression(options) {
-        var previousStrict, previousYieldAllowed, body, isSimpleParameterList;
+        var previousStrict, previousYieldAllowed, body;
 
         expect('=>');
 
@@ -3023,9 +3023,7 @@ parseYieldExpression: true
         state.yieldAllowed = false;
         body = parseConciseBody();
 
-        isSimpleParameterList = options.defaults.length === 0 && options.rest === null;
-
-        if ((strict || !isSimpleParameterList) && options.firstRestricted) {
+        if (strict && options.firstRestricted) {
             throwError(options.firstRestricted, options.message);
         }
         if (strict && options.stricted) {
