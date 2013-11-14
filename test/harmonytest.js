@@ -1356,6 +1356,48 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 14 }
             }
+        },
+
+        // not strict mode
+        '(a) => 00': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 0,
+                    raw: '00',
+                    range: [7, 9],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 9 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 9],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 9 }
+                }
+            },
+            range: [0, 9],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 9 }
+            }
         }
 
     },
@@ -11252,10 +11294,10 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
         },
 
-        '(a) => 00': {
-            index: 7,
+        '"use strict"; (a) => 00': {
+            index: 21,
             lineNumber: 1,
-            column: 8,
+            column: 22,
             message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
         },
 
@@ -11627,6 +11669,13 @@ var harmonyTestFixture = {
             index: 20,
             lineNumber: 1,
             column: 21,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        '(eval) => { "use strict"; 42 }': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 

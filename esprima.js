@@ -3010,12 +3010,9 @@ parseYieldExpression: true
 
         expect('=>');
 
-        previousStrict = strict;
         previousYieldAllowed = state.yieldAllowed;
-        strict = true;
         state.yieldAllowed = false;
         body = parseConciseBody();
-        strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
         return delegate.createArrowFunctionExpression(options.params, options.defaults, body, options.rest, body.type !== Syntax.BlockStatement);
