@@ -1358,7 +1358,7 @@ var harmonyTestFixture = {
             }
         },
 
-        // not strict mode
+        // not strict mode, using eval
         'eval => 42': {
             type: 'ExpressionStatement',
             expression: {
@@ -1400,7 +1400,7 @@ var harmonyTestFixture = {
             }
         },
 
-        // not strict mode
+        // not strict mode, using arguments
         'arguments => 42': {
             type: 'ExpressionStatement',
             expression: {
@@ -1442,7 +1442,7 @@ var harmonyTestFixture = {
             }
         },
 
-        // not strict mode
+        // not strict mode, using octals
         '(a) => 00': {
             type: 'ExpressionStatement',
             expression: {
@@ -1484,7 +1484,7 @@ var harmonyTestFixture = {
             }
         },
 
-        // not strict mode
+        // not strict mode, using eval, IsSimpleParameterList is true
         '(eval, a) => 42': {
             type: 'ExpressionStatement',
             expression: {
@@ -1531,6 +1531,116 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 15 }
+            }
+        },
+
+        // not strict mode, assigning to eval
+        '(eval = 10) => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'eval',
+                    range: [1, 5],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 5 }
+                    }
+                }],
+                defaults: [{
+                    type: 'Literal',
+                    value: 10,
+                    raw: '10',
+                    range: [8, 10],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 10 }
+                    }
+                }],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [15, 17],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            }
+        },
+
+        // not strict mode, using eval, IsSimpleParameterList is false
+        '(eval, a = 10) => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'eval',
+                    range: [1, 5],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 5 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [7, 8],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 8 }
+                    }
+                }],
+                defaults: [null, {
+                    type: 'Literal',
+                    value: 10,
+                    raw: '10',
+                    range: [11, 13],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 13 }
+                    }
+                }],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [18, 20],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 20 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 20],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 20 }
+                }
+            },
+            range: [0, 20],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 20 }
             }
         }
 
@@ -11393,13 +11503,14 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Unexpected token =>'
         },
 
-        '(eval = 10) => 42': {
-            index: 17,
+        '"use strict"; (eval = 10) => 42': {
+            index: 15,
             lineNumber: 1,
-            column: 18,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            column: 16,
+            message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
         },
 
+        // strict mode, using eval when IsSimpleParameterList is true
         '"use strict"; eval => 42': {
             index: 24,
             lineNumber: 1,
@@ -11407,6 +11518,7 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
+        // strict mode, using arguments when IsSimpleParameterList is true
         '"use strict"; arguments => 42': {
             index: 29,
             lineNumber: 1,
@@ -11414,6 +11526,7 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
+        // strict mode, using eval when IsSimpleParameterList is true
         '"use strict"; (eval, a) => 42': {
             index: 29,
             lineNumber: 1,
@@ -11421,11 +11534,20 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
+        // strict mode, using arguments when IsSimpleParameterList is true
         '"use strict"; (arguments, a) => 42': {
             index: 34,
             lineNumber: 1,
             column: 35,
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        // strict mode, using eval when IsSimpleParameterList is false
+        '"use strict"; (eval, a = 10) => 42': {
+            index: 34,
+            lineNumber: 1,
+            column: 35,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'            
         },
 
         '(a, a) => 42': {
@@ -11434,7 +11556,6 @@ var harmonyTestFixture = {
             column: 7,
             message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
         },
-
 
         '"use strict"; (a, a) => 42': {
             index: 20,
