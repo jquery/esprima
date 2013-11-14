@@ -1359,6 +1359,90 @@ var harmonyTestFixture = {
         },
 
         // not strict mode
+        'eval => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'eval',
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 4 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [8, 10],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 10 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 10],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            range: [0, 10],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 10 }
+            }
+        },
+
+        // not strict mode
+        'arguments => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'arguments',
+                    range: [0, 9],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 9 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [13, 15],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 15 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 15],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            range: [0, 15],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 15 }
+            }
+        },
+
+        // not strict mode
         '(a) => 00': {
             type: 'ExpressionStatement',
             expression: {
@@ -1397,6 +1481,56 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 9 }
+            }
+        },
+
+        // not strict mode
+        '(eval, a) => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'eval',
+                    range: [1, 5],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 5 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [7, 8],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 8 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [13, 15],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 15 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 15],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            range: [0, 15],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 15 }
             }
         }
 
@@ -11259,31 +11393,38 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Unexpected token =>'
         },
 
-        'eval => 42': {
-            index: 4,
+        '(eval = 10) => 42': {
+            index: 17,
             lineNumber: 1,
-            column: 5,
+            column: 18,
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
-        'arguments => 42': {
-            index: 9,
+        '"use strict"; eval => 42': {
+            index: 24,
             lineNumber: 1,
-            column: 10,
+            column: 25,
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
-        '(eval, a) => 42': {
-            index: 9,
+        '"use strict"; arguments => 42': {
+            index: 29,
             lineNumber: 1,
-            column: 10,
+            column: 30,
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
-        '(arguments, a) => 42': {
-            index: 14,
+        '"use strict"; (eval, a) => 42': {
+            index: 29,
             lineNumber: 1,
-            column: 15,
+            column: 30,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        '"use strict"; (arguments, a) => 42': {
+            index: 34,
+            lineNumber: 1,
+            column: 35,
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
@@ -11291,6 +11432,14 @@ var harmonyTestFixture = {
             index: 6,
             lineNumber: 1,
             column: 7,
+            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+        },
+
+
+        '"use strict"; (a, a) => 42': {
+            index: 20,
+            lineNumber: 1,
+            column: 21,
             message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
         },
 
@@ -11665,17 +11814,17 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Unexpected end of input'
         },
 
-        '"use strict"; (eval)=> 42': {
-            index: 20,
+        '"use strict"; (eval) => 42': {
+            index: 26,
             lineNumber: 1,
-            column: 21,
+            column: 27,
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
         '(eval) => { "use strict"; 42 }': {
-            index: 6,
+            index: 30,
             lineNumber: 1,
-            column: 7,
+            column: 31,
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
