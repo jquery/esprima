@@ -2986,33 +2986,53 @@ parseYieldExpression: true
                 params.push(param.left);
                 defaults.push(param.right);
                 ++defaultCount;
+                validateParam(options, param.left, param.left.name);
             } else {
                 return null;
             }
         }
 
-        if (options.firstRestricted) {
-            throwError(options.firstRestricted, options.message);
-        }
-        if (options.stricted) {
-            throwErrorTolerant(options.stricted, options.message);
+        if (options.message === Messages.StrictParamDupe) {
+            throwError(
+                strict ? options.stricted : options.firstRestricted,
+                options.message
+            );
         }
 
         if (defaultCount === 0) {
             defaults = [];
         }
 
-        return { params: params, defaults: defaults, rest: rest };
+        return {
+            params: params,
+            defaults: defaults,
+            rest: rest,
+            stricted: options.stricted,
+            firstRestricted: options.firstRestricted,
+            message: options.message
+        };
     }
 
     function parseArrowFunctionExpression(options) {
-        var previousStrict, previousYieldAllowed, body;
+        var previousStrict, previousYieldAllowed, body, isSimpleParameterList;
 
         expect('=>');
 
+        previousStrict = strict;
         previousYieldAllowed = state.yieldAllowed;
         state.yieldAllowed = false;
         body = parseConciseBody();
+
+        isSimpleParameterList = options.defaults.length === 0 && options.rest === null;
+
+        if ((strict || !isSimpleParameterList) && options.firstRestricted) {
+            throwError(options.firstRestricted, options.message);
+        }
+        if (strict && options.stricted) {
+            throwErrorTolerant(options.stricted, options.message);
+        }
+
+        strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
         return delegate.createArrowFunctionExpression(options.params, options.defaults, body, options.rest, body.type !== Syntax.BlockStatement);
@@ -3043,10 +3063,12 @@ parseYieldExpression: true
 
         if (match('=>') && expr.type === Syntax.Identifier) {
             if (state.parenthesizedCount === oldParenthesizedCount || state.parenthesizedCount === (oldParenthesizedCount + 1)) {
+                params = { params: [ expr ], defaults: [], rest: null };
                 if (isRestrictedWord(expr.name)) {
-                    throwError({}, Messages.StrictParamName);
+                    params.firstRestricted = expr;
+                    params.message = Messages.StrictParamName;
                 }
-                return parseArrowFunctionExpression({ params: [ expr ], defaults: [], rest: null });
+                return parseArrowFunctionExpression(params);
             }
         }
 
