@@ -3333,7 +3333,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 7 },
                             end: { line: 1, column: 8 }
                         }
-                    }]
+                    }],
+                    range: [6, 9],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 9 }
+                    }
                 },
                 init: {
                     type: 'ObjectExpression',
@@ -3372,7 +3377,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 7 },
                             end: { line: 1, column: 8 }
                         }
-                    }]
+                    }],
+                    range: [6, 9],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 9 }
+                    }
                 },
                 init: {
                     type: 'ArrayExpression',
@@ -3431,7 +3441,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 5 },
                             end: { line: 1, column: 6 }
                         }
-                    }]
+                    }],
+                    range: [4, 7],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 7 }
+                    }
                 },
                 init: {
                     type: 'ObjectExpression',
@@ -3470,7 +3485,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 5 },
                             end: { line: 1, column: 6 }
                         }
-                    }]
+                    }],
+                    range: [4, 7],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 7 }
+                    }
                 },
                 init: {
                     type: 'ArrayExpression',
@@ -3529,7 +3549,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 5 },
                             end: { line: 1, column: 6 }
                         }
-                    }]
+                    }],
+                    range: [4, 7],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 7 }
+                    }
                 },
                 init: {
                     type: 'ObjectExpression',
@@ -3568,7 +3593,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 5 },
                             end: { line: 1, column: 6 }
                         }
-                    }]
+                    }],
+                    range: [4, 7],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 7 }
+                    }
                 },
                 init: {
                     type: 'ArrayExpression',
@@ -3627,7 +3657,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 7 },
                             end: { line: 1, column: 10 }
                         }
-                    }]
+                    }],
+                    range: [6, 11],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 11 }
+                    }
                 },
                 init: {
                     type: 'ObjectExpression',
@@ -3686,7 +3721,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 5 },
                             end: { line: 1, column: 8 }
                         }
-                    }]
+                    }],
+                    range: [4, 9],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 9 }
+                    }
                 },
                 init: {
                     type: 'ObjectExpression',
@@ -3745,7 +3785,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 5 },
                             end: { line: 1, column: 8 }
                         }
-                    }]
+                    }],
+                    range: [4, 9],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 9 }
+                    }
                 },
                 init: {
                     type: 'ObjectExpression',
@@ -8996,7 +9041,12 @@ var harmonyTestFixture = {
                         start: { line: 1, column: 16 },
                         end: { line: 1, column: 17 }
                     }
-                }]
+                }],
+                range: [11, 19],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 19 }
+                }
             }],
             defaults: [],
             body: {
@@ -9087,7 +9137,12 @@ var harmonyTestFixture = {
                         start: { line: 1, column: 16 },
                         end: { line: 1, column: 17 }
                     }
-                }]
+                }],
+                range: [11, 19],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 19 }
+                }
             }],
             defaults: [],
             body: {
@@ -9159,7 +9214,12 @@ var harmonyTestFixture = {
                         start: { line: 1, column: 16 },
                         end: { line: 1, column: 17 }
                     }
-                }]
+                }],
+                range: [14, 19],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 19 }
+                }
             }],
             defaults: [],
             body: {
@@ -9221,7 +9281,12 @@ var harmonyTestFixture = {
                         start: { line: 1, column: 19 },
                         end: { line: 1, column: 20 }
                     }
-                }]
+                }],
+                range: [14, 22],
+                loc: {
+                    start: { line: 1, column: 14 },
+                    end: { line: 1, column: 22 }
+                }
             },
             generator: false,
             expression: false,
@@ -9373,7 +9438,12 @@ var harmonyTestFixture = {
                         start: { line: 1, column: 26 },
                         end: { line: 1, column: 35 }
                     }
-                }]
+                }],
+                range: [11, 37],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 37 }
+                }
             }],
             defaults: [],
             body: {
@@ -9411,7 +9481,12 @@ var harmonyTestFixture = {
                         start: { line: 1, column: 49 },
                         end: { line: 1, column: 50 }
                     }
-                }]
+                }],
+                range: [42, 51],
+                loc: {
+                    start: { line: 1, column: 42 },
+                    end: { line: 1, column: 51 }
+                }
             },
             generator: false,
             expression: false,
@@ -9453,7 +9528,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 17 },
                             end: { line: 1, column: 18 }
                         }
-                    }]
+                    }],
+                    range: [12, 20],
+                    loc: {
+                        start: { line: 1, column: 12 },
+                        end: { line: 1, column: 20 }
+                    }
                 }],
                 defaults: [],
                 body: {
@@ -9552,7 +9632,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 17 },
                             end: { line: 1, column: 18 }
                         }
-                    }]
+                    }],
+                    range: [12, 20],
+                    loc: {
+                        start: { line: 1, column: 12 },
+                        end: { line: 1, column: 20 }
+                    }
                 }],
                 defaults: [],
                 body: {
@@ -9622,7 +9707,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 20 },
                             end: { line: 1, column: 21 }
                         }
-                    }]
+                    }],
+                    range: [15, 23],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 23 }
+                    }
                 },
                 generator: false,
                 expression: false,
@@ -9782,7 +9872,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 27 },
                             end: { line: 1, column: 36 }
                         }
-                    }]
+                    }],
+                    range: [12, 38],
+                    loc: {
+                        start: { line: 1, column: 12 },
+                        end: { line: 1, column: 38 }
+                    }
                 }],
                 defaults: [],
                 body: {
@@ -9820,7 +9915,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 50 },
                             end: { line: 1, column: 51 }
                         }
-                    }]
+                    }],
+                    range: [43, 52],
+                    loc: {
+                        start: { line: 1, column: 43 },
+                        end: { line: 1, column: 52 }
+                    }
                 },
                 generator: false,
                 expression: false,
@@ -9873,7 +9973,12 @@ var harmonyTestFixture = {
                                     start: { line: 1, column: 10 },
                                     end: { line: 1, column: 11 }
                                 }
-                            }]
+                            }],
+                            range: [5, 13],
+                            loc: {
+                                start: { line: 1, column: 5 },
+                                end: { line: 1, column: 13 }
+                            }
                         }],
                         defaults: [],
                         body: {
@@ -9963,7 +10068,12 @@ var harmonyTestFixture = {
                                     start: { line: 1, column: 13 },
                                     end: { line: 1, column: 14 }
                                 }
-                            }]
+                            }],
+                            range: [8, 16],
+                            loc: {
+                                start: { line: 1, column: 8 },
+                                end: { line: 1, column: 16 }
+                            }
                         },
                         generator: false,
                         expression: false,
@@ -10143,7 +10253,12 @@ var harmonyTestFixture = {
                                     start: { line: 1, column: 20 },
                                     end: { line: 1, column: 29 }
                                 }
-                            }]
+                            }],
+                            range: [5, 31],
+                            loc: {
+                                start: { line: 1, column: 5 },
+                                end: { line: 1, column: 31 }
+                            }
                         }],
                         defaults: [],
                         body: {
@@ -10181,7 +10296,12 @@ var harmonyTestFixture = {
                                     start: { line: 1, column: 43 },
                                     end: { line: 1, column: 44 }
                                 }
-                            }]
+                            }],
+                            range: [36, 45],
+                            loc: {
+                                start: { line: 1, column: 36 },
+                                end: { line: 1, column: 45 }
+                            }
                         },
                         generator: false,
                         expression: false,
@@ -10477,7 +10597,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 8 },
                             end: { line: 1, column: 9 }
                         }
-                    }]
+                    }],
+                    range: [4, 10],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 10 }
+                    }
                 },
                 generator: false,
                 expression: false,
@@ -11096,7 +11221,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 5 },
                             end: { line: 1, column: 9 }
                         }
-                    }]
+                    }],
+                    range: [4, 10],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 10 }
+                    }
                 },
                 init: {
                     type: 'Identifier',
@@ -11151,7 +11281,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 8 },
                             end: { line: 1, column: 12 }
                         }
-                    }]
+                    }],
+                    range: [4, 13],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 13 }
+                    }
                 },
                 init: {
                     type: 'Identifier',
@@ -11262,7 +11397,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 15 },
                             end: { line: 1, column: 19 }
                         }
-                    }]
+                    }],
+                    range: [4, 20],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 20 }
+                    }
                 },
                 init: {
                     type: 'Identifier',
@@ -11333,7 +11473,12 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 8 },
                             end: { line: 1, column: 17 }
                         }
-                    }]
+                    }],
+                    range: [4, 18],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 18 }
+                    }
                 },
                 init: {
                     type: 'Identifier',
