@@ -107,10 +107,20 @@ if (typeof fname !== 'string') {
     process.exit(1);
 }
 
+// Special handling for regular expression literal since we need to
+// convert it to a string literal, otherwise it will be decoded
+// as object "{}" and the regular expression would be lost.
+function adjustRegexLiteral(key, value) {
+    if (key === 'value' && value instanceof RegExp) {
+        value = value.toString();
+    }
+    return value;
+}
+
 try {
     content = fs.readFileSync(fname, 'utf-8');
     syntax = esprima.parse(content, options);
-    console.log(JSON.stringify(syntax, null, 4));
+    console.log(JSON.stringify(syntax, adjustRegexLiteral, 4));
 } catch (e) {
     console.log('Error: ' + e.message);
     process.exit(1);
