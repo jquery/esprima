@@ -1118,7 +1118,6 @@ parseStatement: true, parseSourceElement: true */
             throwError({}, Messages.InvalidRegExp);
         }
 
-        peek();
 
 
         if (extra.tokenize) {
@@ -2179,6 +2178,7 @@ parseStatement: true, parseSourceElement: true */
             } else {
                 expr = delegate.createLiteral(scanRegExp());
             }
+            peek();
         }
 
         if (expr) {
@@ -3652,7 +3652,7 @@ parseStatement: true, parseSourceElement: true */
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
-            lastCommentStart: -1,
+            lastCommentStart: -1
         };
 
         extra = {};
@@ -3814,7 +3814,7 @@ parseStatement: true, parseSourceElement: true */
         return program;
     }
 
-    // Sync with package.json and component.json.
+    // Sync with *.json manifests.
     exports.version = '1.1.0-dev';
 
     exports.tokenize = tokenize;
