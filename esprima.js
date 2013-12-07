@@ -4269,7 +4269,7 @@ parseYieldExpression: true
     }
 
     function parseYieldExpression() {
-        var delegateFlag, expr, previousYieldAllowed;
+        var delegateFlag, expr;
 
         expectKeyword('yield');
 
@@ -4283,11 +4283,7 @@ parseYieldExpression: true
             delegateFlag = true;
         }
 
-        // It is a Syntax Error if any AssignmentExpression Contains YieldExpression.
-        previousYieldAllowed = state.yieldAllowed;
-        state.yieldAllowed = false;
         expr = parseAssignmentExpression();
-        state.yieldAllowed = previousYieldAllowed;
         state.yieldFound = true;
 
         return delegate.createYieldExpression(expr, delegateFlag);
