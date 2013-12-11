@@ -11013,6 +11013,74 @@ var harmonyTestFixture = {
                 end: { line: 1, column: 10 }
             }
         },
+        
+        '[...a, ...b] = c': {
+          type: 'ExpressionStatement',
+          expression: {
+              type: 'AssignmentExpression',
+              operator: '=',
+              left: {
+                  type: 'ArrayPattern',
+                  elements: [{
+                      type: 'SpreadElement',
+                      argument: {
+                          type: 'Identifier',
+                          name: 'a',
+                          range: [4, 5],
+                          loc: {
+                              start: { line: 1, column: 4 },
+                              end: { line: 1, column: 5 }
+                          }
+                      },
+                      range: [1, 5],
+                      loc: {
+                          start: { line: 1, column: 1 },
+                          end: { line: 1, column: 5 }
+                      }
+                  }, {
+                      type: 'SpreadElement',
+                      argument: {
+                          type: 'Identifier',
+                          name: 'b',
+                          range: [10, 11],
+                          loc: {
+                              start: { line: 1, column: 10 },
+                              end: { line: 1, column: 11 }
+                          }
+                      },
+                      range: [7, 11],
+                      loc: {
+                          start: { line: 1, column: 7 },
+                          end: { line: 1, column: 11 }
+                      }
+                  }],
+                  range: [0, 12],
+                  loc: {
+                      start: { line: 1, column: 0 },
+                      end: { line: 1, column: 12 }
+                  }
+              },
+              right: {
+                  type: 'Identifier',
+                  name: 'c',
+                  range: [15, 16],
+                  loc: {
+                      start: { line: 1, column: 15 },
+                      end: { line: 1, column: 16 }
+                  }
+              },
+              range: [0, 16],
+              loc: {
+                  start: { line: 1, column: 0 },
+                  end: { line: 1, column: 16 }
+              }
+          },
+          range: [0, 16],
+          loc: {
+              start: { line: 1, column: 0 },
+              end: { line: 1, column: 16 }
+          }
+        },
 
         '[a, ...b] = c': {
             type: 'ExpressionStatement',
@@ -11074,6 +11142,95 @@ var harmonyTestFixture = {
             }
         },
 
+        'func(...a, b)': {
+            type: "ExpressionStatement",
+            expression: {
+                type: "CallExpression",
+                callee: {
+                    type: "Identifier",
+                    name: "func",
+                    range: [0, 4],
+                    loc: {
+                        start: {
+                            line: 1,
+                            column: 0
+                        },
+                        end: {
+                            line: 1,
+                            column: 4
+                        }
+                    }
+                },
+                arguments: [{
+                    type: "SpreadElement",
+                    argument: {
+                        type: "Identifier",
+                        name: "a",
+                        range: [8, 9],
+                        loc: {
+                            start: {
+                                line: 1,
+                                column: 8
+                            },
+                            end: {
+                                line: 1,
+                                column: 9
+                            }
+                        }
+                    },
+                    range: [5, 9],
+                    loc: {
+                        start: {
+                            line: 1,
+                            column: 5
+                        },
+                        end: {
+                            line: 1,
+                            column: 9
+                        }
+                    }
+                  },
+                  {
+                      type: "Identifier",
+                      name: "b",
+                      range: [11, 12],
+                      loc: {
+                          start: {
+                              line: 1,
+                              column: 11
+                          },
+                          end: {
+                              line: 1,
+                              column: 12
+                          }
+                      }
+                  }
+                ],
+                range: [0, 13],
+                loc: {
+                    start: {
+                        line: 1,
+                        column: 0
+                    },
+                    end: {
+                        line: 1,
+                        column: 13
+                    }
+                }
+            },
+            range: [0, 13],
+            loc: {
+                start: {
+                    line: 1,
+                    column: 0
+                },
+                end: {
+                    line: 1,
+                    column: 13
+                }
+            }
+        },
+        
         '[{ a, b }, ...c] = d': {
             type: 'ExpressionStatement',
             expression: {
@@ -12388,20 +12545,6 @@ var harmonyTestFixture = {
             message: 'Error: Line 1: Invalid spread argument'
         },
 
-        '[...a, b] = c': {
-            index: 5,
-            lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Spread must be the final element of an element list'
-        },
-
-        'func(...a, b)': {
-            index: 9,
-            lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Spread must be the final element of an element list'
-        },
-
         '({ t(eval) { "use strict"; } });': {
             index: 5,
             lineNumber: 1,
@@ -12414,13 +12557,6 @@ var harmonyTestFixture = {
             lineNumber: 1,
             column: 22,
             message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
-        },
-
-        '[...a, ] = b': {
-            index: 5,
-            lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Spread must be the final element of an element list'
         },
 
         'if (b,...a, );': {

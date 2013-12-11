@@ -2233,11 +2233,7 @@ parseYieldExpression: true
             } else {
                 tmp = parseSpreadOrAssignmentExpression();
                 elements.push(tmp);
-                if (tmp && tmp.type === Syntax.SpreadElement) {
-                    if (!match(']')) {
-                        throwError({}, Messages.ElementAfterSpreadElement);
-                    }
-                } else if (!(match(']') || matchKeyword('for') || matchKeyword('if'))) {
+                if (!(match(']') || matchKeyword('for') || matchKeyword('if'))) {
                     expect(','); // this lexes.
                     possiblecomprehension = false;
                 }
@@ -2567,8 +2563,6 @@ parseYieldExpression: true
 
                 if (match(')')) {
                     break;
-                } else if (arg.type === Syntax.SpreadElement) {
-                    throwError({}, Messages.ElementAfterSpreadElement);
                 }
 
                 expect(',');
