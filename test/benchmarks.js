@@ -32,18 +32,18 @@ var setupBenchmarks,
 
 fullFixture = [
     'Underscore 1.5.2',
-    'Backbone 1.0.0',
+    'Backbone 1.1.0',
     'MooTools 1.4.5',
     'jQuery 1.9.1',
     'YUI 3.12.0',
     'jQuery.Mobile 1.3.2',
-    'Angular 1.0.8'
+    'Angular 1.2.5'
 ];
 
 quickFixture = [
     'Backbone 1.0.0',
     'jQuery 1.9.1',
-    'Angular 1.0.6'
+    'Angular 1.2.5'
 ];
 
 function slug(name) {
