@@ -2234,9 +2234,7 @@ parseYieldExpression: true
                 tmp = parseSpreadOrAssignmentExpression();
                 elements.push(tmp);
                 if (tmp && tmp.type === Syntax.SpreadElement) {
-                    if (!match(']')) {
-                        throwError({}, Messages.ElementAfterSpreadElement);
-                    }
+                    expect(','); // this lexes.
                 } else if (!(match(']') || matchKeyword('for') || matchKeyword('if'))) {
                     expect(','); // this lexes.
                     possiblecomprehension = false;
@@ -2567,8 +2565,6 @@ parseYieldExpression: true
 
                 if (match(')')) {
                     break;
-                } else if (arg.type === Syntax.SpreadElement) {
-                    throwError({}, Messages.ElementAfterSpreadElement);
                 }
 
                 expect(',');
