@@ -4152,7 +4152,7 @@ parseYieldExpression: true
     }
 
     function parseFunctionDeclaration() {
-        var id, body, token, tmp, firstRestricted, message, previousStrict, previousYieldAllowed, generator, expression;
+        var id, body, token, tmp, firstRestricted, message, previousStrict, previousYieldAllowed, generator;
 
         expectKeyword('function');
 
@@ -4190,9 +4190,7 @@ parseYieldExpression: true
         previousYieldAllowed = state.yieldAllowed;
         state.yieldAllowed = generator;
 
-        // here we redo some work in order to set 'expression'
-        expression = !match('{');
-        body = parseConciseBody();
+        body = parseFunctionSourceElements();
 
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
@@ -4206,11 +4204,11 @@ parseYieldExpression: true
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createFunctionDeclaration(id, tmp.params, tmp.defaults, body, tmp.rest, generator, expression);
+        return delegate.createFunctionDeclaration(id, tmp.params, tmp.defaults, body, tmp.rest, generator, false);
     }
 
     function parseFunctionExpression() {
-        var token, id = null, firstRestricted, message, tmp, body, previousStrict, previousYieldAllowed, generator, expression;
+        var token, id = null, firstRestricted, message, tmp, body, previousStrict, previousYieldAllowed, generator;
 
         expectKeyword('function');
 
@@ -4249,9 +4247,7 @@ parseYieldExpression: true
         previousYieldAllowed = state.yieldAllowed;
         state.yieldAllowed = generator;
 
-        // here we redo some work in order to set 'expression'
-        expression = !match('{');
-        body = parseConciseBody();
+        body = parseFunctionSourceElements();
 
         if (strict && firstRestricted) {
             throwError(firstRestricted, message);
@@ -4265,7 +4261,7 @@ parseYieldExpression: true
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createFunctionExpression(id, tmp.params, tmp.defaults, body, tmp.rest, generator, expression);
+        return delegate.createFunctionExpression(id, tmp.params, tmp.defaults, body, tmp.rest, generator, false);
     }
 
     function parseYieldExpression() {
