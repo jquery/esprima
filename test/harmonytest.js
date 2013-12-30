@@ -884,7 +884,7 @@ var harmonyTestFixture = {
         '() => "test"': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [],
                 defaults: [],
@@ -917,7 +917,7 @@ var harmonyTestFixture = {
         'e => "test"': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -958,7 +958,7 @@ var harmonyTestFixture = {
         '(e) => "test"': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -999,7 +999,7 @@ var harmonyTestFixture = {
         '(a, b) => "test"': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -1048,7 +1048,7 @@ var harmonyTestFixture = {
         'e => { 42; }': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -1105,7 +1105,7 @@ var harmonyTestFixture = {
         '(a, b) => { 42; }': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -1170,7 +1170,7 @@ var harmonyTestFixture = {
         '([a, , b]) => 42': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'ArrayPattern',
@@ -1227,7 +1227,7 @@ var harmonyTestFixture = {
         '([a.a]) => 42': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'ArrayPattern',
@@ -1294,7 +1294,7 @@ var harmonyTestFixture = {
         '(x=1) => x * x': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -1362,7 +1362,7 @@ var harmonyTestFixture = {
         'eval => 42': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -1404,7 +1404,7 @@ var harmonyTestFixture = {
         'arguments => 42': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -1446,7 +1446,7 @@ var harmonyTestFixture = {
         '(a) => 00': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -1488,7 +1488,7 @@ var harmonyTestFixture = {
         '(eval, a) => 42': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -1538,7 +1538,7 @@ var harmonyTestFixture = {
         '(eval = 10) => 42': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -1589,7 +1589,7 @@ var harmonyTestFixture = {
         '(eval, a = 10) => 42': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -1647,7 +1647,7 @@ var harmonyTestFixture = {
         '(x => x)': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -1687,7 +1687,7 @@ var harmonyTestFixture = {
         'x => y => 42': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -1700,7 +1700,7 @@ var harmonyTestFixture = {
                 }],
                 defaults: [],
                 body: {
-                    type: 'ArrowFunctionExpression',
+                    type: 'ArrowExpression',
                     id: null,
                     params: [{
                         type: 'Identifier',
@@ -1750,7 +1750,7 @@ var harmonyTestFixture = {
         '(x) => ((y, z) => (x, y, z))': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -1763,7 +1763,7 @@ var harmonyTestFixture = {
                 }],
                 defaults: [],
                 body: {
-                    type: 'ArrowFunctionExpression',
+                    type: 'ArrowExpression',
                     id: null,
                     params: [{
                         type: 'Identifier',
@@ -1855,7 +1855,7 @@ var harmonyTestFixture = {
                     }
                 },
                 'arguments': [{
-                    type: 'ArrowFunctionExpression',
+                    type: 'ArrowExpression',
                     id: null,
                     params: [],
                     defaults: [],
@@ -1904,7 +1904,7 @@ var harmonyTestFixture = {
                     }
                 },
                 'arguments': [{
-                    type: 'ArrowFunctionExpression',
+                    type: 'ArrowExpression',
                     id: null,
                     params: [{
                         type: 'Identifier',
@@ -10281,7 +10281,7 @@ var harmonyTestFixture = {
         '(...a) => {}': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [],
                 defaults: [],
@@ -10320,7 +10320,7 @@ var harmonyTestFixture = {
         '(a, ...b) => {}': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -10368,7 +10368,7 @@ var harmonyTestFixture = {
         '({ a }) => {}': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'ObjectPattern',
@@ -10436,7 +10436,7 @@ var harmonyTestFixture = {
         '({ a }, ...b) => {}': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'ObjectPattern',
@@ -10511,7 +10511,7 @@ var harmonyTestFixture = {
         '(...[a, b]) => {}': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [],
                 defaults: [],
@@ -10566,7 +10566,7 @@ var harmonyTestFixture = {
         '(a, ...[b]) => {}': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'Identifier',
@@ -10621,7 +10621,7 @@ var harmonyTestFixture = {
         '({ a: [a, b] }, ...c) => {}': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'ObjectPattern',
@@ -10712,7 +10712,7 @@ var harmonyTestFixture = {
         '({ a: b, c }, [d, e], ...f) => {}': {
             type: 'ExpressionStatement',
             expression: {
-                type: 'ArrowFunctionExpression',
+                type: 'ArrowExpression',
                 id: null,
                 params: [{
                     type: 'ObjectPattern',
@@ -11948,7 +11948,7 @@ var harmonyTestFixture = {
             index: 34,
             lineNumber: 1,
             column: 35,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'            
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
         '(a, a) => 42': {

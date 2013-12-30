@@ -118,7 +118,7 @@ parseYieldExpression: true
     Syntax = {
         ArrayExpression: 'ArrayExpression',
         ArrayPattern: 'ArrayPattern',
-        ArrowFunctionExpression: 'ArrowFunctionExpression',
+        ArrowExpression: 'ArrowExpression',
         AssignmentExpression: 'AssignmentExpression',
         BinaryExpression: 'BinaryExpression',
         BlockStatement: 'BlockStatement',
@@ -1895,9 +1895,9 @@ parseYieldExpression: true
             };
         },
 
-        createArrowFunctionExpression: function (params, defaults, body, rest, expression) {
+        createArrowExpression: function (params, defaults, body, rest, expression) {
             return {
-                type: Syntax.ArrowFunctionExpression,
+                type: Syntax.ArrowExpression,
                 id: null,
                 params: params,
                 defaults: defaults,
@@ -3009,7 +3009,7 @@ parseYieldExpression: true
         };
     }
 
-    function parseArrowFunctionExpression(options) {
+    function parseArrowExpression(options) {
         var previousStrict, previousYieldAllowed, body;
 
         expect('=>');
@@ -3029,7 +3029,7 @@ parseYieldExpression: true
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
-        return delegate.createArrowFunctionExpression(options.params, options.defaults, body, options.rest, body.type !== Syntax.BlockStatement);
+        return delegate.createArrowExpression(options.params, options.defaults, body, options.rest, body.type !== Syntax.BlockStatement);
     }
 
     function parseAssignmentExpression() {
@@ -3048,7 +3048,7 @@ parseYieldExpression: true
                 if (!match('=>')) {
                     throwUnexpected(lex());
                 }
-                return parseArrowFunctionExpression(params);
+                return parseArrowExpression(params);
             }
         }
 
@@ -3064,7 +3064,7 @@ parseYieldExpression: true
                 params = reinterpretAsCoverFormalsList(expr.expressions);
             }
             if (params) {
-                return parseArrowFunctionExpression(params);
+                return parseArrowExpression(params);
             }
         }
 
@@ -3125,7 +3125,7 @@ parseYieldExpression: true
                 expr = expr.type === Syntax.SequenceExpression ? expr.expressions : expressions;
                 coverFormalsList = reinterpretAsCoverFormalsList(expr);
                 if (coverFormalsList) {
-                    return parseArrowFunctionExpression(coverFormalsList);
+                    return parseArrowExpression(coverFormalsList);
                 }
             }
             throwUnexpected(lex());
