@@ -19449,7 +19449,7 @@ var testFixture = {
             result: {
                 ArrayExpression: 'ArrayExpression',
                 ArrayPattern: 'ArrayPattern',
-                ArrowFunctionExpression: 'ArrowFunctionExpression',
+                ArrowExpression: 'ArrowExpression',
                 AssignmentExpression: 'AssignmentExpression',
                 BinaryExpression: 'BinaryExpression',
                 BlockStatement: 'BlockStatement',
