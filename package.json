@@ -31,7 +31,8 @@
         "complexity-report": "~0.6.1",
         "regenerate": "~0.5.4",
         "unicode-6.3.0": "~0.1.0",
-        "json-diff": "~0.3.1"
+        "json-diff": "~0.3.1",
+        "optimist": "~0.6.0"
     },
     "keywords": [
         "ast",
