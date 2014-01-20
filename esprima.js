@@ -298,6 +298,17 @@ parseStatement: true, parseSourceElement: true */
     // 7.6.1.1 Keywords
 
     function isKeyword(id) {
+        var previous = {};
+
+        if (extra.tokens && extra.tokens.length) {
+            previous = extra.tokens[extra.tokens.length - 1];
+
+            // Reserved keywords are valid identifier for object keys
+            if (previous.value === ',' || previous.value === '{' || previous.value === '.') {
+                return false;
+            }
+        }
+
         if (strict && isStrictModeReservedWord(id)) {
             return true;
         }
