@@ -44,7 +44,7 @@
     },
     "scripts": {
         "test": "npm run-script lint && node test/run.js && npm run-script coverage && npm run-script complexity",
-        "lint": "node tools/check-version.js && node_modules/eslint/bin/eslint.js esprima.js && node_modules/jslint/bin/jslint.js esprima.js",
+        "lint": "node tools/check-version.js && node node_modules/eslint/bin/eslint.js esprima.js && node node_modules/jslint/bin/jslint.js esprima.js",
         "coverage": "npm run-script analyze-coverage && npm run-script check-coverage",
         "analyze-coverage": "node node_modules/istanbul/lib/cli.js cover test/runner.js",
         "check-coverage": "node node_modules/istanbul/lib/cli.js check-coverage --statement -8 --branch -28 --function 99.69",
