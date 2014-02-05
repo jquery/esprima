@@ -30,6 +30,7 @@
     "devDependencies": {
         "jslint": "~0.1.9",
         "eslint": "~0.3.0",
+        "jscs": "~1.2.4",
         "istanbul": "~0.1.27",
         "complexity-report": "~0.6.1",
         "regenerate": "~0.5.4",
@@ -48,7 +49,13 @@
         "generate-regex": "node tools/generate-identifier-regex.js",
 
         "test": "npm run-script lint && node test/run.js && npm run-script coverage && npm run-script complexity",
-        "lint": "node tools/check-version.js && node node_modules/eslint/bin/eslint.js esprima.js && node node_modules/jslint/bin/jslint.js esprima.js",
+
+        "lint": "npm run-script check-version && npm run-script eslint && npm run-script jscs && npm run-script jslint",
+        "check-version": "node tools/check-version.js",
+        "eslint": "node node_modules/eslint/bin/eslint.js esprima.js",
+        "jscs": "node node_modules/.bin/jscs esprima.js",
+        "jslint": "node node_modules/jslint/bin/jslint.js esprima.js",
+
         "coverage": "npm run-script analyze-coverage && npm run-script check-coverage",
         "analyze-coverage": "node node_modules/istanbul/lib/cli.js cover test/runner.js",
         "check-coverage": "node node_modules/istanbul/lib/cli.js check-coverage --statement -8 --branch -19 --function 100",
