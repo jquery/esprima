@@ -20,6 +20,9 @@
         "type": "git",
         "url": "http://github.com/ariya/esprima.git"
     },
+    "bugs": {
+        "url": "http://issues.esprima.org"
+    },
     "licenses": [{
         "type": "BSD",
         "url": "http://github.com/ariya/esprima/raw/master/LICENSE.BSD"
