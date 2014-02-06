@@ -41,7 +41,7 @@ fullFixture = [
 ];
 
 quickFixture = [
-    'Backbone 1.0.0',
+    'Backbone 1.1.0',
     'jQuery 1.9.1',
     'Angular 1.2.5'
 ];
