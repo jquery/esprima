@@ -3205,6 +3205,8 @@ parseYieldExpression: true
             }
             expect('=');
             init = parseAssignmentExpression();
+        } else if (kind === 'default') {
+            init = parseAssignmentExpression();
         } else if (match('=')) {
             lex();
             init = parseAssignmentExpression();
@@ -3328,8 +3330,11 @@ parseYieldExpression: true
         if (isIdentifierName(lookahead)) {
             previousAllowKeyword = state.allowKeyword;
             state.allowKeyword = true;
-            decl = parseVariableDeclarationList('let');
+            decl = parseVariableDeclarationList('default');
             state.allowKeyword = previousAllowKeyword;
+
+            consumeSemicolon();
+
             return delegate.createExportDeclaration(decl, null, null);
         }
 

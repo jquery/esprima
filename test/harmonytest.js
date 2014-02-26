@@ -4347,7 +4347,7 @@ var harmonyTestFixture = {
             }
         },
 
-        'export default = 42': {
+        'export default 42;': {
             type: 'ExportDeclaration',
             declaration: [{
                 type: 'VariableDeclarator',
@@ -4364,27 +4364,162 @@ var harmonyTestFixture = {
                     type: 'Literal',
                     value: 42,
                     raw: '42',
-                    range: [17, 19],
+                    range: [15, 17],
                     loc: {
-                        start: { line: 1, column: 17 },
-                        end: { line: 1, column: 19 }
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 17 }
                     }
                 },
-                range: [7, 19],
+                range: [7, 17],
                 loc: {
                     start: { line: 1, column: 7 },
-                    end: { line: 1, column: 19 }
+                    end: { line: 1, column: 17 }
                 }
             }],
             specifiers: null,
             source: null,
-            range: [0, 19],
+            range: [0, 18],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 19 }
+                end: { line: 1, column: 18 }
             }
         },
 
+        'export default answer;': {
+            type: 'ExportDeclaration',
+            declaration: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'default',
+                    range: [7, 14],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                init: {
+                    type: 'Identifier',
+                    name: 'answer',
+                    range: [15, 21],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 21 }
+                    }
+                },
+                range: [7, 21],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 21 }
+                }
+            }],
+            specifiers: null,
+            source: null,
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+        
+        'export default { x: 1, y: 2 };': {
+            type: 'ExportDeclaration',
+            declaration: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'default',
+                    range: [7, 14],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                init: {
+                    type: 'ObjectExpression',
+                    properties: [
+                        {
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [17, 18],
+                                loc: {
+                                    start: { line: 1, column: 17 },
+                                    end: { line: 1, column: 18 }
+                                }
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 1,
+                                raw: '1',
+                                range: [20, 21],
+                                loc: {
+                                    start: { line: 1, column: 20 },
+                                    end: { line: 1, column: 21 }
+                                }
+                            },
+                            kind: 'init',
+                            method: false,
+                            shorthand: false,
+                            range: [17, 21],
+                            loc: {
+                                start: { line: 1, column: 17 },
+                                end: { line: 1, column: 21 }
+                            }
+                        },
+                        {
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'y',
+                                range: [23, 24],
+                                loc: {
+                                    start: { line: 1, column: 23 },
+                                    end: { line: 1, column: 24 }
+                                }
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 2,
+                                raw: '2',
+                                range: [26, 27],
+                                loc: {
+                                    start: { line: 1, column: 26 },
+                                    end: { line: 1, column: 27 }
+                                }
+                            },
+                            kind: 'init',
+                            method: false,
+                            shorthand: false,
+                            range: [23, 27],
+                            loc: {
+                                start: { line: 1, column: 23 },
+                                end: { line: 1, column: 27 }
+                            }
+                        }
+                    ],
+                    range: [15, 29],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 29 }
+                    }
+                },
+                range: [7, 29],
+                loc: {
+                    start: { line: 1, column: 7 },
+                    end: { line: 1, column: 29 }
+                }
+            }],
+            specifiers: null,
+            source: null,
+            range: [0, 30],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 30 }
+            }
+        },
+        
         'export *': {
             type: 'ExportDeclaration',
             declaration: null,
