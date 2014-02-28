@@ -5,7 +5,6 @@
 .travis.yml
 CONTRIBUTING.md
 ChangeLog
-LICENSE.BSD
 assets/
 bower.json
 component.json
