@@ -1,6 +1,7 @@
 .eslintrc
 .gitignore
 .jscs.json
+.npmignore
 .travis.yml
 CONTRIBUTING.md
 ChangeLog
