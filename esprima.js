@@ -2197,6 +2197,7 @@ parseYieldExpression: true
     }
 
     // 11.1.4 Array Initialiser
+    // Comprehensions: http://wiki.ecmascript.org/doku.php?id=harmony:array_comprehensions
 
     function parseArrayInitialiser() {
         var elements = [], blocks = [], filter = null, tmp, possiblecomprehension = true, body;
@@ -2288,6 +2289,8 @@ parseYieldExpression: true
         return delegate.createFunctionExpression(null, params, defaults, body, options.rest || null, options.generator, body.type !== Syntax.BlockStatement);
     }
 
+
+    // http://wiki.ecmascript.org/doku.php?id=harmony:object_literals#object_literal_property_shorthands
 
     function parsePropertyMethodFunction(options) {
         var previousStrict, tmp, method;
@@ -2437,6 +2440,8 @@ parseYieldExpression: true
         return delegate.createObjectExpression(properties);
     }
 
+    // Templates a.k.a. Quasi-literals: http://wiki.ecmascript.org/doku.php?id=harmony:quasis
+
     function parseTemplateElement(option) {
         var token = scanTemplateElement(option);
         if (strict && token.octal) {
@@ -2581,6 +2586,7 @@ parseYieldExpression: true
     }
 
     function parseSpreadOrAssignmentExpression() {
+        // http://wiki.ecmascript.org/doku.php?id=harmony:spread
         if (match('...')) {
             lex();
             return delegate.createSpreadElement(parseAssignmentExpression());
@@ -2979,6 +2985,8 @@ parseYieldExpression: true
                 reinterpretAsDestructuredParameter(options, param.argument);
                 rest = param.argument;
             } else if (param.type === Syntax.AssignmentExpression) {
+                // http://wiki.ecmascript.org/doku.php?id=harmony:parameter_default_values
+
                 params.push(param.left);
                 defaults.push(param.right);
                 ++defaultCount;
@@ -3008,6 +3016,8 @@ parseYieldExpression: true
             message: options.message
         };
     }
+
+    // http://wiki.ecmascript.org/doku.php?id=harmony:arrow_function_syntax
 
     function parseArrowFunctionExpression(options) {
         var previousStrict, previousYieldAllowed, body;
@@ -3074,7 +3084,8 @@ parseYieldExpression: true
                 throwErrorTolerant(token, Messages.StrictLHSAssignment);
             }
 
-            // ES.next draf 11.13 Runtime Semantics step 1
+            // ES.next draft 11.13 Runtime Semantics step 1
+            // http://wiki.ecmascript.org/doku.php?id=harmony:destructuring
             if (match('=') && (expr.type === Syntax.ObjectExpression || expr.type === Syntax.ArrayExpression)) {
                 reinterpretAsAssignmentBindingPattern(expr);
             } else if (!isLeftHandSide(expr)) {
@@ -3521,6 +3532,8 @@ parseYieldExpression: true
         if (match(';')) {
             lex();
         } else {
+            // 'of' keyword: http://wiki.ecmascript.org/doku.php?id=harmony:iterators
+
             if (matchKeyword('var') || matchKeyword('let') || matchKeyword('const')) {
                 state.allowIn = false;
                 init = parseForVariableDeclaration();
@@ -4389,6 +4402,8 @@ parseYieldExpression: true
             parsePropertyMethodFunction({ generator: false })
         );
     }
+
+    // http://wiki.ecmascript.org/doku.php?id=strawman:maximally_minimal_classes
 
     function parseClassElement(existingProps) {
         if (match(';')) {
