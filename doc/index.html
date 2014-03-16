@@ -300,6 +300,28 @@ then the return value will be (JSON formatted):
 }
 </pre>
 
+<h4 id="es6">ES6 (Harmony) Support</h4>
+
+<p>Experimental support for the next version of ECMAScript (also known as ES6 or Harmony) is being developed in a <a href="https://github.com/ariya/esprima/tree/harmony">separate git branch</a>. Supported features include:</p>
+
+<ul>
+<li><a href="http://wiki.ecmascript.org/doku.php?id=strawman:maximally_minimal_classes">Classes</a></li>
+<li><a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules">Modules</a></li>
+<li><a href="http://wiki.ecmascript.org/doku.php?id=harmony:iterators">for...of loops</a></li>
+<li><a href="http://wiki.ecmascript.org/doku.php?id=harmony:generators">Generators</a></li>
+<li><a href="http://wiki.ecmascript.org/doku.php?id=harmony:block_scoped_bindings">Block-scoped bindings</a></li>
+<li><a href="http://wiki.ecmascript.org/doku.php?id=harmony:destructuring">Destructuring assignment</a></li>
+<li><a href="http://wiki.ecmascript.org/doku.php?id=harmony:parameter_default_values">Parameter default values</a></li>
+<li><a href="http://wiki.ecmascript.org/doku.php?id=harmony:rest_parameters">Rest parameters</a></li>
+<li><a href="http://wiki.ecmascript.org/doku.php?id=harmony:spread">Spread operator</a></li>
+<li><a href="http://wiki.ecmascript.org/doku.php?id=harmony:object_literals#object_literal_property_value_shorthand">Object literal shorthand</a></li>
+<li><a href="http://wiki.ecmascript.org/doku.php?id=harmony:object_literals#object_literal_property_shorthands">Object method definitions</a></li>
+</ul>
+
+<p>This version of Esprima can also be installed in Node:
+<pre class="prettyprint lang-bsh"><span class="pln">npm install git://github.com/ariya/esprima.git#harmony</span></pre>
+</p>
+
 <h4 id="contribution">Contribution Guide</h4>
 
 <h5>Guidelines</h5>
@@ -457,6 +479,7 @@ npm install
         <li><a href="#usage">Basic Usage</a></li>
         <li><a href="#examples">Examples</a></li>
         <li><a href="#ast">Syntax Tree Format</a></li>
+        <li><a href="#es6">ES6 (Harmony) Support</a></li>
         <li><a href="#contribution">Contribution Guide</a></li>
         <li><a href="#license">License</a></li>
         </ol>
