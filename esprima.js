@@ -78,6 +78,7 @@ parseYieldExpression: true
         delegate,
         lookahead,
         state,
+        createLocationMarkerOpt,
         extra;
 
     Token = {
@@ -2816,22 +2817,27 @@ parseYieldExpression: true
     // 11.11 Binary Logical Operators
 
     function parseBinaryExpression() {
-        var expr, token, prec, previousAllowIn, stack, right, operator, left, i;
+        var expr, token, prec, previousAllowIn, stack, right, operator, left, i,
+            marker, markers;
 
         previousAllowIn = state.allowIn;
         state.allowIn = true;
 
-        expr = parseUnaryExpression();
+        marker = createLocationMarkerOpt();
+        left = parseUnaryExpression();
 
         token = lookahead;
         prec = binaryPrecedence(token, previousAllowIn);
         if (prec === 0) {
-            return expr;
+            return left;
         }
         token.prec = prec;
         lex();
 
-        stack = [expr, token, parseUnaryExpression()];
+        markers = [marker, createLocationMarkerOpt()];
+        right = parseUnaryExpression();
+
+        stack = [left, token, right];
 
         while ((prec = binaryPrecedence(lookahead, previousAllowIn)) > 0) {
 
@@ -2840,14 +2846,24 @@ parseYieldExpression: true
                 right = stack.pop();
                 operator = stack.pop().value;
                 left = stack.pop();
-                stack.push(delegate.createBinaryExpression(operator, left, right));
+                expr = delegate.createBinaryExpression(operator, left, right);
+                markers.pop();
+                marker = markers.pop();
+                if (marker) {
+                    marker.end();
+                    marker.apply(expr);
+                }
+                stack.push(expr);
+                markers.push(marker);
             }
 
             // Shift.
             token = lex();
             token.prec = prec;
             stack.push(token);
-            stack.push(parseUnaryExpression());
+            markers.push(createLocationMarkerOpt());
+            expr = parseUnaryExpression();
+            stack.push(expr);
         }
 
         state.allowIn = previousAllowIn;
@@ -2855,10 +2871,17 @@ parseYieldExpression: true
         // Final reduce to clean-up the stack.
         i = stack.length - 1;
         expr = stack[i];
+        markers.pop();
         while (i > 1) {
             expr = delegate.createBinaryExpression(stack[i - 1].value, stack[i - 2], expr);
             i -= 2;
+            marker = markers.pop();
+            if (marker) {
+                marker.end();
+                marker.apply(expr);
+            }
         }
+
         return expr;
     }
 
@@ -4878,25 +4901,6 @@ parseYieldExpression: true
             this.loc.end.column = index - lineStart;
         },
 
-        applyGroup: function (node) {
-            if (extra.range) {
-                node.groupRange = [this.range[0], this.range[1]];
-            }
-            if (extra.loc) {
-                node.groupLoc = {
-                    start: {
-                        line: this.loc.start.line,
-                        column: this.loc.start.column
-                    },
-                    end: {
-                        line: this.loc.end.line,
-                        column: this.loc.end.column
-                    }
-                };
-                node = delegate.postProcess(node);
-            }
-        },
-
         apply: function (node) {
             var nodeType = typeof node;
             assert(nodeType === 'object',
@@ -4926,22 +4930,16 @@ parseYieldExpression: true
         return new LocationMarker();
     }
 
-    function trackGroupExpression() {
-        var marker, expr;
-
+    createLocationMarkerOpt = function () {
+        // parseBinaryExpression is too entangled with the location tracking,
+        // so instead of forking it, adding a new API that returns the markers
+        // conditionally.
+        if (!extra.loc && !extra.range) {
+            return null;
+        }
         skipComment();
-        marker = createLocationMarker();
-        expect('(');
-
-        ++state.parenthesizedCount;
-        expr = parseExpression();
-
-        expect(')');
-        marker.end();
-        marker.applyGroup(expr);
-
-        return expr;
-    }
+        return new LocationMarker();
+    };
 
     function trackLeftHandSideExpression() {
         var marker, expr;
@@ -5002,72 +5000,9 @@ parseYieldExpression: true
         return expr;
     }
 
-    function filterGroup(node) {
-        var n, i, entry;
-
-        n = (Object.prototype.toString.apply(node) === '[object Array]') ? [] : {};
-        for (i in node) {
-            if (node.hasOwnProperty(i) && i !== 'groupRange' && i !== 'groupLoc') {
-                entry = node[i];
-                if (entry === null || typeof entry !== 'object' || entry instanceof RegExp) {
-                    n[i] = entry;
-                } else {
-                    n[i] = filterGroup(entry);
-                }
-            }
-        }
-        return n;
-    }
-
     function wrapTrackingFunction(range, loc) {
 
         return function (parseFunction) {
-
-            function isBinary(node) {
-                return node.type === Syntax.LogicalExpression ||
-                    node.type === Syntax.BinaryExpression;
-            }
-
-            function visit(node) {
-                var start, end;
-
-                if (isBinary(node.left)) {
-                    visit(node.left);
-                }
-                if (isBinary(node.right)) {
-                    visit(node.right);
-                }
-
-                if (range) {
-                    if (node.left.groupRange || node.right.groupRange) {
-                        start = node.left.groupRange ? node.left.groupRange[0] : node.left.range[0];
-                        end = node.right.groupRange ? node.right.groupRange[1] : node.right.range[1];
-                        node.range = [start, end];
-                    } else if (typeof node.range === 'undefined') {
-                        start = node.left.range[0];
-                        end = node.right.range[1];
-                        node.range = [start, end];
-                    }
-                }
-                if (loc) {
-                    if (node.left.groupLoc || node.right.groupLoc) {
-                        start = node.left.groupLoc ? node.left.groupLoc.start : node.left.loc.start;
-                        end = node.right.groupLoc ? node.right.groupLoc.end : node.right.loc.end;
-                        node.loc = {
-                            start: start,
-                            end: end
-                        };
-                        node = delegate.postProcess(node);
-                    } else if (typeof node.loc === 'undefined') {
-                        node.loc = {
-                            start: node.left.loc.start,
-                            end: node.right.loc.end
-                        };
-                        node = delegate.postProcess(node);
-                    }
-                }
-            }
-
             return function () {
                 var marker, node;
 
@@ -5077,16 +5012,9 @@ parseYieldExpression: true
                 node = parseFunction.apply(null, arguments);
                 marker.end();
 
-                if (range && typeof node.range === 'undefined') {
+                if ((range && typeof node.range === 'undefined') ||
+                        (loc && typeof node.loc === 'undefined')) {
                     marker.apply(node);
-                }
-
-                if (loc && typeof node.loc === 'undefined') {
-                    marker.apply(node);
-                }
-
-                if (isBinary(node)) {
-                    visit(node);
                 }
 
                 return node;
@@ -5105,10 +5033,8 @@ parseYieldExpression: true
 
         if (extra.range || extra.loc) {
 
-            extra.parseGroupExpression = parseGroupExpression;
             extra.parseLeftHandSideExpression = parseLeftHandSideExpression;
             extra.parseLeftHandSideExpressionAllowCall = parseLeftHandSideExpressionAllowCall;
-            parseGroupExpression = trackGroupExpression;
             parseLeftHandSideExpression = trackLeftHandSideExpression;
             parseLeftHandSideExpressionAllowCall = trackLeftHandSideExpressionAllowCall;
 
@@ -5235,7 +5161,6 @@ parseYieldExpression: true
             parseFunctionExpression = extra.parseFunctionExpression;
             parseImportDeclaration = extra.parseImportDeclaration;
             parseImportSpecifier = extra.parseImportSpecifier;
-            parseGroupExpression = extra.parseGroupExpression;
             parseLeftHandSideExpression = extra.parseLeftHandSideExpression;
             parseLeftHandSideExpressionAllowCall = extra.parseLeftHandSideExpressionAllowCall;
             parseModuleDeclaration = extra.parseModuleDeclaration;
@@ -5468,9 +5393,6 @@ parseYieldExpression: true
             }
             if (typeof extra.errors !== 'undefined') {
                 program.errors = extra.errors;
-            }
-            if (extra.range || extra.loc) {
-                program.body = filterGroup(program.body);
             }
         } catch (e) {
             throw e;
