@@ -10611,8 +10611,53 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 14 }
             }
+        },
+        'x = (0) ? 1 : 2' : {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [ 0, 1 ],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ConditionalExpression',
+                    test: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0',
+                        range: [ 5, 6 ],
+                        loc: { start: { line: 1, column: 5 }, end: { line: 1, column: 6 } }
+                    },
+                    consequent: {
+                        type: 'Literal',
+                        value: 1,
+                        raw: '1',
+                        range: [ 10, 11 ],
+                        loc: { start: { line: 1, column: 10 }, end: { line: 1, column: 11 } }
+                    },
+                    alternate: {
+                        type: 'Literal',
+                        value: 2,
+                        raw: '2',
+                        range: [ 14, 15 ],
+                        loc: { start: { line: 1, column: 14 }, end: { line: 1, column: 15 } }
+                    },
+                    range: [ 4, 15 ],
+                    loc: { start: { line: 1, column: 4 }, end: { line: 1, column: 15 } }
+                },
+                range: [ 0, 15 ],
+                loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 15 } }
+            },
+            range: [ 0, 15 ],
+            loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 15 } }
         }
-
     },
 
     'Assignment Operators': {
@@ -13949,9 +13994,9 @@ var testFixture = {
                                 end: { line: 1, column: 18 }
                             }
                         },
-                        range: [12, 18],
+                        range: [13, 18],
                         loc: {
-                            start: { line: 1, column: 12 },
+                            start: { line: 1, column: 13 },
                             end: { line: 1, column: 18 }
                         }
                     },
@@ -14059,15 +14104,15 @@ var testFixture = {
                                     end: { line: 1, column: 28 }
                                 }
                             },
-                            range: [16, 29],
+                            range: [17, 29],
                             loc: {
-                                start: { line: 1, column: 16 },
+                                start: { line: 1, column: 17 },
                                 end: { line: 1, column: 29 }
                             }
                         },
-                        range: [12, 29],
+                        range: [13, 29],
                         loc: {
-                            start: { line: 1, column: 12 },
+                            start: { line: 1, column: 13 },
                             end: { line: 1, column: 29 }
                         }
                     },
@@ -24257,4 +24302,3 @@ var testFixture = {
 
     }
 };
-
