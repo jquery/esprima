@@ -33,7 +33,7 @@ fixture = [
     'MooTools 1.4.5',
     'jQuery 1.9.1',
     'YUI 3.12.0',
-    'jQuery.Mobile 1.3.2',
+    'jQuery.Mobile 1.4.2',
     'Angular 1.2.5'
 ];
 
