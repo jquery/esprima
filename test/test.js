@@ -18130,7 +18130,25 @@ var testFixture = {
     },
 
     'Source elements': {
-
+        '//': {
+            "type": "Program",
+            "body": [],
+            "range": [
+                2,
+                2
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 2
+                },
+                "end": {
+                    "line": 1,
+                    "column": 2
+                }
+            },
+            "tokens": []
+        },
         '': {
             type: 'Program',
             body: [],
