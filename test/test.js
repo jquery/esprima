@@ -5786,13 +5786,13 @@ var testFixture = {
                 range: [0, 14],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 2, column: 14 }
+                    end: { line: 2, column: 6 }
                 }
             },
             range: [0, 14],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 2, column: 14 }
+                end: { line: 2, column: 6 }
             }
         },
 
@@ -5976,13 +5976,13 @@ var testFixture = {
                 range: [0, 15],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 2, column: 15 }
+                    end: { line: 2, column: 6 }
                 }
             },
             range: [0, 15],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 2, column: 15 }
+                end: { line: 2, column: 6 }
             }
         },
 
