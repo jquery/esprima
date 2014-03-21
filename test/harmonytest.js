@@ -2823,6 +2823,11 @@ var harmonyTestFixture = {
                         }
                     },
                     each: false,
+                    range: [9, 22],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 22 }
+                    },
                     of: false
                 }, {
                     type: 'ComprehensionBlock',
@@ -2845,6 +2850,11 @@ var harmonyTestFixture = {
                         }
                     },
                     each: false,
+                    range: [23, 36],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 36 }
+                    },
                     of: false
                 }],
                 body: {
@@ -2919,6 +2929,11 @@ var harmonyTestFixture = {
                         }
                     },
                     each: false,
+                    range: [3, 16],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 16 }
+                    },
                     of: false
                 }],
                 body: {
@@ -2969,6 +2984,11 @@ var harmonyTestFixture = {
                         }
                     },
                     each: false,
+                    range: [3, 16],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 16 }
+                    },
                     of: false
                 }],
                 body: {
@@ -3020,6 +3040,11 @@ var harmonyTestFixture = {
                         }
                     },
                     each: false,
+                    range: [7, 20],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 20 }
+                    },
                     of: false
                 }],
                 body: {
@@ -3086,6 +3111,11 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 13 },
                             end: { line: 1, column: 18 }
                         }
+                    },
+                    range: [3, 19],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 19 }
                     },
                     of: true
                 }],
@@ -3162,6 +3192,11 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 18 }
                         }
                     },
+                    range: [3, 19],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 19 }
+                    },
                     of: true
                 }, {
                     type: 'ComprehensionBlock',
@@ -3182,6 +3217,11 @@ var harmonyTestFixture = {
                             start: { line: 1, column: 30 },
                             end: { line: 1, column: 36 }
                         }
+                    },
+                    range: [20, 37],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 37 }
                     },
                     of: true
                 }],
@@ -12092,7 +12132,7 @@ var harmonyTestFixture = {
             index: 34,
             lineNumber: 1,
             column: 35,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'            
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
         '(a, a) => 42': {

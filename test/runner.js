@@ -71,6 +71,28 @@ function errorToObject(e) {
     };
 }
 
+function needLoc(syntax) {
+    var need = true;
+    if (typeof syntax.tokens !== 'undefined' && syntax.tokens.length > 0) {
+        need = (typeof syntax.tokens[0].loc !== 'undefined');
+    }
+    if (typeof syntax.comments !== 'undefined' && syntax.comments.length > 0) {
+        need = (typeof syntax.comments[0].loc !== 'undefined');
+    }
+    return need;
+}
+
+function needRange(syntax) {
+    var need = true;
+    if (typeof syntax.tokens !== 'undefined' && syntax.tokens.length > 0) {
+        need = (typeof syntax.tokens[0].range !== 'undefined');
+    }
+    if (typeof syntax.comments !== 'undefined' && syntax.comments.length > 0) {
+        need = (typeof syntax.comments[0].range !== 'undefined');
+    }
+    return need;
+}
+
 function testParse(esprima, code, syntax) {
     'use strict';
     var expected, tree, actual, options, StringObject, i, len, err;
@@ -80,27 +102,13 @@ function testParse(esprima, code, syntax) {
 
     options = {
         comment: (typeof syntax.comments !== 'undefined'),
-        range: true,
-        loc: true,
+        range: needRange(syntax),
+        loc: needLoc(syntax),
         tokens: (typeof syntax.tokens !== 'undefined'),
         raw: true,
         tolerant: (typeof syntax.errors !== 'undefined'),
         source: null
     };
-
-    if (typeof syntax.tokens !== 'undefined') {
-        if (syntax.tokens.length > 0) {
-            options.range = (typeof syntax.tokens[0].range !== 'undefined');
-            options.loc = (typeof syntax.tokens[0].loc !== 'undefined');
-        }
-    }
-
-    if (typeof syntax.comments !== 'undefined') {
-        if (syntax.comments.length > 0) {
-            options.range = (typeof syntax.comments[0].range !== 'undefined');
-            options.loc = (typeof syntax.comments[0].loc !== 'undefined');
-        }
-    }
 
     if (options.loc) {
         options.source = syntax.loc.source;
@@ -161,6 +169,29 @@ function testParse(esprima, code, syntax) {
     }
     if (expected !== actual) {
         throw new NotMatchingError(expected, actual);
+    }
+}
+
+function mustHaveLocRange(testName, node, needLoc, needRange, stack) {
+    var error;
+    if (node.hasOwnProperty('type')) {
+      if (needLoc && !node.loc) {
+        error = "doesn't have 'loc' property";
+      }
+      if (needRange && !node.range) {
+        error = "doesn't have 'range' property";
+      }
+      if (error) {
+        stack = stack.length ? ' at [' + stack.join('][') + ']' : '';
+        throw new Error("Test '" + testName + "'" + stack + " (type = " + node.type + ") " + error);
+      }
+    }
+    for (i in node) {
+        if (node.hasOwnProperty(i) && node[i] !== null && typeof node[i] === 'object') {
+            stack.push(i);
+            mustHaveLocRange(testName, node[i], needLoc, needRange, stack);
+            stack.pop();
+        }
     }
 }
 
@@ -407,6 +438,9 @@ if (typeof window !== 'undefined') {
             Object.keys(testFixture[category]).forEach(function (source) {
                 total += 1;
                 expected = testFixture[category][source];
+                if (!expected.hasOwnProperty('lineNumber') && !expected.hasOwnProperty('result')) {
+                    mustHaveLocRange(source, expected, needLoc(expected), needRange(expected), []);
+                }
                 try {
                     runTest(esprima, source, expected);
                 } catch (e) {

@@ -5082,6 +5082,7 @@ parseYieldExpression: true
             extra.parseClassDeclaration = parseClassDeclaration;
             extra.parseClassExpression = parseClassExpression;
             extra.parseClassBody = parseClassBody;
+            extra.parseForStatement = parseForStatement;
 
             parseArrayInitialiser = wrapTracking(extra.parseArrayInitialiser);
             parseAssignmentExpression = wrapTracking(extra.parseAssignmentExpression);
@@ -5125,6 +5126,7 @@ parseYieldExpression: true
             parseClassDeclaration = wrapTracking(extra.parseClassDeclaration);
             parseClassExpression = wrapTracking(extra.parseClassExpression);
             parseClassBody = wrapTracking(extra.parseClassBody);
+            parseForStatement = wrapTracking(extra.parseForStatement);
         }
 
         if (typeof extra.tokens !== 'undefined') {
@@ -5186,6 +5188,7 @@ parseYieldExpression: true
             parseClassDeclaration = extra.parseClassDeclaration;
             parseClassExpression = extra.parseClassExpression;
             parseClassBody = extra.parseClassBody;
+            parseForStatement = extra.parseForStatement;
         }
 
         if (typeof extra.scanRegExp === 'function') {
