@@ -4983,10 +4983,29 @@ var testFixture = {
             comments: [{
                 type: 'Line',
                 value: ' comment',
-                range: [1, 11],
+                range: [0, 11],
                 loc: {
-                    start: { line: 1, column: 1 },
+                    start: { line: 1, column: 0 },
                     end: { line: 1, column: 11 }
+                }
+            }]
+        },
+
+        '<!-- comment': {
+            type: 'Program',
+            body: [],
+            range: [12, 12],
+            loc: {
+                start: { line: 1, column: 12 },
+                end: { line: 1, column: 12 }
+            },
+            comments: [{
+                type: 'Line',
+                value: ' comment',
+                range: [0, 12],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 12 }
                 }
             }]
         },
@@ -5002,9 +5021,9 @@ var testFixture = {
             comments: [{
                 type: 'Line',
                 value: ' comment',
-                range: [4, 14],
+                range: [3, 14],
                 loc: {
-                    start: { line: 1, column: 4 },
+                    start: { line: 1, column: 3 },
                     end: { line: 1, column: 14 }
                 }
             }]
@@ -5029,9 +5048,9 @@ var testFixture = {
             }, {
                 type: 'Line',
                 value: ' comment',
-                range: [25, 35],
+                range: [24, 35],
                 loc: {
-                    start: { line: 1, column: 25 },
+                    start: { line: 1, column: 24 },
                     end: { line: 1, column: 35 }
                 }
             }]
@@ -5056,9 +5075,9 @@ var testFixture = {
             }, {
                 type: 'Line',
                 value: ' comment',
-                range: [20, 30],
+                range: [19, 30],
                 loc: {
-                    start: { line: 1, column: 20 },
+                    start: { line: 1, column: 19 },
                     end: { line: 1, column: 30 }
                 }
             }]

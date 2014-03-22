@@ -372,14 +372,14 @@ parseStatement: true, parseSourceElement: true */
         }
     }
 
-    function skipSingleLineComment() {
+    function skipSingleLineComment(offset) {
         var start, loc, ch, comment;
 
-        start = index - 2;
+        start = index - offset;
         loc = {
             start: {
                 line: lineNumber,
-                column: index - lineStart - 2
+                column: index - lineStart - offset
             }
         };
 
@@ -388,7 +388,7 @@ parseStatement: true, parseSourceElement: true */
             ++index;
             if (isLineTerminator(ch)) {
                 if (extra.comments) {
-                    comment = source.slice(start + 2, index - 1);
+                    comment = source.slice(start + offset, index - 1);
                     loc.end = {
                         line: lineNumber,
                         column: index - lineStart - 1
@@ -405,7 +405,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (extra.comments) {
-            comment = source.slice(start + 2, index);
+            comment = source.slice(start + offset, index);
             loc.end = {
                 line: lineNumber,
                 column: index - lineStart
@@ -485,7 +485,7 @@ parseStatement: true, parseSourceElement: true */
                 if (ch === 0x2F) {
                     ++index;
                     ++index;
-                    skipSingleLineComment();
+                    skipSingleLineComment(2);
                     start = true;
                 } else if (ch === 0x2A) {  // U+002A is '*'
                     ++index;
@@ -499,7 +499,7 @@ parseStatement: true, parseSourceElement: true */
                 if ((source.charCodeAt(index + 1) === 0x2D) && (source.charCodeAt(index + 2) === 0x3E)) {
                     // '-->' is a single-line comment
                     index += 3;
-                    skipSingleLineComment();
+                    skipSingleLineComment(3);
                 } else {
                     break;
                 }
@@ -509,7 +509,7 @@ parseStatement: true, parseSourceElement: true */
                     ++index; // `!`
                     ++index; // `-`
                     ++index; // `-`
-                    skipSingleLineComment();
+                    skipSingleLineComment(4);
                 } else {
                     break;
                 }
