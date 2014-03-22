@@ -34,7 +34,7 @@
 /*jslint bitwise:true plusplus:true */
 /*global esprima:true, define:true, exports:true, window: true,
 createLocationMarker: true,
-throwError: true, generateStatement: true, peek: true,
+throwError: true, generateStatement: true,
 parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
 parseFunctionSourceElements: true, parseVariableIdentifier: true,
@@ -1345,18 +1345,6 @@ parseStatement: true, parseSourceElement: true */
         return token;
     }
 
-    function peek() {
-        var pos, line, start;
-
-        pos = index;
-        line = lineNumber;
-        start = lineStart;
-        lookahead = (typeof extra.tokens !== 'undefined') ? collectToken() : advance();
-        index = pos;
-        lineNumber = line;
-        lineStart = start;
-    }
-
     SyntaxTreeDelegate = {
 
         name: 'SyntaxTree',
@@ -1378,9 +1366,6 @@ parseStatement: true, parseSourceElement: true */
             if (typeof node.type === 'undefined' || node.type === Syntax.Program) {
                 return;
             }
-
-            // Check for possible additional trailing comments.
-            peek();
 
             for (i = 0; i < extra.pendingComments.length; ++i) {
                 attacher = extra.pendingComments[i];
@@ -2136,7 +2121,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.1 Primary Expressions
 
     function parsePrimaryExpression() {
-        var type, token, expr;
+        var type, token, expr, pos, line, start;
 
         if (match('(')) {
             return parseGroupExpression();
@@ -2172,12 +2157,15 @@ parseStatement: true, parseSourceElement: true */
         } else if (match('{')) {
             expr = parseObjectInitialiser();
         } else if (match('/') || match('/=')) {
-            if (typeof extra.tokens !== 'undefined') {
-                expr = delegate.createLiteral(collectRegex());
-            } else {
-                expr = delegate.createLiteral(scanRegExp());
-            }
-            peek();
+            lookahead = (typeof extra.tokens === 'undefined') ? scanRegExp() : collectRegex();
+            expr = delegate.createLiteral(lookahead);
+            pos = index;
+            line = lineNumber;
+            start = lineStart;
+            lookahead = (typeof extra.tokens === 'undefined') ? advance() : collectToken();
+            index = pos;
+            lineNumber = line;
+            lineStart = start;
         }
 
         if (expr) {
@@ -3522,7 +3510,6 @@ parseStatement: true, parseSourceElement: true */
 
         delegate.markStart();
         strict = false;
-        peek();
         body = parseSourceElements();
         return delegate.markEnd(delegate.createProgram(body));
     }
@@ -3676,10 +3663,21 @@ parseStatement: true, parseSourceElement: true */
                     source = code.valueOf();
                 }
             }
+
+            lookahead = collectToken();
+            index = 0;
+            lineNumber = 1;
+            lineStart = 0;
+        } else {
+            lookahead = {
+                type: Token.EOF,
+                lineNumber: 0,
+                lineStart: 0,
+                range: [0, 0]
+            };
         }
 
         try {
-            peek();
             if (lookahead.type === Token.EOF) {
                 return extra.tokens;
             }
@@ -3777,6 +3775,17 @@ parseStatement: true, parseSourceElement: true */
                     source = code.valueOf();
                 }
             }
+            lookahead = typeof extra.tokens === 'undefined' ? advance() : collectToken();
+            index = 0;
+            lineNumber = 1;
+            lineStart = 0;
+        } else {
+            lookahead = {
+                type: Token.EOF,
+                lineNumber: 0,
+                lineStart: 0,
+                range: [0, 0]
+            };
         }
 
         try {
