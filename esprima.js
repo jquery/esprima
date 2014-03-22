@@ -242,19 +242,19 @@ parseStatement: true, parseSourceElement: true */
     // 7.6 Identifier Names and Identifiers
 
     function isIdentifierStart(ch) {
-        return (ch === 36) || (ch === 95) ||  // $ (dollar) and _ (underscore)
-            (ch >= 65 && ch <= 90) ||         // A..Z
-            (ch >= 97 && ch <= 122) ||        // a..z
-            (ch === 92) ||                    // \ (backslash)
+        return (ch === 0x24) || (ch === 0x5F) ||  // $ (dollar) and _ (underscore)
+            (ch >= 0x41 && ch <= 0x5A) ||         // A..Z
+            (ch >= 0x61 && ch <= 0x7A) ||         // a..z
+            (ch === 0x5C) ||                      // \ (backslash)
             ((ch >= 0x80) && Regex.NonAsciiIdentifierStart.test(String.fromCharCode(ch)));
     }
 
     function isIdentifierPart(ch) {
-        return (ch === 36) || (ch === 95) ||  // $ (dollar) and _ (underscore)
-            (ch >= 65 && ch <= 90) ||         // A..Z
-            (ch >= 97 && ch <= 122) ||        // a..z
-            (ch >= 48 && ch <= 57) ||         // 0..9
-            (ch === 92) ||                    // \ (backslash)
+        return (ch === 0x24) || (ch === 0x5F) ||  // $ (dollar) and _ (underscore)
+            (ch >= 0x41 && ch <= 0x5A) ||         // A..Z
+            (ch >= 0x61 && ch <= 0x7A) ||         // a..z
+            (ch >= 0x30 && ch <= 0x39) ||         // 0..9
+            (ch === 0x5C) ||                      // \ (backslash)
             ((ch >= 0x80) && Regex.NonAsciiIdentifierPart.test(String.fromCharCode(ch)));
     }
 
@@ -372,14 +372,14 @@ parseStatement: true, parseSourceElement: true */
         }
     }
 
-    function skipSingleLineComment() {
+    function skipSingleLineComment(offset) {
         var start, loc, ch, comment;
 
-        start = index - 2;
+        start = index - offset;
         loc = {
             start: {
                 line: lineNumber,
-                column: index - lineStart - 2
+                column: index - lineStart - offset
             }
         };
 
@@ -388,7 +388,7 @@ parseStatement: true, parseSourceElement: true */
             ++index;
             if (isLineTerminator(ch)) {
                 if (extra.comments) {
-                    comment = source.slice(start + 2, index - 1);
+                    comment = source.slice(start + offset, index - 1);
                     loc.end = {
                         line: lineNumber,
                         column: index - lineStart - 1
@@ -405,7 +405,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         if (extra.comments) {
-            comment = source.slice(start + 2, index);
+            comment = source.slice(start + offset, index);
             loc.end = {
                 line: lineNumber,
                 column: index - lineStart
@@ -430,7 +430,7 @@ parseStatement: true, parseSourceElement: true */
         while (index < length) {
             ch = source.charCodeAt(index);
             if (isLineTerminator(ch)) {
-                if (ch === 13 && source.charCodeAt(index + 1) === 10) {
+                if (ch === 0x0D && source.charCodeAt(index + 1) === 0x0A) {
                     ++index;
                 }
                 ++lineNumber;
@@ -439,9 +439,9 @@ parseStatement: true, parseSourceElement: true */
                 if (index >= length) {
                     throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                 }
-            } else if (ch === 42) {
-                // Block comment ends with '*/' (char #42, char #47).
-                if (source.charCodeAt(index + 1) === 47) {
+            } else if (ch === 0x2A) {
+                // Block comment ends with '*/'.
+                if (source.charCodeAt(index + 1) === 0x2F) {
                     ++index;
                     ++index;
                     if (extra.comments) {
@@ -474,42 +474,42 @@ parseStatement: true, parseSourceElement: true */
                 ++index;
             } else if (isLineTerminator(ch)) {
                 ++index;
-                if (ch === 13 && source.charCodeAt(index) === 10) {
+                if (ch === 0x0D && source.charCodeAt(index) === 0x0A) {
                     ++index;
                 }
                 ++lineNumber;
                 lineStart = index;
                 start = true;
-            } else if (ch === 47) { // 47 is '/'
+            } else if (ch === 0x2F) { // U+002F is '/'
                 ch = source.charCodeAt(index + 1);
-                if (ch === 47) {
+                if (ch === 0x2F) {
                     ++index;
                     ++index;
-                    skipSingleLineComment();
+                    skipSingleLineComment(2);
                     start = true;
-                } else if (ch === 42) {  // 42 is '*'
+                } else if (ch === 0x2A) {  // U+002A is '*'
                     ++index;
                     ++index;
                     skipMultiLineComment();
                 } else {
                     break;
                 }
-            } else if (start && ch === 45) { // 45 is '-'
-                // 62 is '>'
-                if ((source.charCodeAt(index + 1) === 45) && (source.charCodeAt(index + 2) === 62)) {
+            } else if (start && ch === 0x2D) { // U+002D is '-'
+                // U+003E is '>'
+                if ((source.charCodeAt(index + 1) === 0x2D) && (source.charCodeAt(index + 2) === 0x3E)) {
                     // '-->' is a single-line comment
                     index += 3;
-                    skipSingleLineComment();
+                    skipSingleLineComment(3);
                 } else {
                     break;
                 }
-            } else if (ch === 60) { // 60 is '<'
+            } else if (ch === 0x3C) { // U+003C is '<'
                 if (source.slice(index + 1, index + 4) === '!--') {
                     ++index; // `<`
                     ++index; // `!`
                     ++index; // `-`
                     ++index; // `-`
-                    skipSingleLineComment();
+                    skipSingleLineComment(4);
                 } else {
                     break;
                 }
@@ -540,9 +540,9 @@ parseStatement: true, parseSourceElement: true */
         ch = source.charCodeAt(index++);
         id = String.fromCharCode(ch);
 
-        // '\u' (char #92, char #117) denotes an escaped character.
-        if (ch === 92) {
-            if (source.charCodeAt(index) !== 117) {
+        // '\u' (U+005C, U+0075) denotes an escaped character.
+        if (ch === 0x5C) {
+            if (source.charCodeAt(index) !== 0x75) {
                 throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
             }
             ++index;
@@ -561,10 +561,10 @@ parseStatement: true, parseSourceElement: true */
             ++index;
             id += String.fromCharCode(ch);
 
-            // '\u' (char #92, char #117) denotes an escaped character.
-            if (ch === 92) {
+            // '\u' (U+005C, U+0075) denotes an escaped character.
+            if (ch === 0x5C) {
                 id = id.substr(0, id.length - 1);
-                if (source.charCodeAt(index) !== 117) {
+                if (source.charCodeAt(index) !== 0x75) {
                     throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                 }
                 ++index;
@@ -585,8 +585,8 @@ parseStatement: true, parseSourceElement: true */
         start = index++;
         while (index < length) {
             ch = source.charCodeAt(index);
-            if (ch === 92) {
-                // Blackslash (char #92) marks Unicode escape sequence.
+            if (ch === 0x5C) {
+                // Blackslash (U+005C) marks Unicode escape sequence.
                 index = start;
                 return getEscapedIdentifier();
             }
@@ -605,8 +605,8 @@ parseStatement: true, parseSourceElement: true */
 
         start = index;
 
-        // Backslash (char #92) starts an escaped character.
-        id = (source.charCodeAt(index) === 92) ? getEscapedIdentifier() : getIdentifier();
+        // Backslash (U+005C) starts an escaped character.
+        id = (source.charCodeAt(index) === 0x5C) ? getEscapedIdentifier() : getIdentifier();
 
         // There is no keyword or literal with only one character.
         // Thus, it must be an identifier.
@@ -646,23 +646,23 @@ parseStatement: true, parseSourceElement: true */
         switch (code) {
 
         // Check for most common single-character punctuators.
-        case 46:   // . dot
-        case 40:   // ( open bracket
-        case 41:   // ) close bracket
-        case 59:   // ; semicolon
-        case 44:   // , comma
-        case 123:  // { open curly brace
-        case 125:  // } close curly brace
-        case 91:   // [
-        case 93:   // ]
-        case 58:   // :
-        case 63:   // ?
-        case 126:  // ~
+        case 0x2E:  // . dot
+        case 0x28:  // ( open bracket
+        case 0x29:  // ) close bracket
+        case 0x3B:  // ; semicolon
+        case 0x2C:  // , comma
+        case 0x7B:  // { open curly brace
+        case 0x7D:  // } close curly brace
+        case 0x5B:  // [
+        case 0x5D:  // ]
+        case 0x3A:  // :
+        case 0x3F:  // ?
+        case 0x7E:  // ~
             ++index;
             if (extra.tokenize) {
-                if (code === 40) {
+                if (code === 0x28) {
                     extra.openParenToken = extra.tokens.length;
-                } else if (code === 123) {
+                } else if (code === 0x7B) {
                     extra.openCurlyToken = extra.tokens.length;
                 }
             }
@@ -677,19 +677,19 @@ parseStatement: true, parseSourceElement: true */
         default:
             code2 = source.charCodeAt(index + 1);
 
-            // '=' (char #61) marks an assignment or comparison operator.
-            if (code2 === 61) {
+            // '=' (U+003D) marks an assignment or comparison operator.
+            if (code2 === 0x3D) {
                 switch (code) {
-                case 37:  // %
-                case 38:  // &
-                case 42:  // *:
-                case 43:  // +
-                case 45:  // -
-                case 47:  // /
-                case 60:  // <
-                case 62:  // >
-                case 94:  // ^
-                case 124: // |
+                case 0x25:  // %
+                case 0x26:  // &
+                case 0x2A:  // *:
+                case 0x2B:  // +
+                case 0x2D:  // -
+                case 0x2F:  // /
+                case 0x3C:  // <
+                case 0x3E:  // >
+                case 0x5E:  // ^
+                case 0x7C:  // |
                     index += 2;
                     return {
                         type: Token.Punctuator,
@@ -699,12 +699,12 @@ parseStatement: true, parseSourceElement: true */
                         range: [start, index]
                     };
 
-                case 33: // !
-                case 61: // =
+                case 0x21: // !
+                case 0x3D: // =
                     index += 2;
 
                     // !== and ===
-                    if (source.charCodeAt(index) === 61) {
+                    if (source.charCodeAt(index) === 0x3D) {
                         ++index;
                     }
                     return {
@@ -1013,6 +1013,7 @@ parseStatement: true, parseSourceElement: true */
                     if (ch ===  '\r' && source[index] === '\n') {
                         ++index;
                     }
+                    lineStart = index;
                 }
             } else if (isLineTerminator(ch.charCodeAt(0))) {
                 break;
@@ -1261,12 +1262,12 @@ parseStatement: true, parseSourceElement: true */
         ch = source.charCodeAt(index);
 
         // Very common: ( and ) and ;
-        if (ch === 40 || ch === 41 || ch === 58) {
+        if (ch === 0x28 || ch === 0x29 || ch === 0x3A) {
             return scanPunctuator();
         }
 
-        // String literal starts with single quote (#39) or double quote (#34).
-        if (ch === 39 || ch === 34) {
+        // String literal starts with single quote (U+0027) or double quote (U+0022).
+        if (ch === 0x27 || ch === 0x22) {
             return scanStringLiteral();
         }
 
@@ -1274,9 +1275,9 @@ parseStatement: true, parseSourceElement: true */
             return scanIdentifier();
         }
 
-        // Dot (.) char #46 can also start a floating-point number, hence the need
+        // Dot (.) U+002E can also start a floating-point number, hence the need
         // to check the next character.
-        if (ch === 46) {
+        if (ch === 0x2E) {
             if (isDecimalDigit(source.charCodeAt(index + 1))) {
                 return scanNumericLiteral();
             }
@@ -1287,8 +1288,8 @@ parseStatement: true, parseSourceElement: true */
             return scanNumericLiteral();
         }
 
-        // Slash (/) char #47 can also start a regex.
-        if (extra.tokenize && ch === 47) {
+        // Slash (/) U+002F can also start a regex.
+        if (extra.tokenize && ch === 0x2F) {
             return advanceSlash();
         }
 
@@ -1361,6 +1362,7 @@ parseStatement: true, parseSourceElement: true */
         name: 'SyntaxTree',
 
         markStart: function () {
+            skipComment();
             if (extra.loc) {
                 state.markerStack.push(index - lineStart);
                 state.markerStack.push(lineNumber);
@@ -1934,8 +1936,8 @@ parseStatement: true, parseSourceElement: true */
     function consumeSemicolon() {
         var line;
 
-        // Catch the very common case first: immediately a semicolon (char #59).
-        if (source.charCodeAt(index) === 59) {
+        // Catch the very common case first: immediately a semicolon (U+003B).
+        if (source.charCodeAt(index) === 0x3B) {
             lex();
             return;
         }
@@ -1993,7 +1995,6 @@ parseStatement: true, parseSourceElement: true */
         var previousStrict, body;
 
         previousStrict = strict;
-        skipComment();
         delegate.markStart();
         body = parseFunctionSourceElements();
         if (first && strict && isRestrictedWord(param[0].name)) {
@@ -2006,7 +2007,6 @@ parseStatement: true, parseSourceElement: true */
     function parseObjectPropertyKey() {
         var token;
 
-        skipComment();
         delegate.markStart();
         token = lex();
 
@@ -2027,7 +2027,6 @@ parseStatement: true, parseSourceElement: true */
         var token, key, id, value, param;
 
         token = lookahead;
-        skipComment();
         delegate.markStart();
 
         if (token.type === Token.Identifier) {
@@ -2617,7 +2616,6 @@ parseStatement: true, parseSourceElement: true */
     function parseBlock() {
         var block;
 
-        skipComment();
         delegate.markStart();
         expect('{');
 
@@ -2633,7 +2631,6 @@ parseStatement: true, parseSourceElement: true */
     function parseVariableIdentifier() {
         var token;
 
-        skipComment();
         delegate.markStart();
         token = lex();
 
@@ -2647,7 +2644,6 @@ parseStatement: true, parseSourceElement: true */
     function parseVariableDeclaration(kind) {
         var init = null, id;
 
-        skipComment();
         delegate.markStart();
         id = parseVariableIdentifier();
 
@@ -2700,7 +2696,6 @@ parseStatement: true, parseSourceElement: true */
     function parseConstLetDeclaration(kind) {
         var declarations;
 
-        skipComment();
         delegate.markStart();
 
         expectKeyword(kind);
@@ -2892,7 +2887,7 @@ parseStatement: true, parseSourceElement: true */
         expectKeyword('continue');
 
         // Optimize the most common form: 'continue;'.
-        if (source.charCodeAt(index) === 59) {
+        if (source.charCodeAt(index) === 0x3B) {
             lex();
 
             if (!state.inIteration) {
@@ -2935,8 +2930,8 @@ parseStatement: true, parseSourceElement: true */
 
         expectKeyword('break');
 
-        // Catch the very common case first: immediately a semicolon (char #59).
-        if (source.charCodeAt(index) === 59) {
+        // Catch the very common case first: immediately a semicolon (U+003B).
+        if (source.charCodeAt(index) === 0x3B) {
             lex();
 
             if (!(state.inIteration || state.inSwitch)) {
@@ -2984,7 +2979,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         // 'return' followed by a space and an identifier is very common.
-        if (source.charCodeAt(index) === 32) {
+        if (source.charCodeAt(index) === 0x20) {
             if (isIdentifierStart(source.charCodeAt(index + 1))) {
                 argument = parseExpression();
                 consumeSemicolon();
@@ -3036,7 +3031,6 @@ parseStatement: true, parseSourceElement: true */
             consequent = [],
             statement;
 
-        skipComment();
         delegate.markStart();
         if (matchKeyword('default')) {
             lex();
@@ -3126,7 +3120,6 @@ parseStatement: true, parseSourceElement: true */
     function parseCatchClause() {
         var param, body;
 
-        skipComment();
         delegate.markStart();
         expectKeyword('catch');
 
@@ -3191,7 +3184,6 @@ parseStatement: true, parseSourceElement: true */
             throwUnexpected(lookahead);
         }
 
-        skipComment();
         delegate.markStart();
 
         if (type === Token.Punctuator) {
@@ -3270,7 +3262,6 @@ parseStatement: true, parseSourceElement: true */
         var sourceElement, sourceElements = [], token, directive, firstRestricted,
             oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody;
 
-        skipComment();
         delegate.markStart();
         expect('{');
 
@@ -3383,7 +3374,6 @@ parseStatement: true, parseSourceElement: true */
     function parseFunctionDeclaration() {
         var id, params = [], body, token, stricted, tmp, firstRestricted, message, previousStrict;
 
-        skipComment();
         delegate.markStart();
 
         expectKeyword('function');
@@ -3530,7 +3520,6 @@ parseStatement: true, parseSourceElement: true */
     function parseProgram() {
         var body;
 
-        skipComment();
         delegate.markStart();
         strict = false;
         peek();

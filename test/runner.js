@@ -417,6 +417,7 @@ if (typeof window !== 'undefined') {
         var esprima = require('../esprima'),
             vm = require('vm'),
             fs = require('fs'),
+            diff = require('json-diff').diffString,
             total = 0,
             failures = [],
             tick = new Date(),
@@ -444,9 +445,19 @@ if (typeof window !== 'undefined') {
         if (failures.length) {
             console.error(header);
             failures.forEach(function (failure) {
-                console.error(failure.source + ': Expected\n    ' +
-                    failure.expected.split('\n').join('\n    ') +
-                    '\nto match\n    ' + failure.actual);
+                try {
+                    var expectedObject = JSON.parse(failure.expected);
+                    var actualObject = JSON.parse(failure.actual);
+
+                    console.error(failure.source + ': Expected\n    ' +
+                        failure.expected.split('\n').join('\n    ') +
+                        '\nto match\n    ' + failure.actual + '\nDiff:\n' +
+                        diff(expectedObject, actualObject));
+                } catch (ex) {
+                    console.error(failure.source + ': Expected\n    ' +
+                        failure.expected.split('\n').join('\n    ') +
+                        '\nto match\n    ' + failure.actual);
+                }
             });
         } else {
             console.log(header);

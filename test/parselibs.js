@@ -29,12 +29,12 @@ N = 1;
 
 fixture = [
     'Underscore 1.5.2',
-    'Backbone 1.0.0',
+    'Backbone 1.1.0',
     'MooTools 1.4.5',
     'jQuery 1.9.1',
     'YUI 3.12.0',
-    'jQuery.Mobile 1.3.2',
-    'Angular 1.0.8'
+    'jQuery.Mobile 1.4.2',
+    'Angular 1.2.5'
 ];
 
 if (typeof require === 'undefined') {

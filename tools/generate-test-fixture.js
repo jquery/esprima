@@ -30,6 +30,7 @@
 (function () {
     'use strict';
     var fs = require('fs'),
+        optimist = require('optimist'),
         path = require('path'),
         root = path.join(path.dirname(fs.realpathSync(__filename)), '..'),
         esprima = require(path.join(root, 'esprima')),
@@ -44,7 +45,8 @@
     }
 
     // This function is based on ECMA262 section 15.12.3JSON.stringify algorithm with modification
-    function stringify(given) {
+    function stringify(given, printStrictJSON) {
+
         var Regex, gap, top, indent;
 
         Regex = {
@@ -182,10 +184,10 @@
 
         function quote(string) {
             var i, iz, ch, product, hex;
-            product = '\'';
+            product = '"';
             for (i = 0, iz = string.length; i < iz; i += 1) {
                 ch = string[i];
-                if (ch === '\'' || ch === '\\') {
+                if (ch === '"' || ch === '\\') {
                     product += '\\';
                     product += ch;
                 } else {
@@ -221,7 +223,7 @@
                     }
                 }
             }
-            return product + '\'';
+            return product + '"';
         }
 
         function ja(array) {
@@ -231,7 +233,15 @@
         }
 
         function jo(object, key) {
-            var stepback, partial, fin, separator;
+            var stepback, partial, fin, separator,
+                startStr = 'start', endStr = 'end', lineStr = 'line', colStr = 'column';
+
+            if (printStrictJSON) {
+                startStr = '"' + startStr + '"';
+                endStr = '"' + endStr + '"';
+                lineStr = '"' + lineStr + '"';
+                colStr = '"' + colStr + '"';
+            }
 
             stepback = indent;
             indent += gap;
@@ -239,15 +249,15 @@
             if (key === 'loc') {
                 // specialized for loc
                 fin = '{\n' +
-                    indent + 'start: { line: ' + stringify(object.start.line) + ', column: ' + stringify(object.start.column) + ' },\n' +
-                    indent + 'end: { line: ' + stringify(object.end.line) + ', column: ' + stringify(object.end.column) + ' }\n' +
+                    indent + startStr + ': { ' + lineStr + ': ' + stringify(object.start.line) + ', ' + colStr + ': ' + stringify(object.start.column) + ' },\n' +
+                    indent + endStr + ': { ' + lineStr + ': ' + stringify(object.end.line) + ', ' + colStr + ': ' + stringify(object.end.column) + ' }\n' +
                     stepback + '}';
             } else {
                 partial = Object.keys(object).reduce(function (partial, name) {
                     var res;
                     res = str(name, object);
                     if (res !== undefined) {
-                        if (!isIdentifier(name)) {
+                        if (printStrictJSON || !isIdentifier(name)) {
                             name = quote(name);
                         }
                         partial.push(name + ': ' + res);
@@ -318,6 +328,9 @@
         tolerant: false
     };
 
-    console.log(stringify(esprima.parse(content, options)));
+    console.log(stringify(
+        esprima.parse(content, options),
+        !!optimist.argv['strict-json']
+    ));
 }());
 /* vim: set sw=4 ts=4 et tw=80 : */
