@@ -188,7 +188,8 @@ if (typeof window !== 'undefined') {
         function runBenchmarks(suite) {
 
             var index = 0,
-                totalTime = 0;
+                totalTime = 0,
+                totalRme = 0;
 
             function reset() {
                 var i, name;
@@ -203,7 +204,8 @@ if (typeof window !== 'undefined') {
                 var el, test, source, benchmark;
 
                 if (index >= suite.length) {
-                    setText('total-time', (1000 * totalTime).toFixed(1) + ' ms');
+                    setText('total-time', (1000 * totalTime).toFixed(1) + ' ms \xb1 ' +
+                        Math.sqrt(totalRme / totalTime).toFixed(2) + '%');
                     setText('status', 'Ready.');
                     enableRunButtons();
                     return;
@@ -228,6 +230,7 @@ if (typeof window !== 'undefined') {
                         str += this.stats.rme.toFixed(1) + '%';
                         setText(this.name + '-time', str);
                         totalTime += this.stats.mean;
+                        totalRme += this.stats.mean * this.stats.rme * this.stats.rme;
                     }
                 });
 
@@ -299,7 +302,8 @@ if (typeof window !== 'undefined') {
             var index,
                 tree = [],
                 totalTime = 0,
-                totalSize = 0;
+                totalSize = 0,
+                totalRme = 0;
 
             function pad(str, len) {
               var result = str;
@@ -324,12 +328,15 @@ if (typeof window !== 'undefined') {
                         result += ' ms \xb1 ' + this.stats.rme.toFixed(2) + '%';
                         log(result);
                         totalTime += this.stats.mean;
+                        totalRme += this.stats.mean * this.stats.rme * this.stats.rme;
                     }
                 });
             }, new Benchmark.Suite()).on('complete', function () {
                 log('                     ------------------------');
                 log(pad(kb(totalSize) + ' KiB', 32) +
-                    pad((1000 * totalTime).toFixed(2), 10) + ' ms');
+                    pad((1000 * totalTime).toFixed(2), 10) + ' ms \xb1 ' +
+                    Math.sqrt(totalRme / totalTime).toFixed(2) + '%'
+                );
             }).run();
         }
 
