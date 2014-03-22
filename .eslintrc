@@ -7,6 +7,7 @@
 
     "rules": {
         "no-alert": 2,
+        "no-array-constructor": 2,
         "no-caller": 2,
         "no-bitwise": 0,
         "no-catch-shadow": 2,
@@ -43,7 +44,6 @@
         "no-plusplus": 0,
         "no-delete-var": 2,
         "no-return-assign": 2,
-        "no-new-array": 2,
         "no-new-object": 2,
         "no-label-var": 2,
         "no-ternary": 0,
@@ -61,6 +61,7 @@
         "no-shadow": 2,
         "no-use-before-define": 0,
         "no-redeclare": 2,
+        "no-regex-spaces": 2,
 
         "brace-style": 0,
         "block-scoped-var": 0,
@@ -81,7 +82,6 @@
         "quotes": [2, "single"],
         "quote-props": 0,
         "radix": 0,
-        "regex-spaces": 2,
         "semi": 2,
         "strict": 2,
         "unnecessary-strict": 0,
