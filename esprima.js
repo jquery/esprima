@@ -3571,7 +3571,7 @@ parseStatement: true, parseSourceElement: true */
     function LocationMarker() {
         this.startIndex = index;
         this.startLine = lineNumber;
-        this.startColumn = index- lineStart;
+        this.startColumn = index - lineStart;
     }
 
     LocationMarker.prototype = {
