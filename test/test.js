@@ -3338,9 +3338,99 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 77 }
             }
+        },
+
+        'x = { for: 42 }': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'AssignmentExpression',
+                    operator: '=',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x'
+                    },
+                    right: {
+                        type: 'ObjectExpression',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'for'
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 42,
+                                raw: '42'
+                            },
+                            kind: 'init'
+                        }]
+                    }
+                }
+            }],
+            tokens: [{
+                type: 'Identifier',
+                value: 'x'
+            }, {
+                type: 'Punctuator',
+                value: '='
+            }, {
+                type: 'Punctuator',
+                value: '{'
+            }, {
+                type: 'Identifier',
+                value: 'for'
+            }, {
+                type: 'Punctuator',
+                value: ':'
+            }, {
+                type: 'Numeric',
+                value: '42'
+            }, {
+                type: 'Punctuator',
+                value: '}'
+            }]
+        },
+
+        'promise.catch()': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'MemberExpression',
+                        computed: false,
+                        object: {
+                            type: 'Identifier',
+                            name: 'promise'
+                        },
+                        property: {
+                            type: 'Identifier',
+                            name: 'catch'
+                        }
+                    },
+                    arguments: []
+                }
+            }],
+            tokens: [{
+                type: 'Identifier',
+                value: 'promise'
+            }, {
+                type: 'Punctuator',
+                value: '.'
+            }, {
+                type: 'Identifier',
+                value: 'catch'
+            }, {
+                type: 'Punctuator',
+                value: '('
+            }, {
+                type: 'Punctuator',
+                value: ')'
+            }]
         }
-
-
     },
 
     'Comments': {
