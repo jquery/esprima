@@ -2273,7 +2273,6 @@ parseStatement: true, parseSourceElement: true */
                 expr = delegate.createMemberExpression('.', expr, property);
             }
             if (marker) {
-                marker.end();
                 marker.apply(expr);
             }
         }
@@ -2299,7 +2298,6 @@ parseStatement: true, parseSourceElement: true */
                 expr = delegate.createMemberExpression('.', expr, property);
             }
             if (marker) {
-                marker.end();
                 marker.apply(expr);
             }
         }
@@ -2483,7 +2481,6 @@ parseStatement: true, parseSourceElement: true */
                 markers.pop();
                 marker = markers.pop();
                 if (marker) {
-                    marker.end();
                     marker.apply(expr);
                 }
                 stack.push(expr);
@@ -2508,7 +2505,6 @@ parseStatement: true, parseSourceElement: true */
             i -= 2;
             marker = markers.pop();
             if (marker) {
-                marker.end();
                 marker.apply(expr);
             }
         }
@@ -3573,31 +3569,27 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function LocationMarker() {
-        this.marker = [index, lineNumber, index - lineStart, 0, 0, 0];
+        this.startIndex = index;
+        this.startLine = lineNumber;
+        this.startColumn = index - lineStart;
     }
 
     LocationMarker.prototype = {
         constructor: LocationMarker,
 
-        end: function () {
-            this.marker[3] = index;
-            this.marker[4] = lineNumber;
-            this.marker[5] = index - lineStart;
-        },
-
         apply: function (node) {
             if (extra.range) {
-                node.range = [this.marker[0], this.marker[3]];
+                node.range = [this.startIndex, index];
             }
             if (extra.loc) {
                 node.loc = {
                     start: {
-                        line: this.marker[1],
-                        column: this.marker[2]
+                        line: this.startLine,
+                        column: this.startColumn
                     },
                     end: {
-                        line: this.marker[4],
-                        column: this.marker[5]
+                        line: lineNumber,
+                        column: index - lineStart
                     }
                 };
                 node = delegate.postProcess(node);
