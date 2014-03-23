@@ -1370,6 +1370,9 @@ parseStatement: true, parseSourceElement: true */
             if (extra.range) {
                 state.markerStack.push(index);
             }
+            if (extra.tokenRange) {
+                state.markerStack.push(extra.tokens.length ? extra.tokens.length - 1 : 0);
+            }
         },
 
         processComment: function (node) {
@@ -1412,6 +1415,9 @@ parseStatement: true, parseSourceElement: true */
         },
 
         markEnd: function (node) {
+            if (extra.tokenRange) {
+                node.tokenRange = [ state.markerStack.pop(), extra.tokens.length];
+            }
             if (extra.range) {
                 node.range = [state.markerStack.pop(), index];
             }
@@ -1435,7 +1441,10 @@ parseStatement: true, parseSourceElement: true */
         },
 
         markEndIf: function (node) {
-            if (node.range || node.loc) {
+            if (node.range || node.loc || node.tokenRange) {
+                if (node.tokenRange) {
+                    state.markerStack.pop();
+                }
                 if (extra.loc) {
                     state.markerStack.pop();
                     state.markerStack.pop();
@@ -3659,6 +3668,7 @@ parseStatement: true, parseSourceElement: true */
 
         extra.range = (typeof options.range === 'boolean') && options.range;
         extra.loc = (typeof options.loc === 'boolean') && options.loc;
+        extra.tokenRange = (typeof options.tokenRange === 'boolean') && options.tokenRange;
 
         if (typeof options.comment === 'boolean' && options.comment) {
             extra.comments = [];
@@ -3747,6 +3757,7 @@ parseStatement: true, parseSourceElement: true */
             extra.range = (typeof options.range === 'boolean') && options.range;
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
             extra.attachComment = (typeof options.attachComment === 'boolean') && options.attachComment;
+            extra.tokenRange = (typeof options.tokenRange === 'boolean') && options.tokenRange;
 
             if (extra.loc && options.source !== null && options.source !== undefined) {
                 extra.source = toString(options.source);
