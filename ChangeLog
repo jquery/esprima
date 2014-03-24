@@ -1,3 +1,22 @@
+2014-03-23: Version 1.1.0
+
+      * Optionally attach comments to the owning syntax nodes (issue 197)
+      * Simplify binary parsing with stack-based shift reduce (issue 352)
+      * Always include the raw source of literals (issue 376)
+      * Add optional input source information (issue 386)
+      * Tokenizer API for pure lexical scanning (issue 398)
+      * Improve the web site and its online demos (issue 337, 400, 404)
+      * Performance improvement for location tracking (issue 417, 424)
+      * Support HTML comment syntax (issue 451)
+      * Drop support for legacy browsers (issue 474)
+
+2013-08-27: Version 1.0.4
+
+      * Minimize the payload for packages (issue 362)
+      * Fix missing cases on an empty switch statement (issue 436)
+      * Support escaped ] in regexp literal character classes (issue 442)
+      * Tolerate invalid left-hand side expression (issue 130)
+
 2013-05-17: Version 1.0.3
 
       * Variable declaration needs at least one declarator (issue 391)
