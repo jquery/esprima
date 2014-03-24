@@ -20,6 +20,10 @@
     "engines": {
         "node": ">=0.4.0"
     },
+    "author": {
+        "name": "Ariya Hidayat",
+        "email": "ariya.hidayat@gmail.com"
+    },
     "maintainers": [{
         "name": "Ariya Hidayat",
         "email": "ariya.hidayat@gmail.com",
