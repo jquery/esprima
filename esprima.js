@@ -1107,6 +1107,7 @@ parseStatement: true, parseSourceElement: true */
                         flags += 'u';
                         str += '\\u';
                     }
+                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
                 } else {
                     str += '\\';
                 }
