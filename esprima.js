@@ -32,6 +32,7 @@
 
 /*jslint bitwise:true plusplus:true */
 /*global esprima:true, define:true, exports:true, window: true,
+throwErrorTolerant: true,
 throwError: true, generateStatement: true, peek: true,
 parseAssignmentExpression: true, parseBlock: true,
 parseClassExpression: true, parseClassDeclaration: true, parseExpression: true,
@@ -1424,6 +1425,7 @@ parseYieldExpression: true
                         flags += 'u';
                         str += '\\u';
                     }
+                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
                 } else {
                     str += '\\';
                 }
