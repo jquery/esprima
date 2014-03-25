@@ -1196,6 +1196,9 @@ parseStatement: true, parseSourceElement: true */
             return collectRegex();
         }
         if (prevToken.type === 'Punctuator') {
+            if (prevToken.value === ']') {
+                return scanPunctuator();
+            }
             if (prevToken.value === ')') {
                 checkToken = extra.tokens[extra.openParenToken - 1];
                 if (checkToken &&
