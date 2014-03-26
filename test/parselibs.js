@@ -73,16 +73,37 @@ function writeActualSyntax(name, syntax) {
     writeFile('test/3rdparty/syntax/' + name + '.actual.json', tree);
 }
 
+function getBaselineTokens(name) {
+    var data, tokens = null;
+    try {
+        data = readFile('test/3rdparty/syntax/' + name + '.tokens');
+        tokens = JSON.parse(data);
+    } finally {
+        return tokens;
+    }
+}
+
+function createBaselineTokens(name, tokens) {
+    var data = JSON.stringify(tokens, null, 4);
+    writeFile('test/3rdparty/syntax/' + name + '.tokens', data);
+}
+
+function writeActualTokens(name, tokens) {
+    var data = JSON.stringify(tokens, null, 4);
+    writeFile('test/3rdparty/syntax/' + name + '.actual.tokens', data);
+}
+
 console.log('Processing libraries...');
 
 fixture.forEach(function (name) {
-    var filename, source, expected, syntax, i;
+    var filename, source, expected, syntax, tokens, i;
     filename = name.toLowerCase().replace(/\.js/g, 'js').replace(/\s/g, '-');
     source = readFile('test/3rdparty/' + filename + '.js');
     console.log(' ', name);
     try {
         for (i = 0; i < N; ++i) {
             syntax = esprima.parse(source, { range: true, loc: true, raw: true });
+            tokens = esprima.tokenize(source, { range: true });
         }
         expected = getBaselineSyntax(filename);
         if (expected) {
@@ -94,6 +115,17 @@ fixture.forEach(function (name) {
             console.log('    Baseline syntax does not exist. Creating one...');
             createBaselineSyntax(filename, syntax);
         }
+        expected = getBaselineTokens(filename);
+        if (expected) {
+            if (JSON.stringify(expected) !== JSON.stringify(tokens)) {
+                console.log('    Mismatch tokens!');
+                writeActualTokens(filename, tokens);
+            }
+        } else {
+            console.log('    Baseline tokens do not exist. Creating one...');
+            createBaselineTokens(filename, tokens);
+        }
+
     } catch (e) {
         console.log('FATAL', e.toString());
         process.exit(1);
