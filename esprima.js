@@ -240,7 +240,6 @@ parseYieldExpression: true
         NoFromAfterImport: 'Missing from after import',
         InvalidModuleSpecifier: 'Invalid module specifier',
         NestedModule: 'Module declaration can not be nested',
-        NoYieldInGenerator: 'Missing yield in generator',
         NoUnintializedConst: 'Const must be initialized',
         ComprehensionRequiresBlock: 'Comprehension must have at least one block',
         ComprehensionError:  'Comprehension Error',
@@ -358,7 +357,8 @@ parseYieldExpression: true
         }
 
         // 'const' is specialized as Keyword in V8.
-        // 'yield' and 'let' are for compatiblity with SpiderMonkey and ES.next.
+        // 'yield' is only treated as a keyword in strict mode.
+        // 'let' is for compatiblity with SpiderMonkey and ES.next.
         // Some others are from future reserved words.
 
         switch (id.length) {
@@ -372,7 +372,7 @@ parseYieldExpression: true
                 (id === 'void') || (id === 'with') || (id === 'enum');
         case 5:
             return (id === 'while') || (id === 'break') || (id === 'catch') ||
-                (id === 'throw') || (id === 'const') || (id === 'yield') ||
+                (id === 'throw') || (id === 'const') ||
                 (id === 'class') || (id === 'super');
         case 6:
             return (id === 'return') || (id === 'typeof') || (id === 'delete') ||
@@ -2312,9 +2312,6 @@ parseYieldExpression: true
         if (options.name && strict && isRestrictedWord(params[0].name)) {
             throwErrorTolerant(options.name, Messages.StrictParamName);
         }
-        if (state.yieldAllowed && !state.yieldFound) {
-            throwErrorTolerant({}, Messages.NoYieldInGenerator);
-        }
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
@@ -3111,7 +3108,10 @@ parseYieldExpression: true
     function parseAssignmentExpression() {
         var marker, expr, token, params, oldParenthesizedCount;
 
-        if (matchKeyword('yield')) {
+        // Note that 'yield' is treated as a keyword in strict mode, but a
+        // contextual keyword (identifier) in non-strict mode, so we need
+        // to use matchKeyword and matchContextualKeyword appropriately.
+        if ((state.yieldAllowed && matchContextualKeyword('yield')) || (strict && matchKeyword('yield'))) {
             return parseYieldExpression();
         }
 
@@ -4290,9 +4290,6 @@ parseYieldExpression: true
         if (strict && tmp.stricted) {
             throwErrorTolerant(tmp.stricted, message);
         }
-        if (state.yieldAllowed && !state.yieldFound) {
-            throwErrorTolerant({}, Messages.NoYieldInGenerator);
-        }
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
@@ -4348,9 +4345,6 @@ parseYieldExpression: true
         if (strict && tmp.stricted) {
             throwErrorTolerant(tmp.stricted, message);
         }
-        if (state.yieldAllowed && !state.yieldFound) {
-            throwErrorTolerant({}, Messages.NoYieldInGenerator);
-        }
         strict = previousStrict;
         state.yieldAllowed = previousYieldAllowed;
 
@@ -4358,9 +4352,10 @@ parseYieldExpression: true
     }
 
     function parseYieldExpression() {
-        var delegateFlag, expr, marker = markerCreate();
+        var yieldToken, delegateFlag, expr, marker = markerCreate();
 
-        expectKeyword('yield');
+        yieldToken = lex();
+        assert(yieldToken.value === 'yield', 'Called parseYieldExpression with non-yield lookahead.');
 
         if (!state.yieldAllowed) {
             throwErrorTolerant({}, Messages.IllegalYield);
@@ -4373,7 +4368,6 @@ parseYieldExpression: true
         }
 
         expr = parseAssignmentExpression();
-        state.yieldFound = true;
 
         return markerApply(marker, delegate.createYieldExpression(expr, delegateFlag));
     }
@@ -5107,8 +5101,7 @@ parseYieldExpression: true
             inIteration: false,
             inSwitch: false,
             lastCommentStart: -1,
-            yieldAllowed: false,
-            yieldFound: false
+            yieldAllowed: false
         };
 
         extra = {};
