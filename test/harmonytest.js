@@ -12173,44 +12173,350 @@ var harmonyTestFixture = {
         },
 
         'yield v': {
-            index: 5,
+            index: 6,
             lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Illegal yield expression'
+            column: 7,
+            message: 'Error: Line 1: Unexpected identifier'
         },
 
         'yield 10': {
-            index: 5,
+            index: 6,
             lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Illegal yield expression'
+            column: 7,
+            message: 'Error: Line 1: Unexpected number'
         },
 
         'yield* 10': {
-            index: 5,
-            lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Illegal yield expression'
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "BinaryExpression",
+                "operator": "*",
+                "left": {
+                    "type": "Identifier",
+                    "name": "yield",
+                    "range": [
+                        0,
+                        5
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 5
+                        }
+                    }
+                },
+                "right": {
+                    "type": "Literal",
+                    "value": 10,
+                    "raw": "10",
+                    "range": [
+                        7,
+                        9
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 7
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 9
+                        }
+                    }
+                },
+                "range": [
+                    0,
+                    9
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 9
+                    }
+                }
+            },
+            "range": [
+                0,
+                9
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 9
+                }
+            }
         },
 
         'e => yield* 10': {
-            index: 10,
-            lineNumber: 1,
-            column: 11,
-            message: 'Error: Line 1: Illegal yield expression'
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "ArrowFunctionExpression",
+                "id": null,
+                "params": [
+                    {
+                        "type": "Identifier",
+                        "name": "e",
+                        "range": [
+                            0,
+                            1
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 0
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 1
+                            }
+                        }
+                    }
+                ],
+                "defaults": [],
+                "body": {
+                    "type": "BinaryExpression",
+                    "operator": "*",
+                    "left": {
+                        "type": "Identifier",
+                        "name": "yield",
+                        "range": [
+                            5,
+                            10
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 5
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 10
+                            }
+                        }
+                    },
+                    "right": {
+                        "type": "Literal",
+                        "value": 10,
+                        "raw": "10",
+                        "range": [
+                            12,
+                            14
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 14
+                            }
+                        }
+                    },
+                    "range": [
+                        5,
+                        14
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 5
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 14
+                        }
+                    }
+                },
+                "rest": null,
+                "generator": false,
+                "expression": true,
+                "range": [
+                    0,
+                    14
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 14
+                    }
+                }
+            },
+            "range": [
+                0,
+                14
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 14
+                }
+            }
         },
 
         '(function () { yield 10 })': {
-            index: 20,
+            index: 21,
             lineNumber: 1,
-            column: 21,
-            message: 'Error: Line 1: Illegal yield expression'
+            column: 22,
+            message: 'Error: Line 1: Unexpected number'
         },
 
         '(function () { yield* 10 })': {
-            index: 20,
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [],
+                "defaults": [],
+                "body": {
+                    "type": "BlockStatement",
+                    "body": [
+                        {
+                            "type": "ExpressionStatement",
+                            "expression": {
+                                "type": "BinaryExpression",
+                                "operator": "*",
+                                "left": {
+                                    "type": "Identifier",
+                                    "name": "yield",
+                                    "range": [
+                                        15,
+                                        20
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 1,
+                                            "column": 15
+                                        },
+                                        "end": {
+                                            "line": 1,
+                                            "column": 20
+                                        }
+                                    }
+                                },
+                                "right": {
+                                    "type": "Literal",
+                                    "value": 10,
+                                    "raw": "10",
+                                    "range": [
+                                        22,
+                                        24
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 1,
+                                            "column": 22
+                                        },
+                                        "end": {
+                                            "line": 1,
+                                            "column": 24
+                                        }
+                                    }
+                                },
+                                "range": [
+                                    15,
+                                    24
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 15
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 24
+                                    }
+                                }
+                            },
+                            "range": [
+                                15,
+                                25
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 15
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 25
+                                }
+                            }
+                        }
+                    ],
+                    "range": [
+                        13,
+                        26
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 13
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 26
+                        }
+                    }
+                },
+                "rest": null,
+                "generator": false,
+                "expression": false,
+                "range": [
+                    1,
+                    26
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 1
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 26
+                    }
+                }
+            },
+            "range": [
+                0,
+                27
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 27
+                }
+            }
+        },
+
+        '(function() { "use strict"; f(yield v) })': {
+            index: 35,
             lineNumber: 1,
-            column: 21,
+            column: 36,
             message: 'Error: Line 1: Illegal yield expression'
         },
 
@@ -12222,10 +12528,10 @@ var harmonyTestFixture = {
         },
 
         'class A extends yield B { }': {
-            index: 21,
+            index: 22,
             lineNumber: 1,
-            column: 22,
-            message: 'Error: Line 1: Illegal yield expression'
+            column: 23,
+            message: 'Error: Line 1: Unexpected identifier'
         },
 
         'class default': {
