@@ -47,6 +47,8 @@ parseStatement: true, parseSourceElement: true */
 
     // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js,
     // Rhino, and plain browser loading.
+
+    /* istanbul ignore next */
     if (typeof define === 'function' && define.amd) {
         define(['exports'], factory);
     } else if (typeof exports !== 'undefined') {
@@ -208,6 +210,7 @@ parseStatement: true, parseSourceElement: true */
     // Do NOT use this to enforce a certain condition on any user input.
 
     function assert(condition, message) {
+        /* istanbul ignore if */
         if (!condition) {
             throw new Error('ASSERT: ' + message);
         }
@@ -1162,6 +1165,7 @@ parseStatement: true, parseSourceElement: true */
             column: index - lineStart
         };
 
+        /* istanbul ignore next */
         if (!extra.tokenize) {
             // Pop the previous token, which is likely '/' or '/='
             if (extra.tokens.length > 0) {
@@ -1410,6 +1414,7 @@ parseStatement: true, parseSourceElement: true */
                     if (candidate) {
                         pos = candidate.range[0];
                         len = candidate.range[1] - pos;
+                        /* istanbul ignore else */
                         if (node.range[0] <= pos && (node.range[1] - node.range[0] >= len)) {
                             attacher.trailing = node;
                         }
@@ -3514,6 +3519,7 @@ parseStatement: true, parseSourceElement: true */
 
         while (index < length) {
             sourceElement = parseSourceElement();
+            /* istanbul ignore if */
             if (typeof sourceElement === 'undefined') {
                 break;
             }
@@ -3547,6 +3553,7 @@ parseStatement: true, parseSourceElement: true */
             }
             trailing = attacher.trailing;
             if (trailing) {
+                /* istanbul ignore else */
                 if (typeof trailing.trailingComments === 'undefined') {
                     trailing.trailingComments = [];
                 }
@@ -3790,6 +3797,7 @@ parseStatement: true, parseSourceElement: true */
     exports.parse = parse;
 
     // Deep copy.
+   /* istanbul ignore next */
     exports.Syntax = (function () {
         var name, types = {};
 

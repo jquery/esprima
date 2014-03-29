@@ -44,7 +44,7 @@
         "jslint": "~0.1.9",
         "eslint": "~0.4.3",
         "jscs": "~1.2.4",
-        "istanbul": "~0.1.27",
+        "istanbul": "~0.2.6",
         "complexity-report": "~0.6.1",
         "regenerate": "~0.5.4",
         "unicode-6.3.0": "~0.1.0",
@@ -71,7 +71,7 @@
 
         "coverage": "npm run-script analyze-coverage && npm run-script check-coverage",
         "analyze-coverage": "node node_modules/istanbul/lib/cli.js cover test/runner.js",
-        "check-coverage": "node node_modules/istanbul/lib/cli.js check-coverage --statement -4 --branch -13 --function 100",
+        "check-coverage": "node node_modules/istanbul/lib/cli.js check-coverage --statement 100 --branch 100 --function 100",
 
         "complexity": "npm run-script analyze-complexity && npm run-script check-complexity",
         "analyze-complexity": "node tools/list-complexity.js",
