@@ -3667,17 +3667,6 @@ parseStatement: true, parseSourceElement: true */
             extra.errors = [];
         }
 
-        if (length > 0) {
-            if (typeof source[0] === 'undefined') {
-                // Try first to convert to a string. This is good as fast path
-                // for old IE which understands string indexing for string
-                // literals only and not for string object.
-                if (code instanceof String) {
-                    source = code.valueOf();
-                }
-            }
-        }
-
         try {
             peek();
             if (lookahead.type === Token.EOF) {
@@ -3765,17 +3754,6 @@ parseStatement: true, parseSourceElement: true */
                 extra.range = true;
                 extra.pendingComments = [];
                 extra.comments = [];
-            }
-        }
-
-        if (length > 0) {
-            if (typeof source[0] === 'undefined') {
-                // Try first to convert to a string. This is good as fast path
-                // for old IE which understands string indexing for string
-                // literals only and not for string object.
-                if (code instanceof String) {
-                    source = code.valueOf();
-                }
             }
         }
 
