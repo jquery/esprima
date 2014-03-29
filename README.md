@@ -11,7 +11,7 @@ with the help of [many contributors](https://github.com/ariya/esprima/contributo
 - Sensible [syntax tree format](http://esprima.org/doc/index.html#ast) compatible with Mozilla
 [Parser AST](https://developer.mozilla.org/en/SpiderMonkey/Parser_API)
 - Optional tracking of syntax node location (index-based and line-column)
-- Heavily tested (> 600 [unit tests](http://esprima.org/test/) with solid statement and branch coverage)
+- Heavily tested (> 650 [unit tests](http://esprima.org/test/) with [full code coverage](http://esprima.org/test/coverage.html))
 - Experimental support for ES6/Harmony (module, class, destructuring, ...)
 
 Esprima serves as a **building block** for some JavaScript
