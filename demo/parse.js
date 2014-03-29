@@ -174,7 +174,7 @@ function parse(delay) {
 
         code = window.editor.getText();
         options = {
-            comment: id('comment').checked,
+            attachComment: id('comment').checked,
             range: id('range').checked,
             loc: id('loc').checked,
             tolerant: id('tolerant').checked

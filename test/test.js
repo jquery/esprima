@@ -6528,84 +6528,6 @@ var testFixture = {
             }]
         },
 
-        'var x = /[P QR]/\\u0067': {
-            type: 'Program',
-            body: [{
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'x',
-                        range: [4, 5],
-                        loc: {
-                            start: { line: 1, column: 4 },
-                            end: { line: 1, column: 5 }
-                        }
-                    },
-                    init: {
-                        type: 'Literal',
-                        value: '/[P QR]/g',
-                        raw: '/[P QR]/\\u0067',
-                        range: [8, 22],
-                        loc: {
-                            start: { line: 1, column: 8 },
-                            end: { line: 1, column: 22 }
-                        }
-                    },
-                    range: [4, 22],
-                    loc: {
-                        start: { line: 1, column: 4 },
-                        end: { line: 1, column: 22 }
-                    }
-                }],
-                kind: 'var',
-                range: [0, 22],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 22 }
-                }
-            }],
-            range: [0, 22],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 22 }
-            },
-            tokens: [{
-                type: 'Keyword',
-                value: 'var',
-                range: [0, 3],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 3 }
-                }
-            }, {
-                type: 'Identifier',
-                value: 'x',
-                range: [4, 5],
-                loc: {
-                    start: { line: 1, column: 4 },
-                    end: { line: 1, column: 5 }
-                }
-            }, {
-                type: 'Punctuator',
-                value: '=',
-                range: [6, 7],
-                loc: {
-                    start: { line: 1, column: 6 },
-                    end: { line: 1, column: 7 }
-                }
-            }, {
-                type: 'RegularExpression',
-                value: '/[P QR]/\\u0067',
-                range: [8, 22],
-                loc: {
-                    start: { line: 1, column: 8 },
-                    end: { line: 1, column: 22 }
-                }
-            }]
-        },
-
         'var x = /[P QR]/\\g': {
             type: 'Program',
             body: [{
@@ -18504,10 +18426,10 @@ var testFixture = {
         },
 
         'var x = /[a-z]/\\ux': {
-            index: 18,
+            index: 17,
             lineNumber: 1,
-            column: 19,
-            message: 'Error: Line 1: Invalid regular expression'
+            column: 18,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
         'var x = /[a-z\n]/\\ux': {
@@ -18515,6 +18437,20 @@ var testFixture = {
             lineNumber: 1,
             column: 15,
             message: 'Error: Line 1: Invalid regular expression: missing /'
+        },
+
+        'var x = /[a-z]/\\\\ux': {
+            index: 18,
+            lineNumber: 1,
+            column: 19,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        'var x = /[P QR]/\\\\u0067': {
+            index: 23,
+            lineNumber: 1,
+            column: 24,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
         '3 = 4': {
@@ -18767,6 +18703,13 @@ var testFixture = {
             lineNumber: 1,
             column: 30,
             message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
+        },
+
+        '\\u0066unction a(if) { }': {
+            index: 14,
+            lineNumber: 1,
+            column: 15,
+            message: 'Error: Line 1: Unexpected identifier'
         },
 
         'function t(if) { }': {
@@ -21006,6 +20949,99 @@ var testFixture = {
                     "end": {
                         "line": 1,
                         "column": 4
+                    }
+                }
+            }
+        ],
+
+        '[a] / b': [
+            {
+                "type": "Punctuator",
+                "value": "[",
+                "range": [
+                    0,
+                    1
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 1
+                    }
+                }
+            },
+            {
+                "type": "Identifier",
+                "value": "a",
+                "range": [
+                    1,
+                    2
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 1
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 2
+                    }
+                }
+            },
+            {
+                "type": "Punctuator",
+                "value": "]",
+                "range": [
+                    2,
+                    3
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 2
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 3
+                    }
+                }
+            },
+            {
+                "type": "Punctuator",
+                "value": "/",
+                "range": [
+                    4,
+                    5
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 5
+                    }
+                }
+            },
+            {
+                "type": "Identifier",
+                "value": "b",
+                "range": [
+                    6,
+                    7
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 6
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 7
                     }
                 }
             }
@@ -24316,8 +24352,58 @@ var testFixture = {
                 column: 7,
                 message: 'Error: Line 1: Invalid left-hand side in for-in'
             }]
-        }
+        },
 
+        'var x = /[P QR]/\\\\u0067': {
+            type: "Program",
+            body: [{
+                type: "VariableDeclaration",
+                declarations: [{
+                    type: "VariableDeclarator",
+                    id: {
+                        type: "Identifier",
+                        name: "x",
+                        range: [4, 5],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    },
+                    init: {
+                        type: "Literal",
+                        value: "/[P QR]/g",
+                        raw: "/[P QR]/\\\\u0067",
+                        range: [8, 23],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 23 }
+                        }
+                    },
+                    range: [4, 23],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 23 }
+                    }
+                }],
+                kind: "var",
+                range: [0, 23],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 23 }
+                }
+            }],
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            },
+            errors: [{
+                index: 23,
+                lineNumber: 1,
+                column: 24,
+                message: "Error: Line 1: Unexpected token ILLEGAL"
+            }]
+        }
 
     }
 };
