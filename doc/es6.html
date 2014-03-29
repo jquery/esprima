@@ -93,21 +93,85 @@ pre.prettyprint {
 
 <p>From version 2.0, Esprima starts to support new features in ECMAScript 6.</p>
 
-<p><strong>Note</strong>: Partial ES6 support also exists in the experimental <em>harmony</em> branch.
-However, this branch has never been officially released and the features are not documented.</p>
+<h4 id="arrowfunction">Arrow Function</h4>
 
-<h4 id="usage">Arrow Function</h4>
+<p><em>Since: version 2.0. Specification: <a href="https://people.mozilla.org/~jorendorff/es6-draft.html#sec-arrow-function-definitions">section 14.2</a>.</em></p>
 
-<p>To be written.</p>
+<p>Example code snippet:</p>
+
+<pre class="prettyprint lang-js">
+array.map(x => x * x)
+</pre>
+
+
+<p>The corresponding syntax tree:</p>
+
+<pre class="prettyprint lang-json">
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "CallExpression",
+                "callee": {
+                    "type": "MemberExpression",
+                    "computed": false,
+                    "object": {
+                        "type": "Identifier",
+                        "name": "array"
+                    },
+                    "property": {
+                        "type": "Identifier",
+                        "name": "map"
+                    }
+                },
+                "arguments": [
+                    {
+                        "type": "ArrowFunctionExpression",
+                        "id": null,
+                        "params": [
+                            {
+                                "type": "Identifier",
+                                "name": "x"
+                            }
+                        ],
+                        "defaults": [],
+                        "body": {
+                            "type": "BinaryExpression",
+                            "operator": "*",
+                            "left": {
+                                "type": "Identifier",
+                                "name": "x"
+                            },
+                            "right": {
+                                "type": "Identifier",
+                                "name": "x"
+                            }
+                        },
+                        "rest": null,
+                        "generator": false,
+                        "expression": true
+                    }
+                ]
+            }
+        }
+    ]
+}
+</pre>
 
     </div>
 
     <div class="four columns">
       <div class="panel">
           <p><b>Contents</b></p>
-          <p>To be written.</p>
-        </ol>
+          <ol>
+              <li><a href="#arrowfunction">Arrow Function</a></li>
+          </ol>
       </div>
+      <p><strong>Note</strong>: Partial ES6 support also exists in the experimental <em>harmony</em> branch.
+      However, this branch has never been officially released and the features are not documented.</p>
+
     </div>
   </div>
 
