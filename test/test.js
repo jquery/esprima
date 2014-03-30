@@ -17282,10 +17282,10 @@ var testFixture = {
         },
 
         'var x = /[a-z\n]/\\ux': {
-            index: 18,
+            index: 14,
             lineNumber: 1,
-            column: 19,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            column: 15,
+            message: 'Error: Line 1: Invalid regular expression: missing /'
         },
 
         'var x = /[a-z]/\\\\ux': {

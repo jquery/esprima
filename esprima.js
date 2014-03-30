@@ -1356,87 +1356,10 @@ parseYieldExpression: true
         return template;
     }
 
-    function scanRegExp() {
-        var str, ch, start, pattern, flags, value, classMarker = false, restore, terminated = false, tmp;
+    function testRegExp(pattern, flags) {
+        var tmp = pattern,
+            value;
 
-        lookahead = null;
-        skipComment();
-
-        start = index;
-        ch = source[index];
-        assert(ch === '/', 'Regular expression literal must start with a slash');
-        str = source[index++];
-
-        while (index < length) {
-            ch = source[index++];
-            str += ch;
-            if (classMarker) {
-                if (ch === ']') {
-                    classMarker = false;
-                }
-            } else {
-                if (ch === '\\') {
-                    ch = source[index++];
-                    // ECMA-262 7.8.5
-                    if (isLineTerminator(ch.charCodeAt(0))) {
-                        throwError({}, Messages.UnterminatedRegExp);
-                    }
-                    str += ch;
-                } else if (ch === '/') {
-                    terminated = true;
-                    break;
-                } else if (ch === '[') {
-                    classMarker = true;
-                } else if (isLineTerminator(ch.charCodeAt(0))) {
-                    throwError({}, Messages.UnterminatedRegExp);
-                }
-            }
-        }
-
-        if (!terminated) {
-            throwError({}, Messages.UnterminatedRegExp);
-        }
-
-        // Exclude leading and trailing slash.
-        pattern = str.substr(1, str.length - 2);
-
-        flags = '';
-        while (index < length) {
-            ch = source[index];
-            if (!isIdentifierPart(ch.charCodeAt(0))) {
-                break;
-            }
-
-            ++index;
-            if (ch === '\\' && index < length) {
-                ch = source[index];
-                if (ch === 'u') {
-                    ++index;
-                    restore = index;
-                    ch = scanHexEscape('u');
-                    /* istanbul ignore else */
-                    if (ch) {
-                        flags += ch;
-                        for (str += '\\u'; restore < index; ++restore) {
-                            str += source[restore];
-                        }
-                    } else {
-                        index = restore;
-                        flags += 'u';
-                        str += '\\u';
-                    }
-                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
-                } else {
-                    str += '\\';
-                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
-                }
-            } else {
-                flags += ch;
-                str += ch;
-            }
-        }
-
-        tmp = pattern;
         if (flags.indexOf('u') >= 0) {
             // Replace each astral symbol and every Unicode code point
             // escape sequence with a single ASCII symbol to avoid throwing on
@@ -1467,30 +1390,135 @@ parseYieldExpression: true
         // `null` in case the current environment doesn't support the flags it
         // uses.
         try {
-            value = new RegExp(pattern, flags);
+            return new RegExp(pattern, flags);
         } catch (exception) {
-            value = null;
+            return null;
         }
+    }
+
+    function scanRegExpBody() {
+        var ch, str, classMarker, terminated, body;
+
+        ch = source[index];
+        assert(ch === '/', 'Regular expression literal must start with a slash');
+        str = source[index++];
+
+        classMarker = false;
+        terminated = false;
+        while (index < length) {
+            ch = source[index++];
+            str += ch;
+            if (ch === '\\') {
+                ch = source[index++];
+                // ECMA-262 7.8.5
+                if (isLineTerminator(ch.charCodeAt(0))) {
+                    throwError({}, Messages.UnterminatedRegExp);
+                }
+                str += ch;
+            } else if (isLineTerminator(ch.charCodeAt(0))) {
+                throwError({}, Messages.UnterminatedRegExp);
+            } else if (classMarker) {
+                if (ch === ']') {
+                    classMarker = false;
+                }
+            } else {
+                if (ch === '/') {
+                    terminated = true;
+                    break;
+                } else if (ch === '[') {
+                    classMarker = true;
+                }
+            }
+        }
+
+        if (!terminated) {
+            throwError({}, Messages.UnterminatedRegExp);
+        }
+
+        // Exclude leading and trailing slash.
+        body = str.substr(1, str.length - 2);
+        return {
+            value: body,
+            literal: str
+        };
+    }
+
+    function scanRegExpFlags() {
+        var ch, str, flags, restore;
+
+        str = '';
+        flags = '';
+        while (index < length) {
+            ch = source[index];
+            if (!isIdentifierPart(ch.charCodeAt(0))) {
+                break;
+            }
+
+            ++index;
+            if (ch === '\\' && index < length) {
+                ch = source[index];
+                if (ch === 'u') {
+                    ++index;
+                    restore = index;
+                    ch = scanHexEscape('u');
+                    if (ch) {
+                        flags += ch;
+                        for (str += '\\u'; restore < index; ++restore) {
+                            str += source[restore];
+                        }
+                    } else {
+                        index = restore;
+                        flags += 'u';
+                        str += '\\u';
+                    }
+                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
+                } else {
+                    str += '\\';
+                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
+                }
+            } else {
+                flags += ch;
+                str += ch;
+            }
+        }
+
+        return {
+            value: flags,
+            literal: str
+        };
+    }
+
+    function scanRegExp() {
+        var start, body, flags, value;
+
+        lookahead = null;
+        skipComment();
+        start = index;
+
+        body = scanRegExpBody();
+        flags = scanRegExpFlags();
+        value = testRegExp(body.value, flags.value);
 
         if (extra.tokenize) {
             return {
                 type: Token.RegularExpression,
                 value: value,
                 regex: {
-                    pattern: pattern,
-                    flags: flags
+                    pattern: body.value,
+                    flags: flags.value
                 },
                 lineNumber: lineNumber,
                 lineStart: lineStart,
                 range: [start, index]
             };
         }
+
         return {
-            literal: str,
+            literal: body.literal + flags.literal,
             value: value,
             regex: {
-                pattern: pattern,
-                flags: flags
+                pattern: body.value,
+                flags: flags.value
             },
             range: [start, index]
         };
