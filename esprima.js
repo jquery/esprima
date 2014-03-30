@@ -213,7 +213,6 @@ parseYieldExpression: true
         IllegalBreak: 'Illegal break statement',
         IllegalDuplicateClassProperty: 'Illegal duplicate property in class definition',
         IllegalReturn: 'Illegal return statement',
-        IllegalYield: 'Illegal yield expression',
         IllegalSpread: 'Illegal spread element',
         StrictModeWith:  'Strict mode code may not include a with statement',
         StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',
@@ -2221,15 +2220,15 @@ parseYieldExpression: true
 
     // Return true if the next token matches the specified keyword
 
-    function matchKeyword(keyword) {
-        return lookahead.type === Token.Keyword && lookahead.value === keyword;
+    function matchKeyword(keyword, contextual) {
+        var expectedType = contextual ? Token.Identifier : Token.Keyword;
+        return lookahead.type === expectedType && lookahead.value === keyword;
     }
-
 
     // Return true if the next token matches the specified contextual keyword
 
     function matchContextualKeyword(keyword) {
-        return lookahead.type === Token.Identifier && lookahead.value === keyword;
+        return matchKeyword(keyword, true);
     }
 
     // Return true if the next token is an assignment operator
@@ -2253,6 +2252,14 @@ parseYieldExpression: true
             op === '&=' ||
             op === '^=' ||
             op === '|=';
+    }
+
+    // Note that 'yield' is treated as a keyword in strict mode, but a
+    // contextual keyword (identifier) in non-strict mode, so we need to
+    // use matchKeyword('yield', false) and matchKeyword('yield', true)
+    // (i.e. matchContextualKeyword) appropriately.
+    function matchYield() {
+        return state.yieldAllowed && matchKeyword('yield', !strict);
     }
 
     function consumeSemicolon() {
@@ -3256,10 +3263,7 @@ parseYieldExpression: true
     function parseAssignmentExpression() {
         var marker, expr, token, params, oldParenthesizedCount;
 
-        // Note that 'yield' is treated as a keyword in strict mode, but a
-        // contextual keyword (identifier) in non-strict mode, so we need
-        // to use matchKeyword and matchContextualKeyword appropriately.
-        if ((state.yieldAllowed && matchContextualKeyword('yield')) || (strict && matchKeyword('yield'))) {
+        if (matchYield()) {
             return parseYieldExpression();
         }
 
@@ -4505,10 +4509,6 @@ parseYieldExpression: true
 
         yieldToken = lex();
         assert(yieldToken.value === 'yield', 'Called parseYieldExpression with non-yield lookahead.');
-
-        if (!state.yieldAllowed) {
-            throwErrorTolerant({}, Messages.IllegalYield);
-        }
 
         delegateFlag = false;
         if (match('*')) {
