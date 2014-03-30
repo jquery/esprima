@@ -67,7 +67,7 @@ function switchStmt(disc, cases) { return Pattern({ type: "SwitchStatement", dis
 function caseClause(test, stmts) { return Pattern({ type: "SwitchCase", test: test, consequent: stmts }) }
 function defaultClause(stmts) { return Pattern({ type: "SwitchCase", test: null, consequent: stmts }) }
 function catchClause(id, guard, body) { if (guard) { return Pattern({ type: "GuardedCatchClause", param: id, guard: guard, body: body }) } else { return Pattern({ type: "CatchClause", param: id, body: body }) } }
-function tryStmt(body, guarded, catches, fin) { return Pattern({ type: "TryStatement", block: body, guardedHandlers: guarded, handlers: catches, finalizer: fin }) }
+function tryStmt(body, guarded, handler, fin) { return Pattern({ type: "TryStatement", block: body, guardedHandlers: guarded, handler: handler, finalizer: fin }) }
 function letStmt(head, body) { return Pattern({ type: "LetStatement", head: head, body: body }) }
 function funExpr(id, args, body, gen) { return Pattern({ type: "FunctionExpression",
                                                 id: id,
@@ -377,17 +377,17 @@ assertStmt("switch (foo) { case 1: 1; break; case 2: 2; break; default: 3; case 
 assertStmt("try { } catch (e) { }",
            tryStmt(blockStmt([]),
                    [],
-                   [ catchClause(ident("e"), null, blockStmt([])) ],
+                   catchClause(ident("e"), null, blockStmt([])),
                    null));
 assertStmt("try { } catch (e) { } finally { }",
            tryStmt(blockStmt([]),
                    [],
-                   [ catchClause(ident("e"), null, blockStmt([])) ],
+                   catchClause(ident("e"), null, blockStmt([])),
                    blockStmt([])));
 assertStmt("try { } finally { }",
            tryStmt(blockStmt([]),
                    [],
-                   [],
+                   null,
                    blockStmt([])));
 
 // redeclarations (TOK_NAME nodes with lexdef)
