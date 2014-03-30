@@ -14087,10 +14087,10 @@ var harmonyTestFixture = {
         },
 
         '(function() { "use strict"; f(yield v) })': {
-            index: 35,
+            index: 30,
             lineNumber: 1,
-            column: 36,
-            message: 'Error: Line 1: Illegal yield expression'
+            column: 31,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
         },
 
         'var obj = { *test** }': {
