@@ -635,7 +635,8 @@ parseStatement: true, parseSourceElement: true */
             value: id,
             lineNumber: lineNumber,
             lineStart: lineStart,
-            range: [start, index]
+            start: start,
+            end: index
         };
     }
 
@@ -679,7 +680,8 @@ parseStatement: true, parseSourceElement: true */
                 value: String.fromCharCode(code),
                 lineNumber: lineNumber,
                 lineStart: lineStart,
-                range: [start, index]
+                start: start,
+                end: index
             };
 
         default:
@@ -704,7 +706,8 @@ parseStatement: true, parseSourceElement: true */
                         value: String.fromCharCode(code) + String.fromCharCode(code2),
                         lineNumber: lineNumber,
                         lineStart: lineStart,
-                        range: [start, index]
+                        start: start,
+                        end: index
                     };
 
                 case 0x21: // !
@@ -720,7 +723,8 @@ parseStatement: true, parseSourceElement: true */
                         value: source.slice(start, index),
                         lineNumber: lineNumber,
                         lineStart: lineStart,
-                        range: [start, index]
+                        start: start,
+                        end: index
                     };
                 }
             }
@@ -743,7 +747,8 @@ parseStatement: true, parseSourceElement: true */
                     value: '>>>=',
                     lineNumber: lineNumber,
                     lineStart: lineStart,
-                    range: [start, index]
+                    start: start,
+                    end: index
                 };
             }
         }
@@ -757,7 +762,8 @@ parseStatement: true, parseSourceElement: true */
                 value: '>>>',
                 lineNumber: lineNumber,
                 lineStart: lineStart,
-                range: [start, index]
+                start: start,
+                end: index
             };
         }
 
@@ -768,7 +774,8 @@ parseStatement: true, parseSourceElement: true */
                 value: '<<=',
                 lineNumber: lineNumber,
                 lineStart: lineStart,
-                range: [start, index]
+                start: start,
+                end: index
             };
         }
 
@@ -779,7 +786,8 @@ parseStatement: true, parseSourceElement: true */
                 value: '>>=',
                 lineNumber: lineNumber,
                 lineStart: lineStart,
-                range: [start, index]
+                start: start,
+                end: index
             };
         }
 
@@ -792,7 +800,8 @@ parseStatement: true, parseSourceElement: true */
                 value: ch1 + ch2,
                 lineNumber: lineNumber,
                 lineStart: lineStart,
-                range: [start, index]
+                start: start,
+                end: index
             };
         }
 
@@ -803,7 +812,8 @@ parseStatement: true, parseSourceElement: true */
                 value: ch1,
                 lineNumber: lineNumber,
                 lineStart: lineStart,
-                range: [start, index]
+                start: start,
+                end: index
             };
         }
 
@@ -835,7 +845,8 @@ parseStatement: true, parseSourceElement: true */
             value: parseInt('0x' + number, 16),
             lineNumber: lineNumber,
             lineStart: lineStart,
-            range: [start, index]
+            start: start,
+            end: index
         };
     }
 
@@ -858,7 +869,8 @@ parseStatement: true, parseSourceElement: true */
             octal: true,
             lineNumber: lineNumber,
             lineStart: lineStart,
-            range: [start, index]
+            start: start,
+            end: index
         };
     }
 
@@ -931,7 +943,8 @@ parseStatement: true, parseSourceElement: true */
             value: parseFloat(number),
             lineNumber: lineNumber,
             lineStart: lineStart,
-            range: [start, index]
+            start: start,
+            end: index
         };
     }
 
@@ -1042,7 +1055,8 @@ parseStatement: true, parseSourceElement: true */
             startLineStart: startLineStart,
             lineNumber: lineNumber,
             lineStart: lineStart,
-            range: [start, index]
+            start: start,
+            end: index
         };
     }
 
@@ -1135,13 +1149,15 @@ parseStatement: true, parseSourceElement: true */
                 value: value,
                 lineNumber: lineNumber,
                 lineStart: lineStart,
-                range: [start, index]
+                start: start,
+                end: index
             };
         }
         return {
             literal: str,
             value: value,
-            range: [start, index]
+            start: start,
+            end: index
         };
     }
 
@@ -1267,7 +1283,8 @@ parseStatement: true, parseSourceElement: true */
                 type: Token.EOF,
                 lineNumber: lineNumber,
                 lineStart: lineStart,
-                range: [index, index]
+                start: index,
+                end: index
             };
         }
 
@@ -1310,10 +1327,9 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function collectToken() {
-        var start, loc, token, range, value;
+        var loc, token, range, value;
 
         skipComment();
-        start = index;
         loc = {
             start: {
                 line: lineNumber,
@@ -1328,12 +1344,11 @@ parseStatement: true, parseSourceElement: true */
         };
 
         if (token.type !== Token.EOF) {
-            range = [token.range[0], token.range[1]];
-            value = source.slice(token.range[0], token.range[1]);
+            value = source.slice(token.start, token.end);
             extra.tokens.push({
                 type: TokenName[token.type],
                 value: value,
-                range: range,
+                range: [token.start, token.end],
                 loc: loc
             });
         }
@@ -1345,13 +1360,13 @@ parseStatement: true, parseSourceElement: true */
         var token;
 
         token = lookahead;
-        index = token.range[1];
+        index = token.end;
         lineNumber = token.lineNumber;
         lineStart = token.lineStart;
 
         lookahead = (typeof extra.tokens !== 'undefined') ? collectToken() : advance();
 
-        index = token.range[1];
+        index = token.end;
         lineNumber = token.lineNumber;
         lineStart = token.lineStart;
 
@@ -1426,12 +1441,12 @@ parseStatement: true, parseSourceElement: true */
 
         markEnd: function (node, startToken) {
             if (extra.range) {
-                node.range = [startToken.range[0], index];
+                node.range = [startToken.start, index];
             }
             if (extra.loc) {
                 node.loc = new SourceLocation(
                     startToken.startLineNumber === undefined ?  startToken.lineNumber : startToken.startLineNumber,
-                    startToken.range[0] - (startToken.startLineStart === undefined ?  startToken.lineStart : startToken.startLineStart),
+                    startToken.start - (startToken.startLineStart === undefined ?  startToken.lineStart : startToken.startLineStart),
                     lineNumber,
                     index - lineStart
                 );
@@ -1625,7 +1640,7 @@ parseStatement: true, parseSourceElement: true */
             return {
                 type: Syntax.Literal,
                 value: token.value,
-                raw: source.slice(token.range[0], token.range[1])
+                raw: source.slice(token.start, token.end)
             };
         },
 
@@ -1813,9 +1828,9 @@ parseStatement: true, parseSourceElement: true */
 
         if (typeof token.lineNumber === 'number') {
             error = new Error('Line ' + token.lineNumber + ': ' + msg);
-            error.index = token.range[0];
+            error.index = token.start;
             error.lineNumber = token.lineNumber;
-            error.column = token.range[0] - lineStart + 1;
+            error.column = token.start - lineStart + 1;
         } else {
             error = new Error('Line ' + lineNumber + ': ' + msg);
             error.index = index;
@@ -2483,10 +2498,9 @@ parseStatement: true, parseSourceElement: true */
                 left = stack.pop();
                 expr = delegate.createBinaryExpression(operator, left, right);
                 markers.pop();
-                marker = markers.pop();
+                marker = markers[markers.length - 1];
                 delegate.markEnd(expr, marker);
                 stack.push(expr);
-                markers.push(marker);
             }
 
             // Shift.
@@ -3276,7 +3290,7 @@ parseStatement: true, parseSourceElement: true */
                 // this is not directive
                 break;
             }
-            directive = source.slice(token.range[0] + 1, token.range[1] - 1);
+            directive = source.slice(token.start + 1, token.end - 1);
             if (directive === 'use strict') {
                 strict = true;
                 if (firstRestricted) {
@@ -3493,7 +3507,7 @@ parseStatement: true, parseSourceElement: true */
                 // this is not directive
                 break;
             }
-            directive = source.slice(token.range[0] + 1, token.range[1] - 1);
+            directive = source.slice(token.start + 1, token.end - 1);
             if (directive === 'use strict') {
                 strict = true;
                 if (firstRestricted) {
