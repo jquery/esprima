@@ -267,9 +267,9 @@ if (typeof window !== 'undefined') {
                     fn = function () {
                         var file, parser, tree;
                         file = new traceur.syntax.SourceFile('name', source);
-                        parser = new traceur.syntax.Parser(console, file);
-                        tree = parser.parseProgram();
-                        window.tree.push(tree.programElements.length);
+                        parser = new traceur.syntax.Parser(file, console);
+                        tree = parser.parseScript();
+                        window.tree.push(tree.scriptItemList.length);
                     };
                     break;
 
