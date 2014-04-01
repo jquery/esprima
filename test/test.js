@@ -3364,6 +3364,304 @@ var testFixture = {
             }
         },
 
+        '(a + /* assignmenr */b ) * c': {
+            "type": "Program",
+            "body": [
+                {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                        "type": "BinaryExpression",
+                        "operator": "*",
+                        "left": {
+                            "type": "BinaryExpression",
+                            "operator": "+",
+                            "left": {
+                                "type": "Identifier",
+                                "name": "a",
+                                "range": [
+                                    1,
+                                    2
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 1
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 2
+                                    }
+                                }
+                            },
+                            "right": {
+                                "type": "Identifier",
+                                "name": "b",
+                                "range": [
+                                    21,
+                                    22
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 21
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 22
+                                    }
+                                },
+                                "leadingComments": [
+                                    {
+                                        "type": "Block",
+                                        "value": " assignmenr ",
+                                        "range": [
+                                            5,
+                                            21
+                                        ],
+                                        "loc": {
+                                            "start": {
+                                                "line": 1,
+                                                "column": 5
+                                            },
+                                            "end": {
+                                                "line": 1,
+                                                "column": 21
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            "range": [
+                                1,
+                                22
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 1
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 22
+                                }
+                            }
+                        },
+                        "right": {
+                            "type": "Identifier",
+                            "name": "c",
+                            "range": [
+                                27,
+                                28
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 27
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 28
+                                }
+                            }
+                        },
+                        "range": [
+                            0,
+                            28
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 0
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 28
+                            }
+                        }
+                    },
+                    "range": [
+                        0,
+                        28
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 28
+                        }
+                    }
+                }
+            ],
+            "range": [
+                0,
+                28
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 28
+                }
+            },
+            "comments": [
+                {
+                    "type": "Block",
+                    "value": " assignmenr ",
+                    "range": [
+                        5,
+                        21
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 5
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 21
+                        }
+                    }
+                }
+            ]
+        },
+
+        '/* assignmenr */\n a = b': {
+            "type": "Program",
+            "body": [
+                {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                            "type": "Identifier",
+                            "name": "a",
+                            "range": [
+                                18,
+                                19
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 1
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 2
+                                }
+                            }
+                        },
+                        "right": {
+                            "type": "Identifier",
+                            "name": "b",
+                            "range": [
+                                22,
+                                23
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 5
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 6
+                                }
+                            }
+                        },
+                        "range": [
+                            18,
+                            23
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 1
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 6
+                            }
+                        }
+                    },
+                    "range": [
+                        18,
+                        23
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 2,
+                            "column": 1
+                        },
+                        "end": {
+                            "line": 2,
+                            "column": 6
+                        }
+                    },
+                    "leadingComments": [
+                        {
+                            "type": "Block",
+                            "value": " assignmenr ",
+                            "range": [
+                                0,
+                                16
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 0
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 16
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            "range": [
+                18,
+                23
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 1
+                },
+                "end": {
+                    "line": 2,
+                    "column": 6
+                }
+            },
+            "comments": [
+                {
+                    "type": "Block",
+                    "value": " assignmenr ",
+                    "range": [
+                        0,
+                        16
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 16
+                        }
+                    }
+                }
+            ]
+        },
+
         '42 /*The*/ /*Answer*/': {
             type: 'Program',
             body: [{
@@ -10599,6 +10897,1022 @@ var testFixture = {
             range: [ 0, 15 ],
             loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 15 } }
         }
+    },
+
+    '[ES6] Arrow Function': {
+
+        '() => "test"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 'test',
+                    raw: '"test"',
+                    range: [6, 12],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 12],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        },
+
+        'e => "test"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'e',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 'test',
+                    raw: '"test"',
+                    range: [5, 11],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 11 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 11],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 11 }
+                }
+            },
+            range: [0, 11],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 11 }
+            }
+        },
+
+        '(e) => "test"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'e',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 'test',
+                    raw: '"test"',
+                    range: [7, 13],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 13 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 13 }
+            }
+        },
+
+        '(a, b) => "test"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 'b',
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 'test',
+                    raw: '"test"',
+                    range: [10, 16],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            },
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
+        },
+
+        'e => { 42; }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'e',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'Literal',
+                            value: 42,
+                            raw: '42',
+                            range: [7, 9],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 9 }
+                            }
+                        },
+                        range: [7, 10],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 10 }
+                        }
+                    }],
+                    range: [5, 12],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [0, 12],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        },
+
+        'e => ({ property: 42 })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'e',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'property',
+                            range: [8, 16],
+                            loc: {
+                                start: { line: 1, column: 8 },
+                                end: { line: 1, column: 16 }
+                            }
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 42,
+                            raw: '42',
+                            range: [18, 20],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 20 }
+                            }
+                        },
+                        kind: 'init',
+                        range: [8, 20],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 20 }
+                        }
+                    }],
+                    range: [6, 22],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 23],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
+        },
+
+        // Not an object!
+        'e => { label: 42 }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'e',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'LabeledStatement',
+                        label: {
+                            type: 'Identifier',
+                            name: 'label',
+                            range: [7, 12],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 12 }
+                            }
+                        },
+                        body: {
+                            type: 'ExpressionStatement',
+                            expression: {
+                                type: 'Literal',
+                                value: 42,
+                                raw: '42',
+                                range: [14, 16],
+                                loc: {
+                                    start: { line: 1, column: 14 },
+                                    end: { line: 1, column: 16 }
+                                }
+                            },
+                            range: [14, 17],
+                            loc: {
+                                start: { line: 1, column: 14 },
+                                end: { line: 1, column: 17 }
+                            }
+                        },
+                        range: [7, 17],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 17 }
+                        }
+                    }],
+                    range: [5, 18],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [0, 18],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
+        '(a, b) => { 42; }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 'b',
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'Literal',
+                            value: 42,
+                            raw: '42',
+                            range: [12, 14],
+                            loc: {
+                                start: { line: 1, column: 12 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        range: [12, 15],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 15 }
+                        }
+                    }],
+                    range: [10, 17],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            }
+        },
+
+        // not strict mode, using eval
+        'eval => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'eval',
+                    range: [0, 4],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 4 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [8, 10],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 10 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 10],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            range: [0, 10],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 10 }
+            }
+        },
+
+        // not strict mode, using arguments
+        'arguments => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'arguments',
+                    range: [0, 9],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 9 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [13, 15],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 15 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 15],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            range: [0, 15],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 15 }
+            }
+        },
+
+        // not strict mode, using octals
+        '(a) => 00': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 0,
+                    raw: '00',
+                    range: [7, 9],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 9 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 9],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 9 }
+                }
+            },
+            range: [0, 9],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 9 }
+            }
+        },
+
+        // not strict mode, using eval, IsSimpleParameterList is true
+        '(eval, a) => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'eval',
+                    range: [1, 5],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 5 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [7, 8],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 8 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [13, 15],
+                    loc: {
+                        start: { line: 1, column: 13 },
+                        end: { line: 1, column: 15 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 15],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            range: [0, 15],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 15 }
+            }
+        },
+
+        '(x => x)': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [6, 7],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 7 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [1, 7],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            range: [0, 8],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 8 }
+            }
+        },
+
+        'x => y => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'ArrowFunctionExpression',
+                    id: null,
+                    params: [{
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [5, 6],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 6 }
+                        }
+                    }],
+                    defaults: [],
+                    body: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42',
+                        range: [10, 12],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 12 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: true,
+                    range: [5, 12],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 12],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        },
+
+        '(x) => ((y, z) => (x, y, z))': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }],
+                defaults: [],
+                body: {
+                    type: 'ArrowFunctionExpression',
+                    id: null,
+                    params: [{
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    }, {
+                        type: 'Identifier',
+                        name: 'z',
+                        range: [12, 13],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 13 }
+                        }
+                    }],
+                    defaults: [],
+                    body: {
+                        type: 'SequenceExpression',
+                        expressions: [{
+                            type: 'Identifier',
+                            name: 'x',
+                            range: [19, 20],
+                            loc: {
+                                start: { line: 1, column: 19 },
+                                end: { line: 1, column: 20 }
+                            }
+                        }, {
+                            type: 'Identifier',
+                            name: 'y',
+                            range: [22, 23],
+                            loc: {
+                                start: { line: 1, column: 22 },
+                                end: { line: 1, column: 23 }
+                            }
+                        }, {
+                            type: 'Identifier',
+                            name: 'z',
+                            range: [25, 26],
+                            loc: {
+                                start: { line: 1, column: 25 },
+                                end: { line: 1, column: 26 }
+                            }
+                        }],
+                        range: [19, 26],
+                        loc: {
+                            start: { line: 1, column: 19 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: true,
+                    range: [8, 27],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 28],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 28 }
+                }
+            },
+            range: [0, 28],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
+            }
+        },
+
+        'foo(() => {})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'Identifier',
+                    name: 'foo',
+                    range: [0, 3],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 3 }
+                    }
+                },
+                'arguments': [{
+                    type: 'ArrowFunctionExpression',
+                    id: null,
+                    params: [],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [10, 12],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 12 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [4, 12],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 12 }
+                    }
+                }],
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 13 }
+            }
+        },
+
+        'foo((x, y) => {})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'Identifier',
+                    name: 'foo',
+                    range: [0, 3],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 3 }
+                    }
+                },
+                'arguments': [{
+                    type: 'ArrowFunctionExpression',
+                    id: null,
+                    params: [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [5, 6],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 6 }
+                        }
+                    }, {
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [8, 9],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 9 }
+                        }
+                    }],
+                    defaults: [],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [14, 16],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 16 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [4, 16],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 16 }
+                    }
+                }],
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            }
+        },
+
+        '(sun) => earth': {
+            type: "Program",
+            body: [{
+                type: "ExpressionStatement",
+                expression: {
+                    type: "ArrowFunctionExpression",
+                    id: null,
+                    params: [{
+                        type: "Identifier",
+                        name: "sun",
+                        range: [1, 4],
+                        loc: {
+                            start: { line: 1, column: 1 },
+                            end: { line: 1, column: 4 }
+                        }
+                    }],
+                    defaults: [],
+                    body: {
+                        type: "Identifier",
+                        name: "earth",
+                        range: [9, 14],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: true,
+                    range: [0, 14],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                range: [0, 14],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 14 }
+                }
+            }],
+            range: [0, 14],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 14 }
+            },
+            tokens: [{
+                type: "Punctuator",
+                value: "(",
+                range: [0, 1],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 1 }
+                }
+            }, {
+                type: "Identifier",
+                value: "sun",
+                range: [1, 4],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 4 }
+                }
+            }, {
+                type: "Identifier",
+                value: "sun",
+                range: [1, 4],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 4 }
+                }
+            }, {
+                type: "Punctuator",
+                value: ")",
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
+            }, {
+                type: "Punctuator",
+                value: "=>",
+                range: [6, 8],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 8 }
+                }
+            }, {
+                type: "Identifier",
+                value: "earth",
+                range: [9, 14],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 14 }
+                }
+            }]
+        }
+
     },
 
     'Assignment Operators': {
@@ -18705,6 +20019,123 @@ var testFixture = {
             message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
         },
 
+        '((a)) => 42': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Unexpected token =>'
+        },
+
+        '(a, (b)) => 42': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token =>'
+        },
+
+        '"use strict"; (eval = 10) => 42': {
+            index: 15,
+            lineNumber: 1,
+            column: 16,
+            message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
+        },
+
+        // strict mode, using eval when IsSimpleParameterList is true
+        '"use strict"; eval => 42': {
+            index: 24,
+            lineNumber: 1,
+            column: 25,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        // strict mode, using arguments when IsSimpleParameterList is true
+        '"use strict"; arguments => 42': {
+            index: 29,
+            lineNumber: 1,
+            column: 30,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        // strict mode, using eval when IsSimpleParameterList is true
+        '"use strict"; (eval, a) => 42': {
+            index: 29,
+            lineNumber: 1,
+            column: 30,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        // strict mode, using arguments when IsSimpleParameterList is true
+        '"use strict"; (arguments, a) => 42': {
+            index: 34,
+            lineNumber: 1,
+            column: 35,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        // strict mode, using eval when IsSimpleParameterList is false
+        '"use strict"; (eval, a) => 42': {
+            index: 29,
+            lineNumber: 1,
+            column: 30,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        '(a, a) => 42': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+        },
+
+        '"use strict"; (a, a) => 42': {
+            index: 20,
+            lineNumber: 1,
+            column: 21,
+            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+        },
+
+        '"use strict"; (a) => 00': {
+            index: 21,
+            lineNumber: 1,
+            column: 22,
+            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+        },
+
+        '() <= 42': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token <='
+        },
+
+        '(10) => 00': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Unexpected token =>'
+        },
+
+        '(10, 20) => 00': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token =>'
+        },
+
+        '"use strict"; (eval) => 42': {
+            index: 26,
+            lineNumber: 1,
+            column: 27,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
+        '(eval) => { "use strict"; 42 }': {
+            index: 30,
+            lineNumber: 1,
+            column: 31,
+            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+        },
+
         '\\u0066unction a(if) { }': {
             index: 14,
             lineNumber: 1,
@@ -21198,6 +22629,7 @@ var testFixture = {
             result: {
                 AssignmentExpression: 'AssignmentExpression',
                 ArrayExpression: 'ArrayExpression',
+                ArrowFunctionExpression: 'ArrowFunctionExpression',
                 BlockStatement: 'BlockStatement',
                 BinaryExpression: 'BinaryExpression',
                 BreakStatement: 'BreakStatement',

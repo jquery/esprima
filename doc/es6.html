@@ -4,25 +4,26 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Esprima: Speed Comparisons</title>
+  <title>ECMAScript 6 Support in Esprima</title>
   <meta name="viewport" content="width=device-width" />
-  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" type="text/css" href="../assets/style.css"/>
   <link rel="stylesheet" href="../assets/foundation/foundation.min.css">
-  <script src="../esprima.js"></script>
-  <script src="../assets/json2.js"></script>
-  <script src="compare.js"></script>
-  <script src="3rdparty/benchmark.js"></script>
-  <script src="3rdparty/XMLHttpRequest.js"></script>
-<script>
-/*jslint browser:true, sloppy:true */
-/*global setupBenchmarks:true*/
-window.onload = function () {
-    window.setTimeout(setupBenchmarks, 211);
-};
-</script>
+  <link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css"/>
+  <script type="text/javascript" src="../assets/prettify/prettify.js"></script>
+<style>
+pre.prettyprint {
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 6px 10px;
+    xfont-size: 13px;
+    xline-height: 19px;
+    margin-bottom: 14px;
+}
+</style>
 </head>
 
-<body>
+<body onload="prettyPrint()">
 
   <!-- Navigation bar -->
   <div class="row">
@@ -82,7 +83,7 @@ window.onload = function () {
   <!-- Title and subtitle -->
   <div class="row">
     <div class="twelve columns">
-      <h3 class="subheader"><strong>Speed Comparison</strong> keeps everything in perspective</h3>
+       <h3 class="subheader"><strong>ECMAScript 6</strong> with Esprima</h3>
     </div>
   </div>
 
@@ -90,30 +91,87 @@ window.onload = function () {
   <div class="row">
     <div class="eight columns">
 
-<p>
-<input id="run" class="medium radius button" type="submit" value="Run speed comparison" disabled /></p>
-</p>
+<p>From version 2.0, Esprima starts to support new features in ECMAScript 6.</p>
 
-<p id="status">Please wait...</p>
-<p id="result"></p>
-        <p><strong>Warning:</strong> Since each parser may have a different format for the syntax tree, the speed is not fully comparable (the cost of constructing different result is obviously varying). These tests exist only to ensure that Esprima parser is not ridiculously slow compare to other parsers.</p>
+<h4 id="arrowfunction">Arrow Function</h4>
 
+<p><em>Since: version 2.0. Specification: <a href="https://people.mozilla.org/~jorendorff/es6-draft.html#sec-arrow-function-definitions">section 14.2</a>.</em></p>
+
+<p>Example code snippet:</p>
+
+<pre class="prettyprint lang-js">
+array.map(x => x * x)
+</pre>
+
+
+<p>The corresponding syntax tree:</p>
+
+<pre class="prettyprint lang-json">
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "CallExpression",
+                "callee": {
+                    "type": "MemberExpression",
+                    "computed": false,
+                    "object": {
+                        "type": "Identifier",
+                        "name": "array"
+                    },
+                    "property": {
+                        "type": "Identifier",
+                        "name": "map"
+                    }
+                },
+                "arguments": [
+                    {
+                        "type": "ArrowFunctionExpression",
+                        "id": null,
+                        "params": [
+                            {
+                                "type": "Identifier",
+                                "name": "x"
+                            }
+                        ],
+                        "defaults": [],
+                        "body": {
+                            "type": "BinaryExpression",
+                            "operator": "*",
+                            "left": {
+                                "type": "Identifier",
+                                "name": "x"
+                            },
+                            "right": {
+                                "type": "Identifier",
+                                "name": "x"
+                            }
+                        },
+                        "rest": null,
+                        "generator": false,
+                        "expression": true
+                    }
+                ]
+            }
+        }
+    ]
+}
+</pre>
 
     </div>
 
     <div class="four columns">
       <div class="panel">
-
-        <p>More info on the parsers:<br/>
-        <a href="https://github.com/google/traceur-compiler">github.com/google/traceur-compiler</a><br/>
-        <a href="https://github.com/mishoo/UglifyJS2">github.com/mishoo/UglifyJS2</a><br/>
-        <a href="https://github.com/marijnh/acorn">github.com/marijnh/acorn</a><br/>
-        </p>
-        <p>Each parser produces the syntax tree with location marking in every syntax node.</p>
+          <p><b>Contents</b></p>
+          <ol>
+              <li><a href="#arrowfunction">Arrow Function</a></li>
+          </ol>
       </div>
+      <p><strong>Note</strong>: Partial ES6 support also exists in the experimental <em>harmony</em> branch.
+      However, this branch has never been officially released and the features are not documented.</p>
 
-      <p><strong>Note</strong>: Esprima is not completely optimized for location tracking parsing yet. It still receives on-going, continuous performance tweaks.</p>
-      <p>Time measurement is carried out using <a href="http://benchmarkjs.com" target="_blank">Benchmark.js</a><span id="benchmarkjs-version"></span>.</p>
     </div>
   </div>
 
@@ -129,11 +187,6 @@ window.onload = function () {
       </ul>
     </div>
   </div>
-
-<script src="http://google.github.io/traceur-compiler/bin/traceur.js"></script>
-<script src="http://marijnhaverbeke.nl/acorn/acorn.js"></script>
-<script src="http://lisperator.net/s/js/uglifyjs/uglify.js"></script>
-
 
 </body>
 </html>
