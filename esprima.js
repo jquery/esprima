@@ -371,15 +371,9 @@ parseStatement: true, parseSourceElement: true */
             comment.loc = loc;
         }
         extra.comments.push(comment);
-
         if (extra.attachComment) {
-            attacher = {
-                comment: comment,
-                leading: null,
-                trailing: null,
-                range: [start, end]
-            };
-            extra.pendingComments.push(attacher);
+            extra.leadingComments.push(comment);
+            extra.trailingComments.push(comment);
         }
     }
 
@@ -1487,43 +1481,55 @@ parseStatement: true, parseSourceElement: true */
         name: 'SyntaxTree',
 
         processComment: function (node) {
-            var i, attacher, pos, len, candidate;
-
+            var lastChild, trailingComments;
             if (typeof node.type === 'undefined' || node.type === Syntax.Program) {
                 return;
             }
 
-            // Check for possible additional trailing comments.
+            // FIXME(ikarienator): We are somehow calling processComment multiple times on the same node.
+            if (extra.bottomRightStack.length > 0 && extra.bottomRightStack[extra.bottomRightStack.length - 1] === node) {
+                return;
+            }
+
             peek();
 
-            for (i = 0; i < extra.pendingComments.length; ++i) {
-                attacher = extra.pendingComments[i];
-                if (node.range[0] >= attacher.comment.range[1]) {
-                    candidate = attacher.leading;
-                    if (candidate) {
-                        pos = candidate.range[0];
-                        len = candidate.range[1] - pos;
-                        if (node.range[0] <= pos && (node.range[1] - node.range[0] >= len)) {
-                            attacher.leading = node;
-                        }
-                    } else {
-                        attacher.leading = node;
-                    }
+            if (extra.trailingComments.length > 0) {
+                if (extra.trailingComments[0].range[0] >= node.range[1]) {
+                    trailingComments = extra.trailingComments;
+                    extra.trailingComments = [];
+                } else {
+                    extra.trailingComments.length = 0;
                 }
-                if (node.range[1] <= attacher.comment.range[0]) {
-                    candidate = attacher.trailing;
-                    if (candidate) {
-                        pos = candidate.range[0];
-                        len = candidate.range[1] - pos;
-                        /* istanbul ignore else */
-                        if (node.range[0] <= pos && (node.range[1] - node.range[0] >= len)) {
-                            attacher.trailing = node;
-                        }
-                    } else {
-                        attacher.trailing = node;
-                    }
+            } else {
+                if (extra.bottomRightStack.length > 0 &&
+                        extra.bottomRightStack[extra.bottomRightStack.length - 1].trailingComments &&
+                        extra.bottomRightStack[extra.bottomRightStack.length - 1].trailingComments[0].range[0] >= node.range[1]) {
+                    trailingComments = extra.bottomRightStack[extra.bottomRightStack.length - 1].trailingComments;
+                    delete extra.bottomRightStack[extra.bottomRightStack.length - 1].trailingComments;
                 }
             }
+
+            // Eating the stack.
+            while (extra.bottomRightStack.length > 0 && extra.bottomRightStack[extra.bottomRightStack.length - 1].range[0] >= node.range[0]) {
+                lastChild = extra.bottomRightStack.pop();
+            }
+
+            if (lastChild) {
+                if (lastChild.leadingComments && lastChild.leadingComments[lastChild.leadingComments.length - 1].range[1] <= node.range[0]) {
+                    node.leadingComments = lastChild.leadingComments;
+                    delete lastChild.leadingComments;
+                }
+            } else if (extra.leadingComments.length > 0 && extra.leadingComments[extra.leadingComments.length - 1].range[1] <= node.range[0]) {
+                node.leadingComments = extra.leadingComments;
+                extra.leadingComments = [];
+            }
+
+
+            if (trailingComments) {
+                node.trailingComments = trailingComments;
+            }
+
+            extra.bottomRightStack.push(node);
         },
 
         markEnd: function (node, startToken) {
@@ -3755,31 +3761,6 @@ parseStatement: true, parseSourceElement: true */
         return delegate.markEnd(delegate.createProgram(body), startToken);
     }
 
-    function attachComments() {
-        var i, attacher, comment, leading, trailing;
-
-        for (i = 0; i < extra.pendingComments.length; ++i) {
-            attacher = extra.pendingComments[i];
-            comment = attacher.comment;
-            leading = attacher.leading;
-            if (leading) {
-                if (typeof leading.leadingComments === 'undefined') {
-                    leading.leadingComments = [];
-                }
-                leading.leadingComments.push(attacher.comment);
-            }
-            trailing = attacher.trailing;
-            if (trailing) {
-                /* istanbul ignore else */
-                if (typeof trailing.trailingComments === 'undefined') {
-                    trailing.trailingComments = [];
-                }
-                trailing.trailingComments.push(attacher.comment);
-            }
-        }
-        extra.pendingComments = [];
-    }
-
     function filterTokenLocation() {
         var i, entry, token, tokens = [];
 
@@ -3935,8 +3916,10 @@ parseStatement: true, parseSourceElement: true */
             }
             if (extra.attachComment) {
                 extra.range = true;
-                extra.pendingComments = [];
                 extra.comments = [];
+                extra.bottomRightStack = [];
+                extra.trailingComments = [];
+                extra.leadingComments = [];
             }
         }
 
@@ -3951,9 +3934,6 @@ parseStatement: true, parseSourceElement: true */
             }
             if (typeof extra.errors !== 'undefined') {
                 program.errors = extra.errors;
-            }
-            if (extra.attachComment) {
-                attachComments();
             }
         } catch (e) {
             throw e;
