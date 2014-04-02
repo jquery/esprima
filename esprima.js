@@ -1507,7 +1507,7 @@ parseStatement: true, parseSourceElement: true */
             peek();
 
             extra.nodes.push(node);
-            node.farthestComment = extra.comments.length;
+            extra.farthestComment.push(extra.comments.length);
         },
 
         markEnd: function (node, startToken) {
@@ -3742,14 +3742,14 @@ parseStatement: true, parseSourceElement: true */
 
     function nodeSorter(nodes) {
         // TODO(ikarienator): O(n) sorter for post-order tree traversal.
-        var i, ln = nodes.length, node, boundaries = [];
+        var i, node, boundaries = [];
 
         // TODO(ikarienator): Construct a test case to use attachComment with no source element.
         /* istanbul ignore next */
         if (nodes.length === 0) {
             return [];
         }
-        for (i = 0; i < ln; i++) {
+        for (i = 0; i < nodes.length; i++) {
             node = nodes[i];
             boundaries[i << 1] = {
                 node: node,
@@ -3789,7 +3789,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function attachComments() {
-        var i, j, boundaries, node, comment, comments = extra.comments, boundary;
+        var i, j, boundaries, comments = extra.comments, boundary;
 
         boundaries = nodeSorter(extra.nodes);
         i = 0;
@@ -3816,7 +3816,7 @@ parseStatement: true, parseSourceElement: true */
             boundary = boundaries[i];
             if (boundary.enter === false) {
                 if (comments[j].range[0] >= boundary.position) {
-                    if (j < boundary.node.farthestComment) {
+                    if (j < extra.farthestComment[boundary.index]) {
                         if (typeof boundary.node.trailingComments === 'undefined') {
                             boundary.node.trailingComments = [];
                         }
@@ -3829,10 +3829,6 @@ parseStatement: true, parseSourceElement: true */
             } else {
                 i--;
             }
-        }
-
-        for (i = 0; i < extra.nodes.length; ++i) {
-            delete extra.nodes[i].farthestComment;
         }
     }
 
@@ -3993,6 +3989,7 @@ parseStatement: true, parseSourceElement: true */
                 extra.range = true;
                 extra.nodes = [];
                 extra.comments = [];
+                extra.farthestComment = [];
             }
         }
 
