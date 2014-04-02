@@ -318,7 +318,7 @@ if (typeof window !== 'undefined') {
                     size = source.length;
                 totalSize += size;
                 return suite.add(filename, function () {
-                    var syntax = esprima.parse(source, { range: true, loc: true });
+                    var syntax = esprima.parse(source, { range: true, loc: true, attachComment: true });
                     tree.push(syntax.body.length);
                 }, {
                     'onComplete': function (event, bench) {
