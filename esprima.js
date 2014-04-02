@@ -63,6 +63,7 @@ parseStatement: true, parseSourceElement: true */
         TokenName,
         FnExprTokens,
         Syntax,
+        PlaceHolders,
         PropertyKind,
         Messages,
         Regex,
@@ -154,6 +155,12 @@ parseStatement: true, parseSourceElement: true */
         VariableDeclarator: 'VariableDeclarator',
         WhileStatement: 'WhileStatement',
         WithStatement: 'WithStatement'
+    };
+
+    PlaceHolders = {
+        ArrowParameterPlaceHolder: {
+            type: 'ArrowParameterPlaceHolder'
+        }
     };
 
     PropertyKind = {
@@ -1465,34 +1472,6 @@ parseStatement: true, parseSourceElement: true */
         lineStart = start;
     }
 
-    function lookahead2() {
-        var adv, pos, line, start, result;
-
-        adv = (typeof extra.tokens !== 'undefined') ? collectToken : advance;
-
-        pos = index;
-        line = lineNumber;
-        start = lineStart;
-
-        // Scan for the next immediate token.
-        /* istanbul ignore next */
-        if (lookahead === null) {
-            lookahead = adv();
-        }
-
-        // Grab the token right after.
-        index = lookahead.end;
-        lineNumber = lookahead.lineNumber;
-        lineStart = lookahead.lineStart;
-        result = adv();
-
-        index = pos;
-        lineNumber = line;
-        lineStart = start;
-
-        return result;
-    }
-
     function Position(line, column) {
         this.line = line;
         this.column = column;
@@ -2255,9 +2234,14 @@ parseStatement: true, parseSourceElement: true */
     // 11.1.6 The Grouping Operator
 
     function parseGroupExpression() {
-        var expr;
+        var expr, params, startToken = lookahead;
 
         expect('(');
+
+        if (match(')')) {
+            lex();
+            return PlaceHolders.ArrowParameterPlaceHolder;
+        }
 
         ++state.parenthesisCount;
 
@@ -2598,6 +2582,9 @@ parseStatement: true, parseSourceElement: true */
 
         marker = lookahead;
         left = parseUnaryExpression();
+        if (left === PlaceHolders.ArrowParameterPlaceHolder) {
+            return left;
+        }
 
         token = lookahead;
         prec = binaryPrecedence(token, state.allowIn);
@@ -2658,7 +2645,9 @@ parseStatement: true, parseSourceElement: true */
         startToken = lookahead;
 
         expr = parseBinaryExpression();
-
+        if (expr === PlaceHolders.ArrowParameterPlaceHolder) {
+            return expr;
+        }
         if (match('?')) {
             lex();
             previousAllowIn = state.allowIn;
@@ -2750,30 +2739,19 @@ parseStatement: true, parseSourceElement: true */
         oldParenthesisCount = state.parenthesisCount;
 
         startToken = lookahead;
-
-        if (match('(')) {
-            token = lookahead2();
-            if (token.value === ')' && token.type === Token.Punctuator) {
-                params = parseParams();
-                list  = {
-                    params: params.params
-                };
-                node = parseArrowFunctionExpression(list);
-                return delegate.markEnd(node, startToken);
-            }
-        }
-
         token = lookahead;
 
         node = left = parseConditionalExpression();
 
-        if (match('=>')) {
+        if (node === PlaceHolders.ArrowParameterPlaceHolder || match('=>')) {
             if (state.parenthesisCount === oldParenthesisCount ||
                     state.parenthesisCount === (oldParenthesisCount + 1)) {
                 if (node.type === Syntax.Identifier) {
                     list = reinterpretAsCoverFormalsList([ node ]);
                 } else if (node.type === Syntax.SequenceExpression) {
                     list = reinterpretAsCoverFormalsList(node.expressions);
+                } else if (node === PlaceHolders.ArrowParameterPlaceHolder) {
+                    list = reinterpretAsCoverFormalsList([]);
                 }
                 if (list) {
                     node = parseArrowFunctionExpression(list);
