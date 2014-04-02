@@ -364,16 +364,6 @@ parseStatement: true, parseSourceElement: true */
             comment.loc = loc;
         }
         extra.comments.push(comment);
-
-        if (extra.attachComment) {
-            attacher = {
-                comment: comment,
-                leading: null,
-                trailing: null,
-                range: [start, end]
-            };
-            extra.pendingComments.push(attacher);
-        }
     }
 
     function skipSingleLineComment(offset) {
@@ -1508,47 +1498,20 @@ parseStatement: true, parseSourceElement: true */
         name: 'SyntaxTree',
 
         processComment: function (node) {
-            var i, attacher, pos, len, candidate;
+            var i, attacher, pos, len, candidate, l, r, mid;
 
             if (typeof node.type === 'undefined' || node.type === Syntax.Program) {
                 return;
             }
 
-            // Check for possible additional trailing comments.
             peek();
 
-            for (i = 0; i < extra.pendingComments.length; ++i) {
-                attacher = extra.pendingComments[i];
-                if (node.range[0] >= attacher.comment.range[1]) {
-                    candidate = attacher.leading;
-                    if (candidate) {
-                        pos = candidate.range[0];
-                        len = candidate.range[1] - pos;
-                        if (node.range[0] <= pos && (node.range[1] - node.range[0] >= len)) {
-                            attacher.leading = node;
-                        }
-                    } else {
-                        attacher.leading = node;
-                    }
-                }
-                if (node.range[1] <= attacher.comment.range[0]) {
-                    candidate = attacher.trailing;
-                    if (candidate) {
-                        pos = candidate.range[0];
-                        len = candidate.range[1] - pos;
-                        /* istanbul ignore else */
-                        if (node.range[0] <= pos && (node.range[1] - node.range[0] >= len)) {
-                            attacher.trailing = node;
-                        }
-                    } else {
-                        attacher.trailing = node;
-                    }
-                }
-            }
+            extra.nodes.push(node);
+            node.farthestComment = extra.comments.length;
         },
 
         markEnd: function (node, startToken) {
-            if (extra.range) {
+            if (extra.range || extra.attachComment) {
                 node.range = [startToken.start, index];
             }
             if (extra.loc) {
@@ -3777,29 +3740,100 @@ parseStatement: true, parseSourceElement: true */
         return delegate.markEnd(delegate.createProgram(body), startToken);
     }
 
-    function attachComments() {
-        var i, attacher, comment, leading, trailing;
+    function nodeSorter(nodes) {
+        // TODO(ikarienator): O(n) sorter for post-order tree traversal.
+        var i, ln = nodes.length, node, boundaries = [];
 
-        for (i = 0; i < extra.pendingComments.length; ++i) {
-            attacher = extra.pendingComments[i];
-            comment = attacher.comment;
-            leading = attacher.leading;
-            if (leading) {
-                if (typeof leading.leadingComments === 'undefined') {
-                    leading.leadingComments = [];
-                }
-                leading.leadingComments.push(attacher.comment);
+        // TODO(ikarienator): Construct a test case to use attachComment with no source element.
+        /* istanbul ignore next */
+        if (nodes.length === 0) {
+            return [];
+        }
+        for (i = 0; i < ln; i++) {
+            node = nodes[i];
+            boundaries[i << 1] = {
+                node: node,
+                position: node.range[0],
+                index: i,
+                enter: true
+            };
+            boundaries[(i << 1) + 1] = {
+                node: node,
+                position: node.range[1],
+                index: i,
+                enter: false
+            };
+        }
+
+        boundaries.sort(function (n1, n2) {
+            if (n1.position < n2.position) {
+                return -1;
             }
-            trailing = attacher.trailing;
-            if (trailing) {
-                /* istanbul ignore else */
-                if (typeof trailing.trailingComments === 'undefined') {
-                    trailing.trailingComments = [];
+            if (n1.position > n2.position) {
+                return 1;
+            }
+            /* istanbul ignore next */
+            if (n1.enter > n2.enter) {
+                return -1;
+            }
+            /* istanbul ignore next */
+            if (n1.enter < n2.enter) {
+                return -1;
+            }
+            if (n1.enter === true) {
+                return n2.index - n1.index;
+            }
+            return n1.index - n2.index;
+        });
+        return boundaries;
+    }
+
+    function attachComments() {
+        var i, j, boundaries, node, comment, comments = extra.comments, boundary;
+
+        boundaries = nodeSorter(extra.nodes);
+        i = 0;
+        j = 0;
+        while (i < boundaries.length && j < comments.length) {
+            boundary = boundaries[i];
+            if (boundary.enter === true) {
+                if (comments[j].range[1] <= boundary.position) {
+                    if (typeof boundary.node.leadingComments === 'undefined') {
+                        boundary.node.leadingComments = [];
+                    }
+                    boundary.node.leadingComments.push(comments[j]);
+                    j++;
+                } else {
+                    i++;
                 }
-                trailing.trailingComments.push(attacher.comment);
+            } else {
+                i++;
             }
         }
-        extra.pendingComments = [];
+        i = boundaries.length - 1;
+        j = comments.length - 1;
+        while (i >= 0 && j >= 0) {
+            boundary = boundaries[i];
+            if (boundary.enter === false) {
+                if (comments[j].range[0] >= boundary.position) {
+                    if (j < boundary.node.farthestComment) {
+                        if (typeof boundary.node.trailingComments === 'undefined') {
+                            boundary.node.trailingComments = [];
+                        }
+                        boundary.node.trailingComments.push(comments[j]);
+                    }
+                    j--;
+                } else {
+                    i--;
+                }
+            } else {
+                i--;
+            }
+        }
+
+        for (i = 0; i < extra.nodes.length; ++i) {
+            delete extra.nodes[i].farthestComment;
+        }
     }
 
     function filterTokenLocation() {
@@ -3957,7 +3991,7 @@ parseStatement: true, parseSourceElement: true */
             }
             if (extra.attachComment) {
                 extra.range = true;
-                extra.pendingComments = [];
+                extra.nodes = [];
                 extra.comments = [];
             }
         }

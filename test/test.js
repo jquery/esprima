@@ -3364,6 +3364,68 @@ var testFixture = {
             }
         },
 
+        '42 /* block comment */ /* block comment */': {
+            "type": "Program",
+            "body": [
+                {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                        "type": "Literal",
+                        "value": 42,
+                        "raw": "42",
+                        "range": [
+                            0,
+                            2
+                        ],
+                        "trailingComments": [
+                            {
+                                "type": "Block",
+                                "value": " block comment ",
+                                "range": [
+                                    23,
+                                    42
+                                ]
+                            },
+                            {
+                                "type": "Block",
+                                "value": " block comment ",
+                                "range": [
+                                    3,
+                                    22
+                                ]
+                            }
+                        ]
+                    },
+                    "range": [
+                        0,
+                        42
+                    ]
+                }
+            ],
+            "range": [
+                0,
+                42
+            ],
+            "comments": [
+                {
+                    "type": "Block",
+                    "value": " block comment ",
+                    "range": [
+                        3,
+                        22
+                    ]
+                },
+                {
+                    "type": "Block",
+                    "value": " block comment ",
+                    "range": [
+                        23,
+                        42
+                    ]
+                }
+            ]
+        },
+
         '(a + /* assignmenr */b ) * c': {
             "type": "Program",
             "body": [
