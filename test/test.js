@@ -11921,14 +11921,6 @@ var testFixture = {
                     end: { line: 1, column: 4 }
                 }
             }, {
-                type: "Identifier",
-                value: "sun",
-                range: [1, 4],
-                loc: {
-                    start: { line: 1, column: 1 },
-                    end: { line: 1, column: 4 }
-                }
-            }, {
                 type: "Punctuator",
                 value: ")",
                 range: [4, 5],
@@ -20183,6 +20175,20 @@ var testFixture = {
             lineNumber: 1,
             column: 4,
             message: 'Error: Line 1: Unexpected token <='
+        },
+
+        '() ? 42': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ?'
+        },
+
+        '() + 42': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token +'
         },
 
         '(10) => 00': {
