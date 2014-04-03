@@ -34,7 +34,7 @@ fixture = [
     'MooTools 1.4.5',
     'jQuery 1.9.1',
     'YUI 3.12.0',
-    // 'jQuery.Mobile 1.4.2',  // Excluded for now, the syntax file > 100 MB
+    'jQuery.Mobile 1.4.2',
     'Angular 1.2.5'
 ];
 
@@ -64,12 +64,12 @@ function getBaselineSyntax(name) {
 }
 
 function createBaselineSyntax(name, syntax) {
-    var tree = JSON.stringify(syntax, null, 4);
+    var tree = JSON.stringify(syntax);
     writeFile('test/3rdparty/syntax/' + name + '.json', tree);
 }
 
 function writeActualSyntax(name, syntax) {
-    var tree = JSON.stringify(syntax, null, 4);
+    var tree = JSON.stringify(syntax);
     writeFile('test/3rdparty/syntax/' + name + '.actual.json', tree);
 }
 
@@ -84,12 +84,12 @@ function getBaselineTokens(name) {
 }
 
 function createBaselineTokens(name, tokens) {
-    var data = JSON.stringify(tokens, null, 4);
+    var data = JSON.stringify(tokens);
     writeFile('test/3rdparty/syntax/' + name + '.tokens', data);
 }
 
 function writeActualTokens(name, tokens) {
-    var data = JSON.stringify(tokens, null, 4);
+    var data = JSON.stringify(tokens);
     writeFile('test/3rdparty/syntax/' + name + '.actual.tokens', data);
 }
 
