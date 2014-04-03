@@ -3364,6 +3364,68 @@ var testFixture = {
             }
         },
 
+        '42 /* block comment 1 */ /* block comment 2 */': {
+            "type": "Program",
+            "body": [
+                {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                        "type": "Literal",
+                        "value": 42,
+                        "raw": "42",
+                        "range": [
+                            0,
+                            2
+                        ],
+                        "trailingComments": [
+                            {
+                                "type": "Block",
+                                "value": " block comment 1 ",
+                                "range": [
+                                    3,
+                                    24
+                                ]
+                            },
+                            {
+                                "type": "Block",
+                                "value": " block comment 2 ",
+                                "range": [
+                                    25,
+                                    46
+                                ]
+                            }
+                        ]
+                    },
+                    "range": [
+                        0,
+                        46
+                    ]
+                }
+            ],
+            "range": [
+                0,
+                46
+            ],
+            "comments": [
+                {
+                    "type": "Block",
+                    "value": " block comment 1 ",
+                    "range": [
+                        3,
+                        24
+                    ]
+                },
+                {
+                    "type": "Block",
+                    "value": " block comment 2 ",
+                    "range": [
+                        25,
+                        46
+                    ]
+                }
+            ]
+        },
+
         '(a + /* assignmenr */b ) * c': {
             "type": "Program",
             "body": [
@@ -6321,6 +6383,48 @@ var testFixture = {
                 end: { line: 1, column: 14 }
             }
         }
+    },
+
+    '[ES6] Unicode Code Point Escape Sequence': {
+
+        '"\\u{714E}\\u{8336}"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: '煎茶',
+                raw: '"\\u{714E}\\u{8336}"',
+                range: [0, 18],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
+        '"\\u{20BB7}\\u{91CE}\\u{5BB6}"': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: '\ud842\udfb7\u91ce\u5bb6',
+                raw: '"\\u{20BB7}\\u{91CE}\\u{5BB6}"',
+                range: [0, 27],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 27 }
+                }
+            },
+            range: [0, 27],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
+            }
+        }
+
     },
 
     'Regular Expression Literals': {
@@ -11869,14 +11973,6 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 1, column: 1 }
-                }
-            }, {
-                type: "Identifier",
-                value: "sun",
-                range: [1, 4],
-                loc: {
-                    start: { line: 1, column: 1 },
-                    end: { line: 1, column: 4 }
                 }
             }, {
                 type: "Identifier",
@@ -19788,6 +19884,41 @@ var testFixture = {
             message: 'Error: Line 1: Invalid left-hand side in assignment'
         },
 
+        '"\\u{110000}"': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '"\\u{}"': {
+            index: 4,
+            lineNumber: 1,
+            column: 5,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '"\\u{FFFF"': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '"\\u{FFZ}"': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        'x\\': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
         '1++': {
             index: 1,
             lineNumber: 1,
@@ -20106,6 +20237,20 @@ var testFixture = {
             lineNumber: 1,
             column: 4,
             message: 'Error: Line 1: Unexpected token <='
+        },
+
+        '() ? 42': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ?'
+        },
+
+        '() + 42': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token +'
         },
 
         '(10) => 00': {

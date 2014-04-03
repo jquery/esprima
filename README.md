@@ -11,7 +11,7 @@ with the help of [many contributors](https://github.com/ariya/esprima/contributo
 - Sensible [syntax tree format](http://esprima.org/doc/index.html#ast) compatible with Mozilla
 [Parser AST](https://developer.mozilla.org/en/SpiderMonkey/Parser_API)
 - Optional tracking of syntax node location (index-based and line-column)
-- Heavily tested (> 650 [unit tests](http://esprima.org/test/) with [full code coverage](http://esprima.org/test/coverage.html))
+- Heavily tested (> 700 [unit tests](http://esprima.org/test/) with [full code coverage](http://esprima.org/test/coverage.html))
 - [Partial support](http://esprima.org/doc/es6.html) support for ECMAScript 6
 
 Esprima serves as a **building block** for some JavaScript
@@ -19,6 +19,6 @@ language tools, from [code instrumentation](http://esprima.org/demo/functiontrac
 to [editor autocompletion](http://esprima.org/demo/autocomplete.html).
 
 Esprima runs on many popular web browsers, as well as other ECMAScript platforms such as
-[Rhino](http://www.mozilla.org/rhino) and [Node.js](https://npmjs.org/package/esprima).
+[Rhino](http://www.mozilla.org/rhino), [Nashorn](http://openjdk.java.net/projects/nashorn/), and [Node.js](https://npmjs.org/package/esprima).
 
 For more information, check the web site [esprima.org](http://esprima.org).

@@ -160,6 +160,41 @@ array.map(x => x * x)
 }
 </pre>
 
+<h4 id="codepointescape">Unicode Code Point Escape Sequence</h4>
+<p><em>Since: version 2.0. Specification: <a href="https://people.mozilla.org/~jorendorff/es6-draft.html#sec-literals-string-literals">section 11.8.4</a>.</em></p>
+
+<p>Example code snippet:</p>
+
+<pre class="prettyprint lang-js">
+x = '\u{41}'
+</pre>
+
+<p>The corresponding syntax tree:</p>
+
+<pre class="prettyprint lang-js">
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "AssignmentExpression",
+                "operator": "=",
+                "left": {
+                    "type": "Identifier",
+                    "name": "x"
+                },
+                "right": {
+                    "type": "Literal",
+                    "value": "A",
+                    "raw": "'\\u{41}'"
+                }
+            }
+        }
+    ]
+}
+</pre>
+
     </div>
 
     <div class="four columns">
@@ -167,6 +202,7 @@ array.map(x => x * x)
           <p><b>Contents</b></p>
           <ol>
               <li><a href="#arrowfunction">Arrow Function</a></li>
+              <li><a href="#codepointescape">Unicode Code Point Escapee</a></li>
           </ol>
       </div>
       <p><strong>Note</strong>: Partial ES6 support also exists in the experimental <em>harmony</em> branch.
