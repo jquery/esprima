@@ -94,7 +94,9 @@ pre.prettyprint {
 <h4 id="usage">Basic Usage</h4>
 
 <p>Esprima runs on web browsers (IE 8+, modern browsers) as well as
-<a href="http://www.mozilla.org/rhino">Rhino</a> and <a href="http://nodejs.org">Node.js</a>.</p>
+<a href="http://www.mozilla.org/rhino">Rhino</a>,
+<a href="http://openjdk.java.net/projects/nashorn/">Nashorn</a>,
+and <a href="http://nodejs.org">Node.js</a>.</p>
 
 <h5>In a web browser</h5>
 
@@ -147,7 +149,7 @@ var esprima = require('esprima');
 console.log(JSON.stringify(esprima.parse('var answer = 42'), null, 4));
 </pre>
 
-<h5>With Rhino</h5>
+<h5>With Rhino or Nashorn</h5>
 
 <p>Load the source file from another script:</p>
 
