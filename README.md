@@ -19,6 +19,6 @@ language tools, from [code instrumentation](http://esprima.org/demo/functiontrac
 to [editor autocompletion](http://esprima.org/demo/autocomplete.html).
 
 Esprima runs on many popular web browsers, as well as other ECMAScript platforms such as
-[Rhino](http://www.mozilla.org/rhino) and [Node.js](https://npmjs.org/package/esprima).
+[Rhino](http://www.mozilla.org/rhino), [Nashorn](http://openjdk.java.net/projects/nashorn/), and [Node.js](https://npmjs.org/package/esprima).
 
 For more information, check the web site [esprima.org](http://esprima.org).
