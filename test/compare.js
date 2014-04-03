@@ -251,7 +251,7 @@ if (typeof window !== 'undefined') {
                 switch (parser) {
                 case 'Esprima':
                     fn = function () {
-                        var syntax = window.esprima.parse(source, { range: true, loc: true });
+                        var syntax = window.esprima.parse(source, { range: false, loc: false });
                         window.tree.push(syntax.body.length);
                     };
                     break;
@@ -275,7 +275,7 @@ if (typeof window !== 'undefined') {
 
                 case 'Acorn':
                     fn = function () {
-                        var syntax = window.acorn.parse(source, { ranges: true, locations: true });
+                        var syntax = window.acorn.parse(source, { ranges: false, locations: false });
                         window.tree.push(syntax.body.length);
                     };
                     break;
