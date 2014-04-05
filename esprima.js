@@ -2080,6 +2080,16 @@ parseStatement: true, parseSourceElement: true */
         return expr.type === Syntax.Identifier || expr.type === Syntax.MemberExpression;
     }
 
+    // Empty literal node for array holes
+
+    function parseArrayHole() {
+        var token;
+        token = lex();
+        token.value = undefined;
+        token.start += 1;
+        return delegate.markEnd(delegate.createLiteral(token), token);
+    }
+
     // 11.1.4 Array Initialiser
 
     function parseArrayInitialiser() {
@@ -2090,8 +2100,7 @@ parseStatement: true, parseSourceElement: true */
 
         while (!match(']')) {
             if (match(',')) {
-                lex();
-                elements.push(null);
+                elements.push(parseArrayHole());
             } else {
                 elements.push(parseAssignmentExpression());
 
