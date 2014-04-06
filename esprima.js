@@ -1428,11 +1428,6 @@ parseStatement: true, parseSourceElement: true */
                 return;
             }
 
-            // FIXME(ikarienator): We are somehow calling processComment multiple times on the same node.
-            if (extra.bottomRightStack.length > 0 && extra.bottomRightStack[extra.bottomRightStack.length - 1] === node) {
-                return;
-            }
-
             peek();
 
             if (extra.trailingComments.length > 0) {
@@ -3232,14 +3227,16 @@ parseStatement: true, parseSourceElement: true */
             throwUnexpected(lookahead);
         }
 
+        if (type === Token.Punctuator && lookahead.value === '{') {
+            return parseBlock();
+        }
+
         startToken = lookahead;
 
         if (type === Token.Punctuator) {
             switch (lookahead.value) {
             case ';':
                 return delegate.markEnd(parseEmptyStatement(), startToken);
-            case '{':
-                return delegate.markEnd(parseBlock(), startToken);
             case '(':
                 return delegate.markEnd(parseExpressionStatement(), startToken);
             default:
