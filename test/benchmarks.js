@@ -46,6 +46,10 @@ quickFixture = [
     'Angular 1.2.5'
 ];
 
+if (typeof gc === 'undefined') {
+    gc = undefined;
+}
+
 function slug(name) {
     'use strict';
     return name.toLowerCase().replace(/\.js/g, 'js').replace(/\s/g, '-');
@@ -298,6 +302,12 @@ if (typeof window !== 'undefined') {
             log = console.log.bind(console);
         }
 
+        if (gc) {
+            log("Has exposed gc().")
+        } else {
+            log("Doesn't have exposed gc().")
+        }
+
         function runTests(tests) {
             var index,
                 tree = [],
@@ -322,6 +332,9 @@ if (typeof window !== 'undefined') {
                     tree.push(syntax.body.length);
                 }, {
                     'onComplete': function (event, bench) {
+                        if (gc) {
+                            gc();
+                        }
                         var result = pad(this.name, 20);
                         result += pad(kb(size) + ' KiB', 12);
                         result += pad((1000 * this.stats.mean).toFixed(2), 10);
