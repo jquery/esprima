@@ -71,6 +71,32 @@ function errorToObject(e) {
     };
 }
 
+function sortedObject(o) {
+    if (o === null) {
+        return o;
+    }
+    if (o instanceof Array) {
+        return o.map(sortedObject);
+    }
+    if (typeof o !== 'object') {
+        return o;
+    }
+    if (o instanceof RegExp) {
+        return o;
+    }
+    var keys = Object.keys(o);
+    var result = {
+        range: undefined,
+        loc: undefined
+    };
+    keys.forEach(function (key) {
+        if (o.hasOwnProperty(key)){
+            result[key] = sortedObject(o[key]);
+        }
+    });
+    return result;
+}
+
 function hasAttachedComment(syntax) {
     var key;
     for (key in syntax) {
@@ -125,6 +151,7 @@ function testParse(esprima, code, syntax) {
         options.source = syntax.loc.source;
     }
 
+    syntax = sortedObject(syntax);
     expected = JSON.stringify(syntax, null, 4);
     try {
         // Some variations of the options.
@@ -140,7 +167,7 @@ function testParse(esprima, code, syntax) {
                 tree.errors[i] = errorToObject(tree.errors[i]);
             }
         }
-
+        tree = sortedObject(tree);
         actual = JSON.stringify(tree, adjustRegexLiteral, 4);
 
         // Only to ensure that there is no error when using string object.
@@ -168,6 +195,7 @@ function testParse(esprima, code, syntax) {
     // Check again without any location info.
     options.range = false;
     options.loc = false;
+    syntax = sortedObject(syntax);
     expected = JSON.stringify(syntax, filter, 4);
     try {
         tree = esprima.parse(code, options);
@@ -178,7 +206,7 @@ function testParse(esprima, code, syntax) {
                 tree.errors[i] = errorToObject(tree.errors[i]);
             }
         }
-
+        tree = sortedObject(tree);
         actual = JSON.stringify(tree, filter, 4);
     } catch (e) {
         throw new NotMatchingError(expected, e.toString());
