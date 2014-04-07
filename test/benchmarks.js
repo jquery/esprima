@@ -25,7 +25,7 @@
 
 
 /*jslint browser: true node: true */
-/*global load:true, print:true */
+/*global load:true, print:true, gc:true */
 var setupBenchmarks,
     fullFixture,
     quickFixture;
@@ -45,10 +45,6 @@ quickFixture = [
     'jQuery 1.9.1',
     'Angular 1.2.5'
 ];
-
-if (typeof gc === 'undefined') {
-    gc = undefined;
-}
 
 function slug(name) {
     'use strict';
@@ -302,10 +298,10 @@ if (typeof window !== 'undefined') {
             log = console.log.bind(console);
         }
 
-        if (gc) {
-            log("Has exposed gc().")
+        if (typeof gc === 'function') {
+            log('Has exposed gc().');
         } else {
-            log("Doesn't have exposed gc().")
+            log('Doesn\'t have exposed gc().');
         }
 
         function runTests(tests) {
@@ -332,7 +328,7 @@ if (typeof window !== 'undefined') {
                     tree.push(syntax.body.length);
                 }, {
                     'onComplete': function (event, bench) {
-                        if (gc) {
+                        if (typeof gc === 'function') {
                             gc();
                         }
                         var result = pad(this.name, 20);
