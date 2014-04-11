@@ -762,62 +762,33 @@ parseStatement: true, parseSourceElement: true */
                     };
                 }
             }
-            break;
         }
-
-        // Peek more characters.
-
-        ch2 = source[index + 1];
-        ch3 = source[index + 2];
-        ch4 = source[index + 3];
 
         // 4-character punctuator: >>>=
 
-        if (ch1 === '>' && ch2 === '>' && ch3 === '>') {
-            if (ch4 === '=') {
-                index += 4;
-                return {
-                    type: Token.Punctuator,
-                    value: '>>>=',
-                    lineNumber: lineNumber,
-                    lineStart: lineStart,
-                    start: start,
-                    end: index
-                };
-            }
+        ch4 = source.substr(index, 4);
+
+        if (ch4 === '>>>=') {
+            index += 4;
+            return {
+                type: Token.Punctuator,
+                value: ch4,
+                lineNumber: lineNumber,
+                lineStart: lineStart,
+                start: start,
+                end: index
+            };
         }
 
         // 3-character punctuators: === !== >>> <<= >>=
 
-        if (ch1 === '>' && ch2 === '>' && ch3 === '>') {
-            index += 3;
-            return {
-                type: Token.Punctuator,
-                value: '>>>',
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                start: start,
-                end: index
-            };
-        }
+        ch3 = ch4.substr(0, 3);
 
-        if (ch1 === '<' && ch2 === '<' && ch3 === '=') {
+        if (ch3 === '>>>' || ch3 === '<<=' || ch3 === '>>=') {
             index += 3;
             return {
                 type: Token.Punctuator,
-                value: '<<=',
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                start: start,
-                end: index
-            };
-        }
-
-        if (ch1 === '>' && ch2 === '>' && ch3 === '=') {
-            index += 3;
-            return {
-                type: Token.Punctuator,
-                value: '>>=',
+                value: ch3,
                 lineNumber: lineNumber,
                 lineStart: lineStart,
                 start: start,
@@ -826,12 +797,13 @@ parseStatement: true, parseSourceElement: true */
         }
 
         // Other 2-character punctuators: ++ -- << >> && ||
+        ch2 = ch3.substr(0, 2);
 
-        if (ch1 === ch2 && ('+-<>&|'.indexOf(ch1) >= 0)) {
+        if ((ch1 === ch2[1] && ('+-<>&|'.indexOf(ch1) >= 0)) || ch2 === '=>') {
             index += 2;
             return {
                 type: Token.Punctuator,
-                value: ch1 + ch2,
+                value: ch2,
                 lineNumber: lineNumber,
                 lineStart: lineStart,
                 start: start,
@@ -839,17 +811,7 @@ parseStatement: true, parseSourceElement: true */
             };
         }
 
-        if (ch1 === '=' && ch2 === '>') {
-            index += 2;
-            return {
-                type: Token.Punctuator,
-                value: '=>',
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                start: start,
-                end: index
-            };
-        }
+        // 1-character punctuators: < > = ! + - * % & | ^ /
 
         if ('<>=!+-*%&|^/'.indexOf(ch1) >= 0) {
             ++index;
