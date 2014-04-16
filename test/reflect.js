@@ -25,6 +25,7 @@ function throwStmt(expr) { return Pattern({ type: "ThrowStatement", argument: ex
 function returnStmt(expr) { return Pattern({ type: "ReturnStatement", argument: expr }) }
 function yieldExpr(expr) { return Pattern({ type: "YieldExpression", argument: expr }) }
 function lit(val) { return Pattern({ type: "Literal", value: val }) }
+var litu = Pattern({ type: "Literal", value: undefined });
 var thisExpr = Pattern({ type: "ThisExpression" });
 function funDecl(id, params, body) { return Pattern({ type: "FunctionDeclaration",
                                              id: id,
@@ -287,17 +288,17 @@ assertExpr("[]", arrExpr([]));
 assertExpr("[1]", arrExpr([lit(1)]));
 assertExpr("[1,2]", arrExpr([lit(1),lit(2)]));
 assertExpr("[1,2,3]", arrExpr([lit(1),lit(2),lit(3)]));
-assertExpr("[1,,2,3]", arrExpr([lit(1),,lit(2),lit(3)]));
-assertExpr("[1,,,2,3]", arrExpr([lit(1),,,lit(2),lit(3)]));
-assertExpr("[1,,,2,,3]", arrExpr([lit(1),,,lit(2),,lit(3)]));
-assertExpr("[1,,,2,,,3]", arrExpr([lit(1),,,lit(2),,,lit(3)]));
-assertExpr("[,1,2,3]", arrExpr([,lit(1),lit(2),lit(3)]));
-assertExpr("[,,1,2,3]", arrExpr([,,lit(1),lit(2),lit(3)]));
-assertExpr("[,,,1,2,3]", arrExpr([,,,lit(1),lit(2),lit(3)]));
-assertExpr("[,,,1,2,3,]", arrExpr([,,,lit(1),lit(2),lit(3)]));
-assertExpr("[,,,1,2,3,,]", arrExpr([,,,lit(1),lit(2),lit(3),undefined]));
-assertExpr("[,,,1,2,3,,,]", arrExpr([,,,lit(1),lit(2),lit(3),undefined,undefined]));
-assertExpr("[,,,,,]", arrExpr([undefined,undefined,undefined,undefined,undefined]));
+assertExpr("[1,,2,3]", arrExpr([lit(1),litu,lit(2),lit(3)]));
+assertExpr("[1,,,2,3]", arrExpr([lit(1),litu,litu,lit(2),lit(3)]));
+assertExpr("[1,,,2,,3]", arrExpr([lit(1),litu,litu,lit(2),litu,lit(3)]));
+assertExpr("[1,,,2,,,3]", arrExpr([lit(1),litu,litu,lit(2),litu,litu,lit(3)]));
+assertExpr("[,1,2,3]", arrExpr([litu,lit(1),lit(2),lit(3)]));
+assertExpr("[,,1,2,3]", arrExpr([litu,litu,lit(1),lit(2),lit(3)]));
+assertExpr("[,,,1,2,3]", arrExpr([litu,litu,litu,lit(1),lit(2),lit(3)]));
+assertExpr("[,,,1,2,3,]", arrExpr([litu,litu,litu,lit(1),lit(2),lit(3)]));
+assertExpr("[,,,1,2,3,,]", arrExpr([litu,litu,litu,lit(1),lit(2),lit(3),litu]));
+assertExpr("[,,,1,2,3,,,]", arrExpr([litu,litu,litu,lit(1),lit(2),lit(3),litu,litu]));
+assertExpr("[,,,,,]", arrExpr([litu,litu,litu,litu,litu]));
 assertExpr("({})", objExpr([]));
 assertExpr("({x:1})", objExpr([objProp(ident("x"), lit(1), "init")]));
 assertExpr("({x:1, y:2})", objExpr([objProp(ident("x"), lit(1), "init"),

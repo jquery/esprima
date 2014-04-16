@@ -537,19 +537,34 @@ var testFixture = {
                 },
                 right: {
                     type: 'ArrayExpression',
-                    elements: [
-                        null,
-                        null,
-                        {
-                            type: 'Literal',
-                            value: 42,
-                            raw: '42',
-                            range: [9, 11],
-                            loc: {
-                                start: { line: 1, column: 9 },
-                                end: { line: 1, column: 11 }
-                            }
-                        }],
+                    elements: [{
+                        type: 'Literal',
+                        value: undefined,
+                        raw: '',
+                        range: [7, 7],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 7 }
+                        }
+                    }, {
+                        type: 'Literal',
+                        value: undefined,
+                        raw: '',
+                        range: [8, 8],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 8 }
+                        }
+                    }, {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42',
+                        range: [9, 11],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 11 }
+                        }
+                    }],
                     range: [4, 13],
                     loc: {
                         start: { line: 1, column: 4 },
@@ -666,7 +681,16 @@ var testFixture = {
                             start: { line: 1, column: 9 },
                             end: { line: 1, column: 10 }
                         }
-                    }, null, {
+                    }, {
+                        type: 'Literal',
+                        value: undefined,
+                        raw: '',
+                        range: [12, 12],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 12 }
+                        }
+                    }, {
                         type: 'Literal',
                         value: 3,
                         raw: '3',
