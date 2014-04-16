@@ -25,7 +25,7 @@
 
 
 /*jslint browser: true node: true */
-/*global load:true, print:true */
+/*global load:true, print:true, gc:true */
 var setupBenchmarks,
     fullFixture,
     quickFixture;
@@ -298,6 +298,12 @@ if (typeof window !== 'undefined') {
             log = console.log.bind(console);
         }
 
+        if (typeof gc === 'function') {
+            log('Has exposed gc().');
+        } else {
+            log('Doesn\'t have exposed gc().');
+        }
+
         function runTests(tests) {
             var index,
                 tree = [],
@@ -322,6 +328,9 @@ if (typeof window !== 'undefined') {
                     tree.push(syntax.body.length);
                 }, {
                     'onComplete': function (event, bench) {
+                        if (typeof gc === 'function') {
+                            gc();
+                        }
                         var result = pad(this.name, 20);
                         result += pad(kb(size) + ' KiB', 12);
                         result += pad((1000 * this.stats.mean).toFixed(2), 10);

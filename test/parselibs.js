@@ -34,7 +34,7 @@ fixture = [
     'MooTools 1.4.5',
     'jQuery 1.9.1',
     'YUI 3.12.0',
-    // 'jQuery.Mobile 1.4.2',  // Excluded for now, the syntax file > 100 MB
+    'jQuery.Mobile 1.4.2',
     'Angular 1.2.5'
 ];
 
@@ -53,23 +53,49 @@ if (typeof require === 'undefined') {
     };
 }
 
+function sortedObject(o) {
+    if (o === null) {
+        return o;
+    }
+    if (o instanceof Array) {
+        return o.map(sortedObject);
+    }
+    if (typeof o !== 'object') {
+        return o;
+    }
+    if (o instanceof RegExp) {
+        return o;
+    }
+    var keys = Object.keys(o);
+    var result = {
+        range: undefined,
+        loc: undefined
+    };
+    keys.forEach(function (key) {
+        if (o.hasOwnProperty(key)){
+            result[key] = sortedObject(o[key]);
+        }
+    });
+    return result;
+}
+
 function getBaselineSyntax(name) {
     var syntax, tree = null;
     try {
         syntax = readFile('test/3rdparty/syntax/' + name + '.json');
-        tree = JSON.parse(syntax);
+        tree = sortedObject(JSON.parse(syntax));
     } finally {
         return tree;
     }
 }
 
 function createBaselineSyntax(name, syntax) {
-    var tree = JSON.stringify(syntax, null, 4);
+    var tree = JSON.stringify(syntax);
     writeFile('test/3rdparty/syntax/' + name + '.json', tree);
 }
 
 function writeActualSyntax(name, syntax) {
-    var tree = JSON.stringify(syntax, null, 4);
+    var tree = JSON.stringify(syntax);
     writeFile('test/3rdparty/syntax/' + name + '.actual.json', tree);
 }
 
@@ -77,19 +103,19 @@ function getBaselineTokens(name) {
     var data, tokens = null;
     try {
         data = readFile('test/3rdparty/syntax/' + name + '.tokens');
-        tokens = JSON.parse(data);
+        tokens = sortedObject(JSON.parse(data));
     } finally {
         return tokens;
     }
 }
 
 function createBaselineTokens(name, tokens) {
-    var data = JSON.stringify(tokens, null, 4);
+    var data = JSON.stringify(sortedObject(tokens));
     writeFile('test/3rdparty/syntax/' + name + '.tokens', data);
 }
 
 function writeActualTokens(name, tokens) {
-    var data = JSON.stringify(tokens, null, 4);
+    var data = JSON.stringify(sortedObject(tokens));
     writeFile('test/3rdparty/syntax/' + name + '.actual.tokens', data);
 }
 
@@ -102,8 +128,8 @@ fixture.forEach(function (name) {
     console.log(' ', name);
     try {
         for (i = 0; i < N; ++i) {
-            syntax = esprima.parse(source, { range: true, loc: true, raw: true });
-            tokens = esprima.tokenize(source, { range: true });
+            syntax = sortedObject(esprima.parse(source, { range: true, loc: true, raw: true }));
+            tokens = sortedObject(esprima.tokenize(source, { range: true }));
         }
         expected = getBaselineSyntax(filename);
         if (expected) {
