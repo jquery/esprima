@@ -174,6 +174,14 @@ esprima.parse(code, options);
 
 <p>The output of the parser is the syntax tree formatted in <a href="http://www.json.org">JSON</a>, see the following <a href="#ast">Syntax Tree Format</a> section.</p>
 
+<p>Since version 1.1, it is also possible to only tokenize the code:</p>
+
+<pre class="prettyprint lang-js">
+esprima.tokenize(code, options);
+</pre>
+
+<p>The output of the tokenizer is an array with every element in the array representing a token. The token has two properties, type and value. the possible token types are Boolean, Identifier, Keyword, Null, Numeric, Punctuator, String, or RegularExpression.</p>
+
 <p>Available options so far (by default, every option <b>false</b>):</p>
 
 <table>
@@ -211,7 +219,7 @@ esprima.parse(code, options);
 
 <p>The easiest way to see the different output based on various option settings is to use the <a href="../demo/parse.html">online parser demo</a>.
 
-<p><b>Note</b>: In version > 1.0, <code>raw</code> is ignored since literals always include the verbatim source.</p>
+<p><b>Note</b>: In version &gt; 1.0, <code>raw</code> is ignored since literals always include the verbatim source.</p>
 
 <h4 id="examples">Examples</h4>
 
