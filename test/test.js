@@ -20281,13 +20281,6 @@ var testFixture = {
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
-        '\\u0066unction a(if) { }': {
-            index: 14,
-            lineNumber: 1,
-            column: 15,
-            message: 'Error: Line 1: Unexpected identifier'
-        },
-
         'function t(if) { }': {
             index: 11,
             lineNumber: 1,
