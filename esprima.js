@@ -1291,7 +1291,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         // Very common: ( and ) and ;
-        if (ch === 0x28 || ch === 0x29 || ch === 0x3A) {
+        if (ch === 0x28 || ch === 0x29 || ch === 0x3B) {
             return scanPunctuator();
         }
 
