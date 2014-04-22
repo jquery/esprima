@@ -19129,13 +19129,6 @@ var testFixture = {
             message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
         },
 
-        '\\u0066unction a(if) { }': {
-            index: 14,
-            lineNumber: 1,
-            column: 15,
-            message: 'Error: Line 1: Unexpected identifier'
-        },
-
         'function t(if) { }': {
             index: 11,
             lineNumber: 1,

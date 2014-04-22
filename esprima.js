@@ -610,12 +610,7 @@ parseStatement: true, parseSourceElement: true */
         if (id.length === 1) {
             type = Token.Identifier;
         } else if (isKeyword(id)) {
-            // A keyword can not contained escaped characters.
-            if (index - start === id.length) {
-                type = Token.Keyword;
-            } else {
-                type = Token.Identifier;
-            }
+            type = Token.Keyword;
         } else if (id === 'null') {
             type = Token.NullLiteral;
         } else if (id === 'true' || id === 'false') {
