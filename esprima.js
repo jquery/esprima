@@ -1946,7 +1946,7 @@ parseStatement: true, parseSourceElement: true */
         var line;
 
         // Catch the very common case first: immediately a semicolon (U+003B).
-        if (source.charCodeAt(index) === 0x3B) {
+        if (source.charCodeAt(index) === 0x3B || match(';')) {
             lex();
             return;
         }
@@ -1954,11 +1954,6 @@ parseStatement: true, parseSourceElement: true */
         line = lineNumber;
         skipComment();
         if (lineNumber !== line) {
-            return;
-        }
-
-        if (match(';')) {
-            lex();
             return;
         }
 
