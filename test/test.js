@@ -13967,6 +13967,112 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 42 }
             }
+        },
+
+        'if (true) that()\n; else;': {
+            type: "IfStatement",
+            test: {
+                type: "Literal",
+                value: true,
+                raw: "true",
+                range: [4, 8],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 8 }
+                }
+            },
+            consequent: {
+                type: "ExpressionStatement",
+                expression: {
+                    type: "CallExpression",
+                    callee: {
+                        type: "Identifier",
+                        name: "that",
+                        range: [10, 14],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    "arguments": [],
+                    range: [10, 16],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                range: [10, 18],
+                loc: {
+                    start: { line: 1, column: 10 },
+                    end: { line: 2, column: 1 }
+                }
+            },
+            alternate: {
+                type: "EmptyStatement",
+                range: [23, 24],
+                loc: {
+                    start: { line: 2, column: 6 },
+                    end: { line: 2, column: 7 }
+                }
+            },
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 2, column: 7 }
+            }
+        },
+
+        'if (true) that(); else;': {
+            type: "IfStatement",
+            test: {
+                type: "Literal",
+                value: true,
+                raw: "true",
+                range: [4, 8],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 8 }
+                }
+            },
+            consequent: {
+                type: "ExpressionStatement",
+                expression: {
+                    type: "CallExpression",
+                    callee: {
+                        type: "Identifier",
+                        name: "that",
+                        range: [10, 14],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    "arguments": [],
+                    range: [10, 16],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                range: [10, 17],
+                loc: {
+                    start: { line: 1, column: 10 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            alternate: {
+                type: "EmptyStatement",
+                range: [22, 23],
+                loc: {
+                    start: { line: 1, column: 22 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
         }
 
     },
@@ -14211,6 +14317,96 @@ var testFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 30 }
+            }
+        },
+
+        'do that();while (true)': {
+            type: "DoWhileStatement",
+            body: {
+                type: "ExpressionStatement",
+                expression: {
+                    type: "CallExpression",
+                    callee: {
+                        type: "Identifier",
+                        name: "that",
+                        range: [3, 7],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 7 }
+                        }
+                    },
+                    "arguments": [],
+                    range: [3, 9],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 9 }
+                    }
+                },
+                range: [3, 10],
+                loc: {
+                    start: { line: 1, column: 3 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            test: {
+                type: "Literal",
+                value: true,
+                raw: "true",
+                range: [17, 21],
+                loc: {
+                    start: { line: 1, column: 17 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        'do that()\n;while (true)': {
+            type: "DoWhileStatement",
+            body: {
+                type: "ExpressionStatement",
+                expression: {
+                    type: "CallExpression",
+                    callee: {
+                        type: "Identifier",
+                        name: "that",
+                        range: [3, 7],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 7 }
+                        }
+                    },
+                    "arguments": [],
+                    range: [3, 9],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 9 }
+                    }
+                },
+                range: [3, 11],
+                loc: {
+                    start: { line: 1, column: 3 },
+                    end: { line: 2, column: 1 }
+                }
+            },
+            test: {
+                type: "Literal",
+                value: true,
+                raw: "true",
+                range: [18, 22],
+                loc: {
+                    start: { line: 2, column: 8 },
+                    end: { line: 2, column: 12 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 2, column: 13 }
             }
         },
 
