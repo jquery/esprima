@@ -3514,8 +3514,19 @@ parseStatement: true, parseSourceElement: true */
         options.paramSet[key] = true;
     }
 
+    function parseParam(options) {
+        var token, param;
+
+        token = lookahead;
+        param = parseVariableIdentifier();
+        validateParam(options, token, token.value);
+        options.params.push(param);
+
+        return !match(')');
+    }
+
     function parseParams(firstRestricted) {
-        var param, options, token;
+        var options;
 
         options = {
             params: [],
@@ -3527,11 +3538,7 @@ parseStatement: true, parseSourceElement: true */
         if (!match(')')) {
             options.paramSet = {};
             while (index < length) {
-                token = lookahead;
-                param = parseVariableIdentifier();
-                validateParam(options, token, token.value);
-                options.params.push(param);
-                if (match(')')) {
+                if (!parseParam(options)) {
                     break;
                 }
                 expect(',');
