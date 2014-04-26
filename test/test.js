@@ -6930,84 +6930,6 @@ var testFixture = {
             }]
         },
 
-        'var x = /[P QR]/\\g': {
-            type: 'Program',
-            body: [{
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'x',
-                        range: [4, 5],
-                        loc: {
-                            start: { line: 1, column: 4 },
-                            end: { line: 1, column: 5 }
-                        }
-                    },
-                    init: {
-                        type: 'Literal',
-                        value: '/[P QR]/g',
-                        raw: '/[P QR]/\\g',
-                        range: [8, 18],
-                        loc: {
-                            start: { line: 1, column: 8 },
-                            end: { line: 1, column: 18 }
-                        }
-                    },
-                    range: [4, 18],
-                    loc: {
-                        start: { line: 1, column: 4 },
-                        end: { line: 1, column: 18 }
-                    }
-                }],
-                kind: 'var',
-                range: [0, 18],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 18 }
-                }
-            }],
-            range: [0, 18],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 18 }
-            },
-            tokens: [{
-                type: 'Keyword',
-                value: 'var',
-                range: [0, 3],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 3 }
-                }
-            }, {
-                type: 'Identifier',
-                value: 'x',
-                range: [4, 5],
-                loc: {
-                    start: { line: 1, column: 4 },
-                    end: { line: 1, column: 5 }
-                }
-            }, {
-                type: 'Punctuator',
-                value: '=',
-                range: [6, 7],
-                loc: {
-                    start: { line: 1, column: 6 },
-                    end: { line: 1, column: 7 }
-                }
-            }, {
-                type: 'RegularExpression',
-                value: '/[P QR]/\\g',
-                range: [8, 18],
-                loc: {
-                    start: { line: 1, column: 8 },
-                    end: { line: 1, column: 18 }
-                }
-            }]
-        },
-
         'var x = /42/g.test': {
             type: 'VariableDeclaration',
             declarations: [{
@@ -14045,6 +13967,112 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 42 }
             }
+        },
+
+        'if (true) that()\n; else;': {
+            type: "IfStatement",
+            test: {
+                type: "Literal",
+                value: true,
+                raw: "true",
+                range: [4, 8],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 8 }
+                }
+            },
+            consequent: {
+                type: "ExpressionStatement",
+                expression: {
+                    type: "CallExpression",
+                    callee: {
+                        type: "Identifier",
+                        name: "that",
+                        range: [10, 14],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    "arguments": [],
+                    range: [10, 16],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                range: [10, 18],
+                loc: {
+                    start: { line: 1, column: 10 },
+                    end: { line: 2, column: 1 }
+                }
+            },
+            alternate: {
+                type: "EmptyStatement",
+                range: [23, 24],
+                loc: {
+                    start: { line: 2, column: 6 },
+                    end: { line: 2, column: 7 }
+                }
+            },
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 2, column: 7 }
+            }
+        },
+
+        'if (true) that(); else;': {
+            type: "IfStatement",
+            test: {
+                type: "Literal",
+                value: true,
+                raw: "true",
+                range: [4, 8],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 8 }
+                }
+            },
+            consequent: {
+                type: "ExpressionStatement",
+                expression: {
+                    type: "CallExpression",
+                    callee: {
+                        type: "Identifier",
+                        name: "that",
+                        range: [10, 14],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    "arguments": [],
+                    range: [10, 16],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                range: [10, 17],
+                loc: {
+                    start: { line: 1, column: 10 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            alternate: {
+                type: "EmptyStatement",
+                range: [22, 23],
+                loc: {
+                    start: { line: 1, column: 22 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
         }
 
     },
@@ -14289,6 +14317,96 @@ var testFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 30 }
+            }
+        },
+
+        'do that();while (true)': {
+            type: "DoWhileStatement",
+            body: {
+                type: "ExpressionStatement",
+                expression: {
+                    type: "CallExpression",
+                    callee: {
+                        type: "Identifier",
+                        name: "that",
+                        range: [3, 7],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 7 }
+                        }
+                    },
+                    "arguments": [],
+                    range: [3, 9],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 9 }
+                    }
+                },
+                range: [3, 10],
+                loc: {
+                    start: { line: 1, column: 3 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            test: {
+                type: "Literal",
+                value: true,
+                raw: "true",
+                range: [17, 21],
+                loc: {
+                    start: { line: 1, column: 17 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        'do that()\n;while (true)': {
+            type: "DoWhileStatement",
+            body: {
+                type: "ExpressionStatement",
+                expression: {
+                    type: "CallExpression",
+                    callee: {
+                        type: "Identifier",
+                        name: "that",
+                        range: [3, 7],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 7 }
+                        }
+                    },
+                    "arguments": [],
+                    range: [3, 9],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 9 }
+                    }
+                },
+                range: [3, 11],
+                loc: {
+                    start: { line: 1, column: 3 },
+                    end: { line: 2, column: 1 }
+                }
+            },
+            test: {
+                type: "Literal",
+                value: true,
+                raw: "true",
+                range: [18, 22],
+                loc: {
+                    start: { line: 2, column: 8 },
+                    end: { line: 2, column: 12 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 2, column: 13 }
             }
         },
 
@@ -19850,16 +19968,16 @@ var testFixture = {
         },
 
         'var x = /[a-z]/\\\\ux': {
-            index: 18,
+            index: 16,
             lineNumber: 1,
-            column: 19,
+            column: 17,
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
         'var x = /[P QR]/\\\\u0067': {
-            index: 23,
+            index: 17,
             lineNumber: 1,
-            column: 24,
+            column: 18,
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
@@ -20279,13 +20397,6 @@ var testFixture = {
             lineNumber: 1,
             column: 31,
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
-        },
-
-        '\\u0066unction a(if) { }': {
-            index: 14,
-            lineNumber: 1,
-            column: 15,
-            message: 'Error: Line 1: Unexpected identifier'
         },
 
         'function t(if) { }': {
@@ -25931,6 +26042,57 @@ var testFixture = {
             }]
         },
 
+        'var x = /[P QR]/\\g': {
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 18],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 18 }
+                },
+                type: "VariableDeclaration",
+                declarations: [{
+                    range: [4, 18],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 18 }
+                    },
+                    type: "VariableDeclarator",
+                    id: {
+                        range: [4, 5],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        },
+                        type: "Identifier",
+                        name: "x"
+                    },
+                    init: {
+                        range: [8, 18],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 18 }
+                        },
+                        type: "Literal",
+                        value: "/[P QR]/g",
+                        raw: "/[P QR]/\\g"
+                    }
+                }],
+                kind: "var"
+            }],
+            errors: [{
+                index: 17,
+                lineNumber: 1,
+                column: 18,
+                message: "Error: Line 1: Unexpected token ILLEGAL"
+            }]
+        },
+
         'var x = /[P QR]/\\\\u0067': {
             type: "Program",
             body: [{
@@ -25975,6 +26137,11 @@ var testFixture = {
                 end: { line: 1, column: 23 }
             },
             errors: [{
+                index: 17,
+                lineNumber: 1,
+                column: 18,
+                message: "Error: Line 1: Unexpected token ILLEGAL"
+            }, {
                 index: 23,
                 lineNumber: 1,
                 column: 24,

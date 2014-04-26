@@ -650,12 +650,7 @@ parseStatement: true, parseSourceElement: true */
         if (id.length === 1) {
             type = Token.Identifier;
         } else if (isKeyword(id)) {
-            // A keyword can not contained escaped characters.
-            if (index - start === id.length) {
-                type = Token.Keyword;
-            } else {
-                type = Token.Identifier;
-            }
+            type = Token.Keyword;
         } else if (id === 'null') {
             type = Token.NullLiteral;
         } else if (id === 'true' || id === 'false') {
@@ -1161,6 +1156,7 @@ parseStatement: true, parseSourceElement: true */
                     throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
                 } else {
                     str += '\\';
+                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
                 }
             } else {
                 flags += ch;
@@ -1338,7 +1334,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         // Very common: ( and ) and ;
-        if (ch === 0x28 || ch === 0x29 || ch === 0x3A) {
+        if (ch === 0x28 || ch === 0x29 || ch === 0x3B) {
             return scanPunctuator();
         }
 
@@ -2033,7 +2029,7 @@ parseStatement: true, parseSourceElement: true */
         var line;
 
         // Catch the very common case first: immediately a semicolon (U+003B).
-        if (source.charCodeAt(index) === 0x3B) {
+        if (source.charCodeAt(index) === 0x3B || match(';')) {
             lex();
             return;
         }
@@ -2041,11 +2037,6 @@ parseStatement: true, parseSourceElement: true */
         line = lineNumber;
         skipComment();
         if (lineNumber !== line) {
-            return;
-        }
-
-        if (match(';')) {
-            lex();
             return;
         }
 
