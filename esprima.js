@@ -1552,11 +1552,11 @@ parseStatement: true, parseSourceElement: true */
             return this;
         },
 
-        finishArrowFunctionExpression: function (params, body, expression) {
+        finishArrowFunctionExpression: function (params, defaults, body, expression) {
             this.type = Syntax.ArrowFunctionExpression;
             this.id = null;
             this.params = params;
-            this.defaults = [];
+            this.defaults = defaults;
             this.body = body;
             this.rest = null;
             this.generator = false;
@@ -2635,10 +2635,11 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function reinterpretAsCoverFormalsList(expressions) {
-        var i, len, param, params, defaults, options, rest;
+        var i, len, param, params, defaults, defaultCount, options, rest;
 
         params = [];
         defaults = [];
+        defaultCount = 0;
         rest = null;
         options = {
             paramSet: {}
@@ -2650,6 +2651,11 @@ parseStatement: true, parseSourceElement: true */
                 params.push(param);
                 defaults.push(null);
                 validateParam(options, param, param.name);
+            } else if (param.type === Syntax.AssignmentExpression) {
+                params.push(param.left);
+                defaults.push(param.right);
+                ++defaultCount;
+                validateParam(options, param.left, param.left.name);
             } else {
                 return null;
             }
@@ -2660,6 +2666,10 @@ parseStatement: true, parseSourceElement: true */
                 strict ? options.stricted : options.firstRestricted,
                 options.message
             );
+        }
+
+        if (defaultCount === 0) {
+            defaults = [];
         }
 
         return {
@@ -2689,7 +2699,7 @@ parseStatement: true, parseSourceElement: true */
 
         strict = previousStrict;
 
-        return node.finishArrowFunctionExpression(options.params, body, body.type !== Syntax.BlockStatement);
+        return node.finishArrowFunctionExpression(options.params, options.defaults, body, body.type !== Syntax.BlockStatement);
     }
 
     // 11.13 Assignment Operators
@@ -2708,6 +2718,8 @@ parseStatement: true, parseSourceElement: true */
             if (state.parenthesisCount === oldParenthesisCount ||
                     state.parenthesisCount === (oldParenthesisCount + 1)) {
                 if (expr.type === Syntax.Identifier) {
+                    list = reinterpretAsCoverFormalsList([ expr ]);
+                } else if (expr.type === Syntax.AssignmentExpression) {
                     list = reinterpretAsCoverFormalsList([ expr ]);
                 } else if (expr.type === Syntax.SequenceExpression) {
                     list = reinterpretAsCoverFormalsList(expr.expressions);
