@@ -1,3 +1,10 @@
+2014-04-28: Version 1.2.0
+
+      * Fix semicolon handling for expression statement (issue 462, 533)
+      * Disallow escaped characters in regular expression flags (issue 503)
+      * Performance improvement for location tracking (issue 520)
+      * Improve the speed of comment attachment (issue 522)
+
 2014-03-26: Version 1.1.1
 
       * Fix token handling of forward slash after an array literal (issue 512)
