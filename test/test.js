@@ -26433,48 +26433,48 @@ var testFixture = {
         },
 
         'var x = /[P QR]/\\g': {
+            type: "Program",
+            body: [{
+                type: "VariableDeclaration",
+                declarations: [{
+                    type: "VariableDeclarator",
+                    id: {
+                        type: "Identifier",
+                        name: "x",
+                        range: [4, 5],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    },
+                    init: {
+                        type: "Literal",
+                        value: "/[P QR]/g",
+                        raw: "/[P QR]/\\g",
+                        range: [8, 18],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    range: [4, 18],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 18 }
+                    }
+                }],
+                kind: "var",
+                range: [0, 18],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 18 }
+                }
+            }],
             range: [0, 18],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 18 }
             },
-            type: "Program",
-            body: [{
-                range: [0, 18],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 18 }
-                },
-                type: "VariableDeclaration",
-                declarations: [{
-                    range: [4, 18],
-                    loc: {
-                        start: { line: 1, column: 4 },
-                        end: { line: 1, column: 18 }
-                    },
-                    type: "VariableDeclarator",
-                    id: {
-                        range: [4, 5],
-                        loc: {
-                            start: { line: 1, column: 4 },
-                            end: { line: 1, column: 5 }
-                        },
-                        type: "Identifier",
-                        name: "x"
-                    },
-                    init: {
-                        range: [8, 18],
-                        loc: {
-                            start: { line: 1, column: 8 },
-                            end: { line: 1, column: 18 }
-                        },
-                        type: "Literal",
-                        value: "/[P QR]/g",
-                        raw: "/[P QR]/\\g"
-                    }
-                }],
-                kind: "var"
-            }],
             errors: [{
                 index: 17,
                 lineNumber: 1,
