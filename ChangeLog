@@ -1,4 +1,4 @@
-2014-04-28: Version 1.2.0
+2014-04-29: Version 1.2.0
 
       * Fix semicolon handling for expression statement (issue 462, 533)
       * Disallow escaped characters in regular expression flags (issue 503)
