@@ -1552,11 +1552,11 @@ parseStatement: true, parseSourceElement: true */
             return this;
         },
 
-        finishArrowFunctionExpression: function (params, body, expression) {
+        finishArrowFunctionExpression: function (params, defaults, body, expression) {
             this.type = Syntax.ArrowFunctionExpression;
             this.id = null;
             this.params = params;
-            this.defaults = [];
+            this.defaults = defaults;
             this.body = body;
             this.rest = null;
             this.generator = false;
@@ -2635,10 +2635,11 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function reinterpretAsCoverFormalsList(expressions) {
-        var i, len, param, params, defaults, options, rest;
+        var i, len, param, params, defaults, defaultCount, options, rest;
 
         params = [];
         defaults = [];
+        defaultCount = 0;
         rest = null;
         options = {
             paramSet: {}
@@ -2650,6 +2651,11 @@ parseStatement: true, parseSourceElement: true */
                 params.push(param);
                 defaults.push(null);
                 validateParam(options, param, param.name);
+            } else if (param.type === Syntax.AssignmentExpression) {
+                params.push(param.left);
+                defaults.push(param.right);
+                ++defaultCount;
+                validateParam(options, param.left, param.left.name);
             } else {
                 return null;
             }
@@ -2660,6 +2666,10 @@ parseStatement: true, parseSourceElement: true */
                 strict ? options.stricted : options.firstRestricted,
                 options.message
             );
+        }
+
+        if (defaultCount === 0) {
+            defaults = [];
         }
 
         return {
@@ -2689,7 +2699,7 @@ parseStatement: true, parseSourceElement: true */
 
         strict = previousStrict;
 
-        return node.finishArrowFunctionExpression(options.params, body, body.type !== Syntax.BlockStatement);
+        return node.finishArrowFunctionExpression(options.params, options.defaults, body, body.type !== Syntax.BlockStatement);
     }
 
     // 11.13 Assignment Operators
@@ -2708,6 +2718,8 @@ parseStatement: true, parseSourceElement: true */
             if (state.parenthesisCount === oldParenthesisCount ||
                     state.parenthesisCount === (oldParenthesisCount + 1)) {
                 if (expr.type === Syntax.Identifier) {
+                    list = reinterpretAsCoverFormalsList([ expr ]);
+                } else if (expr.type === Syntax.AssignmentExpression) {
                     list = reinterpretAsCoverFormalsList([ expr ]);
                 } else if (expr.type === Syntax.SequenceExpression) {
                     list = reinterpretAsCoverFormalsList(expr.expressions);
@@ -3514,11 +3526,31 @@ parseStatement: true, parseSourceElement: true */
         options.paramSet[key] = true;
     }
 
+    function parseParam(options) {
+        var token, param, def;
+
+        token = lookahead;
+        param = parseVariableIdentifier();
+        validateParam(options, token, token.value);
+        if (match('=')) {
+            lex();
+            def = parseAssignmentExpression();
+            ++options.defaultCount;
+        }
+
+        options.params.push(param);
+        options.defaults.push(def);
+
+        return !match(')');
+    }
+
     function parseParams(firstRestricted) {
-        var param, options, token;
+        var options;
 
         options = {
             params: [],
+            defaultCount: 0,
+            defaults: [],
             firstRestricted: firstRestricted
         };
 
@@ -3527,11 +3559,7 @@ parseStatement: true, parseSourceElement: true */
         if (!match(')')) {
             options.paramSet = {};
             while (index < length) {
-                token = lookahead;
-                param = parseVariableIdentifier();
-                validateParam(options, token, token.value);
-                options.params.push(param);
-                if (match(')')) {
+                if (!parseParam(options)) {
                     break;
                 }
                 expect(',');
@@ -3540,8 +3568,13 @@ parseStatement: true, parseSourceElement: true */
 
         expect(')');
 
+        if (options.defaultCount === 0) {
+            options.defaults = [];
+        }
+
         return {
             params: options.params,
+            defaults: options.defaults,
             stricted: options.stricted,
             firstRestricted: options.firstRestricted,
             message: options.message
@@ -3549,7 +3582,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseFunctionDeclaration() {
-        var id, params = [], body, token, stricted, tmp, firstRestricted, message, previousStrict, node = new Node();
+        var id, params = [], defaults = [], body, token, stricted, tmp, firstRestricted, message, previousStrict, node = new Node();
 
         expectKeyword('function');
         token = lookahead;
@@ -3570,6 +3603,7 @@ parseStatement: true, parseSourceElement: true */
 
         tmp = parseParams(firstRestricted);
         params = tmp.params;
+        defaults = tmp.defaults;
         stricted = tmp.stricted;
         firstRestricted = tmp.firstRestricted;
         if (tmp.message) {
@@ -3586,11 +3620,12 @@ parseStatement: true, parseSourceElement: true */
         }
         strict = previousStrict;
 
-        return node.finishFunctionDeclaration(id, params, [], body);
+        return node.finishFunctionDeclaration(id, params, defaults, body);
     }
 
     function parseFunctionExpression() {
-        var token, id = null, stricted, firstRestricted, message, tmp, params = [], body, previousStrict, node = new Node();
+        var token, id = null, stricted, firstRestricted, message, tmp,
+            params = [], defaults = [], body, previousStrict, node = new Node();
 
         expectKeyword('function');
 
@@ -3614,6 +3649,7 @@ parseStatement: true, parseSourceElement: true */
 
         tmp = parseParams(firstRestricted);
         params = tmp.params;
+        defaults = tmp.defaults;
         stricted = tmp.stricted;
         firstRestricted = tmp.firstRestricted;
         if (tmp.message) {
@@ -3630,7 +3666,7 @@ parseStatement: true, parseSourceElement: true */
         }
         strict = previousStrict;
 
-        return node.finishFunctionExpression(id, params, [], body);
+        return node.finishFunctionExpression(id, params, defaults, body);
     }
 
     // 14 Program

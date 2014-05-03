@@ -11355,6 +11355,73 @@ var testFixture = {
             }
         },
 
+        '(x=1) => x * x': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [1, 2],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 2 }
+                    }
+                }],
+                defaults: [{
+                    type: 'Literal',
+                    value: 1,
+                    raw: '1',
+                    range: [3, 4],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 4 }
+                    }
+                }],
+                body: {
+                    type: 'BinaryExpression',
+                    operator: '*',
+                    left: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [13, 14],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    range: [9, 14],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 14],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 14 }
+                }
+            },
+            range: [0, 14],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 14 }
+            }
+        },
+
         // not strict mode, using eval
         'eval => 42': {
             type: 'ExpressionStatement',
@@ -11528,6 +11595,116 @@ var testFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 15 }
+            }
+        },
+
+        // not strict mode, assigning to eval
+        '(eval = 10) => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'eval',
+                    range: [1, 5],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 5 }
+                    }
+                }],
+                defaults: [{
+                    type: 'Literal',
+                    value: 10,
+                    raw: '10',
+                    range: [8, 10],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 10 }
+                    }
+                }],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [15, 17],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 17 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            }
+        },
+
+        // not strict mode, using eval, IsSimpleParameterList is false
+        '(eval, a = 10) => 42': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'Identifier',
+                    name: 'eval',
+                    range: [1, 5],
+                    loc: {
+                        start: { line: 1, column: 1 },
+                        end: { line: 1, column: 5 }
+                    }
+                }, {
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [7, 8],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 8 }
+                    }
+                }],
+                defaults: [null, {
+                    type: 'Literal',
+                    value: 10,
+                    raw: '10',
+                    range: [11, 13],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 13 }
+                    }
+                }],
+                body: {
+                    type: 'Literal',
+                    value: 42,
+                    raw: '42',
+                    range: [18, 20],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 20 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: true,
+                range: [0, 20],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 20 }
+                }
+            },
+            range: [0, 20],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 20 }
             }
         },
 
@@ -18455,6 +18632,219 @@ var testFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 38 }
+            }
+        }
+
+    },
+
+    '[ES6] Default Parameter Value': {
+
+        'x = function(y = 1) {}': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'FunctionExpression',
+                    id: null,
+                    params: [{
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [13, 14],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 14 }
+                        }
+                    }],
+                    defaults: [{
+                        type: 'Literal',
+                        value: 1,
+                        raw: '1',
+                        range: [17, 18],
+                        loc: {
+                            start: { line: 1, column: 17 },
+                            end: { line: 1, column: 18 }
+                        }
+                    }],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [20, 22],
+                        loc: {
+                            start: { line: 1, column: 20 },
+                            end: { line: 1, column: 22 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [4, 22],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                range: [0, 22],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        'function f(a = 1) {}': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'f',
+                range: [9, 10],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            params: [{
+                type: 'Identifier',
+                name: 'a',
+                range: [11, 12],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 12 }
+                }
+            }],
+            defaults: [{
+                type: 'Literal',
+                value: 1,
+                raw: '1',
+                range: [15, 16],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [18, 20],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 20 }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            range: [0, 20],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 20 }
+            }
+        },
+
+        'x = { f: function(a=1) {} }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'f',
+                            range: [6, 7],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 7 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'Identifier',
+                                name: 'a',
+                                range: [18, 19],
+                                loc: {
+                                    start: { line: 1, column: 18 },
+                                    end: { line: 1, column: 19 }
+                                }
+                            }],
+                            defaults: [{
+                                type: 'Literal',
+                                value: 1,
+                                raw: '1',
+                                range: [20, 21],
+                                loc: {
+                                    start: { line: 1, column: 20 },
+                                    end: { line: 1, column: 21 }
+                                }
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [23, 25],
+                                loc: {
+                                    start: { line: 1, column: 23 },
+                                    end: { line: 1, column: 25 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [9, 25],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 25 }
+                            }
+                        },
+                        kind: 'init',
+                        range: [6, 25],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 25 }
+                        }
+                    }],
+                    range: [4, 27],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                range: [0, 27],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 27 }
+                }
+            },
+            range: [0, 27],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
             }
         }
 
@@ -26043,48 +26433,48 @@ var testFixture = {
         },
 
         'var x = /[P QR]/\\g': {
+            type: "Program",
+            body: [{
+                type: "VariableDeclaration",
+                declarations: [{
+                    type: "VariableDeclarator",
+                    id: {
+                        type: "Identifier",
+                        name: "x",
+                        range: [4, 5],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    },
+                    init: {
+                        type: "Literal",
+                        value: "/[P QR]/g",
+                        raw: "/[P QR]/\\g",
+                        range: [8, 18],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    range: [4, 18],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 18 }
+                    }
+                }],
+                kind: "var",
+                range: [0, 18],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 18 }
+                }
+            }],
             range: [0, 18],
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 18 }
             },
-            type: "Program",
-            body: [{
-                range: [0, 18],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 18 }
-                },
-                type: "VariableDeclaration",
-                declarations: [{
-                    range: [4, 18],
-                    loc: {
-                        start: { line: 1, column: 4 },
-                        end: { line: 1, column: 18 }
-                    },
-                    type: "VariableDeclarator",
-                    id: {
-                        range: [4, 5],
-                        loc: {
-                            start: { line: 1, column: 4 },
-                            end: { line: 1, column: 5 }
-                        },
-                        type: "Identifier",
-                        name: "x"
-                    },
-                    init: {
-                        range: [8, 18],
-                        loc: {
-                            start: { line: 1, column: 8 },
-                            end: { line: 1, column: 18 }
-                        },
-                        type: "Literal",
-                        value: "/[P QR]/g",
-                        raw: "/[P QR]/\\g"
-                    }
-                }],
-                kind: "var"
-            }],
             errors: [{
                 index: 17,
                 lineNumber: 1,
