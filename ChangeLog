@@ -1,3 +1,7 @@
+2014-05-04: Version 1.2.1
+
+      * Ensure that Program node may still have leading comments (issue 536)
+
 2014-04-29: Version 1.2.0
 
       * Fix semicolon handling for expression statement (issue 462, 533)
