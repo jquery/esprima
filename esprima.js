@@ -1394,8 +1394,11 @@ parseStatement: true, parseSourceElement: true */
 
         processComment: function (node) {
             var lastChild, trailingComments;
-            if (typeof node.type === 'undefined' || node.type === Syntax.Program) {
-                return;
+
+            if (node.type === Syntax.Program) {
+                if (node.body.length > 0) {
+                    return;
+                }
             }
 
             peek();
