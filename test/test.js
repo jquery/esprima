@@ -4037,6 +4037,34 @@ var testFixture = {
             }]
         },
 
+        '// one\\n': {
+            type: 'Program',
+            body: [],
+            range: [8, 8],
+            loc: {
+                start: { line: 1, column: 8 },
+                end: { line: 1, column: 8 }
+            },
+            leadingComments: [{
+                type: 'Line',
+                value: ' one\\n',
+                range: [0, 8],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 8 }
+                }
+            }],
+            comments: [{
+                type: 'Line',
+                value: ' one\\n',
+                range: [0, 8],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 8 }
+                }
+            }]
+        },
+
         '// line comment\n42': {
             type: 'ExpressionStatement',
             expression: {
