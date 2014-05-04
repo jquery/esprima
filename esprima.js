@@ -1483,8 +1483,11 @@ parseStatement: true, parseSourceElement: true */
                 trailingComments,
                 bottomRight = extra.bottomRightStack,
                 last = bottomRight[bottomRight.length - 1];
-            if (typeof this.type === 'undefined' || this.type === Syntax.Program) {
-                return;
+
+            if (this.type === Syntax.Program) {
+                if (this.body.length > 0) {
+                    return;
+                }
             }
 
             peek();
