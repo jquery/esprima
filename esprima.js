@@ -1490,7 +1490,9 @@ parseStatement: true, parseSourceElement: true */
                 }
             }
 
-            peek();
+            //https://code.google.com/p/esprima/issues/detail?id=537
+			//nothing is actually done with the lookahead / index / etc, no need to peek
+            //peek();
 
             if (extra.trailingComments.length > 0) {
                 if (extra.trailingComments[0].range[0] >= this.range[1]) {
