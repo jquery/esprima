@@ -2157,7 +2157,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseObjectInitialiser() {
-        var properties = [], property, name, key, kind, map = {}, toString = String, node = new Node();
+        var properties = [], token, property, name, key, kind, map = {}, toString = String, node = new Node();
 
         expect('{');
 
@@ -2194,7 +2194,16 @@ parseStatement: true, parseSourceElement: true */
             properties.push(property);
 
             if (!match('}')) {
-                expect(',');
+                if (extra.errors) {
+                    token = lookahead;
+                    if (token.type !== Token.Punctuator && token.value !== ',') {
+                        throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
+                    } else {
+                        lex();
+                    }
+                } else {
+                    expect(',');
+                }
             }
         }
 
