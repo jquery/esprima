@@ -1490,8 +1490,6 @@ parseStatement: true, parseSourceElement: true */
                 }
             }
 
-            peek();
-
             if (extra.trailingComments.length > 0) {
                 if (extra.trailingComments[0].range[0] >= this.range[1]) {
                     trailingComments = extra.trailingComments;
