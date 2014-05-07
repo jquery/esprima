@@ -3423,7 +3423,285 @@ var testFixture = {
                         46
                     ]
                 }
+            ],
+            "tokens": [
+                {
+                    "type": "Numeric",
+                    "range": [
+                        0,
+                        2
+                    ],
+                    "value": "42"
+                }
             ]
+        },
+
+        'var p1;/* block comment 1 */ /* block comment 2 */': {
+            "range": [
+                0,
+                7
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 7
+                }
+            },
+            "type": "Program",
+            "body": [
+                {
+                    "range": [
+                        0,
+                        7
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 7
+                        }
+                    },
+                    "type": "VariableDeclaration",
+                    "declarations": [
+                        {
+                            "range": [
+                                4,
+                                6
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 4
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 6
+                                }
+                            },
+                            "type": "VariableDeclarator",
+                            "id": {
+                                "range": [
+                                    4,
+                                    6
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 4
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 6
+                                    }
+                                },
+                                "type": "Identifier",
+                                "name": "p1"
+                            },
+                            "init": null
+                        }
+                    ],
+                    "kind": "var",
+                    "trailingComments": [
+                        {
+                            "range": [
+                                7,
+                                28
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 7
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 28
+                                }
+                            },
+                            "type": "Block",
+                            "value": " block comment 1 "
+                        },
+                        {
+                            "range": [
+                                29,
+                                50
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 29
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 50
+                                }
+                            },
+                            "type": "Block",
+                            "value": " block comment 2 "
+                        }
+                    ]
+                }
+            ],
+            "comments": [
+                {
+                    "range": [
+                        7,
+                        28
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 7
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 28
+                        }
+                    },
+                    "type": "Block",
+                    "value": " block comment 1 "
+                },
+                {
+                    "range": [
+                        29,
+                        50
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 29
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 50
+                        }
+                    },
+                    "type": "Block",
+                    "value": " block comment 2 "
+                }
+            ],
+            "tokens": [
+                {
+                    "range": [
+                        0,
+                        3
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 3
+                        }
+                    },
+                    "type": "Keyword",
+                    "value": "var"
+                },
+                {
+                    "range": [
+                        4,
+                        6
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 6
+                        }
+                    },
+                    "type": "Identifier",
+                    "value": "p1"
+                },
+                {
+                    "range": [
+                        6,
+                        7
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 6
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 7
+                        }
+                    },
+                    "type": "Punctuator",
+                    "value": ";"
+                }
+            ]
+        },
+
+        '/*42*/': {
+            "range": [
+                6,
+                6
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 6
+                },
+                "end": {
+                    "line": 1,
+                    "column": 6
+                }
+            },
+            "type": "Program",
+            "body": [],
+            "leadingComments": [
+                {
+                    "range": [
+                        0,
+                        6
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 6
+                        }
+                    },
+                    "type": "Block",
+                    "value": "42"
+                }
+            ],
+            "comments": [
+                {
+                    "range": [
+                        0,
+                        6
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 6
+                        }
+                    },
+                    "type": "Block",
+                    "value": "42"
+                }
+            ],
+            "tokens": []
         },
 
         '(a + /* assignmenr */b ) * c': {
@@ -21808,8 +22086,7 @@ var testFixture = {
             type: 'Boolean',
             value: 'true'
           }]
-        },
-
+        }
     },
 
     'Tolerant parse': {
