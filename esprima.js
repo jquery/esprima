@@ -1490,7 +1490,9 @@ parseStatement: true, parseSourceElement: true */
                 }
             }
 
-            peek();
+            //https://code.google.com/p/esprima/issues/detail?id=537
+			//nothing is actually done with the lookahead / index / etc, no need to peek
+            //peek();
 
             if (extra.trailingComments.length > 0) {
                 if (extra.trailingComments[0].range[0] >= this.range[1]) {
@@ -2159,7 +2161,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseObjectInitialiser() {
-        var properties = [], property, name, key, kind, map = {}, toString = String, node = new Node();
+        var properties = [], token, property, name, key, kind, map = {}, toString = String, node = new Node();
 
         expect('{');
 
@@ -2196,7 +2198,16 @@ parseStatement: true, parseSourceElement: true */
             properties.push(property);
 
             if (!match('}')) {
-                expect(',');
+                if (extra.errors) {
+                    token = lookahead;
+                    if (token.type !== Token.Punctuator && token.value !== ',') {
+                        throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
+                    } else {
+                        lex();
+                    }
+                } else {
+                    expect(',');
+                }
             }
         }
 
