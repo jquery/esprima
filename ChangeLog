@@ -1,3 +1,7 @@
+2014-05-18: Version 1.2.2
+
+      * Fix duplicated tokens when collecting comments (issue 537)
+
 2014-05-04: Version 1.2.1
 
       * Ensure that Program node may still have leading comments (issue 536)
