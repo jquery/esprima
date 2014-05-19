@@ -7,7 +7,7 @@
         "esparse": "./bin/esparse.js",
         "esvalidate": "./bin/esvalidate.js"
     },
-    "version": "1.2.1",
+    "version": "1.2.2",
     "files": [
         "bin",
         "test/run.js",
