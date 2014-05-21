@@ -4415,55 +4415,6 @@ var harmonyTestFixture = {
             }
         },
 
-        'export default {x}': {
-          type: 'ExportDeclaration',
-          declaration: {
-            type: 'ObjectExpression',
-            properties: [{
-              type: 'Property',
-              key: {
-                type: 'Identifier',
-                name: 'x',
-                range: [ 16, 17 ],
-                loc: {
-                  start: { line: 1, column: 16 },
-                  end: { line: 1, column: 17 }
-                }
-              },
-              value: {
-                type: 'Identifier',
-                name: 'x',
-                range: [ 16, 17 ],
-                loc: {
-                  start: { line: 1, column: 16 },
-                  end: { line: 1, column: 17 }
-                }
-              },
-              kind: 'init',
-              method: false,
-              shorthand: true,
-              range: [ 16, 17 ],
-              loc: {
-                start: { line: 1, column: 16 },
-                end: { line: 1, column: 17 }
-              }
-            }],
-            range: [ 15, 18 ],
-            loc: {
-              start: { line: 1, column: 15 },
-              end: { line: 1, column: 18 }
-            }
-          },
-          specifiers: null,
-          source: null,
-          default: true,
-          range: [ 0, 18 ],
-          loc: {
-            start: { line: 1, column: 0 },
-            end: { line: 1, column: 18 }
-          }
-        },
-
         'export default a = 1': {
           type: 'ExportDeclaration',
           declaration: {
