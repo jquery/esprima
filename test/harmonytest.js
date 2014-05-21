@@ -4124,6 +4124,7 @@ var harmonyTestFixture = {
             },
             specifiers: null,
             source: null,
+            default: false,
             range: [ 0, 19 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4170,6 +4171,7 @@ var harmonyTestFixture = {
             },
             specifiers: null,
             source: null,
+            default: false,
             range: [ 0, 25 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4208,6 +4210,7 @@ var harmonyTestFixture = {
             },
             specifiers: null,
             source: null,
+            default: false,
             range: [ 0, 19 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4254,6 +4257,7 @@ var harmonyTestFixture = {
             },
             specifiers: null,
             source: null,
+            default: false,
             range: [ 0, 25 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4300,6 +4304,7 @@ var harmonyTestFixture = {
             },
             specifiers: null,
             source: null,
+            default: false,
             range: [ 0, 27 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4342,6 +4347,7 @@ var harmonyTestFixture = {
             },
             specifiers: null,
             source: null,
+            default: false,
             range: [ 0, 27 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4380,6 +4386,7 @@ var harmonyTestFixture = {
             },
             specifiers: null,
             source: null,
+            default: false,
             range: [ 0, 21 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4387,41 +4394,81 @@ var harmonyTestFixture = {
             }
         },
 
-        'export default = 42': {
+        'export document = 42': {
             type: 'ExportDeclaration',
             declaration: [{
                 type: 'VariableDeclarator',
                 id: {
                     type: 'Identifier',
-                    name: 'default',
-                    range: [7, 14],
+                    name: 'document',
+                    range: [7, 15],
                     loc: {
                         start: { line: 1, column: 7 },
-                        end: { line: 1, column: 14 }
+                        end: { line: 1, column: 15 }
                     }
                 },
                 init: {
                     type: 'Literal',
                     value: 42,
                     raw: '42',
-                    range: [17, 19],
+                    range: [18, 20],
                     loc: {
-                        start: { line: 1, column: 17 },
-                        end: { line: 1, column: 19 }
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 20 }
                     }
                 },
-                range: [7, 19],
+                range: [7, 20],
                 loc: {
                     start: { line: 1, column: 7 },
-                    end: { line: 1, column: 19 }
+                    end: { line: 1, column: 20 }
                 }
             }],
             specifiers: null,
             source: null,
-            range: [0, 19],
+            default: false,
+            range: [0, 20],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 19 }
+                end: { line: 1, column: 20 }
+            }
+        },
+
+        'export default var document': {
+            type: 'ExportDeclaration',
+            declaration: {
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'document',
+                        range: [ 19, 27 ],
+                        loc: {
+                            start: { line: 1, column: 19 },
+                            end: { line: 1, column: 27 }
+                        }
+                    },
+                    init: null,
+                    range: [ 19, 27 ],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 27 }
+                    }
+                }],
+                kind: 'var',
+                range: [ 15, 27 ],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 27 }
+                }
+            },
+            specifiers: null,
+            source: null,
+            default: true,
+            range: [ 0, 27 ],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
             }
         },
 
@@ -4437,6 +4484,7 @@ var harmonyTestFixture = {
                 }
             }],
             source: null,
+            default: false,
             range: [ 0, 8 ],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4465,6 +4513,7 @@ var harmonyTestFixture = {
                     end: { line: 1, column: 22 }
                 }
             },
+            default: false,
             range: [0, 22],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4494,6 +4543,7 @@ var harmonyTestFixture = {
                 }
             }],
             source: null,
+            default: false,
             range: [0, 18],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4540,6 +4590,7 @@ var harmonyTestFixture = {
                 }
             }],
             source: null,
+            default: false,
             range: [0, 27],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4577,6 +4628,7 @@ var harmonyTestFixture = {
                 }
             }],
             source: null,
+            default: false,
             range: [0, 29],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4631,6 +4683,7 @@ var harmonyTestFixture = {
                 }
             }],
             source: null,
+            default: false,
             range: [0, 34],
             loc: {
                 start: { line: 1, column: 0 },
@@ -4684,6 +4737,7 @@ var harmonyTestFixture = {
                     },
                     specifiers: null,
                     source: null,
+                    default: false,
                     range: [15, 35],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -4757,6 +4811,7 @@ var harmonyTestFixture = {
                     },
                     specifiers: null,
                     source: null,
+                    default: false,
                     range: [15, 41],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -4822,6 +4877,7 @@ var harmonyTestFixture = {
                     },
                     specifiers: null,
                     source: null,
+                    default: false,
                     range: [15, 35],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -4895,6 +4951,7 @@ var harmonyTestFixture = {
                     },
                     specifiers: null,
                     source: null,
+                    default: false,
                     range: [15, 41],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -4968,6 +5025,7 @@ var harmonyTestFixture = {
                     },
                     specifiers: null,
                     source: null,
+                    default: false,
                     range: [15, 43],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -5037,6 +5095,7 @@ var harmonyTestFixture = {
                     },
                     specifiers: null,
                     source: null,
+                    default: false,
                     range: [15, 42],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -5102,6 +5161,7 @@ var harmonyTestFixture = {
                     },
                     specifiers: null,
                     source: null,
+                    default: false,
                     range: [15, 36],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -5148,6 +5208,7 @@ var harmonyTestFixture = {
                         }
                     }],
                     source: null,
+                    default: false,
                     range: [15, 24],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -5203,6 +5264,7 @@ var harmonyTestFixture = {
                             end: { line: 1, column: 42 }
                         }
                     },
+                    default: false,
                     range: [20, 43],
                     loc: {
                         start: { line: 1, column: 20 },
@@ -5259,6 +5321,7 @@ var harmonyTestFixture = {
                         }
                     }],
                     source: null,
+                    default: false,
                     range: [18, 37],
                     loc: {
                         start: { line: 1, column: 18 },
@@ -5332,6 +5395,7 @@ var harmonyTestFixture = {
                         }
                     }],
                     source: null,
+                    default: false,
                     range: [18, 46],
                     loc: {
                         start: { line: 1, column: 18 },
@@ -5413,6 +5477,7 @@ var harmonyTestFixture = {
                         }
                     }],
                     source: null,
+                    default: false,
                     range: [18, 53],
                     loc: {
                         start: { line: 1, column: 18 },
