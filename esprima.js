@@ -3394,15 +3394,9 @@ parseYieldExpression: true
 
     function parseExportDeclaration() {
         var previousAllowKeyword, decl, def, src, specifiers,
-            isDefault = false,
             marker = markerCreate();
 
         expectKeyword('export');
-
-        if (lookahead.type === Token.Keyword && lookahead.value === 'default') {
-            expectKeyword('default');
-            isDefault = true;
-        }
 
         if (lookahead.type === Token.Keyword) {
             switch (lookahead.value) {
@@ -3411,16 +3405,11 @@ parseYieldExpression: true
             case 'var':
             case 'class':
             case 'function':
-                return markerApply(marker, delegate.createExportDeclaration(parseSourceElement(), null, null, isDefault));
+                return markerApply(marker, delegate.createExportDeclaration(parseSourceElement(), null, null, false));
+            case 'default':
+                expectKeyword('default');
+                return markerApply(marker, delegate.createExportDeclaration(parseAssignmentExpression(), null, null, true));
             }
-        }
-
-        if (isIdentifierName(lookahead)) {
-            previousAllowKeyword = state.allowKeyword;
-            state.allowKeyword = true;
-            decl = parseVariableDeclarationList('let');
-            state.allowKeyword = previousAllowKeyword;
-            return markerApply(marker, delegate.createExportDeclaration(decl, null, null, isDefault));
         }
 
         specifiers = [];
@@ -3446,7 +3435,7 @@ parseYieldExpression: true
 
         consumeSemicolon();
 
-        return markerApply(marker, delegate.createExportDeclaration(null, specifiers, src, isDefault));
+        return markerApply(marker, delegate.createExportDeclaration(null, specifiers, src, false));
     }
 
     function parseImportDeclaration() {

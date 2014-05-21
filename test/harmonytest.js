@@ -4394,82 +4394,114 @@ var harmonyTestFixture = {
             }
         },
 
-        'export document = 42': {
-            type: 'ExportDeclaration',
-            declaration: [{
-                type: 'VariableDeclarator',
-                id: {
-                    type: 'Identifier',
-                    name: 'document',
-                    range: [7, 15],
-                    loc: {
-                        start: { line: 1, column: 7 },
-                        end: { line: 1, column: 15 }
-                    }
-                },
-                init: {
-                    type: 'Literal',
-                    value: 42,
-                    raw: '42',
-                    range: [18, 20],
-                    loc: {
-                        start: { line: 1, column: 18 },
-                        end: { line: 1, column: 20 }
-                    }
-                },
-                range: [7, 20],
-                loc: {
-                    start: { line: 1, column: 7 },
-                    end: { line: 1, column: 20 }
-                }
-            }],
-            specifiers: null,
-            source: null,
-            default: false,
-            range: [0, 20],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 20 }
-            }
-        },
-
-        'export default var document': {
+        'export default document': {
             type: 'ExportDeclaration',
             declaration: {
-                type: 'VariableDeclaration',
-                declarations: [{
-                    type: 'VariableDeclarator',
-                    id: {
-                        type: 'Identifier',
-                        name: 'document',
-                        range: [ 19, 27 ],
-                        loc: {
-                            start: { line: 1, column: 19 },
-                            end: { line: 1, column: 27 }
-                        }
-                    },
-                    init: null,
-                    range: [ 19, 27 ],
-                    loc: {
-                        start: { line: 1, column: 19 },
-                        end: { line: 1, column: 27 }
-                    }
-                }],
-                kind: 'var',
-                range: [ 15, 27 ],
+                type: 'Identifier',
+                name: 'document',
+                range: [ 15, 23 ],
                 loc: {
                     start: { line: 1, column: 15 },
-                    end: { line: 1, column: 27 }
+                    end: { line: 1, column: 23 }
                 }
             },
             specifiers: null,
             source: null,
             default: true,
-            range: [ 0, 27 ],
+            range: [ 0, 23 ],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 27 }
+                end: { line: 1, column: 23 }
             }
+        },
+
+        'export default {x}': {
+          type: 'ExportDeclaration',
+          declaration: {
+            type: 'ObjectExpression',
+            properties: [{
+              type: 'Property',
+              key: {
+                type: 'Identifier',
+                name: 'x',
+                range: [ 16, 17 ],
+                loc: {
+                  start: { line: 1, column: 16 },
+                  end: { line: 1, column: 17 }
+                }
+              },
+              value: {
+                type: 'Identifier',
+                name: 'x',
+                range: [ 16, 17 ],
+                loc: {
+                  start: { line: 1, column: 16 },
+                  end: { line: 1, column: 17 }
+                }
+              },
+              kind: 'init',
+              method: false,
+              shorthand: true,
+              range: [ 16, 17 ],
+              loc: {
+                start: { line: 1, column: 16 },
+                end: { line: 1, column: 17 }
+              }
+            }],
+            range: [ 15, 18 ],
+            loc: {
+              start: { line: 1, column: 15 },
+              end: { line: 1, column: 18 }
+            }
+          },
+          specifiers: null,
+          source: null,
+          default: true,
+          range: [ 0, 18 ],
+          loc: {
+            start: { line: 1, column: 0 },
+            end: { line: 1, column: 18 }
+          }
+        },
+
+        'export default a = 1': {
+          type: 'ExportDeclaration',
+          declaration: {
+            type: 'AssignmentExpression',
+            operator: '=',
+            left: {
+              type: 'Identifier',
+              name: 'a',
+              range: [ 15, 16 ],
+              loc: {
+                start: { line: 1, column: 15 },
+                end: { line: 1, column: 16 }
+              }
+            },
+            right: {
+              type: 'Literal',
+              value: 1,
+              raw: '1',
+              range: [ 19, 20 ],
+              loc: {
+                start: { line: 1, column: 19 },
+                end: { line: 1, column: 20 }
+              }
+            },
+            range: [ 15, 20 ],
+            loc: {
+              start: { line: 1, column: 15 },
+              end: { line: 1, column: 20 }
+            }
+          },
+          specifiers: null,
+          source: null,
+          default: true,
+          range: [ 0, 20 ],
+          loc: {
+            start: { line: 1, column: 0 },
+            end: { line: 1, column: 20 }
+          }
         },
 
         'export *': {
