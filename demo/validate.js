@@ -8,7 +8,7 @@ function validate(delay) {
     }
 
     validateId = window.setTimeout(function () {
-        var code, result, syntax, errors, i, str;
+        var code, result, syntax, errors, i;
 
         if (typeof window.editor === 'undefined') {
             code = document.getElementById('editor').value;

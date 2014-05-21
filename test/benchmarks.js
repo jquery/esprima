@@ -201,7 +201,7 @@ if (typeof window !== 'undefined') {
             }
 
             function run() {
-                var el, test, source, benchmark;
+                var test, source, benchmark;
 
                 if (index >= suite.length) {
                     setText('total-time', (1000 * totalTime).toFixed(1) + ' ms \xb1 ' +
@@ -212,7 +212,6 @@ if (typeof window !== 'undefined') {
                 }
 
                 test = slug(suite[index]);
-                el = id(test);
                 source = window.data[test];
                 setText(test + '-time', 'Running...');
 
@@ -305,8 +304,7 @@ if (typeof window !== 'undefined') {
         }
 
         function runTests(tests) {
-            var index,
-                tree = [],
+            var tree = [],
                 totalTime = 0,
                 totalSize = 0,
                 totalRme = 0;
