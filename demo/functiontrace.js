@@ -28,14 +28,12 @@
 (function (global) {
     'use strict';
 
-    var lookup;
-
     function id(i) {
         return document.getElementById(i);
     }
 
     function traceInstrument() {
-        var tracer, code, i, functionList, signature, pos;
+        var tracer, code, signature;
 
         if (typeof window.editor === 'undefined') {
             code = document.getElementById('code').value;

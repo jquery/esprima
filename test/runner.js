@@ -114,7 +114,7 @@ function hasAttachedComment(syntax) {
 
 function testParse(esprima, code, syntax) {
     'use strict';
-    var expected, tree, actual, options, StringObject, i, len, err;
+    var expected, tree, actual, options, StringObject, i, len;
 
     // alias, so that JSLint does not complain.
     StringObject = String;
@@ -274,7 +274,7 @@ function testError(esprima, code, exception) {
 
         try {
             if (tokenize) {
-                esprima.tokenize(code, options[i])
+                esprima.tokenize(code, options[i]);
             } else {
                 esprima.parse(code, options[i]);
             }
@@ -342,9 +342,7 @@ if (typeof window !== 'undefined') {
             fixture,
             source,
             tick,
-            expected,
-            index,
-            len;
+            expected;
 
         function setText(el, str) {
             if (typeof el.innerText === 'string') {

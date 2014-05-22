@@ -86,6 +86,7 @@
         "strict": 2,
         "unnecessary-strict": 0,
         "use-isnan": 2,
+        "valid-typeof": 0,
         "wrap-iife": 2,
         "wrap-regex": 0
     }

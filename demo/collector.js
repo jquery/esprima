@@ -58,7 +58,7 @@ function collectRegex() {
         }
 
         timerId = window.setTimeout(function () {
-            var code, result, occurrences, model, i, str;
+            var code, result, occurrences, model, i;
 
             if (typeof window.editor === 'undefined') {
                 code = document.getElementById('code').value;

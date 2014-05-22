@@ -67,14 +67,12 @@ parseStatement: true, parseSourceElement: true */
         PropertyKind,
         Messages,
         Regex,
-        SyntaxTreeDelegate,
         source,
         strict,
         index,
         lineNumber,
         lineStart,
         length,
-        delegate,
         lookahead,
         state,
         extra;
@@ -347,7 +345,7 @@ parseStatement: true, parseSourceElement: true */
     // 7.4 Comments
 
     function addComment(type, value, start, end, loc) {
-        var comment, attacher;
+        var comment;
 
         assert(typeof start === 'number', 'Comment must have valid position');
 
@@ -1171,7 +1169,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function scanRegExp() {
-        var start, body, flags, pattern, value;
+        var start, body, flags, value;
 
         lookahead = null;
         skipComment();
@@ -1366,7 +1364,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function collectToken() {
-        var loc, token, range, value;
+        var loc, token, value;
 
         skipComment();
         loc = {
@@ -1483,11 +1481,12 @@ parseStatement: true, parseSourceElement: true */
                 trailingComments,
                 bottomRight = extra.bottomRightStack,
                 last = bottomRight[bottomRight.length - 1];
-            if (typeof this.type === 'undefined' || this.type === Syntax.Program) {
-                return;
-            }
 
-            peek();
+            if (this.type === Syntax.Program) {
+                if (this.body.length > 0) {
+                    return;
+                }
+            }
 
             if (extra.trailingComments.length > 0) {
                 if (extra.trailingComments[0].range[0] >= this.range[1]) {
@@ -2156,7 +2155,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseObjectInitialiser() {
-        var properties = [], property, name, key, kind, map = {}, toString = String, node = new Node();
+        var properties = [], token, property, name, key, kind, map = {}, toString = String, node = new Node();
 
         expect('{');
 
@@ -2193,7 +2192,16 @@ parseStatement: true, parseSourceElement: true */
             properties.push(property);
 
             if (!match('}')) {
-                expect(',');
+                if (extra.errors) {
+                    token = lookahead;
+                    if (token.type !== Token.Punctuator && token.value !== ',') {
+                        throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
+                    } else {
+                        lex();
+                    }
+                } else {
+                    expect(',');
+                }
             }
         }
 
@@ -2705,7 +2713,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.13 Assignment Operators
 
     function parseAssignmentExpression() {
-        var oldParenthesisCount, token, expr, right, params, list, startToken;
+        var oldParenthesisCount, token, expr, right, list, startToken;
 
         oldParenthesisCount = state.parenthesisCount;
 
@@ -3763,7 +3771,6 @@ parseStatement: true, parseSourceElement: true */
 
     function tokenize(code, options) {
         var toString,
-            token,
             tokens;
 
         toString = String;
@@ -3771,7 +3778,6 @@ parseStatement: true, parseSourceElement: true */
             code = toString(code);
         }
 
-        delegate = SyntaxTreeDelegate;
         source = code;
         index = 0;
         lineNumber = (source.length > 0) ? 1 : 0;
@@ -3816,12 +3822,11 @@ parseStatement: true, parseSourceElement: true */
                 return extra.tokens;
             }
 
-            token = lex();
+            lex();
             while (lookahead.type !== Token.EOF) {
                 try {
-                    token = lex();
+                    lex();
                 } catch (lexError) {
-                    token = lookahead;
                     if (extra.errors) {
                         extra.errors.push(lexError);
                         // We have to break on the first error
@@ -3857,7 +3862,6 @@ parseStatement: true, parseSourceElement: true */
             code = toString(code);
         }
 
-        delegate = SyntaxTreeDelegate;
         source = code;
         index = 0;
         lineNumber = (source.length > 0) ? 1 : 0;
