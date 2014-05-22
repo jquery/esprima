@@ -21010,14 +21010,6 @@ var testFixture = {
             message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
         },
 
-        // strict mode, using eval when IsSimpleParameterList is false
-        '"use strict"; (eval, a) => 42': {
-            index: 29,
-            lineNumber: 1,
-            column: 30,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
-        },
-
         '(a, a) => 42': {
             index: 6,
             lineNumber: 1,

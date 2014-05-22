@@ -67,14 +67,12 @@ parseStatement: true, parseSourceElement: true */
         PropertyKind,
         Messages,
         Regex,
-        SyntaxTreeDelegate,
         source,
         strict,
         index,
         lineNumber,
         lineStart,
         length,
-        delegate,
         lookahead,
         state,
         extra;
@@ -347,7 +345,7 @@ parseStatement: true, parseSourceElement: true */
     // 7.4 Comments
 
     function addComment(type, value, start, end, loc) {
-        var comment, attacher;
+        var comment;
 
         assert(typeof start === 'number', 'Comment must have valid position');
 
@@ -1171,7 +1169,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function scanRegExp() {
-        var start, body, flags, pattern, value;
+        var start, body, flags, value;
 
         lookahead = null;
         skipComment();
@@ -1366,7 +1364,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function collectToken() {
-        var loc, token, range, value;
+        var loc, token, value;
 
         skipComment();
         loc = {
@@ -2715,7 +2713,7 @@ parseStatement: true, parseSourceElement: true */
     // 11.13 Assignment Operators
 
     function parseAssignmentExpression() {
-        var oldParenthesisCount, token, expr, right, params, list, startToken;
+        var oldParenthesisCount, token, expr, right, list, startToken;
 
         oldParenthesisCount = state.parenthesisCount;
 
@@ -3773,7 +3771,6 @@ parseStatement: true, parseSourceElement: true */
 
     function tokenize(code, options) {
         var toString,
-            token,
             tokens;
 
         toString = String;
@@ -3781,7 +3778,6 @@ parseStatement: true, parseSourceElement: true */
             code = toString(code);
         }
 
-        delegate = SyntaxTreeDelegate;
         source = code;
         index = 0;
         lineNumber = (source.length > 0) ? 1 : 0;
@@ -3826,12 +3822,11 @@ parseStatement: true, parseSourceElement: true */
                 return extra.tokens;
             }
 
-            token = lex();
+            lex();
             while (lookahead.type !== Token.EOF) {
                 try {
-                    token = lex();
+                    lex();
                 } catch (lexError) {
-                    token = lookahead;
                     if (extra.errors) {
                         extra.errors.push(lexError);
                         // We have to break on the first error
@@ -3867,7 +3862,6 @@ parseStatement: true, parseSourceElement: true */
             code = toString(code);
         }
 
-        delegate = SyntaxTreeDelegate;
         source = code;
         index = 0;
         lineNumber = (source.length > 0) ? 1 : 0;
