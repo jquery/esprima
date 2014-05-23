@@ -10,11 +10,6 @@
     "version": "1.3.0-dev",
     "files": [
         "bin",
-        "test/run.js",
-        "test/runner.js",
-        "test/test.js",
-        "test/compat.js",
-        "test/reflect.js",
         "esprima.js"
     ],
     "engines": {
