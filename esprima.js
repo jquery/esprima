@@ -1981,6 +1981,26 @@ parseStatement: true, parseSourceElement: true */
         }
     }
 
+    /**
+     * @name expectTolerant
+     * @description Quietly expect the given token value when in tolerant mode, otherwise delegates
+     * to <code>expect(value)</code>
+     * @param {String} value The value we are expecting the lookahead token to have
+     * @since 2.0
+     */
+    function expectTolerant(value) {
+        if (extra.errors) {
+            var token = lookahead;
+            if (token.type !== Token.Punctuator && token.value !== value) {
+                throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
+            } else {
+                lex();
+            }
+        } else {
+            expect(value);
+        }
+    }
+
     // Expect the next token to match the specified keyword.
     // If not, an exception will be thrown.
 
@@ -2194,16 +2214,7 @@ parseStatement: true, parseSourceElement: true */
             properties.push(property);
 
             if (!match('}')) {
-                if (extra.errors) {
-                    token = lookahead;
-                    if (token.type !== Token.Punctuator && token.value !== ',') {
-                        throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
-                    } else {
-                        lex();
-                    }
-                } else {
-                    expect(',');
-                }
+                expectTolerant(',');
             }
         }
 
@@ -2306,7 +2317,7 @@ parseStatement: true, parseSourceElement: true */
                 if (match(')')) {
                     break;
                 }
-                expect(',');
+                expectTolerant(',');
             }
         }
 
