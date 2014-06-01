@@ -8774,6 +8774,811 @@ var harmonyTestFixture = {
 
     'ES6: Default parameters': {
 
+        'function f([x] = [1]) {}': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'f',
+                range: [9, 10],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            params: [{
+                type: 'ArrayPattern',
+                elements: [{
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [12, 13],
+                    loc: {
+                        start: { line: 1, column: 12 },
+                        end: { line: 1, column: 13 }
+                    }
+                }],
+                range: [11, 14],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 14 }
+                }
+            }],
+            defaults: [{
+                type: 'ArrayExpression',
+                elements: [{
+                    type: 'Literal',
+                    value: 1,
+                    raw: '1',
+                    range: [18, 19],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 19 }
+                    }
+                }],
+                range: [17, 20],
+                loc: {
+                    start: { line: 1, column: 17 },
+                    end: { line: 1, column: 20 }
+                }
+            }],
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [22, 24],
+                loc: {
+                    start: { line: 1, column: 22 },
+                    end: { line: 1, column: 24 }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 24 }
+            }
+        },
+
+        'function f({x} = {x: 10}) {}': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'f',
+                range: [9, 10],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            params: [{
+                type: 'ObjectPattern',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [12, 13],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 13 }
+                        }
+                    },
+                    value: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [12, 13],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 13 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: true,
+                    range: [12, 13],
+                    loc: {
+                        start: { line: 1, column: 12 },
+                        end: { line: 1, column: 13 }
+                    }
+                }],
+                range: [11, 14],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 14 }
+                }
+            }],
+            defaults: [{
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [18, 19],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    value: {
+                        type: 'Literal',
+                        value: 10,
+                        raw: '10',
+                        range: [21, 23],
+                        loc: {
+                            start: { line: 1, column: 21 },
+                            end: { line: 1, column: 23 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: false,
+                    range: [18, 23],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 23 }
+                    }
+                }],
+                range: [17, 24],
+                loc: {
+                    start: { line: 1, column: 17 },
+                    end: { line: 1, column: 24 }
+                }
+            }],
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [26, 28],
+                loc: {
+                    start: { line: 1, column: 26 },
+                    end: { line: 1, column: 28 }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            range: [0, 28],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
+            }
+        },
+
+        'f = function({x} = {x: 10}) {}': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'f',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'FunctionExpression',
+                    id: null,
+                    params: [{
+                        type: 'ObjectPattern',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [14, 15],
+                                loc: {
+                                    start: { line: 1, column: 14 },
+                                    end: { line: 1, column: 15 }
+                                }
+                            },
+                            value: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [14, 15],
+                                loc: {
+                                    start: { line: 1, column: 14 },
+                                    end: { line: 1, column: 15 }
+                                }
+                            },
+                            kind: 'init',
+                            method: false,
+                            shorthand: true,
+                            range: [14, 15],
+                            loc: {
+                                start: { line: 1, column: 14 },
+                                end: { line: 1, column: 15 }
+                            }
+                        }],
+                        range: [13, 16],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 16 }
+                        }
+                    }],
+                    defaults: [{
+                        type: 'ObjectExpression',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'x',
+                                range: [20, 21],
+                                loc: {
+                                    start: { line: 1, column: 20 },
+                                    end: { line: 1, column: 21 }
+                                }
+                            },
+                            value: {
+                                type: 'Literal',
+                                value: 10,
+                                raw: '10',
+                                range: [23, 25],
+                                loc: {
+                                    start: { line: 1, column: 23 },
+                                    end: { line: 1, column: 25 }
+                                }
+                            },
+                            kind: 'init',
+                            method: false,
+                            shorthand: false,
+                            range: [20, 25],
+                            loc: {
+                                start: { line: 1, column: 20 },
+                                end: { line: 1, column: 25 }
+                            }
+                        }],
+                        range: [19, 26],
+                        loc: {
+                            start: { line: 1, column: 19 },
+                            end: { line: 1, column: 26 }
+                        }
+                    }],
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [28, 30],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 30 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: false,
+                    range: [4, 30],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 30 }
+                    }
+                },
+                range: [0, 30],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 30 }
+                }
+            },
+            range: [0, 30],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 30 }
+            }
+        },
+
+        '({f: function({x} = {x: 10}) {}})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'f',
+                        range: [2, 3],
+                        loc: {
+                            start: { line: 1, column: 2 },
+                            end: { line: 1, column: 3 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [{
+                            type: 'ObjectPattern',
+                            properties: [{
+                                type: 'Property',
+                                key: {
+                                    type: 'Identifier',
+                                    name: 'x',
+                                    range: [15, 16],
+                                    loc: {
+                                        start: { line: 1, column: 15 },
+                                        end: { line: 1, column: 16 }
+                                    }
+                                },
+                                value: {
+                                    type: 'Identifier',
+                                    name: 'x',
+                                    range: [15, 16],
+                                    loc: {
+                                        start: { line: 1, column: 15 },
+                                        end: { line: 1, column: 16 }
+                                    }
+                                },
+                                kind: 'init',
+                                method: false,
+                                shorthand: true,
+                                range: [15, 16],
+                                loc: {
+                                    start: { line: 1, column: 15 },
+                                    end: { line: 1, column: 16 }
+                                }
+                            }],
+                            range: [14, 17],
+                            loc: {
+                                start: { line: 1, column: 14 },
+                                end: { line: 1, column: 17 }
+                            }
+                        }],
+                        defaults: [{
+                            type: 'ObjectExpression',
+                            properties: [{
+                                type: 'Property',
+                                key: {
+                                    type: 'Identifier',
+                                    name: 'x',
+                                    range: [21, 22],
+                                    loc: {
+                                        start: { line: 1, column: 21 },
+                                        end: { line: 1, column: 22 }
+                                    }
+                                },
+                                value: {
+                                    type: 'Literal',
+                                    value: 10,
+                                    raw: '10',
+                                    range: [24, 26],
+                                    loc: {
+                                        start: { line: 1, column: 24 },
+                                        end: { line: 1, column: 26 }
+                                    }
+                                },
+                                kind: 'init',
+                                method: false,
+                                shorthand: false,
+                                range: [21, 26],
+                                loc: {
+                                    start: { line: 1, column: 21 },
+                                    end: { line: 1, column: 26 }
+                                }
+                            }],
+                            range: [20, 27],
+                            loc: {
+                                start: { line: 1, column: 20 },
+                                end: { line: 1, column: 27 }
+                            }
+                        }],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [29, 31],
+                            loc: {
+                                start: { line: 1, column: 29 },
+                                end: { line: 1, column: 31 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [5, 31],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 31 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: false,
+                    range: [2, 31],
+                    loc: {
+                        start: { line: 1, column: 2 },
+                        end: { line: 1, column: 31 }
+                    }
+                }],
+                range: [1, 32],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 32 }
+                }
+            },
+            range: [0, 33],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 33 }
+            }
+        },
+
+        '({f({x} = {x: 10}) {}})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'f',
+                        range: [2, 3],
+                        loc: {
+                            start: { line: 1, column: 2 },
+                            end: { line: 1, column: 3 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [{
+                            type: 'ObjectPattern',
+                            properties: [{
+                                type: 'Property',
+                                key: {
+                                    type: 'Identifier',
+                                    name: 'x',
+                                    range: [5, 6],
+                                    loc: {
+                                        start: { line: 1, column: 5 },
+                                        end: { line: 1, column: 6 }
+                                    }
+                                },
+                                value: {
+                                    type: 'Identifier',
+                                    name: 'x',
+                                    range: [5, 6],
+                                    loc: {
+                                        start: { line: 1, column: 5 },
+                                        end: { line: 1, column: 6 }
+                                    }
+                                },
+                                kind: 'init',
+                                method: false,
+                                shorthand: true,
+                                range: [5, 6],
+                                loc: {
+                                    start: { line: 1, column: 5 },
+                                    end: { line: 1, column: 6 }
+                                }
+                            }],
+                            range: [4, 7],
+                            loc: {
+                                start: { line: 1, column: 4 },
+                                end: { line: 1, column: 7 }
+                            }
+                        }],
+                        defaults: [{
+                            type: 'ObjectExpression',
+                            properties: [{
+                                type: 'Property',
+                                key: {
+                                    type: 'Identifier',
+                                    name: 'x',
+                                    range: [11, 12],
+                                    loc: {
+                                        start: { line: 1, column: 11 },
+                                        end: { line: 1, column: 12 }
+                                    }
+                                },
+                                value: {
+                                    type: 'Literal',
+                                    value: 10,
+                                    raw: '10',
+                                    range: [14, 16],
+                                    loc: {
+                                        start: { line: 1, column: 14 },
+                                        end: { line: 1, column: 16 }
+                                    }
+                                },
+                                kind: 'init',
+                                method: false,
+                                shorthand: false,
+                                range: [11, 16],
+                                loc: {
+                                    start: { line: 1, column: 11 },
+                                    end: { line: 1, column: 16 }
+                                }
+                            }],
+                            range: [10, 17],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 17 }
+                            }
+                        }],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [19, 21],
+                            loc: {
+                                start: { line: 1, column: 19 },
+                                end: { line: 1, column: 21 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [19, 21],
+                        loc: {
+                            start: { line: 1, column: 19 },
+                            end: { line: 1, column: 21 }
+                        }
+                    },
+                    kind: 'init',
+                    method: true,
+                    shorthand: false,
+                    range: [2, 21],
+                    loc: {
+                        start: { line: 1, column: 2 },
+                        end: { line: 1, column: 21 }
+                    }
+                }],
+                range: [1, 22],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
+        },
+
+        '(class {f({x} = {x: 10}) {}})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ClassExpression',
+                superClass: null,
+                body: {
+                    type: 'ClassBody',
+                    body: [{
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'f',
+                            range: [8, 9],
+                            loc: {
+                                start: { line: 1, column: 8 },
+                                end: { line: 1, column: 9 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [{
+                                type: 'ObjectPattern',
+                                properties: [{
+                                    type: 'Property',
+                                    key: {
+                                        type: 'Identifier',
+                                        name: 'x',
+                                        range: [11, 12],
+                                        loc: {
+                                            start: { line: 1, column: 11 },
+                                            end: { line: 1, column: 12 }
+                                        }
+                                    },
+                                    value: {
+                                        type: 'Identifier',
+                                        name: 'x',
+                                        range: [11, 12],
+                                        loc: {
+                                            start: { line: 1, column: 11 },
+                                            end: { line: 1, column: 12 }
+                                        }
+                                    },
+                                    kind: 'init',
+                                    method: false,
+                                    shorthand: true,
+                                    range: [11, 12],
+                                    loc: {
+                                        start: { line: 1, column: 11 },
+                                        end: { line: 1, column: 12 }
+                                    }
+                                }],
+                                range: [10, 13],
+                                loc: {
+                                    start: { line: 1, column: 10 },
+                                    end: { line: 1, column: 13 }
+                                }
+                            }],
+                            defaults: [{
+                                type: 'ObjectExpression',
+                                properties: [{
+                                    type: 'Property',
+                                    key: {
+                                        type: 'Identifier',
+                                        name: 'x',
+                                        range: [17, 18],
+                                        loc: {
+                                            start: { line: 1, column: 17 },
+                                            end: { line: 1, column: 18 }
+                                        }
+                                    },
+                                    value: {
+                                        type: 'Literal',
+                                        value: 10,
+                                        raw: '10',
+                                        range: [20, 22],
+                                        loc: {
+                                            start: { line: 1, column: 20 },
+                                            end: { line: 1, column: 22 }
+                                        }
+                                    },
+                                    kind: 'init',
+                                    method: false,
+                                    shorthand: false,
+                                    range: [17, 22],
+                                    loc: {
+                                        start: { line: 1, column: 17 },
+                                        end: { line: 1, column: 22 }
+                                    }
+                                }],
+                                range: [16, 23],
+                                loc: {
+                                    start: { line: 1, column: 16 },
+                                    end: { line: 1, column: 23 }
+                                }
+                            }],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [25, 27],
+                                loc: {
+                                    start: { line: 1, column: 25 },
+                                    end: { line: 1, column: 27 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [25, 27],
+                            loc: {
+                                start: { line: 1, column: 25 },
+                                end: { line: 1, column: 27 }
+                            }
+                        },
+                        kind: '',
+                        'static': false,
+                        range: [8, 27],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 27 }
+                        }
+                    }],
+                    range: [7, 28],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 28 }
+                    }
+                },
+                range: [1, 28],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 28 }
+                }
+            },
+            range: [0, 29],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 29 }
+            }
+        },
+
+        '(({x} = {x: 10}) => {})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ArrowFunctionExpression',
+                id: null,
+                params: [{
+                    type: 'ObjectPattern',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'x',
+                            range: [3, 4],
+                            loc: {
+                                start: { line: 1, column: 3 },
+                                end: { line: 1, column: 4 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'x',
+                            range: [3, 4],
+                            loc: {
+                                start: { line: 1, column: 3 },
+                                end: { line: 1, column: 4 }
+                            }
+                        },
+                        kind: 'init',
+                        method: false,
+                        shorthand: true,
+                        range: [3, 4],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 4 }
+                        }
+                    }],
+                    range: [2, 5],
+                    loc: {
+                        start: { line: 1, column: 2 },
+                        end: { line: 1, column: 5 }
+                    }
+                }],
+                defaults: [{
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'x',
+                            range: [9, 10],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 10 }
+                            }
+                        },
+                        value: {
+                            type: 'Literal',
+                            value: 10,
+                            raw: '10',
+                            range: [12, 14],
+                            loc: {
+                                start: { line: 1, column: 12 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        kind: 'init',
+                        method: false,
+                        shorthand: false,
+                        range: [9, 14],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 14 }
+                        }
+                    }],
+                    range: [8, 15],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 15 }
+                    }
+                }],
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [20, 22],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 22 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [1, 22],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
+        },
+
         'x = function(y = 1) {}': {
             type: 'ExpressionStatement',
             expression: {
