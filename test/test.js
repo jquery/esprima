@@ -23682,6 +23682,736 @@ var testFixture = {
     },
 
     'Tolerant parse': {
+        /** if statement recovery missing ) EOF */
+        'if(foo': {
+            range: [0, 6],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 6 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 6],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 6 }
+                },
+                type: "IfStatement",
+                test: {
+                    range: [3, 6],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 6 }
+                    },
+                    type: "Identifier",
+                    name: "foo"
+                },
+                consequent: {
+                    range: [6, 6],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 6 }
+                    },
+                    type: "ExpressionStatement",
+                    expression: {
+                        type: "Identifier",
+                        name: "$RECOVERED$",
+                        range: [6, 6],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 6 }
+                        }
+                    }
+                },
+                alternate: null
+            }],
+            errors: [{
+                index: 6,
+                lineNumber: 1,
+                column: 7,
+                message: "Error: Line 1: Unexpected end of input"
+            }]
+        },
+        /** if statement recovery missing ) trailing {}*/
+        'if(foo {}': {
+            range: [0, 9],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 9 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 9],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 9 }
+                },
+                type: "IfStatement",
+                test: {
+                    range: [3, 6],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 6 }
+                    },
+                    type: "Identifier",
+                    name: "foo"
+                },
+                consequent: {
+                    range: [7, 9],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 9 }
+                    },
+                    type: "BlockStatement",
+                    body: []
+                },
+                alternate: null
+            }],
+            errors: [{
+                index: 7,
+                lineNumber: 1,
+                column: 8,
+                message: "Error: Line 1: Unexpected token {"
+            }]
+        },
+        /** if statement recovery missing ) and } */
+        'if(foo {': {
+            range: [0, 8],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 8 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 8],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 8 }
+                },
+                type: "IfStatement",
+                test: {
+                    range: [3, 6],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 6 }
+                    },
+                    type: "Identifier",
+                    name: "foo"
+                },
+                consequent: {
+                    range: [7, 8],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 8 }
+                    },
+                    type: "BlockStatement",
+                    body: []
+                },
+                alternate: null
+            }],
+            errors: [{
+                index: 7,
+                lineNumber: 1,
+                column: 8,
+                message: "Error: Line 1: Unexpected token {"
+            }, {
+                index: 8,
+                lineNumber: 1,
+                column: 9,
+                message: "Error: Line 1: Unexpected end of input"
+            }]
+        },
+        /** while statement recovery missing ) EOF */
+        'while(foo': {
+            range: [0, 9],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 9 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 9],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 9 }
+                },
+                type: "WhileStatement",
+                test: {
+                    range: [6, 9],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 9 }
+                    },
+                    type: "Identifier",
+                    name: "foo"
+                },
+                body: {
+                    range: [9, 9],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 9 }
+                    },
+                    type: "ExpressionStatement",
+                    expression: {
+                        type: "Identifier",
+                        name: "$RECOVERED$",
+                        range: [9, 9],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 9 }
+                        }
+                    }
+                }
+            }],
+            errors: [{
+                index: 9,
+                lineNumber: 1,
+                column: 10,
+                message: "Error: Line 1: Unexpected end of input"
+            }]
+        },
+        /** while statement recovery missing ) ttrailing {} */
+        'while(myfunc() {}': {
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                },
+                type: "WhileStatement",
+                test: {
+                    range: [6, 14],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 14 }
+                    },
+                    type: "CallExpression",
+                    callee: {
+                        range: [6, 12],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 12 }
+                        },
+                        type: "Identifier",
+                        name: "myfunc"
+                    },
+                    "arguments": []
+                },
+                body: {
+                    range: [15, 17],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 17 }
+                    },
+                    type: "BlockStatement",
+                    body: []
+                }
+            }],
+            errors: [{
+                index: 15,
+                lineNumber: 1,
+                column: 16,
+                message: "Error: Line 1: Unexpected token {"
+            }]
+        },
+        /** while statement recovery missing ( and { */
+        'while({a:1} {': {
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 13 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                },
+                type: "WhileStatement",
+                test: {
+                    range: [6, 11],
+                    loc: {
+                        start: { line: 1, column: 6 },
+                        end: { line: 1, column: 11 }
+                    },
+                    type: "ObjectExpression",
+                    properties: [{
+                        range: [7, 10],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 10 }
+                        },
+                        type: "Property",
+                        key: {
+                            range: [7, 8],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 8 }
+                            },
+                            type: "Identifier",
+                            name: "a"
+                        },
+                        value: {
+                            range: [9, 10],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 10 }
+                            },
+                            type: "Literal",
+                            value: 1,
+                            raw: "1"
+                        },
+                        kind: "init"
+                    }]
+                },
+                body: {
+                    range: [12, 13],
+                    loc: {
+                        start: { line: 1, column: 12 },
+                        end: { line: 1, column: 13 }
+                    },
+                    type: "BlockStatement",
+                    body: []
+                }
+            }],
+            errors: [{
+                index: 12,
+                lineNumber: 1,
+                column: 13,
+                message: "Error: Line 1: Unexpected token {"
+            }, {
+                index: 13,
+                lineNumber: 1,
+                column: 14,
+                message: "Error: Line 1: Unexpected end of input"
+            }]
+        },
+        /** for statement recovery missing ) */
+        'for(var i = 0; i < 1; i++': {
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 25],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 25 }
+                },
+                type: "ForStatement",
+                init: {
+                    range: [4, 13],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 13 }
+                    },
+                    type: "VariableDeclaration",
+                    declarations: [{
+                        range: [8, 13],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 13 }
+                        },
+                        type: "VariableDeclarator",
+                        id: {
+                            range: [8, 9],
+                            loc: {
+                                start: { line: 1, column: 8 },
+                                end: { line: 1, column: 9 }
+                            },
+                            type: "Identifier",
+                            name: "i"
+                        },
+                        init: {
+                            range: [12, 13],
+                            loc: {
+                                start: { line: 1, column: 12 },
+                                end: { line: 1, column: 13 }
+                            },
+                            type: "Literal",
+                            value: 0,
+                            raw: "0"
+                        }
+                    }],
+                    kind: "var"
+                },
+                test: {
+                    range: [15, 20],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 20 }
+                    },
+                    type: "BinaryExpression",
+                    operator: "<",
+                    left: {
+                        range: [15, 16],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 16 }
+                        },
+                        type: "Identifier",
+                        name: "i"
+                    },
+                    right: {
+                        range: [19, 20],
+                        loc: {
+                            start: { line: 1, column: 19 },
+                            end: { line: 1, column: 20 }
+                        },
+                        type: "Literal",
+                        value: 1,
+                        raw: "1"
+                    }
+                },
+                update: {
+                    range: [22, 25],
+                    loc: {
+                        start: { line: 1, column: 22 },
+                        end: { line: 1, column: 25 }
+                    },
+                    type: "UpdateExpression",
+                    operator: "++",
+                    argument: {
+                        range: [22, 23],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 23 }
+                        },
+                        type: "Identifier",
+                        name: "i"
+                    },
+                    prefix: false
+                },
+                body: {
+                    range: [25, 25],
+                    loc: {
+                        start: { line: 1, column: 25 },
+                        end: { line: 1, column: 25 }
+                    },
+                    type: "ExpressionStatement",
+                    expression: {
+                        type: "Identifier",
+                        name: "$RECOVERED$",
+                        range: [25, 25],
+                        loc: {
+                            start: { line: 1, column: 25 },
+                            end: { line: 1, column: 25 }
+                        }
+                    }
+                }
+            }],
+            errors: [{
+                index: 25,
+                lineNumber: 1,
+                column: 26,
+                message: "Error: Line 1: Unexpected end of input"
+            }]
+        },
+        /**for statement recovery missing ) trailing {} */
+        'for(var foo in bar {}': {
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 21],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 21 }
+                },
+                type: "ForInStatement",
+                left: {
+                    range: [4, 11],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 11 }
+                    },
+                    type: "VariableDeclaration",
+                    declarations: [{
+                        range: [8, 11],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 11 }
+                        },
+                        type: "VariableDeclarator",
+                        id: {
+                            range: [8, 11],
+                            loc: {
+                                start: { line: 1, column: 8 },
+                                end: { line: 1, column: 11 }
+                            },
+                            type: "Identifier",
+                            name: "foo"
+                        },
+                        init: null
+                    }],
+                    kind: "var"
+                },
+                right: {
+                    range: [15, 18],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 18 }
+                    },
+                    type: "Identifier",
+                    name: "bar"
+                },
+                body: {
+                    range: [19, 21],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 21 }
+                    },
+                    type: "BlockStatement",
+                    body: []
+                },
+                each: false
+            }],
+            errors: [{
+                index: 19,
+                lineNumber: 1,
+                column: 20,
+                message: "Error: Line 1: Unexpected token {"
+            }]
+        },
+        /** do-while recovery missing )*/
+        'do {}while(foo': {
+            range: [0, 14],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 14 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 14],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 14 }
+                },
+                type: "DoWhileStatement",
+                body: {
+                    range: [3, 5],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 5 }
+                    },
+                    type: "BlockStatement",
+                    body: []
+                },
+                test: {
+                    range: [11, 14],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 14 }
+                    },
+                    type: "Identifier",
+                    name: "foo"
+                }
+            }],
+            errors: [{
+                index: 14,
+                lineNumber: 1,
+                column: 15,
+                message: "Error: Line 1: Unexpected end of input"
+            }]
+        },
+        /** with statement recovery missing ( */
+        'with(foo': {
+            range: [0, 8],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 8 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 8],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 8 }
+                },
+                type: "WithStatement",
+                object: {
+                    range: [5, 8],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 8 }
+                    },
+                    type: "Identifier",
+                    name: "foo"
+                },
+                body: {
+                    range: [8, 8],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 8 }
+                    },
+                    type: "ExpressionStatement",
+                    expression: {
+                        type: "Identifier",
+                        name: "$RECOVERED$",
+                        range: [8, 8],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 8 }
+                        }
+                    }
+                }
+            }],
+            errors: [{
+                index: 8,
+                lineNumber: 1,
+                column: 9,
+                message: "Error: Line 1: Unexpected end of input"
+            }]
+        },
+        /** with statement recovery missing ) trailing {} */
+        'with({a:1} {}': {
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 13 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                },
+                type: "WithStatement",
+                object: {
+                    range: [5, 10],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 10 }
+                    },
+                    type: "ObjectExpression",
+                    properties: [{
+                        range: [6, 9],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 9 }
+                        },
+                        type: "Property",
+                        key: {
+                            range: [6, 7],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 7 }
+                            },
+                            type: "Identifier",
+                            name: "a"
+                        },
+                        value: {
+                            range: [8, 9],
+                            loc: {
+                                start: { line: 1, column: 8 },
+                                end: { line: 1, column: 9 }
+                            },
+                            type: "Literal",
+                            value: 1,
+                            raw: "1"
+                        },
+                        kind: "init"
+                    }]
+                },
+                body: {
+                    range: [11, 13],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 13 }
+                    },
+                    type: "BlockStatement",
+                    body: []
+                }
+            }],
+            errors: [{
+                index: 11,
+                lineNumber: 1,
+                column: 12,
+                message: "Error: Line 1: Unexpected token {"
+            }]
+        },
+        /** throw statement recovery - incomplete */
+        'throw': {
+            range: [0, 5],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 5 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 5 }
+                },
+                type: "ExpressionStatement",
+                expression: {
+                    type: "Identifier",
+                    name: "$RECOVERED$",
+                    range: [0, 5],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
+                }
+            }],
+            errors: [{
+                index: 5,
+                lineNumber: 1,
+                column: 6,
+                message: "Error: Line 1: Unexpected end of input"
+            }]
+        },
+        /** try statement recovery - incomplete */
+        'try {': {
+            range: [0, 5],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 5 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 5 }
+                },
+                type: "ExpressionStatement",
+                expression: {
+                    type: "Identifier",
+                    name: "$RECOVERED$",
+                    range: [0, 5],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
+                }
+            }],
+            errors: [{
+                index: 5,
+                lineNumber: 1,
+                column: 6,
+                message: "Error: Line 1: Unexpected end of input"
+            }, {
+                index: 5,
+                lineNumber: 1,
+                column: 6,
+                message: "Error: Line 1: Missing catch or finally after try"
+            }]
+        },
         /** argument recovery */
         'f(a b c);': {
             range: [0, 9],
