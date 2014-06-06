@@ -1905,21 +1905,31 @@ parseStatement: true, parseSourceElement: true */
                     assert(index < args.length, 'Message reference must be in range');
                     return args[index];
                 }
-            );
+            ),
+            fileName = extra.source || '<anonymous>',
+            errorIndex,
+            errorLineNumber,
+            errorColumnNumber;
 
         if (typeof token.lineNumber === 'number') {
-            error = new Error('Line ' + token.lineNumber + ': ' + msg);
-            error.index = token.start;
-            error.lineNumber = token.lineNumber;
-            error.column = token.start - lineStart + 1;
+            errorLineNumber = token.lineNumber;
+            errorIndex = token.start;
         } else {
-            error = new Error('Line ' + lineNumber + ': ' + msg);
-            error.index = index;
-            error.lineNumber = lineNumber;
-            error.column = index - lineStart + 1;
+            errorLineNumber = lineNumber;
+            errorIndex = index;
         }
 
+        errorColumnNumber = errorIndex - lineStart + 1;
+
+        error = new Error(msg + ' at ' + fileName + ':' + errorLineNumber + ':' + errorColumnNumber);
         error.description = msg;
+        if (fileName) {
+            error.fileName = fileName;
+        }
+        error.lineNumber = errorLineNumber;
+        error.columnNumber = errorColumnNumber;
+        error.index = errorIndex;
+
         throw error;
     }
 
@@ -3895,7 +3905,7 @@ parseStatement: true, parseSourceElement: true */
             extra.loc = (typeof options.loc === 'boolean') && options.loc;
             extra.attachComment = (typeof options.attachComment === 'boolean') && options.attachComment;
 
-            if (extra.loc && options.source !== null && options.source !== undefined) {
+            if (options.source !== null && options.source !== undefined) {
                 extra.source = toString(options.source);
             }
 

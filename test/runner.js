@@ -66,7 +66,7 @@ function errorToObject(e) {
     return {
         index: e.index,
         lineNumber: e.lineNumber,
-        column: e.column,
+        columnNumber: e.columnNumber,
         message: msg
     };
 }
@@ -262,7 +262,7 @@ function testError(esprima, code, exception) {
         handleInvalidRegexFlag = true;
     }
 
-    exception.description = exception.message.replace(/Error: Line [0-9]+: /, '');
+    exception.description = exception.message.replace(/^Error: (.*?) at <anonymous>:\d+:\d+$/, '$1');
 
     if (exception.tokenize) {
         tokenize = true;

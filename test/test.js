@@ -20477,1694 +20477,1694 @@ var testFixture = {
         '{': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 2,
+            message: 'Error: Unexpected end of input at <anonymous>:1:2'
         },
 
         '}': {
             index: 0,
             lineNumber: 1,
-            column: 1,
-            message: 'Error: Line 1: Unexpected token }'
+            columnNumber: 1,
+            message: 'Error: Unexpected token } at <anonymous>:1:1'
         },
 
         '3ea': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 3,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:3'
         },
 
         '3in []': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 2,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:2'
         },
 
         '3e': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 3,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:3'
         },
 
         '3e+': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 4,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:4'
         },
 
         '3e-': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 4,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:4'
         },
 
         '3x': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 2,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:2'
         },
 
         '3x0': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 2,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:2'
         },
 
         '0x': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 3,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:3'
         },
 
         '09': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 2,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:2'
         },
 
         '018': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 3,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:3'
         },
 
         '01a': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 3,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:3'
         },
 
         '3in[]': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 2,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:2'
         },
 
         '0x3in[]': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 4,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:4'
         },
 
         '"Hello\nWorld"': {
             index: 7,
             lineNumber: 1,
-            column: 8,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 8,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:8'
         },
 
         'x\\': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 3,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:3'
         },
 
         'x\\u005c': {
             index: 7,
             lineNumber: 1,
-            column: 8,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 8,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:8'
         },
 
         'x\\u002a': {
             index: 7,
             lineNumber: 1,
-            column: 8,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 8,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:8'
         },
 
         'var x = /(s/g': {
             index: 13,
             lineNumber: 1,
-            column: 14,
-            message: 'Error: Line 1: Invalid regular expression'
+            columnNumber: 14,
+            message: 'Error: Invalid regular expression at <anonymous>:1:14'
         },
 
         'a\\u': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 4,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:4'
         },
 
         '\\ua': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 4,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:4'
         },
 
         '/': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Invalid regular expression: missing /'
+            columnNumber: 2,
+            message: 'Error: Invalid regular expression: missing / at <anonymous>:1:2'
         },
 
         '/test': {
             index: 5,
             lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Invalid regular expression: missing /'
+            columnNumber: 6,
+            message: 'Error: Invalid regular expression: missing / at <anonymous>:1:6'
         },
 
         '/test\n/': {
             index: 6,
             lineNumber: 1,
-            column: 7,
-            message: 'Error: Line 1: Invalid regular expression: missing /'
+            columnNumber: 7,
+            message: 'Error: Invalid regular expression: missing / at <anonymous>:1:7'
         },
 
         'var x = /[a-z]/\\ux': {
             index: 17,
             lineNumber: 1,
-            column: 18,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 18,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:18'
         },
 
         'var x = /[a-z\n]/\\ux': {
             index: 14,
             lineNumber: 1,
-            column: 15,
-            message: 'Error: Line 1: Invalid regular expression: missing /'
+            columnNumber: 15,
+            message: 'Error: Invalid regular expression: missing / at <anonymous>:1:15'
         },
 
         'var x = /[a-z]/\\\\ux': {
             index: 16,
             lineNumber: 1,
-            column: 17,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 17,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:17'
         },
 
         'var x = /[P QR]/\\\\u0067': {
             index: 17,
             lineNumber: 1,
-            column: 18,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 18,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:18'
         },
 
         '3 = 4': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Invalid left-hand side in assignment'
+            columnNumber: 2,
+            message: 'Error: Invalid left-hand side in assignment at <anonymous>:1:2'
         },
 
         'func() = 4': {
             index: 6,
             lineNumber: 1,
-            column: 7,
-            message: 'Error: Line 1: Invalid left-hand side in assignment'
+            columnNumber: 7,
+            message: 'Error: Invalid left-hand side in assignment at <anonymous>:1:7'
         },
 
         '(1 + 1) = 10': {
             index: 7,
             lineNumber: 1,
-            column: 8,
-            message: 'Error: Line 1: Invalid left-hand side in assignment'
+            columnNumber: 8,
+            message: 'Error: Invalid left-hand side in assignment at <anonymous>:1:8'
         },
 
         '"\\u{110000}"': {
             index: 11,
             lineNumber: 1,
-            column: 12,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 12,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:12'
         },
 
         '"\\u{}"': {
             index: 4,
             lineNumber: 1,
-            column: 5,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 5,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:5'
         },
 
         '"\\u{FFFF"': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 10,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:10'
         },
 
         '"\\u{FFZ}"': {
             index: 7,
             lineNumber: 1,
-            column: 8,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 8,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:8'
         },
 
         '1++': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Invalid left-hand side in assignment'
+            columnNumber: 2,
+            message: 'Error: Invalid left-hand side in assignment at <anonymous>:1:2'
         },
 
         '1--': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Invalid left-hand side in assignment'
+            columnNumber: 2,
+            message: 'Error: Invalid left-hand side in assignment at <anonymous>:1:2'
         },
 
         '++1': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Invalid left-hand side in assignment'
+            columnNumber: 4,
+            message: 'Error: Invalid left-hand side in assignment at <anonymous>:1:4'
         },
 
         '--1': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Invalid left-hand side in assignment'
+            columnNumber: 4,
+            message: 'Error: Invalid left-hand side in assignment at <anonymous>:1:4'
         },
 
         'for((1 + 1) in list) process(x);': {
             index: 11,
             lineNumber: 1,
-            column: 12,
-            message: 'Error: Line 1: Invalid left-hand side in for-in'
+            columnNumber: 12,
+            message: 'Error: Invalid left-hand side in for-in at <anonymous>:1:12'
         },
 
         '[': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 2,
+            message: 'Error: Unexpected end of input at <anonymous>:1:2'
         },
 
         '[,': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 3,
+            message: 'Error: Unexpected end of input at <anonymous>:1:3'
         },
 
         '1 + {': {
             index: 5,
             lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 6,
+            message: 'Error: Unexpected end of input at <anonymous>:1:6'
         },
 
         '1 + { t:t ': {
             index: 10,
             lineNumber: 1,
-            column: 11,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 11,
+            message: 'Error: Unexpected end of input at <anonymous>:1:11'
         },
 
         '1 + { t:t,': {
             index: 10,
             lineNumber: 1,
-            column: 11,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 11,
+            message: 'Error: Unexpected end of input at <anonymous>:1:11'
         },
 
         'var x = /\n/': {
             index: 10,
             lineNumber: 1,
-            column: 11,
-            message: 'Error: Line 1: Invalid regular expression: missing /'
+            columnNumber: 11,
+            message: 'Error: Invalid regular expression: missing / at <anonymous>:1:11'
         },
 
         'var x = "\n': {
             index: 10,
             lineNumber: 1,
-            column: 11,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 11,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:11'
         },
 
         'var if = 42': {
             index: 4,
             lineNumber: 1,
-            column: 5,
-            message: 'Error: Line 1: Unexpected token if'
+            columnNumber: 5,
+            message: 'Error: Unexpected token if at <anonymous>:1:5'
         },
 
         'i #= 42': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 3,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:3'
         },
 
         'i + 2 = 42': {
             index: 5,
             lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Invalid left-hand side in assignment'
+            columnNumber: 6,
+            message: 'Error: Invalid left-hand side in assignment at <anonymous>:1:6'
         },
 
         '+i = 42': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Invalid left-hand side in assignment'
+            columnNumber: 3,
+            message: 'Error: Invalid left-hand side in assignment at <anonymous>:1:3'
         },
 
         '1 + (': {
             index: 5,
             lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 6,
+            message: 'Error: Unexpected end of input at <anonymous>:1:6'
         },
 
         '\n\n\n{': {
             index: 4,
             lineNumber: 4,
-            column: 2,
-            message: 'Error: Line 4: Unexpected end of input'
+            columnNumber: 2,
+            message: 'Error: Unexpected end of input at <anonymous>:4:2'
         },
 
         '\n/* Some multiline\ncomment */\n)': {
             index: 30,
             lineNumber: 4,
-            column: 1,
-            message: 'Error: Line 4: Unexpected token )'
+            columnNumber: 1,
+            message: 'Error: Unexpected token ) at <anonymous>:4:1'
         },
 
         '{ set 1 }': {
             index: 6,
             lineNumber: 1,
-            column: 7,
-            message: 'Error: Line 1: Unexpected number'
+            columnNumber: 7,
+            message: 'Error: Unexpected number at <anonymous>:1:7'
         },
 
         '{ get 2 }': {
             index: 6,
             lineNumber: 1,
-            column: 7,
-            message: 'Error: Line 1: Unexpected number'
+            columnNumber: 7,
+            message: 'Error: Unexpected number at <anonymous>:1:7'
         },
 
         '({ set: s(if) { } })': {
             index: 10,
             lineNumber: 1,
-            column: 11,
-            message: 'Error: Line 1: Unexpected token if'
+            columnNumber: 11,
+            message: 'Error: Unexpected token if at <anonymous>:1:11'
         },
 
         '({ set s(.) { } })': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected token .'
+            columnNumber: 10,
+            message: 'Error: Unexpected token . at <anonymous>:1:10'
         },
 
         '({ set s() { } })': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected token )'
+            columnNumber: 10,
+            message: 'Error: Unexpected token ) at <anonymous>:1:10'
         },
 
         '({ set: s() { } })': {
             index: 12,
             lineNumber: 1,
-            column: 13,
-            message: 'Error: Line 1: Unexpected token {'
+            columnNumber: 13,
+            message: 'Error: Unexpected token { at <anonymous>:1:13'
         },
 
         '({ set: s(a, b) { } })': {
             index: 16,
             lineNumber: 1,
-            column: 17,
-            message: 'Error: Line 1: Unexpected token {'
+            columnNumber: 17,
+            message: 'Error: Unexpected token { at <anonymous>:1:17'
         },
 
         '({ get: g(d) { } })': {
             index: 13,
             lineNumber: 1,
-            column: 14,
-            message: 'Error: Line 1: Unexpected token {'
+            columnNumber: 14,
+            message: 'Error: Unexpected token { at <anonymous>:1:14'
         },
 
         '({ get i() { }, i: 42 })': {
             index: 21,
             lineNumber: 1,
-            column: 22,
-            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+            columnNumber: 22,
+            message: 'Error: Object literal may not have data and accessor property with the same name at <anonymous>:1:22'
         },
 
         '({ i: 42, get i() { } })': {
             index: 21,
             lineNumber: 1,
-            column: 22,
-            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+            columnNumber: 22,
+            message: 'Error: Object literal may not have data and accessor property with the same name at <anonymous>:1:22'
         },
 
         '({ set i(x) { }, i: 42 })': {
             index: 22,
             lineNumber: 1,
-            column: 23,
-            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+            columnNumber: 23,
+            message: 'Error: Object literal may not have data and accessor property with the same name at <anonymous>:1:23'
         },
 
         '({ i: 42, set i(x) { } })': {
             index: 22,
             lineNumber: 1,
-            column: 23,
-            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+            columnNumber: 23,
+            message: 'Error: Object literal may not have data and accessor property with the same name at <anonymous>:1:23'
         },
 
         '({ get i() { }, get i() { } })': {
             index: 27,
             lineNumber: 1,
-            column: 28,
-            message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
+            columnNumber: 28,
+            message: 'Error: Object literal may not have multiple get/set accessors with the same name at <anonymous>:1:28'
         },
 
         '({ set i(x) { }, set i(x) { } })': {
             index: 29,
             lineNumber: 1,
-            column: 30,
-            message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
+            columnNumber: 30,
+            message: 'Error: Object literal may not have multiple get/set accessors with the same name at <anonymous>:1:30'
         },
 
         '((a)) => 42': {
             index: 6,
             lineNumber: 1,
-            column: 7,
-            message: 'Error: Line 1: Unexpected token =>'
+            columnNumber: 7,
+            message: 'Error: Unexpected token => at <anonymous>:1:7'
         },
 
         '(a, (b)) => 42': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected token =>'
+            columnNumber: 10,
+            message: 'Error: Unexpected token => at <anonymous>:1:10'
         },
 
         '"use strict"; (eval = 10) => 42': {
             index: 15,
             lineNumber: 1,
-            column: 16,
-            message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
+            columnNumber: 16,
+            message: 'Error: Assignment to eval or arguments is not allowed in strict mode at <anonymous>:1:16'
         },
 
         // strict mode, using eval when IsSimpleParameterList is true
         '"use strict"; eval => 42': {
             index: 24,
             lineNumber: 1,
-            column: 25,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 25,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:25'
         },
 
         // strict mode, using arguments when IsSimpleParameterList is true
         '"use strict"; arguments => 42': {
             index: 29,
             lineNumber: 1,
-            column: 30,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 30,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:30'
         },
 
         // strict mode, using eval when IsSimpleParameterList is true
         '"use strict"; (eval, a) => 42': {
             index: 29,
             lineNumber: 1,
-            column: 30,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 30,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:30'
         },
 
         // strict mode, using arguments when IsSimpleParameterList is true
         '"use strict"; (arguments, a) => 42': {
             index: 34,
             lineNumber: 1,
-            column: 35,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 35,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:35'
         },
 
         '(a, a) => 42': {
             index: 6,
             lineNumber: 1,
-            column: 7,
-            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+            columnNumber: 7,
+            message: 'Error: Strict mode function may not have duplicate parameter names at <anonymous>:1:7'
         },
 
         '"use strict"; (a, a) => 42': {
             index: 20,
             lineNumber: 1,
-            column: 21,
-            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+            columnNumber: 21,
+            message: 'Error: Strict mode function may not have duplicate parameter names at <anonymous>:1:21'
         },
 
         '"use strict"; (a) => 00': {
             index: 21,
             lineNumber: 1,
-            column: 22,
-            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            columnNumber: 22,
+            message: 'Error: Octal literals are not allowed in strict mode. at <anonymous>:1:22'
         },
 
         '() <= 42': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Unexpected token <='
+            columnNumber: 4,
+            message: 'Error: Unexpected token <= at <anonymous>:1:4'
         },
 
         '() ? 42': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Unexpected token ?'
+            columnNumber: 4,
+            message: 'Error: Unexpected token ? at <anonymous>:1:4'
         },
 
         '() + 42': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Unexpected token +'
+            columnNumber: 4,
+            message: 'Error: Unexpected token + at <anonymous>:1:4'
         },
 
         '(10) => 00': {
             index: 5,
             lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Unexpected token =>'
+            columnNumber: 6,
+            message: 'Error: Unexpected token => at <anonymous>:1:6'
         },
 
         '(10, 20) => 00': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected token =>'
+            columnNumber: 10,
+            message: 'Error: Unexpected token => at <anonymous>:1:10'
         },
 
         '"use strict"; (eval) => 42': {
             index: 26,
             lineNumber: 1,
-            column: 27,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 27,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:27'
         },
 
         '(eval) => { "use strict"; 42 }': {
             index: 30,
             lineNumber: 1,
-            column: 31,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 31,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:31'
         },
 
         'function t(if) { }': {
             index: 11,
             lineNumber: 1,
-            column: 12,
-            message: 'Error: Line 1: Unexpected token if'
+            columnNumber: 12,
+            message: 'Error: Unexpected token if at <anonymous>:1:12'
         },
 
         'function t(true) { }': {
             index: 11,
             lineNumber: 1,
-            column: 12,
-            message: 'Error: Line 1: Unexpected token true'
+            columnNumber: 12,
+            message: 'Error: Unexpected token true at <anonymous>:1:12'
         },
 
         'function t(false) { }': {
             index: 11,
             lineNumber: 1,
-            column: 12,
-            message: 'Error: Line 1: Unexpected token false'
+            columnNumber: 12,
+            message: 'Error: Unexpected token false at <anonymous>:1:12'
         },
 
         'function t(null) { }': {
             index: 11,
             lineNumber: 1,
-            column: 12,
-            message: 'Error: Line 1: Unexpected token null'
+            columnNumber: 12,
+            message: 'Error: Unexpected token null at <anonymous>:1:12'
         },
 
         'function null() { }': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected token null'
+            columnNumber: 10,
+            message: 'Error: Unexpected token null at <anonymous>:1:10'
         },
 
         'function true() { }': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected token true'
+            columnNumber: 10,
+            message: 'Error: Unexpected token true at <anonymous>:1:10'
         },
 
         'function false() { }': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected token false'
+            columnNumber: 10,
+            message: 'Error: Unexpected token false at <anonymous>:1:10'
         },
 
         'function if() { }': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected token if'
+            columnNumber: 10,
+            message: 'Error: Unexpected token if at <anonymous>:1:10'
         },
 
         'a b;': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected identifier'
+            columnNumber: 3,
+            message: 'Error: Unexpected identifier at <anonymous>:1:3'
         },
 
         'if.a;': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected token .'
+            columnNumber: 3,
+            message: 'Error: Unexpected token . at <anonymous>:1:3'
         },
 
         'a if;': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected token if'
+            columnNumber: 3,
+            message: 'Error: Unexpected token if at <anonymous>:1:3'
         },
 
         'a class;': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected reserved word'
+            columnNumber: 3,
+            message: 'Error: Unexpected reserved word at <anonymous>:1:3'
         },
 
         'break\n': {
             index: 5,
             lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Illegal break statement'
+            columnNumber: 6,
+            message: 'Error: Illegal break statement at <anonymous>:1:6'
         },
 
         'break 1;': {
             index: 6,
             lineNumber: 1,
-            column: 7,
-            message: 'Error: Line 1: Unexpected number'
+            columnNumber: 7,
+            message: 'Error: Unexpected number at <anonymous>:1:7'
         },
 
         'continue\n': {
             index: 8,
             lineNumber: 1,
-            column: 9,
-            message: 'Error: Line 1: Illegal continue statement'
+            columnNumber: 9,
+            message: 'Error: Illegal continue statement at <anonymous>:1:9'
         },
 
         'continue 2;': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected number'
+            columnNumber: 10,
+            message: 'Error: Unexpected number at <anonymous>:1:10'
         },
 
         'throw': {
             index: 5,
             lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 6,
+            message: 'Error: Unexpected end of input at <anonymous>:1:6'
         },
 
         'throw;': {
             index: 5,
             lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Unexpected token ;'
+            columnNumber: 6,
+            message: 'Error: Unexpected token ; at <anonymous>:1:6'
         },
 
         'throw\n': {
             index: 5,
             lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Illegal newline after throw'
+            columnNumber: 6,
+            message: 'Error: Illegal newline after throw at <anonymous>:1:6'
         },
 
         'for (var i, i2 in {});': {
             index: 15,
             lineNumber: 1,
-            column: 16,
-            message: 'Error: Line 1: Unexpected token in'
+            columnNumber: 16,
+            message: 'Error: Unexpected token in at <anonymous>:1:16'
         },
 
         'for ((i in {}));': {
             index: 14,
             lineNumber: 1,
-            column: 15,
-            message: 'Error: Line 1: Unexpected token )'
+            columnNumber: 15,
+            message: 'Error: Unexpected token ) at <anonymous>:1:15'
         },
 
         'for (i + 1 in {});': {
             index: 10,
             lineNumber: 1,
-            column: 11,
-            message: 'Error: Line 1: Invalid left-hand side in for-in'
+            columnNumber: 11,
+            message: 'Error: Invalid left-hand side in for-in at <anonymous>:1:11'
         },
 
         'for (+i in {});': {
             index: 7,
             lineNumber: 1,
-            column: 8,
-            message: 'Error: Line 1: Invalid left-hand side in for-in'
+            columnNumber: 8,
+            message: 'Error: Invalid left-hand side in for-in at <anonymous>:1:8'
         },
 
         'if(false)': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 10,
+            message: 'Error: Unexpected end of input at <anonymous>:1:10'
         },
 
         'if(false) doThis(); else': {
             index: 24,
             lineNumber: 1,
-            column: 25,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 25,
+            message: 'Error: Unexpected end of input at <anonymous>:1:25'
         },
 
         'do': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 3,
+            message: 'Error: Unexpected end of input at <anonymous>:1:3'
         },
 
         'while(false)': {
             index: 12,
             lineNumber: 1,
-            column: 13,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 13,
+            message: 'Error: Unexpected end of input at <anonymous>:1:13'
         },
 
         'for(;;)': {
             index: 7,
             lineNumber: 1,
-            column: 8,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 8,
+            message: 'Error: Unexpected end of input at <anonymous>:1:8'
         },
 
         'with(x)': {
             index: 7,
             lineNumber: 1,
-            column: 8,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 8,
+            message: 'Error: Unexpected end of input at <anonymous>:1:8'
         },
 
         'try { }': {
             index: 7,
             lineNumber: 1,
-            column: 8,
-            message: 'Error: Line 1: Missing catch or finally after try'
+            columnNumber: 8,
+            message: 'Error: Missing catch or finally after try at <anonymous>:1:8'
         },
 
         'try {} catch (42) {} ': {
             index: 14,
             lineNumber: 1,
-            column: 15,
-            message: 'Error: Line 1: Unexpected number'
+            columnNumber: 15,
+            message: 'Error: Unexpected number at <anonymous>:1:15'
         },
 
         'try {} catch (answer()) {} ': {
             index: 20,
             lineNumber: 1,
-            column: 21,
-            message: 'Error: Line 1: Unexpected token ('
+            columnNumber: 21,
+            message: 'Error: Unexpected token ( at <anonymous>:1:21'
         },
 
         'try {} catch (-x) {} ': {
             index: 14,
             lineNumber: 1,
-            column: 15,
-            message: 'Error: Line 1: Unexpected token -'
+            columnNumber: 15,
+            message: 'Error: Unexpected token - at <anonymous>:1:15'
         },
 
 
         '\u203F = 10': {
             index: 0,
             lineNumber: 1,
-            column: 1,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 1,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:1'
         },
 
         'const x = 12, y;': {
             index: 15,
             lineNumber: 1,
-            column: 16,
-            message: 'Error: Line 1: Unexpected token ;'
+            columnNumber: 16,
+            message: 'Error: Unexpected token ; at <anonymous>:1:16'
         },
 
         'const x, y = 12;': {
             index: 7,
             lineNumber: 1,
-            column: 8,
-            message: 'Error: Line 1: Unexpected token ,'
+            columnNumber: 8,
+            message: 'Error: Unexpected token , at <anonymous>:1:8'
         },
 
         'const x;': {
             index: 7,
             lineNumber: 1,
-            column: 8,
-            message: 'Error: Line 1: Unexpected token ;'
+            columnNumber: 8,
+            message: 'Error: Unexpected token ; at <anonymous>:1:8'
         },
 
         'if(true) let a = 1;': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected token let'
+            columnNumber: 10,
+            message: 'Error: Unexpected token let at <anonymous>:1:10'
         },
 
         'if(true) const a = 1;': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected token const'
+            columnNumber: 10,
+            message: 'Error: Unexpected token const at <anonymous>:1:10'
         },
 
         'switch (c) { default: default: }': {
             index: 30,
             lineNumber: 1,
-            column: 31,
-            message: 'Error: Line 1: More than one default clause in switch statement'
+            columnNumber: 31,
+            message: 'Error: More than one default clause in switch statement at <anonymous>:1:31'
         },
 
         'new X()."s"': {
             index: 8,
             lineNumber: 1,
-            column: 9,
-            message: 'Error: Line 1: Unexpected string'
+            columnNumber: 9,
+            message: 'Error: Unexpected string at <anonymous>:1:9'
         },
 
         '/*': {
             index: 2,
             lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 3,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:3'
         },
 
         '/*\n\n\n': {
             index: 5,
             lineNumber: 4,
-            column: 1,
-            message: 'Error: Line 4: Unexpected token ILLEGAL'
+            columnNumber: 1,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:4:1'
         },
 
         '/**': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 4,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:4'
         },
 
         '/*\n\n*': {
             index: 5,
             lineNumber: 3,
-            column: 2,
-            message: 'Error: Line 3: Unexpected token ILLEGAL'
+            columnNumber: 2,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:3:2'
         },
 
         '/*hello': {
             index: 7,
             lineNumber: 1,
-            column: 8,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 8,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:8'
         },
 
         '/*hello  *': {
             index: 10,
             lineNumber: 1,
-            column: 11,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 11,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:11'
         },
 
         '\n]': {
             index: 1,
             lineNumber: 2,
-            column: 1,
-            message: 'Error: Line 2: Unexpected token ]'
+            columnNumber: 1,
+            message: 'Error: Unexpected token ] at <anonymous>:2:1'
         },
 
         '\r]': {
             index: 1,
             lineNumber: 2,
-            column: 1,
-            message: 'Error: Line 2: Unexpected token ]'
+            columnNumber: 1,
+            message: 'Error: Unexpected token ] at <anonymous>:2:1'
         },
 
         '\r\n]': {
             index: 2,
             lineNumber: 2,
-            column: 1,
-            message: 'Error: Line 2: Unexpected token ]'
+            columnNumber: 1,
+            message: 'Error: Unexpected token ] at <anonymous>:2:1'
         },
 
         '\n\r]': {
             index: 2,
             lineNumber: 3,
-            column: 1,
-            message: 'Error: Line 3: Unexpected token ]'
+            columnNumber: 1,
+            message: 'Error: Unexpected token ] at <anonymous>:3:1'
         },
 
         '//\r\n]': {
             index: 4,
             lineNumber: 2,
-            column: 1,
-            message: 'Error: Line 2: Unexpected token ]'
+            columnNumber: 1,
+            message: 'Error: Unexpected token ] at <anonymous>:2:1'
         },
 
         '//\n\r]': {
             index: 4,
             lineNumber: 3,
-            column: 1,
-            message: 'Error: Line 3: Unexpected token ]'
+            columnNumber: 1,
+            message: 'Error: Unexpected token ] at <anonymous>:3:1'
         },
 
         '/a\\\n/': {
             index: 4,
             lineNumber: 1,
-            column: 5,
-            message: 'Error: Line 1: Invalid regular expression: missing /'
+            columnNumber: 5,
+            message: 'Error: Invalid regular expression: missing / at <anonymous>:1:5'
         },
 
         '//\r \n]': {
             index: 5,
             lineNumber: 3,
-            column: 1,
-            message: 'Error: Line 3: Unexpected token ]'
+            columnNumber: 1,
+            message: 'Error: Unexpected token ] at <anonymous>:3:1'
         },
 
         '/*\r\n*/]': {
             index: 6,
             lineNumber: 2,
-            column: 3,
-            message: 'Error: Line 2: Unexpected token ]'
+            columnNumber: 3,
+            message: 'Error: Unexpected token ] at <anonymous>:2:3'
         },
 
         '/*\n\r*/]': {
             index: 6,
             lineNumber: 3,
-            column: 3,
-            message: 'Error: Line 3: Unexpected token ]'
+            columnNumber: 3,
+            message: 'Error: Unexpected token ] at <anonymous>:3:3'
         },
 
         '/*\r \n*/]': {
             index: 7,
             lineNumber: 3,
-            column: 3,
-            message: 'Error: Line 3: Unexpected token ]'
+            columnNumber: 3,
+            message: 'Error: Unexpected token ] at <anonymous>:3:3'
         },
 
         '\\\\': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 2,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:2'
         },
 
         '\\u005c': {
             index: 6,
             lineNumber: 1,
-            column: 7,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 7,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:7'
         },
 
 
         '\\x': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 2,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:2'
         },
 
         '\\u0000': {
             index: 6,
             lineNumber: 1,
-            column: 7,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 7,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:7'
         },
 
         '\u200C = []': {
             index: 0,
             lineNumber: 1,
-            column: 1,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 1,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:1'
         },
 
         '\u200D = []': {
             index: 0,
             lineNumber: 1,
-            column: 1,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 1,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:1'
         },
 
         '"\\': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 4,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:4'
         },
 
         '"\\u': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
+            columnNumber: 4,
+            message: 'Error: Unexpected token ILLEGAL at <anonymous>:1:4'
         },
 
         'try { } catch() {}': {
             index: 14,
             lineNumber: 1,
-            column: 15,
-            message: 'Error: Line 1: Unexpected token )'
+            columnNumber: 15,
+            message: 'Error: Unexpected token ) at <anonymous>:1:15'
         },
 
         'return': {
             index: 6,
             lineNumber: 1,
-            column: 7,
-            message: 'Error: Line 1: Illegal return statement'
+            columnNumber: 7,
+            message: 'Error: Illegal return statement at <anonymous>:1:7'
         },
 
         'break': {
             index: 5,
             lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Illegal break statement'
+            columnNumber: 6,
+            message: 'Error: Illegal break statement at <anonymous>:1:6'
         },
 
         'continue': {
             index: 8,
             lineNumber: 1,
-            column: 9,
-            message: 'Error: Line 1: Illegal continue statement'
+            columnNumber: 9,
+            message: 'Error: Illegal continue statement at <anonymous>:1:9'
         },
 
         'switch (x) { default: continue; }': {
             index: 31,
             lineNumber: 1,
-            column: 32,
-            message: 'Error: Line 1: Illegal continue statement'
+            columnNumber: 32,
+            message: 'Error: Illegal continue statement at <anonymous>:1:32'
         },
 
         'do { x } *': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Unexpected token *'
+            columnNumber: 10,
+            message: 'Error: Unexpected token * at <anonymous>:1:10'
         },
 
         'while (true) { break x; }': {
             index: 22,
             lineNumber: 1,
-            column: 23,
-            message: 'Error: Line 1: Undefined label \'x\''
+            columnNumber: 23,
+            message: 'Error: Undefined label \'x\' at <anonymous>:1:23'
         },
 
         'while (true) { continue x; }': {
             index: 25,
             lineNumber: 1,
-            column: 26,
-            message: 'Error: Line 1: Undefined label \'x\''
+            columnNumber: 26,
+            message: 'Error: Undefined label \'x\' at <anonymous>:1:26'
         },
 
         'x: while (true) { (function () { break x; }); }': {
             index: 40,
             lineNumber: 1,
-            column: 41,
-            message: 'Error: Line 1: Undefined label \'x\''
+            columnNumber: 41,
+            message: 'Error: Undefined label \'x\' at <anonymous>:1:41'
         },
 
         'x: while (true) { (function () { continue x; }); }': {
             index: 43,
             lineNumber: 1,
-            column: 44,
-            message: 'Error: Line 1: Undefined label \'x\''
+            columnNumber: 44,
+            message: 'Error: Undefined label \'x\' at <anonymous>:1:44'
         },
 
         'x: while (true) { (function () { break; }); }': {
             index: 39,
             lineNumber: 1,
-            column: 40,
-            message: 'Error: Line 1: Illegal break statement'
+            columnNumber: 40,
+            message: 'Error: Illegal break statement at <anonymous>:1:40'
         },
 
         'x: while (true) { (function () { continue; }); }': {
             index: 42,
             lineNumber: 1,
-            column: 43,
-            message: 'Error: Line 1: Illegal continue statement'
+            columnNumber: 43,
+            message: 'Error: Illegal continue statement at <anonymous>:1:43'
         },
 
         'x: while (true) { x: while (true) { } }': {
             index: 20,
             lineNumber: 1,
-            column: 21,
-            message: 'Error: Line 1: Label \'x\' has already been declared'
+            columnNumber: 21,
+            message: 'Error: Label \'x\' has already been declared at <anonymous>:1:21'
         },
 
         '(function () { \'use strict\'; delete i; }())': {
             index: 37,
             lineNumber: 1,
-            column: 38,
-            message: 'Error: Line 1: Delete of an unqualified identifier in strict mode.'
+            columnNumber: 38,
+            message: 'Error: Delete of an unqualified identifier in strict mode. at <anonymous>:1:38'
         },
 
         '(function () { \'use strict\'; with (i); }())': {
             index: 29,
             lineNumber: 1,
-            column: 30,
-            message: 'Error: Line 1: Strict mode code may not include a with statement'
+            columnNumber: 30,
+            message: 'Error: Strict mode code may not include a with statement at <anonymous>:1:30'
         },
 
         'function hello() {\'use strict\'; ({ i: 42, i: 42 }) }': {
             index: 47,
             lineNumber: 1,
-            column: 48,
-            message: 'Error: Line 1: Duplicate data property in object literal not allowed in strict mode'
+            columnNumber: 48,
+            message: 'Error: Duplicate data property in object literal not allowed in strict mode at <anonymous>:1:48'
         },
 
         'function hello() {\'use strict\'; ({ hasOwnProperty: 42, hasOwnProperty: 42 }) }': {
             index: 73,
             lineNumber: 1,
-            column: 74,
-            message: 'Error: Line 1: Duplicate data property in object literal not allowed in strict mode'
+            columnNumber: 74,
+            message: 'Error: Duplicate data property in object literal not allowed in strict mode at <anonymous>:1:74'
         },
 
         'function hello() {\'use strict\'; var eval = 10; }': {
             index: 40,
             lineNumber: 1,
-            column: 41,
-            message: 'Error: Line 1: Variable name may not be eval or arguments in strict mode'
+            columnNumber: 41,
+            message: 'Error: Variable name may not be eval or arguments in strict mode at <anonymous>:1:41'
         },
 
         'function hello() {\'use strict\'; var arguments = 10; }': {
             index: 45,
             lineNumber: 1,
-            column: 46,
-            message: 'Error: Line 1: Variable name may not be eval or arguments in strict mode'
+            columnNumber: 46,
+            message: 'Error: Variable name may not be eval or arguments in strict mode at <anonymous>:1:46'
         },
 
         'function hello() {\'use strict\'; try { } catch (eval) { } }': {
             index: 51,
             lineNumber: 1,
-            column: 52,
-            message: 'Error: Line 1: Catch variable may not be eval or arguments in strict mode'
+            columnNumber: 52,
+            message: 'Error: Catch variable may not be eval or arguments in strict mode at <anonymous>:1:52'
         },
 
         'function hello() {\'use strict\'; try { } catch (arguments) { } }': {
             index: 56,
             lineNumber: 1,
-            column: 57,
-            message: 'Error: Line 1: Catch variable may not be eval or arguments in strict mode'
+            columnNumber: 57,
+            message: 'Error: Catch variable may not be eval or arguments in strict mode at <anonymous>:1:57'
         },
 
         'function hello() {\'use strict\'; eval = 10; }': {
             index: 32,
             lineNumber: 1,
-            column: 33,
-            message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
+            columnNumber: 33,
+            message: 'Error: Assignment to eval or arguments is not allowed in strict mode at <anonymous>:1:33'
         },
 
         'function hello() {\'use strict\'; arguments = 10; }': {
             index: 32,
             lineNumber: 1,
-            column: 33,
-            message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
+            columnNumber: 33,
+            message: 'Error: Assignment to eval or arguments is not allowed in strict mode at <anonymous>:1:33'
         },
 
         'function hello() {\'use strict\'; ++eval; }': {
             index: 38,
             lineNumber: 1,
-            column: 39,
-            message: 'Error: Line 1: Prefix increment/decrement may not have eval or arguments operand in strict mode'
+            columnNumber: 39,
+            message: 'Error: Prefix increment/decrement may not have eval or arguments operand in strict mode at <anonymous>:1:39'
         },
 
         'function hello() {\'use strict\'; --eval; }': {
             index: 38,
             lineNumber: 1,
-            column: 39,
-            message: 'Error: Line 1: Prefix increment/decrement may not have eval or arguments operand in strict mode'
+            columnNumber: 39,
+            message: 'Error: Prefix increment/decrement may not have eval or arguments operand in strict mode at <anonymous>:1:39'
         },
 
         'function hello() {\'use strict\'; ++arguments; }': {
             index: 43,
             lineNumber: 1,
-            column: 44,
-            message: 'Error: Line 1: Prefix increment/decrement may not have eval or arguments operand in strict mode'
+            columnNumber: 44,
+            message: 'Error: Prefix increment/decrement may not have eval or arguments operand in strict mode at <anonymous>:1:44'
         },
 
         'function hello() {\'use strict\'; --arguments; }': {
             index: 43,
             lineNumber: 1,
-            column: 44,
-            message: 'Error: Line 1: Prefix increment/decrement may not have eval or arguments operand in strict mode'
+            columnNumber: 44,
+            message: 'Error: Prefix increment/decrement may not have eval or arguments operand in strict mode at <anonymous>:1:44'
         },
 
         'function hello() {\'use strict\'; eval++; }': {
             index: 36,
             lineNumber: 1,
-            column: 37,
-            message: 'Error: Line 1: Postfix increment/decrement may not have eval or arguments operand in strict mode'
+            columnNumber: 37,
+            message: 'Error: Postfix increment/decrement may not have eval or arguments operand in strict mode at <anonymous>:1:37'
         },
 
         'function hello() {\'use strict\'; eval--; }': {
             index: 36,
             lineNumber: 1,
-            column: 37,
-            message: 'Error: Line 1: Postfix increment/decrement may not have eval or arguments operand in strict mode'
+            columnNumber: 37,
+            message: 'Error: Postfix increment/decrement may not have eval or arguments operand in strict mode at <anonymous>:1:37'
         },
 
         'function hello() {\'use strict\'; arguments++; }': {
             index: 41,
             lineNumber: 1,
-            column: 42,
-            message: 'Error: Line 1: Postfix increment/decrement may not have eval or arguments operand in strict mode'
+            columnNumber: 42,
+            message: 'Error: Postfix increment/decrement may not have eval or arguments operand in strict mode at <anonymous>:1:42'
         },
 
         'function hello() {\'use strict\'; arguments--; }': {
             index: 41,
             lineNumber: 1,
-            column: 42,
-            message: 'Error: Line 1: Postfix increment/decrement may not have eval or arguments operand in strict mode'
+            columnNumber: 42,
+            message: 'Error: Postfix increment/decrement may not have eval or arguments operand in strict mode at <anonymous>:1:42'
         },
 
         'function hello() {\'use strict\'; function eval() { } }': {
             index: 41,
             lineNumber: 1,
-            column: 42,
-            message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            columnNumber: 42,
+            message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:42'
         },
 
         'function hello() {\'use strict\'; function arguments() { } }': {
             index: 41,
             lineNumber: 1,
-            column: 42,
-            message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            columnNumber: 42,
+            message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:42'
         },
 
         'function eval() {\'use strict\'; }': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            columnNumber: 10,
+            message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:10'
         },
 
         'function arguments() {\'use strict\'; }': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            columnNumber: 10,
+            message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:10'
         },
 
         'function hello() {\'use strict\'; (function eval() { }()) }': {
             index: 42,
             lineNumber: 1,
-            column: 43,
-            message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            columnNumber: 43,
+            message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:43'
         },
 
         'function hello() {\'use strict\'; (function arguments() { }()) }': {
             index: 42,
             lineNumber: 1,
-            column: 43,
-            message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            columnNumber: 43,
+            message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:43'
         },
 
         '(function eval() {\'use strict\'; })()': {
             index: 10,
             lineNumber: 1,
-            column: 11,
-            message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            columnNumber: 11,
+            message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:11'
         },
 
         '(function arguments() {\'use strict\'; })()': {
             index: 10,
             lineNumber: 1,
-            column: 11,
-            message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            columnNumber: 11,
+            message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:11'
         },
 
         'function hello() {\'use strict\'; ({ s: function eval() { } }); }': {
             index: 47,
             lineNumber: 1,
-            column: 48,
-            message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            columnNumber: 48,
+            message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:48'
         },
 
         '(function package() {\'use strict\'; })()': {
             index: 10,
             lineNumber: 1,
-            column: 11,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 11,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:11'
         },
 
         'function hello() {\'use strict\'; ({ i: 10, set s(eval) { } }); }': {
             index: 48,
             lineNumber: 1,
-            column: 49,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 49,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:49'
         },
 
         'function hello() {\'use strict\'; ({ set s(eval) { } }); }': {
             index: 41,
             lineNumber: 1,
-            column: 42,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 42,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:42'
         },
 
         'function hello() {\'use strict\'; ({ s: function s(eval) { } }); }': {
             index: 49,
             lineNumber: 1,
-            column: 50,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 50,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:50'
         },
 
         'function hello(eval) {\'use strict\';}': {
             index: 15,
             lineNumber: 1,
-            column: 16,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 16,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:16'
         },
 
         'function hello(arguments) {\'use strict\';}': {
             index: 15,
             lineNumber: 1,
-            column: 16,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 16,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:16'
         },
 
         'function hello() { \'use strict\'; function inner(eval) {} }': {
             index: 48,
             lineNumber: 1,
-            column: 49,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 49,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:49'
         },
 
         'function hello() { \'use strict\'; function inner(arguments) {} }': {
             index: 48,
             lineNumber: 1,
-            column: 49,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 49,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:49'
         },
 
         ' "\\1"; \'use strict\';': {
             index: 1,
             lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            columnNumber: 2,
+            message: 'Error: Octal literals are not allowed in strict mode. at <anonymous>:1:2'
         },
 
         'function hello() { \'use strict\'; "\\1"; }': {
             index: 33,
             lineNumber: 1,
-            column: 34,
-            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            columnNumber: 34,
+            message: 'Error: Octal literals are not allowed in strict mode. at <anonymous>:1:34'
         },
 
         'function hello() { \'use strict\'; 021; }': {
             index: 33,
             lineNumber: 1,
-            column: 34,
-            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            columnNumber: 34,
+            message: 'Error: Octal literals are not allowed in strict mode. at <anonymous>:1:34'
         },
 
         'function hello() { \'use strict\'; ({ "\\1": 42 }); }': {
             index: 36,
             lineNumber: 1,
-            column: 37,
-            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            columnNumber: 37,
+            message: 'Error: Octal literals are not allowed in strict mode. at <anonymous>:1:37'
         },
 
         'function hello() { \'use strict\'; ({ 021: 42 }); }': {
             index: 36,
             lineNumber: 1,
-            column: 37,
-            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            columnNumber: 37,
+            message: 'Error: Octal literals are not allowed in strict mode. at <anonymous>:1:37'
         },
 
         'function hello() { "octal directive\\1"; "use strict"; }': {
             index: 19,
             lineNumber: 1,
-            column: 20,
-            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            columnNumber: 20,
+            message: 'Error: Octal literals are not allowed in strict mode. at <anonymous>:1:20'
         },
 
         'function hello() { "octal directive\\1"; "octal directive\\2"; "use strict"; }': {
             index: 19,
             lineNumber: 1,
-            column: 20,
-            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            columnNumber: 20,
+            message: 'Error: Octal literals are not allowed in strict mode. at <anonymous>:1:20'
         },
 
         'function hello() { "use strict"; function inner() { "octal directive\\1"; } }': {
             index: 52,
             lineNumber: 1,
-            column: 53,
-            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            columnNumber: 53,
+            message: 'Error: Octal literals are not allowed in strict mode. at <anonymous>:1:53'
         },
 
         'function hello() { "use strict"; var implements; }': {
             index: 37,
             lineNumber: 1,
-            column: 38,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 38,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:38'
         },
 
         'function hello() { "use strict"; var interface; }': {
             index: 37,
             lineNumber: 1,
-            column: 38,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 38,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:38'
         },
 
         'function hello() { "use strict"; var package; }': {
             index: 37,
             lineNumber: 1,
-            column: 38,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 38,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:38'
         },
 
         'function hello() { "use strict"; var private; }': {
             index: 37,
             lineNumber: 1,
-            column: 38,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 38,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:38'
         },
 
         'function hello() { "use strict"; var protected; }': {
             index: 37,
             lineNumber: 1,
-            column: 38,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 38,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:38'
         },
 
         'function hello() { "use strict"; var public; }': {
             index: 37,
             lineNumber: 1,
-            column: 38,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 38,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:38'
         },
 
         'function hello() { "use strict"; var static; }': {
             index: 37,
             lineNumber: 1,
-            column: 38,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 38,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:38'
         },
 
         'function hello() { "use strict"; var yield; }': {
             index: 37,
             lineNumber: 1,
-            column: 38,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 38,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:38'
         },
 
         'function hello() { "use strict"; var let; }': {
             index: 37,
             lineNumber: 1,
-            column: 38,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 38,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:38'
         },
 
         'function hello(static) { "use strict"; }': {
             index: 15,
             lineNumber: 1,
-            column: 16,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 16,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:16'
         },
 
         'function static() { "use strict"; }': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 10,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:10'
         },
 
         'function eval(a) { "use strict"; }': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            columnNumber: 10,
+            message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:10'
         },
 
         'function arguments(a) { "use strict"; }': {
             index: 9,
             lineNumber: 1,
-            column: 10,
-            message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+            columnNumber: 10,
+            message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:10'
         },
 
         'var yield': {
             index: 4,
             lineNumber: 1,
-            column: 5,
-            message: 'Error: Line 1: Unexpected token yield'
+            columnNumber: 5,
+            message: 'Error: Unexpected token yield at <anonymous>:1:5'
         },
 
         'var let': {
             index: 4,
             lineNumber: 1,
-            column: 5,
-            message: 'Error: Line 1: Unexpected token let'
+            columnNumber: 5,
+            message: 'Error: Unexpected token let at <anonymous>:1:5'
         },
 
         '"use strict"; function static() { }': {
             index: 23,
             lineNumber: 1,
-            column: 24,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 24,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:24'
         },
 
         'function a(t, t) { "use strict"; }': {
             index: 14,
             lineNumber: 1,
-            column: 15,
-            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+            columnNumber: 15,
+            message: 'Error: Strict mode function may not have duplicate parameter names at <anonymous>:1:15'
         },
 
         'function a(eval) { "use strict"; }': {
             index: 11,
             lineNumber: 1,
-            column: 12,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 12,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:12'
         },
 
         'function a(package) { "use strict"; }': {
             index: 11,
             lineNumber: 1,
-            column: 12,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 12,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:12'
         },
 
         'function a() { "use strict"; function b(t, t) { }; }': {
             index: 43,
             lineNumber: 1,
-            column: 44,
-            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+            columnNumber: 44,
+            message: 'Error: Strict mode function may not have duplicate parameter names at <anonymous>:1:44'
         },
 
         '(function a(t, t) { "use strict"; })': {
             index: 15,
             lineNumber: 1,
-            column: 16,
-            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+            columnNumber: 16,
+            message: 'Error: Strict mode function may not have duplicate parameter names at <anonymous>:1:16'
         },
 
         'function a() { "use strict"; (function b(t, t) { }); }': {
             index: 44,
             lineNumber: 1,
-            column: 45,
-            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+            columnNumber: 45,
+            message: 'Error: Strict mode function may not have duplicate parameter names at <anonymous>:1:45'
         },
 
         '(function a(eval) { "use strict"; })': {
             index: 12,
             lineNumber: 1,
-            column: 13,
-            message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+            columnNumber: 13,
+            message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:13'
         },
 
         '(function a(package) { "use strict"; })': {
             index: 12,
             lineNumber: 1,
-            column: 13,
-            message: 'Error: Line 1: Use of future reserved word in strict mode'
+            columnNumber: 13,
+            message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:13'
         },
 
         '__proto__: __proto__: 42;': {
             index: 21,
             lineNumber: 1,
-            column: 22,
-            message: 'Error: Line 1: Label \'__proto__\' has already been declared'
+            columnNumber: 22,
+            message: 'Error: Label \'__proto__\' has already been declared at <anonymous>:1:22'
         },
 
         '"use strict"; function t(__proto__, __proto__) { }': {
             index: 36,
             lineNumber: 1,
-            column: 37,
-            message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+            columnNumber: 37,
+            message: 'Error: Strict mode function may not have duplicate parameter names at <anonymous>:1:37'
         },
 
         '"use strict"; x = { __proto__: 42, __proto__: 43 }': {
             index: 48,
             lineNumber: 1,
-            column: 49,
-            message: 'Error: Line 1: Duplicate data property in object literal not allowed in strict mode'
+            columnNumber: 49,
+            message: 'Error: Duplicate data property in object literal not allowed in strict mode at <anonymous>:1:49'
         },
 
         '"use strict"; x = { get __proto__() { }, __proto__: 43 }': {
             index: 54,
             lineNumber: 1,
-            column: 55,
-            message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+            columnNumber: 55,
+            message: 'Error: Object literal may not have data and accessor property with the same name at <anonymous>:1:55'
         },
 
         'var': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 4,
+            message: 'Error: Unexpected end of input at <anonymous>:1:4'
         },
 
         'let': {
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 4,
+            message: 'Error: Unexpected end of input at <anonymous>:1:4'
         },
 
         'const': {
             index: 5,
             lineNumber: 1,
-            column: 6,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 6,
+            message: 'Error: Unexpected end of input at <anonymous>:1:6'
         },
 
         '{ ;  ;  ': {
             index: 8,
             lineNumber: 1,
-            column: 9,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 9,
+            message: 'Error: Unexpected end of input at <anonymous>:1:9'
         },
 
         'function t() { ;  ;  ': {
             index: 21,
             lineNumber: 1,
-            column: 22,
-            message: 'Error: Line 1: Unexpected end of input'
+            columnNumber: 22,
+            message: 'Error: Unexpected end of input at <anonymous>:1:22'
         }
 
     },
@@ -23421,16 +23421,16 @@ var testFixture = {
             tokenize: true,
             index: 3,
             lineNumber: 1,
-            column: 4,
-            message: 'Error: Line 1: Invalid regular expression: missing /'
+            columnNumber: 4,
+            message: 'Error: Invalid regular expression: missing / at <anonymous>:1:4'
         },
 
         'foo[/42': {
             tokenize: true,
             index: 7,
             lineNumber: 1,
-            column: 8,
-            message: 'Error: Line 1: Invalid regular expression: missing /'
+            columnNumber: 8,
+            message: 'Error: Invalid regular expression: missing / at <anonymous>:1:8'
         }
 
     },
@@ -23743,13 +23743,13 @@ var testFixture = {
             errors: [{
                 index: 4,
                 lineNumber: 1,
-                column: 5,
-                message: "Error: Line 1: Unexpected token b"
+                columnNumber: 5,
+                message: "Error: Unexpected token b at <anonymous>:1:5"
             }, {
                 index: 6,
                 lineNumber: 1,
-                column: 7,
-                message: "Error: Line 1: Unexpected token c"
+                columnNumber: 7,
+                message: "Error: Unexpected token c at <anonymous>:1:7"
             }]
         },
         
@@ -23828,13 +23828,13 @@ var testFixture = {
             errors: [{
                 index: 4,
                 lineNumber: 1,
-                column: 5,
-                message: "Error: Line 1: Unexpected token function"
+                columnNumber: 5,
+                message: "Error: Unexpected token function at <anonymous>:1:5"
             }, {
                 index: 17,
                 lineNumber: 1,
-                column: 18,
-                message: "Error: Line 1: Unexpected token c"
+                columnNumber: 18,
+                message: "Error: Unexpected token c at <anonymous>:1:18"
             }]
         },
         
@@ -23899,13 +23899,13 @@ var testFixture = {
             errors: [{
                 index: 5,
                 lineNumber: 1,
-                column: 6,
-                message: "Error: Line 1: Unexpected token b"
+                columnNumber: 6,
+                message: "Error: Unexpected token b at <anonymous>:1:6"
             }, {
                 index: 7,
                 lineNumber: 1,
-                column: 8,
-                message: "Error: Line 1: Unexpected token c"
+                columnNumber: 8,
+                message: "Error: Unexpected token c at <anonymous>:1:8"
             }]
         },
         
@@ -24151,8 +24151,8 @@ var testFixture = {
             errors: [{
                 index: 28,
                 lineNumber: 1,
-                column: 29,
-                message: "Error: Line 1: Unexpected token two"
+                columnNumber: 29,
+                message: "Error: Unexpected token two at <anonymous>:1:29"
             }]
         },
         
@@ -24296,13 +24296,13 @@ var testFixture = {
             errors: [{
                 index: 28,
                 lineNumber: 1,
-                column: 29,
-                message: "Error: Line 1: Unexpected token two"
+                columnNumber: 29,
+                message: "Error: Unexpected token two at <anonymous>:1:29"
             }, {
                 index: 34,
                 lineNumber: 1,
-                column: 35,
-                message: "Error: Line 1: Unexpected token three"
+                columnNumber: 35,
+                message: "Error: Unexpected token three at <anonymous>:1:35"
             }]
         },
         
@@ -24474,13 +24474,13 @@ var testFixture = {
             errors: [{
                 index: 28,
                 lineNumber: 1,
-                column: 29,
-                message: "Error: Line 1: Unexpected token two"
+                columnNumber: 29,
+                message: "Error: Unexpected token two at <anonymous>:1:29"
             }, {
                 index: 44,
                 lineNumber: 1,
-                column: 45,
-                message: "Error: Line 1: Unexpected token four"
+                columnNumber: 45,
+                message: "Error: Unexpected token four at <anonymous>:1:45"
             }]
         },
         
@@ -24704,18 +24704,18 @@ var testFixture = {
             errors: [{
                 index: 28,
                 lineNumber: 1,
-                column: 29,
-                message: "Error: Line 1: Unexpected token two"
+                columnNumber: 29,
+                message: "Error: Unexpected token two at <anonymous>:1:29"
             }, {
                 index: 51,
                 lineNumber: 1,
-                column: 52,
-                message: "Error: Line 1: Unexpected token bb"
+                columnNumber: 52,
+                message: "Error: Unexpected token bb at <anonymous>:1:52"
             }, {
                 index: 60,
                 lineNumber: 1,
-                column: 61,
-                message: "Error: Line 1: Unexpected token four"
+                columnNumber: 61,
+                message: "Error: Unexpected token four at <anonymous>:1:61"
             }]
         },
          
@@ -24738,8 +24738,8 @@ var testFixture = {
             errors: [{
                 index: 6,
                 lineNumber: 1,
-                column: 7,
-                message: 'Error: Line 1: Illegal return statement'
+                columnNumber: 7,
+                message: 'Error: Illegal return statement at <anonymous>:1:7'
             }]
         },
 
@@ -24834,8 +24834,8 @@ var testFixture = {
             errors: [{
                 index: 29,
                 lineNumber: 1,
-                column: 30,
-                message: 'Error: Line 1: Strict mode code may not include a with statement'
+                columnNumber: 30,
+                message: 'Error: Strict mode code may not include a with statement at <anonymous>:1:30'
             }]
         },
 
@@ -24923,8 +24923,8 @@ var testFixture = {
             errors: [{
                 index: 29,
                 lineNumber: 1,
-                column: 30,
-                message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+                columnNumber: 30,
+                message: 'Error: Octal literals are not allowed in strict mode. at <anonymous>:1:30'
             }]
         },
 
@@ -24982,8 +24982,8 @@ var testFixture = {
             errors: [{
                 index: 22,
                 lineNumber: 1,
-                column: 23,
-                message: 'Error: Line 1: Delete of an unqualified identifier in strict mode.'
+                columnNumber: 23,
+                message: 'Error: Delete of an unqualified identifier in strict mode. at <anonymous>:1:23'
             }]
         },
 
@@ -25059,8 +25059,8 @@ var testFixture = {
             errors: [{
                 index: 32,
                 lineNumber: 1,
-                column: 33,
-                message: 'Error: Line 1: Catch variable may not be eval or arguments in strict mode'
+                columnNumber: 33,
+                message: 'Error: Catch variable may not be eval or arguments in strict mode at <anonymous>:1:33'
             }]
         },
 
@@ -25136,8 +25136,8 @@ var testFixture = {
             errors: [{
                 index: 37,
                 lineNumber: 1,
-                column: 38,
-                message: 'Error: Line 1: Catch variable may not be eval or arguments in strict mode'
+                columnNumber: 38,
+                message: 'Error: Catch variable may not be eval or arguments in strict mode at <anonymous>:1:38'
             }]
         },
 
@@ -25195,8 +25195,8 @@ var testFixture = {
             errors: [{
                 index: 22,
                 lineNumber: 1,
-                column: 23,
-                message: 'Error: Line 1: Variable name may not be eval or arguments in strict mode'
+                columnNumber: 23,
+                message: 'Error: Variable name may not be eval or arguments in strict mode at <anonymous>:1:23'
             }]
         },
 
@@ -25254,8 +25254,8 @@ var testFixture = {
             errors: [{
                 index: 27,
                 lineNumber: 1,
-                column: 28,
-                message: 'Error: Line 1: Variable name may not be eval or arguments in strict mode'
+                columnNumber: 28,
+                message: 'Error: Variable name may not be eval or arguments in strict mode at <anonymous>:1:28'
             }]
         },
 
@@ -25322,8 +25322,8 @@ var testFixture = {
             errors: [{
                 index: 14,
                 lineNumber: 1,
-                column: 15,
-                message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
+                columnNumber: 15,
+                message: 'Error: Assignment to eval or arguments is not allowed in strict mode at <anonymous>:1:15'
             }]
         },
 
@@ -25381,8 +25381,8 @@ var testFixture = {
             errors: [{
                 index: 18,
                 lineNumber: 1,
-                column: 19,
-                message: 'Error: Line 1: Postfix increment/decrement may not have eval or arguments operand in strict mode'
+                columnNumber: 19,
+                message: 'Error: Postfix increment/decrement may not have eval or arguments operand in strict mode at <anonymous>:1:19'
             }]
         },
 
@@ -25440,8 +25440,8 @@ var testFixture = {
             errors: [{
                 index: 20,
                 lineNumber: 1,
-                column: 21,
-                message: 'Error: Line 1: Prefix increment/decrement may not have eval or arguments operand in strict mode'
+                columnNumber: 21,
+                message: 'Error: Prefix increment/decrement may not have eval or arguments operand in strict mode at <anonymous>:1:21'
             }]
         },
 
@@ -25508,8 +25508,8 @@ var testFixture = {
             errors: [{
                 index: 14,
                 lineNumber: 1,
-                column: 15,
-                message: 'Error: Line 1: Assignment to eval or arguments is not allowed in strict mode'
+                columnNumber: 15,
+                message: 'Error: Assignment to eval or arguments is not allowed in strict mode at <anonymous>:1:15'
             }]
         },
 
@@ -25567,8 +25567,8 @@ var testFixture = {
             errors: [{
                 index: 23,
                 lineNumber: 1,
-                column: 24,
-                message: 'Error: Line 1: Postfix increment/decrement may not have eval or arguments operand in strict mode'
+                columnNumber: 24,
+                message: 'Error: Postfix increment/decrement may not have eval or arguments operand in strict mode at <anonymous>:1:24'
             }]
         },
 
@@ -25626,8 +25626,8 @@ var testFixture = {
             errors: [{
                 index: 25,
                 lineNumber: 1,
-                column: 26,
-                message: 'Error: Line 1: Prefix increment/decrement may not have eval or arguments operand in strict mode'
+                columnNumber: 26,
+                message: 'Error: Prefix increment/decrement may not have eval or arguments operand in strict mode at <anonymous>:1:26'
             }]
         },
 
@@ -25748,8 +25748,8 @@ var testFixture = {
             errors: [{
                 index: 23,
                 lineNumber: 1,
-                column: 24,
-                message: 'Error: Line 1: Duplicate data property in object literal not allowed in strict mode'
+                columnNumber: 24,
+                message: 'Error: Duplicate data property in object literal not allowed in strict mode at <anonymous>:1:24'
             }]
         },
 
@@ -25818,8 +25818,8 @@ var testFixture = {
             errors: [{
                 index: 23,
                 lineNumber: 1,
-                column: 24,
-                message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+                columnNumber: 24,
+                message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:24'
             }]
         },
 
@@ -25888,8 +25888,8 @@ var testFixture = {
             errors: [{
                 index: 23,
                 lineNumber: 1,
-                column: 24,
-                message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+                columnNumber: 24,
+                message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:24'
             }]
         },
 
@@ -25958,8 +25958,8 @@ var testFixture = {
             errors: [{
                 index: 23,
                 lineNumber: 1,
-                column: 24,
-                message: 'Error: Line 1: Use of future reserved word in strict mode'
+                columnNumber: 24,
+                message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:24'
             }]
         },
 
@@ -26029,8 +26029,8 @@ var testFixture = {
             errors: [{
                 index: 24,
                 lineNumber: 1,
-                column: 25,
-                message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+                columnNumber: 25,
+                message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:25'
             }]
         },
 
@@ -26100,8 +26100,8 @@ var testFixture = {
             errors: [{
                 index: 24,
                 lineNumber: 1,
-                column: 25,
-                message: 'Error: Line 1: Function name may not be eval or arguments in strict mode'
+                columnNumber: 25,
+                message: 'Error: Function name may not be eval or arguments in strict mode at <anonymous>:1:25'
             }]
         },
 
@@ -26171,8 +26171,8 @@ var testFixture = {
             errors: [{
                 index: 24,
                 lineNumber: 1,
-                column: 25,
-                message: 'Error: Line 1: Use of future reserved word in strict mode'
+                columnNumber: 25,
+                message: 'Error: Use of future reserved word in strict mode at <anonymous>:1:25'
             }]
         },
 
@@ -26249,8 +26249,8 @@ var testFixture = {
             errors: [{
                 index: 25,
                 lineNumber: 1,
-                column: 26,
-                message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+                columnNumber: 26,
+                message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:26'
             }]
         },
 
@@ -26327,8 +26327,8 @@ var testFixture = {
             errors: [{
                 index: 25,
                 lineNumber: 1,
-                column: 26,
-                message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+                columnNumber: 26,
+                message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:26'
             }]
         },
 
@@ -26413,8 +26413,8 @@ var testFixture = {
             errors: [{
                 index: 31,
                 lineNumber: 1,
-                column: 32,
-                message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+                columnNumber: 32,
+                message: 'Error: Strict mode function may not have duplicate parameter names at <anonymous>:1:32'
             }]
         },
 
@@ -26492,8 +26492,8 @@ var testFixture = {
             errors: [{
                 index: 26,
                 lineNumber: 1,
-                column: 27,
-                message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+                columnNumber: 27,
+                message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:27'
             }]
         },
 
@@ -26572,8 +26572,8 @@ var testFixture = {
             errors: [{
                 index: 26,
                 lineNumber: 1,
-                column: 27,
-                message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+                columnNumber: 27,
+                message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:27'
             }]
         },
 
@@ -26659,8 +26659,8 @@ var testFixture = {
             errors: [{
                 index: 32,
                 lineNumber: 1,
-                column: 33,
-                message: 'Error: Line 1: Strict mode function may not have duplicate parameter names'
+                columnNumber: 33,
+                message: 'Error: Strict mode function may not have duplicate parameter names at <anonymous>:1:33'
             }]
         },
 
@@ -26774,8 +26774,8 @@ var testFixture = {
             errors: [{
                 index: 26,
                 lineNumber: 1,
-                column: 27,
-                message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+                columnNumber: 27,
+                message: 'Error: Parameter name eval or arguments is not allowed in strict mode at <anonymous>:1:27'
             }]
         },
 
@@ -26854,8 +26854,8 @@ var testFixture = {
             errors: [{
                 index: 19,
                 lineNumber: 1,
-                column: 20,
-                message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+                columnNumber: 20,
+                message: 'Error: Octal literals are not allowed in strict mode. at <anonymous>:1:20'
             }]
         },
 
@@ -26904,8 +26904,8 @@ var testFixture = {
             errors: [{
                 index: 0,
                 lineNumber: 1,
-                column: 1,
-                message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+                columnNumber: 1,
+                message: 'Error: Octal literals are not allowed in strict mode. at <anonymous>:1:1'
             }]
         },
 
@@ -26999,8 +26999,8 @@ var testFixture = {
             errors: [{
                 index: 24,
                 lineNumber: 1,
-                column: 25,
-                message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+                columnNumber: 25,
+                message: 'Error: Octal literals are not allowed in strict mode. at <anonymous>:1:25'
             }]
         },
 
@@ -27146,8 +27146,8 @@ var testFixture = {
             errors: [{
                 index: 46,
                 lineNumber: 1,
-                column: 47,
-                message: 'Error: Line 1: Object literal may not have multiple get/set accessors with the same name'
+                columnNumber: 47,
+                message: 'Error: Object literal may not have multiple get/set accessors with the same name at <anonymous>:1:47'
             }]
         },
 
@@ -27280,8 +27280,8 @@ var testFixture = {
             errors: [{
                 index: 41,
                 lineNumber: 1,
-                column: 42,
-                message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+                columnNumber: 42,
+                message: 'Error: Object literal may not have data and accessor property with the same name at <anonymous>:1:42'
             }]
         },
 
@@ -27422,8 +27422,8 @@ var testFixture = {
             errors: [{
                 index: 42,
                 lineNumber: 1,
-                column: 43,
-                message: 'Error: Line 1: Object literal may not have data and accessor property with the same name'
+                columnNumber: 43,
+                message: 'Error: Object literal may not have data and accessor property with the same name at <anonymous>:1:43'
             }]
 
 
@@ -27496,8 +27496,8 @@ var testFixture = {
             errors: [{
                 index: 9,
                 lineNumber: 1,
-                column: 10,
-                message: 'Error: Line 1: Unexpected token )'
+                columnNumber: 10,
+                message: 'Error: Unexpected token ) at <anonymous>:1:10'
             }]
         },
 
@@ -27564,8 +27564,8 @@ var testFixture = {
             errors: [{
                 index: 10,
                 lineNumber: 1,
-                column: 11,
-                message: 'Error: Line 1: Invalid left-hand side in assignment'
+                columnNumber: 11,
+                message: 'Error: Invalid left-hand side in assignment at <anonymous>:1:11'
             }]
         },
 
@@ -27616,8 +27616,8 @@ var testFixture = {
             errors: [{
                 index: 1,
                 lineNumber: 1,
-                column: 2,
-                message: 'Error: Line 1: Invalid left-hand side in assignment'
+                columnNumber: 2,
+                message: 'Error: Invalid left-hand side in assignment at <anonymous>:1:2'
             }]
         },
 
@@ -27659,8 +27659,8 @@ var testFixture = {
             errors: [{
                 index: 1,
                 lineNumber: 1,
-                column: 2,
-                message: 'Error: Line 1: Invalid left-hand side in assignment'
+                columnNumber: 2,
+                message: 'Error: Invalid left-hand side in assignment at <anonymous>:1:2'
             }]
         },
 
@@ -27702,8 +27702,8 @@ var testFixture = {
             errors: [{
                 index: 3,
                 lineNumber: 1,
-                column: 4,
-                message: 'Error: Line 1: Invalid left-hand side in assignment'
+                columnNumber: 4,
+                message: 'Error: Invalid left-hand side in assignment at <anonymous>:1:4'
             }]
         },
 
@@ -27754,8 +27754,8 @@ var testFixture = {
             errors: [{
                 index: 6,
                 lineNumber: 1,
-                column: 7,
-                message: 'Error: Line 1: Invalid left-hand side in for-in'
+                columnNumber: 7,
+                message: 'Error: Invalid left-hand side in for-in at <anonymous>:1:7'
             }]
         },
 
@@ -27805,8 +27805,8 @@ var testFixture = {
             errors: [{
                 index: 17,
                 lineNumber: 1,
-                column: 18,
-                message: "Error: Line 1: Unexpected token ILLEGAL"
+                columnNumber: 18,
+                message: "Error: Unexpected token ILLEGAL at <anonymous>:1:18"
             }]
         },
 
@@ -27856,13 +27856,13 @@ var testFixture = {
             errors: [{
                 index: 17,
                 lineNumber: 1,
-                column: 18,
-                message: "Error: Line 1: Unexpected token ILLEGAL"
+                columnNumber: 18,
+                message: "Error: Unexpected token ILLEGAL at <anonymous>:1:18"
             }, {
                 index: 23,
                 lineNumber: 1,
-                column: 24,
-                message: "Error: Line 1: Unexpected token ILLEGAL"
+                columnNumber: 24,
+                message: "Error: Unexpected token ILLEGAL at <anonymous>:1:24"
             }]
         }
 
