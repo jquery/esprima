@@ -1067,13 +1067,34 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function testRegExp(pattern, flags) {
-        var value;
+        var tmp = pattern,
+            value;
+
+        if (flags.indexOf('u') >= 0) {
+            // Replace each astral symbol and every Unicode code point
+            // escape sequence that represents such a symbol with a single
+            // ASCII symbol to avoid throwing on regular expressions that
+            // are only valid in combination with the `/u` flag.
+            tmp = tmp
+                .replace(/\\u\{([0-9a-fA-F]{5,6})\}/g, 'x')
+                .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, 'x');
+        }
+
+        // First, detect invalid regular expressions.
         try {
-            value = new RegExp(pattern, flags);
+            value = new RegExp(tmp);
         } catch (e) {
             throwError({}, Messages.InvalidRegExp);
         }
-        return value;
+
+        // Return a regular expression object for this pattern-flag pair, or
+        // `null` in case the current environment doesn't support the flags it
+        // uses.
+        try {
+            return new RegExp(pattern, flags);
+        } catch (exception) {
+            return null;
+        }
     }
 
     function scanRegExpBody() {
@@ -1183,6 +1204,10 @@ parseStatement: true, parseSourceElement: true */
             return {
                 type: Token.RegularExpression,
                 value: value,
+                regex: {
+                    pattern: body.value,
+                    flags: flags.value
+                },
                 lineNumber: lineNumber,
                 lineStart: lineStart,
                 start: start,
@@ -1193,6 +1218,10 @@ parseStatement: true, parseSourceElement: true */
         return {
             literal: body.literal + flags.literal,
             value: value,
+            regex: {
+                pattern: body.value,
+                flags: flags.value
+            },
             start: start,
             end: index
         };
@@ -1212,6 +1241,7 @@ parseStatement: true, parseSourceElement: true */
         };
 
         regex = scanRegExp();
+
         loc.end = {
             line: lineNumber,
             column: index - lineStart
@@ -1232,6 +1262,7 @@ parseStatement: true, parseSourceElement: true */
             extra.tokens.push({
                 type: 'RegularExpression',
                 value: regex.literal,
+                regex: regex.regex,
                 range: [pos, index],
                 loc: loc
             });
@@ -1729,6 +1760,9 @@ parseStatement: true, parseSourceElement: true */
             this.type = Syntax.Literal;
             this.value = token.value;
             this.raw = source.slice(token.start, token.end);
+            if (token.regex) {
+                this.regex = token.regex;
+            }
             this.finish();
             return this;
         },
