@@ -1999,11 +1999,6 @@ parseStatement: true, parseSourceElement: true */
         }
     }
 
-    /**
-     * @description Add the error if not already reported.
-     * @param {Object} error The error object to record
-     * @since 2.0
-     */
     function recordError(error) {
         var len = extra.errors.length,
             existing,
@@ -2017,14 +2012,6 @@ parseStatement: true, parseSourceElement: true */
         extra.errors.push(error);
     }
 
-    /**
-     * @description For statements like if, while, for, etc. check for the ')' on the condition. If
-     * it is not present, catch the error, and backtrack if we see a '{' instead (to continue parsing the block)
-     * @param {String} value The expected token value
-     * @param {String} skipTo The optional expected value to skip back to
-     * @throws The original error from  trying to consume the ')' char if not in tolerant mode
-     * @since 2.0
-     */
     function expectSkipTo(value, skipTo) {
         try {
             expect(value);
@@ -3995,7 +3982,7 @@ parseStatement: true, parseSourceElement: true */
         } catch (e) {
             throw e;
         } finally {
-            extra = Object.create(null);
+            extra = {};
         }
         return program;
     }
