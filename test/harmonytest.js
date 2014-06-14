@@ -1143,6 +1143,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: false,
+                        computed: false,
                         range: [8, 20],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -2159,6 +2160,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: true,
                         shorthand: false,
+                        computed: false,
                         range: [6, 18],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2245,6 +2247,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: true,
                         shorthand: false,
+                        computed: false,
                         range: [6, 22],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2324,6 +2327,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: true,
                         shorthand: false,
+                        computed: false,
                         range: [6, 20],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2402,6 +2406,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: true,
                         shorthand: false,
+                        computed: false,
                         range: [6, 15],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2480,6 +2485,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: true,
                         shorthand: false,
+                        computed: false,
                         range: [6, 15],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2559,6 +2565,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: true,
                         shorthand: false,
+                        computed: false,
                         range: [6, 17],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2638,6 +2645,7 @@ var harmonyTestFixture = {
                         kind: 'get',
                         method: false,
                         shorthand: false,
+                        computed: false,
                         range: [6, 21],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2742,6 +2750,7 @@ var harmonyTestFixture = {
                         kind: 'set',
                         method: false,
                         shorthand: false,
+                        computed: false,
                         range: [6, 29],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -3292,6 +3301,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: true,
+                        computed: false,
                         range: [6, 7],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -3320,6 +3330,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: true,
+                        computed: false,
                         range: [9, 10],
                         loc: {
                             start: { line: 1, column: 9 },
@@ -3449,6 +3460,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: false,
+                        computed: false,
                         range: [3, 21],
                         loc: {
                             start: { line: 1, column: 3 },
@@ -3512,6 +3524,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: true,
+                        computed: false,
                         range: [7, 8],
                         loc: {
                             start: { line: 1, column: 7 },
@@ -3620,6 +3633,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: true,
+                        computed: false,
                         range: [5, 6],
                         loc: {
                             start: { line: 1, column: 5 },
@@ -3728,6 +3742,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: true,
+                        computed: false,
                         range: [5, 6],
                         loc: {
                             start: { line: 1, column: 5 },
@@ -3836,6 +3851,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: false,
+                        computed: false,
                         range: [7, 10],
                         loc: {
                             start: { line: 1, column: 7 },
@@ -3900,6 +3916,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: false,
+                        computed: false,
                         range: [5, 8],
                         loc: {
                             start: { line: 1, column: 5 },
@@ -3964,6 +3981,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: false,
+                        computed: false,
                         range: [5, 8],
                         loc: {
                             start: { line: 1, column: 5 },
@@ -6120,6 +6138,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: true,
                         shorthand: false,
+                        computed: false,
                         range: [10, 31],
                         loc: {
                             start: { line: 1, column: 10 },
@@ -8772,6 +8791,710 @@ var harmonyTestFixture = {
 
     },
 
+    'ES6: Computed Properties': {
+        '({[x]: 10})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [3, 4],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 4 }
+                        }
+                    },
+                    value: {
+                        type: 'Literal',
+                        value: 10,
+                        raw: '10',
+                        range: [7, 9],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 9 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: false,
+                    computed: true,
+                    range: [2, 9],
+                    loc: {
+                        start: { line: 1, column: 2 },
+                        end: { line: 1, column: 9 }
+                    }
+                }],
+                range: [1, 10],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            range: [0, 11],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 11 }
+            }
+        },
+
+        '({["x" + "y"]: 10})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'BinaryExpression',
+                        operator: '+',
+                        left: {
+                            type: 'Literal',
+                            value: 'x',
+                            raw: '"x"',
+                            range: [3, 6],
+                            loc: {
+                                start: { line: 1, column: 3 },
+                                end: { line: 1, column: 6 }
+                            }
+                        },
+                        right: {
+                            type: 'Literal',
+                            value: 'y',
+                            raw: '"y"',
+                            range: [9, 12],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 12 }
+                            }
+                        },
+                        range: [3, 12],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 12 }
+                        }
+                    },
+                    value: {
+                        type: 'Literal',
+                        value: 10,
+                        raw: '10',
+                        range: [15, 17],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 17 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: false,
+                    computed: true,
+                    range: [2, 17],
+                    loc: {
+                        start: { line: 1, column: 2 },
+                        end: { line: 1, column: 17 }
+                    }
+                }],
+                range: [1, 18],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        },
+
+        '({[x]: function() {}})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [3, 4],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 4 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [18, 20],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 20 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [7, 20],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 20 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: false,
+                    computed: true,
+                    range: [2, 20],
+                    loc: {
+                        start: { line: 1, column: 2 },
+                        end: { line: 1, column: 20 }
+                    }
+                }],
+                range: [1, 21],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        '({[x]: 10, y: 20})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [3, 4],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 4 }
+                        }
+                    },
+                    value: {
+                        type: 'Literal',
+                        value: 10,
+                        raw: '10',
+                        range: [7, 9],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 9 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: false,
+                    computed: true,
+                    range: [2, 9],
+                    loc: {
+                        start: { line: 1, column: 2 },
+                        end: { line: 1, column: 9 }
+                    }
+                }, {
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [11, 12],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 12 }
+                        }
+                    },
+                    value: {
+                        type: 'Literal',
+                        value: 20,
+                        raw: '20',
+                        range: [14, 16],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 16 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: false,
+                    computed: false,
+                    range: [11, 16],
+                    loc: {
+                        start: { line: 1, column: 11 },
+                        end: { line: 1, column: 16 }
+                    }
+                }],
+                range: [1, 17],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
+        '({get [x]() {}, set [x](v) {}})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [7, 8],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 8 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [12, 14],
+                            loc: {
+                                start: { line: 1, column: 12 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [12, 14],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    kind: 'get',
+                    method: false,
+                    shorthand: false,
+                    computed: true,
+                    range: [2, 14],
+                    loc: {
+                        start: { line: 1, column: 2 },
+                        end: { line: 1, column: 14 }
+                    }
+                }, {
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [21, 22],
+                        loc: {
+                            start: { line: 1, column: 21 },
+                            end: { line: 1, column: 22 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [{
+                            type: 'Identifier',
+                            name: 'v',
+                            range: [24, 25],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 25 }
+                            }
+                        }],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [27, 29],
+                            loc: {
+                                start: { line: 1, column: 27 },
+                                end: { line: 1, column: 29 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [27, 29],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 29 }
+                        }
+                    },
+                    kind: 'set',
+                    method: false,
+                    shorthand: false,
+                    computed: true,
+                    range: [16, 29],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 29 }
+                    }
+                }],
+                range: [1, 30],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 30 }
+                }
+            },
+            range: [0, 31],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 31 }
+            }
+        },
+
+        '({[x]() {}})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [3, 4],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 4 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [8, 10],
+                            loc: {
+                                start: { line: 1, column: 8 },
+                                end: { line: 1, column: 10 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [8, 10],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    kind: 'init',
+                    method: true,
+                    shorthand: false,
+                    computed: true,
+                    range: [2, 10],
+                    loc: {
+                        start: { line: 1, column: 2 },
+                        end: { line: 1, column: 10 }
+                    }
+                }],
+                range: [1, 11],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 11 }
+                }
+            },
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        },
+
+        'var {[x]: y} = {y}': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'ObjectPattern',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'x',
+                            range: [6, 7],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 7 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'y',
+                            range: [10, 11],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 11 }
+                            }
+                        },
+                        kind: 'init',
+                        method: false,
+                        shorthand: false,
+                        computed: true,
+                        range: [5, 11],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 11 }
+                        }
+                    }],
+                    range: [4, 12],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                init: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'y',
+                            range: [16, 17],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 17 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'y',
+                            range: [16, 17],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 17 }
+                            }
+                        },
+                        kind: 'init',
+                        method: false,
+                        shorthand: true,
+                        computed: false,
+                        range: [16, 17],
+                        loc: {
+                            start: { line: 1, column: 16 },
+                            end: { line: 1, column: 17 }
+                        }
+                    }],
+                    range: [15, 18],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                range: [4, 18],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 18 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
+        'function f({[x]: y}) {}': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'f',
+                range: [9, 10],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            params: [{
+                type: 'ObjectPattern',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [13, 14],
+                        loc: {
+                            start: { line: 1, column: 13 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    value: {
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [17, 18],
+                        loc: {
+                            start: { line: 1, column: 17 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: false,
+                    computed: true,
+                    range: [12, 18],
+                    loc: {
+                        start: { line: 1, column: 12 },
+                        end: { line: 1, column: 18 }
+                    }
+                }],
+                range: [11, 19],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 19 }
+                }
+            }],
+            defaults: [],
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [21, 23],
+                loc: {
+                    start: { line: 1, column: 21 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
+        },
+
+        'var x = {*[test]() { yield *v; }}': {
+            type: 'VariableDeclaration',
+            declarations: [{
+                type: 'VariableDeclarator',
+                id: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [4, 5],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                init: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'test',
+                            range: [11, 15],
+                            loc: {
+                                start: { line: 1, column: 11 },
+                                end: { line: 1, column: 15 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [{
+                                    type: 'ExpressionStatement',
+                                    expression: {
+                                        type: 'YieldExpression',
+                                        argument: {
+                                            type: 'Identifier',
+                                            name: 'v',
+                                            range: [28, 29],
+                                            loc: {
+                                                start: { line: 1, column: 28 },
+                                                end: { line: 1, column: 29 }
+                                            }
+                                        },
+                                        delegate: true,
+                                        range: [21, 29],
+                                        loc: {
+                                            start: { line: 1, column: 21 },
+                                            end: { line: 1, column: 29 }
+                                        }
+                                    },
+                                    range: [21, 30],
+                                    loc: {
+                                        start: { line: 1, column: 21 },
+                                        end: { line: 1, column: 30 }
+                                    }
+                                }],
+                                range: [19, 32],
+                                loc: {
+                                    start: { line: 1, column: 19 },
+                                    end: { line: 1, column: 32 }
+                                }
+                            },
+                            rest: null,
+                            generator: true,
+                            expression: false,
+                            range: [19, 32],
+                            loc: {
+                                start: { line: 1, column: 19 },
+                                end: { line: 1, column: 32 }
+                            }
+                        },
+                        kind: 'init',
+                        method: true,
+                        shorthand: false,
+                        computed: true,
+                        range: [9, 32],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 32 }
+                        }
+                    }],
+                    range: [8, 33],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 33 }
+                    }
+                },
+                range: [4, 33],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 33 }
+                }
+            }],
+            kind: 'var',
+            range: [0, 33],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 33 }
+            }
+        },
+
+        '({[x]})': {
+          index: 5,
+          lineNumber: 1,
+          column: 6,
+          message: 'Error: Line 1: Unexpected token }'
+        }
+    },
+
     'ES6: Default parameters': {
 
         'function f([x] = [1]) {}': {
@@ -8875,6 +9598,7 @@ var harmonyTestFixture = {
                     kind: 'init',
                     method: false,
                     shorthand: true,
+                    computed: false,
                     range: [12, 13],
                     loc: {
                         start: { line: 1, column: 12 },
@@ -8913,6 +9637,7 @@ var harmonyTestFixture = {
                     kind: 'init',
                     method: false,
                     shorthand: false,
+                    computed: false,
                     range: [18, 23],
                     loc: {
                         start: { line: 1, column: 18 },
@@ -8986,6 +9711,7 @@ var harmonyTestFixture = {
                             kind: 'init',
                             method: false,
                             shorthand: true,
+                            computed: false,
                             range: [14, 15],
                             loc: {
                                 start: { line: 1, column: 14 },
@@ -9024,6 +9750,7 @@ var harmonyTestFixture = {
                             kind: 'init',
                             method: false,
                             shorthand: false,
+                            computed: false,
                             range: [20, 25],
                             loc: {
                                 start: { line: 1, column: 20 },
@@ -9110,6 +9837,7 @@ var harmonyTestFixture = {
                                 kind: 'init',
                                 method: false,
                                 shorthand: true,
+                                computed: false,
                                 range: [15, 16],
                                 loc: {
                                     start: { line: 1, column: 15 },
@@ -9148,6 +9876,7 @@ var harmonyTestFixture = {
                                 kind: 'init',
                                 method: false,
                                 shorthand: false,
+                                computed: false,
                                 range: [21, 26],
                                 loc: {
                                     start: { line: 1, column: 21 },
@@ -9181,6 +9910,7 @@ var harmonyTestFixture = {
                     kind: 'init',
                     method: false,
                     shorthand: false,
+                    computed: false,
                     range: [2, 31],
                     loc: {
                         start: { line: 1, column: 2 },
@@ -9243,6 +9973,7 @@ var harmonyTestFixture = {
                                 kind: 'init',
                                 method: false,
                                 shorthand: true,
+                                computed: false,
                                 range: [5, 6],
                                 loc: {
                                     start: { line: 1, column: 5 },
@@ -9281,6 +10012,7 @@ var harmonyTestFixture = {
                                 kind: 'init',
                                 method: false,
                                 shorthand: false,
+                                computed: false,
                                 range: [11, 16],
                                 loc: {
                                     start: { line: 1, column: 11 },
@@ -9314,6 +10046,7 @@ var harmonyTestFixture = {
                     kind: 'init',
                     method: true,
                     shorthand: false,
+                    computed: false,
                     range: [2, 21],
                     loc: {
                         start: { line: 1, column: 2 },
@@ -9379,6 +10112,7 @@ var harmonyTestFixture = {
                                     kind: 'init',
                                     method: false,
                                     shorthand: true,
+                                    computed: false,
                                     range: [11, 12],
                                     loc: {
                                         start: { line: 1, column: 11 },
@@ -9417,6 +10151,7 @@ var harmonyTestFixture = {
                                     kind: 'init',
                                     method: false,
                                     shorthand: false,
+                                    computed: false,
                                     range: [17, 22],
                                     loc: {
                                         start: { line: 1, column: 17 },
@@ -9504,6 +10239,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: true,
+                        computed: false,
                         range: [3, 4],
                         loc: {
                             start: { line: 1, column: 3 },
@@ -9542,6 +10278,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: false,
+                        computed: false,
                         range: [9, 14],
                         loc: {
                             start: { line: 1, column: 9 },
@@ -9765,6 +10502,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: false,
+                        computed: false,
                         range: [6, 25],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -9860,6 +10598,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: true,
                         shorthand: false,
+                        computed: false,
                         range: [6, 15],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -10033,6 +10772,7 @@ var harmonyTestFixture = {
                     kind: 'init',
                     method: false,
                     shorthand: true,
+                    computed: false,
                     range: [13, 14],
                     loc: {
                         start: { line: 1, column: 13 },
@@ -10061,6 +10801,7 @@ var harmonyTestFixture = {
                     kind: 'init',
                     method: false,
                     shorthand: true,
+                    computed: false,
                     range: [16, 17],
                     loc: {
                         start: { line: 1, column: 16 },
@@ -10138,6 +10879,7 @@ var harmonyTestFixture = {
                     kind: 'init',
                     method: false,
                     shorthand: true,
+                    computed: false,
                     range: [16, 17],
                     loc: {
                         start: { line: 1, column: 16 },
@@ -10275,6 +11017,7 @@ var harmonyTestFixture = {
                             kind: 'init',
                             method: false,
                             shorthand: true,
+                            computed: false,
                             range: [18, 19],
                             loc: {
                                 start: { line: 1, column: 18 },
@@ -10303,6 +11046,7 @@ var harmonyTestFixture = {
                             kind: 'init',
                             method: false,
                             shorthand: true,
+                            computed: false,
                             range: [21, 22],
                             loc: {
                                 start: { line: 1, column: 21 },
@@ -10318,6 +11062,7 @@ var harmonyTestFixture = {
                     kind: 'init',
                     method: false,
                     shorthand: false,
+                    computed: false,
                     range: [13, 24],
                     loc: {
                         start: { line: 1, column: 13 },
@@ -10362,6 +11107,7 @@ var harmonyTestFixture = {
                     kind: 'init',
                     method: false,
                     shorthand: false,
+                    computed: false,
                     range: [26, 35],
                     loc: {
                         start: { line: 1, column: 26 },
@@ -10528,6 +11274,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: true,
+                        computed: false,
                         range: [14, 15],
                         loc: {
                             start: { line: 1, column: 14 },
@@ -10556,6 +11303,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: true,
+                        computed: false,
                         range: [17, 18],
                         loc: {
                             start: { line: 1, column: 17 },
@@ -10709,6 +11457,7 @@ var harmonyTestFixture = {
                                 kind: 'init',
                                 method: false,
                                 shorthand: true,
+                                computed: false,
                                 range: [19, 20],
                                 loc: {
                                     start: { line: 1, column: 19 },
@@ -10737,6 +11486,7 @@ var harmonyTestFixture = {
                                 kind: 'init',
                                 method: false,
                                 shorthand: true,
+                                computed: false,
                                 range: [22, 23],
                                 loc: {
                                     start: { line: 1, column: 22 },
@@ -10752,6 +11502,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: false,
+                        computed: false,
                         range: [14, 25],
                         loc: {
                             start: { line: 1, column: 14 },
@@ -10796,6 +11547,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: false,
+                        computed: false,
                         range: [27, 36],
                         loc: {
                             start: { line: 1, column: 27 },
@@ -10931,6 +11683,7 @@ var harmonyTestFixture = {
                     kind: 'init',
                     method: true,
                     shorthand: false,
+                    computed: false,
                     range: [3, 16],
                     loc: {
                         start: { line: 1, column: 3 },
@@ -11015,6 +11768,7 @@ var harmonyTestFixture = {
                     kind: 'init',
                     method: true,
                     shorthand: false,
+                    computed: false,
                     range: [3, 19],
                     loc: {
                         start: { line: 1, column: 3 },
@@ -11090,6 +11844,7 @@ var harmonyTestFixture = {
                                         kind: 'init',
                                         method: false,
                                         shorthand: true,
+                                        computed: false,
                                         range: [12, 13],
                                         loc: {
                                             start: { line: 1, column: 12 },
@@ -11118,6 +11873,7 @@ var harmonyTestFixture = {
                                         kind: 'init',
                                         method: false,
                                         shorthand: true,
+                                        computed: false,
                                         range: [15, 16],
                                         loc: {
                                             start: { line: 1, column: 15 },
@@ -11133,6 +11889,7 @@ var harmonyTestFixture = {
                                 kind: 'init',
                                 method: false,
                                 shorthand: false,
+                                computed: false,
                                 range: [7, 18],
                                 loc: {
                                     start: { line: 1, column: 7 },
@@ -11177,6 +11934,7 @@ var harmonyTestFixture = {
                                 kind: 'init',
                                 method: false,
                                 shorthand: false,
+                                computed: false,
                                 range: [20, 29],
                                 loc: {
                                     start: { line: 1, column: 20 },
@@ -11243,6 +12001,7 @@ var harmonyTestFixture = {
                     kind: 'init',
                     method: true,
                     shorthand: false,
+                    computed: false,
                     range: [3, 48],
                     loc: {
                         start: { line: 1, column: 3 },
@@ -11379,6 +12138,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: true,
+                        computed: false,
                         range: [3, 4],
                         loc: {
                             start: { line: 1, column: 3 },
@@ -11447,6 +12207,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: true,
+                        computed: false,
                         range: [3, 4],
                         loc: {
                             start: { line: 1, column: 3 },
@@ -11648,6 +12409,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: false,
+                        computed: false,
                         range: [3, 12],
                         loc: {
                             start: { line: 1, column: 3 },
@@ -11723,6 +12485,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: false,
+                        computed: false,
                         range: [3, 7],
                         loc: {
                             start: { line: 1, column: 3 },
@@ -11751,6 +12514,7 @@ var harmonyTestFixture = {
                         kind: 'init',
                         method: false,
                         shorthand: true,
+                        computed: false,
                         range: [9, 10],
                         loc: {
                             start: { line: 1, column: 9 },
@@ -11968,6 +12732,7 @@ var harmonyTestFixture = {
                             kind: 'init',
                             method: false,
                             shorthand: true,
+                            computed: false,
                             range: [3, 4],
                             loc: {
                                 start: { line: 1, column: 3 },
@@ -11996,6 +12761,7 @@ var harmonyTestFixture = {
                             kind: 'init',
                             method: false,
                             shorthand: true,
+                            computed: false,
                             range: [6, 7],
                             loc: {
                                 start: { line: 1, column: 6 },
@@ -12271,6 +13037,7 @@ var harmonyTestFixture = {
                             kind: 'init',
                             method: false,
                             shorthand: true,
+                            computed: false,
                             range: [7, 8],
                             loc: {
                                 start: { line: 1, column: 7 },
@@ -12299,6 +13066,7 @@ var harmonyTestFixture = {
                             kind: 'init',
                             method: false,
                             shorthand: true,
+                            computed: false,
                             range: [10, 11],
                             loc: {
                                 start: { line: 1, column: 10 },
