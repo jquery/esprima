@@ -16241,8 +16241,223 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 64 }
             }
-        }
+        },
 
+        'for (a[b in c] in d);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'MemberExpression',
+                computed: true,
+                object: {
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [5, 6],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 6 }
+                    }
+                },
+                property: {
+                    type: 'BinaryExpression',
+                    operator: 'in',
+                    left: {
+                        type: 'Identifier',
+                        name: 'b',
+                        range: [7, 8],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 8 }
+                        }
+                    },
+                    right: {
+                        type: 'Identifier',
+                        name: 'c',
+                        range: [12, 13],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 13 }
+                        }
+                    },
+                    range: [7, 13],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 13 }
+                    }
+                },
+                range: [5, 14],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 14 }
+                }
+            },
+            right: {
+                type: 'Identifier',
+                name: 'd',
+                range: [18, 19],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 19 }
+                }
+            },
+            body: {
+                type: 'EmptyStatement',
+                range: [20, 21],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            each: false,
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            }
+        },
+
+        'for (a(b in c)[0] in d);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'MemberExpression',
+                computed: true,
+                object: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'a',
+                        range: [5, 6],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 6 }
+                        }
+                    },
+                    arguments: [{
+                        type: 'BinaryExpression',
+                        operator: 'in',
+                        left: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [7, 8],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 8 }
+                            }
+                        },
+                        right: {
+                            type: 'Identifier',
+                            name: 'c',
+                            range: [12, 13],
+                            loc: {
+                                start: { line: 1, column: 12 },
+                                end: { line: 1, column: 13 }
+                            }
+                        },
+                        range: [7, 13],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 13 }
+                        }
+                    }],
+                    range: [5, 14],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                property: {
+                    type: 'Literal',
+                    value: 0,
+                    raw: '0',
+                    range: [15, 16],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                range: [5, 17],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            right: {
+                type: 'Identifier',
+                name: 'd',
+                range: [21, 22],
+                loc: {
+                    start: { line: 1, column: 21 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            body: {
+                type: 'EmptyStatement',
+                range: [23, 24],
+                loc: {
+                    start: { line: 1, column: 23 },
+                    end: { line: 1, column: 24 }
+                }
+            },
+            each: false,
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 24 }
+            }
+        },
+
+        'for (a.in in a);': {
+            type: 'ForInStatement',
+            left: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [5, 6],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 6 }
+                    }
+                },
+                property: {
+                    type: 'Identifier',
+                    name: 'in',
+                    range: [7, 9],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 9 }
+                    }
+                },
+                range: [5, 9],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 9 }
+                }
+            },
+            right: {
+                type: 'Identifier',
+                name: 'a',
+                range: [13, 14],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 14 }
+                }
+            },
+            body: {
+                type: 'EmptyStatement',
+                range: [15, 16],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 16 }
+                }
+            },
+            each: false,
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
+        }
     },
 
     'continue statement': {
