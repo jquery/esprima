@@ -14656,62 +14656,59 @@ var testFixture = {
             type: 'DoWhileStatement',
             body: {
                 type: 'BlockStatement',
-                body: [
-                    {
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'UpdateExpression',
-                            operator: '++',
-                            argument: {
-                                type: 'Identifier',
-                                name: 'x',
-                                range: [5, 6],
-                                loc: {
-                                    start: { line: 1, column: 5 },
-                                    end: { line: 1, column: 6 }
-                                }
-                            },
-                            prefix: false,
-                            range: [5, 8],
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'UpdateExpression',
+                        operator: '++',
+                        argument: {
+                            type: 'Identifier',
+                            name: 'x',
+                            range: [5, 6],
                             loc: {
                                 start: { line: 1, column: 5 },
-                                end: { line: 1, column: 8 }
+                                end: { line: 1, column: 6 }
                             }
                         },
-                        range: [5, 9],
+                        prefix: false,
+                        range: [5, 8],
                         loc: {
                             start: { line: 1, column: 5 },
-                            end: { line: 1, column: 9 }
+                            end: { line: 1, column: 8 }
                         }
                     },
-                    {
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'UpdateExpression',
-                            operator: '--',
-                            argument: {
-                                type: 'Identifier',
-                                name: 'y',
-                                range: [10, 11],
-                                loc: {
-                                    start: { line: 1, column: 10 },
-                                    end: { line: 1, column: 11 }
-                                }
-                            },
-                            prefix: false,
-                            range: [10, 13],
+                    range: [5, 9],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 9 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'UpdateExpression',
+                        operator: '--',
+                        argument: {
+                            type: 'Identifier',
+                            name: 'y',
+                            range: [10, 11],
                             loc: {
                                 start: { line: 1, column: 10 },
-                                end: { line: 1, column: 13 }
+                                end: { line: 1, column: 11 }
                             }
                         },
-                        range: [10, 14],
+                        prefix: false,
+                        range: [10, 13],
                         loc: {
                             start: { line: 1, column: 10 },
-                            end: { line: 1, column: 14 }
+                            end: { line: 1, column: 13 }
                         }
+                    },
+                    range: [10, 14],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 14 }
                     }
-                ],
+                }],
                 range: [3, 16],
                 loc: {
                     start: { line: 1, column: 3 },
@@ -14755,53 +14752,50 @@ var testFixture = {
 
         '{ do { } while (false) false }': {
             type: 'BlockStatement',
-            body: [
-                {
-                    type: 'DoWhileStatement',
-                    body: {
-                        type: 'BlockStatement',
-                        body: [],
-                        range: [5, 8],
-                        loc: {
-                            start: { line: 1, column: 5 },
-                            end: { line: 1, column: 8 }
-                        }
-                    },
-                    test: {
-                        type: 'Literal',
-                        value: false,
-                        raw: 'false',
-                        range: [16, 21],
-                        loc: {
-                            start: { line: 1, column: 16 },
-                            end: { line: 1, column: 21 }
-                        }
-                    },
-                    range: [2, 22],
+            body: [{
+                type: 'DoWhileStatement',
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [5, 8],
                     loc: {
-                        start: { line: 1, column: 2 },
-                        end: { line: 1, column: 22 }
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 8 }
                     }
                 },
-                {
-                    type: 'ExpressionStatement',
-                    expression: {
-                        type: 'Literal',
-                        value: false,
-                        raw: 'false',
-                        range: [23, 28],
-                        loc: {
-                            start: { line: 1, column: 23 },
-                            end: { line: 1, column: 28 }
-                        }
-                    },
-                    range: [23, 29],
+                test: {
+                    type: 'Literal',
+                    value: false,
+                    raw: 'false',
+                    range: [16, 21],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 21 }
+                    }
+                },
+                range: [2, 22],
+                loc: {
+                    start: { line: 1, column: 2 },
+                    end: { line: 1, column: 22 }
+                }
+            }, {
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: false,
+                    raw: 'false',
+                    range: [23, 28],
                     loc: {
                         start: { line: 1, column: 23 },
-                        end: { line: 1, column: 29 }
+                        end: { line: 1, column: 28 }
                     }
+                },
+                range: [23, 29],
+                loc: {
+                    start: { line: 1, column: 23 },
+                    end: { line: 1, column: 29 }
                 }
-            ],
+            }],
             range: [0, 30],
             loc: {
                 start: { line: 1, column: 0 },
@@ -14976,62 +14970,59 @@ var testFixture = {
             },
             body: {
                 type: 'BlockStatement',
-                body: [
-                    {
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'UpdateExpression',
-                            operator: '++',
-                            argument: {
-                                type: 'Identifier',
-                                name: 'x',
-                                range: [17, 18],
-                                loc: {
-                                    start: { line: 1, column: 17 },
-                                    end: { line: 1, column: 18 }
-                                }
-                            },
-                            prefix: false,
-                            range: [17, 20],
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'UpdateExpression',
+                        operator: '++',
+                        argument: {
+                            type: 'Identifier',
+                            name: 'x',
+                            range: [17, 18],
                             loc: {
                                 start: { line: 1, column: 17 },
-                                end: { line: 1, column: 20 }
+                                end: { line: 1, column: 18 }
                             }
                         },
-                        range: [17, 21],
+                        prefix: false,
+                        range: [17, 20],
                         loc: {
                             start: { line: 1, column: 17 },
-                            end: { line: 1, column: 21 }
+                            end: { line: 1, column: 20 }
                         }
                     },
-                    {
-                        type: 'ExpressionStatement',
-                        expression: {
-                            type: 'UpdateExpression',
-                            operator: '--',
-                            argument: {
-                                type: 'Identifier',
-                                name: 'y',
-                                range: [22, 23],
-                                loc: {
-                                    start: { line: 1, column: 22 },
-                                    end: { line: 1, column: 23 }
-                                }
-                            },
-                            prefix: false,
-                            range: [22, 25],
+                    range: [17, 21],
+                    loc: {
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 21 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'UpdateExpression',
+                        operator: '--',
+                        argument: {
+                            type: 'Identifier',
+                            name: 'y',
+                            range: [22, 23],
                             loc: {
                                 start: { line: 1, column: 22 },
-                                end: { line: 1, column: 25 }
+                                end: { line: 1, column: 23 }
                             }
                         },
-                        range: [22, 26],
+                        prefix: false,
+                        range: [22, 25],
                         loc: {
                             start: { line: 1, column: 22 },
-                            end: { line: 1, column: 26 }
+                            end: { line: 1, column: 25 }
                         }
+                    },
+                    range: [22, 26],
+                    loc: {
+                        start: { line: 1, column: 22 },
+                        end: { line: 1, column: 26 }
                     }
-                ],
+                }],
                 range: [15, 28],
                 loc: {
                     start: { line: 1, column: 15 },
@@ -15137,35 +15128,33 @@ var testFixture = {
             type: 'ForStatement',
             init: {
                 type: 'VariableDeclaration',
-                declarations: [
-                    {
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x',
-                            range: [8, 9],
-                            loc: {
-                                start: { line: 1, column: 8 },
-                                end: { line: 1, column: 9 }
-                            }
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 0,
-                            raw: '0',
-                            range: [12, 13],
-                            loc: {
-                                start: { line: 1, column: 12 },
-                                end: { line: 1, column: 13 }
-                            }
-                        },
-                        range: [8, 13],
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [8, 9],
                         loc: {
                             start: { line: 1, column: 8 },
+                            end: { line: 1, column: 9 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0',
+                        range: [12, 13],
+                        loc: {
+                            start: { line: 1, column: 12 },
                             end: { line: 1, column: 13 }
                         }
+                    },
+                    range: [8, 13],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 13 }
                     }
-                ],
+                }],
                 kind: 'var',
                 range: [4, 13],
                 loc: {
@@ -15194,35 +15183,33 @@ var testFixture = {
             type: 'ForStatement',
             init: {
                 type: 'VariableDeclaration',
-                declarations: [
-                    {
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x',
-                            range: [8, 9],
-                            loc: {
-                                start: { line: 1, column: 8 },
-                                end: { line: 1, column: 9 }
-                            }
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 0,
-                            raw: '0',
-                            range: [12, 13],
-                            loc: {
-                                start: { line: 1, column: 12 },
-                                end: { line: 1, column: 13 }
-                            }
-                        },
-                        range: [8, 13],
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [8, 9],
                         loc: {
                             start: { line: 1, column: 8 },
+                            end: { line: 1, column: 9 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0',
+                        range: [12, 13],
+                        loc: {
+                            start: { line: 1, column: 12 },
                             end: { line: 1, column: 13 }
                         }
+                    },
+                    range: [8, 13],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 13 }
                     }
-                ],
+                }],
                 kind: 'let',
                 range: [4, 13],
                 loc: {
@@ -15251,62 +15238,59 @@ var testFixture = {
             type: 'ForStatement',
             init: {
                 type: 'VariableDeclaration',
-                declarations: [
-                    {
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x',
-                            range: [8, 9],
-                            loc: {
-                                start: { line: 1, column: 8 },
-                                end: { line: 1, column: 9 }
-                            }
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 0,
-                            raw: '0',
-                            range: [12, 13],
-                            loc: {
-                                start: { line: 1, column: 12 },
-                                end: { line: 1, column: 13 }
-                            }
-                        },
-                        range: [8, 13],
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [8, 9],
                         loc: {
                             start: { line: 1, column: 8 },
+                            end: { line: 1, column: 9 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0',
+                        range: [12, 13],
+                        loc: {
+                            start: { line: 1, column: 12 },
                             end: { line: 1, column: 13 }
                         }
                     },
-                    {
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'y',
-                            range: [15, 16],
-                            loc: {
-                                start: { line: 1, column: 15 },
-                                end: { line: 1, column: 16 }
-                            }
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 1,
-                            raw: '1',
-                            range: [19, 20],
-                            loc: {
-                                start: { line: 1, column: 19 },
-                                end: { line: 1, column: 20 }
-                            }
-                        },
-                        range: [15, 20],
+                    range: [8, 13],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 13 }
+                    }
+                }, {
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'y',
+                        range: [15, 16],
                         loc: {
                             start: { line: 1, column: 15 },
+                            end: { line: 1, column: 16 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 1,
+                        raw: '1',
+                        range: [19, 20],
+                        loc: {
+                            start: { line: 1, column: 19 },
                             end: { line: 1, column: 20 }
                         }
+                    },
+                    range: [15, 20],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 20 }
                     }
-                ],
+                }],
                 kind: 'var',
                 range: [4, 20],
                 loc: {
@@ -15587,17 +15571,15 @@ var testFixture = {
                             end: { line: 1, column: 31 }
                         }
                     },
-                    'arguments': [
-                        {
-                            type: 'Identifier',
-                            name: 'x',
-                            range: [32, 33],
-                            loc: {
-                                start: { line: 1, column: 32 },
-                                end: { line: 1, column: 33 }
-                            }
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [32, 33],
+                        loc: {
+                            start: { line: 1, column: 32 },
+                            end: { line: 1, column: 33 }
                         }
-                    ],
+                    }],
                     range: [24, 34],
                     loc: {
                         start: { line: 1, column: 24 },
@@ -15650,17 +15632,15 @@ var testFixture = {
                             end: { line: 1, column: 22 }
                         }
                     },
-                    'arguments': [
-                        {
-                            type: 'Identifier',
-                            name: 'x',
-                            range: [23, 24],
-                            loc: {
-                                start: { line: 1, column: 23 },
-                                end: { line: 1, column: 24 }
-                            }
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [23, 24],
+                        loc: {
+                            start: { line: 1, column: 23 },
+                            end: { line: 1, column: 24 }
                         }
-                    ],
+                    }],
                     range: [15, 25],
                     loc: {
                         start: { line: 1, column: 15 },
@@ -15685,26 +15665,24 @@ var testFixture = {
             type: 'ForInStatement',
             left: {
                 type: 'VariableDeclaration',
-                declarations: [
-                    {
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x',
-                            range: [9, 10],
-                            loc: {
-                                start: { line: 1, column: 9 },
-                                end: { line: 1, column: 10 }
-                            }
-                        },
-                        init: null,
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
                         range: [9, 10],
                         loc: {
                             start: { line: 1, column: 9 },
                             end: { line: 1, column: 10 }
                         }
+                    },
+                    init: null,
+                    range: [9, 10],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 10 }
                     }
-                ],
+                }],
                 kind: 'var',
                 range: [5, 10],
                 loc: {
@@ -15734,17 +15712,15 @@ var testFixture = {
                             end: { line: 1, column: 27 }
                         }
                     },
-                    'arguments': [
-                        {
-                            type: 'Identifier',
-                            name: 'x',
-                            range: [28, 29],
-                            loc: {
-                                start: { line: 1, column: 28 },
-                                end: { line: 1, column: 29 }
-                            }
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [28, 29],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 29 }
                         }
-                    ],
+                    }],
                     range: [20, 30],
                     loc: {
                         start: { line: 1, column: 20 },
@@ -15769,35 +15745,33 @@ var testFixture = {
             type: 'ForInStatement',
             left: {
                 type: 'VariableDeclaration',
-                declarations: [
-                    {
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x',
-                            range: [9, 10],
-                            loc: {
-                                start: { line: 1, column: 9 },
-                                end: { line: 1, column: 10 }
-                            }
-                        },
-                        init: {
-                            type: 'Literal',
-                            value: 42,
-                            raw: '42',
-                            range: [13, 15],
-                            loc: {
-                                start: { line: 1, column: 13 },
-                                end: { line: 1, column: 15 }
-                            }
-                        },
-                        range: [9, 15],
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [9, 10],
                         loc: {
                             start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42',
+                        range: [13, 15],
+                        loc: {
+                            start: { line: 1, column: 13 },
                             end: { line: 1, column: 15 }
                         }
+                    },
+                    range: [9, 15],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 15 }
                     }
-                ],
+                }],
                 kind: 'var',
                 range: [5, 15],
                 loc: {
@@ -15827,17 +15801,15 @@ var testFixture = {
                             end: { line: 1, column: 32 }
                         }
                     },
-                    'arguments': [
-                        {
-                            type: 'Identifier',
-                            name: 'x',
-                            range: [33, 34],
-                            loc: {
-                                start: { line: 1, column: 33 },
-                                end: { line: 1, column: 34 }
-                            }
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [33, 34],
+                        loc: {
+                            start: { line: 1, column: 33 },
+                            end: { line: 1, column: 34 }
                         }
-                    ],
+                    }],
                     range: [25, 35],
                     loc: {
                         start: { line: 1, column: 25 },
@@ -15862,26 +15834,24 @@ var testFixture = {
             type: 'ForInStatement',
             left: {
                 type: 'VariableDeclaration',
-                declarations: [
-                    {
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'x',
-                            range: [9, 10],
-                            loc: {
-                                start: { line: 1, column: 9 },
-                                end: { line: 1, column: 10 }
-                            }
-                        },
-                        init: null,
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
                         range: [9, 10],
                         loc: {
                             start: { line: 1, column: 9 },
                             end: { line: 1, column: 10 }
                         }
+                    },
+                    init: null,
+                    range: [9, 10],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 10 }
                     }
-                ],
+                }],
                 kind: 'let',
                 range: [5, 10],
                 loc: {
@@ -15911,17 +15881,15 @@ var testFixture = {
                             end: { line: 1, column: 27 }
                         }
                     },
-                    'arguments': [
-                        {
-                            type: 'Identifier',
-                            name: 'x',
-                            range: [28, 29],
-                            loc: {
-                                start: { line: 1, column: 28 },
-                                end: { line: 1, column: 29 }
-                            }
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [28, 29],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 29 }
                         }
-                    ],
+                    }],
                     range: [20, 30],
                     loc: {
                         start: { line: 1, column: 20 },
@@ -15946,52 +15914,50 @@ var testFixture = {
             type: 'ForInStatement',
             left: {
                 type: 'VariableDeclaration',
-                declarations: [
-                    {
-                        type: 'VariableDeclarator',
-                        id: {
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    init: {
+                        type: 'AssignmentExpression',
+                        operator: '=',
+                        left: {
                             type: 'Identifier',
-                            name: 'x',
-                            range: [9, 10],
-                            loc: {
-                                start: { line: 1, column: 9 },
-                                end: { line: 1, column: 10 }
-                            }
-                        },
-                        init: {
-                            type: 'AssignmentExpression',
-                            operator: '=',
-                            left: {
-                                type: 'Identifier',
-                                name: 'y',
-                                range: [13, 14],
-                                loc: {
-                                    start: { line: 1, column: 13 },
-                                    end: { line: 1, column: 14 }
-                                }
-                            },
-                            right: {
-                                type: 'Identifier',
-                                name: 'z',
-                                range: [17, 18],
-                                loc: {
-                                    start: { line: 1, column: 17 },
-                                    end: { line: 1, column: 18 }
-                                }
-                            },
-                            range: [13, 18],
+                            name: 'y',
+                            range: [13, 14],
                             loc: {
                                 start: { line: 1, column: 13 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        right: {
+                            type: 'Identifier',
+                            name: 'z',
+                            range: [17, 18],
+                            loc: {
+                                start: { line: 1, column: 17 },
                                 end: { line: 1, column: 18 }
                             }
                         },
-                        range: [9, 18],
+                        range: [13, 18],
                         loc: {
-                            start: { line: 1, column: 9 },
+                            start: { line: 1, column: 13 },
                             end: { line: 1, column: 18 }
                         }
+                    },
+                    range: [9, 18],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 18 }
                     }
-                ],
+                }],
                 kind: 'var',
                 range: [5, 18],
                 loc: {
@@ -16028,88 +15994,86 @@ var testFixture = {
             type: 'ForInStatement',
             left: {
                 type: 'VariableDeclaration',
-                declarations: [
-                    {
-                        type: 'VariableDeclarator',
-                        id: {
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'a',
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    init: {
+                        type: 'AssignmentExpression',
+                        operator: '=',
+                        left: {
                             type: 'Identifier',
-                            name: 'a',
-                            range: [9, 10],
+                            name: 'b',
+                            range: [13, 14],
                             loc: {
-                                start: { line: 1, column: 9 },
-                                end: { line: 1, column: 10 }
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 14 }
                             }
                         },
-                        init: {
+                        right: {
                             type: 'AssignmentExpression',
                             operator: '=',
                             left: {
                                 type: 'Identifier',
-                                name: 'b',
-                                range: [13, 14],
+                                name: 'c',
+                                range: [17, 18],
                                 loc: {
-                                    start: { line: 1, column: 13 },
-                                    end: { line: 1, column: 14 }
+                                    start: { line: 1, column: 17 },
+                                    end: { line: 1, column: 18 }
                                 }
                             },
                             right: {
-                                type: 'AssignmentExpression',
-                                operator: '=',
+                                type: 'BinaryExpression',
+                                operator: 'in',
                                 left: {
                                     type: 'Identifier',
-                                    name: 'c',
-                                    range: [17, 18],
+                                    name: 'd',
+                                    range: [22, 23],
                                     loc: {
-                                        start: { line: 1, column: 17 },
-                                        end: { line: 1, column: 18 }
+                                        start: { line: 1, column: 22 },
+                                        end: { line: 1, column: 23 }
                                     }
                                 },
                                 right: {
-                                    type: 'BinaryExpression',
-                                    operator: 'in',
-                                    left: {
-                                        type: 'Identifier',
-                                        name: 'd',
-                                        range: [22, 23],
-                                        loc: {
-                                            start: { line: 1, column: 22 },
-                                            end: { line: 1, column: 23 }
-                                        }
-                                    },
-                                    right: {
-                                        type: 'Identifier',
-                                        name: 'e',
-                                        range: [27, 28],
-                                        loc: {
-                                            start: { line: 1, column: 27 },
-                                            end: { line: 1, column: 28 }
-                                        }
-                                    },
-                                    range: [22, 28],
+                                    type: 'Identifier',
+                                    name: 'e',
+                                    range: [27, 28],
                                     loc: {
-                                        start: { line: 1, column: 22 },
+                                        start: { line: 1, column: 27 },
                                         end: { line: 1, column: 28 }
                                     }
                                 },
-                                range: [17, 29],
+                                range: [22, 28],
                                 loc: {
-                                    start: { line: 1, column: 17 },
-                                    end: { line: 1, column: 29 }
+                                    start: { line: 1, column: 22 },
+                                    end: { line: 1, column: 28 }
                                 }
                             },
-                            range: [13, 29],
+                            range: [17, 29],
                             loc: {
-                                start: { line: 1, column: 13 },
+                                start: { line: 1, column: 17 },
                                 end: { line: 1, column: 29 }
                             }
                         },
-                        range: [9, 29],
+                        range: [13, 29],
                         loc: {
-                            start: { line: 1, column: 9 },
+                            start: { line: 1, column: 13 },
                             end: { line: 1, column: 29 }
                         }
+                    },
+                    range: [9, 29],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 29 }
                     }
-                ],
+                }],
                 kind: 'var',
                 range: [5, 29],
                 loc: {
@@ -16146,85 +16110,81 @@ var testFixture = {
             type: 'ForInStatement',
             left: {
                 type: 'VariableDeclaration',
-                declarations: [
-                    {
-                        type: 'VariableDeclarator',
-                        id: {
-                            type: 'Identifier',
-                            name: 'i',
-                            range: [9, 10],
-                            loc: {
-                                start: { line: 1, column: 9 },
-                                end: { line: 1, column: 10 }
-                            }
-                        },
-                        init: {
-                            type: 'FunctionExpression',
-                            id: null,
-                            params: [],
-                            defaults: [],
-                            body: {
-                                type: 'BlockStatement',
-                                body: [
-                                    {
-                                        type: 'ReturnStatement',
-                                        argument: {
-                                            type: 'BinaryExpression',
-                                            operator: 'in',
-                                            left: {
-                                                type: 'Literal',
-                                                value: 10,
-                                                raw: '10',
-                                                range: [33, 35],
-                                                loc: {
-                                                    start: { line: 1, column: 33 },
-                                                    end: { line: 1, column: 35 }
-                                                }
-                                            },
-                                            right: {
-                                                type: 'ArrayExpression',
-                                                elements: [],
-                                                range: [39, 41],
-                                                loc: {
-                                                    start: { line: 1, column: 39 },
-                                                    end: { line: 1, column: 41 }
-                                                }
-                                            },
-                                            range: [33, 41],
-                                            loc: {
-                                                start: { line: 1, column: 33 },
-                                                end: { line: 1, column: 41 }
-                                            }
-                                        },
-                                        range: [26, 42],
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'i',
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    init: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [{
+                                type: 'ReturnStatement',
+                                argument: {
+                                    type: 'BinaryExpression',
+                                    operator: 'in',
+                                    left: {
+                                        type: 'Literal',
+                                        value: 10,
+                                        raw: '10',
+                                        range: [33, 35],
                                         loc: {
-                                            start: { line: 1, column: 26 },
-                                            end: { line: 1, column: 42 }
+                                            start: { line: 1, column: 33 },
+                                            end: { line: 1, column: 35 }
                                         }
+                                    },
+                                    right: {
+                                        type: 'ArrayExpression',
+                                        elements: [],
+                                        range: [39, 41],
+                                        loc: {
+                                            start: { line: 1, column: 39 },
+                                            end: { line: 1, column: 41 }
+                                        }
+                                    },
+                                    range: [33, 41],
+                                    loc: {
+                                        start: { line: 1, column: 33 },
+                                        end: { line: 1, column: 41 }
                                     }
-                                ],
-                                range: [24, 43],
+                                },
+                                range: [26, 42],
                                 loc: {
-                                    start: { line: 1, column: 24 },
-                                    end: { line: 1, column: 43 }
+                                    start: { line: 1, column: 26 },
+                                    end: { line: 1, column: 42 }
                                 }
-                            },
-                            rest: null,
-                            generator: false,
-                            expression: false,
-                            range: [13, 43],
+                            }],
+                            range: [24, 43],
                             loc: {
-                                start: { line: 1, column: 13 },
+                                start: { line: 1, column: 24 },
                                 end: { line: 1, column: 43 }
                             }
                         },
-                        range: [9, 43],
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [13, 43],
                         loc: {
-                            start: { line: 1, column: 9 },
+                            start: { line: 1, column: 13 },
                             end: { line: 1, column: 43 }
                         }
+                    },
+                    range: [9, 43],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 43 }
                     }
-                ],
+                }],
                 kind: 'var',
                 range: [5, 43],
                 loc: {
@@ -16254,17 +16214,15 @@ var testFixture = {
                             end: { line: 1, column: 60 }
                         }
                     },
-                    'arguments': [
-                        {
-                            type: 'Identifier',
-                            name: 'x',
-                            range: [61, 62],
-                            loc: {
-                                start: { line: 1, column: 61 },
-                                end: { line: 1, column: 62 }
-                            }
+                    'arguments': [{
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [61, 62],
+                        loc: {
+                            start: { line: 1, column: 61 },
+                            end: { line: 1, column: 62 }
                         }
-                    ],
+                    }],
                     range: [53, 63],
                     loc: {
                         start: { line: 1, column: 53 },
@@ -16286,419 +16244,219 @@ var testFixture = {
         },
 
         'for (a[b in c] in d);': {
-            "range": [
-                0, 21
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 21
-                }
-            },
-            "type": "ForInStatement",
-            "left": {
-                "range": [
-                    5, 14
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 5
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 14
+            type: 'ForInStatement',
+            left: {
+                type: 'MemberExpression',
+                computed: true,
+                object: {
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [5, 6],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 6 }
                     }
                 },
-                "type": "MemberExpression",
-                "computed": true,
-                "object": {
-                    "range": [
-                        5, 6
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 5
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 6
+                property: {
+                    type: 'BinaryExpression',
+                    operator: 'in',
+                    left: {
+                        type: 'Identifier',
+                        name: 'b',
+                        range: [7, 8],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 8 }
                         }
                     },
-                    "type": "Identifier",
-                    "name": "a"
-                },
-                "property": {
-                    "range": [
-                        7, 13
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 7
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 13
+                    right: {
+                        type: 'Identifier',
+                        name: 'c',
+                        range: [12, 13],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 13 }
                         }
                     },
-                    "type": "BinaryExpression",
-                    "operator": "in",
-                    "left": {
-                        "range": [
-                            7, 8
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 7
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 8
-                            }
-                        },
-                        "type": "Identifier",
-                        "name": "b"
-                    },
-                    "right": {
-                        "range": [
-                            12, 13
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 12
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 13
-                            }
-                        },
-                        "type": "Identifier",
-                        "name": "c"
+                    range: [7, 13],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 13 }
                     }
+                },
+                range: [5, 14],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 14 }
                 }
             },
-            "right": {
-                "range": [
-                    18, 19
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 18
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 19
-                    }
-                },
-                "type": "Identifier",
-                "name": "d"
+            right: {
+                type: 'Identifier',
+                name: 'd',
+                range: [18, 19],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 19 }
+                }
             },
-            "body": {
-                "range": [
-                    20, 21
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 20
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 21
-                    }
-                },
-                "type": "EmptyStatement"
+            body: {
+                type: 'EmptyStatement',
+                range: [20, 21],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 21 }
+                }
             },
-            "each": false
+            each: false,
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            }
         },
 
         'for (a(b in c)[0] in d);': {
-            "range": [
-                0, 24
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 24
-                }
-            },
-            "type": "ForInStatement",
-            "left": {
-                "range": [
-                    5, 17
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 5
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 17
-                    }
-                },
-                "type": "MemberExpression",
-                "computed": true,
-                "object": {
-                    "range": [
-                        5, 14
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 5
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 14
+            type: 'ForInStatement',
+            left: {
+                type: 'MemberExpression',
+                computed: true,
+                object: {
+                    type: 'CallExpression',
+                    callee: {
+                        type: 'Identifier',
+                        name: 'a',
+                        range: [5, 6],
+                        loc: {
+                            start: { line: 1, column: 5 },
+                            end: { line: 1, column: 6 }
                         }
                     },
-                    "type": "CallExpression",
-                    "callee": {
-                        "range": [
-                            5, 6
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 5
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 6
+                    arguments: [{
+                        type: 'BinaryExpression',
+                        operator: 'in',
+                        left: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [7, 8],
+                            loc: {
+                                start: { line: 1, column: 7 },
+                                end: { line: 1, column: 8 }
                             }
                         },
-                        "type": "Identifier",
-                        "name": "a"
-                    },
-                    "arguments": [
-                        {
-                            "range": [
-                                7, 13
-                            ],
-                            "loc": {
-                                "start": {
-                                    "line": 1,
-                                    "column": 7
-                                },
-                                "end": {
-                                    "line": 1,
-                                    "column": 13
-                                }
-                            },
-                            "type": "BinaryExpression",
-                            "operator": "in",
-                            "left": {
-                                "range": [
-                                    7, 8
-                                ],
-                                "loc": {
-                                    "start": {
-                                        "line": 1,
-                                        "column": 7
-                                    },
-                                    "end": {
-                                        "line": 1,
-                                        "column": 8
-                                    }
-                                },
-                                "type": "Identifier",
-                                "name": "b"
-                            },
-                            "right": {
-                                "range": [
-                                    12, 13
-                                ],
-                                "loc": {
-                                    "start": {
-                                        "line": 1,
-                                        "column": 12
-                                    },
-                                    "end": {
-                                        "line": 1,
-                                        "column": 13
-                                    }
-                                },
-                                "type": "Identifier",
-                                "name": "c"
+                        right: {
+                            type: 'Identifier',
+                            name: 'c',
+                            range: [12, 13],
+                            loc: {
+                                start: { line: 1, column: 12 },
+                                end: { line: 1, column: 13 }
                             }
-                        }
-                    ]
-                },
-                "property": {
-                    "range": [
-                        15, 16
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 15
                         },
-                        "end": {
-                            "line": 1,
-                            "column": 16
+                        range: [7, 13],
+                        loc: {
+                            start: { line: 1, column: 7 },
+                            end: { line: 1, column: 13 }
                         }
-                    },
-                    "type": "Literal",
-                    "value": 0,
-                    "raw": "0"
+                    }],
+                    range: [5, 14],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 14 }
+                    }
+                },
+                property: {
+                    type: 'Literal',
+                    value: 0,
+                    raw: '0',
+                    range: [15, 16],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                range: [5, 17],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 17 }
                 }
             },
-            "right": {
-                "range": [
-                    21, 22
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 21
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 22
-                    }
-                },
-                "type": "Identifier",
-                "name": "d"
+            right: {
+                type: 'Identifier',
+                name: 'd',
+                range: [21, 22],
+                loc: {
+                    start: { line: 1, column: 21 },
+                    end: { line: 1, column: 22 }
+                }
             },
-            "body": {
-                "range": [
-                    23, 24
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 23
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 24
-                    }
-                },
-                "type": "EmptyStatement"
+            body: {
+                type: 'EmptyStatement',
+                range: [23, 24],
+                loc: {
+                    start: { line: 1, column: 23 },
+                    end: { line: 1, column: 24 }
+                }
             },
-            "each": false
+            each: false,
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 24 }
+            }
         },
 
         'for (a.in in a);': {
-            "range": [
-                0,
-                16
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
+            type: 'ForInStatement',
+            left: {
+                type: 'MemberExpression',
+                computed: false,
+                object: {
+                    type: 'Identifier',
+                    name: 'a',
+                    range: [5, 6],
+                    loc: {
+                        start: { line: 1, column: 5 },
+                        end: { line: 1, column: 6 }
+                    }
                 },
-                "end": {
-                    "line": 1,
-                    "column": 16
+                property: {
+                    type: 'Identifier',
+                    name: 'in',
+                    range: [7, 9],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 9 }
+                    }
+                },
+                range: [5, 9],
+                loc: {
+                    start: { line: 1, column: 5 },
+                    end: { line: 1, column: 9 }
                 }
             },
-            "type": "ForInStatement",
-            "left": {
-                "range": [
-                    5,
-                    9
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 5
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 9
-                    }
-                },
-                "type": "MemberExpression",
-                "computed": false,
-                "object": {
-                    "range": [
-                        5,
-                        6
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 5
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 6
-                        }
-                    },
-                    "type": "Identifier",
-                    "name": "a"
-                },
-                "property": {
-                    "range": [
-                        7,
-                        9
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 7
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 9
-                        }
-                    },
-                    "type": "Identifier",
-                    "name": "in"
+            right: {
+                type: 'Identifier',
+                name: 'a',
+                range: [13, 14],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 14 }
                 }
             },
-            "right": {
-                "range": [
-                    13,
-                    14
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 13
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 14
-                    }
-                },
-                "type": "Identifier",
-                "name": "a"
+            body: {
+                type: 'EmptyStatement',
+                range: [15, 16],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 16 }
+                }
             },
-            "body": {
-                "range": [
-                    15,
-                    16
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 15
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 16
-                    }
-                },
-                "type": "EmptyStatement"
-            },
-            "each": false
+            each: false,
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
         }
     },
 
