@@ -1779,14 +1779,15 @@ parseYieldExpression: true
             };
         },
 
-        createProperty: function (kind, key, value, method, shorthand) {
+        createProperty: function (kind, key, value, method, shorthand, computed) {
             return {
                 type: Syntax.Property,
                 key: key,
                 value: value,
                 kind: kind,
                 method: method,
-                shorthand: shorthand
+                shorthand: shorthand,
+                computed: computed
             };
         },
 
@@ -2355,7 +2356,9 @@ parseYieldExpression: true
 
     function parseObjectPropertyKey() {
         var marker = markerCreate(),
-            token = lex();
+            token = lex(),
+            propertyKey,
+            result;
 
         // Note: This function is called only from parseObjectProperty(), where
         // EOF and Punctuator tokens are already filtered out.
@@ -2367,43 +2370,60 @@ parseYieldExpression: true
             return markerApply(marker, delegate.createLiteral(token));
         }
 
+        if (token.type === Token.Punctuator && token.value === '[') {
+            // For computed properties we should skip the [ and ], and
+            // capture in marker only the assignment expression itself.
+            marker = markerCreate();
+            propertyKey = parseAssignmentExpression();
+            result = markerApply(marker, propertyKey);
+            expect(']');
+            return result;
+        }
+
         return markerApply(marker, delegate.createIdentifier(token.value));
     }
 
     function parseObjectProperty() {
-        var token, key, id, value, param, expr,
+        var token, key, id, value, param, expr, computed,
             marker = markerCreate();
 
         token = lookahead;
+        computed = (token.value === '[');
 
-        if (token.type === Token.Identifier) {
+        if (token.type === Token.Identifier || computed) {
 
             id = parseObjectPropertyKey();
 
             // Property Assignment: Getter and Setter.
 
             if (token.value === 'get' && !(match(':') || match('('))) {
+                computed = (lookahead.value === '[');
                 key = parseObjectPropertyKey();
                 expect('(');
                 expect(')');
-                return markerApply(marker, delegate.createProperty('get', key, parsePropertyFunction({ generator: false }), false, false));
+                return markerApply(marker, delegate.createProperty('get', key, parsePropertyFunction({ generator: false }), false, false, computed));
             }
             if (token.value === 'set' && !(match(':') || match('('))) {
+                computed = (lookahead.value === '[');
                 key = parseObjectPropertyKey();
                 expect('(');
                 token = lookahead;
                 param = [ parseVariableIdentifier() ];
                 expect(')');
-                return markerApply(marker, delegate.createProperty('set', key, parsePropertyFunction({ params: param, generator: false, name: token }), false, false));
+                return markerApply(marker, delegate.createProperty('set', key, parsePropertyFunction({ params: param, generator: false, name: token }), false, false, computed));
             }
             if (match(':')) {
                 lex();
-                return markerApply(marker, delegate.createProperty('init', id, parseAssignmentExpression(), false, false));
+                return markerApply(marker, delegate.createProperty('init', id, parseAssignmentExpression(), false, false, computed));
             }
             if (match('(')) {
-                return markerApply(marker, delegate.createProperty('init', id, parsePropertyMethodFunction({ generator: false }), true, false));
+                return markerApply(marker, delegate.createProperty('init', id, parsePropertyMethodFunction({ generator: false }), true, false, computed));
             }
-            return markerApply(marker, delegate.createProperty('init', id, id, false, true));
+            if (computed) {
+                // Computed properties can only be used with full notation.
+                throwUnexpected(lookahead);
+            }
+            return markerApply(marker, delegate.createProperty('init', id, id, false, true, false));
         }
         if (token.type === Token.EOF || token.type === Token.Punctuator) {
             if (!match('*')) {
@@ -2411,21 +2431,23 @@ parseYieldExpression: true
             }
             lex();
 
+            computed = (lookahead.type === Token.Punctuator && lookahead.value === '[');
+
             id = parseObjectPropertyKey();
 
             if (!match('(')) {
                 throwUnexpected(lex());
             }
 
-            return markerApply(marker, delegate.createProperty('init', id, parsePropertyMethodFunction({ generator: true }), true, false));
+            return markerApply(marker, delegate.createProperty('init', id, parsePropertyMethodFunction({ generator: true }), true, false, computed));
         }
         key = parseObjectPropertyKey();
         if (match(':')) {
             lex();
-            return markerApply(marker, delegate.createProperty('init', key, parseAssignmentExpression(), false, false));
+            return markerApply(marker, delegate.createProperty('init', key, parseAssignmentExpression(), false, false, false));
         }
         if (match('(')) {
-            return markerApply(marker, delegate.createProperty('init', key, parsePropertyMethodFunction({ generator: false }), true, false));
+            return markerApply(marker, delegate.createProperty('init', key, parsePropertyMethodFunction({ generator: false }), true, false, false));
         }
         throwUnexpected(lex());
     }
