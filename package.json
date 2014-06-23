@@ -31,14 +31,14 @@
     }],
     "repository": {
         "type": "git",
-        "url": "http://github.com/ariya/esprima.git"
+        "url": "https://github.com/ariya/esprima.git"
     },
     "bugs": {
         "url": "http://issues.esprima.org"
     },
     "licenses": [{
         "type": "BSD",
-        "url": "http://github.com/ariya/esprima/raw/master/LICENSE.BSD"
+        "url": "https://github.com/ariya/esprima/raw/master/LICENSE.BSD"
     }],
     "devDependencies": {
         "jslint": "~0.1.9",
@@ -46,8 +46,8 @@
         "jscs": "~1.2.4",
         "istanbul": "~0.2.6",
         "complexity-report": "~0.6.1",
-        "regenerate": "~0.5.4",
-        "unicode-6.3.0": "~0.1.0",
+        "regenerate": "~0.6.2",
+        "unicode-7.0.0": "~0.1.5",
         "json-diff": "~0.3.1",
         "optimist": "~0.6.0"
     },
