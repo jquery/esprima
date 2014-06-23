@@ -3,7 +3,7 @@
 var regenerate = require('regenerate');
 
 // Which Unicode version should be used?
-var version = '6.3.0'; // note: also update `package.json` when this changes
+var version = '7.0.0'; // note: also update `package.json` when this changes
 
 // Shorthand function
 var get = function(what) {
@@ -28,8 +28,7 @@ var generateES5Regex = function() { // ES 5.1
         .add(Lu, Ll, Lt, Lm, Lo, Nl)
         .removeRange(0x010000, 0x10FFFF) // remove astral symbols
         .removeRange(0x0, 0x7F); // remove ASCII symbols (Esprima-specific)
-    var identifierStartCodePoints = identifierStart.toArray();
-    var identifierPart = regenerate(identifierStartCodePoints)
+    var identifierPart = identifierStart.clone()
         .add('\u200C', '\u200D', Mn, Mc, Nd, Pc)
         .removeRange(0x010000, 0x10FFFF) // remove astral symbols
         .removeRange(0x0, 0x7F); // remove ASCII symbols (Esprima-specific)
