@@ -2664,7 +2664,7 @@ parseStatement: true, parseSourceElement: true */
             param = expressions[i];
             if (param.type === Syntax.Identifier) {
                 params.push(param);
-                defaults.push(null);
+                defaults.push(undefined);
                 validateParam(options, param, param.name);
             } else if (param.type === Syntax.AssignmentExpression) {
                 params.push(param.left);
