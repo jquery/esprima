@@ -3587,7 +3587,24 @@ var testFixture = {
                     loc: {
                         start: { line: 1, column: 0 },
                         end: { line: 1, column: 2 }
-                    }
+                    },
+                    trailingComments: [{
+                        type: 'Block',
+                        value: 'The',
+                        range: [3, 10],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 10 }
+                        }
+                    }, {
+                        type: 'Block',
+                        value: 'Answer',
+                        range: [11, 21],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 21 }
+                        }
+                    }]
                 },
                 range: [0, 21],
                 loc: {
@@ -3627,7 +3644,16 @@ var testFixture = {
                     type: 'Literal',
                     value: 42,
                     raw: '42',
-                    range: [0, 2]
+                    range: [0, 2],
+                    trailingComments: [{
+                        type: 'Block',
+                        value: 'the',
+                        range: [3, 10]
+                    }, {
+                        type: 'Block',
+                        value: 'answer',
+                        range: [11, 21]
+                    }]
                 },
                 range: [0, 21]
             }],
@@ -3674,7 +3700,16 @@ var testFixture = {
                     loc: {
                         start: { line: 1, column: 0 },
                         end: { line: 1, column: 2 }
-                    }
+                    },
+                    trailingComments: [{
+                        type: 'Block',
+                        value: ' The * answer ',
+                        range: [3, 21],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 21 }
+                        }
+                    }]
                 },
                 range: [0, 21],
                 loc: {
@@ -3717,6 +3752,63 @@ var testFixture = {
             }
         },
 
+        'function foo(){}\n//comment\nfunction bar(){}': {
+            type: "Program",
+            body: [{
+                type: "FunctionDeclaration",
+                id: {
+                    type: "Identifier",
+                    name: "foo",
+                    range: [9, 12]
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: "BlockStatement",
+                    body: [],
+                    range: [14, 16]
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [0, 16],
+                trailingComments: [{
+                    type: "Line",
+                    value: "comment",
+                    range: [17, 26]
+                }]
+            }, {
+                type: "FunctionDeclaration",
+                id: {
+                    type: "Identifier",
+                    name: "bar",
+                    range: [36, 39]
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: "BlockStatement",
+                    body: [],
+                    range: [41, 43]
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [27, 43],
+                leadingComments: [{
+                    type: "Line",
+                    value: "comment",
+                    range: [17, 26]
+                }]
+            }],
+            range: [0, 43],
+            comments: [{
+                type: "Line",
+                value: "comment",
+                range: [17, 26]
+            }]
+        },
+
         '/*a\r\nb*/ 42': {
             type: 'Program',
             body: [{
@@ -3735,7 +3827,16 @@ var testFixture = {
                 loc: {
                     start: { line: 2, column: 4 },
                     end: { line: 2, column: 6 }
-                }
+                },
+                leadingComments: [{
+                    type: 'Block',
+                    value: 'a\r\nb',
+                    range: [0, 8],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 2, column: 3 }
+                    }
+                }]
             }],
             range: [9, 11],
             loc: {
@@ -3771,7 +3872,16 @@ var testFixture = {
                 loc: {
                     start: { line: 2, column: 4 },
                     end: { line: 2, column: 6 }
-                }
+                },
+                leadingComments: [{
+                    type: 'Block',
+                    value: 'a\rb',
+                    range: [0, 7],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 2, column: 3 }
+                    }
+                }]
             }],
             range: [8, 10],
             loc: {
@@ -3807,7 +3917,16 @@ var testFixture = {
                 loc: {
                     start: { line: 2, column: 4 },
                     end: { line: 2, column: 6 }
-                }
+                },
+                leadingComments: [{
+                    type: 'Block',
+                    value: 'a\nb',
+                    range: [0, 7],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 2, column: 3 }
+                    }
+                }]
             }],
             range: [8, 10],
             loc: {
@@ -3833,16 +3952,28 @@ var testFixture = {
                     type: 'Literal',
                     value: 42,
                     raw: '42',
+                    range: [8, 10],
                     loc: {
                         start: { line: 2, column: 4 },
                         end: { line: 2, column: 6 }
                     }
                 },
+                range: [8, 10],
                 loc: {
                     start: { line: 2, column: 4 },
                     end: { line: 2, column: 6 }
-                }
+                },
+                leadingComments: [{
+                    type: 'Block',
+                    value: 'a\nc',
+                    range: [0, 7],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 2, column: 3 }
+                    }
+                }]
             }],
+            range: [8, 10],
             loc: {
                 start: { line: 2, column: 4 },
                 end: { line: 2, column: 6 }
@@ -3850,6 +3981,7 @@ var testFixture = {
             comments: [{
                 type: 'Block',
                 value: 'a\nc',
+                range: [0, 7],
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 2, column: 3 }
@@ -3888,7 +4020,16 @@ var testFixture = {
                     loc: {
                         start: { line: 1, column: 0 },
                         end: { line: 1, column: 2 }
-                    }
+                    },
+                    trailingComments: [{
+                        type: 'Line',
+                        value: ' line comment',
+                        range: [3, 18],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 18 }
+                        }
+                    }]
                 },
                 range: [0, 18],
                 loc: {
@@ -4249,7 +4390,16 @@ var testFixture = {
                         loc: {
                             start: { line: 1, column: 41 },
                             end: { line: 1, column: 49 }
-                        }
+                        },
+                        leadingComments: [{
+                            type: 'Block',
+                            value: ' perfect ',
+                            range: [27, 40],
+                            loc: {
+                                start: { line: 1, column: 27 },
+                                end: { line: 1, column: 40 }
+                            }
+                        }]
                     }],
                     range: [18, 49],
                     loc: {
