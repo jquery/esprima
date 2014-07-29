@@ -654,20 +654,20 @@ var harmonyTestFixture = {
                     range: [0, 19],
                     loc: {
                         start: { line: 1, column: 0 },
-                        end: { line: 3, column: 19 }
+                        end: { line: 3, column: 1 }
                     }
                 }],
                 expressions: [],
                 range: [0, 19],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 3, column: 19 }
+                    end: { line: 3, column: 1 }
                 }
             },
             range: [0, 19],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 3, column: 19 }
+                end: { line: 3, column: 1 }
             }
         },
 
@@ -685,20 +685,20 @@ var harmonyTestFixture = {
                     range: [0, 5],
                     loc: {
                         start: { line: 1, column: 0 },
-                        end: { line: 3, column: 5 }
+                        end: { line: 3, column: 1 }
                     }
                 }],
                 expressions: [],
                 range: [0, 5],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 3, column: 5 }
+                    end: { line: 3, column: 1 }
                 }
             },
             range: [0, 5],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 3, column: 5 }
+                end: { line: 3, column: 1 }
             }
         },
 
