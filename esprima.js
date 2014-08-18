@@ -31,7 +31,7 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint bitwise:true plusplus:true */
+/*jslint bitwise:true, plusplus:true */
 /*global esprima:true, define:true, exports:true, window: true,
 throwErrorTolerant: true,
 throwError: true, generateStatement: true, peek: true,
