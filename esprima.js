@@ -3384,7 +3384,7 @@ parseStatement: true, parseSourceElement: true */
         if (type === Token.Punctuator) {
             switch (lookahead.value) {
             case ';':
-                return parseEmptyStatement(node);
+                return parseEmptyStatement();
             case '(':
                 return parseExpressionStatement(node);
             default:
@@ -3403,7 +3403,7 @@ parseStatement: true, parseSourceElement: true */
             case 'for':
                 return parseForStatement(node);
             case 'function':
-                return parseFunctionDeclaration(node);
+                return parseFunctionDeclaration();
             case 'if':
                 return parseIfStatement(node);
             case 'return':
