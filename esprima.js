@@ -462,8 +462,20 @@ parseStatement: true, parseSourceElement: true */
                 ++index;
             }
         }
-
-        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        if (extra.errors && index === length) {
+            //ran off the end of the file - the whole thing is a comment
+            if (extra.comments) {
+                loc.end = {
+                    line: lineNumber,
+                    column: index - lineStart
+                };
+                comment = source.slice(start + 2, index);
+                addComment('Block', comment, start, index, loc);
+            }
+            throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
+        } else {
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        }
     }
 
     function skipComment() {
