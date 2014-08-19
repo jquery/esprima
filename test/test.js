@@ -24073,6 +24073,30 @@ var testFixture = {
                 message: "Error: Line 1: Unexpected token ILLEGAL"
             }]
         },
+        '/* foo \n\n': {
+            range: [9, 9],
+            loc: {
+                start: { line: 3, column: 0 },
+                end: { line: 3, column: 0 }
+            },
+            type: "Program",
+            body: [],
+            comments: [{
+                type: "Block",
+                value: " foo \n\n",
+                range: [0, 9],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 3, column: 0 }
+                }
+            }],
+            errors: [{
+                index: 9,
+                lineNumber: 3,
+                column: 1,
+                message: "Error: Line 3: Unexpected token ILLEGAL"
+            }]
+        },
         /** argument recovery */
         'f(a b c);': {
             range: [0, 9],

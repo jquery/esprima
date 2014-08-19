@@ -440,7 +440,9 @@ parseStatement: true, parseSourceElement: true */
                 ++index;
                 lineStart = index;
                 if (index >= length) {
-                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    if (typeof extra.errors === 'undefined') {
+                        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    }
                 }
             } else if (ch === 0x2A) {
                 // Block comment ends with '*/'.
@@ -462,7 +464,7 @@ parseStatement: true, parseSourceElement: true */
                 ++index;
             }
         }
-        if (extra.errors && index === length) {
+        if (extra.errors && index >= length) {
             //ran off the end of the file - the whole thing is a comment
             if (extra.comments) {
                 loc.end = {
