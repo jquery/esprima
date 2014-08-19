@@ -29645,6 +29645,206 @@ var testFixture = {
     },
 
     'Tolerant parse': {
+        /** block comment recovery */
+        '/* ': {
+            range: [3, 3],
+            loc: {
+                start: { line: 1, column: 3 },
+                end: { line: 1, column: 3 }
+            },
+            type: 'Program',
+            body: [],
+            comments: [{
+                type: 'Block',
+                value: ' ',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            }],
+            tokens: [],
+            errors: [{
+                index: 3,
+                lineNumber: 1,
+                column: 4,
+                message: 'Error: Line 1: Unexpected token ILLEGAL'
+            }]
+        },
+        'var foo = 1; /* ': {
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            },
+            type: 'Program',
+            body: [{
+                range: [0, 12],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 12 }
+                },
+                type: 'VariableDeclaration',
+                declarations: [{
+                    range: [4, 11],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 11 }
+                    },
+                    type: 'VariableDeclarator',
+                    id: {
+                        range: [4, 7],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 7 }
+                        },
+                        type: 'Identifier',
+                        name: 'foo'
+                    },
+                    init: {
+                        range: [10, 11],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 11 }
+                        },
+                        type: 'Literal',
+                        value: 1,
+                        raw: '1'
+                    }
+                }],
+                kind: 'var'
+            }],
+            comments: [{
+                type: 'Block',
+                value: ' ',
+                range: [13, 16],
+                loc: {
+                    start: { line: 1, column: 13 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            tokens: [{
+                type: 'Keyword',
+                value: 'var',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            }, {
+                type: 'Identifier',
+                value: 'foo',
+                range: [4, 7],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 7 }
+                }
+            }, {
+                type: 'Punctuator',
+                value: '=',
+                range: [8, 9],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 9 }
+                }
+            }, {
+                type: 'Numeric',
+                value: '1',
+                range: [10, 11],
+                loc: {
+                    start: { line: 1, column: 10 },
+                    end: { line: 1, column: 11 }
+                }
+            }, {
+                type: 'Punctuator',
+                value: ';',
+                range: [11, 12],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 12 }
+                }
+            }],
+            errors: [{
+                index: 16,
+                lineNumber: 1,
+                column: 17,
+                message: 'Error: Line 1: Unexpected token ILLEGAL'
+            }]
+        },
+        '/* var fo0 = 1;': {
+            range: [15, 15],
+            loc: {
+                start: { line: 1, column: 15 },
+                end: { line: 1, column: 15 }
+            },
+            type: 'Program',
+            body: [],
+            comments: [{
+                type: 'Block',
+                value: ' var fo0 = 1;',
+                range: [0, 15],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 15 }
+                }
+            }],
+            tokens: [],
+            errors: [{
+                index: 15,
+                lineNumber: 1,
+                column: 16,
+                message: 'Error: Line 1: Unexpected token ILLEGAL'
+            }]
+        },
+        '/* /* if(foo) {}': {
+            range: [16, 16],
+            loc: {
+                start: { line: 1, column: 16 },
+                end: { line: 1, column: 16 }
+            },
+            type: 'Program',
+            body: [],
+            comments: [{
+                type: 'Block',
+                value: ' /* if(foo) {}',
+                range: [0, 16],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 16 }
+                }
+            }],
+            tokens: [],
+            errors: [{
+                index: 16,
+                lineNumber: 1,
+                column: 17,
+                message: 'Error: Line 1: Unexpected token ILLEGAL'
+            }]
+        },
+        '/* foo \n\n': {
+            range: [9, 9],
+            loc: {
+                start: { line: 3, column: 0 },
+                end: { line: 3, column: 0 }
+            },
+            type: 'Program',
+            body: [],
+            comments: [{
+                type: 'Block',
+                value: ' foo \n\n',
+                range: [0, 9],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 3, column: 0 }
+                }
+            }],
+            errors: [{
+                index: 9,
+                lineNumber: 3,
+                column: 1,
+                message: 'Error: Line 3: Unexpected token ILLEGAL'
+            }]
+        },
         /** argument recovery */
         'f(a b c);': {
             range: [0, 9],
