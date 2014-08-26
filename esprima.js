@@ -2037,13 +2037,14 @@ parseYieldExpression: true
             };
         },
 
-        createMethodDefinition: function (propertyType, kind, key, value) {
+        createMethodDefinition: function (propertyType, kind, key, value, computed) {
             return {
                 type: Syntax.MethodDefinition,
                 key: key,
                 value: value,
                 kind: kind,
-                'static': propertyType === ClassPropertyType.static
+                'static': propertyType === ClassPropertyType.static,
+                computed: computed
             };
         },
 
@@ -4611,7 +4612,7 @@ parseYieldExpression: true
     // 14 Classes
 
     function parseMethodDefinition(existingPropNames) {
-        var token, key, param, propType, isValidDuplicateProp = false,
+        var token, key, param, propType, isValidDuplicateProp = false, computed,
             marker = markerCreate();
 
         if (lookahead.value === 'static') {
@@ -4623,11 +4624,13 @@ parseYieldExpression: true
 
         if (match('*')) {
             lex();
+            computed = (lookahead.value === '[');
             return markerApply(marker, delegate.createMethodDefinition(
                 propType,
                 '',
                 parseObjectPropertyKey(),
-                parsePropertyMethodFunction({ generator: true })
+                parsePropertyMethodFunction({ generator: true }),
+                computed
             ));
         }
 
@@ -4635,25 +4638,28 @@ parseYieldExpression: true
         key = parseObjectPropertyKey();
 
         if (token.value === 'get' && !match('(')) {
+            computed = (lookahead.value === '[');
             key = parseObjectPropertyKey();
 
             // It is a syntax error if any other properties have a name
             // duplicating this one unless they are a setter
-            if (existingPropNames[propType].hasOwnProperty(key.name)) {
-                isValidDuplicateProp =
-                    // There isn't already a getter for this prop
-                    existingPropNames[propType][key.name].get === undefined
-                    // There isn't already a data prop by this name
-                    && existingPropNames[propType][key.name].data === undefined
-                    // The only existing prop by this name is a setter
-                    && existingPropNames[propType][key.name].set !== undefined;
-                if (!isValidDuplicateProp) {
-                    throwError(key, Messages.IllegalDuplicateClassProperty);
+            if (!computed) {
+                if (existingPropNames[propType].hasOwnProperty(key.name)) {
+                    isValidDuplicateProp =
+                        // There isn't already a getter for this prop
+                        existingPropNames[propType][key.name].get === undefined
+                        // There isn't already a data prop by this name
+                        && existingPropNames[propType][key.name].data === undefined
+                        // The only existing prop by this name is a setter
+                        && existingPropNames[propType][key.name].set !== undefined;
+                    if (!isValidDuplicateProp) {
+                        throwError(key, Messages.IllegalDuplicateClassProperty);
+                    }
+                } else {
+                    existingPropNames[propType][key.name] = {};
                 }
-            } else {
-                existingPropNames[propType][key.name] = {};
+                existingPropNames[propType][key.name].get = true;
             }
-            existingPropNames[propType][key.name].get = true;
 
             expect('(');
             expect(')');
@@ -4661,29 +4667,33 @@ parseYieldExpression: true
                 propType,
                 'get',
                 key,
-                parsePropertyFunction({ generator: false })
+                parsePropertyFunction({ generator: false }),
+                computed
             ));
         }
         if (token.value === 'set' && !match('(')) {
+            computed = (lookahead.value === '[');
             key = parseObjectPropertyKey();
 
             // It is a syntax error if any other properties have a name
             // duplicating this one unless they are a getter
-            if (existingPropNames[propType].hasOwnProperty(key.name)) {
-                isValidDuplicateProp =
-                    // There isn't already a setter for this prop
-                    existingPropNames[propType][key.name].set === undefined
-                    // There isn't already a data prop by this name
-                    && existingPropNames[propType][key.name].data === undefined
-                    // The only existing prop by this name is a getter
-                    && existingPropNames[propType][key.name].get !== undefined;
-                if (!isValidDuplicateProp) {
-                    throwError(key, Messages.IllegalDuplicateClassProperty);
+            if (!computed) {
+                if (existingPropNames[propType].hasOwnProperty(key.name)) {
+                    isValidDuplicateProp =
+                        // There isn't already a setter for this prop
+                        existingPropNames[propType][key.name].set === undefined
+                        // There isn't already a data prop by this name
+                        && existingPropNames[propType][key.name].data === undefined
+                        // The only existing prop by this name is a getter
+                        && existingPropNames[propType][key.name].get !== undefined;
+                    if (!isValidDuplicateProp) {
+                        throwError(key, Messages.IllegalDuplicateClassProperty);
+                    }
+                } else {
+                    existingPropNames[propType][key.name] = {};
                 }
-            } else {
-                existingPropNames[propType][key.name] = {};
+                existingPropNames[propType][key.name].set = true;
             }
-            existingPropNames[propType][key.name].set = true;
 
             expect('(');
             token = lookahead;
@@ -4693,24 +4703,30 @@ parseYieldExpression: true
                 propType,
                 'set',
                 key,
-                parsePropertyFunction({ params: param, generator: false, name: token })
+                parsePropertyFunction({ params: param, generator: false, name: token }),
+                computed
             ));
         }
 
+        computed = (token.value === '[');
+
         // It is a syntax error if any other properties have the same name as a
         // non-getter, non-setter method
-        if (existingPropNames[propType].hasOwnProperty(key.name)) {
-            throwError(key, Messages.IllegalDuplicateClassProperty);
-        } else {
-            existingPropNames[propType][key.name] = {};
+        if (!computed) {
+            if (existingPropNames[propType].hasOwnProperty(key.name)) {
+                throwError(key, Messages.IllegalDuplicateClassProperty);
+            } else {
+                existingPropNames[propType][key.name] = {};
+            }
+            existingPropNames[propType][key.name].data = true;
         }
-        existingPropNames[propType][key.name].data = true;
 
         return markerApply(marker, delegate.createMethodDefinition(
             propType,
             '',
             key,
-            parsePropertyMethodFunction({ generator: false })
+            parsePropertyMethodFunction({ generator: false }),
+            computed
         ));
     }
 
