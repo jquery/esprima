@@ -266,6 +266,31 @@ parseYieldExpression: true
         }
     }
 
+    function StringMap() {
+        this.$data = {};
+    }
+
+    StringMap.prototype.get = function (key) {
+        key = '$' + key;
+        return this.$data[key];
+    };
+
+    StringMap.prototype.set = function (key, value) {
+        key = '$' + key;
+        this.$data[key] = value;
+        return this;
+    };
+
+    StringMap.prototype.has = function (key) {
+        key = '$' + key;
+        return Object.prototype.hasOwnProperty.call(this.$data, key);
+    };
+
+    StringMap.prototype['delete'] = function (key) {
+        key = '$' + key;
+        return delete this.$data[key];
+    };
+
     function isDecimalDigit(ch) {
         return (ch >= 48 && ch <= 57);   // 0..9
     }
@@ -2571,8 +2596,16 @@ parseYieldExpression: true
         throwUnexpected(lex());
     }
 
+    function getFieldName(key) {
+        var toString = String;
+        if (key.type === Syntax.Identifier) {
+            return key.name;
+        }
+        return toString(key.value);
+    }
+
     function parseObjectInitialiser() {
-        var properties = [], property, name, key, kind, map = {}, toString = String,
+        var properties = [], property, name, kind, storedKind, map = new StringMap(),
             marker = markerCreate();
 
         expect('{');
@@ -2581,16 +2614,12 @@ parseYieldExpression: true
             property = parseObjectProperty();
 
             if (!property.computed) {
-                if (property.key.type === Syntax.Identifier) {
-                    name = property.key.name;
-                } else {
-                    name = toString(property.key.value);
-                }
+                name = getFieldName(property.key);
                 kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
 
-                key = '$' + name;
-                if (Object.prototype.hasOwnProperty.call(map, key)) {
-                    if (map[key] === PropertyKind.Data) {
+                if (map.has(name)) {
+                    storedKind = map.get(name);
+                    if (storedKind === PropertyKind.Data) {
                         if (strict && kind === PropertyKind.Data) {
                             throwErrorTolerant({}, Messages.StrictDuplicateProperty);
                         } else if (kind !== PropertyKind.Data) {
@@ -2599,13 +2628,13 @@ parseYieldExpression: true
                     } else {
                         if (kind === PropertyKind.Data) {
                             throwErrorTolerant({}, Messages.AccessorDataProperty);
-                        } else if (map[key] & kind) {
+                        } else if (storedKind & kind) {
                             throwErrorTolerant({}, Messages.AccessorGetSet);
                         }
                     }
-                    map[key] |= kind;
+                    map.set(name, storedKind | kind);
                 } else {
-                    map[key] = kind;
+                    map.set(name, kind);
                 }
             }
 
@@ -3173,7 +3202,7 @@ parseYieldExpression: true
         defaultCount = 0;
         rest = null;
         options = {
-            paramSet: {}
+            paramSet: new StringMap()
         };
 
         for (i = 0, len = expressions.length; i < len; i += 1) {
@@ -3924,7 +3953,7 @@ parseYieldExpression: true
     // 12.7 The continue statement
 
     function parseContinueStatement() {
-        var label = null, key, marker = markerCreate();
+        var label = null, marker = markerCreate();
 
         expectKeyword('continue');
 
@@ -3950,8 +3979,7 @@ parseYieldExpression: true
         if (lookahead.type === Token.Identifier) {
             label = parseVariableIdentifier();
 
-            key = '$' + label.name;
-            if (!Object.prototype.hasOwnProperty.call(state.labelSet, key)) {
+            if (!state.labelSet.has(label.name)) {
                 throwError({}, Messages.UnknownLabel, label.name);
             }
         }
@@ -3968,7 +3996,7 @@ parseYieldExpression: true
     // 12.8 The break statement
 
     function parseBreakStatement() {
-        var label = null, key, marker = markerCreate();
+        var label = null, marker = markerCreate();
 
         expectKeyword('break');
 
@@ -3994,8 +4022,7 @@ parseYieldExpression: true
         if (lookahead.type === Token.Identifier) {
             label = parseVariableIdentifier();
 
-            key = '$' + label.name;
-            if (!Object.prototype.hasOwnProperty.call(state.labelSet, key)) {
+            if (!state.labelSet.has(label.name)) {
                 throwError({}, Messages.UnknownLabel, label.name);
             }
         }
@@ -4223,8 +4250,7 @@ parseYieldExpression: true
         var type = lookahead.type,
             marker,
             expr,
-            labeledBody,
-            key;
+            labeledBody;
 
         if (type === Token.EOF) {
             throwUnexpected(lookahead);
@@ -4287,14 +4313,13 @@ parseYieldExpression: true
         if ((expr.type === Syntax.Identifier) && match(':')) {
             lex();
 
-            key = '$' + expr.name;
-            if (Object.prototype.hasOwnProperty.call(state.labelSet, key)) {
+            if (state.labelSet.has(expr.name)) {
                 throwError({}, Messages.Redeclaration, 'Label', expr.name);
             }
 
-            state.labelSet[key] = true;
+            state.labelSet.set(expr.name, true);
             labeledBody = parseStatement();
-            delete state.labelSet[key];
+            state.labelSet['delete'](expr.name);
             return markerApply(marker, delegate.createLabeledStatement(expr, labeledBody));
         }
 
@@ -4350,7 +4375,7 @@ parseYieldExpression: true
         oldInFunctionBody = state.inFunctionBody;
         oldParenthesizedCount = state.parenthesizedCount;
 
-        state.labelSet = {};
+        state.labelSet = new StringMap();
         state.inIteration = false;
         state.inSwitch = false;
         state.inFunctionBody = true;
@@ -4379,13 +4404,12 @@ parseYieldExpression: true
     }
 
     function validateParam(options, param, name) {
-        var key = '$' + name;
         if (strict) {
             if (isRestrictedWord(name)) {
                 options.stricted = param;
                 options.message = Messages.StrictParamName;
             }
-            if (Object.prototype.hasOwnProperty.call(options.paramSet, key)) {
+            if (options.paramSet.has(name)) {
                 options.stricted = param;
                 options.message = Messages.StrictParamDupe;
             }
@@ -4396,12 +4420,12 @@ parseYieldExpression: true
             } else if (isStrictModeReservedWord(name)) {
                 options.firstRestricted = param;
                 options.message = Messages.StrictReservedWord;
-            } else if (Object.prototype.hasOwnProperty.call(options.paramSet, key)) {
+            } else if (options.paramSet.has(name)) {
                 options.firstRestricted = param;
                 options.message = Messages.StrictParamDupe;
             }
         }
-        options.paramSet[key] = true;
+        options.paramSet.set(name, true);
     }
 
     function parseParam(options) {
@@ -4463,7 +4487,7 @@ parseYieldExpression: true
         expect('(');
 
         if (!match(')')) {
-            options.paramSet = {};
+            options.paramSet = new StringMap();
             while (index < length) {
                 if (!parseParam(options)) {
                     break;
@@ -4613,8 +4637,46 @@ parseYieldExpression: true
 
     // 14 Classes
 
+    function validateDuplicateProp(propMap, key, accessor) {
+        var propInfo, reversed, name, isValidDuplicateProp;
+
+        name = getFieldName(key);
+
+        if (propMap.has(name)) {
+            propInfo = propMap.get(name);
+            if (accessor === 'data') {
+                isValidDuplicateProp = false;
+            } else {
+                if (accessor === 'get') {
+                    reversed = 'set';
+                } else {
+                    reversed = 'get';
+                }
+
+                isValidDuplicateProp =
+                    // There isn't already a specified accessor for this prop
+                    propInfo[accessor] === undefined
+                    // There isn't already a data prop by this name
+                    && propInfo.data === undefined
+                    // The only existing prop by this name is a reversed accessor
+                    && propInfo[reversed] !== undefined;
+            }
+            if (!isValidDuplicateProp) {
+                throwError(key, Messages.IllegalDuplicateClassProperty);
+            }
+        } else {
+            propInfo = {
+                get: undefined,
+                set: undefined,
+                data: undefined
+            };
+            propMap.set(name, propInfo);
+        }
+        propInfo[accessor] = true;
+    }
+
     function parseMethodDefinition(existingPropNames) {
-        var token, key, param, propType, isValidDuplicateProp = false, computed,
+        var token, key, param, propType, computed, propMap,
             marker = markerCreate();
 
         if (lookahead.value === 'static') {
@@ -4623,6 +4685,8 @@ parseYieldExpression: true
         } else {
             propType = ClassPropertyType.prototype;
         }
+
+        propMap = existingPropNames[propType];
 
         if (match('*')) {
             lex();
@@ -4646,21 +4710,7 @@ parseYieldExpression: true
             // It is a syntax error if any other properties have a name
             // duplicating this one unless they are a setter
             if (!computed) {
-                if (existingPropNames[propType].hasOwnProperty(key.name)) {
-                    isValidDuplicateProp =
-                        // There isn't already a getter for this prop
-                        existingPropNames[propType][key.name].get === undefined
-                        // There isn't already a data prop by this name
-                        && existingPropNames[propType][key.name].data === undefined
-                        // The only existing prop by this name is a setter
-                        && existingPropNames[propType][key.name].set !== undefined;
-                    if (!isValidDuplicateProp) {
-                        throwError(key, Messages.IllegalDuplicateClassProperty);
-                    }
-                } else {
-                    existingPropNames[propType][key.name] = {};
-                }
-                existingPropNames[propType][key.name].get = true;
+                validateDuplicateProp(propMap, key, 'get');
             }
 
             expect('(');
@@ -4680,21 +4730,7 @@ parseYieldExpression: true
             // It is a syntax error if any other properties have a name
             // duplicating this one unless they are a getter
             if (!computed) {
-                if (existingPropNames[propType].hasOwnProperty(key.name)) {
-                    isValidDuplicateProp =
-                        // There isn't already a setter for this prop
-                        existingPropNames[propType][key.name].set === undefined
-                        // There isn't already a data prop by this name
-                        && existingPropNames[propType][key.name].data === undefined
-                        // The only existing prop by this name is a getter
-                        && existingPropNames[propType][key.name].get !== undefined;
-                    if (!isValidDuplicateProp) {
-                        throwError(key, Messages.IllegalDuplicateClassProperty);
-                    }
-                } else {
-                    existingPropNames[propType][key.name] = {};
-                }
-                existingPropNames[propType][key.name].set = true;
+                validateDuplicateProp(propMap, key, 'set');
             }
 
             expect('(');
@@ -4715,12 +4751,7 @@ parseYieldExpression: true
         // It is a syntax error if any other properties have the same name as a
         // non-getter, non-setter method
         if (!computed) {
-            if (existingPropNames[propType].hasOwnProperty(key.name)) {
-                throwError(key, Messages.IllegalDuplicateClassProperty);
-            } else {
-                existingPropNames[propType][key.name] = {};
-            }
-            existingPropNames[propType][key.name].data = true;
+            validateDuplicateProp(propMap, key, 'data');
         }
 
         return markerApply(marker, delegate.createMethodDefinition(
@@ -4743,8 +4774,8 @@ parseYieldExpression: true
     function parseClassBody() {
         var classElement, classElements = [], existingProps = {}, marker = markerCreate();
 
-        existingProps[ClassPropertyType.static] = {};
-        existingProps[ClassPropertyType.prototype] = {};
+        existingProps[ClassPropertyType.static] = new StringMap();
+        existingProps[ClassPropertyType.prototype] = new StringMap();
 
         expect('{');
 
@@ -5214,7 +5245,7 @@ parseYieldExpression: true
         state = {
             allowKeyword: true,
             allowIn: true,
-            labelSet: {},
+            labelSet: new StringMap(),
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
@@ -5304,7 +5335,7 @@ parseYieldExpression: true
         state = {
             allowKeyword: false,
             allowIn: true,
-            labelSet: {},
+            labelSet: new StringMap(),
             parenthesizedCount: 0,
             inFunctionBody: false,
             inIteration: false,
