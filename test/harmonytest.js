@@ -10681,6 +10681,221 @@ var harmonyTestFixture = {
             }
         },
 
+        'class hello extends[]{"ok"(){}get"g1"(){}set"s1"(v){}*gen(){}}': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'hello',
+                range: [6, 11],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 11 }
+                }
+            },
+            superClass: {
+                type: 'ArrayExpression',
+                elements: [],
+                range: [19, 21],
+                loc: {
+                    start: { line: 1, column: 19 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Literal',
+                        value: 'ok',
+                        raw: '"ok"',
+                        range: [22, 26],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [28, 30],
+                            loc: {
+                                start: { line: 1, column: 28 },
+                                end: { line: 1, column: 30 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [28, 30],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 30 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: false,
+                    range: [22, 30],
+                    loc: {
+                        start: { line: 1, column: 22 },
+                        end: { line: 1, column: 30 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Literal',
+                        value: 'g1',
+                        raw: '"g1"',
+                        range: [33, 37],
+                        loc: {
+                            start: { line: 1, column: 33 },
+                            end: { line: 1, column: 37 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [39, 41],
+                            loc: {
+                                start: { line: 1, column: 39 },
+                                end: { line: 1, column: 41 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [39, 41],
+                        loc: {
+                            start: { line: 1, column: 39 },
+                            end: { line: 1, column: 41 }
+                        }
+                    },
+                    kind: 'get',
+                    'static': false,
+                    computed: false,
+                    range: [30, 41],
+                    loc: {
+                        start: { line: 1, column: 30 },
+                        end: { line: 1, column: 41 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Literal',
+                        value: 's1',
+                        raw: '"s1"',
+                        range: [44, 48],
+                        loc: {
+                            start: { line: 1, column: 44 },
+                            end: { line: 1, column: 48 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [{
+                            type: 'Identifier',
+                            name: 'v',
+                            range: [49, 50],
+                            loc: {
+                                start: { line: 1, column: 49 },
+                                end: { line: 1, column: 50 }
+                            }
+                        }],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [51, 53],
+                            loc: {
+                                start: { line: 1, column: 51 },
+                                end: { line: 1, column: 53 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [51, 53],
+                        loc: {
+                            start: { line: 1, column: 51 },
+                            end: { line: 1, column: 53 }
+                        }
+                    },
+                    kind: 'set',
+                    'static': false,
+                    computed: false,
+                    range: [41, 53],
+                    loc: {
+                        start: { line: 1, column: 41 },
+                        end: { line: 1, column: 53 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'gen',
+                        range: [54, 57],
+                        loc: {
+                            start: { line: 1, column: 54 },
+                            end: { line: 1, column: 57 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [59, 61],
+                            loc: {
+                                start: { line: 1, column: 59 },
+                                end: { line: 1, column: 61 }
+                            }
+                        },
+                        rest: null,
+                        generator: true,
+                        expression: false,
+                        range: [59, 61],
+                        loc: {
+                            start: { line: 1, column: 59 },
+                            end: { line: 1, column: 61 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: false,
+                    range: [53, 61],
+                    loc: {
+                        start: { line: 1, column: 53 },
+                        end: { line: 1, column: 61 }
+                    }
+                }],
+                range: [21, 62],
+                loc: {
+                    start: { line: 1, column: 21 },
+                    end: { line: 1, column: 62 }
+                }
+            },
+            range: [0, 62],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 62 }
+            }
+        },
+
         '(({x} = {x: 10}) => {})': {
             type: 'ExpressionStatement',
             expression: {
