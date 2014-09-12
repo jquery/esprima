@@ -19744,7 +19744,8 @@ var testFixture = {
                 VariableDeclarator: 'VariableDeclarator',
                 WhileStatement: 'WhileStatement',
                 WithStatement: 'WithStatement',
-                YieldExpression: 'YieldExpression'
+                YieldExpression: 'YieldExpression',
+                AwaitExpression: 'AwaitExpression'
             }
         },
 
