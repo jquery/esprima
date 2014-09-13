@@ -9488,11 +9488,61 @@ var harmonyTestFixture = {
         },
 
         '({[x]})': {
-          index: 5,
-          lineNumber: 1,
-          column: 6,
-          message: 'Error: Line 1: Unexpected token }'
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Unexpected token }'
+        },
+
+        "({ '[': 42 })": {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'Literal',
+                        value: '[',
+                        raw: '\'[\'',
+                        range: [3, 6],
+                        loc: {
+                            start: { line: 1, column: 3 },
+                            end: { line: 1, column: 6 }
+                        }
+                    },
+                    value: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42',
+                        range: [8, 10],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 10 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: false,
+                    computed: false,
+                    range: [3, 10],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 10 }
+                    }
+                }],
+                range: [1, 12],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 13 }
+            }
         }
+
     },
 
     'ES6: Default parameters': {
