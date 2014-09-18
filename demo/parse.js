@@ -259,7 +259,7 @@ window.onload = function () {
             var queries, elements, code, i, iz, pair;
 
             window.editor = editor({ parent: 'editor', lang: 'js' });
-            window.editor.getTextView().getModel().addEventListener("Changed", parse);
+            window.editor.getTextView().getModel().addEventListener("Changed", function () { parse(); });
             parse(100);
 
             if (location.search) {

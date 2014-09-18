@@ -48,7 +48,7 @@ window.onload = function () {
     try {
         require(['custom/editor'], function (editor) {
             window.editor = editor({ parent: 'editor', lang: 'js' });
-            window.editor.getTextView().getModel().addEventListener("Changed", validate);
+            window.editor.getTextView().getModel().addEventListener("Changed", function () { validate(); });
         });
         validate(55);
     } catch (e) {
