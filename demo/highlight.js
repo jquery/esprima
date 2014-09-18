@@ -135,7 +135,7 @@ window.onload = function () {
     try {
         require(['custom/editor'], function (editor) {
             window.editor = editor({ parent: 'editor', lang: 'js' });
-            window.editor.getTextView().getModel().addEventListener("Changed", triggerParse);
+            window.editor.getTextView().getModel().addEventListener("Changed", function () { triggerParse(); });
             window.editor.getTextView().addEventListener("Selection", trackCursor);
             window.editor.onGotoLine(9, 12, 12);
             triggerParse(50);
