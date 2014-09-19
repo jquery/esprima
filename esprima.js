@@ -3222,6 +3222,11 @@ parseYieldExpression: true
                 state.parenthesizedCount === (oldParenthesizedCount + 1))) {
             if (expr.type === Syntax.Identifier) {
                 params = reinterpretAsCoverFormalsList([ expr ]);
+            // ADDED by Termi
+            // case example: ```(a = 1) => (  a + 1  , a  )``` throw wrong error: Line 1: Unexpected token =>
+            } else if (expr.type === Syntax.ObjectExpression || expr.type === Syntax.ArrayExpression || expr.type === Syntax.AssignmentExpression) {
+                params = reinterpretAsCoverFormalsList([expr]);
+            // ADDED by Termi
             } else if (expr.type === Syntax.SequenceExpression) {
                 params = reinterpretAsCoverFormalsList(expr.expressions);
             }
