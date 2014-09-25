@@ -216,6 +216,7 @@ parseYieldExpression: true
         IllegalContinue: 'Illegal continue statement',
         IllegalBreak: 'Illegal break statement',
         IllegalDuplicateClassProperty: 'Illegal duplicate property in class definition',
+        IllegalClassConstructorProperty: 'Illegal constructor property in class definition',
         IllegalReturn: 'Illegal return statement',
         IllegalYield: 'Illegal yield expression',
         IllegalSpread: 'Illegal spread element',
@@ -4655,58 +4656,29 @@ parseYieldExpression: true
         return markerApply(marker, delegate.createYieldExpression(expr, delegateFlag));
     }
 
-    // 14 Classes
+    // 14 Functions and classes
 
-    function validateDuplicateProp(propMap, key, accessor) {
-        var propInfo, reversed, name, isValidDuplicateProp;
+    // 14.1 Functions is defined above (13 in ES5)
+    // 14.2 Arrow Functions Definitions is defined in (7.3 assignments)
 
-        name = getFieldName(key);
-
-        if (propMap.has(name)) {
-            propInfo = propMap.get(name);
-            if (accessor === 'data') {
-                isValidDuplicateProp = false;
-            } else {
-                if (accessor === 'get') {
-                    reversed = 'set';
-                } else {
-                    reversed = 'get';
-                }
-
-                isValidDuplicateProp =
-                    // There isn't already a specified accessor for this prop
-                    propInfo[accessor] === undefined
-                    // There isn't already a data prop by this name
-                    && propInfo.data === undefined
-                    // The only existing prop by this name is a reversed accessor
-                    && propInfo[reversed] !== undefined;
-            }
-            if (!isValidDuplicateProp) {
-                throwError(key, Messages.IllegalDuplicateClassProperty);
-            }
-        } else {
-            propInfo = {
-                get: undefined,
-                set: undefined,
-                data: undefined
-            };
-            propMap.set(name, propInfo);
-        }
-        propInfo[accessor] = true;
+    // 14.3 Method Definitions
+    // 14.3.7
+    function specialMethod(methodDefinition) {
+        return methodDefinition.kind === 'get' ||
+            methodDefinition.kind === 'set' ||
+            methodDefinition.value.generator;
     }
 
-    function parseMethodDefinition(existingPropNames) {
-        var token, key, param, propType, computed, propMap,
+    function parseMethodDefinition() {
+        var token, key, param, propType, computed,
             marker = markerCreate();
 
         if (lookahead.value === 'static') {
-            propType = ClassPropertyType.static;
+            propType = ClassPropertyType['static'];
             lex();
         } else {
             propType = ClassPropertyType.prototype;
         }
-
-        propMap = existingPropNames[propType];
 
         if (match('*')) {
             lex();
@@ -4727,12 +4699,6 @@ parseYieldExpression: true
             computed = (lookahead.value === '[');
             key = parseObjectPropertyKey();
 
-            // It is a syntax error if any other properties have a name
-            // duplicating this one unless they are a setter
-            if (!computed) {
-                validateDuplicateProp(propMap, key, 'get');
-            }
-
             expect('(');
             expect(')');
             return markerApply(marker, delegate.createMethodDefinition(
@@ -4746,12 +4712,6 @@ parseYieldExpression: true
         if (token.value === 'set' && !match('(')) {
             computed = (lookahead.value === '[');
             key = parseObjectPropertyKey();
-
-            // It is a syntax error if any other properties have a name
-            // duplicating this one unless they are a getter
-            if (!computed) {
-                validateDuplicateProp(propMap, key, 'set');
-            }
 
             expect('(');
             token = lookahead;
@@ -4768,12 +4728,6 @@ parseYieldExpression: true
 
         computed = (token.value === '[');
 
-        // It is a syntax error if any other properties have the same name as a
-        // non-getter, non-setter method
-        if (!computed) {
-            validateDuplicateProp(propMap, key, 'data');
-        }
-
         return markerApply(marker, delegate.createMethodDefinition(
             propType,
             '',
@@ -4783,18 +4737,21 @@ parseYieldExpression: true
         ));
     }
 
-    function parseClassElement(existingProps) {
+    // 14.5 Class Definitions
+
+    function parseClassElement() {
         if (match(';')) {
             lex();
             return;
         }
-        return parseMethodDefinition(existingProps);
+        return parseMethodDefinition();
     }
 
     function parseClassBody() {
-        var classElement, classElements = [], existingProps = {}, marker = markerCreate();
+        var classElement, classElements = [], existingProps = {},
+            marker = markerCreate(), propName, propType;
 
-        existingProps[ClassPropertyType.static] = new StringMap();
+        existingProps[ClassPropertyType['static']] = new StringMap();
         existingProps[ClassPropertyType.prototype] = new StringMap();
 
         expect('{');
@@ -4807,6 +4764,23 @@ parseYieldExpression: true
 
             if (typeof classElement !== 'undefined') {
                 classElements.push(classElement);
+
+                propName = !classElement.computed && getFieldName(classElement.key);
+                if (propName !== false) {
+                    propType = classElement['static'] ?
+                                ClassPropertyType['static'] :
+                                ClassPropertyType.prototype;
+
+                    if (propName === 'constructor' && !classElement['static']) {
+                        if (specialMethod(classElement)) {
+                            throwError(classElement, Messages.IllegalClassConstructorProperty);
+                        }
+                        if (existingProps[ClassPropertyType.prototype].has('constructor')) {
+                            throwError(classElement.key, Messages.IllegalDuplicateClassProperty);
+                        }
+                    }
+                    existingProps[propType].set(propName, true);
+                }
             }
         }
 

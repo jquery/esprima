@@ -8108,52 +8108,1656 @@ var harmonyTestFixture = {
             }
         },
 
+        'class A { static [foo]() {} static foo() {} }': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [18, 21],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 21 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [25, 27],
+                            loc: {
+                                start: { line: 1, column: 25 },
+                                end: { line: 1, column: 27 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [25, 27],
+                        loc: {
+                            start: { line: 1, column: 25 },
+                            end: { line: 1, column: 27 }
+                        }
+                    },
+                    kind: '',
+                    'static': true,
+                    computed: true,
+                    range: [10, 27],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 27 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [35, 38],
+                        loc: {
+                            start: { line: 1, column: 35 },
+                            end: { line: 1, column: 38 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [41, 43],
+                            loc: {
+                                start: { line: 1, column: 41 },
+                                end: { line: 1, column: 43 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [41, 43],
+                        loc: {
+                            start: { line: 1, column: 41 },
+                            end: { line: 1, column: 43 }
+                        }
+                    },
+                    kind: '',
+                    'static': true,
+                    computed: false,
+                    range: [28, 43],
+                    loc: {
+                        start: { line: 1, column: 28 },
+                        end: { line: 1, column: 43 }
+                    }
+                }],
+                range: [8, 45],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 45 }
+                }
+            },
+            range: [0, 45],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 45 }
+            }
+        },
+
+        'class A { [foo]() {} foo() {} }': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [11, 14],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [18, 20],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 20 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [18, 20],
+                        loc: {
+                            start: { line: 1, column: 18 },
+                            end: { line: 1, column: 20 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: true,
+                    range: [10, 20],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 20 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [21, 24],
+                        loc: {
+                            start: { line: 1, column: 21 },
+                            end: { line: 1, column: 24 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [27, 29],
+                            loc: {
+                                start: { line: 1, column: 27 },
+                                end: { line: 1, column: 29 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [27, 29],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 29 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: false,
+                    range: [21, 29],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 29 }
+                    }
+                }],
+                range: [8, 31],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 31 }
+                }
+            },
+            range: [0, 31],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 31 }
+            }
+        },
+
+        'class A { get [foo]() {} set [foo](v) {} get foo() {} set foo(v) {} }': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [15, 18],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [22, 24],
+                            loc: {
+                                start: { line: 1, column: 22 },
+                                end: { line: 1, column: 24 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [22, 24],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 24 }
+                        }
+                    },
+                    kind: 'get',
+                    'static': false,
+                    computed: true,
+                    range: [10, 24],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 24 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [30, 33],
+                        loc: {
+                            start: { line: 1, column: 30 },
+                            end: { line: 1, column: 33 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [{
+                            type: 'Identifier',
+                            name: 'v',
+                            range: [35, 36],
+                            loc: {
+                                start: { line: 1, column: 35 },
+                                end: { line: 1, column: 36 }
+                            }
+                        }],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [38, 40],
+                            loc: {
+                                start: { line: 1, column: 38 },
+                                end: { line: 1, column: 40 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [38, 40],
+                        loc: {
+                            start: { line: 1, column: 38 },
+                            end: { line: 1, column: 40 }
+                        }
+                    },
+                    kind: 'set',
+                    'static': false,
+                    computed: true,
+                    range: [25, 40],
+                    loc: {
+                        start: { line: 1, column: 25 },
+                        end: { line: 1, column: 40 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [45, 48],
+                        loc: {
+                            start: { line: 1, column: 45 },
+                            end: { line: 1, column: 48 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [51, 53],
+                            loc: {
+                                start: { line: 1, column: 51 },
+                                end: { line: 1, column: 53 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [51, 53],
+                        loc: {
+                            start: { line: 1, column: 51 },
+                            end: { line: 1, column: 53 }
+                        }
+                    },
+                    kind: 'get',
+                    'static': false,
+                    computed: false,
+                    range: [41, 53],
+                    loc: {
+                        start: { line: 1, column: 41 },
+                        end: { line: 1, column: 53 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [58, 61],
+                        loc: {
+                            start: { line: 1, column: 58 },
+                            end: { line: 1, column: 61 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [{
+                            type: 'Identifier',
+                            name: 'v',
+                            range: [62, 63],
+                            loc: {
+                                start: { line: 1, column: 62 },
+                                end: { line: 1, column: 63 }
+                            }
+                        }],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [65, 67],
+                            loc: {
+                                start: { line: 1, column: 65 },
+                                end: { line: 1, column: 67 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [65, 67],
+                        loc: {
+                            start: { line: 1, column: 65 },
+                            end: { line: 1, column: 67 }
+                        }
+                    },
+                    kind: 'set',
+                    'static': false,
+                    computed: false,
+                    range: [54, 67],
+                    loc: {
+                        start: { line: 1, column: 54 },
+                        end: { line: 1, column: 67 }
+                    }
+                }],
+                range: [8, 69],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 69 }
+                }
+            },
+            range: [0, 69],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 69 }
+            }
+        },
+
+        'class A { *[foo]() {} *foo() {} }': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [12, 15],
+                        loc: {
+                            start: { line: 1, column: 12 },
+                            end: { line: 1, column: 15 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [19, 21],
+                            loc: {
+                                start: { line: 1, column: 19 },
+                                end: { line: 1, column: 21 }
+                            }
+                        },
+                        rest: null,
+                        generator: true,
+                        expression: false,
+                        range: [19, 21],
+                        loc: {
+                            start: { line: 1, column: 19 },
+                            end: { line: 1, column: 21 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: true,
+                    range: [10, 21],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 21 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [23, 26],
+                        loc: {
+                            start: { line: 1, column: 23 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [29, 31],
+                            loc: {
+                                start: { line: 1, column: 29 },
+                                end: { line: 1, column: 31 }
+                            }
+                        },
+                        rest: null,
+                        generator: true,
+                        expression: false,
+                        range: [29, 31],
+                        loc: {
+                            start: { line: 1, column: 29 },
+                            end: { line: 1, column: 31 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: false,
+                    range: [22, 31],
+                    loc: {
+                        start: { line: 1, column: 22 },
+                        end: { line: 1, column: 31 }
+                    }
+                }],
+                range: [8, 33],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 33 }
+                }
+            },
+            range: [0, 33],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 33 }
+            }
+        },
+
         'class A { get foo() {} get foo() {} }': {
-            index: 30,
-            lineNumber: 1,
-            column: 31,
-            message: 'Error: Line 1: Illegal duplicate property in class definition',
-            description: 'Illegal duplicate property in class definition'
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [14, 17],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 17 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [20, 22],
+                           loc: {
+                               start: { line: 1, column: 20 },
+                               end: { line: 1, column: 22 }
+                           }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [20, 22],
+                        loc: {
+                           start: { line: 1, column: 20 },
+                           end: { line: 1, column: 22 }
+                        }
+                    },
+                    kind: 'get',
+                    'static': false,
+                    computed: false,
+                    range: [10, 22],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 22 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [27, 30],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 30 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [33, 35],
+                           loc: {
+                               start: { line: 1, column: 33 },
+                               end: { line: 1, column: 35 }
+                           }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [33, 35],
+                        loc: {
+                           start: { line: 1, column: 33 },
+                           end: { line: 1, column: 35 }
+                        }
+                    },
+                    kind: 'get',
+                    'static': false,
+                    computed: false,
+                    range: [23, 35],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 35 }
+                    }
+                }],
+                range: [8, 37],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 37 }
+                }
+            },
+            range: [0, 37],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 37 }
+            }
         },
 
         'class A { set foo(v) {} set foo(v) {} }': {
-            index: 31,
-            lineNumber: 1,
-            column: 32,
-            message: 'Error: Line 1: Illegal duplicate property in class definition',
-            description: 'Illegal duplicate property in class definition'
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [14, 17],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 17 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [{
+                           type: 'Identifier',
+                           name: 'v',
+                           range: [18, 19],
+                           loc: {
+                               start: { line: 1, column: 18 },
+                               end: { line: 1, column: 19 }
+                           }
+                        }],
+                        defaults: [],
+                        body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [21, 23],
+                           loc: {
+                               start: { line: 1, column: 21 },
+                               end: { line: 1, column: 23 }
+                           }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [21, 23],
+                        loc: {
+                           start: { line: 1, column: 21 },
+                           end: { line: 1, column: 23 }
+                        }
+                    },
+                    kind: 'set',
+                    'static': false,
+                    computed: false,
+                    range: [10, 23],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 23 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [28, 31],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 31 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [{
+                           type: 'Identifier',
+                           name: 'v',
+                           range: [32, 33],
+                           loc: {
+                               start: { line: 1, column: 32 },
+                               end: { line: 1, column: 33 }
+                           }
+                        }],
+                        defaults: [],
+                        body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [35, 37],
+                           loc: {
+                               start: { line: 1, column: 35 },
+                               end: { line: 1, column: 37 }
+                           }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [35, 37],
+                        loc: {
+                           start: { line: 1, column: 35 },
+                           end: { line: 1, column: 37 }
+                        }
+                    },
+                    kind: 'set',
+                    'static': false,
+                    computed: false,
+                    range: [24, 37],
+                    loc: {
+                        start: { line: 1, column: 24 },
+                        end: { line: 1, column: 37 }
+                    }
+                }],
+                range: [8, 39],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 39 }
+                }
+            },
+            range: [0, 39],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 39 }
+            }
         },
 
         'class A { get foo() {} foo() {} }': {
-            index: 26,
-            lineNumber: 1,
-            column: 27,
-            message: 'Error: Line 1: Illegal duplicate property in class definition',
-            description: 'Illegal duplicate property in class definition'
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [14, 17],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 17 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [20, 22],
+                           loc: {
+                               start: { line: 1, column: 20 },
+                               end: { line: 1, column: 22 }
+                           }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [20, 22],
+                        loc: {
+                           start: { line: 1, column: 20 },
+                           end: { line: 1, column: 22 }
+                        }
+                    },
+                    kind: 'get',
+                    'static': false,
+                    computed: false,
+                    range: [10, 22],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 22 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [23, 26],
+                        loc: {
+                            start: { line: 1, column: 23 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [29, 31],
+                           loc: {
+                               start: { line: 1, column: 29 },
+                               end: { line: 1, column: 31 }
+                           }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [29, 31],
+                        loc: {
+                           start: { line: 1, column: 29 },
+                           end: { line: 1, column: 31 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: false,
+                    range: [23, 31],
+                    loc: {
+                        start: { line: 1, column: 23 },
+                        end: { line: 1, column: 31 }
+                    }
+                }],
+                range: [8, 33],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 33 }
+                }
+            },
+            range: [0, 33],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 33 }
+            }
         },
 
         'class A { foo() {} get foo() {} }': {
-            index: 26,
-            lineNumber: 1,
-            column: 27,
-            message: 'Error: Line 1: Illegal duplicate property in class definition',
-            description: 'Illegal duplicate property in class definition'
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [10, 13],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 13 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [16, 18],
+                           loc: {
+                               start: { line: 1, column: 16 },
+                               end: { line: 1, column: 18 }
+                           }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [16, 18],
+                        loc: {
+                           start: { line: 1, column: 16 },
+                           end: { line: 1, column: 18 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: false,
+                    range: [10, 18],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 18 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [23, 26],
+                        loc: {
+                            start: { line: 1, column: 23 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [29, 31],
+                           loc: {
+                               start: { line: 1, column: 29 },
+                               end: { line: 1, column: 31 }
+                           }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [29, 31],
+                        loc: {
+                           start: { line: 1, column: 29 },
+                           end: { line: 1, column: 31 }
+                        }
+                    },
+                    kind: 'get',
+                    'static': false,
+                    computed: false,
+                    range: [19, 31],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 31 }
+                    }
+                }],
+                range: [8, 33],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 33 }
+                }
+            },
+            range: [0, 33],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 33 }
+            }
         },
 
         'class A { set foo(v) {} foo() {} }': {
-            index: 27,
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [14, 17],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 17 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [{
+                           type: 'Identifier',
+                           name: 'v',
+                           range: [18, 19],
+                           loc: {
+                               start: { line: 1, column: 18 },
+                               end: { line: 1, column: 19 }
+                           }
+                        }],
+                        defaults: [],
+                        body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [21, 23],
+                           loc: {
+                               start: { line: 1, column: 21 },
+                               end: { line: 1, column: 23 }
+                           }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [21, 23],
+                        loc: {
+                           start: { line: 1, column: 21 },
+                           end: { line: 1, column: 23 }
+                        }
+                    },
+                    kind: 'set',
+                    'static': false,
+                    computed: false,
+                    range: [10, 23],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 23 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [24, 27],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 27 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [30, 32],
+                           loc: {
+                               start: { line: 1, column: 30 },
+                               end: { line: 1, column: 32 }
+                           }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [30, 32],
+                        loc: {
+                           start: { line: 1, column: 30 },
+                           end: { line: 1, column: 32 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: false,
+                    range: [24, 32],
+                    loc: {
+                        start: { line: 1, column: 24 },
+                        end: { line: 1, column: 32 }
+                    }
+                }],
+                range: [8, 34],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 34 }
+                }
+            },
+            range: [0, 34],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 34 }
+            }
+        },
+
+        'class A { foo() {} set foo(v) {} }': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [10, 13],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 13 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [16, 18],
+                           loc: {
+                               start: { line: 1, column: 16 },
+                               end: { line: 1, column: 18 }
+                           }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [16, 18],
+                        loc: {
+                           start: { line: 1, column: 16 },
+                           end: { line: 1, column: 18 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: false,
+                    range: [10, 18],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 18 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'foo',
+                        range: [23, 26],
+                        loc: {
+                            start: { line: 1, column: 23 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    value: {
+                       type: 'FunctionExpression',
+                       id: null,
+                       params: [{
+                           type: 'Identifier',
+                           name: 'v',
+                           range: [27, 28],
+                           loc: {
+                               start: { line: 1, column: 27 },
+                               end: { line: 1, column: 28 }
+                           }
+                       }],
+                       defaults: [],
+                       body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [30, 32],
+                           loc: {
+                               start: { line: 1, column: 30 },
+                               end: { line: 1, column: 32 }
+                           }
+                       },
+                       rest: null,
+                       generator: false,
+                       expression: false,
+                       range: [30, 32],
+                       loc: {
+                           start: { line: 1, column: 30 },
+                           end: { line: 1, column: 32 }
+                       }
+                    },
+                    kind: 'set',
+                    'static': false,
+                    computed: false,
+                    range: [19, 32],
+                    loc: {
+                        start: { line: 1, column: 19 },
+                        end: { line: 1, column: 32 }
+                    }
+                }],
+                range: [8, 34],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 34 }
+                }
+            },
+            range: [0, 34],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 34 }
+            }
+        },
+
+        'class A { constructor() {} static constructor() {} }': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'constructor',
+                        range: [10, 21],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 21 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [24, 26],
+                           loc: {
+                               start: { line: 1, column: 24 },
+                               end: { line: 1, column: 26 }
+                           }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [24, 26],
+                        loc: {
+                           start: { line: 1, column: 24 },
+                           end: { line: 1, column: 26 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: false,
+                    range: [10, 26],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 26 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'constructor',
+                        range: [34, 45],
+                        loc: {
+                            start: { line: 1, column: 34 },
+                            end: { line: 1, column: 45 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                           type: 'BlockStatement',
+                           body: [],
+                           range: [48, 50],
+                           loc: {
+                               start: { line: 1, column: 48 },
+                               end: { line: 1, column: 50 }
+                           }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [48, 50],
+                        loc: {
+                           start: { line: 1, column: 48 },
+                           end: { line: 1, column: 50 }
+                        }
+                    },
+                    kind: '',
+                    'static': true,
+                    computed: false,
+                    range: [27, 50],
+                    loc: {
+                        start: { line: 1, column: 27 },
+                        end: { line: 1, column: 50 }
+                    }
+                }],
+                range: [8, 52],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 52 }
+                }
+            },
+            range: [0, 52],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 52 }
+            }
+        },
+
+        'class A { static constructor() {} constructor() {} }': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'constructor',
+                        range: [17, 28],
+                        loc: {
+                            start: { line: 1, column: 17 },
+                            end: { line: 1, column: 28 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [31, 33],
+                            loc: {
+                                start: { line: 1, column: 31 },
+                                end: { line: 1, column: 33 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [31, 33],
+                        loc: {
+                            start: { line: 1, column: 31 },
+                            end: { line: 1, column: 33 }
+                        }
+                    },
+                    kind: '',
+                    'static': true,
+                    computed: false,
+                    range: [10, 33],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 33 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'constructor',
+                        range: [34, 45],
+                        loc: {
+                            start: { line: 1, column: 34 },
+                            end: { line: 1, column: 45 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [48, 50],
+                            loc: {
+                                start: { line: 1, column: 48 },
+                                end: { line: 1, column: 50 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [48, 50],
+                        loc: {
+                            start: { line: 1, column: 48 },
+                            end: { line: 1, column: 50 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: false,
+                    range: [34, 50],
+                    loc: {
+                        start: { line: 1, column: 34 },
+                        end: { line: 1, column: 50 }
+                    }
+                }],
+                range: [8, 52],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 52 }
+                }
+            },
+            range: [0, 52],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 52 }
+            }
+        },
+
+        'class A { constructor() {} [constructor]() {} }': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'constructor',
+                        range: [10, 21],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 21 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [24, 26],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 26 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [24, 26],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: false,
+                    range: [10, 26],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 26 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'constructor',
+                        range: [28, 39],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 39 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [43, 45],
+                            loc: {
+                                start: { line: 1, column: 43 },
+                                end: { line: 1, column: 45 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [43, 45],
+                        loc: {
+                            start: { line: 1, column: 43 },
+                            end: { line: 1, column: 45 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: true,
+                    range: [27, 45],
+                    loc: {
+                        start: { line: 1, column: 27 },
+                        end: { line: 1, column: 45 }
+                    }
+                }],
+                range: [8, 47],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 47 }
+                }
+            },
+            range: [0, 47],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 47 }
+            }
+        },
+
+        'class A { constructor() {} constructor() {} }': {
+            index: 43,
             lineNumber: 1,
-            column: 28,
+            column: 44,
             message: 'Error: Line 1: Illegal duplicate property in class definition',
             description: 'Illegal duplicate property in class definition'
         },
 
-        'class A { foo() {} set foo(v) {} }': {
-            index: 26,
+        'class A { constructor() {} "constructor"() {} }': {
+            index: 45,
             lineNumber: 1,
-            column: 27,
+            column: 46,
             message: 'Error: Line 1: Illegal duplicate property in class definition',
             description: 'Illegal duplicate property in class definition'
+        },
+
+        'class A { "constructor"() {} constructor() {} }': {
+            index: 45,
+            lineNumber: 1,
+            column: 46,
+            message: 'Error: Line 1: Illegal duplicate property in class definition',
+            description: 'Illegal duplicate property in class definition'
+        },
+
+        'class A { get constructor() {} }': {
+            index: 30,
+            lineNumber: 1,
+            column: 31,
+            message: 'Error: Line 1: Illegal constructor property in class definition',
+            description: 'Illegal constructor property in class definition"'
+        },
+
+        'class A { set constructor(v) {} }': {
+            index: 31,
+            lineNumber: 1,
+            column: 32,
+            message: 'Error: Line 1: Illegal constructor property in class definition',
+            description: 'Illegal constructor property in class definition"'
+        },
+
+        'class A { *constructor() {} }': {
+            index: 27,
+            lineNumber: 1,
+            column: 28,
+            message: 'Error: Line 1: Illegal constructor property in class definition',
+            description: 'Illegal constructor property in class definition"'
+        },
+
+        'class A { constructor() {} get constructor() {} }': {
+            index: 47,
+            lineNumber: 1,
+            column: 48,
+            message: 'Error: Line 1: Illegal constructor property in class definition',
+            description: 'Illegal constructor property in class definition"'
+        },
+
+        'class A { get constructor() {} constructor() {} }': {
+            index: 30,
+            lineNumber: 1,
+            column: 31,
+            message: 'Error: Line 1: Illegal constructor property in class definition',
+            description: 'Illegal constructor property in class definition"'
         },
 
     },
