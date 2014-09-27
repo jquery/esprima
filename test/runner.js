@@ -452,6 +452,7 @@ if (typeof window !== 'undefined') {
 
         vm.runInThisContext(fs.readFileSync(__dirname + '/test.js', 'utf-8'));
         vm.runInThisContext(fs.readFileSync(__dirname + '/harmonytest.js', 'utf-8'));
+        vm.runInThisContext(fs.readFileSync(__dirname + '/harmonymodulestest.js', 'utf-8'));
 
         Object.keys(testFixture).forEach(function (category) {
             Object.keys(testFixture[category]).forEach(function (source) {
