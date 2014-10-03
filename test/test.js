@@ -6753,11 +6753,11 @@ var testFixture = {
                     init: {
                         type: 'Literal',
                         value: '/[a-z]/i',
+                        raw: '/[a-z]/i',
                         regex: {
                             pattern: '[a-z]',
                             flags: 'i'
                         },
-                        raw: '/[a-z]/i',
                         range: [8, 16],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -6838,12 +6838,12 @@ var testFixture = {
                     },
                     init: {
                         type: 'Literal',
-                        value: '/[a-z]/y',
+                        value: null,
+                        raw: '/[a-z]/y',
                         regex: {
                             pattern: '[a-z]',
                             flags: 'y'
                         },
-                        raw: '/[a-z]/y',
                         range: [8, 16],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -6924,12 +6924,12 @@ var testFixture = {
                     },
                     init: {
                         type: 'Literal',
-                        value: '/[a-z]/u',
+                        value: null,
+                        raw: '/[a-z]/u',
                         regex: {
                             pattern: '[a-z]',
                             flags: 'u'
                         },
-                        raw: '/[a-z]/u',
                         range: [8, 16],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -7007,11 +7007,11 @@ var testFixture = {
                     init: {
                         type: 'Literal',
                         value: '/[x-z]/i',
+                        raw: '/[x-z]/i',
                         regex: {
                             pattern: '[x-z]',
                             flags: 'i'
                         },
-                        raw: '/[x-z]/i',
                         range: [8, 16]
                     },
                     range: [4, 16]
@@ -7060,11 +7060,11 @@ var testFixture = {
                     init: {
                         type: 'Literal',
                         value: '/[a-c]/i',
+                        raw: '/[a-c]/i',
                         regex: {
                             pattern: '[a-c]',
                             flags: 'i'
                         },
-                        raw: '/[a-c]/i',
                         loc: {
                             start: { line: 1, column: 8 },
                             end: { line: 1, column: 16 }
@@ -7138,11 +7138,11 @@ var testFixture = {
                     init: {
                         type: 'Literal',
                         value: '/[P QR]/i',
+                        raw: '/[P QR]/i',
                         regex: {
                             pattern: '[P QR]',
                             flags: 'i'
                         },
-                        raw: '/[P QR]/i',
                         range: [8, 17],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -7225,6 +7225,10 @@ var testFixture = {
                         type: 'Literal',
                         value: new RegExp('[\\]/]').toString(),
                         raw: '/[\\]/]/',
+                        regex: {
+                            pattern: '[\\]/]',
+                            flags: ''
+                        },
                         range: [8, 15],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -7306,11 +7310,11 @@ var testFixture = {
                     init: {
                         type: 'Literal',
                         value: '/foo\\/bar/',
+                        raw: '/foo\\/bar/',
                         regex: {
                             pattern: 'foo\\/bar',
                             flags: ''
                         },
-                        raw: '/foo\\/bar/',
                         range: [8, 18],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -7392,11 +7396,11 @@ var testFixture = {
                     init: {
                         type: 'Literal',
                         value: '/=([^=\\s])+/g',
+                        raw: '/=([^=\\s])+/g',
                         regex: {
                             pattern: '=([^=\\s])+',
                             flags: 'g'
                         },
-                        raw: '/=([^=\\s])+/g',
                         range: [8, 21],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -7479,11 +7483,11 @@ var testFixture = {
                     object: {
                         type: 'Literal',
                         value: '/42/g',
+                        raw: '/42/g',
                         regex: {
                             pattern: '42',
                             flags: 'g'
                         },
-                        raw: '/42/g',
                         range: [8, 13],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -28248,11 +28252,11 @@ var testFixture = {
                     init: {
                         type: "Literal",
                         value: "/[P QR]/g",
+                        raw: "/[P QR]/\\g",
                         regex: {
                             pattern: "[P QR]",
                             flags: "g"
                         },
-                        raw: "/[P QR]/\\g",
                         range: [8, 18],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -28303,11 +28307,11 @@ var testFixture = {
                     init: {
                         type: "Literal",
                         value: "/[P QR]/g",
+                        raw: "/[P QR]/\\\\u0067",
                         regex: {
                             pattern: "[P QR]",
                             flags: "g"
                         },
-                        raw: "/[P QR]/\\\\u0067",
                         range: [8, 23],
                         loc: {
                             start: { line: 1, column: 8 },

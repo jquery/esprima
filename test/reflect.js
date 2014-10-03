@@ -217,7 +217,7 @@ assertDecl("function f(a,b,c) { function b() { } }",
 assertExpr("true", lit(true));
 assertExpr("false", lit(false));
 assertExpr("42", lit(42));
-//assertExpr("(/asdf/)", lit(/asdf/)); // https://code.google.com/p/esprima/issues/detail?id=557#c4
+assertExpr("(/asdf/)", lit(/asdf/));
 assertExpr("this", thisExpr);
 assertExpr("foo", ident("foo"));
 assertExpr("foo.bar", dotExpr(ident("foo"), ident("bar")));

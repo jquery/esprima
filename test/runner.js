@@ -39,8 +39,8 @@ var runTests;
 // will be compared instead.
 function adjustRegexLiteral(key, value) {
     'use strict';
-    if (value && value.regex) {
-        delete value.value;
+    if (key === 'value' && value instanceof RegExp) {
+        value = value.toString();
     }
     return value;
 }
