@@ -1395,7 +1395,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function collectToken() {
-        var loc, token, value;
+        var loc, token, value, entry;
 
         skipComment();
         loc = {
@@ -1413,12 +1413,19 @@ parseStatement: true, parseSourceElement: true */
 
         if (token.type !== Token.EOF) {
             value = source.slice(token.start, token.end);
-            extra.tokens.push({
+            entry = {
                 type: TokenName[token.type],
                 value: value,
                 range: [token.start, token.end],
                 loc: loc
-            });
+            };
+            if (token.regex) {
+                entry.regex = {
+                    pattern: token.regex.pattern,
+                    flags: token.regex.flags
+                };
+            }
+            extra.tokens.push(entry);
         }
 
         return token;
@@ -3798,6 +3805,12 @@ parseStatement: true, parseSourceElement: true */
                 type: entry.type,
                 value: entry.value
             };
+            if (entry.regex) {
+                token.regex = {
+                    pattern: entry.regex.pattern,
+                    flags: entry.regex.flags
+                };
+            }
             if (extra.range) {
                 token.range = entry.range;
             }
