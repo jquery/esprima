@@ -6,6 +6,10 @@ a:hover, a:active {
     text-decoration: none;
 }
 
+div.panel ul {
+    margin-left: 20px;
+}
+
 div.row.copyright {
     margin-top: 44px;
     padding-top: 11px;
@@ -55,3 +59,4 @@ div#info {
     margin: -1px;
     border-radius: 4px;
 }
+
