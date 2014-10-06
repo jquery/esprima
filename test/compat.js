@@ -96,6 +96,9 @@ function getContext(esprima, reportCase, reportFailure) {
             } else if (key === 'raw' && typeof value === "string") {
                 // Ignore Esprima-specific 'raw' property.
                 return undefined;
+            } else if (key === 'regex' && typeof value === "object") {
+                // Ignore Esprima-specific 'regex' property.
+                return undefined;
             }
             return value;
         }

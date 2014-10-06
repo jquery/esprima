@@ -33,9 +33,10 @@
 
 var runTests;
 
-// Special handling for regular expression literal since we need to
-// convert it to a string literal, otherwise it will be decoded
-// as object "{}" and the regular expression would be lost.
+// Special handling for regular expression literals: remove their `value`
+// property since it may be `null` if it represents a regular expression
+// that is not supported in the current environment. The `regex` property
+// will be compared instead.
 function adjustRegexLiteral(key, value) {
     'use strict';
     if (key === 'value' && value instanceof RegExp) {
@@ -133,7 +134,7 @@ function testParse(esprima, code, syntax) {
         options.source = syntax.loc.source;
     }
 
-    expected = JSON.stringify(syntax, null, 4);
+    expected = JSON.stringify(syntax, adjustRegexLiteral, 4);
     try {
         tree = esprima.parse(code, options);
         tree = (options.comment || options.tokens || options.tolerant) ? tree : tree.body[0];
@@ -251,7 +252,7 @@ function testError(esprima, code, exception) {
     ];
 
     // If handleInvalidRegexFlag is true, an invalid flag in a regular expression
-    // will throw an exception. In some old version V8, this is not the case
+    // will throw an exception. In some old version of V8, this is not the case
     // and hence handleInvalidRegexFlag is false.
     handleInvalidRegexFlag = false;
     try {
