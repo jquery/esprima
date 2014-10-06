@@ -109,7 +109,25 @@ pre.prettyprint {
 
 <h4>Version 1.0</h4>
 
-<p>Initial release.</p>
+<p>In this initial release, the syntax tree is very similar to the one produced
+by Mozilla SpiderMonkey, with the following variants:
+</p>
+
+<p><strong>Range-based location</strong> for each syntax node is available by
+specifying the <code>range</code> property to <code>true</code> in the options
+object. Example:</p>
+
+<pre class="prettyprint lang-js">
+esprima.parse('answer = 42', { range: true });
+</pre>
+
+<p><strong>Raw value of constant literal</strong> is available by specifying
+the <code>raw</code> property to <code>true</code> in the options object.
+Example:</p>
+
+<pre class="prettyprint lang-js">
+esprima.parse('answer = 42', { raw: true });
+</pre>
 
     </div>
 
