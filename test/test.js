@@ -19983,13 +19983,15 @@ var testFixture = {
                 Identifier: 'Identifier',
                 IfStatement: 'IfStatement',
                 ImportDeclaration: 'ImportDeclaration',
+                ImportDefaultSpecifier: "ImportDefaultSpecifier",
+                ImportNamespaceSpecifier: "ImportNamespaceSpecifier",
                 ImportSpecifier: 'ImportSpecifier',
                 LabeledStatement: 'LabeledStatement',
                 Literal: 'Literal',
                 LogicalExpression: 'LogicalExpression',
                 MemberExpression: 'MemberExpression',
                 MethodDefinition: 'MethodDefinition',
-                ModuleDeclaration: 'ModuleDeclaration',
+                ModuleSpecifier: 'ModuleSpecifier',
                 NewExpression: 'NewExpression',
                 ObjectExpression: 'ObjectExpression',
                 ObjectPattern: 'ObjectPattern',
@@ -22834,5 +22836,3 @@ var testFixture = {
 
     }
 };
-
-
