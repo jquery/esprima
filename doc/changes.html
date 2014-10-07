@@ -129,6 +129,14 @@ Example:</p>
 esprima.parse('answer = 42', { raw: true });
 </pre>
 
+<p><strong>The list of all comments</strong> (block and line) is supplied
+(as an array) if the <code>comment</code> property in the options object is
+set to <code>true</code>. Example:</p>
+
+<pre class="prettyprint lang-js">
+esprima.parse('/* Hello */ 42', { comment: true });
+</pre>
+
     </div>
 
     <div class="four columns">
