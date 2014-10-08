@@ -2379,6 +2379,23 @@ var modulesTestFixture = {
             message: 'Error: Line 1: Missing from clause',
             description: 'Missing from clause'
         },
+
+        'export * +': {
+            index: 8,
+            lineNumber: 1,
+            column: 9,
+            message: 'Error: Line 1: Unexpected token +',
+            description: 'Unexpected token +'
+        },
+
+        'export {default} +': {
+            index: 16,
+            lineNumber: 1,
+            column: 17,
+            message: 'Error: Line 1: Unexpected token +',
+            description: 'Unexpected token +'
+        },
+
         'import {default as foo}': {
             index: 23,
             lineNumber: 1,
