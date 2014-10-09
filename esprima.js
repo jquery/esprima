@@ -50,6 +50,8 @@ parseYieldExpression: true
 
     // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js,
     // Rhino, and plain browser loading.
+
+    /* istanbul ignore next */
     if (typeof define === 'function' && define.amd) {
         define(['exports'], factory);
     } else if (typeof exports !== 'undefined') {
@@ -258,6 +260,7 @@ parseYieldExpression: true
     // Do NOT use this to enforce a certain condition on any user input.
 
     function assert(condition, message) {
+        /* istanbul ignore if */
         if (!condition) {
             throw new Error('ASSERT: ' + message);
         }
@@ -921,6 +924,7 @@ parseYieldExpression: true
 
                     if (index < length) {
                         ch = source.charCodeAt(index);
+                        /* istanbul ignore else */
                         if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
                             throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                         }
@@ -1051,6 +1055,7 @@ parseYieldExpression: true
                                 octal = true;
                             }
 
+                            /* istanbul ignore else */
                             if (index < length && isOctalDigit(source[index])) {
                                 octal = true;
                                 code = code * 8 + '01234567'.indexOf(source[index++]);
@@ -1167,6 +1172,7 @@ parseYieldExpression: true
                                 octal = true;
                             }
 
+                            /* istanbul ignore else */
                             if (index < length && isOctalDigit(source[index])) {
                                 octal = true;
                                 code = code * 8 + '01234567'.indexOf(source[index++]);
@@ -1299,6 +1305,7 @@ parseYieldExpression: true
                     ++index;
                     restore = index;
                     ch = scanHexEscape('u');
+                    /* istanbul ignore else */
                     if (ch) {
                         flags += ch;
                         for (str += '\\u'; restore < index; ++restore) {
@@ -1525,6 +1532,7 @@ parseYieldExpression: true
         var adv, pos, line, start, result;
 
         // If we are collecting the tokens, don't grab the next one yet.
+        /* istanbul ignore next */
         adv = (typeof extra.advance === 'function') ? extra.advance : advance;
 
         pos = index;
@@ -1532,6 +1540,7 @@ parseYieldExpression: true
         start = lineStart;
 
         // Scan for the next immediate token.
+        /* istanbul ignore if */
         if (lookahead === null) {
             lookahead = adv();
         }
@@ -1563,6 +1572,7 @@ parseYieldExpression: true
             last = bottomRight[bottomRight.length - 1];
 
         if (node.type === Syntax.Program) {
+            /* istanbul ignore else */
             if (node.body.length > 0) {
                 return;
             }
@@ -3100,6 +3110,7 @@ parseYieldExpression: true
             expr.type = Syntax.ArrayPattern;
             for (i = 0, len = expr.elements.length; i < len; i += 1) {
                 element = expr.elements[i];
+                /* istanbul ignore else */
                 if (element) {
                     reinterpretAsAssignmentBindingPattern(element);
                 }
@@ -3114,6 +3125,7 @@ parseYieldExpression: true
                 throwError({}, Messages.ObjectPatternAsSpread);
             }
         } else {
+            /* istanbul ignore else */
             if (expr.type !== Syntax.MemberExpression && expr.type !== Syntax.CallExpression && expr.type !== Syntax.NewExpression) {
                 throwError({}, Messages.InvalidLHSInAssignment);
             }
@@ -3403,6 +3415,7 @@ parseYieldExpression: true
             id = parseArrayInitialiser();
             reinterpretAsAssignmentBindingPattern(id);
         } else {
+            /* istanbul ignore next */
             id = state.allowKeyword ? parseNonComputedProperty() : parseVariableIdentifier();
             // 12.2.1
             if (strict && isRestrictedWord(id.name)) {
@@ -5065,6 +5078,7 @@ parseYieldExpression: true
         };
 
         if (!extra.tokenize) {
+            /* istanbul ignore next */
             // Pop the previous token, which is likely '/' or '/='
             if (extra.tokens.length > 0) {
                 token = extra.tokens[extra.tokens.length - 1];
@@ -5146,12 +5160,14 @@ parseYieldExpression: true
         var entry, result = {};
 
         for (entry in object) {
+            /* istanbul ignore else */
             if (object.hasOwnProperty(entry)) {
                 result[entry] = object[entry];
             }
         }
 
         for (entry in properties) {
+            /* istanbul ignore else */
             if (properties.hasOwnProperty(entry)) {
                 result[entry] = properties[entry];
             }
@@ -5343,6 +5359,7 @@ parseYieldExpression: true
     exports.parse = parse;
 
     // Deep copy.
+   /* istanbul ignore next */
     exports.Syntax = (function () {
         var name, types = {};
 
