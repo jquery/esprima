@@ -3094,6 +3094,8 @@ parseYieldExpression: true
 
     // 11.13 Assignment Operators
 
+    // 12.14.5 AssignmentPattern
+
     function reinterpretAsAssignmentBindingPattern(expr) {
         var i, len, property, element;
 
@@ -3132,6 +3134,7 @@ parseYieldExpression: true
         }
     }
 
+    // 13.2.3 BindingPattern
 
     function reinterpretAsDestructuredParameter(options, expr) {
         var i, len, property, element;
@@ -3155,10 +3158,14 @@ parseYieldExpression: true
             }
         } else if (expr.type === Syntax.Identifier) {
             validateParam(options, expr, expr.name);
-        } else {
-            if (expr.type !== Syntax.MemberExpression) {
+        } else if (expr.type === Syntax.SpreadElement) {
+            // BindingRestElement only allows BindingIdentifier
+            if (expr.argument.type !== Syntax.Identifier) {
                 throwError({}, Messages.InvalidLHSInFormalsList);
             }
+            validateParam(options, expr.argument, expr.argument.name);
+        } else {
+            throwError({}, Messages.InvalidLHSInFormalsList);
         }
     }
 
@@ -3185,6 +3192,9 @@ parseYieldExpression: true
                 defaults.push(null);
             } else if (param.type === Syntax.SpreadElement) {
                 assert(i === len - 1, 'It is guaranteed that SpreadElement is last element by parseExpression');
+                if (param.argument.type !== Syntax.Identifier) {
+                    throwError({}, Messages.InvalidLHSInFormalsList);
+                }
                 reinterpretAsDestructuredParameter(options, param.argument);
                 rest = param.argument;
             } else if (param.type === Syntax.AssignmentExpression) {
