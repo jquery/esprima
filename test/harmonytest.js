@@ -7292,6 +7292,215 @@ var harmonyTestFixture = {
             }
         },
 
+        '({ [name]: "hello", [name]: 42 })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'name',
+                        range: [4, 8],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 8 }
+                        }
+                    },
+                    value: {
+                        type: 'Literal',
+                        value: 'hello',
+                        raw: '"hello"',
+                        range: [11, 18],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: false,
+                    computed: true,
+                    range: [3, 18],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 18 }
+                    }
+                }, {
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'name',
+                        range: [21, 25],
+                        loc: {
+                            start: { line: 1, column: 21 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    value: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42',
+                        range: [28, 30],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 30 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: false,
+                    computed: true,
+                    range: [20, 30],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 30 }
+                    }
+                }],
+                range: [1, 32],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 32 }
+                }
+            },
+            range: [0, 33],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 33 }
+            }
+        },
+
+        '({ get [Symbol.create]() { }, *[generator()]() { } })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'MemberExpression',
+                        computed: false,
+                        object: {
+                            type: 'Identifier',
+                            name: 'Symbol',
+                            range: [8, 14],
+                            loc: {
+                                start: { line: 1, column: 8 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        property: {
+                            type: 'Identifier',
+                            name: 'create',
+                            range: [15, 21],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 21 }
+                            }
+                        },
+                        range: [8, 21],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 21 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [25, 28],
+                            loc: {
+                                start: { line: 1, column: 25 },
+                                end: { line: 1, column: 28 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [25, 28],
+                        loc: {
+                            start: { line: 1, column: 25 },
+                            end: { line: 1, column: 28 }
+                        }
+                    },
+                    kind: 'get',
+                    method: false,
+                    shorthand: false,
+                    computed: true,
+                    range: [3, 28],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 28 }
+                    }
+                }, {
+                    type: 'Property',
+                    key: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'generator',
+                            range: [32, 41],
+                            loc: {
+                                start: { line: 1, column: 32 },
+                                end: { line: 1, column: 41 }
+                            }
+                        },
+                        'arguments': [],
+                        range: [32, 43],
+                        loc: {
+                            start: { line: 1, column: 32 },
+                            end: { line: 1, column: 43 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [47, 50],
+                            loc: {
+                                start: { line: 1, column: 47 },
+                                end: { line: 1, column: 50 }
+                            }
+                        },
+                        rest: null,
+                        generator: true,
+                        expression: false,
+                        range: [47, 50],
+                        loc: {
+                            start: { line: 1, column: 47 },
+                            end: { line: 1, column: 50 }
+                        }
+                    },
+                    kind: 'init',
+                    method: true,
+                    shorthand: false,
+                    computed: true,
+                    range: [30, 50],
+                    loc: {
+                        start: { line: 1, column: 30 },
+                        end: { line: 1, column: 50 }
+                    }
+                }],
+                range: [1, 52],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 52 }
+                }
+            },
+            range: [0, 53],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 53 }
+            }
+        },
+
         '({[x]() {}})': {
             type: 'ExpressionStatement',
             expression: {

@@ -2579,31 +2579,33 @@ parseYieldExpression: true
         while (!match('}')) {
             property = parseObjectProperty();
 
-            if (property.key.type === Syntax.Identifier) {
-                name = property.key.name;
-            } else {
-                name = toString(property.key.value);
-            }
-            kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
-
-            key = '$' + name;
-            if (Object.prototype.hasOwnProperty.call(map, key)) {
-                if (map[key] === PropertyKind.Data) {
-                    if (strict && kind === PropertyKind.Data) {
-                        throwErrorTolerant({}, Messages.StrictDuplicateProperty);
-                    } else if (kind !== PropertyKind.Data) {
-                        throwErrorTolerant({}, Messages.AccessorDataProperty);
-                    }
+            if (!property.computed) {
+                if (property.key.type === Syntax.Identifier) {
+                    name = property.key.name;
                 } else {
-                    if (kind === PropertyKind.Data) {
-                        throwErrorTolerant({}, Messages.AccessorDataProperty);
-                    } else if (map[key] & kind) {
-                        throwErrorTolerant({}, Messages.AccessorGetSet);
-                    }
+                    name = toString(property.key.value);
                 }
-                map[key] |= kind;
-            } else {
-                map[key] = kind;
+                kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
+
+                key = '$' + name;
+                if (Object.prototype.hasOwnProperty.call(map, key)) {
+                    if (map[key] === PropertyKind.Data) {
+                        if (strict && kind === PropertyKind.Data) {
+                            throwErrorTolerant({}, Messages.StrictDuplicateProperty);
+                        } else if (kind !== PropertyKind.Data) {
+                            throwErrorTolerant({}, Messages.AccessorDataProperty);
+                        }
+                    } else {
+                        if (kind === PropertyKind.Data) {
+                            throwErrorTolerant({}, Messages.AccessorDataProperty);
+                        } else if (map[key] & kind) {
+                            throwErrorTolerant({}, Messages.AccessorGetSet);
+                        }
+                    }
+                    map[key] |= kind;
+                } else {
+                    map[key] = kind;
+                }
             }
 
             properties.push(property);
