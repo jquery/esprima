@@ -4897,6 +4897,7 @@ var harmonyTestFixture = {
                         },
                         kind: "",
                         'static': false,
+                        computed: false,
                         range: [9, 17],
                         loc: {
                             start: { line: 1, column: 9 },
@@ -4967,6 +4968,7 @@ var harmonyTestFixture = {
                     },
                     kind: '',
                     'static': true,
+                    computed: false,
                     range: [10, 25],
                     loc: {
                         start: { line: 1, column: 10 },
@@ -5044,6 +5046,7 @@ var harmonyTestFixture = {
                     },
                     kind: "get",
                     'static': false,
+                    computed: false,
                     range: [19, 31],
                     loc: {
                         start: { line: 1, column: 19 },
@@ -5121,6 +5124,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'get',
                     'static': true,
+                    computed: false,
                     range: [20, 39],
                     loc: {
                         start: { line: 1, column: 20 },
@@ -5199,6 +5203,7 @@ var harmonyTestFixture = {
                         },
                         kind: "set",
                         'static': false,
+                        computed: false,
                         range: [9, 20],
                         loc: {
                             start: { line: 1, column: 9 },
@@ -5277,6 +5282,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'set',
                     'static': true,
+                    computed: false,
                     range: [10, 28],
                     loc: {
                         start: { line: 1, column: 10 },
@@ -5355,6 +5361,7 @@ var harmonyTestFixture = {
                         },
                         kind: "",
                         'static': false,
+                        computed: false,
                         range: [9, 18],
                         loc: {
                             start: { line: 1, column: 9 },
@@ -5433,6 +5440,7 @@ var harmonyTestFixture = {
                     },
                     kind: '',
                     'static': true,
+                    computed: false,
                     range: [10, 26],
                     loc: {
                         start: { line: 1, column: 10 },
@@ -5536,6 +5544,7 @@ var harmonyTestFixture = {
                         },
                         kind: "",
                         'static': false,
+                        computed: false,
                         range: [9, 29],
                         loc: {
                             start: { line: 1, column: 9 },
@@ -5639,6 +5648,7 @@ var harmonyTestFixture = {
                     },
                     kind: '',
                     'static': true,
+                    computed: false,
                     range: [10, 37],
                     loc: {
                         start: { line: 1, column: 10 },
@@ -5759,6 +5769,7 @@ var harmonyTestFixture = {
                                     },
                                     kind: "",
                                     'static': false,
+                                    computed: false,
                                     range: [24, 49],
                                     loc: {
                                         start: { line: 1, column: 24 },
@@ -5843,6 +5854,7 @@ var harmonyTestFixture = {
                     },
                     kind: '',
                     'static': true,
+                    computed: false,
                     range: [9, 24],
                     loc: {
                         start: { line: 1, column: 9 },
@@ -5912,6 +5924,7 @@ var harmonyTestFixture = {
                     },
                     kind: '',
                     'static': false,
+                    computed: false,
                     range: [9, 17],
                     loc: {
                         start: { line: 1, column: 9 },
@@ -5953,6 +5966,7 @@ var harmonyTestFixture = {
                     },
                     kind: '',
                     'static': true,
+                    computed: false,
                     range: [18, 33],
                     loc: {
                         start: { line: 1, column: 18 },
@@ -6068,6 +6082,7 @@ var harmonyTestFixture = {
                             },
                             kind: '',
                             'static': true,
+                            computed: false,
                             range: [25, 57],
                             loc: {
                                 start: { line: 1, column: 25 },
@@ -6150,6 +6165,7 @@ var harmonyTestFixture = {
                     },
                     kind: '',
                     'static': false,
+                    computed: false,
                     range: [10, 18],
                     loc: {
                         start: { line: 1, column: 10 },
@@ -6191,6 +6207,7 @@ var harmonyTestFixture = {
                     },
                     kind: '',
                     'static': false,
+                    computed: false,
                     range: [19, 27],
                     loc: {
                         start: { line: 1, column: 19 },
@@ -6260,6 +6277,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'get',
                     'static': false,
+                    computed: false,
                     range: [10, 22],
                     loc: {
                         start: { line: 1, column: 10 },
@@ -6309,6 +6327,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'set',
                     'static': false,
+                    computed: false,
                     range: [23, 36],
                     loc: {
                         start: { line: 1, column: 23 },
@@ -6378,6 +6397,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'get',
                     'static': true,
+                    computed: false,
                     range: [10, 29],
                     loc: {
                         start: { line: 1, column: 10 },
@@ -6419,6 +6439,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'get',
                     'static': false,
+                    computed: false,
                     range: [30, 42],
                     loc: {
                         start: { line: 1, column: 30 },
@@ -6488,6 +6509,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'get',
                     'static': true,
+                    computed: false,
                     range: [10, 29],
                     loc: {
                         start: { line: 1, column: 10 },
@@ -6529,6 +6551,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'get',
                     'static': true,
+                    computed: false,
                     range: [30, 49],
                     loc: {
                         start: { line: 1, column: 30 },
@@ -6598,6 +6621,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'get',
                     'static': true,
+                    computed: false,
                     range: [10, 29],
                     loc: {
                         start: { line: 1, column: 10 },
@@ -6647,6 +6671,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'set',
                     'static': true,
+                    computed: false,
                     range: [30, 50],
                     loc: {
                         start: { line: 1, column: 30 },
@@ -6688,6 +6713,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'get',
                     'static': false,
+                    computed: false,
                     range: [51, 63],
                     loc: {
                         start: { line: 1, column: 51 },
@@ -6737,6 +6763,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'set',
                     'static': false,
+                    computed: false,
                     range: [64, 77],
                     loc: {
                         start: { line: 1, column: 64 },
@@ -6814,6 +6841,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'set',
                     'static': false,
+                    computed: false,
                     range: [10, 23],
                     loc: {
                         start: { line: 1, column: 10 },
@@ -6855,6 +6883,7 @@ var harmonyTestFixture = {
                     },
                     kind: 'get',
                     'static': false,
+                    computed: false,
                     range: [24, 36],
                     loc: {
                         start: { line: 1, column: 24 },
@@ -6871,6 +6900,239 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 38 }
+            }
+        },
+
+        'class A { [Symbol.create]() {} get ["get"]() {} set ["set"](value) { } *[generator()]() { } }': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'MemberExpression',
+                        computed: false,
+                        object: {
+                            type: 'Identifier',
+                            name: 'Symbol',
+                            range: [11, 17],
+                            loc: {
+                                start: { line: 1, column: 11 },
+                                end: { line: 1, column: 17 }
+                            }
+                        },
+                        property: {
+                            type: 'Identifier',
+                            name: 'create',
+                            range: [18, 24],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 24 }
+                            }
+                        },
+                        range: [11, 24],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 24 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [28, 30],
+                            loc: {
+                                start: { line: 1, column: 28 },
+                                end: { line: 1, column: 30 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [28, 30],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 30 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: true,
+                    range: [10, 30],
+                    loc: {
+                        start: { line: 1, column: 10 },
+                        end: { line: 1, column: 30 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Literal',
+                        value: 'get',
+                        raw: '"get"',
+                        range: [36, 41],
+                        loc: {
+                            start: { line: 1, column: 36 },
+                            end: { line: 1, column: 41 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [45, 47],
+                            loc: {
+                                start: { line: 1, column: 45 },
+                                end: { line: 1, column: 47 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [45, 47],
+                        loc: {
+                            start: { line: 1, column: 45 },
+                            end: { line: 1, column: 47 }
+                        }
+                    },
+                    kind: 'get',
+                    'static': false,
+                    computed: true,
+                    range: [31, 47],
+                    loc: {
+                        start: { line: 1, column: 31 },
+                        end: { line: 1, column: 47 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Literal',
+                        value: 'set',
+                        raw: '"set"',
+                        range: [53, 58],
+                        loc: {
+                            start: { line: 1, column: 53 },
+                            end: { line: 1, column: 58 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [{
+                            type: 'Identifier',
+                            name: 'value',
+                            range: [60, 65],
+                            loc: {
+                                start: { line: 1, column: 60 },
+                                end: { line: 1, column: 65 }
+                            }
+                        }],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [67, 70],
+                            loc: {
+                                start: { line: 1, column: 67 },
+                                end: { line: 1, column: 70 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [67, 70],
+                        loc: {
+                            start: { line: 1, column: 67 },
+                            end: { line: 1, column: 70 }
+                        }
+                    },
+                    kind: 'set',
+                    'static': false,
+                    computed: true,
+                    range: [48, 70],
+                    loc: {
+                        start: { line: 1, column: 48 },
+                        end: { line: 1, column: 70 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'generator',
+                            range: [73, 82],
+                            loc: {
+                                start: { line: 1, column: 73 },
+                                end: { line: 1, column: 82 }
+                            }
+                        },
+                        'arguments': [],
+                        range: [73, 84],
+                        loc: {
+                            start: { line: 1, column: 73 },
+                            end: { line: 1, column: 84 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [88, 91],
+                            loc: {
+                                start: { line: 1, column: 88 },
+                                end: { line: 1, column: 91 }
+                            }
+                        },
+                        rest: null,
+                        generator: true,
+                        expression: false,
+                        range: [88, 91],
+                        loc: {
+                            start: { line: 1, column: 88 },
+                            end: { line: 1, column: 91 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: true,
+                    range: [71, 91],
+                    loc: {
+                        start: { line: 1, column: 71 },
+                        end: { line: 1, column: 91 }
+                    }
+                }],
+                range: [8, 93],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 93 }
+                }
+            },
+            range: [0, 93],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 93 }
             }
         },
 
@@ -7289,6 +7551,215 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 31 }
+            }
+        },
+
+        '({ [name]: "hello", [name]: 42 })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'name',
+                        range: [4, 8],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 8 }
+                        }
+                    },
+                    value: {
+                        type: 'Literal',
+                        value: 'hello',
+                        raw: '"hello"',
+                        range: [11, 18],
+                        loc: {
+                            start: { line: 1, column: 11 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: false,
+                    computed: true,
+                    range: [3, 18],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 18 }
+                    }
+                }, {
+                    type: 'Property',
+                    key: {
+                        type: 'Identifier',
+                        name: 'name',
+                        range: [21, 25],
+                        loc: {
+                            start: { line: 1, column: 21 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    value: {
+                        type: 'Literal',
+                        value: 42,
+                        raw: '42',
+                        range: [28, 30],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 30 }
+                        }
+                    },
+                    kind: 'init',
+                    method: false,
+                    shorthand: false,
+                    computed: true,
+                    range: [20, 30],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 30 }
+                    }
+                }],
+                range: [1, 32],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 32 }
+                }
+            },
+            range: [0, 33],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 33 }
+            }
+        },
+
+        '({ get [Symbol.create]() { }, *[generator()]() { } })': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ObjectExpression',
+                properties: [{
+                    type: 'Property',
+                    key: {
+                        type: 'MemberExpression',
+                        computed: false,
+                        object: {
+                            type: 'Identifier',
+                            name: 'Symbol',
+                            range: [8, 14],
+                            loc: {
+                                start: { line: 1, column: 8 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        property: {
+                            type: 'Identifier',
+                            name: 'create',
+                            range: [15, 21],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 21 }
+                            }
+                        },
+                        range: [8, 21],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 21 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [25, 28],
+                            loc: {
+                                start: { line: 1, column: 25 },
+                                end: { line: 1, column: 28 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [25, 28],
+                        loc: {
+                            start: { line: 1, column: 25 },
+                            end: { line: 1, column: 28 }
+                        }
+                    },
+                    kind: 'get',
+                    method: false,
+                    shorthand: false,
+                    computed: true,
+                    range: [3, 28],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 28 }
+                    }
+                }, {
+                    type: 'Property',
+                    key: {
+                        type: 'CallExpression',
+                        callee: {
+                            type: 'Identifier',
+                            name: 'generator',
+                            range: [32, 41],
+                            loc: {
+                                start: { line: 1, column: 32 },
+                                end: { line: 1, column: 41 }
+                            }
+                        },
+                        'arguments': [],
+                        range: [32, 43],
+                        loc: {
+                            start: { line: 1, column: 32 },
+                            end: { line: 1, column: 43 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [47, 50],
+                            loc: {
+                                start: { line: 1, column: 47 },
+                                end: { line: 1, column: 50 }
+                            }
+                        },
+                        rest: null,
+                        generator: true,
+                        expression: false,
+                        range: [47, 50],
+                        loc: {
+                            start: { line: 1, column: 47 },
+                            end: { line: 1, column: 50 }
+                        }
+                    },
+                    kind: 'init',
+                    method: true,
+                    shorthand: false,
+                    computed: true,
+                    range: [30, 50],
+                    loc: {
+                        start: { line: 1, column: 30 },
+                        end: { line: 1, column: 50 }
+                    }
+                }],
+                range: [1, 52],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 52 }
+                }
+            },
+            range: [0, 53],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 53 }
             }
         },
 
@@ -8317,6 +8788,7 @@ var harmonyTestFixture = {
                         },
                         kind: '',
                         'static': false,
+                        computed: false,
                         range: [8, 27],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -8339,6 +8811,221 @@ var harmonyTestFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 29 }
+            }
+        },
+
+        'class hello extends[]{"ok"(){}get"g1"(){}set"s1"(v){}*gen(){}}': {
+            type: 'ClassDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'hello',
+                range: [6, 11],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 11 }
+                }
+            },
+            superClass: {
+                type: 'ArrayExpression',
+                elements: [],
+                range: [19, 21],
+                loc: {
+                    start: { line: 1, column: 19 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            body: {
+                type: 'ClassBody',
+                body: [{
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Literal',
+                        value: 'ok',
+                        raw: '"ok"',
+                        range: [22, 26],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [28, 30],
+                            loc: {
+                                start: { line: 1, column: 28 },
+                                end: { line: 1, column: 30 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [28, 30],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 30 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: false,
+                    range: [22, 30],
+                    loc: {
+                        start: { line: 1, column: 22 },
+                        end: { line: 1, column: 30 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Literal',
+                        value: 'g1',
+                        raw: '"g1"',
+                        range: [33, 37],
+                        loc: {
+                            start: { line: 1, column: 33 },
+                            end: { line: 1, column: 37 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [39, 41],
+                            loc: {
+                                start: { line: 1, column: 39 },
+                                end: { line: 1, column: 41 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [39, 41],
+                        loc: {
+                            start: { line: 1, column: 39 },
+                            end: { line: 1, column: 41 }
+                        }
+                    },
+                    kind: 'get',
+                    'static': false,
+                    computed: false,
+                    range: [30, 41],
+                    loc: {
+                        start: { line: 1, column: 30 },
+                        end: { line: 1, column: 41 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Literal',
+                        value: 's1',
+                        raw: '"s1"',
+                        range: [44, 48],
+                        loc: {
+                            start: { line: 1, column: 44 },
+                            end: { line: 1, column: 48 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [{
+                            type: 'Identifier',
+                            name: 'v',
+                            range: [49, 50],
+                            loc: {
+                                start: { line: 1, column: 49 },
+                                end: { line: 1, column: 50 }
+                            }
+                        }],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [51, 53],
+                            loc: {
+                                start: { line: 1, column: 51 },
+                                end: { line: 1, column: 53 }
+                            }
+                        },
+                        rest: null,
+                        generator: false,
+                        expression: false,
+                        range: [51, 53],
+                        loc: {
+                            start: { line: 1, column: 51 },
+                            end: { line: 1, column: 53 }
+                        }
+                    },
+                    kind: 'set',
+                    'static': false,
+                    computed: false,
+                    range: [41, 53],
+                    loc: {
+                        start: { line: 1, column: 41 },
+                        end: { line: 1, column: 53 }
+                    }
+                }, {
+                    type: 'MethodDefinition',
+                    key: {
+                        type: 'Identifier',
+                        name: 'gen',
+                        range: [54, 57],
+                        loc: {
+                            start: { line: 1, column: 54 },
+                            end: { line: 1, column: 57 }
+                        }
+                    },
+                    value: {
+                        type: 'FunctionExpression',
+                        id: null,
+                        params: [],
+                        defaults: [],
+                        body: {
+                            type: 'BlockStatement',
+                            body: [],
+                            range: [59, 61],
+                            loc: {
+                                start: { line: 1, column: 59 },
+                                end: { line: 1, column: 61 }
+                            }
+                        },
+                        rest: null,
+                        generator: true,
+                        expression: false,
+                        range: [59, 61],
+                        loc: {
+                            start: { line: 1, column: 59 },
+                            end: { line: 1, column: 61 }
+                        }
+                    },
+                    kind: '',
+                    'static': false,
+                    computed: false,
+                    range: [53, 61],
+                    loc: {
+                        start: { line: 1, column: 53 },
+                        end: { line: 1, column: 61 }
+                    }
+                }],
+                range: [21, 62],
+                loc: {
+                    start: { line: 1, column: 21 },
+                    end: { line: 1, column: 62 }
+                }
+            },
+            range: [0, 62],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 62 }
             }
         },
 
