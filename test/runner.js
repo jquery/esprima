@@ -109,7 +109,7 @@ function hasAttachedComment(syntax) {
     return false;
 }
 
-function testParse(esprima, code, syntax) {
+function testParse(esprima, code, syntax, testOptions) {
     'use strict';
     var expected, tree, actual, options, StringObject, i, len, err;
 
@@ -123,7 +123,8 @@ function testParse(esprima, code, syntax) {
         tokens: (typeof syntax.tokens !== 'undefined'),
         raw: true,
         tolerant: (typeof syntax.errors !== 'undefined'),
-        source: null
+        source: null,
+        sourceType: testOptions.sourceType
     };
 
     if (options.comment) {
@@ -215,7 +216,7 @@ function mustHaveLocRange(testName, node, needLoc, needRange, stack) {
     }
 }
 
-function testTokenize(esprima, code, tokens) {
+function testTokenize(esprima, code, tokens, testOptions) {
     'use strict';
     var options, expected, actual, tree;
 
@@ -223,7 +224,8 @@ function testTokenize(esprima, code, tokens) {
         comment: true,
         tolerant: true,
         loc: true,
-        range: true
+        range: true,
+        sourceType: testOptions.sourceType
     };
 
     expected = JSON.stringify(tokens, null, 4);
@@ -239,16 +241,17 @@ function testTokenize(esprima, code, tokens) {
     }
 }
 
-function testError(esprima, code, exception) {
+function testError(esprima, code, exception, testOptions) {
     'use strict';
-    var i, options, expected, actual, err, handleInvalidRegexFlag, tokenize;
+    var i, options, expected, actual, err, handleInvalidRegexFlag, tokenize,
+        sourceType;
 
     // Different parsing options should give the same error.
     options = [
-        {},
-        { comment: true },
-        { raw: true },
-        { raw: true, comment: true }
+        { sourceType: testOptions.sourceType },
+        { sourceType: testOptions.sourceType, comment: true },
+        { sourceType: testOptions.sourceType, raw: true },
+        { sourceType: testOptions.sourceType, raw: true, comment: true }
     ];
 
     // If handleInvalidRegexFlag is true, an invalid flag in a regular expression
@@ -318,16 +321,16 @@ function testAPI(esprima, code, result) {
     }
 }
 
-function runTest(esprima, code, result) {
+function runTest(esprima, code, result, options) {
     'use strict';
     if (result.hasOwnProperty('lineNumber')) {
-        testError(esprima, code, result);
+        testError(esprima, code, result, options);
     } else if (result.hasOwnProperty('result')) {
         testAPI(esprima, code, result);
     } else if (result instanceof Array) {
-        testTokenize(esprima, code, result);
+        testTokenize(esprima, code, result, options);
     } else {
-        testParse(esprima, code, result);
+        testParse(esprima, code, result, options);
     }
 }
 
@@ -408,14 +411,21 @@ if (typeof window !== 'undefined') {
         tick = new Date();
         for (category in testFixture) {
             if (testFixture.hasOwnProperty(category)) {
+                var categoryOptions = testFixtureOptions[category] || {};
                 startCategory(category);
                 fixture = testFixture[category];
                 for (source in fixture) {
                     if (fixture.hasOwnProperty(source)) {
+                        var sourceOptions =
+                            categoryOptions.hasOwnProperty(source)
+                            ? categoryOptions[source]
+                            : categoryOptions;
+
                         expected = fixture[source];
                         total += 1;
                         try {
-                            runTest(esprima, source, expected);
+
+                            runTest(esprima, source, expected, sourceOptions);
                             reportSuccess(source, JSON.stringify(expected, null, 4));
                         } catch (e) {
                             failures += 1;
@@ -456,14 +466,19 @@ if (typeof window !== 'undefined') {
         vm.runInThisContext(fs.readFileSync(__dirname + '/harmonymodulestest.js', 'utf-8'));
 
         Object.keys(testFixture).forEach(function (category) {
+            var categoryOptions = testFixtureOptions[category] || {};
             Object.keys(testFixture[category]).forEach(function (source) {
+                var sourceOptions =
+                    categoryOptions.hasOwnProperty(source)
+                    ? categoryOptions[source]
+                    : categoryOptions;
                 total += 1;
                 expected = testFixture[category][source];
                 if (!expected.hasOwnProperty('lineNumber') && !expected.hasOwnProperty('result')) {
                     mustHaveLocRange(source, expected, needLoc(expected), needRange(expected), []);
                 }
                 try {
-                    runTest(esprima, source, expected);
+                    runTest(esprima, source, expected, sourceOptions);
                 } catch (e) {
                     e.source = source;
                     failures.push(e);

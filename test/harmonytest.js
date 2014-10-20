@@ -12229,9 +12229,7 @@ var harmonyTestFixture = {
         }
     },
 
-
     'Harmony Invalid syntax': {
-
         '0o': {
             index: 2,
             lineNumber: 1,
@@ -12476,8 +12474,6 @@ var harmonyTestFixture = {
             column: 7,
             message: 'Error: Line 1: Unexpected token default'
         },
-
-
 
         '({ v: eval }) = obj': {
             index: 13,
@@ -13278,7 +13274,6 @@ var harmonyTestFixture = {
             column: 7,
             message: 'Error: Line 1: Invalid left-hand side in assignment'
         }
-
     }
 };
 

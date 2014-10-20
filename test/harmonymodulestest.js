@@ -2317,10 +2317,16 @@ var modulesTestFixture = {
                 end: { line: 1, column: 33 }
             }
         }
-
     },
 
     'Modules Invalid Syntax': {
+        // Module top-levels are implicitly "use strict"
+        'with(someObj) {}': {
+            index: 0,
+            lineNumber: 1,
+            column: 1,
+            message: "Error: Line 1: Strict mode code may not include a with statement"
+        },
 
         'import foo': {
             index: 10,
@@ -2458,9 +2464,25 @@ var modulesTestFixture = {
             message: "Error: Line 1: Unexpected token ,",
             description: "Unexpected token ,"
         }
+    },
 
+    'Invalid Non-Modules Syntax': {
+        'export default 42;': {
+            index: 0,
+            lineNumber: 1,
+            column: 1,
+            message: "Error: Line 1: Unexpected reserved word",
+            description: "Unexpected reserved word"
+        },
+
+        'import foo from "foo";': {
+            index: 0,
+            lineNumber: 1,
+            column: 1,
+            message: "Error: Line 1: Unexpected reserved word",
+            description: "Unexpected reserved word"
+        }
     }
-
 };
 
 // Merge both test fixtures.
@@ -2469,7 +2491,9 @@ var modulesTestFixture = {
 
     'use strict';
 
-    var i, fixtures;
+    var i, fixtures, moduleFixtureOptions = {
+      sourceType: 'module'
+    };
 
     for (i in modulesTestFixture) {
         if (modulesTestFixture.hasOwnProperty(i)) {
@@ -2478,6 +2502,10 @@ var modulesTestFixture = {
                 throw new Error('Harmony test should not replace existing test for ' + i);
             }
             testFixture[i] = fixtures;
+
+            if (i !== 'Invalid Non-Modules Syntax') {
+                testFixtureOptions[i] = moduleFixtureOptions;
+            }
         }
     }
 
