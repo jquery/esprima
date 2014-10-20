@@ -4864,7 +4864,7 @@ parseYieldExpression: true
     }
 
     function parseProgramElement() {
-        if (lookahead.type === Token.Keyword) {
+        if (extra.isModule && lookahead.type === Token.Keyword) {
             switch (lookahead.value) {
             case 'export':
                 return parseExportDeclaration();
@@ -4916,7 +4916,7 @@ parseYieldExpression: true
 
     function parseProgram() {
         var body, marker = markerCreate();
-        strict = false;
+        strict = !!extra.isModule;
         peek();
         body = parseProgramElements();
         return markerApply(marker, delegate.createProgram(body));
@@ -5369,6 +5369,9 @@ parseYieldExpression: true
                 });
             }
 
+            if (options.sourceType === 'module') {
+                extra.isModule = true;
+            }
             if (typeof options.tokens === 'boolean' && options.tokens) {
                 extra.tokens = [];
             }

@@ -28,6 +28,8 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+var testFixtureOptions = {};
+
 var testFixture = {
 
     'Primary Expression': {
