@@ -6348,6 +6348,25 @@ var testFixture = {
             }
         },
 
+        '"\""': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: '"',
+                raw: '"\""',
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
+            },
+            range: [0, 4],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 4 }
+            }
+        },
+
         '"\\n\\r\\t\\v\\b\\f\\\\\\\'\\"\\0"': {
             type: 'ExpressionStatement',
             expression: {
