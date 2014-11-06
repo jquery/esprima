@@ -3754,6 +3754,67 @@ var testFixture = {
             }
         },
 
+        'var o = {\n/** Desc */\nfoo: function(){}\n};': {
+            "type": "Program",
+            "body": [{
+                "type": "VariableDeclaration",
+                "declarations": [{
+                    "type": "VariableDeclarator",
+                    "id": {
+                        "type": "Identifier",
+                        "name": "o",
+                        "range": [4, 5]
+                    },
+                    "init": {
+                        "type": "ObjectExpression",
+                        "properties": [{
+                                "type": "Property",
+                                "key": {
+                                    "type": "Identifier",
+                                    "name": "foo",
+                                    "range": [22, 25]
+                                },
+                                "value": {
+                                    "type": "FunctionExpression",
+                                    "id": null,
+                                    "params": [],
+                                    "defaults": [],
+                                    "body": {
+                                        "type": "BlockStatement",
+                                        "body": [],
+                                        "range": [37, 39]
+                                    },
+                                    "rest": null,
+                                    "generator": false,
+                                    "expression": false,
+                                    "range": [27, 39]
+                                },
+                                "kind": "init",
+                                method: false,
+                                shorthand: false,
+                                computed: false,
+                                "range": [22, 39],
+                                "leadingComments": [{
+                                    "type": "Block",
+                                    "value": "* Desc ",
+                                    "range": [10, 21]
+                                }],
+                        }],
+                        "range": [8, 41]
+                    },
+                    "range": [4, 41]
+                }],
+                "kind": "var",
+                "range": [0, 42]
+            }],
+            "range": [0, 42],
+            "comments": [{
+                "type": "Block",
+                "value": "* Desc ",
+                "range": [10, 21]
+            }]
+        },
+
         'function foo(){}\n//comment\nfunction bar(){}': {
             type: "Program",
             body: [{
