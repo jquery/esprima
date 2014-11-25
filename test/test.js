@@ -6697,7 +6697,7 @@ var testFixture = {
             type: 'ExpressionStatement',
             expression: {
                 type: 'Literal',
-                value: '煎茶',
+                value: '\u714E\u8336',
                 raw: '"\\u{714E}\\u{8336}"',
                 range: [0, 18],
                 loc: {
@@ -6728,6 +6728,25 @@ var testFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 27 }
+            }
+        },
+
+        '"\\u{00000000034}"': {
+            type: 'ExpressionStatement',
+            expression: {
+                range: [0, 17],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 17 }
+                },
+                type: 'Literal',
+                value: '4',
+                raw: '"\\u{00000000034}"'
+            },
+            range: [0, 17],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 17 }
             }
         }
 
@@ -6991,6 +7010,99 @@ var testFixture = {
                     end: { line: 1, column: 16 }
                 }
             }]
+        },
+
+        'var x = /[\\u{0000000000000061}-\\u{7A}]/u': {
+            type: 'Program',
+            body: [{
+                type: 'VariableDeclaration',
+                declarations: [{
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [4, 5],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    },
+                    init: {
+                        type: 'Literal',
+                        value: null,
+                        raw: '/[\\u{0000000000000061}-\\u{7A}]/u',
+                        regex: {
+                            pattern: '[\\u{0000000000000061}-\\u{7A}]',
+                            flags: 'u'
+                        },
+                        range: [8, 40],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 40 }
+                        }
+                    },
+                    range: [4, 40],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 40 }
+                    }
+                }],
+                kind: 'var',
+                range: [0, 40],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 40 }
+                }
+            }],
+            range: [0, 40],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 40 }
+            },
+            tokens: [{
+                type: 'Keyword',
+                value: 'var',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            }, {
+                type: 'Identifier',
+                value: 'x',
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
+            }, {
+                type: 'Punctuator',
+                value: '=',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            }, {
+                type: 'RegularExpression',
+                value: '/[\\u{0000000000000061}-\\u{7A}]/u',
+                regex: {
+                    pattern: '[\\u{0000000000000061}-\\u{7A}]',
+                    flags: 'u'
+                },
+                range: [8, 40],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 40 }
+                }
+            }]
+        },
+
+        'var x = /\\u{110000}/u': {
+            index: 21,
+            lineNumber: 1,
+            column: 22,
+            message: 'Error: Line 1: Invalid regular expression'
         },
 
         'var x = /[x-z]/i': {
