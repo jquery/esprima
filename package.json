@@ -47,7 +47,8 @@
         "complexity-report": "~0.6.1",
         "regenerate": "~0.5.4",
         "unicode-6.3.0": "~0.1.0",
-        "json-diff": "~0.3.1"
+        "json-diff": "~0.3.1",
+        "commander": "~2.5.0"
     },
     "scripts": {
         "test": "npm run-script lint && node test/run.js && npm run-script coverage && npm run-script complexity",
