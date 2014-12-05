@@ -2463,6 +2463,39 @@ var modulesTestFixture = {
             column: 16,
             message: "Error: Line 1: Unexpected token ,",
             description: "Unexpected token ,"
+        },
+
+        'import {} from "foo";': {
+            type: 'ImportDeclaration',
+            specifiers: [],
+            source: {
+                type: 'ModuleSpecifier',
+                value: 'foo',
+                raw: '"foo"',
+                range: [15, 20],
+                loc: {
+                    start: { line: 1, column: 15 },
+                    end: { line: 1, column: 20 }
+                }
+            },
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            }
+        },
+
+        'export {};': {
+            type: 'ExportDeclaration',
+            'default': false,
+            declaration: null,
+            specifiers: [],
+            source: null,
+            range: [0, 10],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 10 }
+            }
         }
     },
 

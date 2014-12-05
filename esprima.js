@@ -3658,10 +3658,12 @@ parseYieldExpression: true
         }
 
         expect('{');
-        do {
-            isExportFromIdentifier = isExportFromIdentifier || matchKeyword('default');
-            specifiers.push(parseExportSpecifier());
-        } while (match(',') && lex());
+        if (!match('}')) {
+            do {
+                isExportFromIdentifier = isExportFromIdentifier || matchKeyword('default');
+                specifiers.push(parseExportSpecifier());
+            } while (match(',') && lex());
+        }
         expect('}');
 
         if (matchContextualKeyword('from')) {
@@ -3702,9 +3704,11 @@ parseYieldExpression: true
         var specifiers = [];
         // {foo, bar as bas}
         expect('{');
-        do {
-            specifiers.push(parseImportSpecifier());
-        } while (match(',') && lex());
+        if (!match('}')) {
+            do {
+                specifiers.push(parseImportSpecifier());
+            } while (match(',') && lex());
+        }
         expect('}');
         return specifiers;
     }
