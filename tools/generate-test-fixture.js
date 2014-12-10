@@ -43,8 +43,6 @@
 
     code = cliArgs.args[0];
 
-    console.log('code', code);
-
     if (code.length === 0) {
         console.log('Usage:');
         console.log('   generate-test-fixture.js code');
