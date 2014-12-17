@@ -2031,7 +2031,95 @@ var harmonyTestFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 17 }
             }
+        },
+
+        'fn(({field_name: field_value}) => field_name)' : {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'CallExpression',
+                callee: {
+                    type: 'Identifier',
+                    name: 'fn',
+                    range: [0, 2],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 2 }
+                    }
+                },
+                'arguments': [{
+                    type: 'ArrowFunctionExpression',
+                    id: null,
+                    params: [{
+                        type: 'ObjectPattern',
+                        properties: [{
+                            type: 'Property',
+                            key: {
+                                type: 'Identifier',
+                                name: 'field_name',
+                                range: [5, 15],
+                                loc: {
+                                    start: { line: 1, column: 5 },
+                                    end: { line: 1, column: 15 }
+                                }
+                            },
+                            value: {
+                                type: 'Identifier',
+                                name: 'field_value',
+                                range: [17, 28],
+                                loc: {
+                                    start: { line: 1, column: 17 },
+                                    end: { line: 1, column: 28 }
+                                }
+                            },
+                            kind: 'init',
+                            method: false,
+                            shorthand: false,
+                            computed: false,
+                            range: [5, 28],
+                            loc: {
+                                start: { line: 1, column: 5 },
+                                end: { line: 1, column: 28 }
+                            }
+                        }],
+                        range: [4, 29],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 29 }
+                        }
+                    }],
+                    defaults: [],
+                    body: {
+                        type: 'Identifier',
+                        name: 'field_name',
+                        range: [34, 44],
+                        loc: {
+                            start: { line: 1, column: 34 },
+                            end: { line: 1, column: 44 }
+                        }
+                    },
+                    rest: null,
+                    generator: false,
+                    expression: true,
+                    range: [3, 44],
+                    loc: {
+                        start: { line: 1, column: 3 },
+                        end: { line: 1, column: 44 }
+                    }
+                }],
+                range: [0, 45],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 45 }
+                }
+            },
+            range: [0, 45],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 45 }
+            }
+
         }
+
 
     },
 
