@@ -3299,7 +3299,8 @@ parseYieldExpression: true
     }
 
     function parseAssignmentExpression() {
-        var marker, expr, token, params, oldParenthesizedCount;
+        var marker, expr, token, params, oldParenthesizedCount,
+            startsWithParen = false;
 
         // Note that 'yield' is treated as a keyword in strict mode, but a
         // contextual keyword (identifier) in non-strict mode, so we need
@@ -3321,6 +3322,7 @@ parseYieldExpression: true
                 }
                 return parseArrowFunctionExpression(params, marker);
             }
+            startsWithParen = true;
         }
 
         token = lookahead;
@@ -3330,6 +3332,13 @@ parseYieldExpression: true
                 (state.parenthesizedCount === oldParenthesizedCount ||
                 state.parenthesizedCount === (oldParenthesizedCount + 1))) {
             if (expr.type === Syntax.Identifier) {
+                params = reinterpretAsCoverFormalsList([ expr ]);
+            } else if (expr.type === Syntax.AssignmentExpression ||
+                    expr.type === Syntax.ArrayExpression ||
+                    expr.type === Syntax.ObjectExpression) {
+                if (!startsWithParen) {
+                    throwUnexpected(lex());
+                }
                 params = reinterpretAsCoverFormalsList([ expr ]);
             } else if (expr.type === Syntax.SequenceExpression) {
                 params = reinterpretAsCoverFormalsList(expr.expressions);
@@ -3389,18 +3398,6 @@ parseYieldExpression: true
             }
 
             sequence = markerApply(marker, delegate.createSequenceExpression(expressions));
-        }
-
-        if (match('=>')) {
-            // Do not allow nested parentheses on the LHS of the =>.
-            if (state.parenthesizedCount === oldParenthesizedCount || state.parenthesizedCount === (oldParenthesizedCount + 1)) {
-                expr = expr.type === Syntax.SequenceExpression ? expr.expressions : expressions;
-                coverFormalsList = reinterpretAsCoverFormalsList(expr);
-                if (coverFormalsList) {
-                    return parseArrowFunctionExpression(coverFormalsList, marker);
-                }
-            }
-            throwUnexpected(lex());
         }
 
         if (spreadFound && lookahead2().value !== '=>') {
