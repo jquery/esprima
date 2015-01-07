@@ -31,15 +31,14 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint bitwise:true plusplus:true */
-/*global esprima:true, define:true, exports:true, window: true,
+/*jslint bitwise:true, plusplus:true */
+/*global define:true, exports:true,
 throwErrorTolerant: true,
-throwError: true, generateStatement: true, peek: true,
-parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
+throwError: true,
+parseAssignmentExpression: true, parseExpression: true,
 parseFunctionDeclaration: true, parseFunctionExpression: true,
 parseFunctionSourceElements: true, parseVariableIdentifier: true,
-parseLeftHandSideExpression: true, parseParams: true, validateParam: true,
-parseUnaryExpression: true,
+parseLeftHandSideExpression: true, validateParam: true,
 parseStatement: true, parseSourceElement: true */
 
 (function (root, factory) {
@@ -2225,7 +2224,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function parseObjectInitialiser() {
-        var properties = [], token, property, name, key, kind, map = {}, toString = String, node = new Node();
+        var properties = [], property, name, key, kind, map = {}, toString = String, node = new Node();
 
         expect('{');
 
