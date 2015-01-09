@@ -32,7 +32,7 @@
 
 /*jslint bitwise:true plusplus:true */
 /*global esprima:true, define:true, exports:true, window: true,
-throwError: true, generateStatement: true, peek: true,
+throwError: true, generateStatement: true, peek: true, lookahead2: true,
 parseAssignmentExpression: true, parseBlock: true,
 parseClassExpression: true, parseClassDeclaration: true, parseExpression: true,
 parseForStatement: true,
@@ -1387,7 +1387,7 @@ parseYieldExpression: true
             value = null;
         }
 
-        peek();
+        lookahead2();
 
         if (extra.tokenize) {
             return {
