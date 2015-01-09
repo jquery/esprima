@@ -4,9 +4,9 @@
         "node": true,
         "amd": true
     },
-
     "rules": {
         "no-alert": 2,
+        "no-array-constructor": 2,
         "no-caller": 2,
         "no-bitwise": 0,
         "no-catch-shadow": 2,
@@ -43,7 +43,6 @@
         "no-plusplus": 0,
         "no-delete-var": 2,
         "no-return-assign": 2,
-        "no-new-array": 2,
         "no-new-object": 2,
         "no-label-var": 2,
         "no-ternary": 0,
@@ -56,36 +55,61 @@
         "no-script-url": 2,
         "no-proto": 2,
         "no-iterator": 2,
-        "no-mixed-requires": [0, false],
+        "no-mixed-requires": [
+            0,
+            false
+        ],
         "no-wrap-func": 2,
         "no-shadow": 2,
         "no-use-before-define": 0,
         "no-redeclare": 2,
-
+        "no-regex-spaces": 2,
         "brace-style": 0,
         "block-scoped-var": 0,
         "camelcase": 2,
-        "complexity": [0, 11],
-        "consistent-this": [0, "that"],
+        "complexity": [
+            0,
+            11
+        ],
+        "consistent-this": [
+            0,
+            "that"
+        ],
         "curly": 2,
         "dot-notation": 2,
         "eqeqeq": 2,
         "guard-for-in": 0,
-        "max-depth": [0, 4],
-        "max-len": [0, 80, 4],
-        "max-params": [0, 3],
-        "max-statements": [0, 10],
+        "max-depth": [
+            0,
+            4
+        ],
+        "max-len": [
+            0,
+            80,
+            4
+        ],
+        "max-params": [
+            0,
+            3
+        ],
+        "max-statements": [
+            0,
+            10
+        ],
         "new-cap": 2,
         "new-parens": 2,
         "one-var": 0,
-        "quotes": [2, "single"],
+        "quotes": [
+            2,
+            "single"
+        ],
         "quote-props": 0,
         "radix": 0,
-        "regex-spaces": 2,
         "semi": 2,
         "strict": 2,
         "unnecessary-strict": 0,
         "use-isnan": 2,
+        "valid-typeof": 0,
         "wrap-iife": 2,
         "wrap-regex": 0
     }
