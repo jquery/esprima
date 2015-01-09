@@ -42,7 +42,7 @@
     }],
     "devDependencies": {
         "jslint": "~0.1.9",
-        "eslint": "~0.1.0",
+        "eslint": "~0.6.2",
         "istanbul": "~0.2.6",
         "complexity-report": "~0.6.1",
         "regenerate": "~0.5.4",

@@ -4742,9 +4742,9 @@ parseYieldExpression: true
     function parseClassElement() {
         if (match(';')) {
             lex();
-            return;
+        } else {
+            return parseMethodDefinition();
         }
-        return parseMethodDefinition();
     }
 
     function parseClassBody() {
