@@ -1274,7 +1274,7 @@ parseYieldExpression: true
     }
 
     function scanRegExp() {
-        var str, ch, start, pattern, flags, value, classMarker = false, restore, terminated = false, tmp;
+        var str, ch, start, pattern, flags, value, classMarker = false, restore, terminated = false, tmp, token;
 
         lookahead = null;
         skipComment();
@@ -1387,10 +1387,8 @@ parseYieldExpression: true
             value = null;
         }
 
-        lookahead2();
-
         if (extra.tokenize) {
-            return {
+            token = {
                 type: Token.RegularExpression,
                 value: value,
                 regex: {
@@ -1401,16 +1399,21 @@ parseYieldExpression: true
                 lineStart: lineStart,
                 range: [start, index]
             };
+        } else {
+            lookahead2();
+
+            token = {
+                literal: str,
+                value: value,
+                regex: {
+                    pattern: pattern,
+                    flags: flags
+                },
+                range: [start, index]
+            };
         }
-        return {
-            literal: str,
-            value: value,
-            regex: {
-                pattern: pattern,
-                flags: flags
-            },
-            range: [start, index]
-        };
+
+        return token;
     }
 
     function isIdentifierName(token) {
@@ -5139,6 +5142,8 @@ parseYieldExpression: true
                 range: [pos, index],
                 loc: loc
             });
+
+            peek();
         }
 
         return regex;
