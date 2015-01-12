@@ -1838,11 +1838,12 @@ parseStatement: true, parseSourceElement: true */
             return this;
         },
 
-        finishProperty: function (kind, key, value) {
+        finishProperty: function (kind, key, value, method) {
             this.type = Syntax.Property;
             this.key = key;
             this.value = value;
             this.kind = kind;
+            this.method = method;
             this.finish();
             return this;
         },
@@ -2174,6 +2175,18 @@ parseStatement: true, parseSourceElement: true */
         return node.finishFunctionExpression(null, param, [], body);
     }
 
+    function parsePropertyMethodFunction() {
+        var previousStrict, param, method;
+
+        previousStrict = strict;
+        strict = true;
+        param = parseParams();
+        method = parsePropertyFunction(param.params);
+        strict = previousStrict;
+
+        return method;
+    }
+
     function parseObjectPropertyKey() {
         var token, node = new Node();
 
@@ -2203,14 +2216,14 @@ parseStatement: true, parseSourceElement: true */
 
             // Property Assignment: Getter and Setter.
 
-            if (token.value === 'get' && !match(':')) {
+            if (token.value === 'get' && !(match(':') || match('('))) {
                 key = parseObjectPropertyKey();
                 expect('(');
                 expect(')');
                 value = parsePropertyFunction([]);
-                return node.finishProperty('get', key, value);
+                return node.finishProperty('get', key, value, false);
             }
-            if (token.value === 'set' && !match(':')) {
+            if (token.value === 'set' && !(match(':') || match('('))) {
                 key = parseObjectPropertyKey();
                 expect('(');
                 token = lookahead;
@@ -2223,19 +2236,33 @@ parseStatement: true, parseSourceElement: true */
                     expect(')');
                     value = parsePropertyFunction(param, token);
                 }
-                return node.finishProperty('set', key, value);
+                return node.finishProperty('set', key, value, false);
             }
-            expect(':');
-            value = parseAssignmentExpression();
-            return node.finishProperty('init', id, value);
+            if (match(':')) {
+                lex();
+                value = parseAssignmentExpression();
+                return node.finishProperty('init', id, value, false);
+            }
+            if (match('(')) {
+                value = parsePropertyMethodFunction();
+                return node.finishProperty('init', id, value, true);
+            }
+            throwUnexpected(lex());
         }
         if (token.type === Token.EOF || token.type === Token.Punctuator) {
             throwUnexpected(token);
         } else {
             key = parseObjectPropertyKey();
-            expect(':');
-            value = parseAssignmentExpression();
-            return node.finishProperty('init', key, value);
+            if (match(':')) {
+                lex();
+                value = parseAssignmentExpression();
+                return node.finishProperty('init', key, value, false);
+            }
+            if (match('(')) {
+                value = parsePropertyMethodFunction();
+                return node.finishProperty('init', key, value, true);
+            }
+            throwUnexpected(lex());
         }
     }
 
