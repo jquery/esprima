@@ -2499,21 +2499,171 @@ var modulesTestFixture = {
         }
     },
 
+    'Tolerated Invalid Syntax': {
+
+        'function f(){ export var g; }': {
+            type: 'Program',
+            body: [{
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'f',
+                    range: [9, 10],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 10 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExportDeclaration',
+                        'default': false,
+                        declaration: {
+                            type: 'VariableDeclaration',
+                            declarations: [{
+                                type: 'VariableDeclarator',
+                                id: {
+                                    type: 'Identifier',
+                                    name: 'g',
+                                    range: [25, 26],
+                                    loc: {
+                                        start: { line: 1, column: 25 },
+                                        end: { line: 1, column: 26 }
+                                    }
+                                },
+                                init: null,
+                                range: [25, 26],
+                                loc: {
+                                    start: { line: 1, column: 25 },
+                                    end: { line: 1, column: 26 }
+                                }
+                            }],
+                            kind: 'var',
+                            range: [21, 27],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 27 }
+                            }
+                        },
+                        specifiers: [],
+                        source: null,
+                        range: [14, 27],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 27 }
+                        }
+                    }],
+                    range: [12, 29],
+                    loc: {
+                        start: { line: 1, column: 12 },
+                        end: { line: 1, column: 29 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [0, 29],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 29 }
+                }
+            }],
+            range: [0, 29],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 29 }
+            },
+            errors: [{
+                index: 13,
+                lineNumber: 1,
+                column: 14,
+                message: "Error: Line 1: Illegal export declaration"
+            }]
+        },
+
+        'function f(){ import "h"; }': {
+            type: 'Program',
+            body: [{
+                type: 'FunctionDeclaration',
+                id: {
+                    type: 'Identifier',
+                    name: 'f',
+                    range: [9, 10],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 10 }
+                    }
+                },
+                params: [],
+                defaults: [],
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ImportDeclaration',
+                        specifiers: [],
+                        source: {
+                            type: 'ModuleSpecifier',
+                            value: 'h',
+                            raw: '"h"',
+                            range: [21, 24],
+                            loc: {
+                                start: { line: 1, column: 21 },
+                                end: { line: 1, column: 24 }
+                            }
+                        },
+                        range: [14, 25],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 25 }
+                        }
+                    }],
+                    range: [12, 27],
+                    loc: {
+                        start: { line: 1, column: 12 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                rest: null,
+                generator: false,
+                expression: false,
+                range: [0, 27],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 27 }
+                }
+            }],
+            range: [0, 27],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
+            },
+            errors: [{
+                index: 13,
+                lineNumber: 1,
+                column: 14,
+                message: "Error: Line 1: Illegal import declaration"
+            }]
+        }
+    },
+
     'Invalid Non-Modules Syntax': {
         'export default 42;': {
             index: 0,
             lineNumber: 1,
             column: 1,
-            message: "Error: Line 1: Unexpected reserved word",
-            description: "Unexpected reserved word"
+            message: "Error: Line 1: Illegal export declaration",
+            description: "Illegal export declaration"
         },
 
         'import foo from "foo";': {
             index: 0,
             lineNumber: 1,
             column: 1,
-            message: "Error: Line 1: Unexpected reserved word",
-            description: "Unexpected reserved word"
+            message: "Error: Line 1: Illegal import declaration",
+            description: "Illegal import declaration"
         }
     }
 };
