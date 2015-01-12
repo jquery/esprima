@@ -1067,13 +1067,43 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function testRegExp(pattern, flags) {
-        var value;
+        var tmp = pattern,
+            value;
+
+        if (flags.indexOf('u') >= 0) {
+            // Replace each astral symbol and every Unicode code point
+            // escape sequence with a single ASCII symbol to avoid throwing on
+            // regular expressions that are only valid in combination with the
+            // `/u` flag.
+            // Note: replacing with the ASCII symbol `x` might cause false
+            // negatives in unlikely scenarios. For example, `[\u{61}-b]` is a
+            // perfectly valid pattern that is equivalent to `[a-b]`, but it
+            // would be replaced by `[x-b]` which throws an error.
+            tmp = tmp
+                .replace(/\\u\{([0-9a-fA-F]+)\}/g, function ($0, $1) {
+                    if (parseInt($1, 16) <= 0x10FFFF) {
+                        return 'x';
+                    }
+                    throwError({}, Messages.InvalidRegExp);
+                })
+                .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, 'x');
+        }
+
+        // First, detect invalid regular expressions.
         try {
-            value = new RegExp(pattern, flags);
+            value = new RegExp(tmp);
         } catch (e) {
             throwError({}, Messages.InvalidRegExp);
         }
-        return value;
+
+        // Return a regular expression object for this pattern-flag pair, or
+        // `null` in case the current environment doesn't support the flags it
+        // uses.
+        try {
+            return new RegExp(pattern, flags);
+        } catch (exception) {
+            return null;
+        }
     }
 
     function scanRegExpBody() {
@@ -1183,6 +1213,10 @@ parseStatement: true, parseSourceElement: true */
             return {
                 type: Token.RegularExpression,
                 value: value,
+                regex: {
+                    pattern: body.value,
+                    flags: flags.value
+                },
                 lineNumber: lineNumber,
                 lineStart: lineStart,
                 start: start,
@@ -1193,6 +1227,10 @@ parseStatement: true, parseSourceElement: true */
         return {
             literal: body.literal + flags.literal,
             value: value,
+            regex: {
+                pattern: body.value,
+                flags: flags.value
+            },
             start: start,
             end: index
         };
@@ -1212,6 +1250,7 @@ parseStatement: true, parseSourceElement: true */
         };
 
         regex = scanRegExp();
+
         loc.end = {
             line: lineNumber,
             column: index - lineStart
@@ -1232,6 +1271,7 @@ parseStatement: true, parseSourceElement: true */
             extra.tokens.push({
                 type: 'RegularExpression',
                 value: regex.literal,
+                regex: regex.regex,
                 range: [pos, index],
                 loc: loc
             });
@@ -1304,7 +1344,7 @@ parseStatement: true, parseSourceElement: true */
             }
             return collectRegex();
         }
-        if (prevToken.type === 'Keyword') {
+        if (prevToken.type === 'Keyword' && prevToken.value !== 'this') {
             return collectRegex();
         }
         return scanPunctuator();
@@ -1364,7 +1404,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     function collectToken() {
-        var loc, token, value;
+        var loc, token, value, entry;
 
         skipComment();
         loc = {
@@ -1382,12 +1422,19 @@ parseStatement: true, parseSourceElement: true */
 
         if (token.type !== Token.EOF) {
             value = source.slice(token.start, token.end);
-            extra.tokens.push({
+            entry = {
                 type: TokenName[token.type],
                 value: value,
                 range: [token.start, token.end],
                 loc: loc
-            });
+            };
+            if (token.regex) {
+                entry.regex = {
+                    pattern: token.regex.pattern,
+                    flags: token.regex.flags
+                };
+            }
+            extra.tokens.push(entry);
         }
 
         return token;
@@ -1478,8 +1525,11 @@ parseStatement: true, parseSourceElement: true */
 
         processComment: function () {
             var lastChild,
+                leadingComments,
                 trailingComments,
                 bottomRight = extra.bottomRightStack,
+                i,
+                comment,
                 last = bottomRight[bottomRight.length - 1];
 
             if (this.type === Syntax.Program) {
@@ -1489,12 +1539,15 @@ parseStatement: true, parseSourceElement: true */
             }
 
             if (extra.trailingComments.length > 0) {
-                if (extra.trailingComments[0].range[0] >= this.range[1]) {
-                    trailingComments = extra.trailingComments;
-                    extra.trailingComments = [];
-                } else {
-                    extra.trailingComments.length = 0;
+                trailingComments = [];
+                for (i = extra.trailingComments.length - 1; i >= 0; --i) {
+                    comment = extra.trailingComments[i];
+                    if (comment.range[0] >= this.range[1]) {
+                        trailingComments.unshift(comment);
+                        extra.trailingComments.splice(i, 1);
+                    }
                 }
+                extra.trailingComments = [];
             } else {
                 if (last && last.trailingComments && last.trailingComments[0].range[0] >= this.range[1]) {
                     trailingComments = last.trailingComments;
@@ -1515,13 +1568,22 @@ parseStatement: true, parseSourceElement: true */
                     this.leadingComments = lastChild.leadingComments;
                     lastChild.leadingComments = undefined;
                 }
-            } else if (extra.leadingComments.length > 0 && extra.leadingComments[extra.leadingComments.length - 1].range[1] <= this.range[0]) {
-                this.leadingComments = extra.leadingComments;
-                extra.leadingComments = [];
+            } else if (extra.leadingComments.length > 0) {
+                leadingComments = [];
+                for (i = extra.leadingComments.length - 1; i >= 0; --i) {
+                    comment = extra.leadingComments[i];
+                    if (comment.range[1] <= this.range[0]) {
+                        leadingComments.unshift(comment);
+                        extra.leadingComments.splice(i, 1);
+                    }
+                }
             }
 
 
-            if (trailingComments) {
+            if (leadingComments && leadingComments.length > 0) {
+                this.leadingComments = leadingComments;
+            }
+            if (trailingComments && trailingComments.length > 0) {
                 this.trailingComments = trailingComments;
             }
 
@@ -1729,6 +1791,9 @@ parseStatement: true, parseSourceElement: true */
             this.type = Syntax.Literal;
             this.value = token.value;
             this.raw = source.slice(token.start, token.end);
+            if (token.regex) {
+                this.regex = token.regex;
+            }
             this.finish();
             return this;
         },
@@ -1773,11 +1838,12 @@ parseStatement: true, parseSourceElement: true */
             return this;
         },
 
-        finishProperty: function (kind, key, value) {
+        finishProperty: function (kind, key, value, method) {
             this.type = Syntax.Property;
             this.key = key;
             this.value = value;
             this.kind = kind;
+            this.method = method;
             this.finish();
             return this;
         },
@@ -2109,6 +2175,18 @@ parseStatement: true, parseSourceElement: true */
         return node.finishFunctionExpression(null, param, [], body);
     }
 
+    function parsePropertyMethodFunction() {
+        var previousStrict, param, method;
+
+        previousStrict = strict;
+        strict = true;
+        param = parseParams();
+        method = parsePropertyFunction(param.params);
+        strict = previousStrict;
+
+        return method;
+    }
+
     function parseObjectPropertyKey() {
         var token, node = new Node();
 
@@ -2138,14 +2216,14 @@ parseStatement: true, parseSourceElement: true */
 
             // Property Assignment: Getter and Setter.
 
-            if (token.value === 'get' && !match(':')) {
+            if (token.value === 'get' && !(match(':') || match('('))) {
                 key = parseObjectPropertyKey();
                 expect('(');
                 expect(')');
                 value = parsePropertyFunction([]);
-                return node.finishProperty('get', key, value);
+                return node.finishProperty('get', key, value, false);
             }
-            if (token.value === 'set' && !match(':')) {
+            if (token.value === 'set' && !(match(':') || match('('))) {
                 key = parseObjectPropertyKey();
                 expect('(');
                 token = lookahead;
@@ -2158,19 +2236,33 @@ parseStatement: true, parseSourceElement: true */
                     expect(')');
                     value = parsePropertyFunction(param, token);
                 }
-                return node.finishProperty('set', key, value);
+                return node.finishProperty('set', key, value, false);
             }
-            expect(':');
-            value = parseAssignmentExpression();
-            return node.finishProperty('init', id, value);
+            if (match(':')) {
+                lex();
+                value = parseAssignmentExpression();
+                return node.finishProperty('init', id, value, false);
+            }
+            if (match('(')) {
+                value = parsePropertyMethodFunction();
+                return node.finishProperty('init', id, value, true);
+            }
+            throwUnexpected(lex());
         }
         if (token.type === Token.EOF || token.type === Token.Punctuator) {
             throwUnexpected(token);
         } else {
             key = parseObjectPropertyKey();
-            expect(':');
-            value = parseAssignmentExpression();
-            return node.finishProperty('init', key, value);
+            if (match(':')) {
+                lex();
+                value = parseAssignmentExpression();
+                return node.finishProperty('init', key, value, false);
+            }
+            if (match('(')) {
+                value = parsePropertyMethodFunction();
+                return node.finishProperty('init', key, value, true);
+            }
+            throwUnexpected(lex());
         }
     }
 
@@ -3764,6 +3856,12 @@ parseStatement: true, parseSourceElement: true */
                 type: entry.type,
                 value: entry.value
             };
+            if (entry.regex) {
+                token.regex = {
+                    pattern: entry.regex.pattern,
+                    flags: entry.regex.flags
+                };
+            }
             if (extra.range) {
                 token.range = entry.range;
             }
