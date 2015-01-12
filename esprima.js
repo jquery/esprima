@@ -1525,8 +1525,11 @@ parseStatement: true, parseSourceElement: true */
 
         processComment: function () {
             var lastChild,
+                leadingComments,
                 trailingComments,
                 bottomRight = extra.bottomRightStack,
+                i,
+                comment,
                 last = bottomRight[bottomRight.length - 1];
 
             if (this.type === Syntax.Program) {
@@ -1536,12 +1539,15 @@ parseStatement: true, parseSourceElement: true */
             }
 
             if (extra.trailingComments.length > 0) {
-                if (extra.trailingComments[0].range[0] >= this.range[1]) {
-                    trailingComments = extra.trailingComments;
-                    extra.trailingComments = [];
-                } else {
-                    extra.trailingComments.length = 0;
+                trailingComments = [];
+                for (i = extra.trailingComments.length - 1; i >= 0; --i) {
+                    comment = extra.trailingComments[i];
+                    if (comment.range[0] >= this.range[1]) {
+                        trailingComments.unshift(comment);
+                        extra.trailingComments.splice(i, 1);
+                    }
                 }
+                extra.trailingComments = [];
             } else {
                 if (last && last.trailingComments && last.trailingComments[0].range[0] >= this.range[1]) {
                     trailingComments = last.trailingComments;
@@ -1562,13 +1568,22 @@ parseStatement: true, parseSourceElement: true */
                     this.leadingComments = lastChild.leadingComments;
                     lastChild.leadingComments = undefined;
                 }
-            } else if (extra.leadingComments.length > 0 && extra.leadingComments[extra.leadingComments.length - 1].range[1] <= this.range[0]) {
-                this.leadingComments = extra.leadingComments;
-                extra.leadingComments = [];
+            } else if (extra.leadingComments.length > 0) {
+                leadingComments = [];
+                for (i = extra.leadingComments.length - 1; i >= 0; --i) {
+                    comment = extra.leadingComments[i];
+                    if (comment.range[1] <= this.range[0]) {
+                        leadingComments.unshift(comment);
+                        extra.leadingComments.splice(i, 1);
+                    }
+                }
             }
 
 
-            if (trailingComments) {
+            if (leadingComments && leadingComments.length > 0) {
+                this.leadingComments = leadingComments;
+            }
+            if (trailingComments && trailingComments.length > 0) {
                 this.trailingComments = trailingComments;
             }
 

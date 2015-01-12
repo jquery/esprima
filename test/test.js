@@ -5907,7 +5907,100 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 16 }
             }
+        },
+
+        '/*Venus*/ debugger; // Mars': {
+            type: 'Program',
+            body: [{
+                type: 'DebuggerStatement',
+                leadingComments: [{
+                    type: 'Block',
+                    value: 'Venus',
+                    range: [0, 9],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 9 }
+                    }
+                }],
+                trailingComments: [{
+                    type: 'Line',
+                    value: ' Mars',
+                    range: [20, 27],
+                    loc: {
+                        start: { line: 1, column: 20 },
+                        end: { line: 1, column: 27 }
+                    }
+                }],
+                range: [10, 19],
+                loc: {
+                    start: { line: 1, column: 10 },
+                    end: { line: 1, column: 19 }
+                }
+            }],
+            comments: [{
+                type: 'Block',
+                value: 'Venus',
+                range: [0, 9],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 9 }
+                }
+            }, {
+                type: 'Line',
+                value: ' Mars',
+                range: [20, 27],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 27 }
+                }
+            }],
+            range: [10, 19],
+            loc: {
+                start: { line: 1, column: 10 },
+                end: { line: 1, column: 19 }
+            }
+        },
+
+        'function x(){ /*Jupiter*/ return; /*Saturn*/}': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'x',
+                range: [9, 10],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            params: [],
+            defaults: [],
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ReturnStatement',
+                    argument: null,
+                    range: [26, 33],
+                    loc: {
+                        start: { line: 1, column: 26 },
+                        end: { line: 1, column: 33 }
+                    }
+                }],
+                range: [12, 45],
+                loc: {
+                    start: { line: 1, column: 12 },
+                    end: { line: 1, column: 45 }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            range: [0, 45],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 45 }
+            }
         }
+
     },
 
     'Numeric Literals': {
