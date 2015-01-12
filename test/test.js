@@ -5216,6 +5216,126 @@ var testFixture = {
 
     'Regular Expression Literals': {
 
+        '/p/;': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'Literal',
+                    value: '/p/',
+                    raw: '/p/',
+                    regex: {
+                        pattern: 'p',
+                        flags: ''
+                    },
+                    range: [0, 3],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 3 }
+                    }
+                },
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
+            }],
+            range: [0, 4],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 4 }
+            },
+            tokens: [{
+                type: 'RegularExpression',
+                value: '/p/',
+                regex: {
+                    pattern: 'p',
+                    flags: ''
+                },
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            }, {
+                type: 'Punctuator',
+                value: ';',
+                range: [3, 4],
+                loc: {
+                    start: { line: 1, column: 3 },
+                    end: { line: 1, column: 4 }
+                }
+            }]
+        },
+
+        '[/q/]': {
+            type: 'Program',
+            body: [{
+                type: 'ExpressionStatement',
+                expression: {
+                    type: 'ArrayExpression',
+                    elements: [{
+                        type: 'Literal',
+                        value: '/q/',
+                        raw: '/q/',
+                        regex: {
+                            pattern: 'q',
+                            flags: ''
+                        },
+                        range: [1, 4],
+                        loc: {
+                            start: { line: 1, column: 1 },
+                            end: { line: 1, column: 4 }
+                        }
+                    }],
+                    range: [0, 5],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 5 }
+                    }
+                },
+                range: [0, 5],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 5 }
+                }
+            }],
+            range: [0, 5],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 5 }
+            },
+            tokens: [{
+                type: 'Punctuator',
+                value: '[',
+                range: [0, 1],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 1 }
+                }
+            }, {
+                type: 'RegularExpression',
+                value: '/q/',
+                regex: {
+                    pattern: 'q',
+                    flags: ''
+                },
+                range: [1, 4],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 4 }
+                }
+            }, {
+                type: 'Punctuator',
+                value: ']',
+                range: [4, 5],
+                loc: {
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 5 }
+                }
+            }]
+        },
+
         'var x = /[a-z]/i': {
             type: 'Program',
             body: [{
