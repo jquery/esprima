@@ -1428,6 +1428,7 @@ parseYieldExpression: true
                     throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
                 } else {
                     str += '\\';
+                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
                 }
             } else {
                 flags += ch;
