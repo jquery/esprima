@@ -7,6 +7,7 @@
 
     "rules": {
         "no-alert": 2,
+        "no-array-constructor": 2,
         "no-caller": 2,
         "no-bitwise": 0,
         "no-catch-shadow": 2,
@@ -27,11 +28,10 @@
         "no-implied-eval": 2,
         "no-with": 2,
         "no-fallthrough": 2,
-        "no-global-strict": 2,
         "no-unreachable": 2,
         "no-undef": 2,
         "no-undef-init": 2,
-        "no-unused-expressions": 0,
+        "no-unused-expressions": 2,
         "no-octal": 2,
         "no-octal-escape": 2,
         "no-obj-calls": 2,
@@ -43,7 +43,6 @@
         "no-plusplus": 0,
         "no-delete-var": 2,
         "no-return-assign": 2,
-        "no-new-array": 2,
         "no-new-object": 2,
         "no-label-var": 2,
         "no-ternary": 0,
@@ -52,7 +51,7 @@
         "no-underscore-dangle": 2,
         "no-loop-func": 2,
         "no-empty-label": 2,
-        "no-unused-vars": 0,
+        "no-unused-vars": 1,
         "no-script-url": 2,
         "no-proto": 2,
         "no-iterator": 2,
@@ -61,6 +60,7 @@
         "no-shadow": 2,
         "no-use-before-define": 0,
         "no-redeclare": 2,
+        "no-regex-spaces": 2,
 
         "brace-style": 0,
         "block-scoped-var": 0,
@@ -81,11 +81,11 @@
         "quotes": [2, "single"],
         "quote-props": 0,
         "radix": 0,
-        "regex-spaces": 2,
         "semi": 2,
         "strict": 2,
         "unnecessary-strict": 0,
         "use-isnan": 2,
+        "valid-typeof": 0,
         "wrap-iife": 2,
         "wrap-regex": 0
     }

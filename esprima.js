@@ -30,22 +30,6 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint bitwise:true plusplus:true */
-/*global esprima:true, define:true, exports:true, window: true,
-throwErrorTolerant: true,
-throwError: true, generateStatement: true, peek: true,
-parseAssignmentExpression: true, parseBlock: true,
-parseClassExpression: true, parseClassDeclaration: true, parseExpression: true,
-parseForStatement: true,
-parseFunctionDeclaration: true, parseFunctionExpression: true,
-parseFunctionSourceElements: true, parseVariableIdentifier: true,
-parseImportSpecifier: true,
-parseLeftHandSideExpression: true, parseParams: true, validateParam: true,
-parseSpreadOrAssignmentExpression: true,
-parseStatement: true, parseSourceElement: true, parseConciseBody: true,
-parseYieldExpression: true
-*/
-
 (function (root, factory) {
     'use strict';
 
