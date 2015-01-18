@@ -23895,7 +23895,7 @@ var testFixture = {
                 "value": "/42/",
                 "regex": {
                     "pattern": "42",
-                    "flags": "",
+                    "flags": ""
                 },
                 "range": [
                     9,
