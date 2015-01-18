@@ -28,8 +28,6 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-var testFixture;
-
 var modulesTestFixture = {
 
     // people.mozilla.org/~jorendorff/es6-draft.html

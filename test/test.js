@@ -28,9 +28,9 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-var testFixtureOptions = {};
+var testFixtureOptions = {},
 
-var testFixture = {
+    testFixture = {
 
     'Primary Expression': {
 
@@ -20204,7 +20204,7 @@ var testFixture = {
             type: 'Boolean',
             value: 'true'
           }]
-        },
+        }
 
     },
 
@@ -22988,7 +22988,7 @@ var testFixture = {
                 loc: {
                     start: { line: 1, column: 0 },
                     end: { line: 1, column: 18 }
-                },
+                }
             }],
             range: [0, 18],
             loc: {
