@@ -1,3 +1,7 @@
+2015-01-18: Version 1.2.3
+
+      * Fix division by this (issue 616)
+
 2014-05-18: Version 1.2.2
 
       * Fix duplicated tokens when collecting comments (issue 537)
