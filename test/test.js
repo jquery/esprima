@@ -26519,6 +26519,83 @@ var testFixture = {
             }]
         },
 
+        'x = { y: z; }': {
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 13 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                },
+                type: "ExpressionStatement",
+                expression: {
+                    range: [0, 13],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 13 }
+                    },
+                    type: "AssignmentExpression",
+                    operator: "=",
+                    left: {
+                        range: [0, 1],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 1 }
+                        },
+                        type: "Identifier",
+                        name: "x"
+                    },
+                    right: {
+                        range: [4, 13],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 13 }
+                        },
+                        type: "ObjectExpression",
+                        properties: [{
+                            range: [6, 10],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 10 }
+                            },
+                            type: "Property",
+                            key: {
+                                range: [6, 7],
+                                loc: {
+                                    start: { line: 1, column: 6 },
+                                    end: { line: 1, column: 7 }
+                                },
+                                type: "Identifier",
+                                name: "y"
+                            },
+                            value: {
+                                range: [9, 10],
+                                loc: {
+                                    start: { line: 1, column: 9 },
+                                    end: { line: 1, column: 10 }
+                                },
+                                type: "Identifier",
+                                name: "z"
+                            },
+                            kind: "init",
+                            method: false
+                        }]
+                    }
+                }
+            }],
+            errors: [{
+                index: 10,
+                lineNumber: 1,
+                column: 11,
+                message: "Error: Line 1: Unexpected token ;"
+            }]
+        },
+
         'return': {
             type: 'Program',
             body: [{

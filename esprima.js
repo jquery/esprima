@@ -2092,22 +2092,26 @@
     }
 
     /**
-     * @name expectTolerant
-     * @description Quietly expect the given token value when in tolerant mode, otherwise delegates
+     * @name expectCommaSeparator
+     * @description Quietly expect a comma when in tolerant mode, otherwise delegates
      * to <code>expect(value)</code>
-     * @param {String} value The value we are expecting the lookahead token to have
      * @since 2.0
      */
-    function expectTolerant(value) {
+    function expectCommaSeparator() {
+        var token;
+
         if (extra.errors) {
-            var token = lookahead;
-            if (token.type !== Token.Punctuator && token.value !== value) {
+            token = lookahead;
+            if (token.type === Token.Punctuator && token.value === ',') {
+                lex();
+            } else if (token.type === Token.Punctuator && token.value === ';') {
+                lex();
                 throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
             } else {
-                lex();
+                throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
             }
         } else {
-            expect(value);
+            expect(',');
         }
     }
 
@@ -2350,7 +2354,7 @@
             properties.push(property);
 
             if (!match('}')) {
-                expectTolerant(',');
+                expectCommaSeparator();
             }
         }
 
@@ -2453,7 +2457,7 @@
                 if (match(')')) {
                     break;
                 }
-                expectTolerant(',');
+                expectCommaSeparator();
             }
         }
 
