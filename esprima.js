@@ -1884,12 +1884,13 @@
             return this;
         },
 
-        finishProperty: function (kind, key, value, method) {
+        finishProperty: function (kind, key, value, method, shorthand) {
             this.type = Syntax.Property;
             this.key = key;
             this.value = value;
             this.kind = kind;
             this.method = method;
+            this.shorthand = shorthand;
             this.finish();
             return this;
         },
@@ -2271,7 +2272,7 @@
                 expect('(');
                 expect(')');
                 value = parsePropertyFunction([]);
-                return node.finishProperty('get', key, value, false);
+                return node.finishProperty('get', key, value, false, false);
             }
             if (token.value === 'set' && !(match(':') || match('('))) {
                 key = parseObjectPropertyKey();
@@ -2286,18 +2287,20 @@
                     expect(')');
                     value = parsePropertyFunction(param, token);
                 }
-                return node.finishProperty('set', key, value, false);
+                return node.finishProperty('set', key, value, false, false);
             }
             if (match(':')) {
                 lex();
                 value = parseAssignmentExpression();
-                return node.finishProperty('init', id, value, false);
+                return node.finishProperty('init', id, value, false, false);
             }
             if (match('(')) {
                 value = parsePropertyMethodFunction();
-                return node.finishProperty('init', id, value, true);
+                return node.finishProperty('init', id, value, true, false);
             }
-            throwUnexpected(lex());
+
+            value = id;
+            return node.finishProperty('init', id, value, false, true);
         }
         if (token.type === Token.EOF || token.type === Token.Punctuator) {
             throwUnexpected(token);
@@ -2306,11 +2309,11 @@
             if (match(':')) {
                 lex();
                 value = parseAssignmentExpression();
-                return node.finishProperty('init', key, value, false);
+                return node.finishProperty('init', key, value, false, false);
             }
             if (match('(')) {
                 value = parsePropertyMethodFunction();
-                return node.finishProperty('init', key, value, true);
+                return node.finishProperty('init', key, value, true, false);
             }
             throwUnexpected(lex());
         }

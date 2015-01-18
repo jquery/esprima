@@ -100,7 +100,7 @@ function newExpr(callee, args) { return Pattern({ type: "NewExpression", callee:
 function callExpr(callee, args) { return Pattern({ type: "CallExpression", callee: callee, arguments: args }); }
 function arrExpr(elts) { return Pattern({ type: "ArrayExpression", elements: elts }); }
 function objExpr(elts) { return Pattern({ type: "ObjectExpression", properties: elts }); }
-function objProp(key, value, kind) { return Pattern({ type: "Property", key: key, value: value, kind: kind, method: false }); }
+function objProp(key, value, kind) { return Pattern({ type: "Property", key: key, value: value, kind: kind, method: false, shorthand: false }); }
 
 function arrPatt(elts) { return Pattern({ type: "ArrayPattern", elements: elts }); }
 function objPatt(elts) { return Pattern({ type: "ObjectPattern", properties: elts }); }

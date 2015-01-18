@@ -1026,6 +1026,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 16],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1090,6 +1091,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 12],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1154,6 +1156,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 14],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1218,6 +1221,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 15],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1282,6 +1286,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 14],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1347,6 +1352,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 18],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1412,6 +1418,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [6, 10],
                             loc: {
                                 start: { line: 1, column: 6 },
@@ -1441,6 +1448,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [12, 16],
                             loc: {
                                 start: { line: 1, column: 12 },
@@ -1535,6 +1543,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 36],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1612,6 +1621,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 20],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1689,6 +1699,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 17],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1766,6 +1777,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 19],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1843,6 +1855,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 20],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1920,6 +1933,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 19],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1998,6 +2012,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 22],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2076,6 +2091,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 17],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2195,6 +2211,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 34],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2314,6 +2331,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 28],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2433,6 +2451,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 32],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2552,6 +2571,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 34],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2671,6 +2691,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 32],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2791,6 +2812,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 34],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2911,6 +2933,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 30],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2975,6 +2998,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 13],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -3039,6 +3063,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 13],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -3103,6 +3128,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 18],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -3168,6 +3194,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [5, 19],
                         loc: {
                             start: { line: 1, column: 5 },
@@ -3261,6 +3288,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 36],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -3344,6 +3372,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [38, 75],
                         loc: {
                             start: { line: 1, column: 38 },
@@ -12421,6 +12450,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [8, 20],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -13398,6 +13428,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 18],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -13483,6 +13514,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 22],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -13561,6 +13593,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 20],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -13638,6 +13671,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 15],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -13715,6 +13749,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 15],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -13740,6 +13775,101 @@ var testFixture = {
             }
         }
 
+    },
+
+    '[ES6] Object Literal Property Value Shorthand': {
+
+        'x = { y, z }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'y',
+                            range: [6, 7],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 7 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'y',
+                            range: [6, 7],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 7 }
+                            }
+                        },
+                        kind: 'init',
+                        method: false,
+                        shorthand: true,
+                        range: [6, 7],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 7 }
+                        }
+                    }, {
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'z',
+                            range: [9, 10],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 10 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'z',
+                            range: [9, 10],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 10 }
+                            }
+                        },
+                        kind: 'init',
+                        method: false,
+                        shorthand: true,
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    }],
+                    range: [4, 12],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 12],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        }
     },
 
     'Assignment Operators': {
@@ -19059,6 +19189,7 @@ var testFixture = {
                     },
                     kind: 'init',
                     method: false,
+                    shorthand: false,
                     range: [8, 24],
                     loc: {
                         start: { line: 1, column: 8 },
@@ -20672,6 +20803,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 25],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -25772,7 +25904,8 @@ var testFixture = {
                                 expression: false
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [28, 33],
                             loc: {
@@ -25800,7 +25933,8 @@ var testFixture = {
                                 raw: "2"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }]
                     }
                 }],
@@ -26021,7 +26155,8 @@ var testFixture = {
                                 expression: false
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [28, 33],
                             loc: {
@@ -26049,7 +26184,8 @@ var testFixture = {
                                 raw: "2"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [34, 42],
                             loc: {
@@ -26077,7 +26213,8 @@ var testFixture = {
                                 raw: "3"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }]
                     }
                 }],
@@ -26174,7 +26311,8 @@ var testFixture = {
                                 expression: false
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [28, 33],
                             loc: {
@@ -26202,7 +26340,8 @@ var testFixture = {
                                 raw: "2"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [35, 43],
                             loc: {
@@ -26230,7 +26369,8 @@ var testFixture = {
                                 raw: "3"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [44, 52],
                             loc: {
@@ -26259,7 +26399,8 @@ var testFixture = {
                                 raw: "4"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }]
                     }
                 }],
@@ -26356,7 +26497,8 @@ var testFixture = {
                                 expression: false
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [28, 33],
                             loc: {
@@ -26384,7 +26526,8 @@ var testFixture = {
                                 raw: "2"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [35, 59],
                             loc: {
@@ -26435,7 +26578,8 @@ var testFixture = {
                                         raw: "\"a\""
                                     },
                                     kind: "init",
-                                    method: false
+                                    method: false,
+                                    shorthand: false
                                 }, {
                                     range: [51, 58],
                                     loc: {
@@ -26463,11 +26607,13 @@ var testFixture = {
                                         raw: "\"b\""
                                     },
                                     kind: "init",
-                                    method: false
+                                    method: false,
+                                    shorthand: false
                                 }]
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [60, 67],
                             loc: {
@@ -26495,7 +26641,8 @@ var testFixture = {
                                 raw: "4"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }]
                     }
                 }],
@@ -26583,7 +26730,8 @@ var testFixture = {
                                 name: "z"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }]
                     }
                 }
@@ -27567,6 +27715,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [16, 19],
                             loc: {
                                 start: { line: 1, column: 16 },
@@ -27595,6 +27744,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [20, 23],
                             loc: {
                                 start: { line: 1, column: 20 },
@@ -28622,6 +28772,7 @@ var testFixture = {
                             },
                             kind: 'set',
                             method: false,
+                            shorthand: false,
                             range: [20, 34],
                             loc: {
                                 start: { line: 1, column: 20 },
@@ -28847,6 +28998,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [24, 30],
                             loc: {
                                 start: { line: 1, column: 24 },
@@ -28955,6 +29107,7 @@ var testFixture = {
                             },
                             kind: 'get',
                             method: false,
+                            shorthand: false,
                             range: [24, 34],
                             loc: {
                                 start: { line: 1, column: 24 },
@@ -28996,6 +29149,7 @@ var testFixture = {
                             },
                             kind: 'get',
                             method: false,
+                            shorthand: false,
                             range: [36, 46],
                             loc: {
                                 start: { line: 1, column: 36 },
@@ -29091,6 +29245,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [24, 29],
                             loc: {
                                 start: { line: 1, column: 24 },
@@ -29132,6 +29287,7 @@ var testFixture = {
                             },
                             kind: 'get',
                             method: false,
+                            shorthand: false,
                             range: [31, 41],
                             loc: {
                                 start: { line: 1, column: 31 },
@@ -29248,6 +29404,7 @@ var testFixture = {
                             },
                             kind: 'set',
                             method: false,
+                            shorthand: false,
                             range: [24, 35],
                             loc: {
                                 start: { line: 1, column: 24 },
@@ -29276,6 +29433,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [37, 42],
                             loc: {
                                 start: { line: 1, column: 37 },
@@ -29358,6 +29516,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [3, 14],
                         loc: {
                             start: { line: 1, column: 3 },
