@@ -1,11 +1,11 @@
-var cr = require('complexity-report'),
+var escomplex = require('escomplex-js'),
     content = require('fs').readFileSync('esprima.js', 'utf-8'),
     opt = { logicalor: false, switchcase: false },
     list = [];
 
-cr.run(content, opt).functions.forEach(function (entry) {
+escomplex.analyse(content, opt).functions.forEach(function (entry) {
     var name = (entry.name === '<anonymous>') ? (':' + entry.line) : entry.name;
-    list.push({ name: name, value: entry.complexity.cyclomatic });
+    list.push({ name: name, value: entry.cyclomatic });
 });
 
 list.sort(function (x, y) {

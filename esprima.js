@@ -31,17 +31,6 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint bitwise:true plusplus:true */
-/*global esprima:true, define:true, exports:true, window: true,
-throwErrorTolerant: true,
-throwError: true, generateStatement: true, peek: true,
-parseAssignmentExpression: true, parseBlock: true, parseExpression: true,
-parseFunctionDeclaration: true, parseFunctionExpression: true,
-parseFunctionSourceElements: true, parseVariableIdentifier: true,
-parseLeftHandSideExpression: true, parseParams: true, validateParam: true,
-parseUnaryExpression: true,
-parseStatement: true, parseSourceElement: true */
-
 (function (root, factory) {
     'use strict';
 
@@ -169,39 +158,39 @@ parseStatement: true, parseSourceElement: true */
 
     // Error messages should be identical to V8.
     Messages = {
-        UnexpectedToken:  'Unexpected token %0',
-        UnexpectedNumber:  'Unexpected number',
-        UnexpectedString:  'Unexpected string',
-        UnexpectedIdentifier:  'Unexpected identifier',
-        UnexpectedReserved:  'Unexpected reserved word',
-        UnexpectedEOS:  'Unexpected end of input',
-        NewlineAfterThrow:  'Illegal newline after throw',
+        UnexpectedToken: 'Unexpected token %0',
+        UnexpectedNumber: 'Unexpected number',
+        UnexpectedString: 'Unexpected string',
+        UnexpectedIdentifier: 'Unexpected identifier',
+        UnexpectedReserved: 'Unexpected reserved word',
+        UnexpectedEOS: 'Unexpected end of input',
+        NewlineAfterThrow: 'Illegal newline after throw',
         InvalidRegExp: 'Invalid regular expression',
-        UnterminatedRegExp:  'Invalid regular expression: missing /',
-        InvalidLHSInAssignment:  'Invalid left-hand side in assignment',
-        InvalidLHSInForIn:  'Invalid left-hand side in for-in',
+        UnterminatedRegExp: 'Invalid regular expression: missing /',
+        InvalidLHSInAssignment: 'Invalid left-hand side in assignment',
+        InvalidLHSInForIn: 'Invalid left-hand side in for-in',
         MultipleDefaultsInSwitch: 'More than one default clause in switch statement',
-        NoCatchOrFinally:  'Missing catch or finally after try',
+        NoCatchOrFinally: 'Missing catch or finally after try',
         UnknownLabel: 'Undefined label \'%0\'',
         Redeclaration: '%0 \'%1\' has already been declared',
         IllegalContinue: 'Illegal continue statement',
         IllegalBreak: 'Illegal break statement',
         IllegalReturn: 'Illegal return statement',
-        StrictModeWith:  'Strict mode code may not include a with statement',
-        StrictCatchVariable:  'Catch variable may not be eval or arguments in strict mode',
-        StrictVarName:  'Variable name may not be eval or arguments in strict mode',
-        StrictParamName:  'Parameter name eval or arguments is not allowed in strict mode',
+        StrictModeWith: 'Strict mode code may not include a with statement',
+        StrictCatchVariable: 'Catch variable may not be eval or arguments in strict mode',
+        StrictVarName: 'Variable name may not be eval or arguments in strict mode',
+        StrictParamName: 'Parameter name eval or arguments is not allowed in strict mode',
         StrictParamDupe: 'Strict mode function may not have duplicate parameter names',
-        StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
-        StrictOctalLiteral:  'Octal literals are not allowed in strict mode.',
-        StrictDelete:  'Delete of an unqualified identifier in strict mode.',
-        StrictDuplicateProperty:  'Duplicate data property in object literal not allowed in strict mode',
-        AccessorDataProperty:  'Object literal may not have data and accessor property with the same name',
-        AccessorGetSet:  'Object literal may not have multiple get/set accessors with the same name',
-        StrictLHSAssignment:  'Assignment to eval or arguments is not allowed in strict mode',
-        StrictLHSPostfix:  'Postfix increment/decrement may not have eval or arguments operand in strict mode',
-        StrictLHSPrefix:  'Prefix increment/decrement may not have eval or arguments operand in strict mode',
-        StrictReservedWord:  'Use of future reserved word in strict mode'
+        StrictFunctionName: 'Function name may not be eval or arguments in strict mode',
+        StrictOctalLiteral: 'Octal literals are not allowed in strict mode.',
+        StrictDelete: 'Delete of an unqualified identifier in strict mode.',
+        StrictDuplicateProperty: 'Duplicate data property in object literal not allowed in strict mode',
+        AccessorDataProperty: 'Object literal may not have data and accessor property with the same name',
+        AccessorGetSet: 'Object literal may not have multiple get/set accessors with the same name',
+        StrictLHSAssignment: 'Assignment to eval or arguments is not allowed in strict mode',
+        StrictLHSPostfix: 'Postfix increment/decrement may not have eval or arguments operand in strict mode',
+        StrictLHSPrefix: 'Prefix increment/decrement may not have eval or arguments operand in strict mode',
+        StrictReservedWord: 'Use of future reserved word in strict mode'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -312,7 +301,7 @@ parseStatement: true, parseSourceElement: true */
         }
 
         // 'const' is specialized as Keyword in V8.
-        // 'yield' and 'let' are for compatiblity with SpiderMonkey and ES.next.
+        // 'yield' and 'let' are for compatibility with SpiderMonkey and ES.next.
         // Some others are from future reserved words.
 
         switch (id.length) {
@@ -851,13 +840,64 @@ parseStatement: true, parseSourceElement: true */
         };
     }
 
-    function scanOctalLiteral(start) {
-        var number = '0' + source[index++];
+    function scanBinaryLiteral(start) {
+        var ch, number;
+
+        number = '';
+
+        while (index < length) {
+            ch = source[index];
+            if (ch !== '0' && ch !== '1') {
+                break;
+            }
+            number += source[index++];
+        }
+
+        if (number.length === 0) {
+            // only 0b or 0B
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        }
+
+        if (index < length) {
+            ch = source.charCodeAt(index);
+            /* istanbul ignore else */
+            if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
+                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+            }
+        }
+
+        return {
+            type: Token.NumericLiteral,
+            value: parseInt(number, 2),
+            lineNumber: lineNumber,
+            lineStart: lineStart,
+            start: start,
+            end: index
+        };
+    }
+
+    function scanOctalLiteral(prefix, start) {
+        var number, octal;
+
+        if (isOctalDigit(prefix)) {
+            octal = true;
+            number = '0' + source[index++];
+        } else {
+            octal = false;
+            ++index;
+            number = '';
+        }
+
         while (index < length) {
             if (!isOctalDigit(source[index])) {
                 break;
             }
             number += source[index++];
+        }
+
+        if (!octal && number.length === 0) {
+            // only 0o or 0O
+            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
         }
 
         if (isIdentifierStart(source.charCodeAt(index)) || isDecimalDigit(source.charCodeAt(index))) {
@@ -867,7 +907,7 @@ parseStatement: true, parseSourceElement: true */
         return {
             type: Token.NumericLiteral,
             value: parseInt(number, 8),
-            octal: true,
+            octal: octal,
             lineNumber: lineNumber,
             lineStart: lineStart,
             start: start,
@@ -890,13 +930,19 @@ parseStatement: true, parseSourceElement: true */
 
             // Hex number starts with '0x'.
             // Octal number starts with '0'.
+            // Octal number in ES6 starts with '0o'.
+            // Binary number in ES6 starts with '0b'.
             if (number === '0') {
                 if (ch === 'x' || ch === 'X') {
                     ++index;
                     return scanHexLiteral(start);
                 }
-                if (isOctalDigit(ch)) {
-                    return scanOctalLiteral(start);
+                if (ch === 'b' || ch === 'B') {
+                    ++index;
+                    return scanBinaryLiteral(start);
+                }
+                if (ch === 'o' || ch === 'O' || isOctalDigit(ch)) {
+                    return scanOctalLiteral(ch, start);
                 }
 
                 // decimal number starts with '0' such as '09' is illegal.
@@ -1037,7 +1083,7 @@ parseStatement: true, parseSourceElement: true */
                     }
                 } else {
                     ++lineNumber;
-                    if (ch ===  '\r' && source[index] === '\n') {
+                    if (ch === '\r' && source[index] === '\n') {
                         ++index;
                     }
                     lineStart = index;
@@ -1838,12 +1884,13 @@ parseStatement: true, parseSourceElement: true */
             return this;
         },
 
-        finishProperty: function (kind, key, value, method) {
+        finishProperty: function (kind, key, value, method, shorthand) {
             this.type = Syntax.Property;
             this.key = key;
             this.value = value;
             this.kind = kind;
             this.method = method;
+            this.shorthand = shorthand;
             this.finish();
             return this;
         },
@@ -1967,9 +2014,9 @@ parseStatement: true, parseSourceElement: true */
             args = Array.prototype.slice.call(arguments, 2),
             msg = messageFormat.replace(
                 /%(\d)/g,
-                function (whole, index) {
-                    assert(index < args.length, 'Message reference must be in range');
-                    return args[index];
+                function (whole, idx) {
+                    assert(idx < args.length, 'Message reference must be in range');
+                    return args[idx];
                 }
             );
 
@@ -2046,22 +2093,26 @@ parseStatement: true, parseSourceElement: true */
     }
 
     /**
-     * @name expectTolerant
-     * @description Quietly expect the given token value when in tolerant mode, otherwise delegates
+     * @name expectCommaSeparator
+     * @description Quietly expect a comma when in tolerant mode, otherwise delegates
      * to <code>expect(value)</code>
-     * @param {String} value The value we are expecting the lookahead token to have
      * @since 2.0
      */
-    function expectTolerant(value) {
+    function expectCommaSeparator() {
+        var token;
+
         if (extra.errors) {
-            var token = lookahead;
-            if (token.type !== Token.Punctuator && token.value !== value) {
+            token = lookahead;
+            if (token.type === Token.Punctuator && token.value === ',') {
+                lex();
+            } else if (token.type === Token.Punctuator && token.value === ';') {
+                lex();
                 throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
             } else {
-                lex();
+                throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
             }
         } else {
-            expect(value);
+            expect(',');
         }
     }
 
@@ -2221,7 +2272,7 @@ parseStatement: true, parseSourceElement: true */
                 expect('(');
                 expect(')');
                 value = parsePropertyFunction([]);
-                return node.finishProperty('get', key, value, false);
+                return node.finishProperty('get', key, value, false, false);
             }
             if (token.value === 'set' && !(match(':') || match('('))) {
                 key = parseObjectPropertyKey();
@@ -2236,18 +2287,20 @@ parseStatement: true, parseSourceElement: true */
                     expect(')');
                     value = parsePropertyFunction(param, token);
                 }
-                return node.finishProperty('set', key, value, false);
+                return node.finishProperty('set', key, value, false, false);
             }
             if (match(':')) {
                 lex();
                 value = parseAssignmentExpression();
-                return node.finishProperty('init', id, value, false);
+                return node.finishProperty('init', id, value, false, false);
             }
             if (match('(')) {
                 value = parsePropertyMethodFunction();
-                return node.finishProperty('init', id, value, true);
+                return node.finishProperty('init', id, value, true, false);
             }
-            throwUnexpected(lex());
+
+            value = id;
+            return node.finishProperty('init', id, value, false, true);
         }
         if (token.type === Token.EOF || token.type === Token.Punctuator) {
             throwUnexpected(token);
@@ -2256,18 +2309,18 @@ parseStatement: true, parseSourceElement: true */
             if (match(':')) {
                 lex();
                 value = parseAssignmentExpression();
-                return node.finishProperty('init', key, value, false);
+                return node.finishProperty('init', key, value, false, false);
             }
             if (match('(')) {
                 value = parsePropertyMethodFunction();
-                return node.finishProperty('init', key, value, true);
+                return node.finishProperty('init', key, value, true, false);
             }
             throwUnexpected(lex());
         }
     }
 
     function parseObjectInitialiser() {
-        var properties = [], token, property, name, key, kind, map = {}, toString = String, node = new Node();
+        var properties = [], property, name, key, kind, map = {}, toString = String, node = new Node();
 
         expect('{');
 
@@ -2304,7 +2357,7 @@ parseStatement: true, parseSourceElement: true */
             properties.push(property);
 
             if (!match('}')) {
-                expectTolerant(',');
+                expectCommaSeparator();
             }
         }
 
@@ -2356,7 +2409,7 @@ parseStatement: true, parseSourceElement: true */
         node = new Node();
 
         if (type === Token.Identifier) {
-            expr =  node.finishIdentifier(lex().value);
+            expr = node.finishIdentifier(lex().value);
         } else if (type === Token.StringLiteral || type === Token.NumericLiteral) {
             if (strict && lookahead.octal) {
                 throwErrorTolerant(lookahead, Messages.StrictOctalLiteral);
@@ -2407,7 +2460,7 @@ parseStatement: true, parseSourceElement: true */
                 if (match(')')) {
                     break;
                 }
-                expectTolerant(',');
+                expectCommaSeparator();
             }
         }
 

@@ -1026,6 +1026,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 16],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1090,6 +1091,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 12],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1154,6 +1156,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 14],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1218,6 +1221,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 15],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1282,6 +1286,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 14],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1347,6 +1352,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 18],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1412,6 +1418,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [6, 10],
                             loc: {
                                 start: { line: 1, column: 6 },
@@ -1441,6 +1448,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [12, 16],
                             loc: {
                                 start: { line: 1, column: 12 },
@@ -1535,6 +1543,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 36],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1612,6 +1621,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 20],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1689,6 +1699,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 17],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1766,6 +1777,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 19],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1843,6 +1855,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 20],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1920,6 +1933,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 19],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -1998,6 +2012,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 22],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2076,6 +2091,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 17],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2195,6 +2211,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 34],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2314,6 +2331,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 28],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2433,6 +2451,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 32],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2552,6 +2571,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 34],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2671,6 +2691,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 32],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2791,6 +2812,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 34],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2911,6 +2933,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [6, 30],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -2975,6 +2998,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 13],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -3039,6 +3063,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 13],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -3103,6 +3128,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 18],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -3168,6 +3194,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [5, 19],
                         loc: {
                             start: { line: 1, column: 5 },
@@ -3261,6 +3288,7 @@ var testFixture = {
                         },
                         kind: 'get',
                         method: false,
+                        shorthand: false,
                         range: [6, 36],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -3344,6 +3372,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [38, 75],
                         loc: {
                             start: { line: 1, column: 38 },
@@ -6390,6 +6419,120 @@ var testFixture = {
             }
         },
 
+        '0b0': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0,
+                raw: '0b0',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            },
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            }
+        },
+
+        '0b1': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 1,
+                raw: '0b1',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            },
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            }
+        },
+
+        '0b10': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 2,
+                raw: '0b10',
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
+            },
+            range: [0, 4],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 4 }
+            }
+        },
+
+        '0B0': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0,
+                raw: '0B0',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            },
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            }
+        },
+
+        '0B1': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 1,
+                raw: '0B1',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            },
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            }
+        },
+
+        '0B10': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 2,
+                raw: '0B10',
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
+            },
+            range: [0, 4],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 4 }
+            }
+        },
+
         '02': {
             type: 'ExpressionStatement',
             expression: {
@@ -6444,6 +6587,233 @@ var testFixture = {
             loc: {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 4 }
+            }
+        },
+
+        '00': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0,
+                raw: '00',
+                range: [0, 2],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 2 }
+                }
+            },
+            range: [0, 2],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 2 }
+            }
+        },
+
+        '0o0': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0,
+                raw: '0o0',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            },
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            }
+        },
+
+        'function test() {\'use strict\'; 0o0; }': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'test',
+                range: [9, 13],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            params: [],
+            defaults: [],
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: 'use strict',
+                        raw: '\'use strict\'',
+                        range: [17, 29],
+                        loc: {
+                            start: { line: 1, column: 17 },
+                            end: { line: 1, column: 29 }
+                        }
+                    },
+                    range: [17, 30],
+                    loc: {
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 30 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0o0',
+                        range: [31, 34],
+                        loc: {
+                            start: { line: 1, column: 31 },
+                            end: { line: 1, column: 34 }
+                        }
+                    },
+                    range: [31, 35],
+                    loc: {
+                        start: { line: 1, column: 31 },
+                        end: { line: 1, column: 35 }
+                    }
+                }],
+                range: [16, 37],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 37 }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            range: [0, 37],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 37 }
+            }
+        },
+
+        '0o2': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 2,
+                raw: '0o2',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            },
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            }
+        },
+
+        '0o12': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 10,
+                raw: '0o12',
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
+            },
+            range: [0, 4],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 4 }
+            }
+        },
+
+        '0O0': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 0,
+                raw: '0O0',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            },
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            }
+        },
+
+        'function test() {\'use strict\'; 0O0; }': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'test',
+                range: [9, 13],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 13 }
+                }
+            },
+            params: [],
+            defaults: [],
+            body: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: 'use strict',
+                        raw: '\'use strict\'',
+                        range: [17, 29],
+                        loc: {
+                            start: { line: 1, column: 17 },
+                            end: { line: 1, column: 29 }
+                        }
+                    },
+                    range: [17, 30],
+                    loc: {
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 30 }
+                    }
+                }, {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'Literal',
+                        value: 0,
+                        raw: '0O0',
+                        range: [31, 34],
+                        loc: {
+                            start: { line: 1, column: 31 },
+                            end: { line: 1, column: 34 }
+                        }
+                    },
+                    range: [31, 35],
+                    loc: {
+                        start: { line: 1, column: 31 },
+                        end: { line: 1, column: 35 }
+                    }
+                }],
+                range: [16, 37],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 37 }
+                }
+            },
+            rest: null,
+            generator: false,
+            expression: false,
+            range: [0, 37],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 37 }
             }
         }
 
@@ -12080,6 +12450,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [8, 20],
                         loc: {
                             start: { line: 1, column: 8 },
@@ -13057,6 +13428,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 18],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -13142,6 +13514,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 22],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -13220,6 +13593,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 20],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -13297,6 +13671,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 15],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -13374,6 +13749,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: true,
+                        shorthand: false,
                         range: [6, 15],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -13399,6 +13775,101 @@ var testFixture = {
             }
         }
 
+    },
+
+    '[ES6] Object Literal Property Value Shorthand': {
+
+        'x = { y, z }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'y',
+                            range: [6, 7],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 7 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'y',
+                            range: [6, 7],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 7 }
+                            }
+                        },
+                        kind: 'init',
+                        method: false,
+                        shorthand: true,
+                        range: [6, 7],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 7 }
+                        }
+                    }, {
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'z',
+                            range: [9, 10],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 10 }
+                            }
+                        },
+                        value: {
+                            type: 'Identifier',
+                            name: 'z',
+                            range: [9, 10],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 10 }
+                            }
+                        },
+                        kind: 'init',
+                        method: false,
+                        shorthand: true,
+                        range: [9, 10],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 10 }
+                        }
+                    }],
+                    range: [4, 12],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 12 }
+                    }
+                },
+                range: [0, 12],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        }
     },
 
     'Assignment Operators': {
@@ -18718,6 +19189,7 @@ var testFixture = {
                     },
                     kind: 'init',
                     method: false,
+                    shorthand: false,
                     range: [8, 24],
                     loc: {
                         start: { line: 1, column: 8 },
@@ -20331,6 +20803,7 @@ var testFixture = {
                         },
                         kind: 'init',
                         method: false,
+                        shorthand: false,
                         range: [6, 25],
                         loc: {
                             start: { line: 1, column: 6 },
@@ -21764,6 +22237,132 @@ var testFixture = {
             index: 2,
             lineNumber: 1,
             column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0o1a': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0o': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0O': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0o9': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0o18': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0O1a': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0b': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0b1a': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0b9': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0b18': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0b12': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0B': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0B1a': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0B9': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0B18': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0B12': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0O9': {
+            index: 2,
+            lineNumber: 1,
+            column: 3,
+            message: 'Error: Line 1: Unexpected token ILLEGAL'
+        },
+
+        '0O18': {
+            index: 3,
+            lineNumber: 1,
+            column: 4,
             message: 'Error: Line 1: Unexpected token ILLEGAL'
         },
 
@@ -23428,7 +24027,7 @@ var testFixture = {
                 "value": "/42/",
                 "regex": {
                     "pattern": "42",
-                    "flags": "",
+                    "flags": ""
                 },
                 "range": [
                     9,
@@ -25305,7 +25904,8 @@ var testFixture = {
                                 expression: false
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [28, 33],
                             loc: {
@@ -25333,7 +25933,8 @@ var testFixture = {
                                 raw: "2"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }]
                     }
                 }],
@@ -25554,7 +26155,8 @@ var testFixture = {
                                 expression: false
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [28, 33],
                             loc: {
@@ -25582,7 +26184,8 @@ var testFixture = {
                                 raw: "2"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [34, 42],
                             loc: {
@@ -25610,7 +26213,8 @@ var testFixture = {
                                 raw: "3"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }]
                     }
                 }],
@@ -25707,7 +26311,8 @@ var testFixture = {
                                 expression: false
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [28, 33],
                             loc: {
@@ -25735,7 +26340,8 @@ var testFixture = {
                                 raw: "2"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [35, 43],
                             loc: {
@@ -25763,7 +26369,8 @@ var testFixture = {
                                 raw: "3"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [44, 52],
                             loc: {
@@ -25792,7 +26399,8 @@ var testFixture = {
                                 raw: "4"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }]
                     }
                 }],
@@ -25889,7 +26497,8 @@ var testFixture = {
                                 expression: false
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [28, 33],
                             loc: {
@@ -25917,7 +26526,8 @@ var testFixture = {
                                 raw: "2"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [35, 59],
                             loc: {
@@ -25968,7 +26578,8 @@ var testFixture = {
                                         raw: "\"a\""
                                     },
                                     kind: "init",
-                                    method: false
+                                    method: false,
+                                    shorthand: false
                                 }, {
                                     range: [51, 58],
                                     loc: {
@@ -25996,11 +26607,13 @@ var testFixture = {
                                         raw: "\"b\""
                                     },
                                     kind: "init",
-                                    method: false
+                                    method: false,
+                                    shorthand: false
                                 }]
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }, {
                             range: [60, 67],
                             loc: {
@@ -26028,7 +26641,8 @@ var testFixture = {
                                 raw: "4"
                             },
                             kind: "init",
-                            method: false
+                            method: false,
+                            shorthand: false
                         }]
                     }
                 }],
@@ -26049,6 +26663,84 @@ var testFixture = {
                 lineNumber: 1,
                 column: 61,
                 message: "Error: Line 1: Unexpected token four"
+            }]
+        },
+
+        'x = { y: z; }': {
+            range: [0, 13],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 13 }
+            },
+            type: "Program",
+            body: [{
+                range: [0, 13],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 13 }
+                },
+                type: "ExpressionStatement",
+                expression: {
+                    range: [0, 13],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 13 }
+                    },
+                    type: "AssignmentExpression",
+                    operator: "=",
+                    left: {
+                        range: [0, 1],
+                        loc: {
+                            start: { line: 1, column: 0 },
+                            end: { line: 1, column: 1 }
+                        },
+                        type: "Identifier",
+                        name: "x"
+                    },
+                    right: {
+                        range: [4, 13],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 13 }
+                        },
+                        type: "ObjectExpression",
+                        properties: [{
+                            range: [6, 10],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 10 }
+                            },
+                            type: "Property",
+                            key: {
+                                range: [6, 7],
+                                loc: {
+                                    start: { line: 1, column: 6 },
+                                    end: { line: 1, column: 7 }
+                                },
+                                type: "Identifier",
+                                name: "y"
+                            },
+                            value: {
+                                range: [9, 10],
+                                loc: {
+                                    start: { line: 1, column: 9 },
+                                    end: { line: 1, column: 10 }
+                                },
+                                type: "Identifier",
+                                name: "z"
+                            },
+                            kind: "init",
+                            method: false,
+                            shorthand: false
+                        }]
+                    }
+                }
+            }],
+            errors: [{
+                index: 10,
+                lineNumber: 1,
+                column: 11,
+                message: "Error: Line 1: Unexpected token ;"
             }]
         },
 
@@ -27023,6 +27715,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [16, 19],
                             loc: {
                                 start: { line: 1, column: 16 },
@@ -27051,6 +27744,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [20, 23],
                             loc: {
                                 start: { line: 1, column: 20 },
@@ -28078,6 +28772,7 @@ var testFixture = {
                             },
                             kind: 'set',
                             method: false,
+                            shorthand: false,
                             range: [20, 34],
                             loc: {
                                 start: { line: 1, column: 20 },
@@ -28303,6 +28998,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [24, 30],
                             loc: {
                                 start: { line: 1, column: 24 },
@@ -28411,6 +29107,7 @@ var testFixture = {
                             },
                             kind: 'get',
                             method: false,
+                            shorthand: false,
                             range: [24, 34],
                             loc: {
                                 start: { line: 1, column: 24 },
@@ -28452,6 +29149,7 @@ var testFixture = {
                             },
                             kind: 'get',
                             method: false,
+                            shorthand: false,
                             range: [36, 46],
                             loc: {
                                 start: { line: 1, column: 36 },
@@ -28547,6 +29245,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [24, 29],
                             loc: {
                                 start: { line: 1, column: 24 },
@@ -28588,6 +29287,7 @@ var testFixture = {
                             },
                             kind: 'get',
                             method: false,
+                            shorthand: false,
                             range: [31, 41],
                             loc: {
                                 start: { line: 1, column: 31 },
@@ -28704,6 +29404,7 @@ var testFixture = {
                             },
                             kind: 'set',
                             method: false,
+                            shorthand: false,
                             range: [24, 35],
                             loc: {
                                 start: { line: 1, column: 24 },
@@ -28732,6 +29433,7 @@ var testFixture = {
                             },
                             kind: 'init',
                             method: false,
+                            shorthand: false,
                             range: [37, 42],
                             loc: {
                                 start: { line: 1, column: 37 },
@@ -28814,6 +29516,7 @@ var testFixture = {
                         },
                         kind: 'set',
                         method: false,
+                        shorthand: false,
                         range: [3, 14],
                         loc: {
                             start: { line: 1, column: 3 },
