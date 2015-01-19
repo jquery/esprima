@@ -301,7 +301,7 @@
         }
 
         // 'const' is specialized as Keyword in V8.
-        // 'yield' and 'let' are for compatiblity with SpiderMonkey and ES.next.
+        // 'yield' and 'let' are for compatibility with SpiderMonkey and ES.next.
         // Some others are from future reserved words.
 
         switch (id.length) {
