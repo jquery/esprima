@@ -6419,6 +6419,67 @@ var testFixture = {
             }
         },
 
+        '02': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 2,
+                raw: '02',
+                range: [0, 2],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 2 }
+                }
+            },
+            range: [0, 2],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 2 }
+            }
+        },
+
+        '012': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 10,
+                raw: '012',
+                range: [0, 3],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 3 }
+                }
+            },
+            range: [0, 3],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 3 }
+            }
+        },
+
+        '0012': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 10,
+                raw: '0012',
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
+            },
+            range: [0, 4],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 4 }
+            }
+        }
+
+    },
+
+    '[ES6] Binary Integer Literals': {
+
         '0b0': {
             type: 'ExpressionStatement',
             expression: {
@@ -6531,64 +6592,11 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 4 }
             }
-        },
+        }
 
-        '02': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'Literal',
-                value: 2,
-                raw: '02',
-                range: [0, 2],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 2 }
-                }
-            },
-            range: [0, 2],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 2 }
-            }
-        },
+    },
 
-        '012': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'Literal',
-                value: 10,
-                raw: '012',
-                range: [0, 3],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 3 }
-                }
-            },
-            range: [0, 3],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 3 }
-            }
-        },
-
-        '0012': {
-            type: 'ExpressionStatement',
-            expression: {
-                type: 'Literal',
-                value: 10,
-                raw: '0012',
-                range: [0, 4],
-                loc: {
-                    start: { line: 1, column: 0 },
-                    end: { line: 1, column: 4 }
-                }
-            },
-            range: [0, 4],
-            loc: {
-                start: { line: 1, column: 0 },
-                end: { line: 1, column: 4 }
-            }
-        },
+    '[ES6] Octal Integer Literals': {
 
         '00': {
             type: 'ExpressionStatement',
