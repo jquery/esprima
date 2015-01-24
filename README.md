@@ -25,5 +25,5 @@ For more information, check the web site [esprima.org](http://esprima.org).
 
 ### CDN Availability
 The un-minified version of esprima delivered throug CDN, can be found here:
-	- for dev/staging: [https://rawgit.com/ariya/esprima/master/esprima.js](https://rawgit.com/ariya/esprima/master/esprima.js)
-	- for production: [https://cdn.rawgit.com/ariya/esprima/master/esprima.js](https://cdn.rawgit.com/ariya/esprima/master/esprima.js)
+	- for dev/staging environments: [https://rawgit.com/ariya/esprima/master/esprima.js](https://rawgit.com/ariya/esprima/master/esprima.js)
+	- for production environments: [https://cdn.rawgit.com/ariya/esprima/master/esprima.js](https://cdn.rawgit.com/ariya/esprima/master/esprima.js)
