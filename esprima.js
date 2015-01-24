@@ -1321,9 +1321,29 @@
                 range: [pos, index],
                 loc: loc
             });
+            if (extra.saxCallback) {
+                resolveOpenBracketTokens();
+                if (extra.tokens.length > extra.maxTokensBufferLength) {
+                    extra.tokens = extra.tokens.splice(-2);
+                }
+                extra.saxCallback.call(null, filterTokenLocation(extra.tokens[extra.tokens.length - 1]));
+            }
         }
 
         return regex;
+    }
+
+    function resolveOpenBracketTokens() {
+        if (typeof extra.openParenToken !== 'undefined') {
+            extra.openParenToken1 = extra.tokens[extra.openParenToken - 1];
+            delete extra.openParenToken;
+        }
+        if (typeof extra.openCurlyToken !== 'undefined') {
+            extra.openCurlyToken3 = extra.tokens[extra.openCurlyToken - 3];
+            extra.openCurlyToken4 = extra.tokens[extra.openCurlyToken - 4];
+            extra.openCurlyToken5 = extra.tokens[extra.openCurlyToken - 5];
+            delete extra.openCurlyToken;
+        }
     }
 
     function isIdentifierName(token) {
@@ -1348,7 +1368,8 @@
                 return scanPunctuator();
             }
             if (prevToken.value === ')') {
-                checkToken = extra.tokens[extra.openParenToken - 1];
+                resolveOpenBracketTokens();
+                checkToken = extra.openParenToken1;
                 if (checkToken &&
                         checkToken.type === 'Keyword' &&
                         (checkToken.value === 'if' ||
@@ -1360,19 +1381,20 @@
                 return scanPunctuator();
             }
             if (prevToken.value === '}') {
+                resolveOpenBracketTokens();
                 // Dividing a function by anything makes little sense,
                 // but we have to check for that.
-                if (extra.tokens[extra.openCurlyToken - 3] &&
-                        extra.tokens[extra.openCurlyToken - 3].type === 'Keyword') {
+                if (extra.openCurlyToken3 &&
+                        extra.openCurlyToken3.type === 'Keyword') {
                     // Anonymous function.
-                    checkToken = extra.tokens[extra.openCurlyToken - 4];
+                    checkToken = extra.openCurlyToken4;
                     if (!checkToken) {
                         return scanPunctuator();
                     }
-                } else if (extra.tokens[extra.openCurlyToken - 4] &&
-                        extra.tokens[extra.openCurlyToken - 4].type === 'Keyword') {
+                } else if (extra.openCurlyToken4 &&
+                        extra.openCurlyToken4.type === 'Keyword') {
                     // Named function.
-                    checkToken = extra.tokens[extra.openCurlyToken - 5];
+                    checkToken = extra.openCurlyToken5;
                     if (!checkToken) {
                         return collectRegex();
                     }
@@ -1481,6 +1503,13 @@
                 };
             }
             extra.tokens.push(entry);
+            if (extra.saxCallback) {
+                resolveOpenBracketTokens();
+                if (extra.tokens.length > extra.maxTokensBufferLength) {
+                    extra.tokens = extra.tokens.splice(-2);
+                }
+                extra.saxCallback.call(null, filterTokenLocation(entry));
+            }
         }
 
         return token;
@@ -3900,28 +3929,31 @@
         return node.finishProgram(body);
     }
 
-    function filterTokenLocation() {
-        var i, entry, token, tokens = [];
+    function filterTokenLocation(entry) {
+        var token = {
+            type: entry.type,
+            value: entry.value
+        };
+        if (entry.regex) {
+            token.regex = {
+                pattern: entry.regex.pattern,
+                flags: entry.regex.flags
+            };
+        }
+        if (extra.range) {
+            token.range = entry.range;
+        }
+        if (extra.loc) {
+            token.loc = entry.loc;
+        }
+        return token;
+    }
+
+    function filterTokensLocation() {
+        var i, tokens = [];
 
         for (i = 0; i < extra.tokens.length; ++i) {
-            entry = extra.tokens[i];
-            token = {
-                type: entry.type,
-                value: entry.value
-            };
-            if (entry.regex) {
-                token.regex = {
-                    pattern: entry.regex.pattern,
-                    flags: entry.regex.flags
-                };
-            }
-            if (extra.range) {
-                token.range = entry.range;
-            }
-            if (extra.loc) {
-                token.loc = entry.loc;
-            }
-            tokens.push(token);
+            tokens.push(filterTokenLocation(extra.tokens[i]));
         }
 
         extra.tokens = tokens;
@@ -3929,7 +3961,8 @@
 
     function tokenize(code, options) {
         var toString,
-            tokens;
+            tokens,
+            useSaxInterface;
 
         toString = String;
         if (typeof code !== 'string' && !(code instanceof String)) {
@@ -3960,9 +3993,6 @@
         options.tokens = true;
         extra.tokens = [];
         extra.tokenize = true;
-        // The following two fields are necessary to compute the Regex tokens.
-        extra.openParenToken = -1;
-        extra.openCurlyToken = -1;
 
         extra.range = (typeof options.range === 'boolean') && options.range;
         extra.loc = (typeof options.loc === 'boolean') && options.loc;
@@ -3972,6 +4002,13 @@
         }
         if (typeof options.tolerant === 'boolean' && options.tolerant) {
             extra.errors = [];
+        }
+        useSaxInterface = typeof options.saxCallback === 'function';
+        if (useSaxInterface) {
+            extra.saxCallback = options.saxCallback;
+            /*eslint-disable*/
+            extra.maxTokensBufferLength = options.maxTokensBufferLength || /* istanbul ignore next */ 1000;
+            /*eslint-enable*/
         }
 
         try {
@@ -3996,8 +4033,12 @@
                 }
             }
 
-            filterTokenLocation();
-            tokens = extra.tokens;
+            if (!useSaxInterface) {
+                filterTokensLocation();
+                tokens = extra.tokens;
+            } else {
+                tokens = [];
+            }
             if (typeof extra.comments !== 'undefined') {
                 tokens.comments = extra.comments;
             }
@@ -4070,7 +4111,7 @@
                 program.comments = extra.comments;
             }
             if (typeof extra.tokens !== 'undefined') {
-                filterTokenLocation();
+                filterTokensLocation();
                 program.tokens = extra.tokens;
             }
             if (typeof extra.errors !== 'undefined') {
