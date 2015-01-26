@@ -2116,6 +2116,55 @@
         }
     }
 
+    function recordError(error) {
+        var len = extra.errors.length,
+            existing,
+            e;
+        for (e = 0; e < len; e++) {
+            existing = extra.errors[e];
+            if (existing.index === error.index && existing.message === error.message) {
+                return; // do not add duplicate
+            }
+        }
+        extra.errors.push(error);
+    }
+
+    function expectSkipTo(value, skipTo) {
+        try {
+            expect(value);
+        } catch (e) {
+            if (extra.errors) {
+                recordError(e);
+                if (skipTo &&  source[e.index] === skipTo) {
+                    index = e.index;
+                    peek();
+                }
+            } else {
+                throw e;
+            }
+        }
+    }
+
+    /**
+     * @description Returns a node to fill in incomplete tree locations while recovering
+     * @param {Node} node The node context we tried to parse. Used to collect range and loc infos
+     * @since 2.0
+     */
+    function recoveredNode(node) {
+        var recovered = {
+            type: Syntax.Identifier,
+            name: '$RECOVERED$'
+        };
+        if (extra.range) {
+            recovered.range = node.range;
+            recovered.range[1] = index;
+        }
+        if (extra.loc) {
+            recovered.loc = node.loc;
+            recovered.loc.end = new Position();
+        }
+        return recovered;
+    }
     // Expect the next token to match the specified keyword.
     // If not, an exception will be thrown.
 
@@ -2962,7 +3011,7 @@
 
         block = parseStatementList();
 
-        expect('}');
+        expectSkipTo('}');
 
         return node.finishBlockStatement(block);
     }
@@ -3071,7 +3120,7 @@
 
         test = parseExpression();
 
-        expect(')');
+        expectSkipTo(')', '{');
 
         consequent = parseStatement();
 
@@ -3105,7 +3154,7 @@
 
         test = parseExpression();
 
-        expect(')');
+        expectSkipTo(')', '{');
 
         if (match(';')) {
             lex();
@@ -3123,7 +3172,7 @@
 
         test = parseExpression();
 
-        expect(')');
+        expectSkipTo(')', '{');
 
         oldInIteration = state.inIteration;
         state.inIteration = true;
@@ -3202,7 +3251,7 @@
             }
         }
 
-        expect(')');
+        expectSkipTo(')', '{');
 
         oldInIteration = state.inIteration;
         state.inIteration = true;
@@ -3356,7 +3405,7 @@
 
         object = parseExpression();
 
-        expect(')');
+        expectSkipTo(')', '{');
 
         body = parseStatement();
 
@@ -3441,7 +3490,7 @@
         expectKeyword('throw');
 
         if (peekLineTerminator()) {
-            throwError({}, Messages.NewlineAfterThrow);
+            throwErrorTolerant({}, Messages.NewlineAfterThrow);
         }
 
         argument = parseExpression();
@@ -3515,80 +3564,81 @@
             labeledBody,
             key,
             node;
-
-        if (type === Token.EOF) {
-            throwUnexpected(lookahead);
-        }
-
-        if (type === Token.Punctuator && lookahead.value === '{') {
-            return parseBlock();
-        }
-
-        node = new Node();
-
-        if (type === Token.Punctuator) {
-            switch (lookahead.value) {
-            case ';':
-                return parseEmptyStatement(node);
-            case '(':
-                return parseExpressionStatement(node);
-            default:
-                break;
+        try {
+            extra.statementStart = index;
+            node = new Node();
+            if (type === Token.EOF) {
+                throwUnexpected(lookahead);
             }
-        } else if (type === Token.Keyword) {
-            switch (lookahead.value) {
-            case 'break':
-                return parseBreakStatement(node);
-            case 'continue':
-                return parseContinueStatement(node);
-            case 'debugger':
-                return parseDebuggerStatement(node);
-            case 'do':
-                return parseDoWhileStatement(node);
-            case 'for':
-                return parseForStatement(node);
-            case 'function':
-                return parseFunctionDeclaration(node);
-            case 'if':
-                return parseIfStatement(node);
-            case 'return':
-                return parseReturnStatement(node);
-            case 'switch':
-                return parseSwitchStatement(node);
-            case 'throw':
-                return parseThrowStatement(node);
-            case 'try':
-                return parseTryStatement(node);
-            case 'var':
-                return parseVariableStatement(node);
-            case 'while':
-                return parseWhileStatement(node);
-            case 'with':
-                return parseWithStatement(node);
-            default:
-                break;
+            if (type === Token.Punctuator && lookahead.value === '{') {
+                return parseBlock();
+            }
+            if (type === Token.Punctuator) {
+                switch (lookahead.value) {
+                case ';':
+                    return parseEmptyStatement(node);
+                case '(':
+                    return parseExpressionStatement(node);
+                default:
+                    break;
+                }
+            } else if (type === Token.Keyword) {
+                switch (lookahead.value) {
+                case 'break':
+                    return parseBreakStatement(node);
+                case 'continue':
+                    return parseContinueStatement(node);
+                case 'debugger':
+                    return parseDebuggerStatement(node);
+                case 'do':
+                    return parseDoWhileStatement(node);
+                case 'for':
+                    return parseForStatement(node);
+                case 'function':
+                    return parseFunctionDeclaration(node);
+                case 'if':
+                    return parseIfStatement(node);
+                case 'return':
+                    return parseReturnStatement(node);
+                case 'switch':
+                    return parseSwitchStatement(node);
+                case 'throw':
+                    return parseThrowStatement(node);
+                case 'try':
+                    return parseTryStatement(node);
+                case 'var':
+                    return parseVariableStatement(node);
+                case 'while':
+                    return parseWhileStatement(node);
+                case 'with':
+                    return parseWithStatement(node);
+                default:
+                    break;
+                }
+            }
+            expr = parseExpression();
+        } catch (e) {
+            if (extra.errors) {
+                recordError(e);
+            } else {
+                throw e;
             }
         }
-
-        expr = parseExpression();
-
-        // 12.12 Labelled Statements
-        if ((expr.type === Syntax.Identifier) && match(':')) {
+        if (!expr) {
+            expr = recoveredNode(node);
+        } else if ((expr.type === Syntax.Identifier) && match(':')) {
+            // 12.12 Labelled Statements
             lex();
-
             key = '$' + expr.name;
             if (Object.prototype.hasOwnProperty.call(state.labelSet, key)) {
                 throwError({}, Messages.Redeclaration, 'Label', expr.name);
             }
-
             state.labelSet[key] = true;
             labeledBody = parseStatement();
             delete state.labelSet[key];
             return node.finishLabeledStatement(expr, labeledBody);
         }
-
         consumeSemicolon();
-
         return node.finishExpressionStatement(expr);
     }
 
@@ -3649,7 +3699,7 @@
             sourceElements.push(sourceElement);
         }
 
-        expect('}');
+        expectSkipTo('}');
 
         state.labelSet = oldLabelSet;
         state.inIteration = oldInIteration;
@@ -4081,10 +4131,8 @@
         } finally {
             extra = {};
         }
-
         return program;
     }
-
     // Sync with *.json manifests.
     exports.version = '2.0.0-dev';
 
