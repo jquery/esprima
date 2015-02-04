@@ -1,3 +1,17 @@
+Version 2.0.0
+
+      * Support ES6 arrow function (issue 517)
+      * Support ES6 Unicode code point escape (issue 521)
+      * Improve the speed and accuracy of comment attachment (issue 522)
+      * Support ES6 default parameter (issue 519)
+      * Support ES6 regular expression flags (issue 557)
+      * Fix scanning of implicit octal literals (issue 565)
+      * Fix the handling of automatic semicolon insertion (issue 574)
+      * Support ES6 method definition (issue 620)
+      * Support ES6 octal integer literal (issue 621)
+      * Support ES6 binary integer literal (issue 622)
+      * Support ES6 object literal property value shorthand (issue 624)
+
 2015-01-18: Version 1.2.3
 
       * Fix division by this (issue 616)
