@@ -6323,6 +6323,82 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 4 }
             }
+        },
+
+        '08': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 8,
+                raw: '08',
+                range: [0, 2],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 2 }
+                }
+            },
+            range: [0, 2],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 2 }
+            }
+        },
+
+        '0008': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 8,
+                raw: '0008',
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
+            },
+            range: [0, 4],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 4 }
+            }
+        },
+
+        '09': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 9,
+                raw: '09',
+                range: [0, 2],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 2 }
+                }
+            },
+            range: [0, 2],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 2 }
+            }
+        },
+
+        '09.5': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'Literal',
+                value: 9.5,
+                raw: '09.5',
+                range: [0, 4],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 4 }
+                }
+            },
+            range: [0, 4],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 4 }
+            }
         }
 
     },
@@ -19314,20 +19390,6 @@ var testFixture = {
         },
 
         '0x': {
-            index: 2,
-            lineNumber: 1,
-            column: 3,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
-        },
-
-        '09': {
-            index: 1,
-            lineNumber: 1,
-            column: 2,
-            message: 'Error: Line 1: Unexpected token ILLEGAL'
-        },
-
-        '018': {
             index: 2,
             lineNumber: 1,
             column: 3,
