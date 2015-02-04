@@ -45,16 +45,16 @@ var testFixture = {
                         end: { line: 1, column: 4 }
                     }
                 },
-                range: [0, 5],
+                range: [0, 4],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 2, column: 0 }
+                    end: { line: 1, column: 4 }
                 }
             }],
-            range: [0, 5],
+            range: [0, 4],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 2, column: 0 }
+                end: { line: 1, column: 4 }
             },
             tokens: [{
                 type: 'Keyword',
@@ -81,16 +81,16 @@ var testFixture = {
                         end: { line: 1, column: 4 }
                     }
                 },
-                range: [0, 5],
+                range: [0, 4],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 2, column: 0 }
+                    end: { line: 1, column: 4 }
                 }
             }],
-            range: [0, 5],
+            range: [0, 4],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 2, column: 0 }
+                end: { line: 1, column: 4 }
             },
             tokens: [{
                 type: 'Null',
@@ -117,16 +117,16 @@ var testFixture = {
                         end: { line: 2, column: 6 }
                     }
                 },
-                range: [5, 9],
+                range: [5, 7],
                 loc: {
                     start: { line: 2, column: 4 },
-                    end: { line: 4, column: 0 }
+                    end: { line: 2, column: 6 }
                 }
             }],
-            range: [5, 9],
+            range: [5, 7],
             loc: {
                 start: { line: 2, column: 4 },
-                end: { line: 4, column: 0 }
+                end: { line: 2, column: 6 }
             },
             tokens: [{
                 type: 'Numeric',
@@ -4747,22 +4747,22 @@ var testFixture = {
                             loc: {
                                 start: { line: 1, column: 9 },
                                 end: { line: 1, column: 17 }
-                            },
-                            trailingComments: [{
-                                type: 'Line',
-                                value: ' Some comment',
-                                range: [18, 33],
-                                loc: {
-                                    start: { line: 1, column: 18 },
-                                    end: { line: 1, column: 33 }
-                                }
-                            }]
+                            }
                         },
-                        range: [9, 35],
+                        range: [9, 17],
                         loc: {
                             start: { line: 1, column: 9 },
-                            end: { line: 2, column: 1 }
-                        }
+                            end: { line: 1, column: 17 }
+                        },
+                        trailingComments: [{
+                            type: 'Line',
+                            value: ' Some comment',
+                            range: [18, 33],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 33 }
+                            }
+                        }]
                     }],
                     range: [7, 36],
                     loc: {
@@ -17947,10 +17947,10 @@ var testFixture = {
                         end: { line: 1, column: 3 }
                     }
                 },
-                range: [2, 4],
+                range: [2, 3],
                 loc: {
                     start: { line: 1, column: 2 },
-                    end: { line: 2, column: 0 }
+                    end: { line: 1, column: 3 }
                 }
             }, {
                 type: 'ExpressionStatement',
@@ -17999,10 +17999,10 @@ var testFixture = {
                         end: { line: 1, column: 3 }
                     }
                 },
-                range: [2, 4],
+                range: [2, 3],
                 loc: {
                     start: { line: 1, column: 2 },
-                    end: { line: 2, column: 0 }
+                    end: { line: 1, column: 3 }
                 }
             }, {
                 type: 'ExpressionStatement',
@@ -18124,10 +18124,10 @@ var testFixture = {
                     }
                 }],
                 kind: 'var',
-                range: [2, 20],
+                range: [2, 19],
                 loc: {
                     start: { line: 1, column: 2 },
-                    end: { line: 2, column: 0 }
+                    end: { line: 1, column: 19 }
                 }
             }, {
                 type: 'ExpressionStatement',
@@ -18655,10 +18655,10 @@ var testFixture = {
                         end: { line: 1, column: 13 }
                     }
                 },
-                range: [2, 14],
+                range: [2, 13],
                 loc: {
                     start: { line: 1, column: 2 },
-                    end: { line: 2, column: 0 }
+                    end: { line: 1, column: 13 }
                 }
             }, {
                 type: 'ExpressionStatement',
@@ -18697,10 +18697,10 @@ var testFixture = {
                         end: { line: 1, column: 13 }
                     }
                 },
-                range: [2, 24],
+                range: [2, 13],
                 loc: {
                     start: { line: 1, column: 2 },
-                    end: { line: 2, column: 0 }
+                    end: { line: 1, column: 13 }
                 }
             }, {
                 type: 'ExpressionStatement',
@@ -18739,10 +18739,10 @@ var testFixture = {
                         end: { line: 1, column: 13 }
                     }
                 },
-                range: [2, 36],
+                range: [2, 13],
                 loc: {
                     start: { line: 1, column: 2 },
-                    end: { line: 2, column: 10 }
+                    end: { line: 1, column: 13 }
                 }
             }, {
                 type: 'ExpressionStatement',
@@ -18982,10 +18982,10 @@ var testFixture = {
                             end: {line: 1, column: 2}
                         }
                     },
-                    range: [1, 3],
+                    range: [1, 2],
                     loc: {
                         start: {line: 1, column: 1},
-                        end: {line: 2, column: 0}
+                        end: {line: 1, column: 2}
                     }
                 },
                 {
@@ -19000,10 +19000,10 @@ var testFixture = {
                             end: {line: 2, column: 1}
                         }
                     },
-                    range: [3, 5],
+                    range: [3, 4],
                     loc: {
                         start: {line: 2, column: 0},
-                        end: {line: 3, column: 0}
+                        end: {line: 2, column: 1}
                     }
                 },
                 {
@@ -19018,10 +19018,10 @@ var testFixture = {
                             end: {line: 3, column: 1}
                         }
                     },
-                    range: [5, 7],
+                    range: [5, 6],
                     loc: {
                         start: {line: 3, column: 0},
-                        end: {line: 4, column: 0}
+                        end: {line: 3, column: 1}
                     }
                 },
                 {
@@ -19036,10 +19036,10 @@ var testFixture = {
                             end: {line: 4, column: 1}
                         }
                     },
-                    range: [7, 9],
+                    range: [7, 8],
                     loc: {
                         start: {line: 4, column: 0},
-                        end: {line: 5, column: 0}
+                        end: {line: 4, column: 1}
                     }
                 },
                 {
