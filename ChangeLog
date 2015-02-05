@@ -12,6 +12,11 @@
       * Support ES6 binary integer literal (issue 622)
       * Support ES6 object literal property value shorthand (issue 624)
 
+2015-02-05: Version 1.2.4
+
+      * Fix parsing of LeftHandSideExpression in ForInStatement (issue 560)
+      * Fix the handling of automatic semicolon insertion (issue 574)
+
 2015-01-18: Version 1.2.3
 
       * Fix division by this (issue 616)
