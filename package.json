@@ -7,7 +7,7 @@
         "esparse": "./bin/esparse.js",
         "esvalidate": "./bin/esvalidate.js"
     },
-    "version": "2.0.0-dev",
+    "version": "2.0.0",
     "files": [
         "bin",
         "test/run.js",
@@ -31,14 +31,14 @@
     }],
     "repository": {
         "type": "git",
-        "url": "https://github.com/ariya/esprima.git"
+        "url": "https://github.com/jquery/esprima.git"
     },
     "bugs": {
         "url": "http://issues.esprima.org"
     },
     "licenses": [{
         "type": "BSD",
-        "url": "https://github.com/ariya/esprima/raw/master/LICENSE.BSD"
+        "url": "https://github.com/jquery/esprima/raw/master/LICENSE.BSD"
     }],
     "devDependencies": {
         "eslint": "~0.12.0",

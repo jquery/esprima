@@ -1,4 +1,4 @@
-Version 2.0.0
+2015-02-06: Version 2.0.0
 
       * Support ES6 arrow function (issue 517)
       * Support ES6 Unicode code point escape (issue 521)
