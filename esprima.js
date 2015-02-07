@@ -429,7 +429,7 @@
                 ++index;
                 lineStart = index;
                 if (index >= length) {
-                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    throwUnexpectedToken();
                 }
             } else if (ch === 0x2A) {
                 // Block comment ends with '*/'.
@@ -452,7 +452,7 @@
             }
         }
 
-        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        throwUnexpectedToken();
     }
 
     function skipComment() {
@@ -534,7 +534,7 @@
 
         // At least, one hex digit is required.
         if (ch === '}') {
-            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+            throwUnexpectedToken();
         }
 
         while (index < length) {
@@ -546,7 +546,7 @@
         }
 
         if (code > 0x10FFFF || ch !== '}') {
-            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+            throwUnexpectedToken();
         }
 
         // UTF-16 Encoding
@@ -567,12 +567,12 @@
         // '\u' (U+005C, U+0075) denotes an escaped character.
         if (ch === 0x5C) {
             if (source.charCodeAt(index) !== 0x75) {
-                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                throwUnexpectedToken();
             }
             ++index;
             ch = scanHexEscape('u');
             if (!ch || ch === '\\' || !isIdentifierStart(ch.charCodeAt(0))) {
-                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                throwUnexpectedToken();
             }
             id = ch;
         }
@@ -589,12 +589,12 @@
             if (ch === 0x5C) {
                 id = id.substr(0, id.length - 1);
                 if (source.charCodeAt(index) !== 0x75) {
-                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    throwUnexpectedToken();
                 }
                 ++index;
                 ch = scanHexEscape('u');
                 if (!ch || ch === '\\' || !isIdentifierPart(ch.charCodeAt(0))) {
-                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    throwUnexpectedToken();
                 }
                 id += ch;
             }
@@ -807,7 +807,7 @@
             };
         }
 
-        throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+        throwUnexpectedToken();
     }
 
     // 7.8.3 Numeric Literals
@@ -823,11 +823,11 @@
         }
 
         if (number.length === 0) {
-            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+            throwUnexpectedToken();
         }
 
         if (isIdentifierStart(source.charCodeAt(index))) {
-            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+            throwUnexpectedToken();
         }
 
         return {
@@ -855,14 +855,14 @@
 
         if (number.length === 0) {
             // only 0b or 0B
-            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+            throwUnexpectedToken();
         }
 
         if (index < length) {
             ch = source.charCodeAt(index);
             /* istanbul ignore else */
             if (isIdentifierStart(ch) || isDecimalDigit(ch)) {
-                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                throwUnexpectedToken();
             }
         }
 
@@ -897,11 +897,11 @@
 
         if (!octal && number.length === 0) {
             // only 0o or 0O
-            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+            throwUnexpectedToken();
         }
 
         if (isIdentifierStart(source.charCodeAt(index)) || isDecimalDigit(source.charCodeAt(index))) {
-            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+            throwUnexpectedToken();
         }
 
         return {
@@ -913,6 +913,24 @@
             start: start,
             end: index
         };
+    }
+
+    function isImplicitOctalLiteral() {
+        var i, ch;
+
+        // Implicit octal, unless there is a non-octal digit.
+        // (Annex B.1.1 on Numeric Literals)
+        for (i = index + 1; i < length; ++i) {
+            ch = source[i];
+            if (ch === '8' || ch === '9') {
+                return false;
+            }
+            if (!isOctalDigit(ch)) {
+                return true;
+            }
+        }
+
+        return true;
     }
 
     function scanNumericLiteral() {
@@ -941,13 +959,14 @@
                     ++index;
                     return scanBinaryLiteral(start);
                 }
-                if (ch === 'o' || ch === 'O' || isOctalDigit(ch)) {
+                if (ch === 'o' || ch === 'O') {
                     return scanOctalLiteral(ch, start);
                 }
 
-                // decimal number starts with '0' such as '09' is illegal.
-                if (ch && isDecimalDigit(ch.charCodeAt(0))) {
-                    throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                if (isOctalDigit(ch)) {
+                    if (isImplicitOctalLiteral()) {
+                        return scanOctalLiteral(ch, start);
+                    }
                 }
             }
 
@@ -977,12 +996,12 @@
                     number += source[index++];
                 }
             } else {
-                throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+                throwUnexpectedToken();
             }
         }
 
         if (isIdentifierStart(source.charCodeAt(index))) {
-            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+            throwUnexpectedToken();
         }
 
         return {
@@ -1096,7 +1115,7 @@
         }
 
         if (quote !== '') {
-            throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
+            throwUnexpectedToken();
         }
 
         return {
@@ -1130,7 +1149,7 @@
                     if (parseInt($1, 16) <= 0x10FFFF) {
                         return 'x';
                     }
-                    throwError({}, Messages.InvalidRegExp);
+                    throwError(Messages.InvalidRegExp);
                 })
                 .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, 'x');
         }
@@ -1139,7 +1158,7 @@
         try {
             value = new RegExp(tmp);
         } catch (e) {
-            throwError({}, Messages.InvalidRegExp);
+            throwError(Messages.InvalidRegExp);
         }
 
         // Return a regular expression object for this pattern-flag pair, or
@@ -1168,11 +1187,11 @@
                 ch = source[index++];
                 // ECMA-262 7.8.5
                 if (isLineTerminator(ch.charCodeAt(0))) {
-                    throwError({}, Messages.UnterminatedRegExp);
+                    throwError(Messages.UnterminatedRegExp);
                 }
                 str += ch;
             } else if (isLineTerminator(ch.charCodeAt(0))) {
-                throwError({}, Messages.UnterminatedRegExp);
+                throwError(Messages.UnterminatedRegExp);
             } else if (classMarker) {
                 if (ch === ']') {
                     classMarker = false;
@@ -1188,7 +1207,7 @@
         }
 
         if (!terminated) {
-            throwError({}, Messages.UnterminatedRegExp);
+            throwError(Messages.UnterminatedRegExp);
         }
 
         // Exclude leading and trailing slash.
@@ -1227,10 +1246,10 @@
                         flags += 'u';
                         str += '\\u';
                     }
-                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    tolerateUnexpectedToken();
                 } else {
                     str += '\\';
-                    throwErrorTolerant({}, Messages.UnexpectedToken, 'ILLEGAL');
+                    tolerateUnexpectedToken();
                 }
             } else {
                 flags += ch;
@@ -2007,79 +2026,91 @@
         return found;
     }
 
+    function createError(line, pos, description) {
+        var error = new Error('Line ' + line + ': ' + description);
+        error.index = pos;
+        error.lineNumber = line;
+        error.column = pos - lineStart + 1;
+        error.description = description;
+        return error;
+    }
+
     // Throw an exception
 
-    function throwError(token, messageFormat) {
-        var error,
-            args = Array.prototype.slice.call(arguments, 2),
-            msg = messageFormat.replace(
-                /%(\d)/g,
-                function (whole, idx) {
-                    assert(idx < args.length, 'Message reference must be in range');
-                    return args[idx];
-                }
-            );
+    function throwError(messageFormat) {
+        var args, msg;
 
-        if (typeof token.lineNumber === 'number') {
-            error = new Error('Line ' + token.lineNumber + ': ' + msg);
-            error.index = token.start;
-            error.lineNumber = token.lineNumber;
-            error.column = token.start - lineStart + 1;
-        } else {
-            error = new Error('Line ' + lineNumber + ': ' + msg);
-            error.index = index;
-            error.lineNumber = lineNumber;
-            error.column = index - lineStart + 1;
-        }
-
-        error.description = msg;
-        throw error;
-    }
-
-    function throwErrorTolerant() {
-        try {
-            throwError.apply(null, arguments);
-        } catch (e) {
-            if (extra.errors) {
-                extra.errors.push(e);
-            } else {
-                throw e;
+        args = Array.prototype.slice.call(arguments, 1);
+        msg = messageFormat.replace(/%(\d)/g,
+            function (whole, idx) {
+                assert(idx < args.length, 'Message reference must be in range');
+                return args[idx];
             }
-        }
+        );
+
+        throw createError(lineNumber, index, msg);
     }
 
+    function tolerateError(messageFormat) {
+        var args, msg, error;
+
+        args = Array.prototype.slice.call(arguments, 1);
+        /* istanbul ignore next */
+        msg = messageFormat.replace(/%(\d)/g,
+            function (whole, idx) {
+                assert(idx < args.length, 'Message reference must be in range');
+                return args[idx];
+            }
+        );
+
+        error = createError(lineNumber, index, msg);
+        if (extra.errors) {
+            extra.errors.push(error);
+        } else {
+            throw error;
+        }
+    }
 
     // Throw an exception because of the token.
 
-    function throwUnexpected(token) {
-        if (token.type === Token.EOF) {
-            throwError(token, Messages.UnexpectedEOS);
-        }
+    function unexpectedTokenError(token, message) {
+        var msg = Messages.UnexpectedToken;
 
-        if (token.type === Token.NumericLiteral) {
-            throwError(token, Messages.UnexpectedNumber);
-        }
+        if (token) {
+            msg = message ? message :
+                (token.type === Token.EOF) ? Messages.UnexpectedEOS :
+                (token.type === Token.Identifier) ? Messages.UnexpectedIdentifier :
+                (token.type === Token.NumericLiteral) ? Messages.UnexpectedNumber :
+                (token.type === Token.StringLiteral) ? Messages.UnexpectedString :
+                Messages.UnexpectedToken;
 
-        if (token.type === Token.StringLiteral) {
-            throwError(token, Messages.UnexpectedString);
-        }
-
-        if (token.type === Token.Identifier) {
-            throwError(token, Messages.UnexpectedIdentifier);
-        }
-
-        if (token.type === Token.Keyword) {
-            if (isFutureReservedWord(token.value)) {
-                throwError(token, Messages.UnexpectedReserved);
-            } else if (strict && isStrictModeReservedWord(token.value)) {
-                throwErrorTolerant(token, Messages.StrictReservedWord);
-                return;
+            if (token.type === Token.Keyword) {
+                if (isFutureReservedWord(token.value)) {
+                    msg = Messages.UnexpectedReserved;
+                } else if (strict && isStrictModeReservedWord(token.value)) {
+                    msg = Messages.StrictReservedWord;
+                }
             }
-            throwError(token, Messages.UnexpectedToken, token.value);
         }
 
-        // BooleanLiteral, NullLiteral, or Punctuator.
-        throwError(token, Messages.UnexpectedToken, token.value);
+        msg = msg.replace('%0', token ? token.value : 'ILLEGAL');
+
+        return (token && typeof token.lineNumber === 'number') ?
+            createError(token.lineNumber, token.start, msg) :
+            createError(lineNumber, index, msg);
+    }
+
+    function throwUnexpectedToken(token, message) {
+        throw unexpectedTokenError(token, message);
+    }
+
+    function tolerateUnexpectedToken(token, message) {
+        var error = unexpectedTokenError(token, message);
+        if (extra.errors) {
+            extra.errors.push(error);
+        } else {
+            throw error;
+        }
     }
 
     // Expect the next token to match the specified punctuator.
@@ -2088,7 +2119,7 @@
     function expect(value) {
         var token = lex();
         if (token.type !== Token.Punctuator || token.value !== value) {
-            throwUnexpected(token);
+            throwUnexpectedToken(token);
         }
     }
 
@@ -2107,9 +2138,9 @@
                 lex();
             } else if (token.type === Token.Punctuator && token.value === ';') {
                 lex();
-                throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
+                tolerateUnexpectedToken(token);
             } else {
-                throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
+                tolerateUnexpectedToken(token, Messages.UnexpectedToken);
             }
         } else {
             expect(',');
@@ -2122,7 +2153,7 @@
     function expectKeyword(keyword) {
         var token = lex();
         if (token.type !== Token.Keyword || token.value !== keyword) {
-            throwUnexpected(token);
+            throwUnexpectedToken(token);
         }
     }
 
@@ -2162,7 +2193,8 @@
     }
 
     function consumeSemicolon() {
-        var line;
+        var line, oldIndex = index, oldLineNumber = lineNumber,
+            oldLineStart = lineStart, oldLookahead = lookahead;
 
         // Catch the very common case first: immediately a semicolon (U+003B).
         if (source.charCodeAt(index) === 0x3B || match(';')) {
@@ -2173,11 +2205,15 @@
         line = lineNumber;
         skipComment();
         if (lineNumber !== line) {
+            index = oldIndex;
+            lineNumber = oldLineNumber;
+            lineStart = oldLineStart;
+            lookahead = oldLookahead;
             return;
         }
 
         if (lookahead.type !== Token.EOF && !match('}')) {
-            throwUnexpected(lookahead);
+            throwUnexpectedToken(lookahead);
         }
     }
 
@@ -2220,7 +2256,7 @@
         previousStrict = strict;
         body = parseFunctionSourceElements();
         if (first && strict && isRestrictedWord(param[0].name)) {
-            throwErrorTolerant(first, Messages.StrictParamName);
+            tolerateUnexpectedToken(first, Messages.StrictParamName);
         }
         strict = previousStrict;
         return node.finishFunctionExpression(null, param, [], body);
@@ -2248,7 +2284,7 @@
 
         if (token.type === Token.StringLiteral || token.type === Token.NumericLiteral) {
             if (strict && token.octal) {
-                throwErrorTolerant(token, Messages.StrictOctalLiteral);
+                tolerateUnexpectedToken(token, Messages.StrictOctalLiteral);
             }
             return node.finishLiteral(token);
         }
@@ -2280,7 +2316,7 @@
                 token = lookahead;
                 if (token.type !== Token.Identifier) {
                     expect(')');
-                    throwErrorTolerant(token, Messages.UnexpectedToken, token.value);
+                    tolerateUnexpectedToken(token);
                     value = parsePropertyFunction([]);
                 } else {
                     param = [ parseVariableIdentifier() ];
@@ -2303,7 +2339,7 @@
             return node.finishProperty('init', id, value, false, true);
         }
         if (token.type === Token.EOF || token.type === Token.Punctuator) {
-            throwUnexpected(token);
+            throwUnexpectedToken(token);
         } else {
             key = parseObjectPropertyKey();
             if (match(':')) {
@@ -2315,7 +2351,7 @@
                 value = parsePropertyMethodFunction();
                 return node.finishProperty('init', key, value, true, false);
             }
-            throwUnexpected(lex());
+            throwUnexpectedToken(lex());
         }
     }
 
@@ -2338,15 +2374,15 @@
             if (Object.prototype.hasOwnProperty.call(map, key)) {
                 if (map[key] === PropertyKind.Data) {
                     if (strict && kind === PropertyKind.Data) {
-                        throwErrorTolerant({}, Messages.StrictDuplicateProperty);
+                        tolerateError(Messages.StrictDuplicateProperty);
                     } else if (kind !== PropertyKind.Data) {
-                        throwErrorTolerant({}, Messages.AccessorDataProperty);
+                        tolerateError(Messages.AccessorDataProperty);
                     }
                 } else {
                     if (kind === PropertyKind.Data) {
-                        throwErrorTolerant({}, Messages.AccessorDataProperty);
+                        tolerateError(Messages.AccessorDataProperty);
                     } else if (map[key] & kind) {
-                        throwErrorTolerant({}, Messages.AccessorGetSet);
+                        tolerateError(Messages.AccessorGetSet);
                     }
                 }
                 map[key] |= kind;
@@ -2412,7 +2448,7 @@
             expr = node.finishIdentifier(lex().value);
         } else if (type === Token.StringLiteral || type === Token.NumericLiteral) {
             if (strict && lookahead.octal) {
-                throwErrorTolerant(lookahead, Messages.StrictOctalLiteral);
+                tolerateUnexpectedToken(lookahead, Messages.StrictOctalLiteral);
             }
             expr = node.finishLiteral(lex());
         } else if (type === Token.Keyword) {
@@ -2423,7 +2459,7 @@
                 lex();
                 expr = node.finishThisExpression();
             } else {
-                throwUnexpected(lex());
+                throwUnexpectedToken(lex());
             }
         } else if (type === Token.BooleanLiteral) {
             token = lex();
@@ -2441,7 +2477,7 @@
             }
             peek();
         } else {
-            throwUnexpected(lex());
+            throwUnexpectedToken(lex());
         }
 
         return expr;
@@ -2475,7 +2511,7 @@
         token = lex();
 
         if (!isIdentifierName(token)) {
-            throwUnexpected(token);
+            throwUnexpectedToken(token);
         }
 
         return node.finishIdentifier(token.value);
@@ -2568,11 +2604,11 @@
             if ((match('++') || match('--')) && !peekLineTerminator()) {
                 // 11.3.1, 11.3.2
                 if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
-                    throwErrorTolerant({}, Messages.StrictLHSPostfix);
+                    tolerateError(Messages.StrictLHSPostfix);
                 }
 
                 if (!isLeftHandSide(expr)) {
-                    throwErrorTolerant({}, Messages.InvalidLHSInAssignment);
+                    tolerateError(Messages.InvalidLHSInAssignment);
                 }
 
                 token = lex();
@@ -2596,11 +2632,11 @@
             expr = parseUnaryExpression();
             // 11.4.4, 11.4.5
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
-                throwErrorTolerant({}, Messages.StrictLHSPrefix);
+                tolerateError(Messages.StrictLHSPrefix);
             }
 
             if (!isLeftHandSide(expr)) {
-                throwErrorTolerant({}, Messages.InvalidLHSInAssignment);
+                tolerateError(Messages.InvalidLHSInAssignment);
             }
 
             expr = new WrappingNode(startToken).finishUnaryExpression(token.value, expr);
@@ -2615,7 +2651,7 @@
             expr = parseUnaryExpression();
             expr = new WrappingNode(startToken).finishUnaryExpression(token.value, expr);
             if (strict && expr.operator === 'delete' && expr.argument.type === Syntax.Identifier) {
-                throwErrorTolerant({}, Messages.StrictDelete);
+                tolerateError(Messages.StrictDelete);
             }
         } else {
             expr = parsePostfixExpression();
@@ -2795,7 +2831,7 @@
     }
 
     function reinterpretAsCoverFormalsList(expressions) {
-        var i, len, param, params, defaults, defaultCount, options, rest;
+        var i, len, param, params, defaults, defaultCount, options, rest, token;
 
         params = [];
         defaults = [];
@@ -2822,10 +2858,8 @@
         }
 
         if (options.message === Messages.StrictParamDupe) {
-            throwError(
-                strict ? options.stricted : options.firstRestricted,
-                options.message
-            );
+            token = strict ? options.stricted : options.firstRestricted;
+            throwUnexpectedToken(token, options.message);
         }
 
         if (defaultCount === 0) {
@@ -2851,10 +2885,10 @@
         body = parseConciseBody();
 
         if (strict && options.firstRestricted) {
-            throwError(options.firstRestricted, options.message);
+            throwUnexpectedToken(options.firstRestricted, options.message);
         }
         if (strict && options.stricted) {
-            throwErrorTolerant(options.stricted, options.message);
+            tolerateUnexpectedToken(options.stricted, options.message);
         }
 
         strict = previousStrict;
@@ -2895,12 +2929,12 @@
         if (matchAssign()) {
             // LeftHandSideExpression
             if (!isLeftHandSide(expr)) {
-                throwErrorTolerant({}, Messages.InvalidLHSInAssignment);
+                tolerateError(Messages.InvalidLHSInAssignment);
             }
 
             // 11.13.1
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
-                throwErrorTolerant(token, Messages.StrictLHSAssignment);
+                tolerateUnexpectedToken(token, Messages.StrictLHSAssignment);
             }
 
             token = lex();
@@ -2975,7 +3009,11 @@
         token = lex();
 
         if (token.type !== Token.Identifier) {
-            throwUnexpected(token);
+            if (strict && token.type === Token.Keyword && isStrictModeReservedWord(token.value)) {
+                tolerateUnexpectedToken(token, Messages.StrictReservedWord);
+            } else {
+                throwUnexpectedToken(token);
+            }
         }
 
         return node.finishIdentifier(token.value);
@@ -2988,7 +3026,7 @@
 
         // 12.2.1
         if (strict && isRestrictedWord(id.name)) {
-            throwErrorTolerant({}, Messages.StrictVarName);
+            tolerateError(Messages.StrictVarName);
         }
 
         if (kind === 'const') {
@@ -3175,7 +3213,7 @@
                 if (matchKeyword('in')) {
                     // LeftHandSideExpression
                     if (!isLeftHandSide(init)) {
-                        throwErrorTolerant({}, Messages.InvalidLHSInForIn);
+                        tolerateError(Messages.InvalidLHSInForIn);
                     }
 
                     lex();
@@ -3228,7 +3266,7 @@
             lex();
 
             if (!state.inIteration) {
-                throwError({}, Messages.IllegalContinue);
+                throwError(Messages.IllegalContinue);
             }
 
             return node.finishContinueStatement(null);
@@ -3236,7 +3274,7 @@
 
         if (peekLineTerminator()) {
             if (!state.inIteration) {
-                throwError({}, Messages.IllegalContinue);
+                throwError(Messages.IllegalContinue);
             }
 
             return node.finishContinueStatement(null);
@@ -3247,14 +3285,14 @@
 
             key = '$' + label.name;
             if (!Object.prototype.hasOwnProperty.call(state.labelSet, key)) {
-                throwError({}, Messages.UnknownLabel, label.name);
+                throwError(Messages.UnknownLabel, label.name);
             }
         }
 
         consumeSemicolon();
 
         if (label === null && !state.inIteration) {
-            throwError({}, Messages.IllegalContinue);
+            throwError(Messages.IllegalContinue);
         }
 
         return node.finishContinueStatement(label);
@@ -3272,7 +3310,7 @@
             lex();
 
             if (!(state.inIteration || state.inSwitch)) {
-                throwError({}, Messages.IllegalBreak);
+                throwError(Messages.IllegalBreak);
             }
 
             return node.finishBreakStatement(null);
@@ -3280,7 +3318,7 @@
 
         if (peekLineTerminator()) {
             if (!(state.inIteration || state.inSwitch)) {
-                throwError({}, Messages.IllegalBreak);
+                throwError(Messages.IllegalBreak);
             }
 
             return node.finishBreakStatement(null);
@@ -3291,14 +3329,14 @@
 
             key = '$' + label.name;
             if (!Object.prototype.hasOwnProperty.call(state.labelSet, key)) {
-                throwError({}, Messages.UnknownLabel, label.name);
+                throwError(Messages.UnknownLabel, label.name);
             }
         }
 
         consumeSemicolon();
 
         if (label === null && !(state.inIteration || state.inSwitch)) {
-            throwError({}, Messages.IllegalBreak);
+            throwError(Messages.IllegalBreak);
         }
 
         return node.finishBreakStatement(label);
@@ -3312,7 +3350,7 @@
         expectKeyword('return');
 
         if (!state.inFunctionBody) {
-            throwErrorTolerant({}, Messages.IllegalReturn);
+            tolerateError(Messages.IllegalReturn);
         }
 
         // 'return' followed by a space and an identifier is very common.
@@ -3347,7 +3385,7 @@
         if (strict) {
             // TODO(ikarienator): Should we update the test cases instead?
             skipComment();
-            throwErrorTolerant({}, Messages.StrictModeWith);
+            tolerateError(Messages.StrictModeWith);
         }
 
         expectKeyword('with');
@@ -3419,7 +3457,7 @@
             clause = parseSwitchCase();
             if (clause.test === null) {
                 if (defaultFound) {
-                    throwError({}, Messages.MultipleDefaultsInSwitch);
+                    throwError(Messages.MultipleDefaultsInSwitch);
                 }
                 defaultFound = true;
             }
@@ -3441,7 +3479,7 @@
         expectKeyword('throw');
 
         if (peekLineTerminator()) {
-            throwError({}, Messages.NewlineAfterThrow);
+            throwError(Messages.NewlineAfterThrow);
         }
 
         argument = parseExpression();
@@ -3460,13 +3498,13 @@
 
         expect('(');
         if (match(')')) {
-            throwUnexpected(lookahead);
+            throwUnexpectedToken(lookahead);
         }
 
         param = parseVariableIdentifier();
         // 12.14.1
         if (strict && isRestrictedWord(param.name)) {
-            throwErrorTolerant({}, Messages.StrictCatchVariable);
+            tolerateError(Messages.StrictCatchVariable);
         }
 
         expect(')');
@@ -3491,7 +3529,7 @@
         }
 
         if (handlers.length === 0 && !finalizer) {
-            throwError({}, Messages.NoCatchOrFinally);
+            throwError(Messages.NoCatchOrFinally);
         }
 
         return node.finishTryStatement(block, [], handlers, finalizer);
@@ -3517,7 +3555,7 @@
             node;
 
         if (type === Token.EOF) {
-            throwUnexpected(lookahead);
+            throwUnexpectedToken(lookahead);
         }
 
         if (type === Token.Punctuator && lookahead.value === '{') {
@@ -3578,7 +3616,7 @@
 
             key = '$' + expr.name;
             if (Object.prototype.hasOwnProperty.call(state.labelSet, key)) {
-                throwError({}, Messages.Redeclaration, 'Label', expr.name);
+                throwError(Messages.Redeclaration, 'Label', expr.name);
             }
 
             state.labelSet[key] = true;
@@ -3617,7 +3655,7 @@
             if (directive === 'use strict') {
                 strict = true;
                 if (firstRestricted) {
-                    throwErrorTolerant(firstRestricted, Messages.StrictOctalLiteral);
+                    tolerateUnexpectedToken(firstRestricted, Messages.StrictOctalLiteral);
                 }
             } else {
                 if (!firstRestricted && token.octal) {
@@ -3749,7 +3787,7 @@
         id = parseVariableIdentifier();
         if (strict) {
             if (isRestrictedWord(token.value)) {
-                throwErrorTolerant(token, Messages.StrictFunctionName);
+                tolerateUnexpectedToken(token, Messages.StrictFunctionName);
             }
         } else {
             if (isRestrictedWord(token.value)) {
@@ -3773,10 +3811,10 @@
         previousStrict = strict;
         body = parseFunctionSourceElements();
         if (strict && firstRestricted) {
-            throwError(firstRestricted, message);
+            throwUnexpectedToken(firstRestricted, message);
         }
         if (strict && stricted) {
-            throwErrorTolerant(stricted, message);
+            tolerateUnexpectedToken(stricted, message);
         }
         strict = previousStrict;
 
@@ -3794,7 +3832,7 @@
             id = parseVariableIdentifier();
             if (strict) {
                 if (isRestrictedWord(token.value)) {
-                    throwErrorTolerant(token, Messages.StrictFunctionName);
+                    tolerateUnexpectedToken(token, Messages.StrictFunctionName);
                 }
             } else {
                 if (isRestrictedWord(token.value)) {
@@ -3819,10 +3857,10 @@
         previousStrict = strict;
         body = parseFunctionSourceElements();
         if (strict && firstRestricted) {
-            throwError(firstRestricted, message);
+            throwUnexpectedToken(firstRestricted, message);
         }
         if (strict && stricted) {
-            throwErrorTolerant(stricted, message);
+            tolerateUnexpectedToken(stricted, message);
         }
         strict = previousStrict;
 
@@ -3868,7 +3906,7 @@
             if (directive === 'use strict') {
                 strict = true;
                 if (firstRestricted) {
-                    throwErrorTolerant(firstRestricted, Messages.StrictOctalLiteral);
+                    tolerateUnexpectedToken(firstRestricted, Messages.StrictOctalLiteral);
                 }
             } else {
                 if (!firstRestricted && token.octal) {
@@ -4086,7 +4124,7 @@
     }
 
     // Sync with *.json manifests.
-    exports.version = '2.0.0-dev';
+    exports.version = '2.0.0';
 
     exports.tokenize = tokenize;
 
