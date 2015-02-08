@@ -61,6 +61,14 @@
         index,
         lineNumber,
         lineStart,
+        hasLineTerminator,
+        lastIndex,
+        lastLineNumber,
+        lastLineStart,
+        startIndex,
+        startLineNumber,
+        startLineStart,
+        scanning,
         length,
         lookahead,
         state,
@@ -338,13 +346,6 @@
 
         assert(typeof start === 'number', 'Comment must have valid position');
 
-        // Because the way the actual token is scanned, often the comments
-        // (if any) are skipped twice during the lexical analysis.
-        // Thus, we need to skip adding a comment if the comment array already
-        // handled it.
-        if (state.lastCommentStart >= start) {
-            return;
-        }
         state.lastCommentStart = start;
 
         comment = {
@@ -379,6 +380,7 @@
             ch = source.charCodeAt(index);
             ++index;
             if (isLineTerminator(ch)) {
+                hasLineTerminator = true;
                 if (extra.comments) {
                     comment = source.slice(start + offset, index - 1);
                     loc.end = {
@@ -425,12 +427,10 @@
                 if (ch === 0x0D && source.charCodeAt(index + 1) === 0x0A) {
                     ++index;
                 }
+                hasLineTerminator = true;
                 ++lineNumber;
                 ++index;
                 lineStart = index;
-                if (index >= length) {
-                    throwUnexpectedToken();
-                }
             } else if (ch === 0x2A) {
                 // Block comment ends with '*/'.
                 if (source.charCodeAt(index + 1) === 0x2F) {
@@ -457,6 +457,7 @@
 
     function skipComment() {
         var ch, start;
+        hasLineTerminator = false;
 
         start = (index === 0);
         while (index < length) {
@@ -465,6 +466,7 @@
             if (isWhiteSpace(ch)) {
                 ++index;
             } else if (isLineTerminator(ch)) {
+                hasLineTerminator = true;
                 ++index;
                 if (ch === 0x0D && source.charCodeAt(index) === 0x0A) {
                     ++index;
@@ -1017,9 +1019,7 @@
     // 7.8.4 String Literals
 
     function scanStringLiteral() {
-        var str = '', quote, start, ch, code, unescaped, restore, octal = false, startLineNumber, startLineStart;
-        startLineNumber = lineNumber;
-        startLineStart = lineStart;
+        var str = '', quote, start, ch, code, unescaped, restore, octal = false;
 
         quote = source[index];
         assert((quote === '\'' || quote === '"'),
@@ -1122,18 +1122,15 @@
             type: Token.StringLiteral,
             value: str,
             octal: octal,
-            startLineNumber: startLineNumber,
-            startLineStart: startLineStart,
-            lineNumber: lineNumber,
-            lineStart: lineStart,
+            lineNumber: startLineNumber,
+            lineStart: startLineStart,
             start: start,
             end: index
         };
     }
 
     function testRegExp(pattern, flags) {
-        var tmp = pattern,
-            value;
+        var tmp = pattern;
 
         if (flags.indexOf('u') >= 0) {
             // Replace each astral symbol and every Unicode code point
@@ -1149,16 +1146,16 @@
                     if (parseInt($1, 16) <= 0x10FFFF) {
                         return 'x';
                     }
-                    throwError(Messages.InvalidRegExp);
+                    throwUnexpectedToken(null, Messages.InvalidRegExp);
                 })
                 .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, 'x');
         }
 
         // First, detect invalid regular expressions.
         try {
-            value = new RegExp(tmp);
+            RegExp(tmp);
         } catch (e) {
-            throwError(Messages.InvalidRegExp);
+            throwUnexpectedToken(null, Messages.InvalidRegExp);
         }
 
         // Return a regular expression object for this pattern-flag pair, or
@@ -1187,11 +1184,11 @@
                 ch = source[index++];
                 // ECMA-262 7.8.5
                 if (isLineTerminator(ch.charCodeAt(0))) {
-                    throwError(Messages.UnterminatedRegExp);
+                    throwUnexpectedToken(null, Messages.UnterminatedRegExp);
                 }
                 str += ch;
             } else if (isLineTerminator(ch.charCodeAt(0))) {
-                throwError(Messages.UnterminatedRegExp);
+                throwUnexpectedToken(null, Messages.UnterminatedRegExp);
             } else if (classMarker) {
                 if (ch === ']') {
                     classMarker = false;
@@ -1207,7 +1204,7 @@
         }
 
         if (!terminated) {
-            throwError(Messages.UnterminatedRegExp);
+            throwUnexpectedToken(null, Messages.UnterminatedRegExp);
         }
 
         // Exclude leading and trailing slash.
@@ -1264,6 +1261,7 @@
     }
 
     function scanRegExp() {
+        scanning = true;
         var start, body, flags, value;
 
         lookahead = null;
@@ -1273,7 +1271,7 @@
         body = scanRegExpBody();
         flags = scanRegExpFlags();
         value = testRegExp(body.value, flags.value);
-
+        scanning = false;
         if (extra.tokenize) {
             return {
                 type: Token.RegularExpression,
@@ -1418,8 +1416,6 @@
     function advance() {
         var ch;
 
-        skipComment();
-
         if (index >= length) {
             return {
                 type: Token.EOF,
@@ -1471,7 +1467,6 @@
     function collectToken() {
         var loc, token, value, entry;
 
-        skipComment();
         loc = {
             start: {
                 line: lineNumber,
@@ -1507,36 +1502,45 @@
 
     function lex() {
         var token;
+        scanning = true;
+
+        lastIndex = index;
+        lastLineNumber = lineNumber;
+        lastLineStart = lineStart;
+
+        skipComment();
 
         token = lookahead;
-        index = token.end;
-        lineNumber = token.lineNumber;
-        lineStart = token.lineStart;
+
+        startIndex = index;
+        startLineNumber = lineNumber;
+        startLineStart = lineStart;
 
         lookahead = (typeof extra.tokens !== 'undefined') ? collectToken() : advance();
-
-        index = token.end;
-        lineNumber = token.lineNumber;
-        lineStart = token.lineStart;
-
+        scanning = false;
         return token;
     }
 
     function peek() {
-        var pos, line, start;
+        scanning = true;
 
-        pos = index;
-        line = lineNumber;
-        start = lineStart;
+        skipComment();
+
+        lastIndex = index;
+        lastLineNumber = lineNumber;
+        lastLineStart = lineStart;
+
+        startIndex = index;
+        startLineNumber = lineNumber;
+        startLineStart = lineStart;
+
         lookahead = (typeof extra.tokens !== 'undefined') ? collectToken() : advance();
-        index = pos;
-        lineNumber = line;
-        lineStart = start;
+        scanning = false;
     }
 
     function Position() {
-        this.line = lineNumber;
-        this.column = index - lineStart;
+        this.line = startLineNumber;
+        this.column = startIndex - startLineStart;
     }
 
     function SourceLocation() {
@@ -1545,32 +1549,16 @@
     }
 
     function WrappingSourceLocation(startToken) {
-        if (startToken.type === Token.StringLiteral) {
-            this.start = {
-                line: startToken.startLineNumber,
-                column: startToken.start - startToken.startLineStart
-            };
-        } else {
-            this.start = {
-                line: startToken.lineNumber,
-                column: startToken.start - startToken.lineStart
-            };
-        }
+        this.start = {
+            line: startToken.lineNumber,
+            column: startToken.start - startToken.lineStart
+        };
         this.end = null;
     }
 
     function Node() {
-        // Skip comment.
-        index = lookahead.start;
-        if (lookahead.type === Token.StringLiteral) {
-            lineNumber = lookahead.startLineNumber;
-            lineStart = lookahead.startLineStart;
-        } else {
-            lineNumber = lookahead.lineNumber;
-            lineStart = lookahead.lineStart;
-        }
         if (extra.range) {
-            this.range = [index, 0];
+            this.range = [startIndex, 0];
         }
         if (extra.loc) {
             this.loc = new SourceLocation();
@@ -1657,10 +1645,13 @@
 
         finish: function () {
             if (extra.range) {
-                this.range[1] = index;
+                this.range[1] = lastIndex;
             }
             if (extra.loc) {
-                this.loc.end = new Position();
+                this.loc.end = {
+                    line: lastLineNumber,
+                    column: lastIndex - lastLineStart
+                };
                 if (extra.source) {
                     this.loc.source = extra.source;
                 }
@@ -2009,28 +2000,11 @@
         }
     };
 
-    // Return true if there is a line terminator before the next token.
-
-    function peekLineTerminator() {
-        var pos, line, start, found;
-
-        pos = index;
-        line = lineNumber;
-        start = lineStart;
-        skipComment();
-        found = lineNumber !== line;
-        index = pos;
-        lineNumber = line;
-        lineStart = start;
-
-        return found;
-    }
-
     function createError(line, pos, description) {
         var error = new Error('Line ' + line + ': ' + description);
         error.index = pos;
         error.lineNumber = line;
-        error.column = pos - lineStart + 1;
+        error.column = pos - (scanning ? lineStart : lastLineStart) + 1;
         error.description = description;
         return error;
     }
@@ -2048,7 +2022,7 @@
             }
         );
 
-        throw createError(lineNumber, index, msg);
+        throw createError(lastLineNumber, lastIndex, msg);
     }
 
     function tolerateError(messageFormat) {
@@ -2063,7 +2037,7 @@
             }
         );
 
-        error = createError(lineNumber, index, msg);
+        error = createError(lineNumber, lastIndex, msg);
         if (extra.errors) {
             extra.errors.push(error);
         } else {
@@ -2074,11 +2048,10 @@
     // Throw an exception because of the token.
 
     function unexpectedTokenError(token, message) {
-        var msg = Messages.UnexpectedToken;
+        var msg = message || Messages.UnexpectedToken;
 
-        if (token) {
-            msg = message ? message :
-                (token.type === Token.EOF) ? Messages.UnexpectedEOS :
+        if (token && !message) {
+            msg = (token.type === Token.EOF) ? Messages.UnexpectedEOS :
                 (token.type === Token.Identifier) ? Messages.UnexpectedIdentifier :
                 (token.type === Token.NumericLiteral) ? Messages.UnexpectedNumber :
                 (token.type === Token.StringLiteral) ? Messages.UnexpectedString :
@@ -2097,7 +2070,7 @@
 
         return (token && typeof token.lineNumber === 'number') ?
             createError(token.lineNumber, token.start, msg) :
-            createError(lineNumber, index, msg);
+            createError(scanning ? lineNumber : lastLineNumber, scanning ? index : lastIndex, msg);
     }
 
     function throwUnexpectedToken(token, message) {
@@ -2193,24 +2166,20 @@
     }
 
     function consumeSemicolon() {
-        var line, oldIndex = index, oldLineNumber = lineNumber,
-            oldLineStart = lineStart, oldLookahead = lookahead;
-
         // Catch the very common case first: immediately a semicolon (U+003B).
-        if (source.charCodeAt(index) === 0x3B || match(';')) {
+        if (source.charCodeAt(startIndex) === 0x3B || match(';')) {
             lex();
             return;
         }
 
-        line = lineNumber;
-        skipComment();
-        if (lineNumber !== line) {
-            index = oldIndex;
-            lineNumber = oldLineNumber;
-            lineStart = oldLineStart;
-            lookahead = oldLookahead;
+        if (hasLineTerminator) {
             return;
         }
+
+        // FIXME(ikarienator): this is seemingly an issue in the previous location info convention.
+        lastIndex = startIndex;
+        lastLineNumber = startLineNumber;
+        lastLineStart = startLineStart;
 
         if (lookahead.type !== Token.EOF && !match('}')) {
             throwUnexpectedToken(lookahead);
@@ -2470,12 +2439,15 @@
             token.value = null;
             expr = node.finishLiteral(token);
         } else if (match('/') || match('/=')) {
+            index = startIndex;
+
             if (typeof extra.tokens !== 'undefined') {
-                expr = node.finishLiteral(collectRegex());
+                token = collectRegex();
             } else {
-                expr = node.finishLiteral(scanRegExp());
+                token = scanRegExp();
             }
-            peek();
+            lex();
+            expr = node.finishLiteral(token);
         } else {
             throwUnexpectedToken(lex());
         }
@@ -2491,7 +2463,7 @@
         expect('(');
 
         if (!match(')')) {
-            while (index < length) {
+            while (startIndex < length) {
                 args.push(parseAssignmentExpression());
                 if (match(')')) {
                     break;
@@ -2600,8 +2572,8 @@
 
         expr = parseLeftHandSideExpressionAllowCall();
 
-        if (lookahead.type === Token.Punctuator) {
-            if ((match('++') || match('--')) && !peekLineTerminator()) {
+        if (!hasLineTerminator && lookahead.type === Token.Punctuator) {
+            if (match('++') || match('--')) {
                 // 11.3.1, 11.3.2
                 if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                     tolerateError(Messages.StrictLHSPostfix);
@@ -2955,7 +2927,7 @@
         if (match(',')) {
             expressions = [expr];
 
-            while (index < length) {
+            while (startIndex < length) {
                 if (!match(',')) {
                     break;
                 }
@@ -2972,18 +2944,12 @@
     // 12.1 Block
 
     function parseStatementList() {
-        var list = [],
-            statement;
-
-        while (index < length) {
+        var list = [];
+        while (startIndex < length) {
             if (match('}')) {
                 break;
             }
-            statement = parseSourceElement();
-            if (typeof statement === 'undefined') {
-                break;
-            }
-            list.push(statement);
+            list.push(parseSourceElement());
         }
 
         return list;
@@ -3049,7 +3015,7 @@
                 break;
             }
             lex();
-        } while (index < length);
+        } while (startIndex < length);
 
         return list;
     }
@@ -3262,7 +3228,7 @@
         expectKeyword('continue');
 
         // Optimize the most common form: 'continue;'.
-        if (source.charCodeAt(index) === 0x3B) {
+        if (source.charCodeAt(startIndex) === 0x3B) {
             lex();
 
             if (!state.inIteration) {
@@ -3272,7 +3238,7 @@
             return node.finishContinueStatement(null);
         }
 
-        if (peekLineTerminator()) {
+        if (hasLineTerminator) {
             if (!state.inIteration) {
                 throwError(Messages.IllegalContinue);
             }
@@ -3306,7 +3272,7 @@
         expectKeyword('break');
 
         // Catch the very common case first: immediately a semicolon (U+003B).
-        if (source.charCodeAt(index) === 0x3B) {
+        if (source.charCodeAt(lastIndex) === 0x3B) {
             lex();
 
             if (!(state.inIteration || state.inSwitch)) {
@@ -3316,7 +3282,7 @@
             return node.finishBreakStatement(null);
         }
 
-        if (peekLineTerminator()) {
+        if (hasLineTerminator) {
             if (!(state.inIteration || state.inSwitch)) {
                 throwError(Messages.IllegalBreak);
             }
@@ -3354,15 +3320,16 @@
         }
 
         // 'return' followed by a space and an identifier is very common.
-        if (source.charCodeAt(index) === 0x20) {
-            if (isIdentifierStart(source.charCodeAt(index + 1))) {
+        if (source.charCodeAt(lastIndex) === 0x20) {
+            if (isIdentifierStart(source.charCodeAt(lastIndex + 1))) {
                 argument = parseExpression();
                 consumeSemicolon();
                 return node.finishReturnStatement(argument);
             }
         }
 
-        if (peekLineTerminator()) {
+        if (hasLineTerminator) {
+            // HACK
             return node.finishReturnStatement(null);
         }
 
@@ -3383,8 +3350,6 @@
         var object, body;
 
         if (strict) {
-            // TODO(ikarienator): Should we update the test cases instead?
-            skipComment();
             tolerateError(Messages.StrictModeWith);
         }
 
@@ -3415,7 +3380,7 @@
         }
         expect(':');
 
-        while (index < length) {
+        while (startIndex < length) {
             if (match('}') || matchKeyword('default') || matchKeyword('case')) {
                 break;
             }
@@ -3450,7 +3415,7 @@
         state.inSwitch = true;
         defaultFound = false;
 
-        while (index < length) {
+        while (startIndex < length) {
             if (match('}')) {
                 break;
             }
@@ -3478,7 +3443,7 @@
 
         expectKeyword('throw');
 
-        if (peekLineTerminator()) {
+        if (hasLineTerminator) {
             throwError(Messages.NewlineAfterThrow);
         }
 
@@ -3639,7 +3604,7 @@
 
         expect('{');
 
-        while (index < length) {
+        while (startIndex < length) {
             if (lookahead.type !== Token.StringLiteral) {
                 break;
             }
@@ -3676,14 +3641,11 @@
         state.inFunctionBody = true;
         state.parenthesizedCount = 0;
 
-        while (index < length) {
+        while (startIndex < length) {
             if (match('}')) {
                 break;
             }
             sourceElement = parseSourceElement();
-            if (typeof sourceElement === 'undefined') {
-                break;
-            }
             sourceElements.push(sourceElement);
         }
 
@@ -3756,7 +3718,7 @@
 
         if (!match(')')) {
             options.paramSet = {};
-            while (index < length) {
+            while (startIndex < length) {
                 if (!parseParam(options)) {
                     break;
                 }
@@ -3877,20 +3839,16 @@
                 return parseConstLetDeclaration(lookahead.value);
             case 'function':
                 return parseFunctionDeclaration();
-            default:
-                return parseStatement();
             }
         }
 
-        if (lookahead.type !== Token.EOF) {
-            return parseStatement();
-        }
+        return parseStatement();
     }
 
     function parseSourceElements() {
         var sourceElement, sourceElements = [], token, directive, firstRestricted;
 
-        while (index < length) {
+        while (startIndex < length) {
             token = lookahead;
             if (token.type !== Token.StringLiteral) {
                 break;
@@ -3915,7 +3873,7 @@
             }
         }
 
-        while (index < length) {
+        while (startIndex < length) {
             sourceElement = parseSourceElement();
             /* istanbul ignore if */
             if (typeof sourceElement === 'undefined') {
@@ -3929,7 +3887,6 @@
     function parseProgram() {
         var body, node;
 
-        skipComment();
         peek();
         node = new Node();
         strict = false;
@@ -3978,6 +3935,9 @@
         index = 0;
         lineNumber = (source.length > 0) ? 1 : 0;
         lineStart = 0;
+        startIndex = index;
+        startLineNumber = lineNumber;
+        startLineStart = lineStart;
         length = source.length;
         lookahead = null;
         state = {
@@ -4062,6 +4022,9 @@
         index = 0;
         lineNumber = (source.length > 0) ? 1 : 0;
         lineStart = 0;
+        startIndex = index;
+        startLineNumber = lineNumber;
+        startLineStart = lineStart;
         length = source.length;
         lookahead = null;
         state = {
