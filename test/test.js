@@ -23528,9 +23528,9 @@ var testFixture = {
         },
 
         '(function () { \'use strict\'; with (i); }())': {
-            index: 29,
+            index: 28,
             lineNumber: 1,
-            column: 30,
+            column: 29,
             message: 'Error: Line 1: Strict mode code may not include a with statement'
         },
 
@@ -24050,6 +24050,13 @@ var testFixture = {
             lineNumber: 1,
             column: 22,
             message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        '\'use strict\'; a package': {
+            index: 16,
+            lineNumber: 1,
+            column: 17,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
         }
 
     },
@@ -26927,9 +26934,9 @@ var testFixture = {
                 end: { line: 1, column: 43 }
             },
             errors: [{
-                index: 29,
+                index: 28,
                 lineNumber: 1,
-                column: 30,
+                column: 29,
                 message: 'Error: Line 1: Strict mode code may not include a with statement'
             }]
         },
