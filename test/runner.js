@@ -217,7 +217,7 @@ function testParse(esprima, code, syntax) {
     }
 }
 
-function testTokenize(esprima, code, tokens) {
+function testTokenize(esprima, code, tokens, useSaxInterface) {
     'use strict';
     var options, expected, actual, tree;
 
@@ -231,13 +231,24 @@ function testTokenize(esprima, code, tokens) {
     expected = JSON.stringify(tokens, null, 4);
 
     try {
-        tree = esprima.tokenize(code, options);
+        if (useSaxInterface) {
+            tree = [];
+            options.saxCallback = pushToken.bind(null, tree);
+            options.maxTokensBufferLength = 5;
+            esprima.tokenize(code, options);
+        } else {
+            tree = esprima.tokenize(code, options);
+        }
         actual = JSON.stringify(tree, null, 4);
     } catch (e) {
         throw new NotMatchingError(expected, e.toString());
     }
     if (expected !== actual) {
         throw new NotMatchingError(expected, actual);
+    }
+
+    function pushToken(tokens, token) {
+        tokens.push(token);
     }
 }
 
@@ -327,7 +338,8 @@ function runTest(esprima, code, result) {
     } else if (result.hasOwnProperty('result')) {
         testAPI(esprima, code, result);
     } else if (result instanceof Array) {
-        testTokenize(esprima, code, result);
+        testTokenize(esprima, code, result, false);
+        testTokenize(esprima, code, result, true);
     } else {
         testParse(esprima, code, result);
     }
