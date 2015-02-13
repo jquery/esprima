@@ -1948,11 +1948,12 @@
             return this;
         },
 
-        finishTryStatement: function (block, guardedHandlers, handlers, finalizer) {
+        finishTryStatement: function (block, handler, finalizer) {
             this.type = Syntax.TryStatement;
             this.block = block;
-            this.guardedHandlers = guardedHandlers;
-            this.handlers = handlers;
+            this.guardedHandlers = [];
+            this.handlers = handler ? [ handler ] : [];
+            this.handler = handler;
             this.finalizer = finalizer;
             this.finish();
             return this;
@@ -3478,14 +3479,14 @@
     }
 
     function parseTryStatement(node) {
-        var block, handlers = [], finalizer = null;
+        var block, handler = null, finalizer = null;
 
         expectKeyword('try');
 
         block = parseBlock();
 
         if (matchKeyword('catch')) {
-            handlers.push(parseCatchClause());
+            handler = parseCatchClause();
         }
 
         if (matchKeyword('finally')) {
@@ -3493,11 +3494,11 @@
             finalizer = parseBlock();
         }
 
-        if (handlers.length === 0 && !finalizer) {
+        if (!handler && !finalizer) {
             throwError(Messages.NoCatchOrFinally);
         }
 
-        return node.finishTryStatement(block, [], handlers, finalizer);
+        return node.finishTryStatement(block, handler, finalizer);
     }
 
     // 12.15 The debugger statement

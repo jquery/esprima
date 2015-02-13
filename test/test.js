@@ -19335,6 +19335,32 @@ var testFixture = {
                     end: { line: 1, column: 21 }
                 }
             }],
+            handler: {
+                type: 'CatchClause',
+                param: {
+                    type: 'Identifier',
+                    name: 'e',
+                    range: [15, 16],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [18, 21],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 21 }
+                    }
+                },
+                range: [8, 21],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 21 }
+                }
+            },
             finalizer: null,
             range: [0, 21],
             loc: {
@@ -19381,6 +19407,32 @@ var testFixture = {
                     end: { line: 1, column: 24 }
                 }
             }],
+            handler: {
+                type: 'CatchClause',
+                param: {
+                    type: 'Identifier',
+                    name: 'eval',
+                    range: [15, 19],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 19 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [21, 24],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                range: [8, 24],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 24 }
+                }
+            },
             finalizer: null,
             range: [0, 24],
             loc: {
@@ -19427,6 +19479,32 @@ var testFixture = {
                     end: { line: 1, column: 29 }
                 }
             }],
+            handler: {
+                type: 'CatchClause',
+                param: {
+                    type: 'Identifier',
+                    name: 'arguments',
+                    range: [15, 24],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 24 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [],
+                    range: [26, 29],
+                    loc: {
+                        start: { line: 1, column: 26 },
+                        end: { line: 1, column: 29 }
+                    }
+                },
+                range: [8, 29],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 29 }
+                }
+            },
             finalizer: null,
             range: [0, 29],
             loc: {
@@ -19506,6 +19584,65 @@ var testFixture = {
                     end: { line: 1, column: 28 }
                 }
             }],
+            handler: {
+                type: 'CatchClause',
+                param: {
+                    type: 'Identifier',
+                    name: 'e',
+                    range: [15, 16],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'say',
+                                range: [20, 23],
+                                loc: {
+                                    start: { line: 1, column: 20 },
+                                    end: { line: 1, column: 23 }
+                                }
+                            },
+                            'arguments': [{
+                                type: 'Identifier',
+                                name: 'e',
+                                range: [24, 25],
+                                loc: {
+                                    start: { line: 1, column: 24 },
+                                    end: { line: 1, column: 25 }
+                                }
+                            }],
+                            range: [20, 26],
+                            loc: {
+                                start: { line: 1, column: 20 },
+                                end: { line: 1, column: 26 }
+                            }
+                        },
+                        range: [20, 27],
+                        loc: {
+                            start: { line: 1, column: 20 },
+                            end: { line: 1, column: 27 }
+                        }
+                    }],
+                    range: [18, 28],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 28 }
+                    }
+                },
+                range: [8, 28],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 28 }
+                }
+            },
             finalizer: null,
             range: [0, 28],
             loc: {
@@ -19527,6 +19664,7 @@ var testFixture = {
             },
             guardedHandlers: [],
             handlers: [],
+            handler: null,
             finalizer: {
                 type: 'BlockStatement',
                 body: [{
@@ -19672,6 +19810,65 @@ var testFixture = {
                     end: { line: 1, column: 38 }
                 }
             }],
+            handler: {
+                type: 'CatchClause',
+                param: {
+                    type: 'Identifier',
+                    name: 'e',
+                    range: [25, 26],
+                    loc: {
+                        start: { line: 1, column: 25 },
+                        end: { line: 1, column: 26 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'say',
+                                range: [30, 33],
+                                loc: {
+                                    start: { line: 1, column: 30 },
+                                    end: { line: 1, column: 33 }
+                                }
+                            },
+                            'arguments': [{
+                                type: 'Identifier',
+                                name: 'e',
+                                range: [34, 35],
+                                loc: {
+                                    start: { line: 1, column: 34 },
+                                    end: { line: 1, column: 35 }
+                                }
+                            }],
+                            range: [30, 36],
+                            loc: {
+                                start: { line: 1, column: 30 },
+                                end: { line: 1, column: 36 }
+                            }
+                        },
+                        range: [30, 37],
+                        loc: {
+                            start: { line: 1, column: 30 },
+                            end: { line: 1, column: 37 }
+                        }
+                    }],
+                    range: [28, 38],
+                    loc: {
+                        start: { line: 1, column: 28 },
+                        end: { line: 1, column: 38 }
+                    }
+                },
+                range: [18, 38],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 38 }
+                }
+            },
             finalizer: null,
             range: [0, 38],
             loc: {
@@ -19776,6 +19973,65 @@ var testFixture = {
                     end: { line: 1, column: 38 }
                 }
             }],
+            handler: {
+                type: 'CatchClause',
+                param: {
+                    type: 'Identifier',
+                    name: 'e',
+                    range: [25, 26],
+                    loc: {
+                        start: { line: 1, column: 25 },
+                        end: { line: 1, column: 26 }
+                    }
+                },
+                body: {
+                    type: 'BlockStatement',
+                    body: [{
+                        type: 'ExpressionStatement',
+                        expression: {
+                            type: 'CallExpression',
+                            callee: {
+                                type: 'Identifier',
+                                name: 'say',
+                                range: [30, 33],
+                                loc: {
+                                    start: { line: 1, column: 30 },
+                                    end: { line: 1, column: 33 }
+                                }
+                            },
+                            'arguments': [{
+                                type: 'Identifier',
+                                name: 'e',
+                                range: [34, 35],
+                                loc: {
+                                    start: { line: 1, column: 34 },
+                                    end: { line: 1, column: 35 }
+                                }
+                            }],
+                            range: [30, 36],
+                            loc: {
+                                start: { line: 1, column: 30 },
+                                end: { line: 1, column: 36 }
+                            }
+                        },
+                        range: [30, 37],
+                        loc: {
+                            start: { line: 1, column: 30 },
+                            end: { line: 1, column: 37 }
+                        }
+                    }],
+                    range: [28, 38],
+                    loc: {
+                        start: { line: 1, column: 28 },
+                        end: { line: 1, column: 38 }
+                    }
+                },
+                range: [18, 38],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 38 }
+                }
+            },
             finalizer: {
                 type: 'BlockStatement',
                 body: [{
@@ -27146,6 +27402,32 @@ var testFixture = {
                         end: { line: 1, column: 36 }
                     }
                 }],
+                handler: {
+                    type: 'CatchClause',
+                    param: {
+                        type: 'Identifier',
+                        name: 'eval',
+                        range: [28, 32],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 32 }
+                        }
+                    },
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [34, 36],
+                        loc: {
+                            start: { line: 1, column: 34 },
+                            end: { line: 1, column: 36 }
+                        }
+                    },
+                    range: [21, 36],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 36 }
+                    }
+                },
                 finalizer: null,
                 range: [14, 36],
                 loc: {
@@ -27223,6 +27505,32 @@ var testFixture = {
                         end: { line: 1, column: 41 }
                     }
                 }],
+                handler: {
+                    type: 'CatchClause',
+                    param: {
+                        type: 'Identifier',
+                        name: 'arguments',
+                        range: [28, 37],
+                        loc: {
+                            start: { line: 1, column: 28 },
+                            end: { line: 1, column: 37 }
+                        }
+                    },
+                    body: {
+                        type: 'BlockStatement',
+                        body: [],
+                        range: [39, 41],
+                        loc: {
+                            start: { line: 1, column: 39 },
+                            end: { line: 1, column: 41 }
+                        }
+                    },
+                    range: [21, 41],
+                    loc: {
+                        start: { line: 1, column: 21 },
+                        end: { line: 1, column: 41 }
+                    }
+                },
                 finalizer: null,
                 range: [14, 41],
                 loc: {
