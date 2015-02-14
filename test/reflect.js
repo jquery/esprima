@@ -67,7 +67,7 @@ function switchStmt(disc, cases) { return Pattern({ type: "SwitchStatement", dis
 function caseClause(test, stmts) { return Pattern({ type: "SwitchCase", test: test, consequent: stmts }); }
 function defaultClause(stmts) { return Pattern({ type: "SwitchCase", test: null, consequent: stmts }); }
 function catchClause(id, guard, body) { if (guard) { return Pattern({ type: "GuardedCatchClause", param: id, guard: guard, body: body }) } else { return Pattern({ type: "CatchClause", param: id, body: body }); } }
-function tryStmt(body, guarded, catches, fin) { return Pattern({ type: "TryStatement", block: body, guardedHandlers: guarded, handlers: catches, finalizer: fin }); }
+function tryStmt(body, guarded, catches, fin) { return Pattern({ type: "TryStatement", block: body, guardedHandlers: guarded, handlers: catches, handler: (catches.length > 0) ? catches[0] : null, finalizer: fin }); }
 function letStmt(head, body) { return Pattern({ type: "LetStatement", head: head, body: body }); }
 function funExpr(id, args, body, gen) { return Pattern({ type: "FunctionExpression",
                                                 id: id,
