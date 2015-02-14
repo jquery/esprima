@@ -1535,9 +1535,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [18, 36],
+                            range: [15, 36],
                             loc: {
-                                start: { line: 1, column: 18 },
+                                start: { line: 1, column: 15 },
                                 end: { line: 1, column: 36 }
                             }
                         },
@@ -1613,9 +1613,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [18, 20],
+                            range: [15, 20],
                             loc: {
-                                start: { line: 1, column: 18 },
+                                start: { line: 1, column: 15 },
                                 end: { line: 1, column: 20 }
                             }
                         },
@@ -1691,9 +1691,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [15, 17],
+                            range: [12, 17],
                             loc: {
-                                start: { line: 1, column: 15 },
+                                start: { line: 1, column: 12 },
                                 end: { line: 1, column: 17 }
                             }
                         },
@@ -1769,9 +1769,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [17, 19],
+                            range: [14, 19],
                             loc: {
-                                start: { line: 1, column: 17 },
+                                start: { line: 1, column: 14 },
                                 end: { line: 1, column: 19 }
                             }
                         },
@@ -1847,9 +1847,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [18, 20],
+                            range: [15, 20],
                             loc: {
-                                start: { line: 1, column: 18 },
+                                start: { line: 1, column: 15 },
                                 end: { line: 1, column: 20 }
                             }
                         },
@@ -1925,9 +1925,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [17, 19],
+                            range: [14, 19],
                             loc: {
-                                start: { line: 1, column: 17 },
+                                start: { line: 1, column: 14 },
                                 end: { line: 1, column: 19 }
                             }
                         },
@@ -2004,9 +2004,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [20, 22],
+                            range: [17, 22],
                             loc: {
-                                start: { line: 1, column: 20 },
+                                start: { line: 1, column: 17 },
                                 end: { line: 1, column: 22 }
                             }
                         },
@@ -2083,9 +2083,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [15, 17],
+                            range: [12, 17],
                             loc: {
-                                start: { line: 1, column: 15 },
+                                start: { line: 1, column: 12 },
                                 end: { line: 1, column: 17 }
                             }
                         },
@@ -2203,9 +2203,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [19, 34],
+                            range: [15, 34],
                             loc: {
-                                start: { line: 1, column: 19 },
+                                start: { line: 1, column: 15 },
                                 end: { line: 1, column: 34 }
                             }
                         },
@@ -2323,9 +2323,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [16, 28],
+                            range: [12, 28],
                             loc: {
-                                start: { line: 1, column: 16 },
+                                start: { line: 1, column: 12 },
                                 end: { line: 1, column: 28 }
                             }
                         },
@@ -2443,9 +2443,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [18, 32],
+                            range: [14, 32],
                             loc: {
-                                start: { line: 1, column: 18 },
+                                start: { line: 1, column: 14 },
                                 end: { line: 1, column: 32 }
                             }
                         },
@@ -2563,9 +2563,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [19, 34],
+                            range: [15, 34],
                             loc: {
-                                start: { line: 1, column: 19 },
+                                start: { line: 1, column: 15 },
                                 end: { line: 1, column: 34 }
                             }
                         },
@@ -2683,9 +2683,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [18, 32],
+                            range: [14, 32],
                             loc: {
-                                start: { line: 1, column: 18 },
+                                start: { line: 1, column: 14 },
                                 end: { line: 1, column: 32 }
                             }
                         },
@@ -2804,9 +2804,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [20, 34],
+                            range: [16, 34],
                             loc: {
-                                start: { line: 1, column: 20 },
+                                start: { line: 1, column: 16 },
                                 end: { line: 1, column: 34 }
                             }
                         },
@@ -2925,9 +2925,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [16, 30],
+                            range: [12, 30],
                             loc: {
-                                start: { line: 1, column: 16 },
+                                start: { line: 1, column: 12 },
                                 end: { line: 1, column: 30 }
                             }
                         },
@@ -3280,9 +3280,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [18, 36],
+                            range: [15, 36],
                             loc: {
-                                start: { line: 1, column: 18 },
+                                start: { line: 1, column: 15 },
                                 end: { line: 1, column: 36 }
                             }
                         },
@@ -3364,9 +3364,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [55, 75],
+                            range: [47, 75],
                             loc: {
-                                start: { line: 1, column: 55 },
+                                start: { line: 1, column: 47 },
                                 end: { line: 1, column: 75 }
                             }
                         },
@@ -13504,9 +13504,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [15, 18],
+                            range: [12, 18],
                             loc: {
-                                start: { line: 1, column: 15 },
+                                start: { line: 1, column: 12 },
                                 end: { line: 1, column: 18 }
                             }
                         },
@@ -13590,9 +13590,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [19, 22],
+                            range: [12, 22],
                             loc: {
-                                start: { line: 1, column: 19 },
+                                start: { line: 1, column: 12 },
                                 end: { line: 1, column: 22 }
                             }
                         },
@@ -13669,9 +13669,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [17, 20],
+                            range: [14, 20],
                             loc: {
-                                start: { line: 1, column: 17 },
+                                start: { line: 1, column: 14 },
                                 end: { line: 1, column: 20 }
                             }
                         },
@@ -13747,9 +13747,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [12, 15],
+                            range: [9, 15],
                             loc: {
-                                start: { line: 1, column: 12 },
+                                start: { line: 1, column: 9 },
                                 end: { line: 1, column: 15 }
                             }
                         },
@@ -13825,9 +13825,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [12, 15],
+                            range: [9, 15],
                             loc: {
-                                start: { line: 1, column: 12 },
+                                start: { line: 1, column: 9 },
                                 end: { line: 1, column: 15 }
                             }
                         },
@@ -28841,9 +28841,9 @@ var testFixture = {
                                 rest: null,
                                 generator: false,
                                 expression: false,
-                                range: [32, 34],
+                                range: [25, 34],
                                 loc: {
-                                    start: { line: 1, column: 32 },
+                                    start: { line: 1, column: 25 },
                                     end: { line: 1, column: 34 }
                                 }
                             },
@@ -29176,9 +29176,9 @@ var testFixture = {
                                 rest: null,
                                 generator: false,
                                 expression: false,
-                                range: [32, 34],
+                                range: [29, 34],
                                 loc: {
-                                    start: { line: 1, column: 32 },
+                                    start: { line: 1, column: 29 },
                                     end: { line: 1, column: 34 }
                                 }
                             },
@@ -29218,9 +29218,9 @@ var testFixture = {
                                 rest: null,
                                 generator: false,
                                 expression: false,
-                                range: [44, 46],
+                                range: [41, 46],
                                 loc: {
-                                    start: { line: 1, column: 44 },
+                                    start: { line: 1, column: 41 },
                                     end: { line: 1, column: 46 }
                                 }
                             },
@@ -29356,9 +29356,9 @@ var testFixture = {
                                 rest: null,
                                 generator: false,
                                 expression: false,
-                                range: [39, 41],
+                                range: [36, 41],
                                 loc: {
-                                    start: { line: 1, column: 39 },
+                                    start: { line: 1, column: 36 },
                                     end: { line: 1, column: 41 }
                                 }
                             },
@@ -29473,9 +29473,9 @@ var testFixture = {
                                 rest: null,
                                 generator: false,
                                 expression: false,
-                                range: [33, 35],
+                                range: [29, 35],
                                 loc: {
-                                    start: { line: 1, column: 33 },
+                                    start: { line: 1, column: 29 },
                                     end: { line: 1, column: 35 }
                                 }
                             },
@@ -29585,9 +29585,9 @@ var testFixture = {
                             rest: null,
                             generator: false,
                             expression: false,
-                            range: [11, 14],
+                            range: [8, 14],
                             loc: {
-                                start: { line: 1, column: 11 },
+                                start: { line: 1, column: 8 },
                                 end: { line: 1, column: 14 }
                             }
                         },
