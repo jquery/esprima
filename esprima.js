@@ -2220,8 +2220,8 @@
 
     // 11.1.5 Object Initialiser
 
-    function parsePropertyFunction(param, first) {
-        var previousStrict, body, node = new Node();
+    function parsePropertyFunction(node, param, first) {
+        var previousStrict, body;
 
         previousStrict = strict;
         body = parseFunctionSourceElements();
@@ -2233,12 +2233,12 @@
     }
 
     function parsePropertyMethodFunction() {
-        var previousStrict, param, method;
+        var previousStrict, param, method, node = new Node();
 
         previousStrict = strict;
         strict = true;
         param = parseParams();
-        method = parsePropertyFunction(param.params);
+        method = parsePropertyFunction(node, param.params);
         strict = previousStrict;
 
         return method;
@@ -2263,7 +2263,7 @@
     }
 
     function parseObjectProperty() {
-        var token, key, id, value, param, node = new Node();
+        var token, key, id, value, param, methodNode, node = new Node();
 
         token = lookahead;
 
@@ -2275,23 +2275,25 @@
 
             if (token.value === 'get' && !(match(':') || match('('))) {
                 key = parseObjectPropertyKey();
+                methodNode = new Node();
                 expect('(');
                 expect(')');
-                value = parsePropertyFunction([]);
+                value = parsePropertyFunction(methodNode, []);
                 return node.finishProperty('get', key, value, false, false);
             }
             if (token.value === 'set' && !(match(':') || match('('))) {
                 key = parseObjectPropertyKey();
+                methodNode = new Node();
                 expect('(');
                 token = lookahead;
                 if (token.type !== Token.Identifier) {
                     expect(')');
                     tolerateUnexpectedToken(token);
-                    value = parsePropertyFunction([]);
+                    value = parsePropertyFunction(methodNode, []);
                 } else {
                     param = [ parseVariableIdentifier() ];
                     expect(')');
-                    value = parsePropertyFunction(param, token);
+                    value = parsePropertyFunction(methodNode, param, token);
                 }
                 return node.finishProperty('set', key, value, false, false);
             }
