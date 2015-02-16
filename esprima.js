@@ -198,7 +198,10 @@
         StrictLHSAssignment: 'Assignment to eval or arguments is not allowed in strict mode',
         StrictLHSPostfix: 'Postfix increment/decrement may not have eval or arguments operand in strict mode',
         StrictLHSPrefix: 'Prefix increment/decrement may not have eval or arguments operand in strict mode',
-        StrictReservedWord: 'Use of future reserved word in strict mode'
+        StrictReservedWord: 'Use of future reserved word in strict mode',
+        ParameterAfterRestParameter: 'Rest parameter must be last formal parameter',
+        DefaultRestParameter: 'Unexpected token =',
+        ObjectPatternAsRestParameter: 'Unexpected token {'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -674,6 +677,19 @@
 
         // Check for most common single-character punctuators.
         case 0x2E:  // . dot
+            ch3 = source.substr(index, 3);
+            if (ch3 === '...') {
+                index += 3;
+                return {
+                    type: Token.Punctuator,
+                    value: ch3,
+                    lineNumber: lineNumber,
+                    lineStart: lineStart,
+                    start: start,
+                    end: index
+                };
+            }
+            /*falls through*/
         case 0x28:  // ( open bracket
         case 0x29:  // ) close bracket
         case 0x3B:  // ; semicolon
@@ -1793,26 +1809,26 @@
             return this;
         },
 
-        finishFunctionDeclaration: function (id, params, defaults, body) {
+        finishFunctionDeclaration: function (id, params, defaults, body, rest) {
             this.type = Syntax.FunctionDeclaration;
             this.id = id;
             this.params = params;
             this.defaults = defaults;
             this.body = body;
-            this.rest = null;
+            this.rest = rest;
             this.generator = false;
             this.expression = false;
             this.finish();
             return this;
         },
 
-        finishFunctionExpression: function (id, params, defaults, body) {
+        finishFunctionExpression: function (id, params, defaults, body, rest) {
             this.type = Syntax.FunctionExpression;
             this.id = id;
             this.params = params;
             this.defaults = defaults;
             this.body = body;
-            this.rest = null;
+            this.rest = rest;
             this.generator = false;
             this.expression = false;
             this.finish();
@@ -2220,25 +2236,27 @@
 
     // 11.1.5 Object Initialiser
 
-    function parsePropertyFunction(node, param, first) {
-        var previousStrict, body;
+    function parsePropertyFunction(node, options) {
+        var previousStrict, body, params, rest;
 
+        params = options.params || [];
+        rest = options.rest || null;
         previousStrict = strict;
         body = parseFunctionSourceElements();
-        if (first && strict && isRestrictedWord(param[0].name)) {
-            tolerateUnexpectedToken(first, Messages.StrictParamName);
+        if (options.name && strict && isRestrictedWord(params[0].name)) {
+            tolerateUnexpectedToken(options.name, Messages.StrictParamName);
         }
         strict = previousStrict;
-        return node.finishFunctionExpression(null, param, [], body);
+        return node.finishFunctionExpression(null, params, [], body, rest);
     }
 
     function parsePropertyMethodFunction() {
-        var previousStrict, param, method, node = new Node();
+        var previousStrict, params, method, node = new Node();
 
         previousStrict = strict;
         strict = true;
-        param = parseParams();
-        method = parsePropertyFunction(node, param.params);
+        params = parseParams();
+        method = parsePropertyFunction(node, params);
         strict = previousStrict;
 
         return method;
@@ -2278,7 +2296,7 @@
                 methodNode = new Node();
                 expect('(');
                 expect(')');
-                value = parsePropertyFunction(methodNode, []);
+                value = parsePropertyFunction(methodNode, {});
                 return node.finishProperty('get', key, value, false, false);
             }
             if (token.value === 'set' && !(match(':') || match('('))) {
@@ -2289,11 +2307,11 @@
                 if (token.type !== Token.Identifier) {
                     expect(')');
                     tolerateUnexpectedToken(token);
-                    value = parsePropertyFunction(methodNode, []);
+                    value = parsePropertyFunction(methodNode, {});
                 } else {
                     param = [ parseVariableIdentifier() ];
                     expect(')');
-                    value = parsePropertyFunction(methodNode, param, token);
+                    value = parsePropertyFunction(methodNode, { params: param, name: token });
                 }
                 return node.finishProperty('set', key, value, false, false);
             }
@@ -3689,15 +3707,36 @@
     }
 
     function parseParam(options) {
-        var token, param, def;
+        var token, param, def, rest;
 
         token = lookahead;
+        if (token.value === '...') {
+            token = lex();
+            rest = true;
+            if (match('{')) {
+                throwError(Messages.ObjectPatternAsRestParameter);
+            }
+        }
+
         param = parseVariableIdentifier();
         validateParam(options, token, token.value);
+
         if (match('=')) {
+            if (rest) {
+                throwError(Messages.DefaultRestParameter);
+            }
+
             lex();
             def = parseAssignmentExpression();
             ++options.defaultCount;
+        }
+
+        if (rest) {
+            if (!match(')')) {
+                throwError(Messages.ParameterAfterRestParameter);
+            }
+            options.rest = param;
+            return false;
         }
 
         options.params.push(param);
@@ -3713,6 +3752,7 @@
             params: [],
             defaultCount: 0,
             defaults: [],
+            rest: null,
             firstRestricted: firstRestricted
         };
 
@@ -3737,6 +3777,7 @@
         return {
             params: options.params,
             defaults: options.defaults,
+            rest: options.rest,
             stricted: options.stricted,
             firstRestricted: options.firstRestricted,
             message: options.message
@@ -3782,7 +3823,7 @@
         }
         strict = previousStrict;
 
-        return node.finishFunctionDeclaration(id, params, defaults, body);
+        return node.finishFunctionDeclaration(id, params, defaults, body, tmp.rest);
     }
 
     function parseFunctionExpression() {
@@ -3828,7 +3869,7 @@
         }
         strict = previousStrict;
 
-        return node.finishFunctionExpression(id, params, defaults, body);
+        return node.finishFunctionExpression(id, params, defaults, body, tmp.rest);
     }
 
     // 14 Program
