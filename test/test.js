@@ -12271,6 +12271,308 @@ var testFixture = {
         }
     },
 
+    '[ES6] Rest parameters': {
+        'function f(a, ...b) {}': {
+            type: 'FunctionDeclaration',
+            id: {
+                type: 'Identifier',
+                name: 'f',
+                range: [9, 10],
+                loc: {
+                    start: { line: 1, column: 9 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            params: [{
+                type: 'Identifier',
+                name: 'a',
+                range: [11, 12],
+                loc: {
+                    start: { line: 1, column: 11 },
+                    end: { line: 1, column: 12 }
+                }
+            }],
+            defaults: [],
+            body: {
+                type: 'BlockStatement',
+                body: [],
+                range: [20, 22],
+                loc: {
+                    start: { line: 1, column: 20 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            rest: {
+                type: 'Identifier',
+                name: 'b',
+                range: [17, 18],
+                loc: {
+                    start: { line: 1, column: 17 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            generator: false,
+            expression: false,
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        'f = function(a, ...b) {}': {
+            range: [0, 24],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 24 }
+            },
+            type: 'ExpressionStatement',
+            expression: {
+                range: [0, 24],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 24 }
+                },
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    },
+                    type: 'Identifier',
+                    name: 'f'
+                },
+                right: {
+                    range: [4, 24],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 24 }
+                    },
+                    type: 'FunctionExpression',
+                    id: null,
+                    params: [
+                        {
+                            range: [13, 14],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 14 }
+                            },
+                            type: 'Identifier',
+                            name: 'a'
+                        }
+                    ],
+                    defaults: [],
+                    body: {
+                        range: [22, 24],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 24 }
+                        },
+                        type: 'BlockStatement',
+                        body: []
+                    },
+                    rest: {
+                        range: [19, 20],
+                        loc: {
+                            start: { line: 1, column: 19 },
+                            end: { line: 1, column: 20 }
+                        },
+                        type: 'Identifier',
+                        name: 'b'
+                    },
+                    generator: false,
+                    expression: false
+                }
+            }
+        },
+
+        'o = { f: function(a, ...b) {} }': {
+            range: [0, 31],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 31}
+            },
+            type: 'ExpressionStatement',
+            expression: {
+                range: [0, 31 ],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 31 }
+                },
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    },
+                    type: 'Identifier',
+                    name: 'o'
+                },
+                right: {
+                    range: [4, 31],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 31 }
+                    },
+                    type: 'ObjectExpression',
+                    properties: [
+                        {
+                            range: [6, 29],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 29 }
+                            },
+                            type: 'Property',
+                            key: {
+                                range: [6, 7],
+                                loc: {
+                                    start: { line: 1, column: 6 },
+                                    end: { line: 1, column: 7 }
+                                },
+                                type: 'Identifier',
+                                name: 'f'
+                            },
+                            value: {
+                                range: [9, 29],
+                                loc: {
+                                    start: { line: 1, column: 9 },
+                                    end: { line: 1, column: 29 }
+                                },
+                                type: 'FunctionExpression',
+                                id: null,
+                                params: [
+                                    {
+                                        range: [18, 19],
+                                        loc: {
+                                            start: { line: 1, column: 18 },
+                                            end: { line: 1, column: 19 }
+                                        },
+                                        type: 'Identifier',
+                                        name: 'a'
+                                    }
+                                ],
+                                defaults: [],
+                                body: {
+                                    range: [27, 29],
+                                    loc: {
+                                        start: { line: 1, column: 27 },
+                                        end: { line: 1, column: 29 }
+                                    },
+                                    type: 'BlockStatement',
+                                    body: []
+                                },
+                                rest: {
+                                    range: [24, 25],
+                                    loc: {
+                                        start: { line: 1, column: 24 },
+                                        end: { line: 1, column: 25 }
+                                    },
+                                    type: 'Identifier',
+                                    name: 'b'
+                                },
+                                generator: false,
+                                expression: false
+                            },
+                            kind: 'init',
+                            method: false,
+                            shorthand: false
+                        }
+                    ]
+                }
+            }
+        },
+
+        'x = { method(...test) { } }': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'AssignmentExpression',
+                operator: '=',
+                left: {
+                    type: 'Identifier',
+                    name: 'x',
+                    range: [0, 1],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 1 }
+                    }
+                },
+                right: {
+                    type: 'ObjectExpression',
+                    properties: [{
+                        type: 'Property',
+                        key: {
+                            type: 'Identifier',
+                            name: 'method',
+                            range: [6, 12],
+                            loc: {
+                                start: { line: 1, column: 6 },
+                                end: { line: 1, column: 12 }
+                            }
+                        },
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [22, 25],
+                                loc: {
+                                    start: { line: 1, column: 22 },
+                                    end: { line: 1, column: 25 }
+                                }
+                            },
+                            rest: {
+                                type: 'Identifier',
+                                name: 'test',
+                                range: [16, 20],
+                                loc: {
+                                    start: { line: 1, column: 16 },
+                                    end: { line: 1, column: 20 }
+                                }
+                            },
+                            generator: false,
+                            expression: false,
+                            range: [12, 25],
+                            loc: {
+                                start: { line: 1, column: 12 },
+                                end: { line: 1, column: 25 }
+                            }
+                        },
+                        kind: 'init',
+                        method: true,
+                        shorthand: false,
+                        range: [6, 25],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 25 }
+                        }
+                    }],
+                    range: [4, 27],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 27 }
+                    }
+                },
+                range: [0, 27],
+                loc: {
+                    start: { line: 1, column: 0 },
+                    end: { line: 1, column: 27 }
+                }
+            },
+            range: [0, 27],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
+            }
+        }
+    },
+
     '[ES6] Arrow Function': {
 
         '() => "test"': {
@@ -13455,7 +13757,6 @@ var testFixture = {
                 }
             }]
         }
-
     },
 
     '[ES6] Method Definition': {
@@ -24313,6 +24614,27 @@ var testFixture = {
             lineNumber: 1,
             column: 17,
             message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'function f(a, ...b, c){}': {
+            index: 18,
+            lineNumber: 1,
+            column: 19,
+            message: 'Error: Line 1: Rest parameter must be last formal parameter'
+        },
+
+        'function x(...{ a }){}': {
+            index: 14,
+            lineNumber: 1,
+            column: 15,
+            message: 'Error: Line 1: Unexpected token {'
+        },
+
+        'function x(...a = 1){}': {
+            index: 15,
+            lineNumber: 1,
+            column: 16,
+            message: 'Error: Line 1: Unexpected token ='
         }
 
     },
