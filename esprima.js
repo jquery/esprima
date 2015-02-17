@@ -3053,8 +3053,7 @@
 
     // 12.3 Empty Statement
 
-    function parseEmptyStatement() {
-        var node = new Node();
+    function parseEmptyStatement(node) {
         expect(';');
         return node.finishEmptyStatement();
     }
@@ -3744,8 +3743,8 @@
         };
     }
 
-    function parseFunctionDeclaration() {
-        var id, params = [], defaults = [], body, token, stricted, tmp, firstRestricted, message, previousStrict, node = new Node();
+    function parseFunctionDeclaration(node) {
+        var id, params = [], defaults = [], body, token, stricted, tmp, firstRestricted, message, previousStrict;
 
         expectKeyword('function');
         token = lookahead;
@@ -3835,13 +3834,16 @@
     // 14 Program
 
     function parseSourceElement() {
+        var node;
+
         if (lookahead.type === Token.Keyword) {
             switch (lookahead.value) {
             case 'const':
             case 'let':
                 return parseConstLetDeclaration(lookahead.value);
             case 'function':
-                return parseFunctionDeclaration();
+                node = new Node();
+                return parseFunctionDeclaration(node);
             }
         }
 
