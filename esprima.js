@@ -53,7 +53,6 @@
         FnExprTokens,
         Syntax,
         PlaceHolders,
-        PropertyKind,
         Messages,
         Regex,
         source,
@@ -158,12 +157,6 @@
         }
     };
 
-    PropertyKind = {
-        Data: 1,
-        Get: 2,
-        Set: 4
-    };
-
     // Error messages should be identical to V8.
     Messages = {
         UnexpectedToken: 'Unexpected token %0',
@@ -192,16 +185,14 @@
         StrictFunctionName: 'Function name may not be eval or arguments in strict mode',
         StrictOctalLiteral: 'Octal literals are not allowed in strict mode.',
         StrictDelete: 'Delete of an unqualified identifier in strict mode.',
-        StrictDuplicateProperty: 'Duplicate data property in object literal not allowed in strict mode',
-        AccessorDataProperty: 'Object literal may not have data and accessor property with the same name',
-        AccessorGetSet: 'Object literal may not have multiple get/set accessors with the same name',
         StrictLHSAssignment: 'Assignment to eval or arguments is not allowed in strict mode',
         StrictLHSPostfix: 'Postfix increment/decrement may not have eval or arguments operand in strict mode',
         StrictLHSPrefix: 'Prefix increment/decrement may not have eval or arguments operand in strict mode',
         StrictReservedWord: 'Use of future reserved word in strict mode',
         ParameterAfterRestParameter: 'Rest parameter must be last formal parameter',
         DefaultRestParameter: 'Unexpected token =',
-        ObjectPatternAsRestParameter: 'Unexpected token {'
+        ObjectPatternAsRestParameter: 'Unexpected token {',
+        DuplicateProtoProperty: 'Duplicate __proto__ fields are not allowed in object literals'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -1910,9 +1901,10 @@
             return this;
         },
 
-        finishProperty: function (kind, key, value, method, shorthand) {
+        finishProperty: function (kind, key, computed, value, method, shorthand) {
             this.type = Syntax.Property;
             this.key = key;
+            this.computed = computed;
             this.value = value;
             this.kind = kind;
             this.method = method;
@@ -2262,44 +2254,76 @@
         return method;
     }
 
+    // This function returns a tuple `[PropertyName, boolean]` where the PropertyName is the key being consumed and the second
+    // element indicate whether its a computed PropertyName or a static PropertyName.
     function parseObjectPropertyKey() {
-        var token, node = new Node();
+        var token, node = new Node(), expr;
 
         token = lex();
 
         // Note: This function is called only from parseObjectProperty(), where
         // EOF and Punctuator tokens are already filtered out.
 
-        if (token.type === Token.StringLiteral || token.type === Token.NumericLiteral) {
+        switch (token.type) {
+        case Token.StringLiteral:
+        case Token.NumericLiteral:
             if (strict && token.octal) {
                 tolerateUnexpectedToken(token, Messages.StrictOctalLiteral);
             }
             return node.finishLiteral(token);
+        case Token.Identifier:
+        case Token.BooleanLiteral:
+        case Token.NullLiteral:
+        case Token.Keyword:
+            return node.finishIdentifier(token.value);
+        case Token.Punctuator:
+            if (token.value === '[') {
+                expr = parseAssignmentExpression();
+                expect(']');
+                return expr;
+            }
+            break;
         }
-
-        return node.finishIdentifier(token.value);
+        throwUnexpectedToken(token);
     }
 
-    function parseObjectProperty() {
-        var token, key, id, value, param, methodNode, node = new Node();
+    function lookaheadPropertyName() {
+        switch (lookahead.type) {
+        case Token.Identifier:
+        case Token.StringLiteral:
+        case Token.BooleanLiteral:
+        case Token.NullLiteral:
+        case Token.NumericLiteral:
+        case Token.Keyword:
+            return true;
+        case Token.Punctuator:
+            return lookahead.value === '[';
+        }
+        return false;
+    }
 
-        token = lookahead;
+    // This function is to try to parse a MethodDefinition as defined in 14.3. But in the case of object literals,
+    // it might be called at a position where there is in fact a short hand identifier pattern or a data property.
+    // This can only be determined after we consumed up to the left parentheses.
+    //
+    // In order to avoid back tracking, it returns `null` if the position is not a MethodDefinition and the caller
+    // is responsible to visit other options.
+    function tryParseMethodDefinition(token, key, computed, node) {
+        var value, param, methodNode;
 
         if (token.type === Token.Identifier) {
+            // check for `get` and `set`;
 
-            id = parseObjectPropertyKey();
-
-            // Property Assignment: Getter and Setter.
-
-            if (token.value === 'get' && !(match(':') || match('('))) {
+            if (token.value === 'get' && lookaheadPropertyName()) {
+                computed = match('[');
                 key = parseObjectPropertyKey();
                 methodNode = new Node();
                 expect('(');
                 expect(')');
                 value = parsePropertyFunction(methodNode, {});
-                return node.finishProperty('get', key, value, false, false);
-            }
-            if (token.value === 'set' && !(match(':') || match('('))) {
+                return node.finishProperty('get', key, computed, value, false, false);
+            } else if (token.value === 'set' && lookaheadPropertyName()) {
+                computed = match('[');
                 key = parseObjectPropertyKey();
                 methodNode = new Node();
                 expect('(');
@@ -2313,74 +2337,66 @@
                     expect(')');
                     value = parsePropertyFunction(methodNode, { params: param, name: token });
                 }
-                return node.finishProperty('set', key, value, false, false);
+                return node.finishProperty('set', key, computed, value, false, false);
             }
-            if (match(':')) {
-                lex();
-                value = parseAssignmentExpression();
-                return node.finishProperty('init', id, value, false, false);
-            }
-            if (match('(')) {
-                value = parsePropertyMethodFunction();
-                return node.finishProperty('init', id, value, true, false);
-            }
-
-            value = id;
-            return node.finishProperty('init', id, value, false, true);
         }
-        if (token.type === Token.EOF || token.type === Token.Punctuator) {
-            throwUnexpectedToken(token);
-        } else {
-            key = parseObjectPropertyKey();
-            if (match(':')) {
-                lex();
-                value = parseAssignmentExpression();
-                return node.finishProperty('init', key, value, false, false);
+
+        if (match('(')) {
+            value = parsePropertyMethodFunction();
+            return node.finishProperty('init', key, computed, value, true, false);
+        }
+
+        // Not a MethodDefinition.
+        return null;
+    }
+
+    function checkProto(key, computed, hasProto) {
+        if (computed === false && (key.type === Syntax.Identifier && key.name === '__proto__' ||
+            key.type === Syntax.Literal && key.value === '__proto__')) {
+            if (hasProto.value) {
+                tolerateError(Messages.DuplicateProtoProperty);
+            } else {
+                hasProto.value = true;
             }
-            if (match('(')) {
-                value = parsePropertyMethodFunction();
-                return node.finishProperty('init', key, value, true, false);
-            }
-            throwUnexpectedToken(lex());
         }
     }
 
+    function parseObjectProperty(hasProto) {
+        var token = lookahead, node = new Node(), computed, key, maybeMethod, value;
+
+        computed = match('[');
+        key = parseObjectPropertyKey();
+        maybeMethod = tryParseMethodDefinition(token, key, computed, node);
+
+        if (maybeMethod) {
+            checkProto(maybeMethod.key, maybeMethod.computed, hasProto);
+            // finished
+            return maybeMethod;
+        }
+
+        // init property or short hand property.
+        checkProto(key, computed, hasProto);
+
+        if (match(':')) {
+            lex();
+            value = parseAssignmentExpression();
+            return node.finishProperty('init', key, computed, value, false, false);
+        }
+
+        if (token.type === Token.Identifier) {
+            return node.finishProperty('init', key, computed, key, false, true);
+        }
+
+        throwUnexpectedToken(lookahead);
+    }
+
     function parseObjectInitialiser() {
-        var properties = [], property, name, key, kind, map = {}, toString = String, node = new Node();
+        var properties = [], hasProto = {value: false}, node = new Node();
 
         expect('{');
 
         while (!match('}')) {
-            property = parseObjectProperty();
-
-            if (property.key.type === Syntax.Identifier) {
-                name = property.key.name;
-            } else {
-                name = toString(property.key.value);
-            }
-            kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
-
-            key = '$' + name;
-            if (Object.prototype.hasOwnProperty.call(map, key)) {
-                if (map[key] === PropertyKind.Data) {
-                    if (strict && kind === PropertyKind.Data) {
-                        tolerateError(Messages.StrictDuplicateProperty);
-                    } else if (kind !== PropertyKind.Data) {
-                        tolerateError(Messages.AccessorDataProperty);
-                    }
-                } else {
-                    if (kind === PropertyKind.Data) {
-                        tolerateError(Messages.AccessorDataProperty);
-                    } else if (map[key] & kind) {
-                        tolerateError(Messages.AccessorGetSet);
-                    }
-                }
-                map[key] |= kind;
-            } else {
-                map[key] = kind;
-            }
-
-            properties.push(property);
+            properties.push(parseObjectProperty(hasProto));
 
             if (!match('}')) {
                 expectCommaSeparator();
