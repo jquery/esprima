@@ -116,6 +116,9 @@
         BreakStatement: 'BreakStatement',
         CallExpression: 'CallExpression',
         CatchClause: 'CatchClause',
+        ClassBody: 'ClassBody',
+        ClassDeclaration: 'ClassDeclaration',
+        ClassExpression: 'ClassExpression',
         ConditionalExpression: 'ConditionalExpression',
         ContinueStatement: 'ContinueStatement',
         DoWhileStatement: 'DoWhileStatement',
@@ -132,6 +135,7 @@
         LabeledStatement: 'LabeledStatement',
         LogicalExpression: 'LogicalExpression',
         MemberExpression: 'MemberExpression',
+        MethodDefinition: 'MethodDefinition',
         NewExpression: 'NewExpression',
         ObjectExpression: 'ObjectExpression',
         Program: 'Program',
@@ -192,7 +196,10 @@
         ParameterAfterRestParameter: 'Rest parameter must be last formal parameter',
         DefaultRestParameter: 'Unexpected token =',
         ObjectPatternAsRestParameter: 'Unexpected token {',
-        DuplicateProtoProperty: 'Duplicate __proto__ fields are not allowed in object literals'
+        DuplicateProtoProperty: 'Duplicate __proto__ fields are not allowed in object literals',
+        ConstructorSpecialMethod: 'Class constructor may not be an accessor',
+        DuplicateConstructor: 'A class may only have one constructor',
+        StaticPrototype: 'Classes may not have static property named prototype'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -262,10 +269,8 @@
 
     function isFutureReservedWord(id) {
         switch (id) {
-        case 'class':
         case 'enum':
         case 'export':
-        case 'extends':
         case 'import':
         case 'super':
             return true;
@@ -273,6 +278,8 @@
             return false;
         }
     }
+
+    // 11.6.2.2 Future Reserved Words
 
     function isStrictModeReservedWord(id) {
         switch (id) {
@@ -1737,6 +1744,31 @@
             return this;
         },
 
+        finishClassBody: function (body) {
+            this.type = Syntax.ClassBody;
+            this.body = body;
+            this.finish();
+            return this;
+        },
+
+        finishClassDeclaration: function (name, superClass, body) {
+            this.type = Syntax.ClassDeclaration;
+            this.name = name;
+            this.superClass = superClass;
+            this.body = body;
+            this.finish();
+            return this;
+        },
+
+        finishClassExpression: function (name, superClass, body) {
+            this.type = Syntax.ClassExpression;
+            this.name = name;
+            this.superClass = superClass;
+            this.body = body;
+            this.finish();
+            return this;
+        },
+
         finishConditionalExpression: function (test, consequent, alternate) {
             this.type = Syntax.ConditionalExpression;
             this.test = test;
@@ -2228,28 +2260,28 @@
 
     // 11.1.5 Object Initialiser
 
-    function parsePropertyFunction(node, options) {
-        var previousStrict, body, params, rest;
+    function parsePropertyFunction(node, paramInfo) {
+        var previousStrict, body;
 
-        params = options.params || [];
-        rest = options.rest || null;
         previousStrict = strict;
         body = parseFunctionSourceElements();
-        if (options.name && strict && isRestrictedWord(params[0].name)) {
-            tolerateUnexpectedToken(options.name, Messages.StrictParamName);
+
+        if (strict && paramInfo.firstRestricted) {
+            tolerateUnexpectedToken(paramInfo.firstRestricted, paramInfo.message);
         }
+        if (strict && paramInfo.stricted) {
+            tolerateUnexpectedToken(paramInfo.stricted, paramInfo.message);
+        }
+
         strict = previousStrict;
-        return node.finishFunctionExpression(null, params, [], body, rest);
+        return node.finishFunctionExpression(null, paramInfo.params, paramInfo.defaults, body, paramInfo.rest);
     }
 
     function parsePropertyMethodFunction() {
-        var previousStrict, params, method, node = new Node();
+        var params, method, node = new Node();
 
-        previousStrict = strict;
-        strict = true;
         params = parseParams();
         method = parsePropertyFunction(node, params);
-        strict = previousStrict;
 
         return method;
     }
@@ -2309,7 +2341,7 @@
     // In order to avoid back tracking, it returns `null` if the position is not a MethodDefinition and the caller
     // is responsible to visit other options.
     function tryParseMethodDefinition(token, key, computed, node) {
-        var value, param, methodNode;
+        var value, options, methodNode;
 
         if (token.type === Token.Identifier) {
             // check for `get` and `set`;
@@ -2320,23 +2352,40 @@
                 methodNode = new Node();
                 expect('(');
                 expect(')');
-                value = parsePropertyFunction(methodNode, {});
+                value = parsePropertyFunction(methodNode, {
+                    params: [],
+                    defaults: [],
+                    stricted: null,
+                    firstRestricted: null,
+                    message: null,
+                    rest: null
+                });
                 return node.finishProperty('get', key, computed, value, false, false);
             } else if (token.value === 'set' && lookaheadPropertyName()) {
                 computed = match('[');
                 key = parseObjectPropertyKey();
                 methodNode = new Node();
                 expect('(');
-                token = lookahead;
-                if (token.type !== Token.Identifier) {
-                    expect(')');
-                    tolerateUnexpectedToken(token);
-                    value = parsePropertyFunction(methodNode, {});
+
+                options = {
+                    params: [],
+                    defaultCount: 0,
+                    defaults: [],
+                    firstRestricted: null,
+                    paramSet: {},
+                    rest: null
+                };
+                if (match(')')) {
+                    tolerateUnexpectedToken(lookahead);
                 } else {
-                    param = [ parseVariableIdentifier() ];
-                    expect(')');
-                    value = parsePropertyFunction(methodNode, { params: param, name: token });
+                    parseParam(options);
+                    if (options.defaultCount === 0) {
+                        options.defaults = [];
+                    }
                 }
+                expect(')');
+
+                value = parsePropertyFunction(methodNode, options);
                 return node.finishProperty('set', key, computed, value, false, false);
             }
         }
@@ -2463,10 +2512,12 @@
             }
             if (matchKeyword('this')) {
                 lex();
-                expr = node.finishThisExpression();
-            } else {
-                throwUnexpectedToken(lex());
+                return node.finishThisExpression();
             }
+            if (matchKeyword('class')) {
+                return parseClassExpression();
+            }
+            throwUnexpectedToken(lex());
         } else if (type === Token.BooleanLiteral) {
             token = lex();
             token.value = (token.value === 'true');
@@ -3888,19 +3939,115 @@
         return node.finishFunctionExpression(id, params, defaults, body, tmp.rest);
     }
 
+
+    function parseClassBody() {
+        var classBody, token, isStatic, hasConstructor = false, body, method, computed, key;
+
+        classBody = new Node();
+
+        expect('{');
+        body = [];
+        while (!match('}')) {
+            if (match(';')) {
+                lex();
+            } else {
+                method = new Node();
+                token = lookahead;
+                isStatic = false;
+                computed = match('[');
+                key = parseObjectPropertyKey();
+                if (key.name === 'static' && lookaheadPropertyName()) {
+                    token = lookahead;
+                    isStatic = true;
+                    computed = match('[');
+                    key = parseObjectPropertyKey();
+                }
+                method = tryParseMethodDefinition(token, key, computed, method);
+                if (method) {
+                    method.static = isStatic;
+                    if (method.kind === 'init') {
+                        method.kind = 'method';
+                    }
+                    if (!isStatic) {
+                        if (!method.computed && (method.key.name || method.key.value.toString()) === 'constructor') {
+                            if (method.kind !== 'method' || !method.method || method.value.generator) {
+                                throwUnexpectedToken(token, Messages.ConstructorSpecialMethod);
+                            }
+                            if (hasConstructor) {
+                                throwUnexpectedToken(token, Messages.DuplicateConstructor);
+                            } else {
+                                hasConstructor = true;
+                            }
+                            method.kind = 'constructor';
+                        }
+                    } else {
+                        if (!method.computed && (method.key.name || method.key.value.toString()) === 'prototype') {
+                            throwUnexpectedToken(token, Messages.StaticPrototype);
+                        }
+                    }
+                    method.type = Syntax.MethodDefinition;
+                    delete method.method;
+                    delete method.shorthand;
+                    body.push(method);
+                } else {
+                    throwUnexpectedToken(lookahead);
+                }
+            }
+        }
+        lex();
+        return classBody.finishClassBody(body);
+    }
+
+    function parseClassDeclaration() {
+        var id = null, superClass = null, classNode = new Node(), classBody, previousStrict = strict;
+        strict = true;
+
+        expectKeyword('class');
+
+        id = parseVariableIdentifier();
+
+        if (matchKeyword('extends')) {
+            lex();
+            superClass = parseLeftHandSideExpressionAllowCall();
+        }
+        classBody = parseClassBody();
+        strict = previousStrict;
+
+        return classNode.finishClassDeclaration(id, superClass, classBody);
+    }
+
+    function parseClassExpression() {
+        var id = null, superClass = null, classNode = new Node(), classBody, previousStrict = strict;
+        strict = true;
+
+        expectKeyword('class');
+
+        if (lookahead.type === Token.Identifier) {
+            id = parseVariableIdentifier();
+        }
+
+        if (matchKeyword('extends')) {
+            lex();
+            superClass = parseLeftHandSideExpressionAllowCall();
+        }
+        classBody = parseClassBody();
+        strict = previousStrict;
+
+        return classNode.finishClassExpression(id, superClass, classBody);
+    }
+
     // 14 Program
 
     function parseSourceElement() {
-        var node;
-
         if (lookahead.type === Token.Keyword) {
             switch (lookahead.value) {
             case 'const':
             case 'let':
                 return parseConstLetDeclaration(lookahead.value);
             case 'function':
-                node = new Node();
-                return parseFunctionDeclaration(node);
+                return parseFunctionDeclaration(new Node());
+            case 'class':
+                return parseClassDeclaration();
             }
         }
 

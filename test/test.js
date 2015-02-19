@@ -4359,6 +4359,101 @@ var testFixture = {
                 start: { line: 1, column: 0 },
                 end: { line: 1, column: 11 }
             }
+        },
+
+        '({set x(a=0){}})': {
+            type: 'Program',
+            body: [
+                {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'ObjectExpression',
+                        properties: [
+                            {
+                                type: 'Property',
+                                key: {
+                                    type: 'Identifier',
+                                    name: 'x',
+                                    range: [6, 7],
+                                    loc: {
+                                        start: { line: 1, column: 6 },
+                                        end: { line: 1, column: 7 }
+                                    }
+                                },
+                                computed: false,
+                                value: {
+                                    type: 'FunctionExpression',
+                                    id: null,
+                                    params: [
+                                        {
+                                            type: 'Identifier',
+                                            name: 'a',
+                                            range: [8, 9],
+                                            loc: {
+                                                start: { line: 1, column: 8 },
+                                                end: { line: 1, column: 9 }
+                                            }
+                                        }
+                                    ],
+                                    defaults: [
+                                        {
+                                            type: 'Literal',
+                                            value: 0,
+                                            raw: '0',
+                                            range: [10, 11],
+                                            loc: {
+                                                start: { line: 1, column: 10 },
+                                                end: { line: 1, column: 11 }
+                                            }
+                                        }
+                                    ],
+                                    body: {
+                                        type: 'BlockStatement',
+                                        body: [],
+                                        range: [12, 14],
+                                        loc: {
+                                            start: { line: 1, column: 12 },
+                                            end: { line: 1, column: 14 }
+                                        }
+                                    },
+                                    rest: null,
+                                    generator: false,
+                                    expression: false,
+                                    range: [7, 14],
+                                    loc: {
+                                        start: { line: 1, column: 7 },
+                                        end: { line: 1, column: 14 }
+                                    }
+                                },
+                                kind: 'set',
+                                method: false,
+                                shorthand: false,
+                                range: [2, 14],
+                                loc: {
+                                    start: { line: 1, column: 2 },
+                                    end: { line: 1, column: 14 }
+                                }
+                            }
+                        ],
+                        range: [1, 15],
+                        loc: {
+                            start: { line: 1, column: 1 },
+                            end: { line: 1, column: 15 }
+                        }
+                    },
+                    range: [0, 16],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 16 }
+                    }
+                }
+            ],
+            errors: [],
+            range: [0, 16],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 16 }
+            }
         }
 
     },
@@ -15229,6 +15324,2128 @@ var testFixture = {
         }
     },
 
+    '[ES6] Classes': {
+
+        'class A {}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [],
+                range: [8, 10],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 10 }
+                }
+            },
+            range: [0, 10],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 10 }
+            }
+        },
+
+        'class A extends 0 {}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: {
+                type: 'Literal',
+                value: 0,
+                raw: '0',
+                range: [16, 17],
+                loc: {
+                    start: { line: 1, column: 16 },
+                    end: { line: 1, column: 17 }
+                }
+            },
+            body: {
+                type: 'ClassBody',
+                body: [],
+                range: [18, 20],
+                loc: {
+                    start: { line: 1, column: 18 },
+                    end: { line: 1, column: 20 }
+                }
+            },
+            range: [0, 20],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 20 }
+            }
+        },
+
+        'class A {;}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [],
+                range: [8, 11],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 11 }
+                }
+            },
+            range: [0, 11],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 11 }
+            }
+        },
+
+        'class A {;;}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [],
+                range: [8, 12],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 12 }
+                }
+            },
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        },
+
+        'class A {a(){}}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [9, 10],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 10 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [12, 14],
+                                loc: {
+                                    start: { line: 1, column: 12 },
+                                    end: { line: 1, column: 14 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [10, 14],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        kind: 'method',
+                        static: false,
+                        range: [9, 14],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 14 }
+                        }
+                    }
+                ],
+                range: [8, 15],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 15 }
+                }
+            },
+            range: [0, 15],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 15 }
+            }
+        },
+
+        'class A {a(){}b(){}}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [9, 10],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 10 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [12, 14],
+                                loc: {
+                                    start: { line: 1, column: 12 },
+                                    end: { line: 1, column: 14 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [10, 14],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        kind: 'method',
+                        static: false,
+                        range: [9, 14],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [14, 15],
+                            loc: {
+                                start: { line: 1, column: 14 },
+                                end: { line: 1, column: 15 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [17, 19],
+                                loc: {
+                                    start: { line: 1, column: 17 },
+                                    end: { line: 1, column: 19 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [15, 19],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 19 }
+                            }
+                        },
+                        kind: 'method',
+                        static: false,
+                        range: [14, 19],
+                        loc: {
+                            start: { line: 1, column: 14 },
+                            end: { line: 1, column: 19 }
+                        }
+                    }
+                ],
+                range: [8, 20],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 20 }
+                }
+            },
+            range: [0, 20],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 20 }
+            }
+        },
+
+        'class A {a(){};b(){}}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [9, 10],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 10 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [12, 14],
+                                loc: {
+                                    start: { line: 1, column: 12 },
+                                    end: { line: 1, column: 14 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [10, 14],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        kind: 'method',
+                        static: false,
+                        range: [9, 14],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [15, 16],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 16 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [18, 20],
+                                loc: {
+                                    start: { line: 1, column: 18 },
+                                    end: { line: 1, column: 20 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [16, 20],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 20 }
+                            }
+                        },
+                        kind: 'method',
+                        static: false,
+                        range: [15, 20],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 20 }
+                        }
+                    }
+                ],
+                range: [8, 21],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            }
+        },
+
+        'class A {a(){};b(){};}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [9, 10],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 10 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [12, 14],
+                                loc: {
+                                    start: { line: 1, column: 12 },
+                                    end: { line: 1, column: 14 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [10, 14],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        kind: 'method',
+                        static: false,
+                        range: [9, 14],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 14 }
+                        }
+                    },
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [15, 16],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 16 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [18, 20],
+                                loc: {
+                                    start: { line: 1, column: 18 },
+                                    end: { line: 1, column: 20 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [16, 20],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 20 }
+                            }
+                        },
+                        kind: 'method',
+                        static: false,
+                        range: [15, 20],
+                        loc: {
+                            start: { line: 1, column: 15 },
+                            end: { line: 1, column: 20 }
+                        }
+                    }
+                ],
+                range: [8, 22],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 22 }
+                }
+            },
+            range: [0, 22],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 22 }
+            }
+        },
+
+        'class A {;a(){};b(){};}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [10, 11],
+                            loc: {
+                                start: { line: 1, column: 10 },
+                                end: { line: 1, column: 11 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [13, 15],
+                                loc: {
+                                    start: { line: 1, column: 13 },
+                                    end: { line: 1, column: 15 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [11, 15],
+                            loc: {
+                                start: { line: 1, column: 11 },
+                                end: { line: 1, column: 15 }
+                            }
+                        },
+                        kind: 'method',
+                        static: false,
+                        range: [10, 15],
+                        loc: {
+                            start: { line: 1, column: 10 },
+                            end: { line: 1, column: 15 }
+                        }
+                    },
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [16, 17],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 17 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [19, 21],
+                                loc: {
+                                    start: { line: 1, column: 19 },
+                                    end: { line: 1, column: 21 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [17, 21],
+                            loc: {
+                                start: { line: 1, column: 17 },
+                                end: { line: 1, column: 21 }
+                            }
+                        },
+                        kind: 'method',
+                        static: false,
+                        range: [16, 21],
+                        loc: {
+                            start: { line: 1, column: 16 },
+                            end: { line: 1, column: 21 }
+                        }
+                    }
+                ],
+                range: [8, 23],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
+        },
+
+        'class A {static(){};}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'static',
+                            range: [9, 15],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 15 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [17, 19],
+                                loc: {
+                                    start: { line: 1, column: 17 },
+                                    end: { line: 1, column: 19 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [15, 19],
+                            loc: {
+                                start: { line: 1, column: 15 },
+                                end: { line: 1, column: 19 }
+                            }
+                        },
+                        kind: 'method',
+                        static: false,
+                        range: [9, 19],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 19 }
+                        }
+                    }
+                ],
+                range: [8, 21],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 21 }
+                }
+            },
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            }
+        },
+
+        'class A {get a(){} set b(c){};}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [13, 14],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 14 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [16, 18],
+                                loc: {
+                                    start: { line: 1, column: 16 },
+                                    end: { line: 1, column: 18 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [14, 18],
+                            loc: {
+                                start: { line: 1, column: 14 },
+                                end: { line: 1, column: 18 }
+                            }
+                        },
+                        kind: 'get',
+                        static: false,
+                        range: [9, 18],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 18 }
+                        }
+                    },
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [23, 24],
+                            loc: {
+                                start: { line: 1, column: 23 },
+                                end: { line: 1, column: 24 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [
+                                {
+                                    type: 'Identifier',
+                                    name: 'c',
+                                    range: [25, 26],
+                                    loc: {
+                                        start: { line: 1, column: 25 },
+                                        end: { line: 1, column: 26 }
+                                    }
+                                }
+                            ],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [27, 29],
+                                loc: {
+                                    start: { line: 1, column: 27 },
+                                    end: { line: 1, column: 29 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [24, 29],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 29 }
+                            }
+                        },
+                        kind: 'set',
+                        static: false,
+                        range: [19, 29],
+                        loc: {
+                            start: { line: 1, column: 19 },
+                            end: { line: 1, column: 29 }
+                        }
+                    }
+                ],
+                range: [8, 31],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 31 }
+                }
+            },
+            range: [0, 31],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 31 }
+            }
+        },
+
+        'class A {static a(){} static get a(){} static set a(b){} }': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [16, 17],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 17 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [19, 21],
+                                loc: {
+                                    start: { line: 1, column: 19 },
+                                    end: { line: 1, column: 21 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [17, 21],
+                            loc: {
+                                start: { line: 1, column: 17 },
+                                end: { line: 1, column: 21 }
+                            }
+                        },
+                        kind: 'method',
+                        static: true,
+                        range: [9, 21],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 21 }
+                        }
+                    },
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [33, 34],
+                            loc: {
+                                start: { line: 1, column: 33 },
+                                end: { line: 1, column: 34 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [36, 38],
+                                loc: {
+                                    start: { line: 1, column: 36 },
+                                    end: { line: 1, column: 38 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [34, 38],
+                            loc: {
+                                start: { line: 1, column: 34 },
+                                end: { line: 1, column: 38 }
+                            }
+                        },
+                        kind: 'get',
+                        static: true,
+                        range: [22, 38],
+                        loc: {
+                            start: { line: 1, column: 22 },
+                            end: { line: 1, column: 38 }
+                        }
+                    },
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [50, 51],
+                            loc: {
+                                start: { line: 1, column: 50 },
+                                end: { line: 1, column: 51 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [
+                                {
+                                    type: 'Identifier',
+                                    name: 'b',
+                                    range: [52, 53],
+                                    loc: {
+                                        start: { line: 1, column: 52 },
+                                        end: { line: 1, column: 53 }
+                                    }
+                                }
+                            ],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [54, 56],
+                                loc: {
+                                    start: { line: 1, column: 54 },
+                                    end: { line: 1, column: 56 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [51, 56],
+                            loc: {
+                                start: { line: 1, column: 51 },
+                                end: { line: 1, column: 56 }
+                            }
+                        },
+                        kind: 'set',
+                        static: true,
+                        range: [39, 56],
+                        loc: {
+                            start: { line: 1, column: 39 },
+                            end: { line: 1, column: 56 }
+                        }
+                    }
+                ],
+                range: [8, 58],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 58 }
+                }
+            },
+            range: [0, 58],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 58 }
+            }
+        },
+
+        'class A {static a(){};}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [16, 17],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 17 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [19, 21],
+                                loc: {
+                                    start: { line: 1, column: 19 },
+                                    end: { line: 1, column: 21 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [17, 21],
+                            loc: {
+                                start: { line: 1, column: 17 },
+                                end: { line: 1, column: 21 }
+                            }
+                        },
+                        kind: 'method',
+                        static: true,
+                        range: [9, 21],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 21 }
+                        }
+                    }
+                ],
+                range: [8, 23],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
+        },
+
+        'class A {static [a](){};}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [17, 18],
+                            loc: {
+                                start: { line: 1, column: 17 },
+                                end: { line: 1, column: 18 }
+                            }
+                        },
+                        computed: true,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [21, 23],
+                                loc: {
+                                    start: { line: 1, column: 21 },
+                                    end: { line: 1, column: 23 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [19, 23],
+                            loc: {
+                                start: { line: 1, column: 19 },
+                                end: { line: 1, column: 23 }
+                            }
+                        },
+                        kind: 'method',
+                        static: true,
+                        range: [9, 23],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 23 }
+                        }
+                    }
+                ],
+                range: [8, 25],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'class A {static[a](){}; static[b](){}}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'a',
+                            range: [16, 17],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 17 }
+                            }
+                        },
+                        computed: true,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [20, 22],
+                                loc: {
+                                    start: { line: 1, column: 20 },
+                                    end: { line: 1, column: 22 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [18, 22],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 22 }
+                            }
+                        },
+                        kind: 'method',
+                        static: true,
+                        range: [9, 22],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 22 }
+                        }
+                    },
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [31, 32],
+                            loc: {
+                                start: { line: 1, column: 31 },
+                                end: { line: 1, column: 32 }
+                            }
+                        },
+                        computed: true,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [35, 37],
+                                loc: {
+                                    start: { line: 1, column: 35 },
+                                    end: { line: 1, column: 37 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [33, 37],
+                            loc: {
+                                start: { line: 1, column: 33 },
+                                end: { line: 1, column: 37 }
+                            }
+                        },
+                        kind: 'method',
+                        static: true,
+                        range: [24, 37],
+                        loc: {
+                            start: { line: 1, column: 24 },
+                            end: { line: 1, column: 37 }
+                        }
+                    }
+                ],
+                range: [8, 38],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 38 }
+                }
+            },
+            range: [0, 38],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 38 }
+            }
+        },
+
+        'class A {static static(){};}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'static',
+                            range: [16, 22],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 22 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [24, 26],
+                                loc: {
+                                    start: { line: 1, column: 24 },
+                                    end: { line: 1, column: 26 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [22, 26],
+                            loc: {
+                                start: { line: 1, column: 22 },
+                                end: { line: 1, column: 26 }
+                            }
+                        },
+                        kind: 'method',
+                        static: true,
+                        range: [9, 26],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 26 }
+                        }
+                    }
+                ],
+                range: [8, 28],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 28 }
+                }
+            },
+            range: [0, 28],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 28 }
+            }
+        },
+
+        'var x = class A extends 0{}': {
+            type: 'VariableDeclaration',
+            declarations: [
+                {
+                    type: 'VariableDeclarator',
+                    id: {
+                        type: 'Identifier',
+                        name: 'x',
+                        range: [4, 5],
+                        loc: {
+                            start: { line: 1, column: 4 },
+                            end: { line: 1, column: 5 }
+                        }
+                    },
+                    init: {
+                        type: 'ClassExpression',
+                        name: {
+                            type: 'Identifier',
+                            name: 'A',
+                            range: [14, 15],
+                            loc: {
+                                start: { line: 1, column: 14 },
+                                end: { line: 1, column: 15 }
+                            }
+                        },
+                        superClass: {
+                            type: 'Literal',
+                            value: 0,
+                            raw: '0',
+                            range: [24, 25],
+                            loc: {
+                                start: { line: 1, column: 24 },
+                                end: { line: 1, column: 25 }
+                            }
+                        },
+                        body: {
+                            type: 'ClassBody',
+                            body: [],
+                            range: [25, 27],
+                            loc: {
+                                start: { line: 1, column: 25 },
+                                end: { line: 1, column: 27 }
+                            }
+                        },
+                        range: [8, 27],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 27 }
+                        }
+                    },
+                    range: [4, 27],
+                    loc: {
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 27 }
+                    }
+                }
+            ],
+            kind: 'var',
+            range: [0, 27],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 27 }
+            }
+        },
+
+        'class A {prototype(){}}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'prototype',
+                            range: [9, 18],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 18 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [20, 22],
+                                loc: {
+                                    start: { line: 1, column: 20 },
+                                    end: { line: 1, column: 22 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [18, 22],
+                            loc: {
+                                start: { line: 1, column: 18 },
+                                end: { line: 1, column: 22 }
+                            }
+                        },
+                        kind: 'method',
+                        static: false,
+                        range: [9, 22],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 22 }
+                        }
+                    }
+                ],
+                range: [8, 23],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 23 }
+                }
+            },
+            range: [0, 23],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 23 }
+            }
+        },
+
+        'class A {constructor(){}}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'constructor',
+                            range: [9, 20],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 20 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [22, 24],
+                                loc: {
+                                    start: { line: 1, column: 22 },
+                                    end: { line: 1, column: 24 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [20, 24],
+                            loc: {
+                                start: { line: 1, column: 20 },
+                                end: { line: 1, column: 24 }
+                            }
+                        },
+                        kind: 'constructor',
+                        static: false,
+                        range: [9, 24],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 24 }
+                        }
+                    }
+                ],
+                range: [8, 25],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 25 }
+                }
+            },
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        },
+
+        'class A {"constructor"(){} ["constructor"](){}}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Literal',
+                            value: 'constructor',
+                            raw: '"constructor"',
+                            range: [9, 22],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 22 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [24, 26],
+                                loc: {
+                                    start: { line: 1, column: 24 },
+                                    end: { line: 1, column: 26 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [22, 26],
+                            loc: {
+                                start: { line: 1, column: 22 },
+                                end: { line: 1, column: 26 }
+                            }
+                        },
+                        kind: 'constructor',
+                        static: false,
+                        range: [9, 26],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 26 }
+                        }
+                    },
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Literal',
+                            value: 'constructor',
+                            raw: '"constructor"',
+                            range: [28, 41],
+                            loc: {
+                                start: { line: 1, column: 28 },
+                                end: { line: 1, column: 41 }
+                            }
+                        },
+                        computed: true,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [44, 46],
+                                loc: {
+                                    start: { line: 1, column: 44 },
+                                    end: { line: 1, column: 46 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [42, 46],
+                            loc: {
+                                start: { line: 1, column: 42 },
+                                end: { line: 1, column: 46 }
+                            }
+                        },
+                        kind: 'method',
+                        static: false,
+                        range: [27, 46],
+                        loc: {
+                            start: { line: 1, column: 27 },
+                            end: { line: 1, column: 46 }
+                        }
+                    }
+                ],
+                range: [8, 47],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 47 }
+                }
+            },
+            range: [0, 47],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 47 }
+            }
+        },
+
+        'class A {static constructor(){} static constructor(){}}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'constructor',
+                            range: [16, 27],
+                            loc: {
+                                start: { line: 1, column: 16 },
+                                end: { line: 1, column: 27 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [29, 31],
+                                loc: {
+                                    start: { line: 1, column: 29 },
+                                    end: { line: 1, column: 31 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [27, 31],
+                            loc: {
+                                start: { line: 1, column: 27 },
+                                end: { line: 1, column: 31 }
+                            }
+                        },
+                        kind: 'method',
+                        static: true,
+                        range: [9, 31],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 31 }
+                        }
+                    },
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Identifier',
+                            name: 'constructor',
+                            range: [39, 50],
+                            loc: {
+                                start: { line: 1, column: 39 },
+                                end: { line: 1, column: 50 }
+                            }
+                        },
+                        computed: false,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [52, 54],
+                                loc: {
+                                    start: { line: 1, column: 52 },
+                                    end: { line: 1, column: 54 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [50, 54],
+                            loc: {
+                                start: { line: 1, column: 50 },
+                                end: { line: 1, column: 54 }
+                            }
+                        },
+                        kind: 'method',
+                        static: true,
+                        range: [32, 54],
+                        loc: {
+                            start: { line: 1, column: 32 },
+                            end: { line: 1, column: 54 }
+                        }
+                    }
+                ],
+                range: [8, 55],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 55 }
+                }
+            },
+            range: [0, 55],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 55 }
+            }
+        },
+
+        'class A {static ["prototype"](){}}': {
+            type: 'ClassDeclaration',
+            name: {
+                type: 'Identifier',
+                name: 'A',
+                range: [6, 7],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 7 }
+                }
+            },
+            superClass: null,
+            body: {
+                type: 'ClassBody',
+                body: [
+                    {
+                        type: 'MethodDefinition',
+                        key: {
+                            type: 'Literal',
+                            value: 'prototype',
+                            raw: '"prototype"',
+                            range: [17, 28],
+                            loc: {
+                                start: { line: 1, column: 17 },
+                                end: { line: 1, column: 28 }
+                            }
+                        },
+                        computed: true,
+                        value: {
+                            type: 'FunctionExpression',
+                            id: null,
+                            params: [],
+                            defaults: [],
+                            body: {
+                                type: 'BlockStatement',
+                                body: [],
+                                range: [31, 33],
+                                loc: {
+                                    start: { line: 1, column: 31 },
+                                    end: { line: 1, column: 33 }
+                                }
+                            },
+                            rest: null,
+                            generator: false,
+                            expression: false,
+                            range: [29, 33],
+                            loc: {
+                                start: { line: 1, column: 29 },
+                                end: { line: 1, column: 33 }
+                            }
+                        },
+                        kind: 'method',
+                        static: true,
+                        range: [9, 33],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 33 }
+                        }
+                    }
+                ],
+                range: [8, 34],
+                loc: {
+                    start: { line: 1, column: 8 },
+                    end: { line: 1, column: 34 }
+                }
+            },
+            range: [0, 34],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 34 }
+            }
+        },
+
+        '(class {})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ClassExpression',
+                name: null,
+                superClass: null,
+                body: {
+                    type: 'ClassBody',
+                    body: [],
+                    range: [7, 9],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 9 }
+                    }
+                },
+                range: [1, 9],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 9 }
+                }
+            },
+            range: [0, 10],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 10 }
+            }
+        },
+
+        '(class A {})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ClassExpression',
+                name: {
+                    type: 'Identifier',
+                    name: 'A',
+                    range: [7, 8],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 8 }
+                    }
+                },
+                superClass: null,
+                body: {
+                    type: 'ClassBody',
+                    body: [],
+                    range: [9, 11],
+                    loc: {
+                        start: { line: 1, column: 9 },
+                        end: { line: 1, column: 11 }
+                    }
+                },
+                range: [1, 11],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 11 }
+                }
+            },
+            range: [0, 12],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 12 }
+            }
+        },
+
+        '(class extends 0{})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ClassExpression',
+                name: null,
+                superClass: {
+                    type: 'Literal',
+                    value: 0,
+                    raw: '0',
+                    range: [15, 16],
+                    loc: {
+                        start: { line: 1, column: 15 },
+                        end: { line: 1, column: 16 }
+                    }
+                },
+                body: {
+                    type: 'ClassBody',
+                    body: [],
+                    range: [16, 18],
+                    loc: {
+                        start: { line: 1, column: 16 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                range: [1, 18],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
+        },
+
+        '(class A extends 0{})': {
+            type: 'ExpressionStatement',
+            expression: {
+                type: 'ClassExpression',
+                name: {
+                    type: 'Identifier',
+                    name: 'A',
+                    range: [7, 8],
+                    loc: {
+                        start: { line: 1, column: 7 },
+                        end: { line: 1, column: 8 }
+                    }
+                },
+                superClass: {
+                    type: 'Literal',
+                    value: 0,
+                    raw: '0',
+                    range: [17, 18],
+                    loc: {
+                        start: { line: 1, column: 17 },
+                        end: { line: 1, column: 18 }
+                    }
+                },
+                body: {
+                    type: 'ClassBody',
+                    body: [],
+                    range: [18, 20],
+                    loc: {
+                        start: { line: 1, column: 18 },
+                        end: { line: 1, column: 20 }
+                    }
+                },
+                range: [1, 20],
+                loc: {
+                    start: { line: 1, column: 1 },
+                    end: { line: 1, column: 20 }
+                }
+            },
+            range: [0, 21],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 21 }
+            }
+        },
+
+        '({x(eval){"use strict"}})': {
+            type: 'Program',
+            body: [
+                {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'ObjectExpression',
+                        properties: [
+                            {
+                                type: 'Property',
+                                key: {
+                                    type: 'Identifier',
+                                    name: 'x',
+                                    range: [2, 3],
+                                    loc: {
+                                        start: { line: 1, column: 2 },
+                                        end: { line: 1, column: 3 }
+                                    }
+                                },
+                                computed: false,
+                                value: {
+                                    type: 'FunctionExpression',
+                                    id: null,
+                                    params: [
+                                        {
+                                            type: 'Identifier',
+                                            name: 'eval',
+                                            range: [4, 8],
+                                            loc: {
+                                                start: { line: 1, column: 4 },
+                                                end: { line: 1, column: 8 }
+                                            }
+                                        }
+                                    ],
+                                    defaults: [],
+                                    body: {
+                                        type: 'BlockStatement',
+                                        body: [
+                                            {
+                                                type: 'ExpressionStatement',
+                                                expression: {
+                                                    type: 'Literal',
+                                                    value: 'use strict',
+                                                    raw: '"use strict"',
+                                                    range: [10, 22],
+                                                    loc: {
+                                                        start: { line: 1, column: 10 },
+                                                        end: { line: 1, column: 22 }
+                                                    }
+                                                },
+                                                range: [10, 22],
+                                                loc: {
+                                                    start: { line: 1, column: 10 },
+                                                    end: { line: 1, column: 22 }
+                                                }
+                                            }
+                                        ],
+                                        range: [9, 23],
+                                        loc: {
+                                            start: { line: 1, column: 9 },
+                                            end: { line: 1, column: 23 }
+                                        }
+                                    },
+                                    rest: null,
+                                    generator: false,
+                                    expression: false,
+                                    range: [3, 23],
+                                    loc: {
+                                        start: { line: 1, column: 3 },
+                                        end: { line: 1, column: 23 }
+                                    }
+                                },
+                                kind: 'init',
+                                method: true,
+                                shorthand: false,
+                                range: [2, 23],
+                                loc: {
+                                    start: { line: 1, column: 2 },
+                                    end: { line: 1, column: 23 }
+                                }
+                            }
+                        ],
+                        range: [1, 24],
+                        loc: {
+                            start: { line: 1, column: 1 },
+                            end: { line: 1, column: 24 }
+                        }
+                    },
+                    range: [0, 25],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 25 }
+                    }
+                }
+            ],
+            errors: [
+                {
+                    index: 4,
+                    lineNumber: 1,
+                    column: 5,
+                    message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+                }
+            ],
+            range: [0, 25],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 25 }
+            }
+        }
+    },
+
     'Assignment Operators': {
 
         'x = 42': {
@@ -24573,7 +26790,7 @@ var testFixture = {
             message: 'Error: Line 1: Unexpected token if'
         },
 
-        'a class;': {
+        'a enum;': {
             index: 2,
             lineNumber: 1,
             column: 3,
@@ -25576,6 +27793,7 @@ var testFixture = {
             message: 'Error: Line 1: Use of future reserved word in strict mode'
         },
 
+
         'function f(a, ...b, c){}': {
             index: 18,
             lineNumber: 1,
@@ -25595,8 +27813,133 @@ var testFixture = {
             lineNumber: 1,
             column: 16,
             message: 'Error: Line 1: Unexpected token ='
-        }
+        },
 
+        'class': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'class ': {
+            index: 6,
+            lineNumber: 1,
+            column: 7,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'class;': {
+            index: 5,
+            lineNumber: 1,
+            column: 6,
+            message: 'Error: Line 1: Unexpected token ;'
+        },
+
+        'class A extends a + b {}': {
+            index: 18,
+            lineNumber: 1,
+            column: 19,
+            message: 'Error: Line 1: Unexpected token +'
+        },
+
+        'class A': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'class A {': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Unexpected end of input'
+        },
+
+        'class A;': {
+            index: 7,
+            lineNumber: 1,
+            column: 8,
+            message: 'Error: Line 1: Unexpected token ;'
+        },
+
+        'class A {a:0}': {
+            index: 10,
+            lineNumber: 1,
+            column: 11,
+            message: 'Error: Line 1: Unexpected token :'
+        },
+
+        'class A {a(){},b(){}}': {
+            index: 14,
+            lineNumber: 1,
+            column: 15,
+            message: 'Error: Line 1: Unexpected token ,'
+        },
+
+        'class A {static prototype(){}}': {
+            index: 16,
+            lineNumber: 1,
+            column: 17,
+            message: 'Error: Line 1: Classes may not have static property named prototype'
+        },
+
+        'class A {static "prototype"(){}}': {
+            index: 16,
+            lineNumber: 1,
+            column: 17,
+            message: 'Error: Line 1: Classes may not have static property named prototype'
+        },
+
+        'class A {get constructor(){}}': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Class constructor may not be an accessor'
+        },
+
+        'class A {set constructor(m){}}': {
+            index: 9,
+            lineNumber: 1,
+            column: 10,
+            message: 'Error: Line 1: Class constructor may not be an accessor'
+        },
+
+        'class A {constructor(){} "constructor"(){}}': {
+            index: 25,
+            lineNumber: 1,
+            column: 26,
+            message: 'Error: Line 1: A class may only have one constructor'
+        },
+
+        'class A {a static(){}}': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'class A {static static static(){}}': {
+            index: 23,
+            lineNumber: 1,
+            column: 24,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        },
+
+        'class A {a(enum){}}': {
+            index: 11,
+            lineNumber: 1,
+            column: 12,
+            message: 'Error: Line 1: Unexpected reserved word'
+        },
+
+        'class A {static [static](){};}': {
+            index: 17,
+            lineNumber: 1,
+            column: 18,
+            message: 'Error: Line 1: Use of future reserved word in strict mode'
+        }
     },
 
     'Tokenize': {
@@ -27104,6 +29447,9 @@ var testFixture = {
                 BreakStatement: 'BreakStatement',
                 CallExpression: 'CallExpression',
                 CatchClause: 'CatchClause',
+                ClassBody: 'ClassBody',
+                ClassDeclaration: 'ClassDeclaration',
+                ClassExpression: 'ClassExpression',
                 ConditionalExpression: 'ConditionalExpression',
                 ContinueStatement: 'ContinueStatement',
                 DoWhileStatement: 'DoWhileStatement',
@@ -27120,6 +29466,7 @@ var testFixture = {
                 LabeledStatement: 'LabeledStatement',
                 LogicalExpression: 'LogicalExpression',
                 MemberExpression: 'MemberExpression',
+                MethodDefinition: 'MethodDefinition',
                 NewExpression: 'NewExpression',
                 ObjectExpression: 'ObjectExpression',
                 Program: 'Program',
@@ -31042,6 +33389,216 @@ var testFixture = {
                 column: 24,
                 message: "Error: Line 1: Unexpected token ILLEGAL"
             }]
+        },
+
+        '({x(eval){"use strict";}})': {
+            type: 'Program',
+            body: [
+                {
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'ObjectExpression',
+                        properties: [
+                            {
+                                type: 'Property',
+                                key: {
+                                    type: 'Identifier',
+                                    name: 'x',
+                                    range: [2, 3],
+                                    loc: {
+                                        start: { line: 1, column: 2 },
+                                        end: { line: 1, column: 3 }
+                                    }
+                                },
+                                computed: false,
+                                value: {
+                                    type: 'FunctionExpression',
+                                    id: null,
+                                    params: [
+                                        {
+                                            type: 'Identifier',
+                                            name: 'eval',
+                                            range: [4, 8],
+                                            loc: {
+                                                start: { line: 1, column: 4 },
+                                                end: { line: 1, column: 8 }
+                                            }
+                                        }
+                                    ],
+                                    defaults: [],
+                                    body: {
+                                        type: 'BlockStatement',
+                                        body: [
+                                            {
+                                                type: 'ExpressionStatement',
+                                                expression: {
+                                                    type: 'Literal',
+                                                    value: 'use strict',
+                                                    raw: '"use strict"',
+                                                    range: [10, 22],
+                                                    loc: {
+                                                        start: { line: 1, column: 10 },
+                                                        end: { line: 1, column: 22 }
+                                                    }
+                                                },
+                                                range: [10, 23],
+                                                loc: {
+                                                    start: { line: 1, column: 10 },
+                                                    end: { line: 1, column: 23 }
+                                                }
+                                            }
+                                        ],
+                                        range: [9, 24],
+                                        loc: {
+                                            start: { line: 1, column: 9 },
+                                            end: { line: 1, column: 24 }
+                                        }
+                                    },
+                                    rest: null,
+                                    generator: false,
+                                    expression: false,
+                                    range: [3, 24],
+                                    loc: {
+                                        start: { line: 1, column: 3 },
+                                        end: { line: 1, column: 24 }
+                                    }
+                                },
+                                kind: 'init',
+                                method: true,
+                                shorthand: false,
+                                range: [2, 24],
+                                loc: {
+                                    start: { line: 1, column: 2 },
+                                    end: { line: 1, column: 24 }
+                                }
+                            }
+                        ],
+                        range: [1, 25],
+                        loc: {
+                            start: { line: 1, column: 1 },
+                            end: { line: 1, column: 25 }
+                        }
+                    },
+                    range: [0, 26],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 26 }
+                    }
+                }
+            ],
+            errors: [
+                {
+                    index: 4,
+                    lineNumber: 1,
+                    column: 5,
+                    message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+                }
+            ],
+            range: [0, 26],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 26 }
+            }
+        },
+
+        'class A {a(eval){}}': {
+            type: 'Program',
+            body: [
+                {
+                    type: 'ClassDeclaration',
+                    name: {
+                        type: 'Identifier',
+                        name: 'A',
+                        range: [6, 7],
+                        loc: {
+                            start: { line: 1, column: 6 },
+                            end: { line: 1, column: 7 }
+                        }
+                    },
+                    superClass: null,
+                    body: {
+                        type: 'ClassBody',
+                        body: [
+                            {
+                                type: 'MethodDefinition',
+                                key: {
+                                    type: 'Identifier',
+                                    name: 'a',
+                                    range: [9, 10],
+                                    loc: {
+                                        start: { line: 1, column: 9 },
+                                        end: { line: 1, column: 10 }
+                                    }
+                                },
+                                computed: false,
+                                value: {
+                                    type: 'FunctionExpression',
+                                    id: null,
+                                    params: [
+                                        {
+                                            type: 'Identifier',
+                                            name: 'eval',
+                                            range: [11, 15],
+                                            loc: {
+                                                start: { line: 1, column: 11 },
+                                                end: { line: 1, column: 15 }
+                                            }
+                                        }
+                                    ],
+                                    defaults: [],
+                                    body: {
+                                        type: 'BlockStatement',
+                                        body: [],
+                                        range: [16, 18],
+                                        loc: {
+                                            start: { line: 1, column: 16 },
+                                            end: { line: 1, column: 18 }
+                                        }
+                                    },
+                                    rest: null,
+                                    generator: false,
+                                    expression: false,
+                                    range: [10, 18],
+                                    loc: {
+                                        start: { line: 1, column: 10 },
+                                        end: { line: 1, column: 18 }
+                                    }
+                                },
+                                kind: 'method',
+                                static: false,
+                                range: [9, 18],
+                                loc: {
+                                    start: { line: 1, column: 9 },
+                                    end: { line: 1, column: 18 }
+                                }
+                            }
+                        ],
+                        range: [8, 19],
+                        loc: {
+                            start: { line: 1, column: 8 },
+                            end: { line: 1, column: 19 }
+                        }
+                    },
+                    range: [0, 19],
+                    loc: {
+                        start: { line: 1, column: 0 },
+                        end: { line: 1, column: 19 }
+                    }
+                }
+            ],
+            errors: [
+                {
+                    index: 11,
+                    lineNumber: 1,
+                    column: 12,
+                    message: 'Error: Line 1: Parameter name eval or arguments is not allowed in strict mode'
+                }
+            ],
+            range: [0, 19],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 19 }
+            }
         }
 
     }
