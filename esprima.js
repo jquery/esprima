@@ -663,167 +663,97 @@
     // 7.7 Punctuators
 
     function scanPunctuator() {
-        var start = index,
-            code = source.charCodeAt(index),
-            code2,
-            ch1 = source[index],
-            ch2,
-            ch3,
-            ch4;
+        var token, str;
 
-        switch (code) {
+        token = {
+            type: Token.Punctuator,
+            value: '',
+            lineNumber: lineNumber,
+            lineStart: lineStart,
+            start: index,
+            end: index
+        };
 
         // Check for most common single-character punctuators.
-        case 0x2E:  // . dot
-            ch3 = source.substr(index, 3);
-            if (ch3 === '...') {
-                index += 3;
-                return {
-                    type: Token.Punctuator,
-                    value: ch3,
-                    lineNumber: lineNumber,
-                    lineStart: lineStart,
-                    start: start,
-                    end: index
-                };
-            }
-            /*falls through*/
-        case 0x28:  // ( open bracket
-        case 0x29:  // ) close bracket
-        case 0x3B:  // ; semicolon
-        case 0x2C:  // , comma
-        case 0x7B:  // { open curly brace
-        case 0x7D:  // } close curly brace
-        case 0x5B:  // [
-        case 0x5D:  // ]
-        case 0x3A:  // :
-        case 0x3F:  // ?
-        case 0x7E:  // ~
-            ++index;
+        str = source[index];
+        switch (str) {
+
+        case '(':
             if (extra.tokenize) {
-                if (code === 0x28) {
-                    extra.openParenToken = extra.tokens.length;
-                } else if (code === 0x7B) {
-                    extra.openCurlyToken = extra.tokens.length;
-                }
+                extra.openParenToken = extra.tokens.length;
             }
-            return {
-                type: Token.Punctuator,
-                value: String.fromCharCode(code),
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                start: start,
-                end: index
-            };
+            ++index;
+            break;
+
+        case '{':
+            if (extra.tokenize) {
+                extra.openCurlyToken = extra.tokens.length;
+            }
+            ++index;
+            break;
+
+        case '.':
+            ++index;
+            if (source[index] === '.' && source[index + 1] === '.') {
+                // Spread operator: ...
+                index += 2;
+                str = '...';
+            }
+            break;
+
+        case ')':
+        case ';':
+        case ',':
+        case '}':
+        case '[':
+        case ']':
+        case ':':
+        case '?':
+        case '~':
+            ++index;
+            break;
 
         default:
-            code2 = source.charCodeAt(index + 1);
+            // 4-character punctuator.
+            str = source.substr(index, 4);
+            if (str === '>>>=') {
+                index += 4;
+            } else {
 
-            // '=' (U+003D) marks an assignment or comparison operator.
-            if (code2 === 0x3D) {
-                switch (code) {
-                case 0x2B:  // +
-                case 0x2D:  // -
-                case 0x2F:  // /
-                case 0x3C:  // <
-                case 0x3E:  // >
-                case 0x5E:  // ^
-                case 0x7C:  // |
-                case 0x25:  // %
-                case 0x26:  // &
-                case 0x2A:  // *
-                    index += 2;
-                    return {
-                        type: Token.Punctuator,
-                        value: String.fromCharCode(code) + String.fromCharCode(code2),
-                        lineNumber: lineNumber,
-                        lineStart: lineStart,
-                        start: start,
-                        end: index
-                    };
+                // 3-character punctuators.
+                str = str.substr(0, 3);
+                if (str === '===' || str === '!==' || str === '>>>' ||
+                    str === '<<=' || str === '>>=') {
+                    index += 3;
+                } else {
 
-                case 0x21: // !
-                case 0x3D: // =
-                    index += 2;
+                    // 2-character punctuators.
+                    str = str.substr(0, 2);
+                    if (str === '&&' || str === '||' || str === '==' || str === '!=' ||
+                        str === '+=' || str === '-=' || str === '*=' || str === '/=' ||
+                        str === '++' || str === '--' || str === '<<' || str === '>>' ||
+                        str === '&=' || str === '|=' || str === '^=' || str === '%=' ||
+                        str === '<=' || str === '>=' || str === '=>') {
+                        index += 2;
+                    } else {
 
-                    // !== and ===
-                    if (source.charCodeAt(index) === 0x3D) {
-                        ++index;
+                        // 1-character punctuators.
+                        str = source[index];
+                        if ('<>=!+-*%&|^/'.indexOf(str) >= 0) {
+                            ++index;
+                        }
                     }
-                    return {
-                        type: Token.Punctuator,
-                        value: source.slice(start, index),
-                        lineNumber: lineNumber,
-                        lineStart: lineStart,
-                        start: start,
-                        end: index
-                    };
                 }
             }
         }
 
-        // 4-character punctuator: >>>=
-
-        ch4 = source.substr(index, 4);
-
-        if (ch4 === '>>>=') {
-            index += 4;
-            return {
-                type: Token.Punctuator,
-                value: ch4,
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                start: start,
-                end: index
-            };
+        if (index === token.start) {
+            throwUnexpectedToken();
         }
 
-        // 3-character punctuators: === !== >>> <<= >>=
-
-        ch3 = ch4.substr(0, 3);
-
-        if (ch3 === '>>>' || ch3 === '<<=' || ch3 === '>>=') {
-            index += 3;
-            return {
-                type: Token.Punctuator,
-                value: ch3,
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                start: start,
-                end: index
-            };
-        }
-
-        // Other 2-character punctuators: ++ -- << >> && ||
-        ch2 = ch3.substr(0, 2);
-
-        if ((ch1 === ch2[1] && ('+-<>&|'.indexOf(ch1) >= 0)) || ch2 === '=>') {
-            index += 2;
-            return {
-                type: Token.Punctuator,
-                value: ch2,
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                start: start,
-                end: index
-            };
-        }
-
-        // 1-character punctuators: < > = ! + - * % & | ^ /
-
-        if ('<>=!+-*%&|^/'.indexOf(ch1) >= 0) {
-            ++index;
-            return {
-                type: Token.Punctuator,
-                value: ch1,
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                start: start,
-                end: index
-            };
-        }
-
-        throwUnexpectedToken();
+        token.end = index;
+        token.value = str;
+        return token;
     }
 
     // 7.8.3 Numeric Literals
