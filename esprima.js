@@ -2974,13 +2974,29 @@
 
     // 12.1 Block
 
+    function parseStatementListItem() {
+        if (lookahead.type === Token.Keyword) {
+            switch (lookahead.value) {
+            case 'const':
+            case 'let':
+                return parseLexicalDeclaration();
+            case 'function':
+                return parseFunctionDeclaration(new Node());
+            case 'class':
+                return parseClassDeclaration();
+            }
+        }
+
+        return parseStatement();
+    }
+
     function parseStatementList() {
         var list = [];
         while (startIndex < length) {
             if (match('}')) {
                 break;
             }
-            list.push(parseSourceElement());
+            list.push(parseStatementListItem());
         }
 
         return list;
@@ -3063,14 +3079,11 @@
         return node.finishVariableDeclaration(declarations, 'var');
     }
 
-    // kind may be `const` or `let`
-    // Both are experimental and not in the specification yet.
-    // see http://wiki.ecmascript.org/doku.php?id=harmony:const
-    // and http://wiki.ecmascript.org/doku.php?id=harmony:let
-    function parseConstLetDeclaration(kind) {
-        var declarations, node = new Node();
+    function parseLexicalDeclaration() {
+        var kind, declarations, node = new Node();
 
-        expectKeyword(kind);
+        kind = lex().value;
+        assert(kind === 'let' || kind === 'const', 'Lexical declaration must be either let or const');
 
         declarations = parseVariableDeclarationList(kind);
 
@@ -3414,7 +3427,7 @@
             if (match('}') || matchKeyword('default') || matchKeyword('case')) {
                 break;
             }
-            statement = parseSourceElement();
+            statement = parseStatementListItem();
             consequent.push(statement);
         }
 
@@ -3628,7 +3641,7 @@
     // 13 Function Definition
 
     function parseFunctionSourceElements() {
-        var sourceElement, sourceElements = [], token, directive, firstRestricted,
+        var statement, body = [], token, directive, firstRestricted,
             oldLabelSet, oldInIteration, oldInSwitch, oldInFunctionBody, oldParenthesisCount,
             node = new Node();
 
@@ -3640,9 +3653,9 @@
             }
             token = lookahead;
 
-            sourceElement = parseSourceElement();
-            sourceElements.push(sourceElement);
-            if (sourceElement.expression.type !== Syntax.Literal) {
+            statement = parseStatementListItem();
+            body.push(statement);
+            if (statement.expression.type !== Syntax.Literal) {
                 // this is not directive
                 break;
             }
@@ -3675,8 +3688,7 @@
             if (match('}')) {
                 break;
             }
-            sourceElement = parseSourceElement();
-            sourceElements.push(sourceElement);
+            body.push(parseStatementListItem());
         }
 
         expect('}');
@@ -3687,7 +3699,7 @@
         state.inFunctionBody = oldInFunctionBody;
         state.parenthesizedCount = oldParenthesisCount;
 
-        return node.finishBlockStatement(sourceElements);
+        return node.finishBlockStatement(body);
     }
 
     function validateParam(options, param, name) {
@@ -3981,24 +3993,8 @@
 
     // 14 Program
 
-    function parseSourceElement() {
-        if (lookahead.type === Token.Keyword) {
-            switch (lookahead.value) {
-            case 'const':
-            case 'let':
-                return parseConstLetDeclaration(lookahead.value);
-            case 'function':
-                return parseFunctionDeclaration(new Node());
-            case 'class':
-                return parseClassDeclaration();
-            }
-        }
-
-        return parseStatement();
-    }
-
-    function parseSourceElements() {
-        var sourceElement, sourceElements = [], token, directive, firstRestricted;
+    function parseScriptBody() {
+        var statement, body = [], token, directive, firstRestricted;
 
         while (startIndex < length) {
             token = lookahead;
@@ -4006,9 +4002,9 @@
                 break;
             }
 
-            sourceElement = parseSourceElement();
-            sourceElements.push(sourceElement);
-            if (sourceElement.expression.type !== Syntax.Literal) {
+            statement = parseStatementListItem();
+            body.push(statement);
+            if (statement.expression.type !== Syntax.Literal) {
                 // this is not directive
                 break;
             }
@@ -4026,14 +4022,14 @@
         }
 
         while (startIndex < length) {
-            sourceElement = parseSourceElement();
+            statement = parseStatementListItem();
             /* istanbul ignore if */
-            if (typeof sourceElement === 'undefined') {
+            if (typeof statement === 'undefined') {
                 break;
             }
-            sourceElements.push(sourceElement);
+            body.push(statement);
         }
-        return sourceElements;
+        return body;
     }
 
     function parseProgram() {
@@ -4043,7 +4039,7 @@
         node = new Node();
         strict = false;
 
-        body = parseSourceElements();
+        body = parseScriptBody();
         return node.finishProgram(body);
     }
 
