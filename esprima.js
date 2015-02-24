@@ -3095,8 +3095,10 @@
         }
 
         if (kind === 'const') {
-            expect('=');
-            init = parseAssignmentExpression();
+            if (!matchKeyword('in')) {
+                expect('=');
+                init = parseAssignmentExpression();
+            }
         } else if (match('=')) {
             lex();
             init = parseAssignmentExpression();
