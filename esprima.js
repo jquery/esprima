@@ -1951,7 +1951,15 @@
             return this;
         },
 
-        finishVariableDeclaration: function (declarations, kind) {
+        finishVariableDeclaration: function (declarations) {
+            this.type = Syntax.VariableDeclaration;
+            this.declarations = declarations;
+            this.kind = 'var';
+            this.finish();
+            return this;
+        },
+
+        finishLexicalDeclaration: function (declarations, kind) {
             this.type = Syntax.VariableDeclaration;
             this.declarations = declarations;
             this.kind = kind;
@@ -3032,7 +3040,51 @@
         return node.finishIdentifier(token.value);
     }
 
-    function parseVariableDeclaration(kind) {
+    function parseVariableDeclaration() {
+        var init = null, id, node = new Node();
+
+        id = parseVariableIdentifier();
+
+        // 12.2.1
+        if (strict && isRestrictedWord(id.name)) {
+            tolerateError(Messages.StrictVarName);
+        }
+
+        if (match('=')) {
+            lex();
+            init = parseAssignmentExpression();
+        }
+
+        return node.finishVariableDeclarator(id, init);
+    }
+
+    function parseVariableDeclarationList() {
+        var list = [];
+
+        do {
+            list.push(parseVariableDeclaration());
+            if (!match(',')) {
+                break;
+            }
+            lex();
+        } while (startIndex < length);
+
+        return list;
+    }
+
+    function parseVariableStatement(node) {
+        var declarations;
+
+        expectKeyword('var');
+
+        declarations = parseVariableDeclarationList();
+
+        consumeSemicolon();
+
+        return node.finishVariableDeclaration(declarations);
+    }
+
+    function parseLexicalBinding(kind) {
         var init = null, id, node = new Node();
 
         id = parseVariableIdentifier();
@@ -3053,11 +3105,11 @@
         return node.finishVariableDeclarator(id, init);
     }
 
-    function parseVariableDeclarationList(kind) {
+    function parseBindingList(kind) {
         var list = [];
 
         do {
-            list.push(parseVariableDeclaration(kind));
+            list.push(parseLexicalBinding(kind));
             if (!match(',')) {
                 break;
             }
@@ -3067,29 +3119,17 @@
         return list;
     }
 
-    function parseVariableStatement(node) {
-        var declarations;
-
-        expectKeyword('var');
-
-        declarations = parseVariableDeclarationList();
-
-        consumeSemicolon();
-
-        return node.finishVariableDeclaration(declarations, 'var');
-    }
-
     function parseLexicalDeclaration() {
         var kind, declarations, node = new Node();
 
         kind = lex().value;
         assert(kind === 'let' || kind === 'const', 'Lexical declaration must be either let or const');
 
-        declarations = parseVariableDeclarationList(kind);
+        declarations = parseBindingList(kind);
 
         consumeSemicolon();
 
-        return node.finishVariableDeclaration(declarations, kind);
+        return node.finishLexicalDeclaration(declarations, kind);
     }
 
     // 12.3 Empty Statement
@@ -3182,17 +3222,9 @@
         return node.finishWhileStatement(test, body);
     }
 
-    function parseForVariableDeclaration() {
-        var token, declarations, node = new Node();
-
-        token = lex();
-        declarations = parseVariableDeclarationList();
-
-        return node.finishVariableDeclaration(declarations, token.value);
-    }
-
     function parseForStatement(node) {
-        var init, test, update, left, right, body, oldInIteration, previousAllowIn = state.allowIn;
+        var init, test, update, left, right, kind, declarations,
+            body, oldInIteration, previousAllowIn = state.allowIn;
 
         init = test = update = null;
 
@@ -3203,9 +3235,12 @@
         if (match(';')) {
             lex();
         } else {
-            if (matchKeyword('var') || matchKeyword('let')) {
+            if (matchKeyword('var')) {
+                init = new Node();
+                lex();
+
                 state.allowIn = false;
-                init = parseForVariableDeclaration();
+                init = init.finishVariableDeclaration(parseVariableDeclarationList());
                 state.allowIn = previousAllowIn;
 
                 if (init.declarations.length === 1 && matchKeyword('in')) {
@@ -3213,6 +3248,26 @@
                     left = init;
                     right = parseExpression();
                     init = null;
+                } else {
+                    expect(';');
+                }
+            } else if (matchKeyword('const') || matchKeyword('let')) {
+                init = new Node();
+                kind = lex().value;
+
+                state.allowIn = false;
+                declarations = parseBindingList(kind);
+                state.allowIn = previousAllowIn;
+
+                if (declarations.length === 1 && matchKeyword('in')) {
+                    init = init.finishLexicalDeclaration(declarations, kind);
+                    lex();
+                    left = init;
+                    right = parseExpression();
+                    init = null;
+                } else {
+                    consumeSemicolon();
+                    init = init.finishLexicalDeclaration(declarations, kind);
                 }
             } else {
                 state.allowIn = false;
@@ -3229,11 +3284,9 @@
                     left = init;
                     right = parseExpression();
                     init = null;
+                } else {
+                    expect(';');
                 }
-            }
-
-            if (typeof left === 'undefined') {
-                expect(';');
             }
         }
 
