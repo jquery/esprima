@@ -1,0 +1,96 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [],
+                "defaults": [],
+                "body": {
+                    "type": "BlockStatement",
+                    "body": [
+                        {
+                            "type": "ReturnStatement",
+                            "argument": null,
+                            "range": [
+                                13,
+                                20
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 13
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 20
+                                }
+                            }
+                        }
+                    ],
+                    "range": [
+                        11,
+                        22
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 11
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 22
+                        }
+                    }
+                },
+                "rest": null,
+                "generator": false,
+                "expression": false,
+                "range": [
+                    1,
+                    22
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 1
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 22
+                    }
+                }
+            },
+            "range": [
+                0,
+                23
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 23
+                }
+            }
+        }
+    ],
+    "range": [
+        0,
+        23
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 23
+        }
+    }
+}

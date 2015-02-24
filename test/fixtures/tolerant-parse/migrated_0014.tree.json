@@ -1,0 +1,192 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "CallExpression",
+                "callee": {
+                    "type": "FunctionExpression",
+                    "id": null,
+                    "params": [],
+                    "defaults": [],
+                    "body": {
+                        "type": "BlockStatement",
+                        "body": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Literal",
+                                    "value": "use strict",
+                                    "raw": "'use strict'",
+                                    "range": [
+                                        15,
+                                        27
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 1,
+                                            "column": 15
+                                        },
+                                        "end": {
+                                            "line": 1,
+                                            "column": 27
+                                        }
+                                    }
+                                },
+                                "range": [
+                                    15,
+                                    28
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 15
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 28
+                                    }
+                                }
+                            },
+                            {
+                                "type": "WithStatement",
+                                "object": {
+                                    "type": "Identifier",
+                                    "name": "i",
+                                    "range": [
+                                        35,
+                                        36
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 1,
+                                            "column": 35
+                                        },
+                                        "end": {
+                                            "line": 1,
+                                            "column": 36
+                                        }
+                                    }
+                                },
+                                "body": {
+                                    "type": "EmptyStatement",
+                                    "range": [
+                                        37,
+                                        38
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 1,
+                                            "column": 37
+                                        },
+                                        "end": {
+                                            "line": 1,
+                                            "column": 38
+                                        }
+                                    }
+                                },
+                                "range": [
+                                    29,
+                                    38
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 29
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 38
+                                    }
+                                }
+                            }
+                        ],
+                        "range": [
+                            13,
+                            40
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 13
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 40
+                            }
+                        }
+                    },
+                    "rest": null,
+                    "generator": false,
+                    "expression": false,
+                    "range": [
+                        1,
+                        40
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 1
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 40
+                        }
+                    }
+                },
+                "arguments": [],
+                "range": [
+                    1,
+                    42
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 1
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 42
+                    }
+                }
+            },
+            "range": [
+                0,
+                43
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 43
+                }
+            }
+        }
+    ],
+    "errors": [
+        {
+            "index": 28,
+            "lineNumber": 1,
+            "column": 29,
+            "message": "Error: Line 1: Strict mode code may not include a with statement"
+        }
+    ],
+    "range": [
+        0,
+        43
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 43
+        }
+    }
+}

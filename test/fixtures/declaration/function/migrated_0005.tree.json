@@ -1,0 +1,173 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "FunctionDeclaration",
+            "id": {
+                "type": "Identifier",
+                "name": "eval",
+                "range": [
+                    9,
+                    13
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 13
+                    }
+                }
+            },
+            "params": [],
+            "defaults": [],
+            "body": {
+                "type": "BlockStatement",
+                "body": [
+                    {
+                        "type": "FunctionDeclaration",
+                        "id": {
+                            "type": "Identifier",
+                            "name": "inner",
+                            "range": [
+                                27,
+                                32
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 27
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 32
+                                }
+                            }
+                        },
+                        "params": [],
+                        "defaults": [],
+                        "body": {
+                            "type": "BlockStatement",
+                            "body": [
+                                {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "Literal",
+                                        "value": "use strict",
+                                        "raw": "\"use strict\"",
+                                        "range": [
+                                            37,
+                                            49
+                                        ],
+                                        "loc": {
+                                            "start": {
+                                                "line": 1,
+                                                "column": 37
+                                            },
+                                            "end": {
+                                                "line": 1,
+                                                "column": 49
+                                            }
+                                        }
+                                    },
+                                    "range": [
+                                        37,
+                                        50
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 1,
+                                            "column": 37
+                                        },
+                                        "end": {
+                                            "line": 1,
+                                            "column": 50
+                                        }
+                                    }
+                                }
+                            ],
+                            "range": [
+                                35,
+                                51
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 35
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 51
+                                }
+                            }
+                        },
+                        "rest": null,
+                        "generator": false,
+                        "expression": false,
+                        "range": [
+                            18,
+                            51
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 18
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 51
+                            }
+                        }
+                    }
+                ],
+                "range": [
+                    16,
+                    53
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 53
+                    }
+                }
+            },
+            "rest": null,
+            "generator": false,
+            "expression": false,
+            "range": [
+                0,
+                53
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 53
+                }
+            }
+        }
+    ],
+    "range": [
+        0,
+        53
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 53
+        }
+    }
+}

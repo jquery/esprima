@@ -1,0 +1,232 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "ClassDeclaration",
+            "name": {
+                "type": "Identifier",
+                "name": "A",
+                "range": [
+                    6,
+                    7
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 6
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 7
+                    }
+                }
+            },
+            "superClass": null,
+            "body": {
+                "type": "ClassBody",
+                "body": [
+                    {
+                        "type": "MethodDefinition",
+                        "key": {
+                            "type": "Identifier",
+                            "name": "constructor",
+                            "range": [
+                                16,
+                                27
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 16
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 27
+                                }
+                            }
+                        },
+                        "computed": false,
+                        "value": {
+                            "type": "FunctionExpression",
+                            "id": null,
+                            "params": [],
+                            "defaults": [],
+                            "body": {
+                                "type": "BlockStatement",
+                                "body": [],
+                                "range": [
+                                    29,
+                                    31
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 29
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 31
+                                    }
+                                }
+                            },
+                            "rest": null,
+                            "generator": false,
+                            "expression": false,
+                            "range": [
+                                27,
+                                31
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 27
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 31
+                                }
+                            }
+                        },
+                        "kind": "method",
+                        "static": true,
+                        "range": [
+                            9,
+                            31
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 9
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 31
+                            }
+                        }
+                    },
+                    {
+                        "type": "MethodDefinition",
+                        "key": {
+                            "type": "Identifier",
+                            "name": "constructor",
+                            "range": [
+                                39,
+                                50
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 39
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 50
+                                }
+                            }
+                        },
+                        "computed": false,
+                        "value": {
+                            "type": "FunctionExpression",
+                            "id": null,
+                            "params": [],
+                            "defaults": [],
+                            "body": {
+                                "type": "BlockStatement",
+                                "body": [],
+                                "range": [
+                                    52,
+                                    54
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 52
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 54
+                                    }
+                                }
+                            },
+                            "rest": null,
+                            "generator": false,
+                            "expression": false,
+                            "range": [
+                                50,
+                                54
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 50
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 54
+                                }
+                            }
+                        },
+                        "kind": "method",
+                        "static": true,
+                        "range": [
+                            32,
+                            54
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 32
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 54
+                            }
+                        }
+                    }
+                ],
+                "range": [
+                    8,
+                    55
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 8
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 55
+                    }
+                }
+            },
+            "range": [
+                0,
+                55
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 55
+                }
+            }
+        }
+    ],
+    "range": [
+        0,
+        55
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 55
+        }
+    }
+}

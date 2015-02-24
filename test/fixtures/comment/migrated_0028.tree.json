@@ -1,0 +1,167 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "IfStatement",
+            "test": {
+                "type": "Identifier",
+                "name": "x",
+                "range": [
+                    4,
+                    5
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 5
+                    }
+                }
+            },
+            "consequent": {
+                "type": "BlockStatement",
+                "body": [
+                    {
+                        "type": "ExpressionStatement",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "type": "Identifier",
+                                "name": "doThat",
+                                "range": [
+                                    25,
+                                    31
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 0
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 6
+                                    }
+                                }
+                            },
+                            "arguments": [],
+                            "range": [
+                                25,
+                                33
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 0
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 8
+                                }
+                            }
+                        },
+                        "leadingComments": [
+                            {
+                                "type": "Line",
+                                "value": " Some comment",
+                                "range": [
+                                    9,
+                                    24
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 9
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 24
+                                    }
+                                }
+                            }
+                        ],
+                        "range": [
+                            25,
+                            34
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 0
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 9
+                            }
+                        }
+                    }
+                ],
+                "range": [
+                    7,
+                    36
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 7
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 11
+                    }
+                }
+            },
+            "alternate": null,
+            "range": [
+                0,
+                36
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 2,
+                    "column": 11
+                }
+            }
+        }
+    ],
+    "comments": [
+        {
+            "type": "Line",
+            "value": " Some comment",
+            "range": [
+                9,
+                24
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 9
+                },
+                "end": {
+                    "line": 1,
+                    "column": 24
+                }
+            }
+        }
+    ],
+    "range": [
+        0,
+        36
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 2,
+            "column": 11
+        }
+    }
+}

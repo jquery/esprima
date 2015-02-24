@@ -1,0 +1,132 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "VariableDeclaration",
+            "declarations": [
+                {
+                    "type": "VariableDeclarator",
+                    "id": {
+                        "type": "Identifier",
+                        "name": "hi",
+                        "range": [
+                            4,
+                            6
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 6
+                            }
+                        }
+                    },
+                    "init": {
+                        "type": "FunctionExpression",
+                        "id": {
+                            "type": "Identifier",
+                            "name": "eval",
+                            "range": [
+                                18,
+                                22
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 18
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 22
+                                }
+                            }
+                        },
+                        "params": [],
+                        "defaults": [],
+                        "body": {
+                            "type": "BlockStatement",
+                            "body": [],
+                            "range": [
+                                25,
+                                28
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 25
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 28
+                                }
+                            }
+                        },
+                        "rest": null,
+                        "generator": false,
+                        "expression": false,
+                        "range": [
+                            9,
+                            28
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 9
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 28
+                            }
+                        }
+                    },
+                    "range": [
+                        4,
+                        28
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 28
+                        }
+                    }
+                }
+            ],
+            "kind": "var",
+            "range": [
+                0,
+                29
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 29
+                }
+            }
+        }
+    ],
+    "range": [
+        0,
+        29
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 29
+        }
+    }
+}

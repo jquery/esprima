@@ -1,0 +1,128 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "BlockStatement",
+            "body": [
+                {
+                    "type": "DoWhileStatement",
+                    "body": {
+                        "type": "BlockStatement",
+                        "body": [],
+                        "range": [
+                            5,
+                            8
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 5
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 8
+                            }
+                        }
+                    },
+                    "test": {
+                        "type": "Literal",
+                        "value": false,
+                        "raw": "false",
+                        "range": [
+                            16,
+                            21
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 21
+                            }
+                        }
+                    },
+                    "range": [
+                        2,
+                        22
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 2
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 22
+                        }
+                    }
+                },
+                {
+                    "type": "ExpressionStatement",
+                    "expression": {
+                        "type": "Literal",
+                        "value": false,
+                        "raw": "false",
+                        "range": [
+                            23,
+                            28
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 23
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 28
+                            }
+                        }
+                    },
+                    "range": [
+                        23,
+                        29
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 23
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 29
+                        }
+                    }
+                }
+            ],
+            "range": [
+                0,
+                30
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 30
+                }
+            }
+        }
+    ],
+    "range": [
+        0,
+        30
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 30
+        }
+    }
+}

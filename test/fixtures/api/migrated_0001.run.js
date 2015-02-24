@@ -1,0 +1,1 @@
+esprima.parse(null);
