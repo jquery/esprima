@@ -1,0 +1,187 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "SwitchStatement",
+            "discriminant": {
+                "type": "Identifier",
+                "name": "answer",
+                "range": [
+                    8,
+                    14
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 8
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 14
+                    }
+                }
+            },
+            "cases": [
+                {
+                    "type": "SwitchCase",
+                    "test": {
+                        "type": "Literal",
+                        "value": 42,
+                        "raw": "42",
+                        "range": [
+                            23,
+                            25
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 23
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 25
+                            }
+                        }
+                    },
+                    "consequent": [
+                        {
+                            "type": "ExpressionStatement",
+                            "expression": {
+                                "type": "CallExpression",
+                                "callee": {
+                                    "type": "Identifier",
+                                    "name": "bingo",
+                                    "range": [
+                                        41,
+                                        46
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 1,
+                                            "column": 41
+                                        },
+                                        "end": {
+                                            "line": 1,
+                                            "column": 46
+                                        }
+                                    }
+                                },
+                                "arguments": [],
+                                "range": [
+                                    41,
+                                    48
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 41
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 48
+                                    }
+                                }
+                            },
+                            "leadingComments": [
+                                {
+                                    "type": "Block",
+                                    "value": " perfect ",
+                                    "range": [
+                                        27,
+                                        40
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 1,
+                                            "column": 27
+                                        },
+                                        "end": {
+                                            "line": 1,
+                                            "column": 40
+                                        }
+                                    }
+                                }
+                            ],
+                            "range": [
+                                41,
+                                49
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 41
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 49
+                                }
+                            }
+                        }
+                    ],
+                    "range": [
+                        18,
+                        49
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 18
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 49
+                        }
+                    }
+                }
+            ],
+            "range": [
+                0,
+                50
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 50
+                }
+            }
+        }
+    ],
+    "comments": [
+        {
+            "type": "Block",
+            "value": " perfect ",
+            "range": [
+                27,
+                40
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 27
+                },
+                "end": {
+                    "line": 1,
+                    "column": 40
+                }
+            }
+        }
+    ],
+    "range": [
+        0,
+        50
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 50
+        }
+    }
+}

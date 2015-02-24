@@ -1,0 +1,10 @@
+{
+    "type": "Program",
+    "body": [],
+    "comments": [
+        {
+            "type": "Line",
+            "value": " foo"
+        }
+    ]
+}

@@ -33,18 +33,6 @@
 
 var runTests;
 
-// Special handling for regular expression literals: remove their `value`
-// property since it may be `null` if it represents a regular expression
-// that is not supported in the current environment. The `regex` property
-// will be compared instead.
-function adjustRegexLiteral(key, value) {
-    'use strict';
-    if (key === 'value' && value instanceof RegExp) {
-        value = value.toString();
-    }
-    return value;
-}
-
 function NotMatchingError(expected, actual) {
     'use strict';
     Error.call(this, 'Expected ');
@@ -76,7 +64,7 @@ function sortedObject(o) {
     if (o === null) {
         return o;
     }
-    if (o instanceof Array) {
+    if (Array.isArray(o)) {
         return o.map(sortedObject);
     }
     if (typeof o !== 'object') {
@@ -153,7 +141,7 @@ function testParse(esprima, code, syntax) {
     }
 
     syntax = sortedObject(syntax);
-    expected = JSON.stringify(syntax, adjustRegexLiteral, 4);
+    expected = JSON.stringify(syntax, null, 4);
     try {
         // Some variations of the options.
         tree = esprima.parse(code, { tolerant: options.tolerant });
@@ -161,7 +149,6 @@ function testParse(esprima, code, syntax) {
         tree = esprima.parse(code, { tolerant: options.tolerant, loc: true });
 
         tree = esprima.parse(code, options);
-        tree = (options.comment || options.tokens || options.tolerant) ? tree : tree.body[0];
 
         if (options.tolerant) {
             for (i = 0, len = tree.errors.length; i < len; i += 1) {
@@ -169,7 +156,7 @@ function testParse(esprima, code, syntax) {
             }
         }
         tree = sortedObject(tree);
-        actual = JSON.stringify(tree, adjustRegexLiteral, 4);
+        actual = JSON.stringify(tree, null, 4);
 
         // Only to ensure that there is no error when using string object.
         esprima.parse(new StringObject(code), options);
@@ -182,9 +169,6 @@ function testParse(esprima, code, syntax) {
     }
 
     function filter(key, value) {
-        if (key === 'value' && value instanceof RegExp) {
-            value = value.toString();
-        }
         return (key === 'loc' || key === 'range') ? undefined : value;
     }
 
@@ -200,7 +184,6 @@ function testParse(esprima, code, syntax) {
     expected = JSON.stringify(syntax, filter, 4);
     try {
         tree = esprima.parse(code, options);
-        tree = (options.comment || options.tokens) ? tree : tree.body[0];
 
         if (options.tolerant) {
             for (i = 0, len = tree.errors.length; i < len; i += 1) {
@@ -300,144 +283,22 @@ function testError(esprima, code, exception) {
     }
 }
 
-function testAPI(esprima, code, result) {
-    'use strict';
-    var expected, res, actual;
-
-    expected = JSON.stringify(result.result, null, 4);
+function testAPI(esprima, code, expected) {
+    var result;
+    // API test.
+    expected = JSON.stringify(expected, null, 4);
     try {
-        if (typeof result.property !== 'undefined') {
-            res = esprima[result.property];
-        } else {
-            res = esprima[result.call].apply(esprima, result.args);
-        }
-        actual = JSON.stringify(res, adjustRegexLiteral, 4);
+        result = eval(code);
+        result = JSON.stringify(result, null, 4);
     } catch (e) {
         throw new NotMatchingError(expected, e.toString());
     }
-    if (expected !== actual) {
-        throw new NotMatchingError(expected, actual);
+    if (expected !== result) {
+        throw new NotMatchingError(expected, result);
     }
 }
 
-function runTest(esprima, code, result) {
-    'use strict';
-    if (result.hasOwnProperty('lineNumber')) {
-        testError(esprima, code, result);
-    } else if (result.hasOwnProperty('result')) {
-        testAPI(esprima, code, result);
-    } else if (result instanceof Array) {
-        testTokenize(esprima, code, result);
-    } else {
-        testParse(esprima, code, result);
-    }
-}
-
-if (typeof window !== 'undefined') {
-    // Run all tests in a browser environment.
-    runTests = function () {
-        'use strict';
-        var total = 0,
-            failures = 0,
-            category,
-            fixture,
-            source,
-            tick,
-            expected;
-
-        function setText(el, str) {
-            if (typeof el.innerText === 'string') {
-                el.innerText = str;
-            } else {
-                el.textContent = str;
-            }
-        }
-
-        function startCategory(category) {
-            var report, e;
-            report = document.getElementById('report');
-            e = document.createElement('h4');
-            setText(e, category);
-            report.appendChild(e);
-        }
-
-        function reportSuccess(code) {
-            var report, e;
-            report = document.getElementById('report');
-            e = document.createElement('pre');
-            e.setAttribute('class', 'code');
-            setText(e, code);
-            report.appendChild(e);
-        }
-
-        function reportFailure(code, expected, actual) {
-            var report, e;
-
-            report = document.getElementById('report');
-
-            e = document.createElement('p');
-            setText(e, 'Code:');
-            report.appendChild(e);
-
-            e = document.createElement('pre');
-            e.setAttribute('class', 'code');
-            setText(e, code);
-            report.appendChild(e);
-
-            e = document.createElement('p');
-            setText(e, 'Expected');
-            report.appendChild(e);
-
-            e = document.createElement('pre');
-            e.setAttribute('class', 'expected');
-            setText(e, expected);
-            report.appendChild(e);
-
-            e = document.createElement('p');
-            setText(e, 'Actual');
-            report.appendChild(e);
-
-            e = document.createElement('pre');
-            e.setAttribute('class', 'actual');
-            setText(e, actual);
-            report.appendChild(e);
-        }
-
-        setText(document.getElementById('version'), esprima.version);
-
-        tick = new Date();
-        for (category in testFixture) {
-            if (testFixture.hasOwnProperty(category)) {
-                startCategory(category);
-                fixture = testFixture[category];
-                for (source in fixture) {
-                    if (fixture.hasOwnProperty(source)) {
-                        expected = fixture[source];
-                        total += 1;
-                        try {
-                            runTest(esprima, source, expected);
-                            reportSuccess(source, JSON.stringify(expected, null, 4));
-                        } catch (e) {
-                            failures += 1;
-                            reportFailure(source, e.expected, e.actual);
-                        }
-                    }
-                }
-            }
-        }
-        tick = (new Date()) - tick;
-
-        if (failures > 0) {
-            document.getElementById('status').className = 'alert-box alert';
-            setText(document.getElementById('status'), total + ' tests. ' +
-                'Failures: ' + failures + '. ' + tick + ' ms.');
-        } else {
-            document.getElementById('status').className = 'alert-box success';
-            setText(document.getElementById('status'), total + ' tests. ' +
-                'No failure. ' + tick + ' ms.');
-        }
-    };
-} else {
+if (typeof window === 'undefined') {
     (function () {
         'use strict';
 
@@ -446,25 +307,76 @@ if (typeof window !== 'undefined') {
             fs = require('fs'),
             diff = require('json-diff').diffString,
             total = 0,
+            result,
             failures = [],
+            cases = {},
+            context = {source: '', result: null},
             tick = new Date(),
             expected,
+            testCase,
             header;
 
-        vm.runInThisContext(fs.readFileSync(__dirname + '/test.js', 'utf-8'));
+        function enumerateFixtures(root) {
+            var dirs = fs.readdirSync(root), key, kind,
+                kinds = ['case', 'source', 'run', 'tree', 'tokens', 'failure', 'result'],
+                suffices = ['js', 'js', 'js', 'json', 'json', 'json', 'json'];
 
-        Object.keys(testFixture).forEach(function (category) {
-            Object.keys(testFixture[category]).forEach(function (source) {
-                total += 1;
-                expected = testFixture[category][source];
-                try {
-                    runTest(esprima, source, expected);
-                } catch (e) {
-                    e.source = source;
-                    failures.push(e);
+            dirs.forEach(function (item) {
+                var i;
+                if (fs.statSync(root + '/' + item).isDirectory()) {
+                    enumerateFixtures(root + '/' + item);
+                } else {
+                    kind = 'case';
+                    key = item.slice(0, -3);
+                    for (i = 1; i < kinds.length; i++) {
+                        var suffix = '.' + kinds[i] + '.' + suffices[i];
+                        if (item.slice(-suffix.length) === suffix) {
+                            key = item.slice(0, -suffix.length);
+                            kind = kinds[i];
+                        }
+                    }
+                    key = root + '/' + key;
+                    if (!cases[key]) {
+                        total++;
+                        cases[key] = { key: key };
+                    }
+                    cases[key][kind] = fs.readFileSync(root + '/' + item, 'utf-8');
                 }
             });
-        });
+        }
+
+        enumerateFixtures(__dirname + '/fixtures');
+
+        for (var key in cases) {
+            if (cases.hasOwnProperty(key)) {
+                testCase = cases[key];
+
+                if (testCase.hasOwnProperty('source')) {
+                    testCase.case = eval(testCase.source + ';source');
+                }
+
+                try {
+                    if (testCase.hasOwnProperty('tree')) {
+                        testParse(esprima, testCase.case, JSON.parse(testCase.tree));
+                    } else if (testCase.hasOwnProperty('tokens')) {
+                        testTokenize(esprima, testCase.case, JSON.parse(testCase.tokens));
+                    } else if (testCase.hasOwnProperty('failure')) {
+                        testError(esprima, testCase.case, JSON.parse(testCase.failure));
+                    } else if (testCase.hasOwnProperty('result')) {
+                        testAPI(esprima, testCase.run, JSON.parse(testCase.result));
+                    } else {
+                        throw new Error('Incomplete test case:' + testCase.key);
+                    }
+                } catch (e) {
+                    if (!e.expected) {
+                        throw e;
+                    }
+                    e.source = testCase.case || testCase.key;
+                    failures.push(e);
+                }
+            }
+        }
+
         tick = (new Date()) - tick;
 
         header = total + ' tests. ' + failures.length + ' failures. ' +

@@ -1,0 +1,35 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "Literal",
+                "value": 3,
+                "raw": "3",
+                "range": [
+                    0,
+                    1
+                ]
+            },
+            "range": [
+                0,
+                1
+            ]
+        }
+    ],
+    "tokens": [
+        {
+            "type": "Numeric",
+            "value": "3",
+            "range": [
+                0,
+                1
+            ]
+        }
+    ],
+    "range": [
+        0,
+        1
+    ]
+}

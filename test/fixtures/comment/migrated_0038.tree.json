@@ -1,0 +1,38 @@
+{
+    "type": "Program",
+    "body": [],
+    "comments": [
+        {
+            "type": "Line",
+            "value": " comment",
+            "range": [
+                0,
+                11
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 11
+                }
+            }
+        }
+    ],
+    "range": [
+        11,
+        11
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 11
+        },
+        "end": {
+            "line": 1,
+            "column": 11
+        }
+    }
+}
