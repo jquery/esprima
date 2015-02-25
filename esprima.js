@@ -1992,6 +1992,22 @@
         }
     };
 
+
+    function recordError(error) {
+        var e, existing;
+
+        for (e = 0; e < extra.errors.length; e++) {
+            existing = extra.errors[e];
+            // Prevent duplicated error.
+            /* istanbul ignore next */
+            if (existing.index === error.index && existing.message === error.message) {
+                return;
+            }
+        }
+
+        extra.errors.push(error);
+    }
+
     function createError(line, pos, description) {
         var error = new Error('Line ' + line + ': ' + description);
         error.index = pos;
@@ -2031,7 +2047,7 @@
 
         error = createError(lineNumber, lastIndex, msg);
         if (extra.errors) {
-            extra.errors.push(error);
+            recordError(error);
         } else {
             throw error;
         }
@@ -2072,7 +2088,7 @@
     function tolerateUnexpectedToken(token, message) {
         var error = unexpectedTokenError(token, message);
         if (extra.errors) {
-            extra.errors.push(error);
+            recordError(error);
         } else {
             throw error;
         }
@@ -4187,7 +4203,7 @@
                     lex();
                 } catch (lexError) {
                     if (extra.errors) {
-                        extra.errors.push(lexError);
+                        recordError(lexError);
                         // We have to break on the first error
                         // to avoid infinite loops.
                         break;
