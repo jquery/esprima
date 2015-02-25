@@ -82,7 +82,8 @@
         NumericLiteral: 6,
         Punctuator: 7,
         StringLiteral: 8,
-        RegularExpression: 9
+        RegularExpression: 9,
+        Template: 10
     };
 
     TokenName = {};
@@ -142,8 +143,11 @@
         Property: 'Property',
         ReturnStatement: 'ReturnStatement',
         SequenceExpression: 'SequenceExpression',
-        SwitchStatement: 'SwitchStatement',
         SwitchCase: 'SwitchCase',
+        SwitchStatement: 'SwitchStatement',
+        TaggedTemplateExpression: 'TaggedTemplateExpression',
+        TemplateElement: 'TemplateElement',
+        TemplateLiteral: 'TemplateLiteral',
         ThisExpression: 'ThisExpression',
         ThrowStatement: 'ThrowStatement',
         TryStatement: 'TryStatement',
@@ -168,6 +172,7 @@
         UnexpectedString: 'Unexpected string',
         UnexpectedIdentifier: 'Unexpected identifier',
         UnexpectedReserved: 'Unexpected reserved word',
+        UnexpectedTemplate: 'Unexpected quasi %0',
         UnexpectedEOS: 'Unexpected end of input',
         NewlineAfterThrow: 'Illegal newline after throw',
         InvalidRegExp: 'Invalid regular expression',
@@ -1086,6 +1091,148 @@
         };
     }
 
+    function scanTemplate() {
+        var cooked = '', ch, start, terminated, tail, restore, unescaped, code, octal;
+
+        terminated = false;
+        tail = false;
+        start = index;
+
+        ++index;
+
+        while (index < length) {
+            ch = source[index++];
+            if (ch === '`') {
+                tail = true;
+                terminated = true;
+                break;
+            } else if (ch === '$') {
+                if (source[index] === '{') {
+                    ++index;
+                    terminated = true;
+                    break;
+                }
+                cooked += ch;
+            } else if (ch === '\\') {
+                ch = source[index++];
+                if (!isLineTerminator(ch.charCodeAt(0))) {
+                    switch (ch) {
+                    case 'n':
+                        cooked += '\n';
+                        break;
+                    case 'r':
+                        cooked += '\r';
+                        break;
+                    case 't':
+                        cooked += '\t';
+                        break;
+                    case 'u':
+                    case 'x':
+                        if (source[index] === '{') {
+                            ++index;
+                            cooked += scanUnicodeCodePointEscape();
+                        } else {
+                            restore = index;
+                            unescaped = scanHexEscape(ch);
+                            if (unescaped) {
+                                cooked += unescaped;
+                            } else {
+                                index = restore;
+                                cooked += ch;
+                            }
+                        }
+                        break;
+                    case 'b':
+                        cooked += '\b';
+                        break;
+                    case 'f':
+                        cooked += '\f';
+                        break;
+                    case 'v':
+                        cooked += '\v';
+                        break;
+
+                    default:
+                        if (isOctalDigit(ch)) {
+                            code = '01234567'.indexOf(ch);
+
+                            // \0 is not octal escape sequence
+                            if (code !== 0) {
+                                octal = true;
+                            }
+
+                            /* istanbul ignore else */
+                            if (index < length && isOctalDigit(source[index])) {
+                                octal = true;
+                                code = code * 8 + '01234567'.indexOf(source[index++]);
+
+                                // 3 digits are only allowed when string starts
+                                // with 0, 1, 2, 3
+                                if ('0123'.indexOf(ch) >= 0 &&
+                                        index < length &&
+                                        isOctalDigit(source[index])) {
+                                    code = code * 8 + '01234567'.indexOf(source[index++]);
+                                }
+                            }
+                            cooked += String.fromCharCode(code);
+                        } else {
+                            cooked += ch;
+                        }
+                        break;
+                    }
+                } else {
+                    ++lineNumber;
+                    if (ch === '\r' && source[index] === '\n') {
+                        ++index;
+                    }
+                    lineStart = index;
+                }
+            } else if (isLineTerminator(ch.charCodeAt(0))) {
+                ++lineNumber;
+                if (ch === '\r' && source[index] === '\n') {
+                    ++index;
+                }
+                lineStart = index;
+                cooked += '\n';
+            } else {
+                cooked += ch;
+            }
+        }
+
+        if (!terminated) {
+            throwError(Messages.UnexpectedToken);
+        }
+
+        return {
+            type: Token.Template,
+            value: {
+                cooked: cooked,
+                raw: source.slice(start + 1, index - ((tail) ? 1 : 2))
+            },
+            tail: tail,
+            octal: octal,
+            lineNumber: lineNumber,
+            lineStart: lineStart,
+            range: [start, index]
+        };
+    }
+
+    function scanTemplateElement(option) {
+        var startsWith, template;
+        lookahead = null;
+        skipComment();
+
+        startsWith = (option.head) ? '`' : '}';
+        if (source[index] !== startsWith) {
+            throwError(Messages.UnexpectedToken, source[index]);
+        }
+
+        template = scanTemplate();
+        peek();
+
+        return template;
+    }
+
     function testRegExp(pattern, flags) {
         var tmp = pattern;
 
@@ -1407,6 +1554,11 @@
                 return scanNumericLiteral();
             }
             return scanPunctuator();
+        }
+
+        // Template literal starts with backtick (U+0060)
+        if (ch === 0x60) {
+            return scanTemplate();
         }
 
         if (isDecimalDigit(ch)) {
@@ -1918,6 +2070,30 @@
             return this;
         },
 
+        finishTaggedTemplateExpression: function(tag, quasi) {
+            this.type = Syntax.TaggedTemplateExpression;
+            this.tag = tag;
+            this.quasi = quasi;
+            this.finish();
+            return this;
+        },
+
+        finishTemplateElement: function (value, tail) {
+            this.type = Syntax.TemplateElement;
+            this.value = value;
+            this.tail = tail;
+            this.finish();
+            return this;
+        },
+
+        finishTemplateLiteral: function (quasis, expressions) {
+            this.type = Syntax.TemplateLiteral;
+            this.quasis = quasis;
+            this.expressions = expressions;
+            this.finish();
+            return this;
+        },
+
         finishThisExpression: function () {
             this.type = Syntax.ThisExpression;
             this.finish();
@@ -2408,6 +2584,31 @@
         return node.finishObjectExpression(properties);
     }
 
+    function parseTemplateElement(option) {
+        var token = scanTemplateElement(option), node = new Node();
+        if (strict && token.octal) {
+            throwError(token, Messages.StrictOctalLiteral);
+        }
+        return node.finishTemplateElement(token.value, token.tail);
+    }
+
+    function parseTemplateLiteral() {
+        var quasi, quasis, expressions, node = new Node();
+        index = startIndex;
+        quasi = parseTemplateElement({ head: true });
+        quasis = [ quasi ];
+        expressions = [];
+
+        while (!quasi.tail) {
+            expressions.push(parseExpression());
+            index = startIndex;
+            quasi = parseTemplateElement({ head: false });
+            quasis.push(quasi);
+        }
+
+        return node.finishTemplateLiteral(quasis, expressions);
+    }
+
     // 11.1.6 The Grouping Operator
 
     function parseGroupExpression() {
@@ -2477,7 +2678,9 @@
             token = lex();
             token.value = null;
             expr = node.finishLiteral(token);
-        } else if (match('/') || match('/=')) {
+        } else if (type === Token.Template) {
+            return parseTemplateLiteral();
+        }   else if (match('/') || match('/=')) {
             index = startIndex;
 
             if (typeof extra.tokens !== 'undefined') {
@@ -2573,6 +2776,8 @@
             } else if (match('[')) {
                 property = parseComputedMember();
                 expr = new WrappingNode(startToken).finishMemberExpression('[', expr, property);
+            } else if (lookahead.type === Token.Template) {
+                expr = new WrappingNode(startToken).finishTaggedTemplateExpression(expr, parseTemplateLiteral());
             } else {
                 break;
             }
@@ -2597,6 +2802,8 @@
             } else if (match('.')) {
                 property = parseNonComputedMember();
                 expr = new WrappingNode(startToken).finishMemberExpression('.', expr, property);
+            } else if (lookahead.type === Token.Template) {
+                expr = new WrappingNode(startToken).finishTaggedTemplateExpression(expr, parseTemplateLiteral());
             } else {
                 break;
             }
