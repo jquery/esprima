@@ -67,7 +67,7 @@
         "check-version": "node tools/check-version.js",
         "eslint": "node node_modules/eslint/bin/eslint.js esprima.js",
         "jscs": "node node_modules/jscs/bin/jscs esprima.js",
-        "jslint": "node node_modules/jslint/bin/jslint.js esprima.js",
+        "jslint": "echo Skipping JSLint",
 
         "coverage": "npm run-script analyze-coverage && npm run-script check-coverage",
         "analyze-coverage": "node node_modules/istanbul/lib/cli.js cover test/runner.js",
