@@ -3740,7 +3740,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     // Sync with *.json manifests.
-    exports.version = '1.2.4';
+    exports.version = '1.2.5';
 
     exports.tokenize = tokenize;
 
