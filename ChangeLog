@@ -12,6 +12,10 @@
       * Support ES6 binary integer literal (issue 622)
       * Support ES6 object literal property value shorthand (issue 624)
 
+2015-03-03: Version 1.2.5
+
+      * Fix scanning of implicit octal literals (issue 565)
+
 2015-02-05: Version 1.2.4
 
       * Fix parsing of LeftHandSideExpression in ForInStatement (issue 560)
