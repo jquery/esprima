@@ -27,6 +27,7 @@
                     }
                 ],
                 "defaults": [],
+                "rest": null,
                 "body": {
                     "type": "ArrowFunctionExpression",
                     "id": null,
@@ -69,6 +70,7 @@
                         }
                     ],
                     "defaults": [],
+                    "rest": null,
                     "body": {
                         "type": "SequenceExpression",
                         "expressions": [
@@ -142,7 +144,6 @@
                             }
                         }
                     },
-                    "rest": null,
                     "generator": false,
                     "expression": true,
                     "range": [
@@ -160,7 +161,6 @@
                         }
                     }
                 },
-                "rest": null,
                 "generator": false,
                 "expression": true,
                 "range": [

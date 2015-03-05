@@ -66,6 +66,7 @@
                         }
                     }
                 ],
+                "rest": null,
                 "body": {
                     "type": "Literal",
                     "value": 42,
@@ -85,7 +86,6 @@
                         }
                     }
                 },
-                "rest": null,
                 "generator": false,
                 "expression": true,
                 "range": [
