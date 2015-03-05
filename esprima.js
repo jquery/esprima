@@ -156,9 +156,7 @@
     };
 
     PlaceHolders = {
-        ArrowParameterPlaceHolder: {
-            type: 'ArrowParameterPlaceHolder'
-        }
+        ArrowParameterPlaceHolder: 'ArrowParameterPlaceHolder'
     };
 
     // Error messages should be identical to V8.
@@ -1626,13 +1624,13 @@
             return this;
         },
 
-        finishArrowFunctionExpression: function (params, defaults, body, expression) {
+        finishArrowFunctionExpression: function (params, defaults, rest, body, expression) {
             this.type = Syntax.ArrowFunctionExpression;
             this.id = null;
             this.params = params;
             this.defaults = defaults;
+            this.rest = rest;
             this.body = body;
-            this.rest = null;
             this.generator = false;
             this.expression = expression;
             this.finish();
@@ -2427,20 +2425,83 @@
     // 11.1.6 The Grouping Operator
 
     function parseGroupExpression() {
-        var expr;
+        var expr, expressions, startToken, isValidArrowParameter = true;
 
         expect('(');
 
         if (match(')')) {
             lex();
-            return PlaceHolders.ArrowParameterPlaceHolder;
+            if (!match('=>')) {
+                expect('=>');
+            }
+            return {
+                type: PlaceHolders.ArrowParameterPlaceHolder,
+                params: [],
+                rest: null
+            };
         }
 
-        ++state.parenthesisCount;
+        startToken = lookahead;
+        if (match('...')) {
+            lex();
+            expr = parseVariableIdentifier();
+            expect(')');
+            if (!match('=>')) {
+                expect('=>');
+            }
+            return {
+                type: PlaceHolders.ArrowParameterPlaceHolder,
+                params: [],
+                rest: expr
+            };
+        }
 
-        expr = parseExpression();
+        if (match('(')) {
+            isValidArrowParameter = false;
+        }
+
+        expr = parseAssignmentExpression();
+
+        if (match(',')) {
+            expressions = [expr];
+
+            while (startIndex < length) {
+                if (!match(',')) {
+                    break;
+                }
+                lex();
+
+                if (match('...')) {
+                    if (!isValidArrowParameter) {
+                        throwUnexpectedToken(lookahead);
+                    }
+                    lex();
+                    expr = parseVariableIdentifier();
+                    expect(')');
+                    if (!match('=>')) {
+                        expect('=>');
+                    }
+                    return {
+                        type: PlaceHolders.ArrowParameterPlaceHolder,
+                        params: expressions,
+                        rest: expr
+                    };
+                } else if (match('(')) {
+                    isValidArrowParameter = false;
+                }
+
+                expressions.push(parseAssignmentExpression());
+            }
+
+            expr = new WrappingNode(startToken).finishSequenceExpression(expressions);
+        }
+
 
         expect(')');
+
+        if (match('=>') && !isValidArrowParameter) {
+            throwUnexpectedToken(lookahead);
+        }
 
         return expr;
     }
@@ -2771,9 +2832,6 @@
 
         marker = lookahead;
         left = parseUnaryExpression();
-        if (left === PlaceHolders.ArrowParameterPlaceHolder) {
-            return left;
-        }
 
         token = lookahead;
         prec = binaryPrecedence(token, state.allowIn);
@@ -2830,9 +2888,6 @@
         startToken = lookahead;
 
         expr = parseBinaryExpression();
-        if (expr === PlaceHolders.ArrowParameterPlaceHolder) {
-            return expr;
-        }
         if (match('?')) {
             lex();
             previousAllowIn = state.allowIn;
@@ -2857,25 +2912,41 @@
         return parseAssignmentExpression();
     }
 
-    function reinterpretAsCoverFormalsList(expressions) {
+    function reinterpretAsCoverFormalsList(expr) {
         var i, len, param, params, defaults, defaultCount, options, rest, token;
 
-        params = [];
         defaults = [];
         defaultCount = 0;
+        params = [expr];
         rest = null;
+
+        switch (expr.type) {
+        case Syntax.Identifier:
+        case Syntax.AssignmentExpression:
+            break;
+        case Syntax.SequenceExpression:
+            params = expr.expressions;
+            break;
+        case PlaceHolders.ArrowParameterPlaceHolder:
+            params = expr.params;
+            rest = expr.rest;
+            break;
+        default:
+            return null;
+        }
+
         options = {
             paramSet: {}
         };
 
-        for (i = 0, len = expressions.length; i < len; i += 1) {
-            param = expressions[i];
+        for (i = 0, len = params.length; i < len; i += 1) {
+            param = params[i];
             if (param.type === Syntax.Identifier) {
-                params.push(param);
+                params[i] = param;
                 defaults.push(null);
                 validateParam(options, param, param.name);
             } else if (param.type === Syntax.AssignmentExpression) {
-                params.push(param.left);
+                params[i] = param.left;
                 defaults.push(param.right);
                 ++defaultCount;
                 validateParam(options, param.left, param.left.name);
@@ -2920,36 +2991,24 @@
 
         strict = previousStrict;
 
-        return node.finishArrowFunctionExpression(options.params, options.defaults, body, body.type !== Syntax.BlockStatement);
+        return node.finishArrowFunctionExpression(options.params, options.defaults, options.rest, body, body.type !== Syntax.BlockStatement);
     }
 
     // 11.13 Assignment Operators
 
     function parseAssignmentExpression() {
-        var oldParenthesisCount, token, expr, right, list, startToken;
-
-        oldParenthesisCount = state.parenthesisCount;
+        var token, expr, right, list, startToken;
 
         startToken = lookahead;
         token = lookahead;
 
         expr = parseConditionalExpression();
 
-        if (expr === PlaceHolders.ArrowParameterPlaceHolder || match('=>')) {
-            if (state.parenthesisCount === oldParenthesisCount ||
-                    state.parenthesisCount === (oldParenthesisCount + 1)) {
-                if (expr.type === Syntax.Identifier) {
-                    list = reinterpretAsCoverFormalsList([ expr ]);
-                } else if (expr.type === Syntax.AssignmentExpression) {
-                    list = reinterpretAsCoverFormalsList([ expr ]);
-                } else if (expr.type === Syntax.SequenceExpression) {
-                    list = reinterpretAsCoverFormalsList(expr.expressions);
-                } else if (expr === PlaceHolders.ArrowParameterPlaceHolder) {
-                    list = reinterpretAsCoverFormalsList([]);
-                }
-                if (list) {
-                    return parseArrowFunctionExpression(list, new WrappingNode(startToken));
-                }
+        if (expr.type === PlaceHolders.ArrowParameterPlaceHolder || match('=>')) {
+            list = reinterpretAsCoverFormalsList(expr);
+
+            if (list) {
+                return parseArrowFunctionExpression(list, new WrappingNode(startToken));
             }
         }
 
@@ -4249,7 +4308,6 @@
         state = {
             allowIn: true,
             labelSet: {},
-            parenthesisCount: 0,
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,

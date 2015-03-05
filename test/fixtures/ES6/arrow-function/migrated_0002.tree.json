@@ -27,6 +27,7 @@
                     }
                 ],
                 "defaults": [],
+                "rest": null,
                 "body": {
                     "type": "Literal",
                     "value": "test",
@@ -46,7 +47,6 @@
                         }
                     }
                 },
-                "rest": null,
                 "generator": false,
                 "expression": true,
                 "range": [

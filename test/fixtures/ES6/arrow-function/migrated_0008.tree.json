@@ -47,6 +47,7 @@
                         }
                     }
                 ],
+                "rest": null,
                 "body": {
                     "type": "BinaryExpression",
                     "operator": "*",
@@ -101,7 +102,6 @@
                         }
                     }
                 },
-                "rest": null,
                 "generator": false,
                 "expression": true,
                 "range": [

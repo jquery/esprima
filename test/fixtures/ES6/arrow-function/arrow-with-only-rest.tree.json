@@ -6,43 +6,42 @@
             "expression": {
                 "type": "ArrowFunctionExpression",
                 "id": null,
-                "params": [
-                    {
-                        "type": "Identifier",
-                        "name": "sun",
-                        "range": [
-                            1,
-                            4
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 1
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 4
-                            }
-                        }
-                    }
-                ],
+                "params": [],
                 "defaults": [],
-                "rest": null,
-                "body": {
+                "rest": {
                     "type": "Identifier",
-                    "name": "earth",
+                    "name": "a",
                     "range": [
-                        9,
-                        14
+                        4,
+                        5
                     ],
                     "loc": {
                         "start": {
                             "line": 1,
-                            "column": 9
+                            "column": 4
                         },
                         "end": {
                             "line": 1,
-                            "column": 14
+                            "column": 5
+                        }
+                    }
+                },
+                "body": {
+                    "type": "Literal",
+                    "value": 0,
+                    "raw": "0",
+                    "range": [
+                        10,
+                        11
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 10
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 11
                         }
                     }
                 },
@@ -50,7 +49,7 @@
                 "expression": true,
                 "range": [
                     0,
-                    14
+                    11
                 ],
                 "loc": {
                     "start": {
@@ -59,13 +58,13 @@
                     },
                     "end": {
                         "line": 1,
-                        "column": 14
+                        "column": 11
                     }
                 }
             },
             "range": [
                 0,
-                14
+                11
             ],
             "loc": {
                 "start": {
@@ -74,7 +73,7 @@
                 },
                 "end": {
                     "line": 1,
-                    "column": 14
+                    "column": 11
                 }
             }
         }
@@ -99,8 +98,8 @@
             }
         },
         {
-            "type": "Identifier",
-            "value": "sun",
+            "type": "Punctuator",
+            "value": "...",
             "range": [
                 1,
                 4
@@ -117,8 +116,8 @@
             }
         },
         {
-            "type": "Punctuator",
-            "value": ")",
+            "type": "Identifier",
+            "value": "a",
             "range": [
                 4,
                 5
@@ -136,44 +135,62 @@
         },
         {
             "type": "Punctuator",
-            "value": "=>",
+            "value": ")",
             "range": [
-                6,
-                8
+                5,
+                6
             ],
             "loc": {
                 "start": {
                     "line": 1,
-                    "column": 6
+                    "column": 5
                 },
                 "end": {
                     "line": 1,
-                    "column": 8
+                    "column": 6
                 }
             }
         },
         {
-            "type": "Identifier",
-            "value": "earth",
+            "type": "Punctuator",
+            "value": "=>",
             "range": [
-                9,
-                14
+                7,
+                9
             ],
             "loc": {
                 "start": {
                     "line": 1,
-                    "column": 9
+                    "column": 7
                 },
                 "end": {
                     "line": 1,
-                    "column": 14
+                    "column": 9
+                }
+            }
+        },
+        {
+            "type": "Numeric",
+            "value": "0",
+            "range": [
+                10,
+                11
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 10
+                },
+                "end": {
+                    "line": 1,
+                    "column": 11
                 }
             }
         }
     ],
     "range": [
         0,
-        14
+        11
     ],
     "loc": {
         "start": {
@@ -182,7 +199,7 @@
         },
         "end": {
             "line": 1,
-            "column": 14
+            "column": 11
         }
     }
 }
