@@ -458,10 +458,14 @@
                     };
                     addComment('Line', comment, start, index - 1, loc);
                 }
-                if (ch === 13 && source.charCodeAt(index) === 10) {
-                    ++index;
+                // CR without a LF does not increment the lineNumber;
+                if (ch !== 13 || source.charCodeAt(index) === 10) {
+                    if (ch === 13) {
+                        // CR LF
+                        ++index;
+                    }
+                    ++lineNumber;
                 }
-                ++lineNumber;
                 lineStart = index;
                 return;
             }
@@ -493,11 +497,15 @@
         while (index < length) {
             ch = source.charCodeAt(index);
             if (isLineTerminator(ch)) {
-                if (ch === 13 && source.charCodeAt(index + 1) === 10) {
-                    ++index;
-                }
-                ++lineNumber;
                 ++index;
+                // CR without a LF does not increment the lineNumber;
+                if (ch !== 13 || source.charCodeAt(index) === 10) {
+                    if (ch === 13) {
+                        // CR LF
+                        ++index;
+                    }
+                    ++lineNumber;
+                }
                 lineStart = index;
                 if (index >= length) {
                     throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
@@ -536,10 +544,14 @@
                 ++index;
             } else if (isLineTerminator(ch)) {
                 ++index;
-                if (ch === 13 && source.charCodeAt(index) === 10) {
-                    ++index;
+                // CR without a LF does not increment the lineNumber;
+                if (ch !== 13 || source.charCodeAt(index) === 10) {
+                    if (ch === 13) {
+                        // CR LF
+                        ++index;
+                    }
+                    ++lineNumber;
                 }
-                ++lineNumber;
                 lineStart = index;
             } else if (ch === 47) { // 47 is '/'
                 ch = source.charCodeAt(index + 1);
