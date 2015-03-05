@@ -458,7 +458,7 @@
                     };
                     addComment('Line', comment, start, index - 1, loc);
                 }
-                // CR without a LF does not increment the lineNumber;
+                // CR without a LF does not increment the lineNumber
                 if (ch !== 13 || source.charCodeAt(index) === 10) {
                     if (ch === 13) {
                         // CR LF
@@ -498,7 +498,7 @@
             ch = source.charCodeAt(index);
             if (isLineTerminator(ch)) {
                 ++index;
-                // CR without a LF does not increment the lineNumber;
+                // CR without a LF does not increment the lineNumber
                 if (ch !== 13 || source.charCodeAt(index) === 10) {
                     if (ch === 13) {
                         // CR LF
@@ -544,7 +544,7 @@
                 ++index;
             } else if (isLineTerminator(ch)) {
                 ++index;
-                // CR without a LF does not increment the lineNumber;
+                // CR without a LF does not increment the lineNumber
                 if (ch !== 13 || source.charCodeAt(index) === 10) {
                     if (ch === 13) {
                         // CR LF
