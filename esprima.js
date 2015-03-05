@@ -3277,7 +3277,7 @@
                 declarations = parseBindingList(kind);
                 state.allowIn = previousAllowIn;
 
-                if (declarations.length === 1 && matchKeyword('in')) {
+                if (declarations.length === 1 && declarations[0].init === null && matchKeyword('in')) {
                     init = init.finishLexicalDeclaration(declarations, kind);
                     lex();
                     left = init;
