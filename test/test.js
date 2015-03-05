@@ -3866,14 +3866,14 @@ var testFixtureOptions = {},
                     raw: '42',
                     range: [8, 10],
                     loc: {
-                        start: { line: 2, column: 4 },
-                        end: { line: 2, column: 6 }
+                        start: { line: 1, column: 4 },
+                        end: { line: 1, column: 6 }
                     }
                 },
                 range: [8, 10],
                 loc: {
-                    start: { line: 2, column: 4 },
-                    end: { line: 2, column: 6 }
+                    start: { line: 1, column: 4 },
+                    end: { line: 1, column: 6 }
                 },
                 leadingComments: [{
                     type: 'Block',
@@ -3881,14 +3881,14 @@ var testFixtureOptions = {},
                     range: [0, 7],
                     loc: {
                         start: { line: 1, column: 0 },
-                        end: { line: 2, column: 3 }
+                        end: { line: 1, column: 3 }
                     }
                 }]
             }],
             range: [8, 10],
             loc: {
-                start: { line: 2, column: 4 },
-                end: { line: 2, column: 6 }
+                start: { line: 1, column: 4 },
+                end: { line: 1, column: 6 }
             },
             comments: [{
                 type: 'Block',
@@ -3896,7 +3896,7 @@ var testFixtureOptions = {},
                 range: [0, 7],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 2, column: 3 }
+                    end: { line: 1, column: 3 }
                 }
             }]
         },
@@ -17864,9 +17864,9 @@ var testFixtureOptions = {},
 
         '\r]': {
             index: 1,
-            lineNumber: 2,
+            lineNumber: 1,
             column: 1,
-            message: 'Error: Line 2: Unexpected token ]'
+            message: 'Error: Line 1: Unexpected token ]'
         },
 
         '\r\n]': {
@@ -17878,9 +17878,9 @@ var testFixtureOptions = {},
 
         '\n\r]': {
             index: 2,
-            lineNumber: 3,
+            lineNumber: 2,
             column: 1,
-            message: 'Error: Line 3: Unexpected token ]'
+            message: 'Error: Line 2: Unexpected token ]'
         },
 
         '//\r\n]': {
@@ -17892,9 +17892,9 @@ var testFixtureOptions = {},
 
         '//\n\r]': {
             index: 4,
-            lineNumber: 3,
+            lineNumber: 2,
             column: 1,
-            message: 'Error: Line 3: Unexpected token ]'
+            message: 'Error: Line 2: Unexpected token ]'
         },
 
         '/a\\\n/': {
@@ -17906,9 +17906,9 @@ var testFixtureOptions = {},
 
         '//\r \n]': {
             index: 5,
-            lineNumber: 3,
+            lineNumber: 2,
             column: 1,
-            message: 'Error: Line 3: Unexpected token ]'
+            message: 'Error: Line 2: Unexpected token ]'
         },
 
         '/*\r\n*/]': {
@@ -17920,16 +17920,16 @@ var testFixtureOptions = {},
 
         '/*\n\r*/]': {
             index: 6,
-            lineNumber: 3,
+            lineNumber: 2,
             column: 3,
-            message: 'Error: Line 3: Unexpected token ]'
+            message: 'Error: Line 2: Unexpected token ]'
         },
 
         '/*\r \n*/]': {
             index: 7,
-            lineNumber: 3,
+            lineNumber: 2,
             column: 3,
-            message: 'Error: Line 3: Unexpected token ]'
+            message: 'Error: Line 2: Unexpected token ]'
         },
 
         '\\\\': {
