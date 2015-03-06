@@ -1,3 +1,13 @@
+2015-03-09: Version 2.1.0
+
+      * Support ES6 class (issue 1001)
+      * Support ES6 rest parameter (issue 1011)
+      * Expand the location of property getter, setter, and methods (issue 1029)
+      * Enable TryStatement transition to a single handler (issue 1031)
+      * Support ES6 computed property name (issue 1037)
+      * Tolerate unclosed block comment (issue 1041)
+      * Support ES6 lexical declaration (issue 1065)
+
 2015-02-06: Version 2.0.0
 
       * Support ES6 arrow function (issue 517)
