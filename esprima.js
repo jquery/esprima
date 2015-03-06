@@ -140,6 +140,7 @@
         ObjectExpression: 'ObjectExpression',
         Program: 'Program',
         Property: 'Property',
+        RestElement: 'RestElement',
         ReturnStatement: 'ReturnStatement',
         SequenceExpression: 'SequenceExpression',
         SwitchStatement: 'SwitchStatement',
@@ -1624,12 +1625,11 @@
             return this;
         },
 
-        finishArrowFunctionExpression: function (params, defaults, rest, body, expression) {
+        finishArrowFunctionExpression: function (params, defaults, body, expression) {
             this.type = Syntax.ArrowFunctionExpression;
             this.id = null;
             this.params = params;
             this.defaults = defaults;
-            this.rest = rest;
             this.body = body;
             this.generator = false;
             this.expression = expression;
@@ -1773,26 +1773,24 @@
             return this;
         },
 
-        finishFunctionDeclaration: function (id, params, defaults, body, rest) {
+        finishFunctionDeclaration: function (id, params, defaults, body) {
             this.type = Syntax.FunctionDeclaration;
             this.id = id;
             this.params = params;
             this.defaults = defaults;
             this.body = body;
-            this.rest = rest;
             this.generator = false;
             this.expression = false;
             this.finish();
             return this;
         },
 
-        finishFunctionExpression: function (id, params, defaults, body, rest) {
+        finishFunctionExpression: function (id, params, defaults, body) {
             this.type = Syntax.FunctionExpression;
             this.id = id;
             this.params = params;
             this.defaults = defaults;
             this.body = body;
-            this.rest = rest;
             this.generator = false;
             this.expression = false;
             this.finish();
@@ -1882,6 +1880,13 @@
             this.kind = kind;
             this.method = method;
             this.shorthand = shorthand;
+            this.finish();
+            return this;
+        },
+
+        finishRestElement: function (argument) {
+            this.type = Syntax.RestElement;
+            this.argument = argument;
             this.finish();
             return this;
         },
@@ -2239,7 +2244,7 @@
         }
 
         strict = previousStrict;
-        return node.finishFunctionExpression(null, paramInfo.params, paramInfo.defaults, body, paramInfo.rest);
+        return node.finishFunctionExpression(null, paramInfo.params, paramInfo.defaults, body);
     }
 
     function parsePropertyMethodFunction() {
@@ -2322,8 +2327,7 @@
                     defaults: [],
                     stricted: null,
                     firstRestricted: null,
-                    message: null,
-                    rest: null
+                    message: null
                 });
                 return node.finishProperty('get', key, computed, value, false, false);
             } else if (token.value === 'set' && lookaheadPropertyName()) {
@@ -2337,8 +2341,7 @@
                     defaultCount: 0,
                     defaults: [],
                     firstRestricted: null,
-                    paramSet: {},
-                    rest: null
+                    paramSet: {}
                 };
                 if (match(')')) {
                     tolerateUnexpectedToken(lookahead);
@@ -2436,23 +2439,20 @@
             }
             return {
                 type: PlaceHolders.ArrowParameterPlaceHolder,
-                params: [],
-                rest: null
+                params: []
             };
         }
 
         startToken = lookahead;
         if (match('...')) {
-            lex();
-            expr = parseVariableIdentifier();
+            expr = parseRestElement();
             expect(')');
             if (!match('=>')) {
                 expect('=>');
             }
             return {
                 type: PlaceHolders.ArrowParameterPlaceHolder,
-                params: [],
-                rest: expr
+                params: [expr]
             };
         }
 
@@ -2475,16 +2475,14 @@
                     if (!isValidArrowParameter) {
                         throwUnexpectedToken(lookahead);
                     }
-                    lex();
-                    expr = parseVariableIdentifier();
+                    expressions.push(parseRestElement());
                     expect(')');
                     if (!match('=>')) {
                         expect('=>');
                     }
                     return {
                         type: PlaceHolders.ArrowParameterPlaceHolder,
-                        params: expressions,
-                        rest: expr
+                        params: expressions
                     };
                 } else if (match('(')) {
                     isValidArrowParameter = false;
@@ -2913,12 +2911,11 @@
     }
 
     function reinterpretAsCoverFormalsList(expr) {
-        var i, len, param, params, defaults, defaultCount, options, rest, token;
+        var i, len, param, params, defaults, defaultCount, options, token;
 
         defaults = [];
         defaultCount = 0;
         params = [expr];
-        rest = null;
 
         switch (expr.type) {
         case Syntax.Identifier:
@@ -2929,7 +2926,6 @@
             break;
         case PlaceHolders.ArrowParameterPlaceHolder:
             params = expr.params;
-            rest = expr.rest;
             break;
         default:
             return null;
@@ -2945,6 +2941,10 @@
                 params[i] = param;
                 defaults.push(null);
                 validateParam(options, param, param.name);
+            } else if (param.type === Syntax.RestElement) {
+                params[i] = param;
+                defaults.push(null);
+                validateParam(options, param.argument, param.argument.name);
             } else if (param.type === Syntax.AssignmentExpression) {
                 params[i] = param.left;
                 defaults.push(param.right);
@@ -2967,7 +2967,6 @@
         return {
             params: params,
             defaults: defaults,
-            rest: rest,
             stricted: options.stricted,
             firstRestricted: options.firstRestricted,
             message: options.message
@@ -2991,7 +2990,7 @@
 
         strict = previousStrict;
 
-        return node.finishArrowFunctionExpression(options.params, options.defaults, options.rest, body, body.type !== Syntax.BlockStatement);
+        return node.finishArrowFunctionExpression(options.params, options.defaults, body, body.type !== Syntax.BlockStatement);
     }
 
     // 11.13 Assignment Operators
@@ -3207,6 +3206,28 @@
         consumeSemicolon();
 
         return node.finishLexicalDeclaration(declarations, kind);
+    }
+
+    function parseRestElement() {
+        var param, node = new Node();
+
+        lex();
+
+        if (match('{')) {
+            throwError(Messages.ObjectPatternAsRestParameter);
+        }
+
+        param = parseVariableIdentifier();
+
+        if (match('=')) {
+            throwError(Messages.DefaultRestParameter);
+        }
+
+        if (!match(')')) {
+            throwError(Messages.ParameterAfterRestParameter);
+        }
+
+        return node.finishRestElement(param);
     }
 
     // 12.3 Empty Statement
@@ -3859,36 +3880,24 @@
     }
 
     function parseParam(options) {
-        var token, param, def, rest;
+        var token, param, def;
 
         token = lookahead;
         if (token.value === '...') {
-            token = lex();
-            rest = true;
-            if (match('{')) {
-                throwError(Messages.ObjectPatternAsRestParameter);
-            }
+            param = parseRestElement();
+            validateParam(options, param.argument, param.argument.name);
+            options.params.push(param);
+            options.defaults.push(null);
+            return false;
         }
 
         param = parseVariableIdentifier();
         validateParam(options, token, token.value);
 
         if (match('=')) {
-            if (rest) {
-                throwError(Messages.DefaultRestParameter);
-            }
-
             lex();
             def = parseAssignmentExpression();
             ++options.defaultCount;
-        }
-
-        if (rest) {
-            if (!match(')')) {
-                throwError(Messages.ParameterAfterRestParameter);
-            }
-            options.rest = param;
-            return false;
         }
 
         options.params.push(param);
@@ -3904,7 +3913,6 @@
             params: [],
             defaultCount: 0,
             defaults: [],
-            rest: null,
             firstRestricted: firstRestricted
         };
 
@@ -3929,7 +3937,6 @@
         return {
             params: options.params,
             defaults: options.defaults,
-            rest: options.rest,
             stricted: options.stricted,
             firstRestricted: options.firstRestricted,
             message: options.message
@@ -3975,7 +3982,7 @@
         }
         strict = previousStrict;
 
-        return node.finishFunctionDeclaration(id, params, defaults, body, tmp.rest);
+        return node.finishFunctionDeclaration(id, params, defaults, body);
     }
 
     function parseFunctionExpression() {
@@ -4021,7 +4028,7 @@
         }
         strict = previousStrict;
 
-        return node.finishFunctionExpression(id, params, defaults, body, tmp.rest);
+        return node.finishFunctionExpression(id, params, defaults, body);
     }
 
 

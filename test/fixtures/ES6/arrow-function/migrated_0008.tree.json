@@ -47,7 +47,6 @@
                         }
                     }
                 ],
-                "rest": null,
                 "body": {
                     "type": "BinaryExpression",
                     "operator": "*",

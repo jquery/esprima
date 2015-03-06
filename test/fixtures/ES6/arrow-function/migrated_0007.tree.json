@@ -45,7 +45,6 @@
                     }
                 ],
                 "defaults": [],
-                "rest": null,
                 "body": {
                     "type": "BlockStatement",
                     "body": [

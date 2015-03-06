@@ -27,7 +27,6 @@
                     }
                 ],
                 "defaults": [],
-                "rest": null,
                 "body": {
                     "type": "ArrowFunctionExpression",
                     "id": null,
@@ -52,7 +51,6 @@
                         }
                     ],
                     "defaults": [],
-                    "rest": null,
                     "body": {
                         "type": "Literal",
                         "value": 42,

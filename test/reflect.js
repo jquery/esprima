@@ -31,7 +31,6 @@ function funDecl(id, params, body) { return Pattern({ type: "FunctionDeclaration
                                              params: params,
                                              defaults: [],
                                              body: body,
-                                             rest: null,
                                              generator: false,
                                              expression: false
                                              }); }
@@ -40,7 +39,6 @@ function genFunDecl(id, params, body) { return Pattern({ type: "FunctionDeclarat
                                                 params: params,
                                                 defaults: [],
                                                 body: body,
-                                                rest: null,
                                                 generator: false,
                                                 expression: false
                                                 }); }
@@ -74,7 +72,6 @@ function funExpr(id, args, body, gen) { return Pattern({ type: "FunctionExpressi
                                                 params: args,
                                                 defaults: [],
                                                 body: body,
-                                                rest: null,
                                                 generator: false,
                                                 expression: false
                                                 }); }
@@ -83,7 +80,6 @@ function genFunExpr(id, args, body) { return Pattern({ type: "FunctionExpression
                                               params: args,
                                               defaults: [],
                                               body: body,
-                                              rest: null,
                                               generator: false,
                                               expression: false
                                               }); }

@@ -70,7 +70,6 @@
                                     }
                                 }
                             },
-                            "rest": null,
                             "generator": false,
                             "expression": false,
                             "range": [
@@ -150,7 +149,6 @@
                                     }
                                 }
                             },
-                            "rest": null,
                             "generator": false,
                             "expression": false,
                             "range": [
