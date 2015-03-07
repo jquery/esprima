@@ -3,7 +3,7 @@
     "body": [
         {
             "type": "ClassDeclaration",
-            "name": {
+            "id": {
                 "type": "Identifier",
                 "name": "A",
                 "range": [

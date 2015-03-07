@@ -1692,18 +1692,18 @@
             return this;
         },
 
-        finishClassDeclaration: function (name, superClass, body) {
+        finishClassDeclaration: function (id, superClass, body) {
             this.type = Syntax.ClassDeclaration;
-            this.name = name;
+            this.id = id;
             this.superClass = superClass;
             this.body = body;
             this.finish();
             return this;
         },
 
-        finishClassExpression: function (name, superClass, body) {
+        finishClassExpression: function (id, superClass, body) {
             this.type = Syntax.ClassExpression;
-            this.name = name;
+            this.id = id;
             this.superClass = superClass;
             this.body = body;
             this.finish();

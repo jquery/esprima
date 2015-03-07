@@ -26,7 +26,7 @@
                     },
                     "init": {
                         "type": "ClassExpression",
-                        "name": {
+                        "id": {
                             "type": "Identifier",
                             "name": "A",
                             "range": [
