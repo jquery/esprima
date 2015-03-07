@@ -2,27 +2,46 @@
     "type": "Program",
     "body": [
         {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "ObjectExpression",
-                "properties": [
+            "type": "ClassDeclaration",
+            "id": {
+                "type": "Identifier",
+                "name": "A",
+                "range": [
+                    6,
+                    7
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 6
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 7
+                    }
+                }
+            },
+            "superClass": null,
+            "body": {
+                "type": "ClassBody",
+                "body": [
                     {
-                        "type": "Property",
+                        "type": "MethodDefinition",
                         "key": {
                             "type": "Identifier",
-                            "name": "x",
+                            "name": "a",
                             "range": [
-                                2,
-                                3
+                                9,
+                                10
                             ],
                             "loc": {
                                 "start": {
                                     "line": 1,
-                                    "column": 2
+                                    "column": 9
                                 },
                                 "end": {
                                     "line": 1,
-                                    "column": 3
+                                    "column": 10
                                 }
                             }
                         },
@@ -35,17 +54,17 @@
                                     "type": "Identifier",
                                     "name": "eval",
                                     "range": [
-                                        4,
-                                        8
+                                        11,
+                                        15
                                     ],
                                     "loc": {
                                         "start": {
                                             "line": 1,
-                                            "column": 4
+                                            "column": 11
                                         },
                                         "end": {
                                             "line": 1,
-                                            "column": 8
+                                            "column": 15
                                         }
                                     }
                                 }
@@ -53,113 +72,75 @@
                             "defaults": [],
                             "body": {
                                 "type": "BlockStatement",
-                                "body": [
-                                    {
-                                        "type": "ExpressionStatement",
-                                        "expression": {
-                                            "type": "Literal",
-                                            "value": "use strict",
-                                            "raw": "\"use strict\"",
-                                            "range": [
-                                                10,
-                                                22
-                                            ],
-                                            "loc": {
-                                                "start": {
-                                                    "line": 1,
-                                                    "column": 10
-                                                },
-                                                "end": {
-                                                    "line": 1,
-                                                    "column": 22
-                                                }
-                                            }
-                                        },
-                                        "range": [
-                                            10,
-                                            22
-                                        ],
-                                        "loc": {
-                                            "start": {
-                                                "line": 1,
-                                                "column": 10
-                                            },
-                                            "end": {
-                                                "line": 1,
-                                                "column": 22
-                                            }
-                                        }
-                                    }
-                                ],
+                                "body": [],
                                 "range": [
-                                    9,
-                                    23
+                                    16,
+                                    18
                                 ],
                                 "loc": {
                                     "start": {
                                         "line": 1,
-                                        "column": 9
+                                        "column": 16
                                     },
                                     "end": {
                                         "line": 1,
-                                        "column": 23
+                                        "column": 18
                                     }
                                 }
                             },
                             "generator": false,
                             "expression": false,
                             "range": [
-                                3,
-                                23
+                                10,
+                                18
                             ],
                             "loc": {
                                 "start": {
                                     "line": 1,
-                                    "column": 3
+                                    "column": 10
                                 },
                                 "end": {
                                     "line": 1,
-                                    "column": 23
+                                    "column": 18
                                 }
                             }
                         },
-                        "kind": "init",
-                        "method": true,
-                        "shorthand": false,
+                        "kind": "method",
+                        "static": false,
                         "range": [
-                            2,
-                            23
+                            9,
+                            18
                         ],
                         "loc": {
                             "start": {
                                 "line": 1,
-                                "column": 2
+                                "column": 9
                             },
                             "end": {
                                 "line": 1,
-                                "column": 23
+                                "column": 18
                             }
                         }
                     }
                 ],
                 "range": [
-                    1,
-                    24
+                    8,
+                    19
                 ],
                 "loc": {
                     "start": {
                         "line": 1,
-                        "column": 1
+                        "column": 8
                     },
                     "end": {
                         "line": 1,
-                        "column": 24
+                        "column": 19
                     }
                 }
             },
             "range": [
                 0,
-                25
+                19
             ],
             "loc": {
                 "start": {
@@ -168,22 +149,22 @@
                 },
                 "end": {
                     "line": 1,
-                    "column": 25
+                    "column": 19
                 }
             }
         }
     ],
     "errors": [
         {
-            "index": 4,
+            "index": 11,
             "lineNumber": 1,
-            "column": 5,
+            "column": 12,
             "message": "Error: Line 1: Parameter name eval or arguments is not allowed in strict mode"
         }
     ],
     "range": [
         0,
-        25
+        19
     ],
     "loc": {
         "start": {
@@ -192,7 +173,7 @@
         },
         "end": {
             "line": 1,
-            "column": 25
+            "column": 19
         }
     }
 }

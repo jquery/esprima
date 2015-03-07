@@ -5,7 +5,7 @@
             "type": "ExpressionStatement",
             "expression": {
                 "type": "ClassExpression",
-                "name": null,
+                "id": null,
                 "superClass": null,
                 "body": {
                     "type": "ClassBody",

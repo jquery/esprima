@@ -1,1 +1,1 @@
-class A {a(eval){}}
+({x(eval){"use strict"}})
