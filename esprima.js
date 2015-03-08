@@ -1089,10 +1089,11 @@
         var tmp = pattern;
 
         if (flags.indexOf('u') >= 0) {
-            // Replace each astral symbol and every Unicode code point
-            // escape sequence with a single ASCII symbol to avoid throwing on
-            // regular expressions that are only valid in combination with the
-            // `/u` flag.
+            // Replace each astral symbol and every Unicode escape sequence
+            // that possibly represents an astral symbol or a paired surrogate
+            // with a single ASCII symbol to avoid throwing on regular
+            // expressions that are only valid in combination with the `/u`
+            // flag.
             // Note: replacing with the ASCII symbol `x` might cause false
             // negatives in unlikely scenarios. For example, `[\u{61}-b]` is a
             // perfectly valid pattern that is equivalent to `[a-b]`, but it
@@ -1104,7 +1105,10 @@
                     }
                     throwUnexpectedToken(null, Messages.InvalidRegExp);
                 })
-                .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, 'x');
+                .replace(
+                    /\\u([a-fA-F0-9]{4})|[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
+                    'x'
+                );
         }
 
         // First, detect invalid regular expressions.
