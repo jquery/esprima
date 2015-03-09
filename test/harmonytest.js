@@ -5792,16 +5792,6 @@ var harmonyTestFixture = {
                         end: { line: 1, column: 23 }
                     }
                 },
-                superClass: null,
-                body: {
-                    type: "ClassBody",
-                    body: [],
-                    range: [34, 36],
-                    loc: {
-                        start: { line: 1, column: 34 },
-                        end: { line: 1, column: 36 }
-                    }
-                },
                 superClass: {
                     type: "Identifier",
                     name: "C",
@@ -5809,6 +5799,15 @@ var harmonyTestFixture = {
                     loc: {
                         start: { line: 1, column: 32 },
                         end: { line: 1, column: 33 }
+                    }
+                },
+                body: {
+                    type: "ClassBody",
+                    body: [],
+                    range: [34, 36],
+                    loc: {
+                        start: { line: 1, column: 34 },
+                        end: { line: 1, column: 36 }
                     }
                 },
                 range: [16, 36],
