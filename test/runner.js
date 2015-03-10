@@ -201,6 +201,30 @@ function testParse(esprima, code, syntax) {
     }
 }
 
+function testTokenizeVsTokens(esprima, code) {
+    var tree, parseTokens, tokenizeTokens, options;
+
+    options = {
+        comment: true,
+        tolerant: true,
+        loc: true,
+        range: true
+    };
+
+    try {
+        tree = esprima.tokenize(code, options);
+        tokenizeTokens = JSON.stringify(tree, null, 4);
+
+        tree = esprima.parse(code, options);
+        parseTokens = JSON.stringify(tree.tokens, null, 4);
+    } catch (e) {
+        throw new NotMatchingError(code, e.toString());
+    }
+    if (parseTokens !== tokenizeTokens) {
+        throw new NotMatchingError(parseTokens, tokenizeTokens);
+    }
+}
+
 function testTokenize(esprima, code, tokens) {
     'use strict';
     var options, expected, actual, tree;
@@ -379,6 +403,7 @@ if (typeof window === 'undefined') {
                 try {
                     if (testCase.hasOwnProperty('tree')) {
                         testParse(esprima, testCase.case, JSON.parse(testCase.tree));
+                        testTokenizeVsTokens(esprima, testCase.case);
                     } else if (testCase.hasOwnProperty('tokens')) {
                         testTokenize(esprima, testCase.case, JSON.parse(testCase.tokens));
                     } else if (testCase.hasOwnProperty('failure')) {
