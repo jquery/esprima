@@ -738,6 +738,14 @@
                     extra.openCurlyToken = extra.tokens.length;
                 }
             }
+
+            // 123 is {, 125 is }
+            if (code === 123) {
+                state.curlyStack.push('{');
+            } else if (code === 125) {
+                state.curlyStack.pop();
+            }
+
             return {
                 type: Token.Punctuator,
                 value: String.fromCharCode(code),
@@ -1203,11 +1211,12 @@
     }
 
     function scanTemplate() {
-        var cooked = '', ch, start, terminated, tail, restore, unescaped, code, octal;
+        var cooked = '', ch, start, terminated, head, tail, restore, unescaped, code, octal;
 
         terminated = false;
         tail = false;
         start = index;
+        head = (source[index] === '`');
 
         ++index;
 
@@ -1314,12 +1323,21 @@
             throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
         }
 
+        if (!tail) {
+            state.curlyStack.push('template');
+        }
+
+        if (!head) {
+            state.curlyStack.pop();
+        }
+
         return {
             type: Token.Template,
             value: {
                 cooked: cooked,
                 raw: source.slice(start + 1, index - ((tail) ? 1 : 2))
             },
+            head: head,
             tail: tail,
             octal: octal,
             lineNumber: lineNumber,
@@ -1608,7 +1626,9 @@
             return scanStringLiteral();
         }
 
-        if (ch === 96) {
+        // Template literals start with backtick (#96) for template head
+        // or close curly (#125) for template middle or template tail.
+        if (ch === 96 || (ch === 125 && state.curlyStack[state.curlyStack.length - 1] === 'template')) {
             return scanTemplate();
         }
         if (isIdentifierStart(ch)) {
@@ -2958,7 +2978,7 @@
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
-        while (match('.') || match('[') || match('(') || lookahead.type === Token.Template) {
+        while (match('.') || match('[') || match('(') || (lookahead.type === Token.Template && lookahead.head)) {
             if (match('(')) {
                 args = parseArguments();
                 expr = markerApply(marker, delegate.createCallExpression(expr, args));
@@ -2979,7 +2999,7 @@
 
         expr = matchKeyword('new') ? parseNewExpression() : parsePrimaryExpression();
 
-        while (match('.') || match('[') || lookahead.type === Token.Template) {
+        while (match('.') || match('[') || (lookahead.type === Token.Template && lookahead.head)) {
             if (match('[')) {
                 expr = markerApply(marker, delegate.createMemberExpression('[', expr, parseComputedMember()));
             } else if (match('.')) {
@@ -5167,7 +5187,8 @@
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
-            lastCommentStart: -1
+            lastCommentStart: -1,
+            curlyStack: []
         };
 
         extra = {};
@@ -5259,7 +5280,8 @@
             inIteration: false,
             inSwitch: false,
             lastCommentStart: -1,
-            yieldAllowed: false
+            yieldAllowed: false,
+            curlyStack: []
         };
 
         extra = {};
