@@ -2976,6 +2976,9 @@
     function parseArrowFunctionExpression(options, node) {
         var previousStrict, body;
 
+        if (hasLineTerminator) {
+            tolerateUnexpectedToken(lookahead);
+        }
         expect('=>');
         previousStrict = strict;
 
