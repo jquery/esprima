@@ -1213,10 +1213,10 @@
         };
     }
 
-    function scanRegExp() {
-        scanning = true;
+    function parseRegExpLiteral() {
         var start, body, flags, value;
 
+        scanning = true;
         lookahead = null;
         skipComment();
         start = index;
@@ -1225,20 +1225,6 @@
         flags = scanRegExpFlags();
         value = testRegExp(body.value, flags.value);
         scanning = false;
-        if (extra.tokenize) {
-            return {
-                type: Token.RegularExpression,
-                value: value,
-                regex: {
-                    pattern: body.value,
-                    flags: flags.value
-                },
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                start: start,
-                end: index
-            };
-        }
 
         return {
             literal: body.literal + flags.literal,
@@ -1247,6 +1233,33 @@
                 pattern: body.value,
                 flags: flags.value
             },
+            start: start,
+            end: index
+        };
+    }
+
+    function scanRegExp() {
+        var start, body, flags, value;
+
+        scanning = true;
+        lookahead = null;
+        skipComment();
+        start = index;
+
+        body = scanRegExpBody();
+        flags = scanRegExpFlags();
+        value = testRegExp(body.value, flags.value);
+        scanning = false;
+
+        return {
+            type: Token.RegularExpression,
+            value: value,
+            regex: {
+                pattern: body.value,
+                flags: flags.value
+            },
+            lineNumber: lineNumber,
+            lineStart: lineStart,
             start: start,
             end: index
         };
@@ -1265,7 +1278,7 @@
             }
         };
 
-        regex = scanRegExp();
+        regex = extra.tokenize ? scanRegExp() : parseRegExpLiteral();
 
         loc.end = {
             line: lineNumber,
