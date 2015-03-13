@@ -304,9 +304,6 @@
     // 7.6.1.1 Keywords
 
     function isKeyword(id) {
-        if (strict && isStrictModeReservedWord(id)) {
-            return true;
-        }
 
         // 'const' is specialized as Keyword in V8.
         // 'yield' and 'let' are for compatibility with SpiderMonkey and ES.next.
@@ -1370,7 +1367,7 @@
     }
 
     function advance() {
-        var ch;
+        var ch, token;
 
         if (index >= length) {
             return {
@@ -1385,7 +1382,11 @@
         ch = source.charCodeAt(index);
 
         if (isIdentifierStart(ch)) {
-            return scanIdentifier();
+            token = scanIdentifier();
+            if (strict && isStrictModeReservedWord(token.value)) {
+                token.type = Token.Keyword;
+            }
+            return token;
         }
 
         // Very common: ( and ) and ;
