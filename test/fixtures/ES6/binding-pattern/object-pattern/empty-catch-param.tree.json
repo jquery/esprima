@@ -1,0 +1,164 @@
+{
+    "range": [
+        0,
+        21
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 21
+        }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                21
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 21
+                }
+            },
+            "type": "TryStatement",
+            "block": {
+                "range": [
+                    4,
+                    7
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 7
+                    }
+                },
+                "type": "BlockStatement",
+                "body": []
+            },
+            "guardedHandlers": [],
+            "handlers": [
+                {
+                    "range": [
+                        8,
+                        21
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 8
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 21
+                        }
+                    },
+                    "type": "CatchClause",
+                    "param": {
+                        "range": [
+                            15,
+                            17
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 15
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 17
+                            }
+                        },
+                        "type": "ObjectPattern",
+                        "properties": []
+                    },
+                    "body": {
+                        "range": [
+                            19,
+                            21
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 19
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 21
+                            }
+                        },
+                        "type": "BlockStatement",
+                        "body": []
+                    }
+                }
+            ],
+            "handler": {
+                "range": [
+                    8,
+                    21
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 8
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 21
+                    }
+                },
+                "type": "CatchClause",
+                "param": {
+                    "range": [
+                        15,
+                        17
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 15
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 17
+                        }
+                    },
+                    "type": "ObjectPattern",
+                    "properties": []
+                },
+                "body": {
+                    "range": [
+                        19,
+                        21
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 19
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 21
+                        }
+                    },
+                    "type": "BlockStatement",
+                    "body": []
+                }
+            },
+            "finalizer": null
+        }
+    ]
+}
