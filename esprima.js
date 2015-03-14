@@ -109,7 +109,9 @@
 
     Syntax = {
         AssignmentExpression: 'AssignmentExpression',
+        AssignmentPattern: 'AssignmentPattern',
         ArrayExpression: 'ArrayExpression',
+        ArrayPattern: 'ArrayPattern',
         ArrowFunctionExpression: 'ArrowFunctionExpression',
         BlockStatement: 'BlockStatement',
         BinaryExpression: 'BinaryExpression',
@@ -138,6 +140,7 @@
         MethodDefinition: 'MethodDefinition',
         NewExpression: 'NewExpression',
         ObjectExpression: 'ObjectExpression',
+        ObjectPattern: 'ObjectPattern',
         Program: 'Program',
         Property: 'Property',
         RestElement: 'RestElement',
@@ -1626,6 +1629,13 @@
             return this;
         },
 
+        finishArrayPattern: function (elements) {
+            this.type = Syntax.ArrayPattern;
+            this.elements = elements;
+            this.finish();
+            return this;
+        },
+
         finishArrowFunctionExpression: function (params, defaults, body, expression) {
             this.type = Syntax.ArrowFunctionExpression;
             this.id = null;
@@ -1641,6 +1651,14 @@
         finishAssignmentExpression: function (operator, left, right) {
             this.type = Syntax.AssignmentExpression;
             this.operator = operator;
+            this.left = left;
+            this.right = right;
+            this.finish();
+            return this;
+        },
+
+        finishAssignmentPattern: function (left, right) {
+            this.type = Syntax.AssignmentPattern;
             this.left = left;
             this.right = right;
             this.finish();
@@ -1852,6 +1870,13 @@
 
         finishObjectExpression: function (properties) {
             this.type = Syntax.ObjectExpression;
+            this.properties = properties;
+            this.finish();
+            return this;
+        },
+
+        finishObjectPattern: function (properties) {
+            this.type = Syntax.ObjectPattern;
             this.properties = properties;
             this.finish();
             return this;
@@ -2204,6 +2229,96 @@
         return expr.type === Syntax.Identifier || expr.type === Syntax.MemberExpression;
     }
 
+    function parseArrayPattern() {
+        var node = new Node(), elements = [], rest, restNode;
+        expect('[');
+
+        while (!match(']')) {
+            if (match(',')) {
+                lex();
+                elements.push(null);
+            } else {
+                if (match('...')) {
+                    restNode = new Node();
+                    lex();
+                    rest = parseVariableIdentifier();
+                    elements.push(restNode.finishRestElement(rest));
+                    break;
+                } else {
+                    elements.push(parsePatternWithDefault());
+                }
+                if (!match(']')) {
+                    expect(',');
+                }
+            }
+
+        }
+
+        expect(']');
+
+        return node.finishArrayPattern(elements);
+    }
+
+    function parsePropertyPattern() {
+        var node = new Node(), key, computed = match('['), init;
+        if (lookahead.type === Token.Identifier) {
+            key = parseVariableIdentifier();
+            if (match('=')) {
+                lex();
+                init = parseAssignmentExpression();
+                return node.finishProperty(
+                    'init', key, false,
+                    new WrappingNode(key).finishAssignmentPattern(key, init), false, false);
+            } else if (!match(':')) {
+                return node.finishProperty('init', key, false, key, false, false);
+            }
+        } else {
+            key = parseObjectPropertyKey();
+        }
+        expect(':');
+        init = parsePatternWithDefault();
+        return node.finishProperty('init', key, computed, init, false, false);
+    }
+
+    function parseObjectPattern() {
+        var node = new Node(), properties = [];
+
+        expect('{');
+
+        while (!match('}')) {
+            properties.push(parsePropertyPattern());
+            if (!match('}')) {
+                expect(',');
+            }
+        }
+
+        lex();
+
+        return node.finishObjectPattern(properties);
+    }
+
+    function parsePattern() {
+        if (lookahead.type === Token.Identifier) {
+            return parseVariableIdentifier();
+        } else if (match('[')) {
+            return parseArrayPattern();
+        } else if (match('{')) {
+            return parseObjectPattern();
+        }
+        throwUnexpectedToken(lookahead);
+    }
+
+    function parsePatternWithDefault() {
+        var pattern, right;
+        pattern = parsePattern();
+        if (match('=')) {
+            lex();
+            right = parseAssignmentExpression();
+            pattern = new WrappingNode(pattern).finishAssignmentPattern(pattern, right);
+        }
+        return pattern;
+    }
+
     // 11.1.4 Array Initialiser
 
     function parseArrayInitialiser() {
@@ -2257,8 +2372,6 @@
         return method;
     }
 
-    // This function returns a tuple `[PropertyName, boolean]` where the PropertyName is the key being consumed and the second
-    // element indicate whether its a computed PropertyName or a static PropertyName.
     function parseObjectPropertyKey() {
         var token, node = new Node(), expr;
 
@@ -3065,7 +3178,7 @@
             switch (lookahead.value) {
             case 'const':
             case 'let':
-                return parseLexicalDeclaration();
+                return parseLexicalDeclaration({inFor: false});
             case 'function':
                 return parseFunctionDeclaration(new Node());
             case 'class':
@@ -3121,7 +3234,7 @@
     function parseVariableDeclaration() {
         var init = null, id, node = new Node();
 
-        id = parseVariableIdentifier();
+        id = parsePattern();
 
         // 12.2.1
         if (strict && isRestrictedWord(id.name)) {
@@ -3131,6 +3244,8 @@
         if (match('=')) {
             lex();
             init = parseAssignmentExpression();
+        } else if (id.type !== Syntax.Identifier) {
+            expect('=');
         }
 
         return node.finishVariableDeclarator(id, init);
@@ -3162,13 +3277,13 @@
         return node.finishVariableDeclaration(declarations);
     }
 
-    function parseLexicalBinding(kind) {
+    function parseLexicalBinding(kind, options) {
         var init = null, id, node = new Node();
 
-        id = parseVariableIdentifier();
+        id = parsePattern();
 
         // 12.2.1
-        if (strict && isRestrictedWord(id.name)) {
+        if (strict && id.type === Syntax.Identifier && isRestrictedWord(id.name)) {
             tolerateError(Messages.StrictVarName);
         }
 
@@ -3177,19 +3292,19 @@
                 expect('=');
                 init = parseAssignmentExpression();
             }
-        } else if (match('=')) {
-            lex();
+        } else if ((!options.inFor && id.type !== Syntax.Identifier) || match('=')) {
+            expect('=');
             init = parseAssignmentExpression();
         }
 
         return node.finishVariableDeclarator(id, init);
     }
 
-    function parseBindingList(kind) {
+    function parseBindingList(kind, options) {
         var list = [];
 
         do {
-            list.push(parseLexicalBinding(kind));
+            list.push(parseLexicalBinding(kind, options));
             if (!match(',')) {
                 break;
             }
@@ -3199,13 +3314,13 @@
         return list;
     }
 
-    function parseLexicalDeclaration() {
+    function parseLexicalDeclaration(options) {
         var kind, declarations, node = new Node();
 
         kind = lex().value;
         assert(kind === 'let' || kind === 'const', 'Lexical declaration must be either let or const');
 
-        declarations = parseBindingList(kind);
+        declarations = parseBindingList(kind, options);
 
         consumeSemicolon();
 
@@ -3358,7 +3473,7 @@
                 kind = lex().value;
 
                 state.allowIn = false;
-                declarations = parseBindingList(kind);
+                declarations = parseBindingList(kind, {inFor: true});
                 state.allowIn = previousAllowIn;
 
                 if (declarations.length === 1 && declarations[0].init === null && matchKeyword('in')) {
@@ -3664,7 +3779,8 @@
             throwUnexpectedToken(lookahead);
         }
 
-        param = parseVariableIdentifier();
+        param = parsePattern();
+
         // 12.14.1
         if (strict && isRestrictedWord(param.name)) {
             tolerateError(Messages.StrictCatchVariable);
@@ -3895,12 +4011,12 @@
             return false;
         }
 
-        param = parseVariableIdentifier();
+        param = parsePatternWithDefault();
         validateParam(options, token, token.value);
 
-        if (match('=')) {
-            lex();
-            def = parseAssignmentExpression();
+        if (param.type === Syntax.AssignmentPattern) {
+            def = param.right;
+            param = param.left;
             ++options.defaultCount;
         }
 

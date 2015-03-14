@@ -1,6 +1,8 @@
 {
     "AssignmentExpression": "AssignmentExpression",
+    "AssignmentPattern": "AssignmentPattern",
     "ArrayExpression": "ArrayExpression",
+    "ArrayPattern": "ArrayPattern",
     "ArrowFunctionExpression": "ArrowFunctionExpression",
     "BlockStatement": "BlockStatement",
     "BinaryExpression": "BinaryExpression",
@@ -29,6 +31,7 @@
     "MethodDefinition": "MethodDefinition",
     "NewExpression": "NewExpression",
     "ObjectExpression": "ObjectExpression",
+    "ObjectPattern": "ObjectPattern",
     "Program": "Program",
     "Property": "Property",
     "RestElement": "RestElement",
