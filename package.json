@@ -39,7 +39,7 @@
         "url": "https://github.com/jquery/esprima/raw/master/LICENSE.BSD"
     }],
     "devDependencies": {
-        "eslint": "~0.15.1",
+        "eslint": "~0.17.1",
         "jscs": "~1.11.3",
         "istanbul": "~0.3.7",
         "escomplex-js": "1.2.0",
