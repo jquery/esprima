@@ -1,7 +1,7 @@
 {
     "range": [
         0,
-        33
+        29
     ],
     "loc": {
         "start": {
@@ -10,7 +10,7 @@
         },
         "end": {
             "line": 1,
-            "column": 33
+            "column": 29
         }
     },
     "type": "Program",
@@ -18,7 +18,7 @@
         {
             "range": [
                 0,
-                33
+                29
             ],
             "loc": {
                 "start": {
@@ -27,14 +27,14 @@
                 },
                 "end": {
                     "line": 1,
-                    "column": 33
+                    "column": 29
                 }
             },
             "type": "ExpressionStatement",
             "expression": {
                 "range": [
                     0,
-                    33
+                    29
                 ],
                 "loc": {
                     "start": {
@@ -43,7 +43,7 @@
                     },
                     "end": {
                         "line": 1,
-                        "column": 33
+                        "column": 29
                     }
                 },
                 "type": "TemplateLiteral",
@@ -51,7 +51,7 @@
                     {
                         "range": [
                             0,
-                            33
+                            29
                         ],
                         "loc": {
                             "start": {
@@ -60,13 +60,13 @@
                             },
                             "end": {
                                 "line": 1,
-                                "column": 33
+                                "column": 29
                             }
                         },
                         "type": "TemplateElement",
                         "value": {
-                            "raw": "\\u{000042}\\u0042\\x42\\u0\\102\\A\\0",
-                            "cooked": "BBBu0BA\u0000"
+                            "raw": "\\u{000042}\\u0042\\x42\\u0\\A\\0",
+                            "cooked": "BBBu0A\u0000"
                         },
                         "tail": true
                     }
@@ -78,10 +78,10 @@
     "tokens": [
         {
             "type": "Template",
-            "value": "`\\u{000042}\\u0042\\x42\\u0\\102\\A\\0`",
+            "value": "`\\u{000042}\\u0042\\x42\\u0\\A\\0`",
             "range": [
                 0,
-                33
+                29
             ],
             "loc": {
                 "start": {
@@ -90,7 +90,7 @@
                 },
                 "end": {
                     "line": 1,
-                    "column": 33
+                    "column": 29
                 }
             }
         }

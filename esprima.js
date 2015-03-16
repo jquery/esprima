@@ -215,6 +215,7 @@
         StrictLHSPostfix: 'Postfix increment/decrement may not have eval or arguments operand in strict mode',
         StrictLHSPrefix: 'Prefix increment/decrement may not have eval or arguments operand in strict mode',
         StrictReservedWord: 'Use of future reserved word in strict mode',
+        TemplateOctalLiteral: 'Octal literals are not allowed in template strings.',
         ParameterAfterRestParameter: 'Rest parameter must be last formal parameter',
         DefaultRestParameter: 'Unexpected token =',
         ObjectPatternAsRestParameter: 'Unexpected token {',
@@ -1184,7 +1185,11 @@
                     default:
                         if (isOctalDigit(ch)) {
                             octToDec = octalToDecimal(ch);
-                            octal = octToDec.octal || octal;
+
+                            // 11.8.6 and 16.1
+                            if (octToDec.octal) {
+                                throwError(Messages.TemplateOctalLiteral);
+                            }
                             cooked += String.fromCharCode(octToDec.code);
                         } else {
                             cooked += ch;
@@ -1226,7 +1231,6 @@
             },
             head: head,
             tail: tail,
-            octal: octal,
             lineNumber: lineNumber,
             lineStart: lineStart,
             start: start,
@@ -2931,10 +2935,6 @@
 
         if (lookahead.type !== Token.Template || (option.head && !lookahead.head)) {
             throwUnexpectedToken();
-        }
-
-        if (strict && lookahead.octal) {
-            tolerateUnexpectedToken(lookahead, Messages.StrictOctalLiteral);
         }
 
         node = new Node();
