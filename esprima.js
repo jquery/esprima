@@ -4176,7 +4176,7 @@
                 }
                 method = tryParseMethodDefinition(token, key, computed, method);
                 if (method) {
-                    method.static = isStatic;
+                    method['static'] = isStatic;
                     if (method.kind === 'init') {
                         method.kind = 'method';
                     }
