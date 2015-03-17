@@ -225,6 +225,7 @@
         StrictLHSPostfix: 'Postfix increment/decrement may not have eval or arguments operand in strict mode',
         StrictLHSPrefix: 'Prefix increment/decrement may not have eval or arguments operand in strict mode',
         StrictReservedWord: 'Use of future reserved word in strict mode',
+        TemplateOctalLiteral: 'Octal literals are not allowed in template strings.',
         MissingFromClause: 'Missing from clause',
         NoAsAfterImportNamespace: 'Missing as after import *',
         InvalidModuleSpecifier: 'Invalid module specifier',
@@ -289,6 +290,29 @@
 
     function isOctalDigit(ch) {
         return '01234567'.indexOf(ch) >= 0;
+    }
+
+    function octalToDecimal(ch) {
+        // \0 is not octal escape sequence
+        var octal = (ch !== '0'), code = '01234567'.indexOf(ch);
+
+        if (index < length && isOctalDigit(source[index])) {
+            octal = true;
+            code = code * 8 + '01234567'.indexOf(source[index++]);
+
+            // 3 digits are only allowed when string starts
+            // with 0, 1, 2, 3
+            if ('0123'.indexOf(ch) >= 0 &&
+                    index < length &&
+                    isOctalDigit(source[index])) {
+                code = code * 8 + '01234567'.indexOf(source[index++]);
+            }
+        }
+
+        return {
+            code: code,
+            octal: octal
+        };
     }
 
 
@@ -1100,7 +1124,7 @@
     // 7.8.4 String Literals
 
     function scanStringLiteral() {
-        var str = '', quote, start, ch, code, unescaped, restore, octal = false;
+        var str = '', quote, start, ch, unescaped, restore, octToDec, octal = false;
 
         quote = source[index];
         assert((quote === '\'' || quote === '"'),
@@ -1156,27 +1180,10 @@
 
                     default:
                         if (isOctalDigit(ch)) {
-                            code = '01234567'.indexOf(ch);
+                            octToDec = octalToDecimal(ch);
 
-                            // \0 is not octal escape sequence
-                            if (code !== 0) {
-                                octal = true;
-                            }
-
-                            /* istanbul ignore else */
-                            if (index < length && isOctalDigit(source[index])) {
-                                octal = true;
-                                code = code * 8 + '01234567'.indexOf(source[index++]);
-
-                                // 3 digits are only allowed when string starts
-                                // with 0, 1, 2, 3
-                                if ('0123'.indexOf(ch) >= 0 &&
-                                        index < length &&
-                                        isOctalDigit(source[index])) {
-                                    code = code * 8 + '01234567'.indexOf(source[index++]);
-                                }
-                            }
-                            str += String.fromCharCode(code);
+                            octal = octToDec.octal || octal;
+                            str += String.fromCharCode(octToDec.code);
                         } else {
                             str += ch;
                         }
@@ -1211,7 +1218,7 @@
     }
 
     function scanTemplate() {
-        var cooked = '', ch, start, terminated, head, tail, restore, unescaped, code, octal;
+        var cooked = '', ch, start, terminated, head, tail, restore, unescaped, octToDec;
 
         terminated = false;
         tail = false;
@@ -1274,27 +1281,13 @@
 
                     default:
                         if (isOctalDigit(ch)) {
-                            code = '01234567'.indexOf(ch);
+                            octToDec = octalToDecimal(ch);
 
-                            // \0 is not octal escape sequence
-                            if (code !== 0) {
-                                octal = true;
+                            // 11.8.6 and 16.1
+                            if (octToDec.octal) {
+                                throwError({}, Messages.TemplateOctalLiteral);
                             }
-
-                            /* istanbul ignore else */
-                            if (index < length && isOctalDigit(source[index])) {
-                                octal = true;
-                                code = code * 8 + '01234567'.indexOf(source[index++]);
-
-                                // 3 digits are only allowed when string starts
-                                // with 0, 1, 2, 3
-                                if ('0123'.indexOf(ch) >= 0 &&
-                                        index < length &&
-                                        isOctalDigit(source[index])) {
-                                    code = code * 8 + '01234567'.indexOf(source[index++]);
-                                }
-                            }
-                            cooked += String.fromCharCode(code);
+                            cooked += String.fromCharCode(octToDec.code);
                         } else {
                             cooked += ch;
                         }
@@ -1339,7 +1332,6 @@
             },
             head: head,
             tail: tail,
-            octal: octal,
             lineNumber: lineNumber,
             lineStart: lineStart,
             range: [start, index]
@@ -2776,9 +2768,7 @@
     function parseTemplateElement(option) {
         var marker = markerCreate(),
             token = scanTemplateElement(option);
-        if (strict && token.octal) {
-            throwError(token, Messages.StrictOctalLiteral);
-        }
+
         return markerApply(marker, delegate.createTemplateElement({ raw: token.value.raw, cooked: token.value.cooked }, token.tail));
     }
 
