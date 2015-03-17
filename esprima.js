@@ -1366,8 +1366,7 @@
     }
 
     function testRegExp(pattern, flags) {
-        var tmp = pattern,
-            value;
+        var tmp = pattern;
 
         if (flags.indexOf('u') >= 0) {
             // Replace each astral symbol and every Unicode code point
@@ -1390,7 +1389,7 @@
 
         // First, detect invalid regular expressions.
         try {
-            value = new RegExp(tmp);
+            RegExp(tmp);
         } catch (e) {
             throwError({}, Messages.InvalidRegExp);
         }
@@ -5165,7 +5164,6 @@
 
     function tokenize(code, options) {
         var toString,
-            token,
             tokens;
 
         toString = String;
@@ -5222,12 +5220,11 @@
                 return extra.tokens;
             }
 
-            token = lex();
+            lex();
             while (lookahead.type !== Token.EOF) {
                 try {
-                    token = lex();
+                    lex();
                 } catch (lexError) {
-                    token = lookahead;
                     if (extra.errors) {
                         extra.errors.push(lexError);
                         // We have to break on the first error
