@@ -1101,34 +1101,34 @@ var harmonyTestFixture = {
             }
         },
 
-        '`\\u{000042}\\u0042\\x42\\u0\\102\\A`': {
+        '`\\u{000042}\\u0042\\x42\\u0\\A\\0`': {
             type: 'ExpressionStatement',
             expression: {
                 type: 'TemplateLiteral',
                 quasis: [{
                     type: 'TemplateElement',
                     value: {
-                        raw: '\\u{000042}\\u0042\\x42\\u0\\102\\A',
-                        cooked: 'BBBu0BA'
+                        raw: '\\u{000042}\\u0042\\x42\\u0\\A\\0',
+                        cooked: 'BBBu0A\u0000'
                     },
                     tail: true,
-                    range: [0, 31],
+                    range: [0, 29],
                     loc: {
                         start: { line: 1, column: 0 },
-                        end: { line: 1, column: 31 }
+                        end: { line: 1, column: 29 }
                     }
                 }],
                 expressions: [],
-                range: [0, 31],
+                range: [0, 29],
                 loc: {
                     start: { line: 1, column: 0 },
-                    end: { line: 1, column: 31 }
+                    end: { line: 1, column: 29 }
                 }
             },
-            range: [0, 31],
+            range: [0, 29],
             loc: {
                 start: { line: 1, column: 0 },
-                end: { line: 1, column: 31 }
+                end: { line: 1, column: 29 }
             }
         },
 
@@ -16173,10 +16173,10 @@ var harmonyTestFixture = {
         },
 
         '"use strict"; `${test}\\02`;': {
-            index: 21,
+            index: 25,
             lineNumber: 1,
-            column: 22,
-            message: 'Error: Line 1: Octal literals are not allowed in strict mode.'
+            column: 26,
+            message: 'Error: Line 1: Octal literals are not allowed in template strings.'
         },
 
         '[...a, ] = b': {
