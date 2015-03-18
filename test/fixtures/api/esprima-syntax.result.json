@@ -37,6 +37,7 @@
     "RestElement": "RestElement",
     "ReturnStatement": "ReturnStatement",
     "SequenceExpression": "SequenceExpression",
+    "SpreadElement": "SpreadElement",
     "SwitchStatement": "SwitchStatement",
     "SwitchCase": "SwitchCase",
     "ThisExpression": "ThisExpression",

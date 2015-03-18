@@ -1,0 +1,601 @@
+{
+    "range": [
+        0,
+        51
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 51
+        }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                51
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 51
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    0,
+                    50
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 50
+                    }
+                },
+                "type": "AssignmentExpression",
+                "operator": "=",
+                "left": {
+                    "range": [
+                        0,
+                        48
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 48
+                        }
+                    },
+                    "type": "ArrayPattern",
+                    "elements": [
+                        {
+                            "range": [
+                                1,
+                                47
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 1
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 47
+                                }
+                            },
+                            "type": "ArrayPattern",
+                            "elements": [
+                                {
+                                    "range": [
+                                        2,
+                                        46
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 1,
+                                            "column": 2
+                                        },
+                                        "end": {
+                                            "line": 1,
+                                            "column": 46
+                                        }
+                                    },
+                                    "type": "ArrayPattern",
+                                    "elements": [
+                                        {
+                                            "range": [
+                                                3,
+                                                45
+                                            ],
+                                            "loc": {
+                                                "start": {
+                                                    "line": 1,
+                                                    "column": 3
+                                                },
+                                                "end": {
+                                                    "line": 1,
+                                                    "column": 45
+                                                }
+                                            },
+                                            "type": "ArrayPattern",
+                                            "elements": [
+                                                {
+                                                    "range": [
+                                                        4,
+                                                        44
+                                                    ],
+                                                    "loc": {
+                                                        "start": {
+                                                            "line": 1,
+                                                            "column": 4
+                                                        },
+                                                        "end": {
+                                                            "line": 1,
+                                                            "column": 44
+                                                        }
+                                                    },
+                                                    "type": "ArrayPattern",
+                                                    "elements": [
+                                                        {
+                                                            "range": [
+                                                                5,
+                                                                43
+                                                            ],
+                                                            "loc": {
+                                                                "start": {
+                                                                    "line": 1,
+                                                                    "column": 5
+                                                                },
+                                                                "end": {
+                                                                    "line": 1,
+                                                                    "column": 43
+                                                                }
+                                                            },
+                                                            "type": "ArrayPattern",
+                                                            "elements": [
+                                                                {
+                                                                    "range": [
+                                                                        6,
+                                                                        42
+                                                                    ],
+                                                                    "loc": {
+                                                                        "start": {
+                                                                            "line": 1,
+                                                                            "column": 6
+                                                                        },
+                                                                        "end": {
+                                                                            "line": 1,
+                                                                            "column": 42
+                                                                        }
+                                                                    },
+                                                                    "type": "ArrayPattern",
+                                                                    "elements": [
+                                                                        {
+                                                                            "range": [
+                                                                                7,
+                                                                                41
+                                                                            ],
+                                                                            "loc": {
+                                                                                "start": {
+                                                                                    "line": 1,
+                                                                                    "column": 7
+                                                                                },
+                                                                                "end": {
+                                                                                    "line": 1,
+                                                                                    "column": 41
+                                                                                }
+                                                                            },
+                                                                            "type": "ArrayPattern",
+                                                                            "elements": [
+                                                                                {
+                                                                                    "range": [
+                                                                                        8,
+                                                                                        40
+                                                                                    ],
+                                                                                    "loc": {
+                                                                                        "start": {
+                                                                                            "line": 1,
+                                                                                            "column": 8
+                                                                                        },
+                                                                                        "end": {
+                                                                                            "line": 1,
+                                                                                            "column": 40
+                                                                                        }
+                                                                                    },
+                                                                                    "type": "ArrayPattern",
+                                                                                    "elements": [
+                                                                                        {
+                                                                                            "range": [
+                                                                                                9,
+                                                                                                39
+                                                                                            ],
+                                                                                            "loc": {
+                                                                                                "start": {
+                                                                                                    "line": 1,
+                                                                                                    "column": 9
+                                                                                                },
+                                                                                                "end": {
+                                                                                                    "line": 1,
+                                                                                                    "column": 39
+                                                                                                }
+                                                                                            },
+                                                                                            "type": "ArrayPattern",
+                                                                                            "elements": [
+                                                                                                {
+                                                                                                    "range": [
+                                                                                                        10,
+                                                                                                        38
+                                                                                                    ],
+                                                                                                    "loc": {
+                                                                                                        "start": {
+                                                                                                            "line": 1,
+                                                                                                            "column": 10
+                                                                                                        },
+                                                                                                        "end": {
+                                                                                                            "line": 1,
+                                                                                                            "column": 38
+                                                                                                        }
+                                                                                                    },
+                                                                                                    "type": "ArrayPattern",
+                                                                                                    "elements": [
+                                                                                                        {
+                                                                                                            "range": [
+                                                                                                                11,
+                                                                                                                37
+                                                                                                            ],
+                                                                                                            "loc": {
+                                                                                                                "start": {
+                                                                                                                    "line": 1,
+                                                                                                                    "column": 11
+                                                                                                                },
+                                                                                                                "end": {
+                                                                                                                    "line": 1,
+                                                                                                                    "column": 37
+                                                                                                                }
+                                                                                                            },
+                                                                                                            "type": "ArrayPattern",
+                                                                                                            "elements": [
+                                                                                                                {
+                                                                                                                    "range": [
+                                                                                                                        12,
+                                                                                                                        36
+                                                                                                                    ],
+                                                                                                                    "loc": {
+                                                                                                                        "start": {
+                                                                                                                            "line": 1,
+                                                                                                                            "column": 12
+                                                                                                                        },
+                                                                                                                        "end": {
+                                                                                                                            "line": 1,
+                                                                                                                            "column": 36
+                                                                                                                        }
+                                                                                                                    },
+                                                                                                                    "type": "ArrayPattern",
+                                                                                                                    "elements": [
+                                                                                                                        {
+                                                                                                                            "range": [
+                                                                                                                                13,
+                                                                                                                                35
+                                                                                                                            ],
+                                                                                                                            "loc": {
+                                                                                                                                "start": {
+                                                                                                                                    "line": 1,
+                                                                                                                                    "column": 13
+                                                                                                                                },
+                                                                                                                                "end": {
+                                                                                                                                    "line": 1,
+                                                                                                                                    "column": 35
+                                                                                                                                }
+                                                                                                                            },
+                                                                                                                            "type": "ArrayPattern",
+                                                                                                                            "elements": [
+                                                                                                                                {
+                                                                                                                                    "range": [
+                                                                                                                                        14,
+                                                                                                                                        34
+                                                                                                                                    ],
+                                                                                                                                    "loc": {
+                                                                                                                                        "start": {
+                                                                                                                                            "line": 1,
+                                                                                                                                            "column": 14
+                                                                                                                                        },
+                                                                                                                                        "end": {
+                                                                                                                                            "line": 1,
+                                                                                                                                            "column": 34
+                                                                                                                                        }
+                                                                                                                                    },
+                                                                                                                                    "type": "ArrayPattern",
+                                                                                                                                    "elements": [
+                                                                                                                                        {
+                                                                                                                                            "range": [
+                                                                                                                                                15,
+                                                                                                                                                33
+                                                                                                                                            ],
+                                                                                                                                            "loc": {
+                                                                                                                                                "start": {
+                                                                                                                                                    "line": 1,
+                                                                                                                                                    "column": 15
+                                                                                                                                                },
+                                                                                                                                                "end": {
+                                                                                                                                                    "line": 1,
+                                                                                                                                                    "column": 33
+                                                                                                                                                }
+                                                                                                                                            },
+                                                                                                                                            "type": "ArrayPattern",
+                                                                                                                                            "elements": [
+                                                                                                                                                {
+                                                                                                                                                    "range": [
+                                                                                                                                                        16,
+                                                                                                                                                        32
+                                                                                                                                                    ],
+                                                                                                                                                    "loc": {
+                                                                                                                                                        "start": {
+                                                                                                                                                            "line": 1,
+                                                                                                                                                            "column": 16
+                                                                                                                                                        },
+                                                                                                                                                        "end": {
+                                                                                                                                                            "line": 1,
+                                                                                                                                                            "column": 32
+                                                                                                                                                        }
+                                                                                                                                                    },
+                                                                                                                                                    "type": "ArrayPattern",
+                                                                                                                                                    "elements": [
+                                                                                                                                                        {
+                                                                                                                                                            "range": [
+                                                                                                                                                                17,
+                                                                                                                                                                31
+                                                                                                                                                            ],
+                                                                                                                                                            "loc": {
+                                                                                                                                                                "start": {
+                                                                                                                                                                    "line": 1,
+                                                                                                                                                                    "column": 17
+                                                                                                                                                                },
+                                                                                                                                                                "end": {
+                                                                                                                                                                    "line": 1,
+                                                                                                                                                                    "column": 31
+                                                                                                                                                                }
+                                                                                                                                                            },
+                                                                                                                                                            "type": "ArrayPattern",
+                                                                                                                                                            "elements": [
+                                                                                                                                                                {
+                                                                                                                                                                    "range": [
+                                                                                                                                                                        18,
+                                                                                                                                                                        30
+                                                                                                                                                                    ],
+                                                                                                                                                                    "loc": {
+                                                                                                                                                                        "start": {
+                                                                                                                                                                            "line": 1,
+                                                                                                                                                                            "column": 18
+                                                                                                                                                                        },
+                                                                                                                                                                        "end": {
+                                                                                                                                                                            "line": 1,
+                                                                                                                                                                            "column": 30
+                                                                                                                                                                        }
+                                                                                                                                                                    },
+                                                                                                                                                                    "type": "ArrayPattern",
+                                                                                                                                                                    "elements": [
+                                                                                                                                                                        {
+                                                                                                                                                                            "range": [
+                                                                                                                                                                                19,
+                                                                                                                                                                                29
+                                                                                                                                                                            ],
+                                                                                                                                                                            "loc": {
+                                                                                                                                                                                "start": {
+                                                                                                                                                                                    "line": 1,
+                                                                                                                                                                                    "column": 19
+                                                                                                                                                                                },
+                                                                                                                                                                                "end": {
+                                                                                                                                                                                    "line": 1,
+                                                                                                                                                                                    "column": 29
+                                                                                                                                                                                }
+                                                                                                                                                                            },
+                                                                                                                                                                            "type": "ArrayPattern",
+                                                                                                                                                                            "elements": [
+                                                                                                                                                                                {
+                                                                                                                                                                                    "range": [
+                                                                                                                                                                                        20,
+                                                                                                                                                                                        28
+                                                                                                                                                                                    ],
+                                                                                                                                                                                    "loc": {
+                                                                                                                                                                                        "start": {
+                                                                                                                                                                                            "line": 1,
+                                                                                                                                                                                            "column": 20
+                                                                                                                                                                                        },
+                                                                                                                                                                                        "end": {
+                                                                                                                                                                                            "line": 1,
+                                                                                                                                                                                            "column": 28
+                                                                                                                                                                                        }
+                                                                                                                                                                                    },
+                                                                                                                                                                                    "type": "ObjectPattern",
+                                                                                                                                                                                    "properties": [
+                                                                                                                                                                                        {
+                                                                                                                                                                                            "range": [
+                                                                                                                                                                                                21,
+                                                                                                                                                                                                27
+                                                                                                                                                                                            ],
+                                                                                                                                                                                            "loc": {
+                                                                                                                                                                                                "start": {
+                                                                                                                                                                                                    "line": 1,
+                                                                                                                                                                                                    "column": 21
+                                                                                                                                                                                                },
+                                                                                                                                                                                                "end": {
+                                                                                                                                                                                                    "line": 1,
+                                                                                                                                                                                                    "column": 27
+                                                                                                                                                                                                }
+                                                                                                                                                                                            },
+                                                                                                                                                                                            "type": "Property",
+                                                                                                                                                                                            "key": {
+                                                                                                                                                                                                "range": [
+                                                                                                                                                                                                    21,
+                                                                                                                                                                                                    22
+                                                                                                                                                                                                ],
+                                                                                                                                                                                                "loc": {
+                                                                                                                                                                                                    "start": {
+                                                                                                                                                                                                        "line": 1,
+                                                                                                                                                                                                        "column": 21
+                                                                                                                                                                                                    },
+                                                                                                                                                                                                    "end": {
+                                                                                                                                                                                                        "line": 1,
+                                                                                                                                                                                                        "column": 22
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                },
+                                                                                                                                                                                                "type": "Identifier",
+                                                                                                                                                                                                "name": "a"
+                                                                                                                                                                                            },
+                                                                                                                                                                                            "computed": false,
+                                                                                                                                                                                            "value": {
+                                                                                                                                                                                                "range": [
+                                                                                                                                                                                                    21,
+                                                                                                                                                                                                    27
+                                                                                                                                                                                                ],
+                                                                                                                                                                                                "loc": {
+                                                                                                                                                                                                    "start": {
+                                                                                                                                                                                                        "line": 1,
+                                                                                                                                                                                                        "column": 21
+                                                                                                                                                                                                    },
+                                                                                                                                                                                                    "end": {
+                                                                                                                                                                                                        "line": 1,
+                                                                                                                                                                                                        "column": 27
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                },
+                                                                                                                                                                                                "type": "AssignmentPattern",
+                                                                                                                                                                                                "left": {
+                                                                                                                                                                                                    "range": [
+                                                                                                                                                                                                        21,
+                                                                                                                                                                                                        22
+                                                                                                                                                                                                    ],
+                                                                                                                                                                                                    "loc": {
+                                                                                                                                                                                                        "start": {
+                                                                                                                                                                                                            "line": 1,
+                                                                                                                                                                                                            "column": 21
+                                                                                                                                                                                                        },
+                                                                                                                                                                                                        "end": {
+                                                                                                                                                                                                            "line": 1,
+                                                                                                                                                                                                            "column": 22
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                    },
+                                                                                                                                                                                                    "type": "Identifier",
+                                                                                                                                                                                                    "name": "a"
+                                                                                                                                                                                                },
+                                                                                                                                                                                                "right": {
+                                                                                                                                                                                                    "range": [
+                                                                                                                                                                                                        23,
+                                                                                                                                                                                                        27
+                                                                                                                                                                                                    ],
+                                                                                                                                                                                                    "loc": {
+                                                                                                                                                                                                        "start": {
+                                                                                                                                                                                                            "line": 1,
+                                                                                                                                                                                                            "column": 23
+                                                                                                                                                                                                        },
+                                                                                                                                                                                                        "end": {
+                                                                                                                                                                                                            "line": 1,
+                                                                                                                                                                                                            "column": 27
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                    },
+                                                                                                                                                                                                    "type": "MemberExpression",
+                                                                                                                                                                                                    "computed": true,
+                                                                                                                                                                                                    "object": {
+                                                                                                                                                                                                        "range": [
+                                                                                                                                                                                                            23,
+                                                                                                                                                                                                            24
+                                                                                                                                                                                                        ],
+                                                                                                                                                                                                        "loc": {
+                                                                                                                                                                                                            "start": {
+                                                                                                                                                                                                                "line": 1,
+                                                                                                                                                                                                                "column": 23
+                                                                                                                                                                                                            },
+                                                                                                                                                                                                            "end": {
+                                                                                                                                                                                                                "line": 1,
+                                                                                                                                                                                                                "column": 24
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                        },
+                                                                                                                                                                                                        "type": "Identifier",
+                                                                                                                                                                                                        "name": "b"
+                                                                                                                                                                                                    },
+                                                                                                                                                                                                    "property": {
+                                                                                                                                                                                                        "range": [
+                                                                                                                                                                                                            25,
+                                                                                                                                                                                                            26
+                                                                                                                                                                                                        ],
+                                                                                                                                                                                                        "loc": {
+                                                                                                                                                                                                            "start": {
+                                                                                                                                                                                                                "line": 1,
+                                                                                                                                                                                                                "column": 25
+                                                                                                                                                                                                            },
+                                                                                                                                                                                                            "end": {
+                                                                                                                                                                                                                "line": 1,
+                                                                                                                                                                                                                "column": 26
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                        },
+                                                                                                                                                                                                        "type": "Literal",
+                                                                                                                                                                                                        "value": 0,
+                                                                                                                                                                                                        "raw": "0"
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                }
+                                                                                                                                                                                            },
+                                                                                                                                                                                            "kind": "init",
+                                                                                                                                                                                            "method": false,
+                                                                                                                                                                                            "shorthand": true
+                                                                                                                                                                                        }
+                                                                                                                                                                                    ]
+                                                                                                                                                                                }
+                                                                                                                                                                            ]
+                                                                                                                                                                        }
+                                                                                                                                                                    ]
+                                                                                                                                                                }
+                                                                                                                                                            ]
+                                                                                                                                                        }
+                                                                                                                                                    ]
+                                                                                                                                                }
+                                                                                                                                            ]
+                                                                                                                                        }
+                                                                                                                                    ]
+                                                                                                                                }
+                                                                                                                            ]
+                                                                                                                        }
+                                                                                                                    ]
+                                                                                                                }
+                                                                                                            ]
+                                                                                                        }
+                                                                                                    ]
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "right": {
+                    "range": [
+                        49,
+                        50
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 49
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 50
+                        }
+                    },
+                    "type": "Literal",
+                    "value": 0,
+                    "raw": "0"
+                }
+            }
+        }
+    ]
+}
