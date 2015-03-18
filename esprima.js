@@ -82,7 +82,8 @@
         NumericLiteral: 6,
         Punctuator: 7,
         StringLiteral: 8,
-        RegularExpression: 9
+        RegularExpression: 9,
+        Template: 10
     };
 
     TokenName = {};
@@ -95,6 +96,7 @@
     TokenName[Token.Punctuator] = 'Punctuator';
     TokenName[Token.StringLiteral] = 'String';
     TokenName[Token.RegularExpression] = 'RegularExpression';
+    TokenName[Token.Template] = 'Template';
 
     // A function following one of those tokens is an expression.
     FnExprTokens = ['(', '{', '[', 'in', 'typeof', 'instanceof', 'new',
@@ -146,8 +148,11 @@
         RestElement: 'RestElement',
         ReturnStatement: 'ReturnStatement',
         SequenceExpression: 'SequenceExpression',
-        SwitchStatement: 'SwitchStatement',
         SwitchCase: 'SwitchCase',
+        SwitchStatement: 'SwitchStatement',
+        TaggedTemplateExpression: 'TaggedTemplateExpression',
+        TemplateElement: 'TemplateElement',
+        TemplateLiteral: 'TemplateLiteral',
         ThisExpression: 'ThisExpression',
         ThrowStatement: 'ThrowStatement',
         TryStatement: 'TryStatement',
@@ -170,6 +175,7 @@
         UnexpectedString: 'Unexpected string',
         UnexpectedIdentifier: 'Unexpected identifier',
         UnexpectedReserved: 'Unexpected reserved word',
+        UnexpectedTemplate: 'Unexpected quasi %0',
         UnexpectedEOS: 'Unexpected end of input',
         NewlineAfterThrow: 'Illegal newline after throw',
         InvalidRegExp: 'Invalid regular expression',
@@ -195,6 +201,7 @@
         StrictLHSPostfix: 'Postfix increment/decrement may not have eval or arguments operand in strict mode',
         StrictLHSPrefix: 'Prefix increment/decrement may not have eval or arguments operand in strict mode',
         StrictReservedWord: 'Use of future reserved word in strict mode',
+        TemplateOctalLiteral: 'Octal literals are not allowed in template strings.',
         ParameterAfterRestParameter: 'Rest parameter must be last formal parameter',
         DefaultRestParameter: 'Unexpected token =',
         ObjectPatternAsRestParameter: 'Unexpected token {',
@@ -234,6 +241,28 @@
         return '01234567'.indexOf(ch) >= 0;
     }
 
+    function octalToDecimal(ch) {
+        // \0 is not octal escape sequence
+        var octal = (ch !== '0'), code = '01234567'.indexOf(ch);
+
+        if (index < length && isOctalDigit(source[index])) {
+            octal = true;
+            code = code * 8 + '01234567'.indexOf(source[index++]);
+
+            // 3 digits are only allowed when string starts
+            // with 0, 1, 2, 3
+            if ('0123'.indexOf(ch) >= 0 &&
+                    index < length &&
+                    isOctalDigit(source[index])) {
+                code = code * 8 + '01234567'.indexOf(source[index++]);
+            }
+        }
+
+        return {
+            code: code,
+            octal: octal
+        };
+    }
 
     // 7.2 White Space
 
@@ -697,6 +726,7 @@
             if (extra.tokenize) {
                 extra.openCurlyToken = extra.tokens.length;
             }
+            state.curlyStack.push('{');
             ++index;
             break;
 
@@ -709,10 +739,13 @@
             }
             break;
 
+        case '}':
+            ++index;
+            state.curlyStack.pop();
+            break;
         case ')':
         case ';':
         case ',':
-        case '}':
         case '[':
         case ']':
         case ':':
@@ -971,7 +1004,7 @@
     // 7.8.4 String Literals
 
     function scanStringLiteral() {
-        var str = '', quote, start, ch, code, unescaped, restore, octal = false;
+        var str = '', quote, start, ch, unescaped, restore, octToDec, octal = false;
 
         quote = source[index];
         assert((quote === '\'' || quote === '"'),
@@ -1027,26 +1060,10 @@
 
                     default:
                         if (isOctalDigit(ch)) {
-                            code = '01234567'.indexOf(ch);
+                            octToDec = octalToDecimal(ch);
 
-                            // \0 is not octal escape sequence
-                            if (code !== 0) {
-                                octal = true;
-                            }
-
-                            if (index < length && isOctalDigit(source[index])) {
-                                octal = true;
-                                code = code * 8 + '01234567'.indexOf(source[index++]);
-
-                                // 3 digits are only allowed when string starts
-                                // with 0, 1, 2, 3
-                                if ('0123'.indexOf(ch) >= 0 &&
-                                        index < length &&
-                                        isOctalDigit(source[index])) {
-                                    code = code * 8 + '01234567'.indexOf(source[index++]);
-                                }
-                            }
-                            str += String.fromCharCode(code);
+                            octal = octToDec.octal || octal;
+                            str += String.fromCharCode(octToDec.code);
                         } else {
                             str += ch;
                         }
@@ -1076,6 +1093,127 @@
             octal: octal,
             lineNumber: startLineNumber,
             lineStart: startLineStart,
+            start: start,
+            end: index
+        };
+    }
+
+    function scanTemplate() {
+        var cooked = '', ch, start, rawOffset, terminated, head, tail, restore, unescaped, octToDec;
+
+        terminated = false;
+        tail = false;
+        start = index;
+        head = (source[index] === '`');
+        rawOffset = 2;
+
+        ++index;
+
+        while (index < length) {
+            ch = source[index++];
+            if (ch === '`') {
+                rawOffset = 1;
+                tail = true;
+                terminated = true;
+                break;
+            } else if (ch === '$') {
+                if (source[index] === '{') {
+                    state.curlyStack.push('${');
+                    ++index;
+                    terminated = true;
+                    break;
+                }
+                cooked += ch;
+            } else if (ch === '\\') {
+                ch = source[index++];
+                if (!isLineTerminator(ch.charCodeAt(0))) {
+                    switch (ch) {
+                    case 'n':
+                        cooked += '\n';
+                        break;
+                    case 'r':
+                        cooked += '\r';
+                        break;
+                    case 't':
+                        cooked += '\t';
+                        break;
+                    case 'u':
+                    case 'x':
+                        if (source[index] === '{') {
+                            ++index;
+                            cooked += scanUnicodeCodePointEscape();
+                        } else {
+                            restore = index;
+                            unescaped = scanHexEscape(ch);
+                            if (unescaped) {
+                                cooked += unescaped;
+                            } else {
+                                index = restore;
+                                cooked += ch;
+                            }
+                        }
+                        break;
+                    case 'b':
+                        cooked += '\b';
+                        break;
+                    case 'f':
+                        cooked += '\f';
+                        break;
+                    case 'v':
+                        cooked += '\v';
+                        break;
+
+                    default:
+                        if (isOctalDigit(ch)) {
+                            octToDec = octalToDecimal(ch);
+
+                            // 11.8.6 and 16.1
+                            if (octToDec.octal) {
+                                throwError(Messages.TemplateOctalLiteral);
+                            }
+                            cooked += String.fromCharCode(octToDec.code);
+                        } else {
+                            cooked += ch;
+                        }
+                        break;
+                    }
+                } else {
+                    ++lineNumber;
+                    if (ch === '\r' && source[index] === '\n') {
+                        ++index;
+                    }
+                    lineStart = index;
+                }
+            } else if (isLineTerminator(ch.charCodeAt(0))) {
+                ++lineNumber;
+                if (ch === '\r' && source[index] === '\n') {
+                    ++index;
+                }
+                lineStart = index;
+                cooked += '\n';
+            } else {
+                cooked += ch;
+            }
+        }
+
+        if (!terminated) {
+            throwUnexpectedToken();
+        }
+
+        if (!head) {
+            state.curlyStack.pop();
+        }
+
+        return {
+            type: Token.Template,
+            value: {
+                cooked: cooked,
+                raw: source.slice(start + 1, index - rawOffset)
+            },
+            head: head,
+            tail: tail,
+            lineNumber: lineNumber,
+            lineStart: lineStart,
             start: start,
             end: index
         };
@@ -1402,7 +1540,6 @@
             return scanStringLiteral();
         }
 
-
         // Dot (.) U+002E can also start a floating-point number, hence the need
         // to check the next character.
         if (ch === 0x2E) {
@@ -1419,6 +1556,12 @@
         // Slash (/) U+002F can also start a regex.
         if (extra.tokenize && ch === 0x2F) {
             return advanceSlash();
+        }
+
+        // Template literals start with ` (U+0060) for template head
+        // or } (U+007D) for template middle or template tail.
+        if (ch === 0x60 || (ch === 0x7D && state.curlyStack[state.curlyStack.length - 1] === '${')) {
+            return scanTemplate();
         }
 
         return scanPunctuator();
@@ -1947,6 +2090,30 @@
             return this;
         },
 
+        finishTaggedTemplateExpression: function (tag, quasi) {
+            this.type = Syntax.TaggedTemplateExpression;
+            this.tag = tag;
+            this.quasi = quasi;
+            this.finish();
+            return this;
+        },
+
+        finishTemplateElement: function (value, tail) {
+            this.type = Syntax.TemplateElement;
+            this.value = value;
+            this.tail = tail;
+            this.finish();
+            return this;
+        },
+
+        finishTemplateLiteral: function (quasis, expressions) {
+            this.type = Syntax.TemplateLiteral;
+            this.quasis = quasis;
+            this.expressions = expressions;
+            this.finish();
+            return this;
+        },
+
         finishThisExpression: function () {
             this.type = Syntax.ThisExpression;
             this.finish();
@@ -2085,25 +2252,32 @@
     // Throw an exception because of the token.
 
     function unexpectedTokenError(token, message) {
-        var msg = message || Messages.UnexpectedToken;
+        var value, msg = message || Messages.UnexpectedToken;
 
-        if (token && !message) {
-            msg = (token.type === Token.EOF) ? Messages.UnexpectedEOS :
-                (token.type === Token.Identifier) ? Messages.UnexpectedIdentifier :
-                (token.type === Token.NumericLiteral) ? Messages.UnexpectedNumber :
-                (token.type === Token.StringLiteral) ? Messages.UnexpectedString :
-                Messages.UnexpectedToken;
+        if (token) {
+            if (!message) {
+                msg = (token.type === Token.EOF) ? Messages.UnexpectedEOS :
+                    (token.type === Token.Identifier) ? Messages.UnexpectedIdentifier :
+                    (token.type === Token.NumericLiteral) ? Messages.UnexpectedNumber :
+                    (token.type === Token.StringLiteral) ? Messages.UnexpectedString :
+                    (token.type === Token.Template) ? Messages.UnexpectedTemplate :
+                    Messages.UnexpectedToken;
 
-            if (token.type === Token.Keyword) {
-                if (isFutureReservedWord(token.value)) {
-                    msg = Messages.UnexpectedReserved;
-                } else if (strict && isStrictModeReservedWord(token.value)) {
-                    msg = Messages.StrictReservedWord;
+                if (token.type === Token.Keyword) {
+                    if (isFutureReservedWord(token.value)) {
+                        msg = Messages.UnexpectedReserved;
+                    } else if (strict && isStrictModeReservedWord(token.value)) {
+                        msg = Messages.StrictReservedWord;
+                    }
                 }
             }
+
+            value = (token.type === Token.Template) ? token.value.raw : token.value;
+        } else {
+            value = 'ILLEGAL';
         }
 
-        msg = msg.replace('%0', token ? token.value : 'ILLEGAL');
+        msg = msg.replace('%0', value);
 
         return (token && typeof token.lineNumber === 'number') ?
             createError(token.lineNumber, token.start, msg) :
@@ -2539,6 +2713,35 @@
         return node.finishObjectExpression(properties);
     }
 
+    function parseTemplateElement(option) {
+        var node, token;
+
+        if (lookahead.type !== Token.Template || (option.head && !lookahead.head)) {
+            throwUnexpectedToken();
+        }
+
+        node = new Node();
+        token = lex();
+
+        return node.finishTemplateElement({ raw: token.value.raw, cooked: token.value.cooked }, token.tail);
+    }
+
+    function parseTemplateLiteral() {
+        var quasi, quasis, expressions, node = new Node();
+
+        quasi = parseTemplateElement({ head: true });
+        quasis = [ quasi ];
+        expressions = [];
+
+        while (!quasi.tail) {
+            expressions.push(parseExpression());
+            quasi = parseTemplateElement({ head: false });
+            quasis.push(quasi);
+        }
+
+        return node.finishTemplateLiteral(quasis, expressions);
+    }
+
     // 11.1.6 The Grouping Operator
 
     function parseGroupExpression() {
@@ -2676,6 +2879,8 @@
             }
             lex();
             expr = node.finishLiteral(token);
+        } else if (type === Token.Template) {
+            expr = parseTemplateLiteral();
         } else {
             throwUnexpectedToken(lex());
         }
@@ -2746,7 +2951,7 @@
     }
 
     function parseLeftHandSideExpressionAllowCall() {
-        var expr, args, property, startToken, previousAllowIn = state.allowIn;
+        var quasi, expr, args, property, startToken, previousAllowIn = state.allowIn;
 
         startToken = lookahead;
         state.allowIn = true;
@@ -2762,6 +2967,9 @@
             } else if (match('[')) {
                 property = parseComputedMember();
                 expr = new WrappingNode(startToken).finishMemberExpression('[', expr, property);
+            } else if (lookahead.type === Token.Template && lookahead.head) {
+                quasi = parseTemplateLiteral();
+                expr = new WrappingNode(startToken).finishTaggedTemplateExpression(expr, quasi);
             } else {
                 break;
             }
@@ -2772,7 +2980,7 @@
     }
 
     function parseLeftHandSideExpression() {
-        var expr, property, startToken;
+        var quasi, expr, property, startToken;
         assert(state.allowIn, 'callee of new expression always allow in keyword.');
 
         startToken = lookahead;
@@ -2786,6 +2994,9 @@
             } else if (match('.')) {
                 property = parseNonComputedMember();
                 expr = new WrappingNode(startToken).finishMemberExpression('.', expr, property);
+            } else if (lookahead.type === Token.Template && lookahead.head) {
+                quasi = parseTemplateLiteral();
+                expr = new WrappingNode(startToken).finishTaggedTemplateExpression(expr, quasi);
             } else {
                 break;
             }
@@ -4351,7 +4562,8 @@
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
-            lastCommentStart: -1
+            lastCommentStart: -1,
+            curlyStack: []
         };
 
         extra = {};
@@ -4438,7 +4650,8 @@
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
-            lastCommentStart: -1
+            lastCommentStart: -1,
+            curlyStack: []
         };
 
         extra = {};
