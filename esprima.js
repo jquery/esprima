@@ -971,7 +971,7 @@
     // 7.8.4 String Literals
 
     function scanStringLiteral() {
-        var str = '', quote, start, ch, code, unescaped, restore, octal = false;
+        var str = '', quote, start, ch, code, unescaped, octal = false;
 
         quote = source[index];
         assert((quote === '\'' || quote === '"'),
@@ -996,14 +996,11 @@
                             ++index;
                             str += scanUnicodeCodePointEscape();
                         } else {
-                            restore = index;
                             unescaped = scanHexEscape(ch);
-                            if (unescaped) {
-                                str += unescaped;
-                            } else {
-                                index = restore;
-                                str += ch;
+                            if (!unescaped) {
+                                throw throwUnexpectedToken();
                             }
+                            str += unescaped;
                         }
                         break;
                     case 'n':
@@ -1024,6 +1021,9 @@
                     case 'v':
                         str += '\x0B';
                         break;
+                    case '8':
+                    case '9':
+                        throw throwUnexpectedToken();
 
                     default:
                         if (isOctalDigit(ch)) {
