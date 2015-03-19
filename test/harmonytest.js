@@ -1039,6 +1039,83 @@ var harmonyTestFixture = {
             }
         },
 
+        'if(a) { (`${b}`) }': {
+            type: 'IfStatement',
+            test: {
+                type: 'Identifier',
+                name: 'a',
+                range: [3, 4],
+                loc: {
+                    start: { line: 1, column: 3 },
+                    end: { line: 1, column: 4 }
+                }
+            },
+            consequent: {
+                type: 'BlockStatement',
+                body: [{
+                    type: 'ExpressionStatement',
+                    expression: {
+                        type: 'TemplateLiteral',
+                        quasis: [{
+                            type: 'TemplateElement',
+                            value: {
+                                raw: '',
+                                cooked: ''
+                            },
+                            tail: false,
+                            range: [9, 12],
+                            loc: {
+                                start: { line: 1, column: 9 },
+                                end: { line: 1, column: 12 }
+                            }
+                        }, {
+                            type: 'TemplateElement',
+                            value: {
+                                raw: '',
+                                cooked: ''
+                            },
+                            tail: true,
+                            range: [13, 15],
+                            loc: {
+                                start: { line: 1, column: 13 },
+                                end: { line: 1, column: 15 }
+                            }
+                        }],
+                        expressions: [{
+                            type: 'Identifier',
+                            name: 'b',
+                            range: [12, 13],
+                            loc: {
+                                start: { line: 1, column: 12 },
+                                end: { line: 1, column: 13 }
+                            }
+                        }],
+                        range: [9, 15],
+                        loc: {
+                            start: { line: 1, column: 9 },
+                            end: { line: 1, column: 15 }
+                        }
+                    },
+                    range: [8, 17],
+                    loc: {
+                        start: { line: 1, column: 8 },
+                        end: { line: 1, column: 17 }
+                    }
+                }],
+                range: [6, 18],
+                loc: {
+                    start: { line: 1, column: 6 },
+                    end: { line: 1, column: 18 }
+                }
+            },
+            alternate: null,
+            range: [0, 18],
+            loc: {
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 18 }
+            }
+        },
+
         '`\\n\\r\\b\\v\\t\\f\\\n\\\r\n`': {
             type: 'ExpressionStatement',
             expression: {
