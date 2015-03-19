@@ -60,5 +60,6 @@
     "VariableDeclaration": "VariableDeclaration",
     "VariableDeclarator": "VariableDeclarator",
     "WhileStatement": "WhileStatement",
-    "WithStatement": "WithStatement"
+    "WithStatement": "WithStatement",
+    "YieldExpression": "YieldExpression"
 }
