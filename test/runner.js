@@ -115,7 +115,8 @@ function testParse(esprima, code, syntax) {
         tokens: (typeof syntax.tokens !== 'undefined'),
         raw: true,
         tolerant: (typeof syntax.errors !== 'undefined'),
-        source: null
+        source: null,
+        sourceType: syntax.sourceType
     };
 
     if (options.comment) {
@@ -144,9 +145,9 @@ function testParse(esprima, code, syntax) {
     expected = JSON.stringify(syntax, null, 4);
     try {
         // Some variations of the options.
-        tree = esprima.parse(code, { tolerant: options.tolerant });
-        tree = esprima.parse(code, { tolerant: options.tolerant, range: true });
-        tree = esprima.parse(code, { tolerant: options.tolerant, loc: true });
+        tree = esprima.parse(code, { tolerant: options.tolerant, sourceType: options.sourceType });
+        tree = esprima.parse(code, { tolerant: options.tolerant, sourceType: options.sourceType, range: true });
+        tree = esprima.parse(code, { tolerant: options.tolerant, sourceType: options.sourceType, loc: true });
 
         tree = esprima.parse(code, options);
 
@@ -221,6 +222,51 @@ function testTokenize(esprima, code, tokens) {
     }
     if (expected !== actual) {
         throw new NotMatchingError(expected, actual);
+    }
+}
+
+
+function testModule(esprima, code, exception) {
+    'use strict';
+    var i, options, expected, actual, err, handleInvalidRegexFlag, tokenize;
+
+    // Different parsing options should give the same error.
+    options = [
+        { sourceType: 'module' },
+        { sourceType: 'module', comment: true },
+        { sourceType: 'module', raw: true },
+        { sourceType: 'module', raw: true, comment: true }
+    ];
+
+    if (!exception.message) {
+        exception.message = 'Error: Line 1: ' + exception.description;
+    }
+    exception.description = exception.message.replace(/Error: Line [0-9]+: /, '');
+
+    expected = JSON.stringify(exception);
+
+    for (i = 0; i < options.length; i += 1) {
+
+        try {
+            esprima.parse(code, options[i]);
+        } catch (e) {
+            err = errorToObject(e);
+            err.description = e.description;
+            actual = JSON.stringify(err);
+        }
+
+        if (expected !== actual) {
+
+            // Compensate for old V8 which does not handle invalid flag.
+            if (exception.message.indexOf('Invalid regular expression') > 0) {
+                if (typeof actual === 'undefined' && !handleInvalidRegexFlag) {
+                    return;
+                }
+            }
+
+            throw new NotMatchingError(expected, actual);
+        }
+
     }
 }
 
@@ -337,8 +383,8 @@ if (typeof window === 'undefined') {
 
         function enumerateFixtures(root) {
             var dirs = fs.readdirSync(root), key, kind,
-                kinds = ['case', 'source', 'run', 'tree', 'tokens', 'failure', 'result'],
-                suffices = ['js', 'js', 'js', 'json', 'json', 'json', 'json'];
+                kinds = ['case', 'source', 'module', 'run', 'tree', 'tokens', 'failure', 'result'],
+                suffices = ['js', 'js', 'json', 'js', 'json', 'json', 'json', 'json'];
 
             dirs.forEach(function (item) {
                 var i;
@@ -375,7 +421,9 @@ if (typeof window === 'undefined') {
                 }
 
                 try {
-                    if (testCase.hasOwnProperty('tree')) {
+                    if (testCase.hasOwnProperty('module')) {
+                        testModule(esprima, testCase.case, JSON.parse(testCase.module));
+                    } else if (testCase.hasOwnProperty('tree')) {
                         testParse(esprima, testCase.case, JSON.parse(testCase.tree));
                     } else if (testCase.hasOwnProperty('tokens')) {
                         testTokenize(esprima, testCase.case, JSON.parse(testCase.tokens));
@@ -422,5 +470,6 @@ if (typeof window === 'undefined') {
             console.log(header);
         }
         process.exit(failures.length === 0 ? 0 : 1);
+
     }());
 }
