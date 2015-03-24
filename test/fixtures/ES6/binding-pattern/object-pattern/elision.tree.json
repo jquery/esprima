@@ -120,7 +120,7 @@
                                 },
                                 "kind": "init",
                                 "method": false,
-                                "shorthand": false
+                                "shorthand": true
                             }
                         ]
                     },
