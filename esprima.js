@@ -2339,7 +2339,7 @@
                     'init', key, false,
                     new WrappingNode(key).finishAssignmentPattern(key, init), false, false);
             } else if (!match(':')) {
-                return node.finishProperty('init', key, false, key, false, false);
+                return node.finishProperty('init', key, false, key, false, true);
             }
         } else {
             key = parseObjectPropertyKey();
