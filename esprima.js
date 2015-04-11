@@ -159,6 +159,7 @@
         ReturnStatement: 'ReturnStatement',
         SequenceExpression: 'SequenceExpression',
         SpreadElement: 'SpreadElement',
+        Super: 'Super',
         SwitchStatement: 'SwitchStatement',
         SwitchCase: 'SwitchCase',
         ThisExpression: 'ThisExpression',
@@ -1968,6 +1969,12 @@
             return this;
         },
 
+        finishSuper: function () {
+            this.type = Syntax.Super;
+            this.finish();
+            return this;
+        },
+
         finishSwitchStatement: function (discriminant, cases) {
             this.type = Syntax.SwitchStatement;
             this.discriminant = discriminant;
@@ -2983,7 +2990,17 @@
 
         startToken = lookahead;
         state.allowIn = true;
-        expr = inheritCoverGrammar(matchKeyword('new') ? parseNewExpression : parsePrimaryExpression);
+
+        if (matchKeyword('super') && state.inFunctionBody) {
+            expr = new Node();
+            lex();
+            expr = expr.finishSuper();
+            if (!match('(') && !match('.') && !match('[')) {
+                throwUnexpectedToken(lookahead);
+            }
+        } else {
+            expr = inheritCoverGrammar(matchKeyword('new') ? parseNewExpression : parsePrimaryExpression);
+        }
 
         for (;;) {
             if (match('.')) {
@@ -3016,7 +3033,13 @@
 
         startToken = lookahead;
 
-        expr = inheritCoverGrammar(matchKeyword('new') ? parseNewExpression : parsePrimaryExpression);
+        if (matchKeyword('super') && state.inFunctionBody) {
+            expr = new Node();
+            lex();
+            expr = expr.finishSuper();
+        } else {
+            expr = inheritCoverGrammar(matchKeyword('new') ? parseNewExpression : parsePrimaryExpression);
+        }
 
         for (;;) {
             if (match('[')) {

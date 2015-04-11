@@ -46,6 +46,7 @@
     "ReturnStatement": "ReturnStatement",
     "SequenceExpression": "SequenceExpression",
     "SpreadElement": "SpreadElement",
+    "Super": "Super",
     "SwitchStatement": "SwitchStatement",
     "SwitchCase": "SwitchCase",
     "ThisExpression": "ThisExpression",
