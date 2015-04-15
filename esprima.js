@@ -5296,7 +5296,7 @@
     exports.parse = parse;
 
     // Deep copy.
-   /* istanbul ignore next */
+    /* istanbul ignore next */
     exports.Syntax = (function () {
         var name, types = {};
 
