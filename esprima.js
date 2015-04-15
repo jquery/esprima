@@ -5289,7 +5289,7 @@
     }
 
     // Sync with *.json manifests.
-    exports.version = '2.1.0';
+    exports.version = '2.2.0';
 
     exports.tokenize = tokenize;
 
