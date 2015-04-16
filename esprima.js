@@ -1023,7 +1023,7 @@
     // 7.8.4 String Literals
 
     function scanStringLiteral() {
-        var str = '', quote, start, ch, unescaped, restore, octToDec, octal = false;
+        var str = '', quote, start, ch, unescaped, octToDec, octal = false;
 
         quote = source[index];
         assert((quote === '\'' || quote === '"'),
@@ -1118,7 +1118,7 @@
     }
 
     function scanTemplate() {
-        var cooked = '', ch, start, rawOffset, terminated, head, tail, restore, unescaped, octToDec;
+        var cooked = '', ch, start, rawOffset, terminated, head, tail, restore, unescaped;
 
         terminated = false;
         tail = false;
@@ -1183,14 +1183,15 @@
                         break;
 
                     default:
-                        if (isOctalDigit(ch)) {
-                            octToDec = octalToDecimal(ch);
-
-                            // 11.8.6 and 16.1
-                            if (octToDec.octal) {
+                        if (ch === '0') {
+                            if (isDecimalDigit(source.charCodeAt(index))) {
+                                // Illegal: \01 \02 and so on
                                 throwError(Messages.TemplateOctalLiteral);
                             }
-                            cooked += String.fromCharCode(octToDec.code);
+                            cooked += '\0';
+                        } else if (isOctalDigit(ch)) {
+                            // Illegal: \1 \2
+                            throwError(Messages.TemplateOctalLiteral);
                         } else {
                             cooked += ch;
                         }
