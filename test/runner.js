@@ -1,11 +1,5 @@
 /*
-  Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
-  Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
-  Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
-  Copyright (C) 2012 Arpad Borsos <arpad.borsos@googlemail.com>
-  Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
-  Copyright (C) 2011 Yusuke Suzuki <utatane.tea@gmail.com>
-  Copyright (C) 2011 Arpad Borsos <arpad.borsos@googlemail.com>
+  Copyright (c) jQuery Foundation, Inc. and Contributors, All Rights Reserved.
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
