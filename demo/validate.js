@@ -28,7 +28,7 @@ function validate(delay) {
                 }
                 result.setAttribute('class', 'alert-box alert');
             } else {
-                result.innerHTML = 'Code is syntatically valid.';
+                result.innerHTML = 'Code is syntactically valid.';
                 result.setAttribute('class', 'alert-box success');
                 if (syntax.body.length === 0) {
                     result.innerHTML = 'Empty code. Nothing to validate.';
