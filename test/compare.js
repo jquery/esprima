@@ -23,18 +23,60 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint browser: true node: true */
-/*global load:true, print:true */
 var setupBenchmarks,
     parsers,
     fixtureList,
     suite;
 
 parsers = [
-    'Esprima',
-    'UglifyJS2',
-    'Traceur',
-    'Acorn',
+{
+    name: 'Esprima',
+    version: function () {
+        return window.esprima.version;
+    },
+    parse: function (code) {
+        var syntax = window.esprima.parse(code, { range: true, loc: true });
+        return syntax.body.length;
+    }
+},
+{
+    name: 'UglifyJS2',
+    link: 'https://github.com/mishoo/UglifyJS2',
+    parse: function (code) {
+        var syntax = window.UglifyJS.parse(code);
+        return syntax.length;
+    }
+},
+{
+    name: 'Traceur',
+    link: 'https://github.com/google/traceur-compiler',
+    parse: function (code) {
+        var file, parser, tree;
+        file = new traceur.syntax.SourceFile('name', code);
+        parser = new traceur.syntax.Parser(file, console);
+        tree = parser.parseScript();
+        return tree.scriptItemList.length;
+    }
+},
+{
+    name: 'Acorn',
+    link: 'https://github.com/marijnh/acorn',
+    version: function () {
+        return window.acorn.version;
+    },
+    parse: function (code) {
+        var syntax = window.acorn.parse(code, { ranges: true, locations: true });
+        return syntax.body.length;
+    }
+},
+{
+    name: 'Shift',
+    link: '',
+    parse: function (code) {
+        var syntax = window.shift.parseScript(code, { loc: true });
+        return syntax.body.statements[0].length;
+    }
+}
 ];
 
 fixtureList = [
@@ -100,7 +142,11 @@ if (typeof window !== 'undefined') {
             str += '<table>';
             str += '<thead><tr><th>Source</th>';
             for (i = 0; i < parsers.length; i += 1) {
-                str += '<th>' + parsers[i] + '</th>';
+                name = parsers[i].name;
+                if (parsers[i].link) {
+                    name = '<a href="' + parsers[i].link + '">' + name + '</a>';
+                }
+                str += '<th>' + name + ' <span id="' + slug(parsers[i].name) + '-version"></th>';
             }
             str += '</tr></thead>';
             str += '<tbody>';
@@ -110,13 +156,13 @@ if (typeof window !== 'undefined') {
                 str += '<tr>';
                 str += '<td>' + test + '</td>';
                 for (i = 0; i < parsers.length; i += 1) {
-                    str += '<td id="' + name + '-' + slug(parsers[i]) + '-time"></td>';
+                    str += '<td id="' + name + '-' + slug(parsers[i].name) + '-time"></td>';
                 }
                 str += '</tr>';
             }
             str += '<tr><td><b>Total</b></td>';
             for (i = 0; i < parsers.length; i += 1) {
-                str += '<td id="' + slug(parsers[i]) + '-total"></td>';
+                str += '<td id="' + slug(parsers[i].name) + '-total"></td>';
             }
             str += '</tr>';
             str += '</tbody>';
@@ -217,8 +263,15 @@ if (typeof window !== 'undefined') {
             function reset() {
                 var i, name;
                 for (i = 0; i < suite.length; i += 1) {
-                    name = slug(suite[i].fixture) + '-' + slug(suite[i].parser);
+                    name = slug(suite[i].fixture) + '-' + slug(suite[i].parser.name);
                     setText(name + '-time', '');
+                }
+                for (i = 0; i < parsers.length; i += 1) {
+                    name = slug(parsers[i].name);
+                    setText(name + '-total', '');
+                    if (parsers[i].version) {
+                        setText(name + '-version', parsers[i].version());
+                    }
                 }
             }
 
@@ -236,7 +289,7 @@ if (typeof window !== 'undefined') {
 
                 source = window.data[slug(fixture)];
 
-                test = slug(fixture) + '-' + slug(parser);
+                test = slug(fixture) + '-' + slug(parser.name);
                 setText(test + '-time', 'Running...');
 
                 setText('status', 'Please wait. Parsing ' + fixture + '...');
@@ -248,41 +301,9 @@ if (typeof window !== 'undefined') {
                 // Poor man's error reporter for Traceur.
                 console.reportError = console.error;
 
-                switch (parser) {
-                case 'Esprima':
-                    fn = function () {
-                        var syntax = window.esprima.parse(source, { range: true, loc: true });
-                        window.tree.push(syntax.body.length);
-                    };
-                    break;
-
-                case 'UglifyJS2':
-                    fn = function () {
-                        var syntax = window.UglifyJS.parse(source);
-                        window.tree.push(syntax.length);
-                    };
-                    break;
-
-                case 'Traceur':
-                    fn = function () {
-                        var file, parser, tree;
-                        file = new traceur.syntax.SourceFile('name', source);
-                        parser = new traceur.syntax.Parser(file, console);
-                        tree = parser.parseScript();
-                        window.tree.push(tree.scriptItemList.length);
-                    };
-                    break;
-
-                case 'Acorn':
-                    fn = function () {
-                        var syntax = window.acorn.parse(source, { ranges: true, locations: true });
-                        window.tree.push(syntax.body.length);
-                    };
-                    break;
-
-                default:
-                    throw 'Unknown parser type ' + parser;
-                }
+                fn = function () {
+                    window.tree.push(parser.parse(source));
+                };
 
                 benchmark = new window.Benchmark(test, fn, {
                     'onComplete': function () {
@@ -292,11 +313,11 @@ if (typeof window !== 'undefined') {
                         setText(this.name + '-time', str);
 
                         if (!totalTime[parser]) {
-                            totalTime[parser] = this.stats.mean;
+                            totalTime[parser.name] = this.stats.mean;
                         } else {
-                            totalTime[parser] += this.stats.mean;
+                            totalTime[parser.name] += this.stats.mean;
                         }
-                        setText(slug(parser) + '-total', (1000 * totalTime[parser]).toFixed(1) + ' ms');
+                        setText(slug(parser.name) + '-total', (1000 * totalTime[parser.name]).toFixed(1) + ' ms');
                     }
                 });
 
