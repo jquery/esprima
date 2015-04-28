@@ -73,7 +73,7 @@ parsers = [
     name: 'Shift',
     link: '',
     parse: function (code) {
-        var syntax = window.shift.parseScript(code, { loc: true });
+        var syntax = window.shift.parseScript(code, { loc: true, earlyErrors: false });
         return syntax.body.statements[0].length;
     }
 }
