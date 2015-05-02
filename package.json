@@ -32,7 +32,7 @@
         "url": "https://github.com/jquery/esprima.git"
     },
     "bugs": {
-        "url": "http://issues.esprima.org"
+        "url": "https://github.com/jquery/esprima/issues"
     },
     "licenses": [{
         "type": "BSD",

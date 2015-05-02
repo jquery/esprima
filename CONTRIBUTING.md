@@ -4,7 +4,7 @@ This page describes how to contribute changes to Esprima.
 
 Please do **not** create a pull request without reading this guide first. Failure to do so may result in the **rejection** of the pull request.
 
-**1. Create a ticket in the [issue tracker](http://issues.esprima.org)**.
+**1. Create a ticket in the [issue tracker](https://github.com/jquery/esprima/issues)**.
 This serves as a placeholder for important feedback, review, or any future updates.
 
 **2. Run all the tests**. This requires Node.js: `npm install` to set up, `npm test` to run the tests.
@@ -18,3 +18,4 @@ This serves as a placeholder for important feedback, review, or any future updat
 
 
 For more information, please check the [detailed contribution guide](http://esprima.org/doc/index.html#contribution).
+
