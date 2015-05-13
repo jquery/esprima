@@ -4817,15 +4817,15 @@
                     lex();
                 } else {
                     key = parseObjectPropertyKey();
-                }
-                if (key && key.name === 'static' && (lookaheadPropertyName() || match('*'))) {
-                    token = lookahead;
-                    isStatic = true;
-                    computed = match('[');
-                    if (match('*')) {
-                        lex();
-                    } else {
-                        key = parseObjectPropertyKey();
+                    if (key.name === 'static' && (lookaheadPropertyName() || match('*'))) {
+                        token = lookahead;
+                        isStatic = true;
+                        computed = match('[');
+                        if (match('*')) {
+                            lex();
+                        } else {
+                            key = parseObjectPropertyKey();
+                        }
                     }
                 }
                 method = tryParseMethodDefinition(token, key, computed, method);
