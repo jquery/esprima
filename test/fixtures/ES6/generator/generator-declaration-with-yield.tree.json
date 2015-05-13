@@ -100,7 +100,7 @@
                                 }
                             },
                             "type": "YieldExpression",
-                            "arguments": {
+                            "argument": {
                                 "range": [
                                     24,
                                     25
