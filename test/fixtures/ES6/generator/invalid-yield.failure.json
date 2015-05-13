@@ -1,1 +1,1 @@
-{"index":14,"lineNumber":1,"column":15,"message":"Error: Line 1: Illegal yield expression","description":"Illegal yield expression"}
+{"index":14,"lineNumber":1,"column":15,"message":"Error: Line 1: Unexpected token yield","description":"Unexpected token yield"}

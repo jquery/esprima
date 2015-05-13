@@ -195,7 +195,7 @@
         IllegalContinue: 'Illegal continue statement',
         IllegalBreak: 'Illegal break statement',
         IllegalReturn: 'Illegal return statement',
-        IllegalYield: 'Illegal yield expression',
+        IllegalYield: 'Unexpected token yield',
         StrictModeWith: 'Strict mode code may not include a with statement',
         StrictCatchVariable: 'Catch variable may not be eval or arguments in strict mode',
         StrictVarName: 'Variable name may not be eval or arguments in strict mode',
@@ -3669,15 +3669,15 @@
     // [ES6] 14.4 Yield expression
 
     function parseYieldExpression() {
-        var argument, expr, delegate, node = lookahead;
+        var argument, expr, delegate;
 
         expr = new Node();
 
-        expectKeyword('yield');
-
         if (!state.allowYield) {
-            tolerateUnexpectedToken(node, Messages.IllegalYield);
+            tolerateUnexpectedToken(lookahead, Messages.IllegalYield);
         }
+
+        expectKeyword('yield');
 
         if (!hasLineTerminator) {
             delegate = match('*');
