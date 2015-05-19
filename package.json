@@ -34,10 +34,7 @@
     "bugs": {
         "url": "https://github.com/jquery/esprima/issues"
     },
-    "licenses": [{
-        "type": "BSD",
-        "url": "https://github.com/jquery/esprima/raw/master/LICENSE.BSD"
-    }],
+    "license": "BSD-2-Clause",
     "devDependencies": {
         "eslint": "~0.19.0",
         "jscs": "~1.12.0",
