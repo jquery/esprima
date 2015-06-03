@@ -3683,10 +3683,11 @@
             delegate = match('*');
             if (delegate) {
                 lex();
-            }
-
-            if (!match(';') && !match('}') && lookahead.type !== Token.EOF) {
                 argument = parseExpression();
+            } else {
+                if (!match(';') && !match('}') && lookahead.type !== Token.EOF) {
+                    argument = parseExpression();
+                }
             }
         }
 
