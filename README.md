@@ -3,7 +3,7 @@ standard-compliant [ECMAScript](http://www.ecma-international.org/publications/s
 parser written in ECMAScript (also popularly known as
 [JavaScript](http://en.wikipedia.org/wiki/JavaScript>JavaScript)).
 Esprima is created and maintained by [Ariya Hidayat](http://twitter.com/ariyahidayat),
-with the help of [many contributors](https://github.com/ariya/esprima/contributors).
+with the help of [many contributors](https://github.com/jquery/esprima/contributors).
 
 ### Features
 
