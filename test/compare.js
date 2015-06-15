@@ -71,9 +71,17 @@ parsers = [
 },
 {
     name: 'Shift',
-    link: '',
+    link: 'https://github.com/shapesecurity/shift-parser-js',
     parse: function (code) {
         var syntax = window.shift.parseScript(code, { loc: true });
+        return syntax.body.statements[0].length;
+    }
+},
+{
+    name: 'Shift (no early errors)',
+    link: 'https://github.com/shapesecurity/shift-parser-js',
+    parse: function (code) {
+        var syntax = window.shift.parseScript(code, { loc: true, earlyErrors: false });
         return syntax.body.statements[0].length;
     }
 }
