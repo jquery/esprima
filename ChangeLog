@@ -1,3 +1,8 @@
+2015-06-16: Version 2.3.0
+
+      * Support ES6 generator (issue 1033)
+      * Improve parsing of regular expressions with `u` flag (issue 1179)
+
 2015-04-17: Version 2.2.0
 
       * Support ES6 import and export declarations (issue 1000)
