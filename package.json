@@ -56,7 +56,7 @@
     "scripts": {
         "generate-regex": "node tools/generate-identifier-regex.js",
 
-        "test": "node test/run.js && npm run lint && npm run coverage",
+        "test": "node unit-tests.js && npm run lint && npm run coverage",
 
         "lint": "npm run check-version && npm run eslint && npm run jscs && npm run complexity",
         "check-version": "node tools/check-version.js",
