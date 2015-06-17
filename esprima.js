@@ -1233,28 +1233,37 @@
     }
 
     function testRegExp(pattern, flags) {
-        var tmp = pattern;
+        // The BMP character to use as a replacement for astral symbols when
+        // translating an ES6 "u"-flagged pattern to an ES5-compatible
+        // approximation.
+        // Note: replacing with '\uFFFF' enables false positives in unlikely
+        // scenarios. For example, `[\u{1044f}-\u{10440}]` is an invalid
+        // pattern that would not be detected by this substitution.
+        var astralSubstitute = '\uFFFF',
+            tmp = pattern;
 
         if (flags.indexOf('u') >= 0) {
-            // Replace each astral symbol and every Unicode escape sequence
-            // that possibly represents an astral symbol or a paired surrogate
-            // with a single ASCII symbol to avoid throwing on regular
-            // expressions that are only valid in combination with the `/u`
-            // flag.
-            // Note: replacing with the ASCII symbol `x` might cause false
-            // negatives in unlikely scenarios. For example, `[\u{61}-b]` is a
-            // perfectly valid pattern that is equivalent to `[a-b]`, but it
-            // would be replaced by `[x-b]` which throws an error.
             tmp = tmp
-                .replace(/\\u\{([0-9a-fA-F]+)\}/g, function ($0, $1) {
-                    if (parseInt($1, 16) <= 0x10FFFF) {
-                        return 'x';
+                // Replace every Unicode escape sequence with the equivalent
+                // BMP character or a constant ASCII code point in the case of
+                // astral symbols. (See the above note on `astralSubstitute`
+                // for more information.)
+                .replace(/\\u\{([0-9a-fA-F]+)\}|\\u([a-fA-F0-9]{4})/g, function ($0, $1, $2) {
+                    var codePoint = parseInt($1 || $2, 16);
+                    if (codePoint > 0x10FFFF) {
+                        throwUnexpectedToken(null, Messages.InvalidRegExp);
                     }
-                    throwUnexpectedToken(null, Messages.InvalidRegExp);
+                    if (codePoint <= 0xFFFF) {
+                        return String.fromCharCode(codePoint);
+                    }
+                    return astralSubstitute;
                 })
+                // Replace each paired surrogate with a single ASCII symbol to
+                // avoid throwing on regular expressions that are only valid in
+                // combination with the "u" flag.
                 .replace(
-                    /\\u([a-fA-F0-9]{4})|[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
-                    'x'
+                    /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
+                    astralSubstitute
                 );
         }
 
@@ -3674,10 +3683,11 @@
             delegate = match('*');
             if (delegate) {
                 lex();
-            }
-
-            if (!match(';') && !match('}') && lookahead.type !== Token.EOF) {
                 argument = parseExpression();
+            } else {
+                if (!match(';') && !match('}') && lookahead.type !== Token.EOF) {
+                    argument = parseExpression();
+                }
             }
         }
 
@@ -4808,15 +4818,15 @@
                     lex();
                 } else {
                     key = parseObjectPropertyKey();
-                }
-                if (key && key.name === 'static' && (lookaheadPropertyName() || match('*'))) {
-                    token = lookahead;
-                    isStatic = true;
-                    computed = match('[');
-                    if (match('*')) {
-                        lex();
-                    } else {
-                        key = parseObjectPropertyKey();
+                    if (key.name === 'static' && (lookaheadPropertyName() || match('*'))) {
+                        token = lookahead;
+                        isStatic = true;
+                        computed = match('[');
+                        if (match('*')) {
+                            lex();
+                        } else {
+                            key = parseObjectPropertyKey();
+                        }
                     }
                 }
                 method = tryParseMethodDefinition(token, key, computed, method);
@@ -5398,7 +5408,7 @@
     }
 
     // Sync with *.json manifests.
-    exports.version = '2.2.0';
+    exports.version = '2.3.0';
 
     exports.tokenize = tokenize;
 

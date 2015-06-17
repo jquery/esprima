@@ -1,3 +1,51 @@
+2015-06-16: Version 2.3.0
+
+      * Support ES6 generator (issue 1033)
+      * Improve parsing of regular expressions with `u` flag (issue 1179)
+
+2015-04-17: Version 2.2.0
+
+      * Support ES6 import and export declarations (issue 1000)
+      * Fix line terminator before arrow not recognized as error (issue 1009)
+      * Support ES6 destructuring (issue 1045)
+      * Support ES6 template literal (issue 1074)
+      * Fix the handling of invalid/incomplete string escape sequences (issue 1106)
+      * Fix ES3 static member access restriction (issue 1120)
+      * Support for `super` in ES6 class (issue 1147)
+
+2015-03-09: Version 2.1.0
+
+      * Support ES6 class (issue 1001)
+      * Support ES6 rest parameter (issue 1011)
+      * Expand the location of property getter, setter, and methods (issue 1029)
+      * Enable TryStatement transition to a single handler (issue 1031)
+      * Support ES6 computed property name (issue 1037)
+      * Tolerate unclosed block comment (issue 1041)
+      * Support ES6 lexical declaration (issue 1065)
+
+2015-02-06: Version 2.0.0
+
+      * Support ES6 arrow function (issue 517)
+      * Support ES6 Unicode code point escape (issue 521)
+      * Improve the speed and accuracy of comment attachment (issue 522)
+      * Support ES6 default parameter (issue 519)
+      * Support ES6 regular expression flags (issue 557)
+      * Fix scanning of implicit octal literals (issue 565)
+      * Fix the handling of automatic semicolon insertion (issue 574)
+      * Support ES6 method definition (issue 620)
+      * Support ES6 octal integer literal (issue 621)
+      * Support ES6 binary integer literal (issue 622)
+      * Support ES6 object literal property value shorthand (issue 624)
+
+2015-03-03: Version 1.2.5
+
+      * Fix scanning of implicit octal literals (issue 565)
+
+2015-02-05: Version 1.2.4
+
+      * Fix parsing of LeftHandSideExpression in ForInStatement (issue 560)
+      * Fix the handling of automatic semicolon insertion (issue 574)
+
 2015-01-18: Version 1.2.3
 
       * Fix division by this (issue 616)
