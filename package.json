@@ -63,7 +63,7 @@
         "check-version": "node tools/check-version.js",
         "jscs": "jscs esprima.js",
         "eslint": "node node_modules/eslint/bin/eslint.js esprima.js",
-        "complexity": "node tools/list-complexity.js && cr -s -l -w --maxcyc 17 esprima.js",
+        "complexity": "node tools/list-complexity.js && cr -s -l -w --maxcyc 19 esprima.js",
 
         "coverage": "npm run analyze-coverage && npm run check-coverage",
         "analyze-coverage": "istanbul cover test/runner.js",
