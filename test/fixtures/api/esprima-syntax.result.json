@@ -23,6 +23,7 @@
     "ExportSpecifier": "ExportSpecifier",
     "ExpressionStatement": "ExpressionStatement",
     "ForStatement": "ForStatement",
+    "ForOfStatement": "ForOfStatement",
     "ForInStatement": "ForInStatement",
     "FunctionDeclaration": "FunctionDeclaration",
     "FunctionExpression": "FunctionExpression",
