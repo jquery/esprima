@@ -36,7 +36,7 @@
     "devDependencies": {
         "eslint": "~0.23.0",
         "jscs": "~1.13.1",
-        "istanbul": "~0.3.15",
+        "istanbul": "~0.3.16",
         "escomplex-js": "1.2.0",
         "complexity-report": "~1.4.0",
         "regenerate": "~0.6.2",
