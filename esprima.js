@@ -1736,11 +1736,9 @@
             }
 
             // Eating the stack.
-            if (last) {
-                while (last && last.range[0] >= this.range[0]) {
-                    lastChild = last;
-                    last = bottomRight.pop();
-                }
+            while (last && last.range[0] >= this.range[0]) {
+                lastChild = bottomRight.pop();
+                last = bottomRight[bottomRight.length - 1];
             }
 
             if (lastChild) {
