@@ -1,0 +1,73 @@
+{
+    "range": [
+        0,
+        31
+    ],
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                31
+            ],
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    14,
+                    30
+                ],
+                "type": "ObjectExpression",
+                "properties": [
+                    {
+                        "range": [
+                            20,
+                            28
+                        ],
+                        "type": "Property",
+                        "key": {
+                            "range": [
+                                20,
+                                22
+                            ],
+                            "type": "Identifier",
+                            "name": "p1"
+                        },
+                        "computed": false,
+                        "value": {
+                            "range": [
+                                24,
+                                28
+                            ],
+                            "type": "Literal",
+                            "value": null,
+                            "raw": "null"
+                        },
+                        "kind": "init",
+                        "method": false,
+                        "shorthand": false
+                    }
+                ],
+                "leadingComments": [
+                    {
+                        "type": "Block",
+                        "value": " comment ",
+                        "range": [
+                            1,
+                            14
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+    "comments": [
+        {
+            "type": "Block",
+            "value": " comment ",
+            "range": [
+                1,
+                14
+            ]
+        }
+    ]
+}
