@@ -1742,9 +1742,19 @@
             }
 
             if (lastChild) {
-                if (lastChild.leadingComments && lastChild.leadingComments[lastChild.leadingComments.length - 1].range[1] <= this.range[0]) {
-                    this.leadingComments = lastChild.leadingComments;
-                    lastChild.leadingComments = undefined;
+                if (lastChild.leadingComments) {
+                    leadingComments = [];
+                    for (i = lastChild.leadingComments.length - 1; i >= 0; --i) {
+                        comment = lastChild.leadingComments[i];
+                        if (comment.range[1] <= this.range[0]) {
+                            leadingComments.unshift(comment);
+                            lastChild.leadingComments.splice(i, 1);
+                        }
+                    }
+
+                    if (!lastChild.leadingComments.length) {
+                        lastChild.leadingComments = undefined;
+                    }
                 }
             } else if (extra.leadingComments.length > 0) {
                 leadingComments = [];
