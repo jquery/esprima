@@ -1,0 +1,102 @@
+{
+    "range": [
+        5,
+        39
+    ],
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                5,
+                39
+            ],
+            "type": "FunctionDeclaration",
+            "id": {
+                "range": [
+                    14,
+                    15
+                ],
+                "type": "Identifier",
+                "name": "a"
+            },
+            "params": [],
+            "defaults": [],
+            "body": {
+                "range": [
+                    18,
+                    39
+                ],
+                "type": "BlockStatement",
+                "body": [
+                    {
+                        "range": [
+                            23,
+                            38
+                        ],
+                        "type": "FunctionDeclaration",
+                        "id": {
+                            "range": [
+                                32,
+                                33
+                            ],
+                            "type": "Identifier",
+                            "name": "o"
+                        },
+                        "params": [],
+                        "defaults": [],
+                        "body": {
+                            "range": [
+                                36,
+                                38
+                            ],
+                            "type": "BlockStatement",
+                            "body": []
+                        },
+                        "generator": false,
+                        "expression": false,
+                        "leadingComments": [
+                            {
+                                "type": "Block",
+                                "value": "",
+                                "range": [
+                                    19,
+                                    23
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "generator": false,
+            "expression": false,
+            "leadingComments": [
+                {
+                    "type": "Block",
+                    "value": "",
+                    "range": [
+                        0,
+                        4
+                    ]
+                }
+            ]
+        }
+    ],
+    "comments": [
+        {
+            "type": "Block",
+            "value": "",
+            "range": [
+                0,
+                4
+            ]
+        },
+        {
+            "type": "Block",
+            "value": "",
+            "range": [
+                19,
+                23
+            ]
+        }
+    ]
+}

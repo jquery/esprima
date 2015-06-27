@@ -1,0 +1,56 @@
+{
+    "range": [
+        5,
+        20
+    ],
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                5,
+                20
+            ],
+            "type": "FunctionDeclaration",
+            "id": {
+                "range": [
+                    14,
+                    15
+                ],
+                "type": "Identifier",
+                "name": "a"
+            },
+            "params": [],
+            "defaults": [],
+            "body": {
+                "range": [
+                    18,
+                    20
+                ],
+                "type": "BlockStatement",
+                "body": []
+            },
+            "generator": false,
+            "expression": false,
+            "leadingComments": [
+                {
+                    "type": "Block",
+                    "value": "",
+                    "range": [
+                        0,
+                        4
+                    ]
+                }
+            ]
+        }
+    ],
+    "comments": [
+        {
+            "type": "Block",
+            "value": "",
+            "range": [
+                0,
+                4
+            ]
+        }
+    ]
+}
