@@ -38,11 +38,9 @@
         "jscs": "~1.13.1",
         "istanbul": "~0.3.16",
         "escomplex-js": "1.2.0",
-        "complexity-report": "~1.4.0",
         "regenerate": "~0.6.2",
         "unicode-7.0.0": "~0.1.5",
         "json-diff": "~0.3.1",
-        "optimist": "~0.6.0",
         "coveralls": "~2.11.2"
     },
     "keywords": [
@@ -53,23 +51,28 @@
         "syntax"
     ],
     "scripts": {
-        "generate-regex": "node tools/generate-identifier-regex.js",
 
-        "test": "node unit-tests.js && npm run lint && npm run coverage",
-
-        "lint": "npm run check-version && npm run eslint && npm run jscs && npm run complexity",
-        "check-version": "node tools/check-version.js",
-        "jscs": "jscs esprima.js",
+        "check-version": "node test/check-version.js",
+        "jscs": "jscs esprima.js && jscs test/*.js",
         "eslint": "node node_modules/eslint/bin/eslint.js esprima.js",
-        "complexity": "node tools/list-complexity.js && cr -s -l -w --maxcyc 19 esprima.js",
+        "complexity": "node test/check-complexity.js",
+        "static-analysis": "npm run check-version && npm run jscs && npm run eslint && npm run complexity",
 
-        "coverage": "npm run analyze-coverage && npm run check-coverage",
-        "analyze-coverage": "istanbul cover test/runner.js",
+        "unit-tests": "node test/unit-tests.js",
+        "regression-tests": "node test/regression-tests.js",
+        "tests": "npm run unit-tests && npm run regression-tests",
+
+        "analyze-coverage": "istanbul cover test/unit-tests.js",
         "check-coverage": "istanbul check-coverage --statement 100 --branch 100 --function 100",
+        "dynamic-analysis": "npm run analyze-coverage && npm run check-coverage",
+
+        "test": "npm run tests && npm run static-analysis && npm run dynamic-analysis",
 
         "benchmark": "node test/benchmarks.js",
         "benchmark-quick": "node test/benchmarks.js quick",
 
-        "travis": "npm test && coveralls < ./coverage/lcov.info"
+        "travis": "npm test && coveralls < ./coverage/lcov.info",
+
+        "generate-regex": "node tools/generate-identifier-regex.js"
     }
 }
