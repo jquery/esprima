@@ -22,7 +22,9 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-var esprima, N, fixture, readFile, writeFile;
+var fs = require('fs'),
+    esprima = require('../esprima'),
+    N, fixture;
 
 // Loops for parsing, useful for stress-testing/profiling.
 N = 1;
@@ -37,22 +39,8 @@ fixture = [
     'Angular 1.2.5'
 ];
 
-if (typeof require === 'undefined') {
-    load('esprima.js');
-    readFile = this.read;
-    console = { log: print };
-    writeFile = function() { print('ERROR: writeFile is not supported'); };
-} else {
-    esprima = require('../esprima');
-    readFile = function (filename) {
-        return require('fs').readFileSync(filename, 'utf-8');
-    };
-    writeFile = function (filename, content) {
-        return require('fs').writeFileSync(filename, content, 'utf-8');
-    };
-}
-
 function sortedObject(o) {
+    var keys, result;
     if (o === null) {
         return o;
     }
@@ -65,13 +53,13 @@ function sortedObject(o) {
     if (o instanceof RegExp) {
         return o;
     }
-    var keys = Object.keys(o);
-    var result = {
+    keys = Object.keys(o);
+    result = {
         range: undefined,
         loc: undefined
     };
     keys.forEach(function (key) {
-        if (o.hasOwnProperty(key)){
+        if (o.hasOwnProperty(key)) {
             result[key] = sortedObject(o[key]);
         }
     });
@@ -81,7 +69,7 @@ function sortedObject(o) {
 function getBaselineSyntax(name) {
     var syntax, tree = null;
     try {
-        syntax = readFile('test/3rdparty/syntax/' + name + '.json');
+        syntax = fs.readFileSync('test/3rdparty/syntax/' + name + '.json', 'utf-8');
         tree = sortedObject(JSON.parse(syntax));
     } finally {
         return tree;
@@ -90,18 +78,18 @@ function getBaselineSyntax(name) {
 
 function createBaselineSyntax(name, syntax) {
     var tree = JSON.stringify(syntax);
-    writeFile('test/3rdparty/syntax/' + name + '.json', tree);
+    fs.writeFileSync('test/3rdparty/syntax/' + name + '.json', tree, 'utf-8');
 }
 
 function writeActualSyntax(name, syntax) {
     var tree = JSON.stringify(syntax);
-    writeFile('test/3rdparty/syntax/' + name + '.actual.json', tree);
+    fs.writeFileSync('test/3rdparty/syntax/' + name + '.actual.json', tree, 'utf-8');
 }
 
 function getBaselineTokens(name) {
     var data, tokens = null;
     try {
-        data = readFile('test/3rdparty/syntax/' + name + '.tokens');
+        data = fs.readFileSync('test/3rdparty/syntax/' + name + '.tokens', 'utf-8');
         tokens = sortedObject(JSON.parse(data));
     } finally {
         return tokens;
@@ -110,12 +98,12 @@ function getBaselineTokens(name) {
 
 function createBaselineTokens(name, tokens) {
     var data = JSON.stringify(sortedObject(tokens));
-    writeFile('test/3rdparty/syntax/' + name + '.tokens', data);
+    fs.writeFileSync('test/3rdparty/syntax/' + name + '.tokens', data, 'utf-8');
 }
 
 function writeActualTokens(name, tokens) {
     var data = JSON.stringify(sortedObject(tokens));
-    writeFile('test/3rdparty/syntax/' + name + '.actual.tokens', data);
+    fs.writeFileSync('test/3rdparty/syntax/' + name + '.actual.tokens', data, 'utf-8');
 }
 
 console.log('Processing libraries...');
@@ -123,7 +111,7 @@ console.log('Processing libraries...');
 fixture.forEach(function (name) {
     var filename, source, expected, syntax, tokens, i;
     filename = name.toLowerCase().replace(/\.js/g, 'js').replace(/\s/g, '-');
-    source = readFile('test/3rdparty/' + filename + '.js');
+    source = fs.readFileSync('test/3rdparty/' + filename + '.js', 'utf-8');
     console.log(' ', name);
     try {
         for (i = 0; i < N; ++i) {

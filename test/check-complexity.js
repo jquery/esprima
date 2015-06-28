@@ -22,44 +22,36 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint node:true */
+'use strict';
 
-(function () {
-    'use strict';
+var escomplex = require('escomplex-js'),
+    content = require('fs').readFileSync('esprima.js', 'utf-8'),
+    opt = { logicalor: false, switchcase: false },
+    MAX = 19,
+    list = [], bad = [];
 
-    var child = require('child_process'),
-        nodejs = '"' + process.execPath + '"',
-        ret = 0,
-        suites,
-        index;
+escomplex.analyse(content, opt).functions.forEach(function (entry) {
+    var name = (entry.name === '<anonymous>') ? (':' + entry.line) : entry.name;
+    list.push({ name: name, value: entry.cyclomatic });
+});
 
-    suites = [
-        'runner',
-        'parselibs'
-    ];
+list.sort(function (x, y) {
+    return y.value - x.value;
+});
 
-    function nextTest() {
-        var suite = suites[index];
-
-        if (index < suites.length) {
-            child.exec(nodejs + ' ./test/' + suite + '.js', function (err, stdout, stderr) {
-                if (stdout) {
-                    process.stdout.write(suite + ': ' + stdout);
-                }
-                if (stderr) {
-                    process.stderr.write(suite + ': ' + stderr);
-                }
-                if (err) {
-                    ret = err.code;
-                }
-                index += 1;
-                nextTest();
-            });
-        } else {
-            process.exit(ret);
-        }
+console.log('Most cyclomatic-complex functions:');
+list.slice(0, 6).forEach(function (entry) {
+    console.log('  ', entry.name, entry.value);
+    if (entry.value > MAX) {
+        bad.push(entry);
     }
+});
+console.log();
 
-    index = 0;
-    nextTest();
-}());
+if (bad.length > 0) {
+    console.log('ERROR: Cyclomatic complexity treshold of', MAX, 'is exceeded!');
+    bad.forEach(function (entry) {
+        console.log('  ', entry.name, entry.value);
+    });
+    process.exit(1);
+}

@@ -22,13 +22,22 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint browser:true node:true */
-/*global esprima:true, testFixture:true */
+'use strict';
 
-var runTests;
+var esprima = require('../esprima'),
+    fs = require('fs'),
+    diff = require('json-diff').diffString,
+    total = 0,
+    result,
+    failures = [],
+    cases = {},
+    context = {source: '', result: null},
+    tick = new Date(),
+    expected,
+    testCase,
+    header;
 
 function NotMatchingError(expected, actual) {
-    'use strict';
     Error.call(this, 'Expected ');
     this.expected = expected;
     this.actual = actual;
@@ -55,6 +64,7 @@ function errorToObject(e) {
 }
 
 function sortedObject(o) {
+    var keys, result;
     if (o === null) {
         return o;
     }
@@ -67,13 +77,13 @@ function sortedObject(o) {
     if (o instanceof RegExp) {
         return o;
     }
-    var keys = Object.keys(o);
-    var result = {
+    keys = Object.keys(o);
+    result = {
         range: undefined,
         loc: undefined
     };
     keys.forEach(function (key) {
-        if (o.hasOwnProperty(key)){
+        if (o.hasOwnProperty(key)) {
             result[key] = sortedObject(o[key]);
         }
     });
@@ -86,21 +96,18 @@ function hasAttachedComment(syntax) {
         if (key === 'leadingComments' || key === 'trailingComments') {
             return true;
         }
-       if (typeof syntax[key] === 'object' && syntax[key] !== null) {
-           if (hasAttachedComment(syntax[key])) {
-               return true;
-           }
-       }
+        if (typeof syntax[key] === 'object' && syntax[key] !== null) {
+            if (hasAttachedComment(syntax[key])) {
+                return true;
+            }
+        }
     }
     return false;
 }
 
 function testParse(esprima, code, syntax) {
     'use strict';
-    var expected, tree, actual, options, StringObject, i, len;
-
-    // alias, so that JSLint does not complain.
-    StringObject = String;
+    var expected, tree, actual, options, i, len;
 
     options = {
         comment: (typeof syntax.comments !== 'undefined'),
@@ -154,7 +161,7 @@ function testParse(esprima, code, syntax) {
         actual = JSON.stringify(tree, null, 4);
 
         // Only to ensure that there is no error when using string object.
-        esprima.parse(new StringObject(code), options);
+        esprima.parse(new String(code), options);
 
     } catch (e) {
         throw new NotMatchingError(expected, e.toString());
@@ -357,113 +364,94 @@ function generateTestCase(esprima, testCase) {
     console.error("Done.");
 }
 
-if (typeof window === 'undefined') {
-    (function () {
-        'use strict';
 
-        var esprima = require('../esprima'),
-            vm = require('vm'),
-            fs = require('fs'),
-            diff = require('json-diff').diffString,
-            total = 0,
-            result,
-            failures = [],
-            cases = {},
-            context = {source: '', result: null},
-            tick = new Date(),
-            expected,
-            testCase,
-            header;
+function enumerateFixtures(root) {
+    var dirs = fs.readdirSync(root), key, kind,
+        kinds = ['case', 'source', 'module', 'run', 'tree', 'tokens', 'failure', 'result'],
+        suffices = ['js', 'js', 'json', 'js', 'json', 'json', 'json', 'json'];
 
-        function enumerateFixtures(root) {
-            var dirs = fs.readdirSync(root), key, kind,
-                kinds = ['case', 'source', 'module', 'run', 'tree', 'tokens', 'failure', 'result'],
-                suffices = ['js', 'js', 'json', 'js', 'json', 'json', 'json', 'json'];
-
-            dirs.forEach(function (item) {
-                var i;
-                if (fs.statSync(root + '/' + item).isDirectory()) {
-                    enumerateFixtures(root + '/' + item);
-                } else {
-                    kind = 'case';
-                    key = item.slice(0, -3);
-                    for (i = 1; i < kinds.length; i++) {
-                        var suffix = '.' + kinds[i] + '.' + suffices[i];
-                        if (item.slice(-suffix.length) === suffix) {
-                            key = item.slice(0, -suffix.length);
-                            kind = kinds[i];
-                        }
-                    }
-                    key = root + '/' + key;
-                    if (!cases[key]) {
-                        total++;
-                        cases[key] = { key: key };
-                    }
-                    cases[key][kind] = fs.readFileSync(root + '/' + item, 'utf-8');
-                }
-            });
-        }
-
-        enumerateFixtures(__dirname + '/fixtures');
-
-        for (var key in cases) {
-            if (cases.hasOwnProperty(key)) {
-                testCase = cases[key];
-
-                if (testCase.hasOwnProperty('source')) {
-                    testCase.case = eval(testCase.source + ';source');
-                }
-
-                try {
-                    if (testCase.hasOwnProperty('module')) {
-                        testModule(esprima, testCase.case, JSON.parse(testCase.module));
-                    } else if (testCase.hasOwnProperty('tree')) {
-                        testParse(esprima, testCase.case, JSON.parse(testCase.tree));
-                    } else if (testCase.hasOwnProperty('tokens')) {
-                        testTokenize(esprima, testCase.case, JSON.parse(testCase.tokens));
-                    } else if (testCase.hasOwnProperty('failure')) {
-                        testError(esprima, testCase.case, JSON.parse(testCase.failure));
-                    } else if (testCase.hasOwnProperty('result')) {
-                        testAPI(esprima, testCase.run, JSON.parse(testCase.result));
-                    } else {
-                        console.error('Incomplete test case:' + testCase.key + '. Generating test result...');
-                        generateTestCase(esprima, testCase);
-                    }
-                } catch (e) {
-                    if (!e.expected) {
-                        throw e;
-                    }
-                    e.source = testCase.case || testCase.key;
-                    failures.push(e);
+    dirs.forEach(function (item) {
+        var i, suffix;
+        if (fs.statSync(root + '/' + item).isDirectory()) {
+            enumerateFixtures(root + '/' + item);
+        } else {
+            kind = 'case';
+            key = item.slice(0, -3);
+            for (i = 1; i < kinds.length; i++) {
+                suffix = '.' + kinds[i] + '.' + suffices[i];
+                if (item.slice(-suffix.length) === suffix) {
+                    key = item.slice(0, -suffix.length);
+                    kind = kinds[i];
                 }
             }
+            key = root + '/' + key;
+            if (!cases[key]) {
+                total++;
+                cases[key] = { key: key };
+            }
+            cases[key][kind] = fs.readFileSync(root + '/' + item, 'utf-8');
         }
-
-        tick = (new Date()) - tick;
-
-        header = total + ' tests. ' + failures.length + ' failures. ' +
-            tick + ' ms';
-        if (failures.length) {
-            console.error(header);
-            failures.forEach(function (failure) {
-                try {
-                    var expectedObject = JSON.parse(failure.expected);
-                    var actualObject = JSON.parse(failure.actual);
-
-                    console.error(failure.source + ': Expected\n    ' +
-                        failure.expected.split('\n').join('\n    ') +
-                        '\nto match\n    ' + failure.actual + '\nDiff:\n' +
-                        diff(expectedObject, actualObject));
-                } catch (ex) {
-                    console.error(failure.source + ': Expected\n    ' +
-                        failure.expected.split('\n').join('\n    ') +
-                        '\nto match\n    ' + failure.actual);
-                }
-            });
-        } else {
-            console.log(header);
-        }
-        process.exit(failures.length === 0 ? 0 : 1);
-
-    }());
+    });
 }
+
+enumerateFixtures(__dirname + '/fixtures');
+
+Object.keys(cases).forEach(function (key) {
+    if (cases.hasOwnProperty(key)) {
+        testCase = cases[key];
+
+        if (testCase.hasOwnProperty('source')) {
+            testCase.case = eval(testCase.source + ';source');
+        }
+
+        try {
+            if (testCase.hasOwnProperty('module')) {
+                testModule(esprima, testCase.case, JSON.parse(testCase.module));
+            } else if (testCase.hasOwnProperty('tree')) {
+                testParse(esprima, testCase.case, JSON.parse(testCase.tree));
+            } else if (testCase.hasOwnProperty('tokens')) {
+                testTokenize(esprima, testCase.case, JSON.parse(testCase.tokens));
+            } else if (testCase.hasOwnProperty('failure')) {
+                testError(esprima, testCase.case, JSON.parse(testCase.failure));
+            } else if (testCase.hasOwnProperty('result')) {
+                testAPI(esprima, testCase.run, JSON.parse(testCase.result));
+            } else {
+                console.error('Incomplete test case:' + testCase.key + '. Generating test result...');
+                generateTestCase(esprima, testCase);
+            }
+        } catch (e) {
+            if (!e.expected) {
+                throw e;
+            }
+            e.source = testCase.case || testCase.key;
+            failures.push(e);
+        }
+    }
+});
+
+tick = (new Date()) - tick;
+
+header = total + ' tests. ' + failures.length + ' failures. ' + tick + ' ms';
+
+if (failures.length) {
+    console.error(header);
+    failures.forEach(function (failure) {
+        try {
+            var expectedObject = JSON.parse(failure.expected),
+                actualObject = JSON.parse(failure.actual);
+
+            console.error(failure.source + ': Expected\n    ' +
+                failure.expected.split('\n').join('\n    ') +
+                '\nto match\n    ' + failure.actual + '\nDiff:\n' +
+                diff(expectedObject, actualObject));
+        } catch (ex) {
+            console.error(failure.source + ': Expected\n    ' +
+                failure.expected.split('\n').join('\n    ') +
+                '\nto match\n    ' + failure.actual);
+        }
+    });
+} else {
+    console.log(header);
+}
+process.exit(failures.length === 0 ? 0 : 1);
+
