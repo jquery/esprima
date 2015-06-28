@@ -22,7 +22,7 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*jslint browser:true node:true */
+/*jslint evil:true, browser:true, node:true */
 /*global esprima:true, testFixture:true */
 
 var runTests;
@@ -67,13 +67,14 @@ function sortedObject(o) {
     if (o instanceof RegExp) {
         return o;
     }
-    var keys = Object.keys(o);
-    var result = {
-        range: undefined,
-        loc: undefined
-    };
+    var keys = Object.keys(o),
+        result = {
+            range: undefined,
+            loc: undefined
+        };
+
     keys.forEach(function (key) {
-        if (o.hasOwnProperty(key)){
+        if (o.hasOwnProperty(key)) {
             result[key] = sortedObject(o[key]);
         }
     });
@@ -86,11 +87,11 @@ function hasAttachedComment(syntax) {
         if (key === 'leadingComments' || key === 'trailingComments') {
             return true;
         }
-       if (typeof syntax[key] === 'object' && syntax[key] !== null) {
-           if (hasAttachedComment(syntax[key])) {
-               return true;
-           }
-       }
+        if (typeof syntax[key] === 'object' && syntax[key] !== null) {
+            if (hasAttachedComment(syntax[key])) {
+                return true;
+            }
+        }
     }
     return false;
 }
@@ -192,6 +193,30 @@ function testParse(esprima, code, syntax) {
     }
     if (expected !== actual) {
         throw new NotMatchingError(expected, actual);
+    }
+}
+
+function testTokenizeVsTokens(esprima, code) {
+    var tree, parseTokens, tokenizeTokens, options;
+
+    options = {
+        comment: true,
+        tolerant: true,
+        loc: true,
+        range: true
+    };
+
+    try {
+        tree = esprima.tokenize(code, options);
+        tokenizeTokens = JSON.stringify(tree, null, 4);
+
+        tree = esprima.parse(code, options);
+        parseTokens = JSON.stringify(tree.tokens, null, 4);
+    } catch (e) {
+        throw new NotMatchingError(code, e.toString());
+    }
+    if (parseTokens !== tokenizeTokens) {
+        throw new NotMatchingError(parseTokens, tokenizeTokens);
     }
 }
 
@@ -373,7 +398,8 @@ if (typeof window === 'undefined') {
             tick = new Date(),
             expected,
             testCase,
-            header;
+            header,
+            key;
 
         function enumerateFixtures(root) {
             var dirs = fs.readdirSync(root), key, kind,
@@ -381,14 +407,14 @@ if (typeof window === 'undefined') {
                 suffices = ['js', 'js', 'json', 'js', 'json', 'json', 'json', 'json'];
 
             dirs.forEach(function (item) {
-                var i;
+                var i, suffix;
                 if (fs.statSync(root + '/' + item).isDirectory()) {
                     enumerateFixtures(root + '/' + item);
                 } else {
                     kind = 'case';
                     key = item.slice(0, -3);
                     for (i = 1; i < kinds.length; i++) {
-                        var suffix = '.' + kinds[i] + '.' + suffices[i];
+                        suffix = '.' + kinds[i] + '.' + suffices[i];
                         if (item.slice(-suffix.length) === suffix) {
                             key = item.slice(0, -suffix.length);
                             kind = kinds[i];
@@ -406,7 +432,7 @@ if (typeof window === 'undefined') {
 
         enumerateFixtures(__dirname + '/fixtures');
 
-        for (var key in cases) {
+        for (key in cases) {
             if (cases.hasOwnProperty(key)) {
                 testCase = cases[key];
 
@@ -419,6 +445,7 @@ if (typeof window === 'undefined') {
                         testModule(esprima, testCase.case, JSON.parse(testCase.module));
                     } else if (testCase.hasOwnProperty('tree')) {
                         testParse(esprima, testCase.case, JSON.parse(testCase.tree));
+                        testTokenizeVsTokens(esprima, testCase.case);
                     } else if (testCase.hasOwnProperty('tokens')) {
                         testTokenize(esprima, testCase.case, JSON.parse(testCase.tokens));
                     } else if (testCase.hasOwnProperty('failure')) {
@@ -447,8 +474,8 @@ if (typeof window === 'undefined') {
             console.error(header);
             failures.forEach(function (failure) {
                 try {
-                    var expectedObject = JSON.parse(failure.expected);
-                    var actualObject = JSON.parse(failure.actual);
+                    var expectedObject = JSON.parse(failure.expected),
+                        actualObject = JSON.parse(failure.actual);
 
                     console.error(failure.source + ': Expected\n    ' +
                         failure.expected.split('\n').join('\n    ') +
