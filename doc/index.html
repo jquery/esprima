@@ -222,57 +222,6 @@ esprima.tokenize(code, options);
 
 <p><b>Note</b>: In version &gt; 1.0, <code>raw</code> is ignored since literals always include the verbatim source.</p>
 
-<h4 id="examples">Examples</h4>
-
-<h5 id="nestedternary">Detect Nested Ternary Conditionals</h5>
-
-<p>The script <code>detectnestedternary.js</code> in the <code>examples/</code> subdirectory is using Esprima to look for a ternary conditional, i.e. <a href="http://en.wikipedia.org/wiki/%3F:">operator ?:</a>, which is immediately followed (in one of its code paths) by another ternary conditional. The script can be invoked from the command-line with Node.js:</p>
-
-<pre class="prettyprint lang-bsh">
-node detectnestedternary.js /some/path
-</pre>
-
-<p>An example code fragment which will be flagged by this script as having a nested ternary conditional:</p>
-
-<pre class="prettyprint lang-js">
-var str = (age < 1) ? "baby" :
-    (age < 5) ? "toddler" :
-    (age < 18) ? "child": "adult";
-</pre>
-
-<p>which will yield the following report:</p>
-
-<pre>
-  Line 1 : Nested ternary for "age &lt 1"
-  Line 2 : Nested ternary for "age &lt 5"
-</pre>
-
-<h5 id="booleantrap">Find Possible Boolean Traps</h5>
-
-<p>The script <code>findbooleantrap.js</code> in the <code>examples/</code> subdirectory is using Esprima to detect some possible cases of Boolean trap, i.e. the use of Boolean literal which may lead to ambiguities and lack of readability. The script can be invoked from command-line with Node.js:</p>
-
-<pre class="prettyprint lang-bsh">
-node findbooleantrap.js /some/path
-</pre>
-
-It will search for all files (recursively) in the given path, try to parse each file, and then look for signs of Boolean traps:
-
-<ul>
-<li>Literal used with a non-setter function (assumption: setter starts with the &quot;set&quot; prefix):</li>
-<pre class="prettyprint lang-js">this.refresh(true);</pre>
-<li>Literal used with a function whose name may have a double-negative interpretation:</li>
-<pre class="prettyprint lang-js">item.setHidden(false);</pre>
-<li>Two different literals in a single function call:</li>
-<pre class="prettyprint lang-js">element.stop(true, false);</pre>
-<li>Multiple literals in a single function invocation:</li>
-<pre class="prettyprint lang-js">event.initKeyEvent("keypress", true, true, null, null,
-    false, false, false, false, 9, 0);</pre>
-<li>Ambiguous Boolean literal as the last argument:</li>
-<pre class="prettyprint lang-js">return getSomething(obj, false);</pre>
-</ul>
-
-For some more info, read also the blog post on <a href="http://ariya.ofilabs.com/2011/08/hall-of-api-shame-boolean-trap.html">Boolean trap</a>.
-
 <h4 id="ast">Syntax Tree Format</h4>
 
 <p>The output of the parser is expected to be compatible with Mozilla SpiderMonkey <a href="https://developer.mozilla.org/en/SpiderMonkey/Parser_API">Parser API</a>.
@@ -466,7 +415,6 @@ npm install
         <p><b>Contents</b></p>
         <ol>
         <li><a href="#usage">Basic Usage</a></li>
-        <li><a href="#examples">Examples</a></li>
         <li><a href="#ast">Syntax Tree Format</a></li>
         <li><a href="#contribution">Contribution Guide</a></li>
         <li><a href="#license">License</a></li>
