@@ -50,7 +50,6 @@ function checkVersion() {
 
     ensureVersion('package.json', version);
     ensureVersion('bower.json', version);
-    ensureVersion('component.json', version);
 }
 
 
