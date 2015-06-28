@@ -60,7 +60,7 @@
         "lint": "npm run check-version && npm run eslint && npm run jscs && npm run complexity",
         "check-version": "node tools/check-version.js",
         "jscs": "jscs esprima.js",
-        "eslint": "node node_modules/eslint/bin/eslint.js esprima.js",
+        "eslint": "node node_modules/eslint/bin/eslint.js -c .lintrc esprima.js",
         "complexity": "node tools/list-complexity.js && cr -s -l -w --maxcyc 19 esprima.js",
 
         "coverage": "npm run analyze-coverage && npm run check-coverage",
@@ -70,6 +70,8 @@
         "benchmark": "node test/benchmarks.js",
         "benchmark-quick": "node test/benchmarks.js quick",
 
-        "travis": "npm test && coveralls < ./coverage/lcov.info"
+        "coveralls": "coveralls < ./coverage/lcov.info",
+        "downstream": "node test/downstream.js",
+        "travis": "npm test && npm run coveralls && npm run downstream"
     }
 }
