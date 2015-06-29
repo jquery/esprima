@@ -37,6 +37,7 @@
     "LabeledStatement": "LabeledStatement",
     "LogicalExpression": "LogicalExpression",
     "MemberExpression": "MemberExpression",
+    "MetaProperty": "MetaProperty",
     "MethodDefinition": "MethodDefinition",
     "NewExpression": "NewExpression",
     "ObjectExpression": "ObjectExpression",
