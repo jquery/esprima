@@ -143,6 +143,7 @@
         LabeledStatement: 'LabeledStatement',
         LogicalExpression: 'LogicalExpression',
         MemberExpression: 'MemberExpression',
+        MetaProperty: 'MetaProperty',
         MethodDefinition: 'MethodDefinition',
         NewExpression: 'NewExpression',
         ObjectExpression: 'ObjectExpression',
@@ -2045,6 +2046,14 @@
             return this;
         },
 
+        finishMetaProperty: function (meta, property) {
+            this.type = Syntax.MetaProperty;
+            this.meta = meta;
+            this.property = property;
+            this.finish();
+            return this;
+        },
+
         finishNewExpression: function (callee, args) {
             this.type = Syntax.NewExpression;
             this.callee = callee;
@@ -3267,6 +3276,18 @@
         var callee, args, node = new Node();
 
         expectKeyword('new');
+
+        if (match('.')) {
+            lex();
+            if (lookahead.type === Token.Identifier && lookahead.value === 'target') {
+                if (state.inFunctionBody) {
+                    lex();
+                    return node.finishMetaProperty('new', 'target');
+                }
+            }
+            throwUnexpectedToken(lookahead);
+        }
+
         callee = isolateCoverGrammar(parseLeftHandSideExpression);
         args = match('(') ? parseArguments() : [];
 
