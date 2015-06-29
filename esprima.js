@@ -222,7 +222,8 @@
         NoAsAfterImportNamespace: 'Unexpected token',
         InvalidModuleSpecifier: 'Unexpected token',
         IllegalImportDeclaration: 'Unexpected token',
-        IllegalExportDeclaration: 'Unexpected token'
+        IllegalExportDeclaration: 'Unexpected token',
+        DuplicateBinding: 'Duplicate binding %0'
     };
 
     // See also tools/generate-unicode-regex.py.
@@ -2595,7 +2596,7 @@
         return result;
     }
 
-    function parseArrayPattern() {
+    function parseArrayPattern(params) {
         var node = new Node(), elements = [], rest, restNode;
         expect('[');
 
@@ -2607,11 +2608,12 @@
                 if (match('...')) {
                     restNode = new Node();
                     lex();
-                    rest = parseVariableIdentifier();
+                    params.push(lookahead);
+                    rest = parseVariableIdentifier(params);
                     elements.push(restNode.finishRestElement(rest));
                     break;
                 } else {
-                    elements.push(parsePatternWithDefault());
+                    elements.push(parsePatternWithDefault(params));
                 }
                 if (!match(']')) {
                     expect(',');
@@ -2625,35 +2627,38 @@
         return node.finishArrayPattern(elements);
     }
 
-    function parsePropertyPattern() {
-        var node = new Node(), key, computed = match('['), init;
+    function parsePropertyPattern(params) {
+        var node = new Node(), key, keyToken, computed = match('['), init;
         if (lookahead.type === Token.Identifier) {
+            keyToken = lookahead;
             key = parseVariableIdentifier();
             if (match('=')) {
+                params.push(keyToken);
                 lex();
                 init = parseAssignmentExpression();
 
                 return node.finishProperty(
                     'init', key, false,
-                    new WrappingNode(key).finishAssignmentPattern(key, init), false, false);
+                    new WrappingNode(keyToken).finishAssignmentPattern(key, init), false, false);
             } else if (!match(':')) {
+                params.push(keyToken);
                 return node.finishProperty('init', key, false, key, false, true);
             }
         } else {
-            key = parseObjectPropertyKey();
+            key = parseObjectPropertyKey(params);
         }
         expect(':');
-        init = parsePatternWithDefault();
+        init = parsePatternWithDefault(params);
         return node.finishProperty('init', key, computed, init, false, false);
     }
 
-    function parseObjectPattern() {
+    function parseObjectPattern(params) {
         var node = new Node(), properties = [];
 
         expect('{');
 
         while (!match('}')) {
-            properties.push(parsePropertyPattern());
+            properties.push(parsePropertyPattern(params));
             if (!match('}')) {
                 expect(',');
             }
@@ -2664,20 +2669,23 @@
         return node.finishObjectPattern(properties);
     }
 
-    function parsePattern() {
+    function parsePattern(params) {
+        var identifier;
         if (lookahead.type === Token.Identifier) {
-            return parseVariableIdentifier();
+            params.push(lookahead);
+            identifier = parseVariableIdentifier();
+            return identifier;
         } else if (match('[')) {
-            return parseArrayPattern();
+            return parseArrayPattern(params);
         } else if (match('{')) {
-            return parseObjectPattern();
+            return parseObjectPattern(params);
         }
         throwUnexpectedToken(lookahead);
     }
 
-    function parsePatternWithDefault() {
+    function parsePatternWithDefault(params) {
         var startToken = lookahead, pattern, right;
-        pattern = parsePattern();
+        pattern = parsePattern(params);
         if (match('=')) {
             lex();
             right = isolateCoverGrammar(parseAssignmentExpression);
@@ -3031,7 +3039,7 @@
     // 11.1.6 The Grouping Operator
 
     function parseGroupExpression() {
-        var expr, expressions, startToken, i;
+        var expr, expressions, startToken, i, params = [];
 
         expect('(');
 
@@ -3042,13 +3050,14 @@
             }
             return {
                 type: PlaceHolders.ArrowParameterPlaceHolder,
-                params: []
+                params: [],
+                rawParams: []
             };
         }
 
         startToken = lookahead;
         if (match('...')) {
-            expr = parseRestElement();
+            expr = parseRestElement(params);
             expect(')');
             if (!match('=>')) {
                 expect('=>');
@@ -3076,7 +3085,7 @@
                     if (!isBindingElement) {
                         throwUnexpectedToken(lookahead);
                     }
-                    expressions.push(parseRestElement());
+                    expressions.push(parseRestElement(params));
                     expect(')');
                     if (!match('=>')) {
                         expect('=>');
@@ -3866,9 +3875,9 @@
     }
 
     function parseVariableDeclaration() {
-        var init = null, id, node = new Node();
+        var init = null, id, node = new Node(), params = [];
 
-        id = parsePattern();
+        id = parsePattern(params);
 
         // 12.2.1
         if (strict && isRestrictedWord(id.name)) {
@@ -3912,9 +3921,9 @@
     }
 
     function parseLexicalBinding(kind, options) {
-        var init = null, id, node = new Node();
+        var init = null, id, node = new Node(), params = [];
 
-        id = parsePattern();
+        id = parsePattern(params);
 
         // 12.2.1
         if (strict && id.type === Syntax.Identifier && isRestrictedWord(id.name)) {
@@ -3961,7 +3970,7 @@
         return node.finishLexicalDeclaration(declarations, kind);
     }
 
-    function parseRestElement() {
+    function parseRestElement(params) {
         var param, node = new Node();
 
         lex();
@@ -3969,6 +3978,8 @@
         if (match('{')) {
             throwError(Messages.ObjectPatternAsRestParameter);
         }
+
+        params.push(lookahead);
 
         param = parseVariableIdentifier();
 
@@ -4439,7 +4450,7 @@
     // 12.14 The try statement
 
     function parseCatchClause() {
-        var param, body, node = new Node();
+        var param, params = [], paramMap = {}, key, i, body, node = new Node();
 
         expectKeyword('catch');
 
@@ -4448,7 +4459,14 @@
             throwUnexpectedToken(lookahead);
         }
 
-        param = parsePattern();
+        param = parsePattern(params);
+        for (i = 0; i < params.length; i++) {
+            key = '$' + params[i].value;
+            if (Object.prototype.hasOwnProperty.call(paramMap, key)) {
+                tolerateError(Messages.DuplicateBinding, params[i].value);
+            }
+            paramMap[key] = true;
+        }
 
         // 12.14.1
         if (strict && isRestrictedWord(param.name)) {
@@ -4661,7 +4679,7 @@
                 options.firstRestricted = param;
                 options.message = Messages.StrictReservedWord;
             } else if (Object.prototype.hasOwnProperty.call(options.paramSet, key)) {
-                options.firstRestricted = param;
+                options.stricted = param;
                 options.message = Messages.StrictParamDupe;
             }
         }
@@ -4669,19 +4687,21 @@
     }
 
     function parseParam(options) {
-        var token, param, def;
+        var token, param, params = [], i, def;
 
         token = lookahead;
         if (token.value === '...') {
-            param = parseRestElement();
+            param = parseRestElement(params);
             validateParam(options, param.argument, param.argument.name);
             options.params.push(param);
             options.defaults.push(null);
             return false;
         }
 
-        param = parsePatternWithDefault();
-        validateParam(options, token, token.value);
+        param = parsePatternWithDefault(params);
+        for (i = 0; i < params.length; i++) {
+            validateParam(options, params[i], params[i].value);
+        }
 
         if (param.type === Syntax.AssignmentPattern) {
             def = param.right;
