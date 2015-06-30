@@ -14,7 +14,7 @@
         "esprima.js"
     ],
     "engines": {
-        "node": ">=0.4.0"
+        "node": ">=0.10.0"
     },
     "author": {
         "name": "Ariya Hidayat",

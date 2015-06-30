@@ -5,6 +5,5 @@ script: "npm run travis"
 node_js:
   - iojs
   - "0.12"
-  - "0.11"
   - "0.10"
 
