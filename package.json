@@ -41,6 +41,7 @@
         "regenerate": "~0.6.2",
         "unicode-7.0.0": "~0.1.5",
         "json-diff": "~0.3.1",
+        "node-tick-processor": "~0.0.2",
         "coveralls": "~2.11.2"
     },
     "keywords": [
@@ -68,6 +69,7 @@
 
         "test": "npm run tests && npm run static-analysis && npm run dynamic-analysis",
 
+        "profile": "node --prof test/profile.js && mv isolate*.log v8.log && node-tick-processor",
         "benchmark": "node test/benchmarks.js",
         "benchmark-quick": "node test/benchmarks.js quick",
 
