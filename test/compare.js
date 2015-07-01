@@ -320,11 +320,10 @@ if (typeof window !== 'undefined') {
                         str += this.stats.rme.toFixed(1) + '%';
                         setText(this.name + '-time', str);
 
-                        if (!totalTime[parser]) {
-                            totalTime[parser.name] = this.stats.mean;
-                        } else {
-                            totalTime[parser.name] += this.stats.mean;
+                        if (!totalTime[parser.name]) {
+                            totalTime[parser.name] = 0;
                         }
+                        totalTime[parser.name] += this.stats.mean;
                         setText(slug(parser.name) + '-total', (1000 * totalTime[parser.name]).toFixed(1) + ' ms');
                     }
                 });
