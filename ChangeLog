@@ -1,3 +1,9 @@
+2015-07-01: Version 2.4.1
+
+      * Fix some cases of comment attachment (issue 1071, 1175)
+      * Fix the handling of destructuring in function arguments (issue 1193)
+      * Fix invalid ranges in assignment expression (issue 1201)
+
 2015-06-26: Version 2.4.0
 
       * Support ES6 for-of iteration (issue 1047)
