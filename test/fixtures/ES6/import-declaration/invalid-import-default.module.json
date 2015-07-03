@@ -1,7 +1,7 @@
 {
-    "index": 6,
+    "index": 7,
     "lineNumber": 1,
-    "column": 7,
+    "column": 8,
     "message": "Error: Line 1: Unexpected token default",
     "description": "Unexpected token default"
 }
