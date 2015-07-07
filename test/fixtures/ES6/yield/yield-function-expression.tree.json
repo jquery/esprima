@@ -1,0 +1,93 @@
+{
+    "range": [
+        0,
+        20
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 20
+        }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                20
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 20
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    1,
+                    19
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 1
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 19
+                    }
+                },
+                "type": "FunctionExpression",
+                "id": {
+                    "range": [
+                        10,
+                        15
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 10
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 15
+                        }
+                    },
+                    "type": "Identifier",
+                    "name": "yield"
+                },
+                "params": [],
+                "defaults": [],
+                "body": {
+                    "range": [
+                        17,
+                        19
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 17
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 19
+                        }
+                    },
+                    "type": "BlockStatement",
+                    "body": []
+                },
+                "generator": false,
+                "expression": false
+            }
+        }
+    ]
+}

@@ -1,0 +1,172 @@
+{
+    "range": [
+        0,
+        35
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 35
+        }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                35
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 35
+                }
+            },
+            "type": "FunctionDeclaration",
+            "id": {
+                "range": [
+                    10,
+                    11
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 11
+                    }
+                },
+                "type": "Identifier",
+                "name": "g"
+            },
+            "params": [],
+            "defaults": [],
+            "body": {
+                "range": [
+                    14,
+                    35
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 35
+                    }
+                },
+                "type": "BlockStatement",
+                "body": [
+                    {
+                        "range": [
+                            16,
+                            34
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 34
+                            }
+                        },
+                        "type": "ExpressionStatement",
+                        "expression": {
+                            "range": [
+                                16,
+                                33
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 16
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 33
+                                }
+                            },
+                            "type": "ArrowFunctionExpression",
+                            "id": null,
+                            "params": [
+                                {
+                                    "range": [
+                                        17,
+                                        18
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 1,
+                                            "column": 17
+                                        },
+                                        "end": {
+                                            "line": 1,
+                                            "column": 18
+                                        }
+                                    },
+                                    "type": "Identifier",
+                                    "name": "x"
+                                }
+                            ],
+                            "defaults": [
+                                {
+                                    "range": [
+                                        21,
+                                        26
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 1,
+                                            "column": 21
+                                        },
+                                        "end": {
+                                            "line": 1,
+                                            "column": 26
+                                        }
+                                    },
+                                    "type": "Identifier",
+                                    "name": "yield"
+                                }
+                            ],
+                            "body": {
+                                "range": [
+                                    31,
+                                    33
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 31
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 33
+                                    }
+                                },
+                                "type": "BlockStatement",
+                                "body": []
+                            },
+                            "generator": false,
+                            "expression": false
+                        }
+                    }
+                ]
+            },
+            "generator": true,
+            "expression": false
+        }
+    ]
+}

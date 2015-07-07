@@ -1,0 +1,134 @@
+{
+    "range": [
+        0,
+        17
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 17
+        }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                17
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 17
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    1,
+                    16
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 1
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 16
+                    }
+                },
+                "type": "ObjectExpression",
+                "properties": [
+                    {
+                        "range": [
+                            3,
+                            14
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 3
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 14
+                            }
+                        },
+                        "type": "Property",
+                        "key": {
+                            "range": [
+                                4,
+                                9
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 4
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 9
+                                }
+                            },
+                            "type": "Identifier",
+                            "name": "yield"
+                        },
+                        "computed": false,
+                        "value": {
+                            "range": [
+                                9,
+                                14
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 9
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 14
+                                }
+                            },
+                            "type": "FunctionExpression",
+                            "id": null,
+                            "params": [],
+                            "defaults": [],
+                            "body": {
+                                "range": [
+                                    12,
+                                    14
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 12
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 14
+                                    }
+                                },
+                                "type": "BlockStatement",
+                                "body": []
+                            },
+                            "generator": true,
+                            "expression": false
+                        },
+                        "kind": "init",
+                        "method": true,
+                        "shorthand": false
+                    }
+                ]
+            }
+        }
+    ]
+}

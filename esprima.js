@@ -198,7 +198,6 @@
         IllegalContinue: 'Illegal continue statement',
         IllegalBreak: 'Illegal break statement',
         IllegalReturn: 'Illegal return statement',
-        IllegalYield: 'Unexpected token yield',
         StrictModeWith: 'Strict mode code may not include a with statement',
         StrictCatchVariable: 'Catch variable may not be eval or arguments in strict mode',
         StrictVarName: 'Variable name may not be eval or arguments in strict mode',
@@ -2679,25 +2678,24 @@
     }
 
     function parsePattern(params) {
-        var identifier;
-        if (lookahead.type === Token.Identifier) {
-            params.push(lookahead);
-            identifier = parseVariableIdentifier();
-            return identifier;
-        } else if (match('[')) {
+        if (match('[')) {
             return parseArrayPattern(params);
         } else if (match('{')) {
             return parseObjectPattern(params);
         }
-        throwUnexpectedToken(lookahead);
+        params.push(lookahead);
+        return parseVariableIdentifier();
     }
 
     function parsePatternWithDefault(params) {
-        var startToken = lookahead, pattern, right;
+        var startToken = lookahead, pattern, previousAllowYield, right;
         pattern = parsePattern(params);
         if (match('=')) {
             lex();
+            previousAllowYield = state.allowYield;
+            state.allowYield = true;
             right = isolateCoverGrammar(parseAssignmentExpression);
+            state.allowYield = previousAllowYield;
             pattern = new WrappingNode(startToken).finishAssignmentPattern(pattern, right);
         }
         return pattern;
@@ -2887,11 +2885,11 @@
             key = parseObjectPropertyKey();
             methodNode = new Node();
 
-            state.allowYield = false;
+            state.allowYield = true;
             params = parseParams();
             state.allowYield = previousAllowYield;
 
-            state.allowYield = true;
+            state.allowYield = false;
             value = parsePropertyFunction(methodNode, params, true);
             state.allowYield = previousAllowYield;
 
@@ -3119,6 +3117,13 @@
         expect(')');
 
         if (match('=>')) {
+            if (expr.type === Syntax.Identifier && expr.name === 'yield') {
+                return {
+                    type: PlaceHolders.ArrowParameterPlaceHolder,
+                    params: [expr]
+                };
+            }
+
             if (!isBindingElement) {
                 throwUnexpectedToken(lookahead);
             }
@@ -3171,6 +3176,9 @@
             }
             expr = node.finishLiteral(lex());
         } else if (type === Token.Keyword) {
+            if (!strict && state.allowYield && matchKeyword('yield')) {
+                return parseNonComputedProperty();
+            }
             isAssignmentTarget = isBindingElement = false;
             if (matchKeyword('function')) {
                 return parseFunctionExpression();
@@ -3635,6 +3643,8 @@
                 }
             }
             break;
+        case Syntax.YieldExpression:
+            break;
         default:
             assert(param.type === Syntax.ObjectPattern, 'Invalid type');
             for (i = 0; i < param.properties.length; i++) {
@@ -3669,6 +3679,15 @@
             switch (param.type) {
             case Syntax.AssignmentPattern:
                 params[i] = param.left;
+                if (param.right.type === Syntax.YieldExpression) {
+                    if (param.right.argument) {
+                        throwUnexpectedToken(lookahead);
+                    }
+                    param.right.type = Syntax.Identifier;
+                    param.right.name = 'yield';
+                    delete param.right.argument;
+                    delete param.right.delegate;
+                }
                 defaults.push(param.right);
                 ++defaultCount;
                 checkPatternParam(options, param.left);
@@ -3678,6 +3697,15 @@
                 params[i] = param;
                 defaults.push(null);
                 break;
+            }
+        }
+
+        if (strict || !state.allowYield) {
+            for (i = 0, len = params.length; i < len; i += 1) {
+                param = params[i];
+                if (param.type === Syntax.YieldExpression) {
+                    throwUnexpectedToken(lookahead);
+                }
             }
         }
 
@@ -3700,13 +3728,16 @@
     }
 
     function parseArrowFunctionExpression(options, node) {
-        var previousStrict, body;
+        var previousStrict, previousAllowYield, body;
 
         if (hasLineTerminator) {
             tolerateUnexpectedToken(lookahead);
         }
         expect('=>');
+
         previousStrict = strict;
+        previousAllowYield = state.allowYield;
+        state.allowYield = true;
 
         body = parseConciseBody();
 
@@ -3718,6 +3749,7 @@
         }
 
         strict = previousStrict;
+        state.allowYield = previousAllowYield;
 
         return node.finishArrowFunctionExpression(options.params, options.defaults, body, body.type !== Syntax.BlockStatement);
     }
@@ -3725,26 +3757,25 @@
     // [ES6] 14.4 Yield expression
 
     function parseYieldExpression() {
-        var argument, expr, delegate;
+        var argument, expr, delegate, previousAllowYield;
 
         expr = new Node();
-
-        if (!state.allowYield) {
-            tolerateUnexpectedToken(lookahead, Messages.IllegalYield);
-        }
 
         expectKeyword('yield');
 
         if (!hasLineTerminator) {
+            previousAllowYield = state.allowYield;
+            state.allowYield = false;
             delegate = match('*');
             if (delegate) {
                 lex();
                 argument = parseExpression();
             } else {
-                if (!match(';') && !match('}') && lookahead.type !== Token.EOF) {
+                if (!match(';') && !match('}') && !match(')') && lookahead.type !== Token.EOF) {
                     argument = parseExpression();
                 }
             }
+            state.allowYield = previousAllowYield;
         }
 
         return expr.finishYieldExpression(argument, delegate);
@@ -3758,7 +3789,7 @@
         startToken = lookahead;
         token = lookahead;
 
-        if (matchKeyword('yield')) {
+        if (!state.allowYield && matchKeyword('yield')) {
             return parseYieldExpression();
         }
 
@@ -3884,7 +3915,13 @@
 
         token = lex();
 
-        if (token.type !== Token.Identifier) {
+        if (token.type === Token.Keyword && token.value === 'yield') {
+            if (strict) {
+                tolerateUnexpectedToken(token, Messages.StrictReservedWord);
+            } if (!state.allowYield) {
+                throwUnexpectedToken(token);
+            }
+        } else if (token.type !== Token.Identifier) {
             if (strict && token.type === Token.Keyword && isStrictModeReservedWord(token.value)) {
                 tolerateUnexpectedToken(token, Messages.StrictReservedWord);
             } else {
@@ -4777,6 +4814,8 @@
         var id = null, params = [], defaults = [], body, token, stricted, tmp, firstRestricted, message, previousStrict,
             isGenerator, previousAllowYield;
 
+        previousAllowYield = state.allowYield;
+
         expectKeyword('function');
 
         isGenerator = match('*');
@@ -4802,11 +4841,8 @@
             }
         }
 
-        previousAllowYield = state.allowYield;
-        state.allowYield = false;
+        state.allowYield = !isGenerator;
         tmp = parseParams(firstRestricted);
-        state.allowYield = previousAllowYield;
-
         params = tmp.params;
         defaults = tmp.defaults;
         stricted = tmp.stricted;
@@ -4815,9 +4851,8 @@
             message = tmp.message;
         }
 
-        previousAllowYield = state.allowYield;
+
         previousStrict = strict;
-        state.allowYield = isGenerator;
         body = parseFunctionSourceElements();
         if (strict && firstRestricted) {
             throwUnexpectedToken(firstRestricted, message);
@@ -4825,6 +4860,7 @@
         if (strict && stricted) {
             tolerateUnexpectedToken(stricted, message);
         }
+
         strict = previousStrict;
         state.allowYield = previousAllowYield;
 
@@ -4836,6 +4872,8 @@
             params = [], defaults = [], body, previousStrict, node = new Node(),
             isGenerator, previousAllowYield;
 
+        previousAllowYield = state.allowYield;
+
         expectKeyword('function');
 
         isGenerator = match('*');
@@ -4843,9 +4881,10 @@
             lex();
         }
 
+        state.allowYield = !isGenerator;
         if (!match('(')) {
             token = lookahead;
-            id = parseVariableIdentifier();
+            id = (!strict && !isGenerator && matchKeyword('yield')) ? parseNonComputedProperty() : parseVariableIdentifier();
             if (strict) {
                 if (isRestrictedWord(token.value)) {
                     tolerateUnexpectedToken(token, Messages.StrictFunctionName);
@@ -4861,11 +4900,7 @@
             }
         }
 
-        previousAllowYield = state.allowYield;
-        state.allowYield = false;
         tmp = parseParams(firstRestricted);
-        state.allowYield = previousAllowYield;
-
         params = tmp.params;
         defaults = tmp.defaults;
         stricted = tmp.stricted;
@@ -4875,10 +4910,7 @@
         }
 
         previousStrict = strict;
-        previousAllowYield = state.allowYield;
-        state.allowYield = isGenerator;
         body = parseFunctionSourceElements();
-
         if (strict && firstRestricted) {
             throwUnexpectedToken(firstRestricted, message);
         }
@@ -5347,7 +5379,7 @@
         lookahead = null;
         state = {
             allowIn: true,
-            allowYield: false,
+            allowYield: true,
             labelSet: {},
             inFunctionBody: false,
             inIteration: false,
@@ -5436,7 +5468,7 @@
         lookahead = null;
         state = {
             allowIn: true,
-            allowYield: false,
+            allowYield: true,
             labelSet: {},
             inFunctionBody: false,
             inIteration: false,

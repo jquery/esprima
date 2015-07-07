@@ -1,0 +1,166 @@
+{
+    "range": [
+        0,
+        34
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 34
+        }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                34
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 34
+                }
+            },
+            "type": "FunctionDeclaration",
+            "id": {
+                "range": [
+                    10,
+                    11
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 11
+                    }
+                },
+                "type": "Identifier",
+                "name": "g"
+            },
+            "params": [],
+            "defaults": [],
+            "body": {
+                "range": [
+                    14,
+                    34
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 34
+                    }
+                },
+                "type": "BlockStatement",
+                "body": [
+                    {
+                        "range": [
+                            16,
+                            32
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 32
+                            }
+                        },
+                        "type": "ExpressionStatement",
+                        "expression": {
+                            "range": [
+                                16,
+                                31
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 16
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 31
+                                }
+                            },
+                            "type": "YieldExpression",
+                            "argument": {
+                                "range": [
+                                    22,
+                                    31
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 22
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 31
+                                    }
+                                },
+                                "type": "MemberExpression",
+                                "computed": false,
+                                "object": {
+                                    "range": [
+                                        22,
+                                        25
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 1,
+                                            "column": 22
+                                        },
+                                        "end": {
+                                            "line": 1,
+                                            "column": 25
+                                        }
+                                    },
+                                    "type": "Identifier",
+                                    "name": "obj"
+                                },
+                                "property": {
+                                    "range": [
+                                        26,
+                                        31
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 1,
+                                            "column": 26
+                                        },
+                                        "end": {
+                                            "line": 1,
+                                            "column": 31
+                                        }
+                                    },
+                                    "type": "Identifier",
+                                    "name": "yield"
+                                }
+                            },
+                            "delegate": false
+                        }
+                    }
+                ]
+            },
+            "generator": true,
+            "expression": false
+        }
+    ]
+}
