@@ -116,6 +116,7 @@
                                     }
                                 },
                                 "type": "YieldExpression",
+                                "argument": null,
                                 "delegate": false
                             },
                             "delegate": true

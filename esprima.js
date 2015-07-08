@@ -3759,6 +3759,7 @@
     function parseYieldExpression() {
         var argument, expr, delegate, previousAllowYield;
 
+        argument = null;
         expr = new Node();
 
         expectKeyword('yield');
