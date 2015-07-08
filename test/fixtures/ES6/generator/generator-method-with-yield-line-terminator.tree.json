@@ -150,7 +150,8 @@
                                                     "column": 7
                                                 }
                                             },
-                                            "type": "YieldExpression"
+                                            "type": "YieldExpression",
+                                            "argument": null
                                         }
                                     },
                                     {
