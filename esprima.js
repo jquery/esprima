@@ -1069,9 +1069,6 @@
                     case 'v':
                         str += '\x0B';
                         break;
-                    case '8':
-                    case '9':
-                        throw throwUnexpectedToken();
 
                     default:
                         if (isOctalDigit(ch)) {
