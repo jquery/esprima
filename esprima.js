@@ -2905,19 +2905,8 @@
         return null;
     }
 
-    function checkProto(key, computed, hasProto) {
-        if (computed === false && (key.type === Syntax.Identifier && key.name === '__proto__' ||
-            key.type === Syntax.Literal && key.value === '__proto__')) {
-            if (hasProto.value) {
-                tolerateError(Messages.DuplicateProtoProperty);
-            } else {
-                hasProto.value = true;
-            }
-        }
-    }
-
     function parseObjectProperty(hasProto) {
-        var token = lookahead, node = new Node(), computed, key, maybeMethod, value;
+        var token = lookahead, node = new Node(), computed, key, maybeMethod, proto, value;
 
         computed = match('[');
         if (match('*')) {
@@ -2926,10 +2915,7 @@
             key = parseObjectPropertyKey();
         }
         maybeMethod = tryParseMethodDefinition(token, key, computed, node);
-
         if (maybeMethod) {
-            checkProto(maybeMethod.key, maybeMethod.computed, hasProto);
-            // finished
             return maybeMethod;
         }
 
@@ -2937,8 +2923,15 @@
             throwUnexpectedToken(lookahead);
         }
 
-        // init property or short hand property.
-        checkProto(key, computed, hasProto);
+        // Check for duplicated __proto__
+        if (!computed) {
+            proto = (key.type === Syntax.Identifier && key.name === '__proto__') ||
+                (key.type === Syntax.Literal && key.value === '__proto__');
+            if (hasProto.value && proto) {
+                tolerateError(Messages.DuplicateProtoProperty);
+            }
+            hasProto.value |= proto;
+        }
 
         if (match(':')) {
             lex();
