@@ -625,9 +625,14 @@
                 throwUnexpectedToken();
             }
             ++index;
-            ch = scanHexEscape('u');
-            if (!ch || ch === '\\' || !isIdentifierStart(ch.charCodeAt(0))) {
-                throwUnexpectedToken();
+            if (source[index] === '{') {
+                ++index;
+                ch = scanUnicodeCodePointEscape();
+            } else {
+                ch = scanHexEscape('u');
+                if (!ch || ch === '\\' || !isIdentifierStart(ch.charCodeAt(0))) {
+                    throwUnexpectedToken();
+                }
             }
             id = ch;
         }
@@ -647,9 +652,14 @@
                     throwUnexpectedToken();
                 }
                 ++index;
-                ch = scanHexEscape('u');
-                if (!ch || ch === '\\' || !isIdentifierPart(ch.charCodeAt(0))) {
-                    throwUnexpectedToken();
+                if (source[index] === '{') {
+                    ++index;
+                    ch = scanUnicodeCodePointEscape();
+                } else {
+                    ch = scanHexEscape('u');
+                    if (!ch || ch === '\\' || !isIdentifierPart(ch.charCodeAt(0))) {
+                        throwUnexpectedToken();
+                    }
                 }
                 id += ch;
             }
