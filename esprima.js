@@ -1081,7 +1081,9 @@
                         break;
                     case '8':
                     case '9':
-                        throw throwUnexpectedToken();
+                        str += ch;
+                        tolerateUnexpectedToken();
+                        break;
 
                     default:
                         if (isOctalDigit(ch)) {
