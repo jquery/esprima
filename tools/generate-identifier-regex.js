@@ -10,42 +10,31 @@ var get = function(what) {
     return require('unicode-' + version + '/' + what + '/code-points');
 };
 
-// Unicode categories needed to construct the ES5 regex
-var Lu = get('categories/Lu');
-var Ll = get('categories/Ll');
-var Lt = get('categories/Lt');
-var Lm = get('categories/Lm');
-var Lo = get('categories/Lo');
-var Nl = get('categories/Nl');
-var Mn = get('categories/Mn');
-var Mc = get('categories/Mc');
-var Nd = get('categories/Nd');
-var Pc = get('categories/Pc');
+var generateES6Regex = function() { // ES 6
+    // https://mathiasbynens.be/notes/javascript-identifiers-es6
+    var identifierStart = regenerate(get('properties/ID_Start'))
+        .add('$', '_')
+        .removeRange(0x0, 0x7F); // remove ASCII symbols (Esprima-specific)
+    var identifierPart = regenerate(get('properties/ID_Continue'))
+        .add(get('properties/Other_ID_Start'))
+        .add('\u200C', '\u200D')
+        .add('$', '_')
+        .removeRange(0x0, 0x7F); // remove ASCII symbols (Esprima-specific)
 
-var generateES5Regex = function() { // ES 5.1
-    // http://mathiasbynens.be/notes/javascript-identifiers#valid-identifier-names
-    var identifierStart = regenerate('$', '_')
-        .add(Lu, Ll, Lt, Lm, Lo, Nl)
-        .removeRange(0x010000, 0x10FFFF) // remove astral symbols
-        .removeRange(0x0, 0x7F); // remove ASCII symbols (Esprima-specific)
-    var identifierPart = identifierStart.clone()
-        .add('\u200C', '\u200D', Mn, Mc, Nd, Pc)
-        .removeRange(0x010000, 0x10FFFF) // remove astral symbols
-        .removeRange(0x0, 0x7F); // remove ASCII symbols (Esprima-specific)
     return {
-        'NonAsciiIdentifierStart': identifierStart.toString(),
-        'NonAsciiIdentifierPart': identifierPart.toString()
+        'NonAsciiIdentifierStart': '/' + identifierStart + '/',
+        'NonAsciiIdentifierPart': '/' + identifierPart + '/'
     };
 };
 
-var result = generateES5Regex();
+var result = generateES6Regex();
 console.log(
-    '// ECMAScript 5.1/Unicode v%s NonAsciiIdentifierStart:\n\n%s\n',
+    '// ECMAScript 6/Unicode v%s NonAsciiIdentifierStart:\n%s\n',
     version,
     result.NonAsciiIdentifierStart
 );
 console.log(
-    '// ECMAScript 5.1/Unicode v%s NonAsciiIdentifierPart:\n\n%s',
+    '// ECMAScript 6/Unicode v%s NonAsciiIdentifierPart:\n%s',
     version,
     result.NonAsciiIdentifierPart
 );
