@@ -22,36 +22,32 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-var fs = require('fs'),
-    esprima = require('../esprima'),
-    N, fixture;
+function testTokenize(code, tokens) {
+    'use strict';
+    var options, expected, actual, tree;
 
-// Loops for parsing, useful for stress-testing/profiling.
-N = 25;
+    options = {
+        comment: true,
+        tolerant: true,
+        loc: true,
+        range: true
+    };
 
-fixture = [
-    'Underscore 1.5.2',
-    'Backbone 1.1.0',
-    'MooTools 1.4.5',
-    'jQuery 1.9.1',
-    'YUI 3.12.0',
-    'jQuery.Mobile 1.4.2',
-    'Angular 1.2.5'
-];
+    expected = jsonify(tokens);
+    tree = esprima.tokenize(code, options);
+    actual = jsonify(tree);
 
-console.log('Parsing libraries for sampling profiling analysis...');
+    expect(expected).to.equal(actual);
+  }
 
-fixture.forEach(function (name) {
-    var filename, source, expected, syntax, tokens, i;
-    filename = name.toLowerCase().replace(/\.js/g, 'js').replace(/\s/g, '-');
-    source = fs.readFileSync('test/3rdparty/' + filename + '.js', 'utf-8');
-    console.log(' ', name);
-    try {
-        for (i = 0; i < N; ++i) {
-            syntax = esprima.parse(source, { range: true, loc: true, raw: true });
-        }
-    } catch (e) {
-        console.log('FATAL', e.toString());
-        process.exit(1);
-    }
+var tokenSpecs = _.omit(cases, function(cases) {
+  return !cases.tokens
+});
+
+describe('tokens', function() {
+  leche.withData(tokenSpecs, function(testCase) {
+    it('should parse', function() {
+        testTokenize(testCase.case, testCase.tokens);
+    });
+  });
 });

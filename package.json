@@ -42,8 +42,26 @@
         "unicode-7.0.0": "~0.1.5",
         "json-diff": "~0.3.1",
         "node-tick-processor": "~0.0.2",
-        "coveralls": "~2.11.2"
+        "coveralls": "~2.11.2",
+        "chai": "~3.0.0",
+        "karma": "~0.12.37",
+        "karma-chai": "~0.1.0",
+        "karma-chrome-launcher": "~0.2.0",
+        "karma-cli": "~0.1.0",
+        "karma-coverage": "~0.4.2",
+        "karma-firefox-launcher": "~0.1.6",
+        "karma-js2js-preprocessor": "^0.1.0",
+        "karma-json-fixtures-preprocessor": "0.0.4",
+        "karma-leche": "0.0.0",
+        "karma-mocha": "~0.2.0",
+        "karma-phantomjs-launcher": "~0.2.0",
+        "karma-sinon": "~1.0.4",
+        "lodash": "~3.10.0",
+        "mocha": "~2.2.5",
+        "phantomjs": "~1.9.17",
+        "sinon": "~1.15.4"
     },
+
     "keywords": [
         "ast",
         "ecmascript",
@@ -59,7 +77,7 @@
         "complexity": "node test/check-complexity.js",
         "static-analysis": "npm run check-version && npm run jscs && npm run eslint && npm run complexity",
 
-        "unit-tests": "node test/unit-tests.js",
+        "unit-tests": "node tools/generate-test-case.js && karma start --single-run",
         "regression-tests": "node test/regression-tests.js",
         "tests": "npm run unit-tests && npm run regression-tests",
 
@@ -78,5 +96,5 @@
         "travis": "npm test && npm run coveralls && npm run downstream",
 
         "generate-regex": "node tools/generate-identifier-regex.js"
-    }
+  }
 }
