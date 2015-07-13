@@ -3173,6 +3173,9 @@
         node = new Node();
 
         if (type === Token.Identifier) {
+            if (sourceType === 'module' && lookahead.value === 'await') {
+                tolerateUnexpectedToken(lookahead);
+            }
             expr = node.finishIdentifier(lex().value);
         } else if (type === Token.StringLiteral || type === Token.NumericLiteral) {
             isAssignmentTarget = isBindingElement = false;
@@ -3933,6 +3936,8 @@
             } else {
                 throwUnexpectedToken(token);
             }
+        } else if (sourceType === 'module' && token.type === Token.Identifier && token.value === 'await') {
+            tolerateUnexpectedToken(token);
         }
 
         return node.finishIdentifier(token.value);
