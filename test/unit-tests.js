@@ -117,34 +117,6 @@ function hasAttachedComment(syntax) {
     return false;
 }
 
-function generateTestCase(esprima, testCase) {
-  console.log(testCase.key);
-    var tree, fileName;
-    try {
-        fileName = testCase.key + ".tree.json";
-        tree = esprima.parse(testCase.case, {loc: true, range: true});
-        tree = JSON.stringify(tree, null, 4);
-    } catch (e) {
-        if (typeof e.index === 'undefined') {
-            console.error("Failed to generate test result.");
-            throw e;
-        }
-        tree = errorToObject(e);
-        tree.description = e.description;
-        tree = JSON.stringify(tree);
-        fileName = testCase.key + ".failure.json";
-    }
-
-
-    require('fs').writeFileSync(fileName, tree);
-    console.error("Done.");
-}
-
-function unwrap(fn) {
-  var str = fn.toString();
-  return str.substring(14, str.length - 3).replace(/<end>/g, '*/');
-}
-
 function enumerateFixtures() {
   function addCase(key, kind, item) {
       if (!cases[key]) {
