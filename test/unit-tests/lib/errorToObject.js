@@ -22,10 +22,23 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-'use strict';
+function errorToObject(e) {
+    'use strict';
+    var msg = e.toString();
 
-require('./unit-tests/api');
-require('./unit-tests/failure');
-require('./unit-tests/module');
-require('./unit-tests/tree');
-require('./unit-tests/tokens');
+    // Opera 9.64 produces an non-standard string in toString().
+    if (msg.substr(0, 6) !== 'Error:') {
+        if (typeof e.message === 'string') {
+            msg = 'Error: ' + e.message;
+        }
+    }
+
+    return {
+        index: e.index,
+        lineNumber: e.lineNumber,
+        column: e.column,
+        message: msg
+    };
+}
+
+module.exports = errorToObject;

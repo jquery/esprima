@@ -22,23 +22,12 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-function testAPI(code, expected) {
-    var actual;
+function jsonify(obj, predicate) {
+  if (!predicate) {
+    predicate = null;
+  }
 
-    expected = jsonify(expected);
-    actual = jsonify(eval(code));
-
-    expect(actual).to.equal(expected);
+  return JSON.stringify(obj, predicate, 4);
 }
 
-var apiSpecs = _.omit(cases, function(cases) {
-  return !cases.result;
-});
-
-describe('Api', function() {
-  leche.withData(apiSpecs, function(testCase) {
-    it('should match expected output', function() {
-        testAPI(testCase.run, testCase.result);
-    });
-  });
-});
+module.exports = jsonify;

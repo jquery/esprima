@@ -22,10 +22,31 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-'use strict';
+function sortedObject(o) {
+    var keys, result;
+    if (o === null) {
+        return o;
+    }
+    if (Array.isArray(o)) {
+        return o.map(sortedObject);
+    }
+    if (typeof o !== 'object') {
+        return o;
+    }
+    if (o instanceof RegExp) {
+        return o;
+    }
+    keys = Object.keys(o);
+    result = {
+        range: undefined,
+        loc: undefined
+    };
+    keys.forEach(function (key) {
+        if (o.hasOwnProperty(key)) {
+            result[key] = sortedObject(o[key]);
+        }
+    });
+    return result;
+}
 
-require('./unit-tests/api');
-require('./unit-tests/failure');
-require('./unit-tests/module');
-require('./unit-tests/tree');
-require('./unit-tests/tokens');
+module.exports = sortedObject;

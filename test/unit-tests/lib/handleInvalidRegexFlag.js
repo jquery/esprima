@@ -22,10 +22,18 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-'use strict';
+// If handleInvalidRegexFlag is true, an invalid flag in a regular expression
+// will throw an exception. In some old version of V8, this is not the case
+// and hence handleInvalidRegexFlag is false.
+function handleInvalidRegexFlag() {
+  handleInvalidRegexFlag = false;
+  try {
+      'test'.match(new RegExp('[a-z]', 'x'));
+  } catch (e) {
+      handleInvalidRegexFlag = true;
+  }
 
-require('./unit-tests/api');
-require('./unit-tests/failure');
-require('./unit-tests/module');
-require('./unit-tests/tree');
-require('./unit-tests/tokens');
+  return handleInvalidRegexFlag;
+}
+
+module.exports = handleInvalidRegexFlag;

@@ -22,6 +22,18 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+
+var jsonify = require('./lib/jsonify'),
+    NotMatchingError = require('./lib/NotMatchingError'),
+    errorToObject = require('./lib/errorToObject'),
+    hasAttachedComment = require('./lib/hasAttachedComment'),
+    sortedObject = require('./lib/sortedObject'),
+    esprima = require('../../esprima'),
+    expect    = require("chai").expect,
+    leche = require('leche'),
+    _ = require('lodash'),
+    cases = require('./lib/enumerate-fixtures');
+
 function testParse(code, syntax) {
     'use strict';
     var expected, tree, actual, options, StringObject, i, len;
@@ -116,8 +128,8 @@ function testParse(code, syntax) {
 }
 
 
-var treeSpecs = _.omit(cases, function(cases) {
-  return !cases.tree;
+var treeSpecs = _.omit(cases, function(_case) {
+  return !_case.tree;
 });
 
 describe('Tree', function() {

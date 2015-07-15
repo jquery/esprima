@@ -4,12 +4,8 @@ module.exports = function(config) {
     frameworks: ['mocha', 'chai', 'leche'],
 
     files: [
-      'test/dist/fixtures_js.js',
-      'test/dist/fixtures_json.js',
-      'node_modules/lodash/index.js',
       'esprima.js',
       'test/unit-tests.js',
-      'test/tests/*.js',
     ],
 
     exclude: [],
@@ -19,6 +15,14 @@ module.exports = function(config) {
         reporter: 'html', // change Karma's debug.html to the mocha web reporter
         ui: 'bdd'
       }
+    },
+
+    preprocessors: {
+        'test/unit-tests.js': ['webpack', 'sourcemap'],
+    },
+
+    webpack: {
+        devtool: '#inline-source-map'
     },
 
     reporters: ['dots'], // available reporters: https://npmjs.org/browse/keyword/karma-reporter

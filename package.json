@@ -58,9 +58,13 @@
     "karma-mocha": "~0.2.0",
     "karma-phantomjs-launcher": "~0.2.0",
     "karma-sinon": "~1.0.4",
+    "karma-sourcemap-loader": "^0.3.5",
+    "karma-webpack": "^1.6.0",
+    "leche": "^2.1.1",
     "lodash": "~3.10.0",
     "map-stream": "0.0.6",
-    "mocha": "~2.2.5",
+    "mocha": "^2.2.5",
+    "node-libs-browser": "^0.5.2",
     "node-tick-processor": "~0.0.2",
     "phantomjs": "~1.9.17",
     "regenerate": "~0.6.2",
@@ -68,7 +72,8 @@
     "unicode-7.0.0": "~0.1.5",
     "vinyl": "^0.5.0",
     "vinyl-fs": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "webpack": "^1.10.1"
   },
   "keywords": [
     "ast",
@@ -86,6 +91,7 @@
     "unit-tests": "node tools/generate-test-case.js && gulp test",
     "regression-tests": "node test/regression-tests.js",
     "tests": "npm run unit-tests && npm run regression-tests",
+    "browser-tests": "gulp test-chrome",
     "analyze-coverage": "istanbul cover test/unit-tests.js",
     "check-coverage": "istanbul check-coverage --statement 100 --branch 100 --function 100",
     "dynamic-analysis": "npm run analyze-coverage && npm run check-coverage",

@@ -22,6 +22,15 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+var jsonify = require('./lib/jsonify'),
+    handleInvalidRegexFlag  = require('./lib/handleInvalidRegexFlag'),
+    errorToObject  = require('./lib/errorToObject'),
+    esprima = require('../../esprima'),
+    expect    = require("chai").expect,
+    leche = require('leche'),
+    _ = require('lodash'),
+    cases = require('./lib/enumerate-fixtures');
+
 function testModule(code, exception) {
     'use strict';
     var i, options, expected, actual, err, tokenize;
@@ -63,8 +72,8 @@ function testModule(code, exception) {
     }
 }
 
-var moduleSpecs = _.omit(cases, function(cases) {
-  return !cases.module;
+var moduleSpecs = _.omit(cases, function(_case) {
+  return !_case.module;
 });
 
 describe('modules', function() {

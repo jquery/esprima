@@ -22,32 +22,30 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-function testTokenize(code, tokens) {
-    'use strict';
-    var options, expected, actual, tree;
+var jsonify = require('./lib/jsonify');
+    esprima = require('../../esprima'),
+    expect    = require("chai").expect,
+    leche = require('leche'),
+    _ = require('lodash'),
+    cases = require('./lib/enumerate-fixtures');
 
-    options = {
-        comment: true,
-        tolerant: true,
-        loc: true,
-        range: true
-    };
+function testAPI(code, expected) {
+    var actual;
 
-    expected = jsonify(tokens);
-    tree = esprima.tokenize(code, options);
-    actual = jsonify(tree);
+    expected = jsonify(expected);
+    actual = jsonify(eval(code));
 
-    expect(expected).to.equal(actual);
-  }
+    expect(actual).to.equal(expected);
+}
 
-var tokenSpecs = _.omit(cases, function(cases) {
-  return !cases.tokens
+var apiSpecs = _.omit(cases, function(_case) {
+  return !_case.result;
 });
 
-describe('tokens', function() {
-  leche.withData(tokenSpecs, function(testCase) {
-    it('should parse', function() {
-        testTokenize(testCase.case, testCase.tokens);
+describe('Api', function() {
+  leche.withData(apiSpecs, function(testCase) {
+    it('should match expected output', function() {
+        testAPI(testCase.run, testCase.result);
     });
   });
 });

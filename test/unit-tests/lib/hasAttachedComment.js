@@ -22,10 +22,19 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-'use strict';
+function hasAttachedComment(syntax) {
+    var key;
+    for (key in syntax) {
+        if (key === 'leadingComments' || key === 'trailingComments') {
+            return true;
+        }
+        if (typeof syntax[key] === 'object' && syntax[key] !== null) {
+            if (hasAttachedComment(syntax[key])) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
-require('./unit-tests/api');
-require('./unit-tests/failure');
-require('./unit-tests/module');
-require('./unit-tests/tree');
-require('./unit-tests/tokens');
+module.exports = hasAttachedComment;

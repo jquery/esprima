@@ -22,10 +22,11 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-'use strict';
+function NotMatchingError(expected, actual) {
+    Error.call(this, 'Expected ');
+    this.expected = expected;
+    this.actual = actual;
+}
+NotMatchingError.prototype = new Error();
 
-require('./unit-tests/api');
-require('./unit-tests/failure');
-require('./unit-tests/module');
-require('./unit-tests/tree');
-require('./unit-tests/tokens');
+module.exports = NotMatchingError;
