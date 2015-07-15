@@ -4,8 +4,8 @@ module.exports = function(config) {
     frameworks: ['mocha', 'chai', 'leche'],
 
     files: [
-      'test/fixtures/**/*.json',
-      'test/fixtures/**/*.js',
+      'test/dist/fixtures_js.js',
+      'test/dist/fixtures_json.js',
       'node_modules/lodash/index.js',
       'esprima.js',
       'test/unit-tests.js',
@@ -13,24 +13,6 @@ module.exports = function(config) {
     ],
 
     exclude: [],
-
-    // https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-      'test/fixtures/**/*.js': ['js2js'],
-      'test/fixtures/**/*.json': ['json_fixtures']
-    },
-
-    jsonFixturesPreprocessor: {
-
-      // stripPrefix: 'test/fixtures',
-
-      // change the global fixtures variable name
-      variableName: '__mocks__',
-
-      transformPath: function(path) {
-        return path;
-      }
-    },
 
     client: {
       mocha: {
@@ -47,8 +29,8 @@ module.exports = function(config) {
     singleRun: false,
 
     browsers:
-    // ['Chrome'],
-    ['PhantomJS'],
+    ['Chrome'],
+    // ['PhantomJS'],
 
   });
 }

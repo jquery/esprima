@@ -127,52 +127,47 @@ function enumerateFixtures() {
       cases[key][kind] = item;
   }
 
-  _.each(__fixtures__, function(value, filePath) {
-
-      function checkType(type) {
-        var suffix = '.'+type + '.js';
-        if (filePath.slice(-suffix.length) === suffix) {
-          return filePath.slice(0, -suffix.length);
-        }
-
-        return false;
-      }
-
-      var key, test = {};
-
-      key = checkType('run')
-      if (key) {
-        return addCase(key, 'run', value);
-      }
-
-      key = checkType('source');
-      if (key) {
-        return addCase(key, 'source', value);
-      }
-
-      var key = filePath.slice(0,-3);
-      return addCase(key, 'case', value);
-  });
-
-  _.each(__mocks__, function(value, filePath) {
+  _.each(__fixtures_js__, function(value, filePath) {
 
       function checkType(type) {
         var suffix = '.'+type;
-        if (filePath.slice(-suffix.length) === suffix) {
-          var path = filePath.slice(0, -suffix.length);
-
-          return {
-              key: path,
-              kind: type
-          }
-        }
-
-        return false;
+        return filePath.slice(-suffix.length) === suffix
       }
 
-      var obj = _.chain(['module', 'tree', 'tokens', 'failure', 'result']).map(checkType).filter().first().value();
-      return addCase(obj.key, obj.kind, value);
+      function getKey(type) {
+        return filePath.slice(0, -type.length-1)
+      }
 
+      if (checkType('run')) {
+        return addCase(getKey('run'), 'run', value);
+      }
+
+      if (checkType('source')) {
+        return addCase(getKey('source'), 'source', value);
+      }
+
+      return addCase(filePath, 'case', value);
+  });
+
+  _.each(__fixtures_json__, function(value, filePath) {
+
+      function getType() {
+        return _(['module', 'tree', 'tokens', 'failure', 'result']).find(function(type) {
+          var suffix = '.'+type;
+          return (filePath.slice(-suffix.length) === suffix);
+        });
+      }
+
+      function getKey() {
+        var type = getType()
+        return filePath.slice(0, -type.length-1)
+      }
+
+      function getValue() {
+        return JSON.parse(value);
+      }
+
+      return addCase(getKey(), getType(), getValue());
   });
 }
 
