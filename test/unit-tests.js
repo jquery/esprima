@@ -166,10 +166,7 @@ function enumerateFixtures() {
         return false;
       }
 
-      var key,
-      test = {};
-
-      value = unwrap(value);
+      var key, test = {};
 
       key = checkType('run')
       if (key) {

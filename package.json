@@ -50,7 +50,7 @@
         "karma-cli": "~0.1.0",
         "karma-coverage": "~0.4.2",
         "karma-firefox-launcher": "~0.1.6",
-        "karma-js2js-preprocessor": "^0.1.0",
+        "karma-js2js-preprocessor": "^0.2.0",
         "karma-json-fixtures-preprocessor": "0.0.4",
         "karma-leche": "0.0.0",
         "karma-mocha": "~0.2.0",
