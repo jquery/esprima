@@ -282,20 +282,20 @@
         };
     }
 
-    // 7.2 White Space
+    // 11.2 White Space
 
     function isWhiteSpace(ch) {
         return (ch === 0x20) || (ch === 0x09) || (ch === 0x0B) || (ch === 0x0C) || (ch === 0xA0) ||
             (ch >= 0x1680 && [0x1680, 0x180E, 0x2000, 0x2001, 0x2002, 0x2003, 0x2004, 0x2005, 0x2006, 0x2007, 0x2008, 0x2009, 0x200A, 0x202F, 0x205F, 0x3000, 0xFEFF].indexOf(ch) >= 0);
     }
 
-    // 7.3 Line Terminators
+    // 11.3 Line Terminators
 
     function isLineTerminator(ch) {
         return (ch === 0x0A) || (ch === 0x0D) || (ch === 0x2028) || (ch === 0x2029);
     }
 
-    // 7.6 Identifier Names and Identifiers
+    // 11.6 Identifier Names and Identifiers
 
     function isIdentifierStart(ch) {
         return (ch === 0x24) || (ch === 0x5F) ||  // $ (dollar) and _ (underscore)
@@ -314,7 +314,7 @@
             ((ch >= 0x80) && Regex.NonAsciiIdentifierPart.test(String.fromCharCode(ch)));
     }
 
-    // 7.6.1.2 Future Reserved Words
+    // 11.6.2.2 Future Reserved Words
 
     function isFutureReservedWord(id) {
         switch (id) {
@@ -327,8 +327,6 @@
             return false;
         }
     }
-
-    // 11.6.2.2 Future Reserved Words
 
     function isStrictModeReservedWord(id) {
         switch (id) {
@@ -351,7 +349,7 @@
         return id === 'eval' || id === 'arguments';
     }
 
-    // 7.6.1.1 Keywords
+    // 11.6.2.1 Keywords
 
     function isKeyword(id) {
 
@@ -386,7 +384,7 @@
         }
     }
 
-    // 7.4 Comments
+    // 11.4 Comments
 
     function addComment(type, value, start, end, loc) {
         var comment;
@@ -725,7 +723,7 @@
     }
 
 
-    // 7.7 Punctuators
+    // 11.7 Punctuators
 
     function scanPunctuator() {
         var token, str;
@@ -825,7 +823,7 @@
         return token;
     }
 
-    // 7.8.3 Numeric Literals
+    // 11.8.3 Numeric Literals
 
     function scanHexLiteral(start) {
         var number = '';
@@ -1029,7 +1027,7 @@
         };
     }
 
-    // 7.8.4 String Literals
+    // 11.8.4 String Literals
 
     function scanStringLiteral() {
         var str = '', quote, start, ch, unescaped, octToDec, octal = false;
@@ -1127,6 +1125,8 @@
             end: index
         };
     }
+
+    // 11.8.6 Template Literal Lexical Components
 
     function scanTemplate() {
         var cooked = '', ch, start, rawOffset, terminated, head, tail, restore, unescaped;
@@ -1249,6 +1249,8 @@
             end: index
         };
     }
+
+    // 11.8.5 Regular Expression Literals
 
     function testRegExp(pattern, flags) {
         // The BMP character to use as a replacement for astral symbols when
@@ -2619,6 +2621,8 @@
         return result;
     }
 
+    // 13.3.3 Destructuring Binding Patterns
+
     function parseArrayPattern(params) {
         var node = new Node(), elements = [], rest, restNode;
         expect('[');
@@ -2716,9 +2720,9 @@
         return pattern;
     }
 
-    // 11.1.4 Array Initialiser
+    // 12.2.5 Array Initializer
 
-    function parseArrayInitialiser() {
+    function parseArrayInitializer() {
         var elements = [], node = new Node(), restSpread;
 
         expect('[');
@@ -2751,7 +2755,7 @@
         return node.finishArrayExpression(elements);
     }
 
-    // 11.1.5 Object Initialiser
+    // 12.2.6 Object Initializer
 
     function parsePropertyFunction(node, paramInfo, isGenerator) {
         var previousStrict, body;
@@ -2968,7 +2972,7 @@
         throwUnexpectedToken(lookahead);
     }
 
-    function parseObjectInitialiser() {
+    function parseObjectInitializer() {
         var properties = [], hasProto = {value: false}, node = new Node();
 
         expect('{');
@@ -3022,6 +3026,8 @@
         }
     }
 
+    // 12.2.9 Template Literals
+
     function parseTemplateElement(option) {
         var node, token;
 
@@ -3051,7 +3057,7 @@
         return node.finishTemplateLiteral(quasis, expressions);
     }
 
-    // 11.1.6 The Grouping Operator
+    // 12.2.10 The Grouping Operator
 
     function parseGroupExpression() {
         var expr, expressions, startToken, i, params = [];
@@ -3154,7 +3160,7 @@
     }
 
 
-    // 11.1 Primary Expressions
+    // 12.2 Primary Expressions
 
     function parsePrimaryExpression() {
         var type, token, expr, node;
@@ -3165,11 +3171,11 @@
         }
 
         if (match('[')) {
-            return inheritCoverGrammar(parseArrayInitialiser);
+            return inheritCoverGrammar(parseArrayInitializer);
         }
 
         if (match('{')) {
-            return inheritCoverGrammar(parseObjectInitialiser);
+            return inheritCoverGrammar(parseObjectInitializer);
         }
 
         type = lookahead.type;
@@ -3232,7 +3238,7 @@
         return expr;
     }
 
-    // 11.2 Left-Hand-Side Expressions
+    // 12.3 Left-Hand-Side Expressions
 
     function parseArguments() {
         var args = [], expr;
@@ -3291,6 +3297,8 @@
         return expr;
     }
 
+    // 12.3.3 The new Operator
+
     function parseNewExpression() {
         var callee, args, node = new Node();
 
@@ -3314,6 +3322,8 @@
 
         return node.finishNewExpression(callee, args);
     }
+
+    // 12.3.4 Function Calls
 
     function parseLeftHandSideExpressionAllowCall() {
         var quasi, expr, args, property, startToken, previousAllowIn = state.allowIn;
@@ -3360,6 +3370,8 @@
         return expr;
     }
 
+    // 12.3 Left-Hand-Side Expressions
+
     function parseLeftHandSideExpression() {
         var quasi, expr, property, startToken;
         assert(state.allowIn, 'callee of new expression always allow in keyword.');
@@ -3398,7 +3410,7 @@
         return expr;
     }
 
-    // 11.3 Postfix Expressions
+    // 12.4 Postfix Expressions
 
     function parsePostfixExpression() {
         var expr, token, startToken = lookahead;
@@ -3426,7 +3438,7 @@
         return expr;
     }
 
-    // 11.4 Unary Operators
+    // 12.5 Unary Operators
 
     function parseUnaryExpression() {
         var token, expr, startToken;
@@ -3540,13 +3552,13 @@
         return prec;
     }
 
-    // 11.5 Multiplicative Operators
-    // 11.6 Additive Operators
-    // 11.7 Bitwise Shift Operators
-    // 11.8 Relational Operators
-    // 11.9 Equality Operators
-    // 11.10 Binary Bitwise Operators
-    // 11.11 Binary Logical Operators
+    // 12.6 Multiplicative Operators
+    // 12.7 Additive Operators
+    // 12.8 Bitwise Shift Operators
+    // 12.9 Relational Operators
+    // 12.10 Equality Operators
+    // 12.11 Binary Bitwise Operators
+    // 12.12 Binary Logical Operators
 
     function parseBinaryExpression() {
         var marker, markers, expr, token, prec, stack, right, operator, left, i;
@@ -3602,7 +3614,7 @@
     }
 
 
-    // 11.12 Conditional Operator
+    // 12.13 Conditional Operator
 
     function parseConditionalExpression() {
         var expr, previousAllowIn, consequent, alternate, startToken;
@@ -3626,7 +3638,7 @@
         return expr;
     }
 
-    // [ES6] 14.2 Arrow Function
+    // 14.2 Arrow Function Definitions
 
     function parseConciseBody() {
         if (match('{')) {
@@ -3765,7 +3777,7 @@
         return node.finishArrowFunctionExpression(options.params, options.defaults, body, body.type !== Syntax.BlockStatement);
     }
 
-    // [ES6] 14.4 Yield expression
+    // 14.4 Yield expression
 
     function parseYieldExpression() {
         var argument, expr, delegate, previousAllowYield;
@@ -3793,7 +3805,7 @@
         return expr.finishYieldExpression(argument, delegate);
     }
 
-    // 11.13 Assignment Operators
+    // 12.14 Assignment Operators
 
     function parseAssignmentExpression() {
         var token, expr, right, list, startToken;
@@ -3844,7 +3856,7 @@
         return expr;
     }
 
-    // 11.14 Comma Operator
+    // 12.15 Comma Operator
 
     function parseExpression() {
         var expr, startToken = lookahead, expressions;
@@ -3868,7 +3880,7 @@
         return expr;
     }
 
-    // 12.1 Block
+    // 13.2 Block
 
     function parseStatementListItem() {
         if (lookahead.type === Token.Keyword) {
@@ -3920,7 +3932,7 @@
         return node.finishBlockStatement(block);
     }
 
-    // 12.2 Variable Statement
+    // 13.3.2 Variable Statement
 
     function parseVariableIdentifier() {
         var token, node = new Node();
@@ -3991,6 +4003,8 @@
 
         return node.finishVariableDeclaration(declarations);
     }
+
+    // 13.3.1 Let and Const Declarations
 
     function parseLexicalBinding(kind, options) {
         var init = null, id, node = new Node(), params = [];
@@ -4066,7 +4080,7 @@
         return node.finishRestElement(param);
     }
 
-    // 12.3 Empty Statement
+    // 13.4 Empty Statement
 
     function parseEmptyStatement(node) {
         expect(';');
@@ -4081,7 +4095,7 @@
         return node.finishExpressionStatement(expr);
     }
 
-    // 12.5 If statement
+    // 13.6 If statement
 
     function parseIfStatement(node) {
         var test, consequent, alternate;
@@ -4106,7 +4120,7 @@
         return node.finishIfStatement(test, consequent, alternate);
     }
 
-    // 12.6 Iteration Statements
+    // 13.7 Iteration Statements
 
     function parseDoWhileStatement(node) {
         var body, test, oldInIteration;
@@ -4285,7 +4299,7 @@
                     node.finishForOfStatement(left, right, body);
     }
 
-    // 12.7 The continue statement
+    // 13.8 The continue statement
 
     function parseContinueStatement(node) {
         var label = null, key;
@@ -4329,7 +4343,7 @@
         return node.finishContinueStatement(label);
     }
 
-    // 12.8 The break statement
+    // 13.9 The break statement
 
     function parseBreakStatement(node) {
         var label = null, key;
@@ -4373,7 +4387,7 @@
         return node.finishBreakStatement(label);
     }
 
-    // 12.9 The return statement
+    // 13.10 The return statement
 
     function parseReturnStatement(node) {
         var argument = null;
@@ -4409,7 +4423,7 @@
         return node.finishReturnStatement(argument);
     }
 
-    // 12.10 The with statement
+    // 13.11 The with statement
 
     function parseWithStatement(node) {
         var object, body;
@@ -4431,7 +4445,7 @@
         return node.finishWithStatement(object, body);
     }
 
-    // 12.10 The swith statement
+    // 13.12 The switch statement
 
     function parseSwitchCase() {
         var test, consequent = [], statement, node = new Node();
@@ -4501,7 +4515,7 @@
         return node.finishSwitchStatement(discriminant, cases);
     }
 
-    // 12.13 The throw statement
+    // 13.14 The throw statement
 
     function parseThrowStatement(node) {
         var argument;
@@ -4519,7 +4533,7 @@
         return node.finishThrowStatement(argument);
     }
 
-    // 12.14 The try statement
+    // 13.15 The try statement
 
     function parseCatchClause() {
         var param, params = [], paramMap = {}, key, i, body, node = new Node();
@@ -4573,7 +4587,7 @@
         return node.finishTryStatement(block, handler, finalizer);
     }
 
-    // 12.15 The debugger statement
+    // 13.16 The debugger statement
 
     function parseDebuggerStatement(node) {
         expectKeyword('debugger');
@@ -4583,7 +4597,7 @@
         return node.finishDebuggerStatement();
     }
 
-    // 12 Statements
+    // 13 Statements
 
     function parseStatement() {
         var type = lookahead.type,
@@ -4668,7 +4682,7 @@
         return node.finishExpressionStatement(expr);
     }
 
-    // 13 Function Definition
+    // 14.1 Function Definition
 
     function parseFunctionSourceElements() {
         var statement, body = [], token, directive, firstRestricted,
@@ -4937,6 +4951,7 @@
         return node.finishFunctionExpression(id, params, defaults, body, isGenerator);
     }
 
+    // 14.5 Class Definitions
 
     function parseClassBody() {
         var classBody, token, isStatic, hasConstructor = false, body, method, computed, key;
@@ -5044,8 +5059,7 @@
         return classNode.finishClassExpression(id, superClass, classBody);
     }
 
-    // Modules grammar from:
-    // people.mozilla.org/~jorendorff/es6-draft.html
+    // 15.2 Modules
 
     function parseModuleSpecifier() {
         var node = new Node();
@@ -5055,6 +5069,8 @@
         }
         return node.finishLiteral(lex());
     }
+
+    // 15.2.3 Exports
 
     function parseExportSpecifier() {
         var exported, local, node = new Node(), def;
@@ -5151,9 +5167,9 @@
         // export default [];
         // export default (1 + 2);
         if (match('{')) {
-            expression = parseObjectInitialiser();
+            expression = parseObjectInitializer();
         } else if (match('[')) {
-            expression = parseArrayInitialiser();
+            expression = parseArrayInitializer();
         } else {
             expression = parseAssignmentExpression();
         }
@@ -5194,6 +5210,8 @@
         }
         return parseExportNamedDeclaration(node);
     }
+
+    // 15.2.2 Imports
 
     function parseImportSpecifier() {
         // import {<foo as bar>} ...;
@@ -5295,7 +5313,7 @@
         return node.finishImportDeclaration(specifiers, src);
     }
 
-    // 14 Program
+    // 15.1 Scripts
 
     function parseScriptBody() {
         var statement, body = [], token, directive, firstRestricted;
