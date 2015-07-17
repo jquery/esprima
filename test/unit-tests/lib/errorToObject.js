@@ -22,36 +22,23 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-var fs = require('fs'),
-    esprima = require('../esprima'),
-    N, fixture;
+function errorToObject(e) {
+    'use strict';
+    var msg = e.toString();
 
-// Loops for parsing, useful for stress-testing/profiling.
-N = 25;
-
-fixture = [
-    'Underscore 1.5.2',
-    'Backbone 1.1.0',
-    'MooTools 1.4.5',
-    'jQuery 1.9.1',
-    'YUI 3.12.0',
-    'jQuery.Mobile 1.4.2',
-    'Angular 1.2.5'
-];
-
-console.log('Parsing libraries for sampling profiling analysis...');
-
-fixture.forEach(function (name) {
-    var filename, source, expected, syntax, tokens, i;
-    filename = name.toLowerCase().replace(/\.js/g, 'js').replace(/\s/g, '-');
-    source = fs.readFileSync('test/3rdparty/' + filename + '.js', 'utf-8');
-    console.log(' ', name);
-    try {
-        for (i = 0; i < N; ++i) {
-            syntax = esprima.parse(source, { range: true, loc: true, raw: true });
+    // Opera 9.64 produces an non-standard string in toString().
+    if (msg.substr(0, 6) !== 'Error:') {
+        if (typeof e.message === 'string') {
+            msg = 'Error: ' + e.message;
         }
-    } catch (e) {
-        console.log('FATAL', e.toString());
-        process.exit(1);
     }
-});
+
+    return {
+        index: e.index,
+        lineNumber: e.lineNumber,
+        column: e.column,
+        message: msg
+    };
+}
+
+module.exports = errorToObject;

@@ -22,36 +22,19 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-var fs = require('fs'),
-    esprima = require('../esprima'),
-    N, fixture;
-
-// Loops for parsing, useful for stress-testing/profiling.
-N = 25;
-
-fixture = [
-    'Underscore 1.5.2',
-    'Backbone 1.1.0',
-    'MooTools 1.4.5',
-    'jQuery 1.9.1',
-    'YUI 3.12.0',
-    'jQuery.Mobile 1.4.2',
-    'Angular 1.2.5'
-];
-
-console.log('Parsing libraries for sampling profiling analysis...');
-
-fixture.forEach(function (name) {
-    var filename, source, expected, syntax, tokens, i;
-    filename = name.toLowerCase().replace(/\.js/g, 'js').replace(/\s/g, '-');
-    source = fs.readFileSync('test/3rdparty/' + filename + '.js', 'utf-8');
-    console.log(' ', name);
-    try {
-        for (i = 0; i < N; ++i) {
-            syntax = esprima.parse(source, { range: true, loc: true, raw: true });
+function hasAttachedComment(syntax) {
+    var key;
+    for (key in syntax) {
+        if (key === 'leadingComments' || key === 'trailingComments') {
+            return true;
         }
-    } catch (e) {
-        console.log('FATAL', e.toString());
-        process.exit(1);
+        if (typeof syntax[key] === 'object' && syntax[key] !== null) {
+            if (hasAttachedComment(syntax[key])) {
+                return true;
+            }
+        }
     }
-});
+    return false;
+}
+
+module.exports = hasAttachedComment;

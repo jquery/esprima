@@ -22,36 +22,30 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-var fs = require('fs'),
-    esprima = require('../esprima'),
-    N, fixture;
+var jsonify = require('./lib/jsonify');
+    esprima = require('../../esprima'),
+    expect    = require("chai").expect,
+    leche = require('leche'),
+    _ = require('lodash'),
+    cases = require('./lib/enumerate-fixtures');
 
-// Loops for parsing, useful for stress-testing/profiling.
-N = 25;
+function testAPI(code, expected) {
+    var actual;
 
-fixture = [
-    'Underscore 1.5.2',
-    'Backbone 1.1.0',
-    'MooTools 1.4.5',
-    'jQuery 1.9.1',
-    'YUI 3.12.0',
-    'jQuery.Mobile 1.4.2',
-    'Angular 1.2.5'
-];
+    expected = jsonify(expected);
+    actual = jsonify(eval(code));
 
-console.log('Parsing libraries for sampling profiling analysis...');
+    expect(actual).to.equal(expected);
+}
 
-fixture.forEach(function (name) {
-    var filename, source, expected, syntax, tokens, i;
-    filename = name.toLowerCase().replace(/\.js/g, 'js').replace(/\s/g, '-');
-    source = fs.readFileSync('test/3rdparty/' + filename + '.js', 'utf-8');
-    console.log(' ', name);
-    try {
-        for (i = 0; i < N; ++i) {
-            syntax = esprima.parse(source, { range: true, loc: true, raw: true });
-        }
-    } catch (e) {
-        console.log('FATAL', e.toString());
-        process.exit(1);
-    }
+var apiSpecs = _.omit(cases, function(_case) {
+  return !_case.result;
+});
+
+describe('Api', function() {
+  leche.withData(apiSpecs, function(testCase) {
+    it('should match expected output', function() {
+        testAPI(testCase.run, testCase.result);
+    });
+  });
 });

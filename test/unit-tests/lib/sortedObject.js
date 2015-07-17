@@ -22,36 +22,31 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-var fs = require('fs'),
-    esprima = require('../esprima'),
-    N, fixture;
-
-// Loops for parsing, useful for stress-testing/profiling.
-N = 25;
-
-fixture = [
-    'Underscore 1.5.2',
-    'Backbone 1.1.0',
-    'MooTools 1.4.5',
-    'jQuery 1.9.1',
-    'YUI 3.12.0',
-    'jQuery.Mobile 1.4.2',
-    'Angular 1.2.5'
-];
-
-console.log('Parsing libraries for sampling profiling analysis...');
-
-fixture.forEach(function (name) {
-    var filename, source, expected, syntax, tokens, i;
-    filename = name.toLowerCase().replace(/\.js/g, 'js').replace(/\s/g, '-');
-    source = fs.readFileSync('test/3rdparty/' + filename + '.js', 'utf-8');
-    console.log(' ', name);
-    try {
-        for (i = 0; i < N; ++i) {
-            syntax = esprima.parse(source, { range: true, loc: true, raw: true });
-        }
-    } catch (e) {
-        console.log('FATAL', e.toString());
-        process.exit(1);
+function sortedObject(o) {
+    var keys, result;
+    if (o === null) {
+        return o;
     }
-});
+    if (Array.isArray(o)) {
+        return o.map(sortedObject);
+    }
+    if (typeof o !== 'object') {
+        return o;
+    }
+    if (o instanceof RegExp) {
+        return o;
+    }
+    keys = Object.keys(o);
+    result = {
+        range: undefined,
+        loc: undefined
+    };
+    keys.forEach(function (key) {
+        if (o.hasOwnProperty(key)) {
+            result[key] = sortedObject(o[key]);
+        }
+    });
+    return result;
+}
+
+module.exports = sortedObject;
