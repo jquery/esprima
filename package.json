@@ -43,6 +43,11 @@
     "istanbul": "~0.3.16",
     "jscs": "~1.13.1",
     "json-diff": "~0.3.1",
+    "karma": "^0.13.3",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-mocha": "^0.2.0",
+    "lodash": "^3.10.0",
+    "mocha": "^2.2.5",
     "node-tick-processor": "~0.0.2",
     "regenerate": "~0.6.2",
     "unicode-7.0.0": "~0.1.5"
@@ -63,6 +68,8 @@
     "unit-tests": "node test/unit-tests.js",
     "regression-tests": "node test/regression-tests.js",
     "tests": "npm run unit-tests && npm run regression-tests",
+    "generate-fixtures": "node tools/generate-fixtures.js",
+    "browser-tests": "npm run generate-fixtures && karma start --single-run",
     "analyze-coverage": "istanbul cover test/unit-tests.js",
     "check-coverage": "istanbul check-coverage --statement 100 --branch 100 --function 100",
     "dynamic-analysis": "npm run analyze-coverage && npm run check-coverage",
@@ -73,7 +80,6 @@
     "coveralls": "coveralls < ./coverage/lcov.info",
     "downstream": "node test/downstream.js",
     "travis": "npm test && npm run coveralls && npm run downstream",
-    "generate-regex": "node tools/generate-identifier-regex.js",
-    "generate-fixtures": "node tools/generate-fixtures.js"
+    "generate-regex": "node tools/generate-identifier-regex.js"
   }
 }
