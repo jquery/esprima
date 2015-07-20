@@ -1994,20 +1994,8 @@
             return this;
         },
 
-        finishFunctionDeclaration: function (id, params, defaults, body, generator) {
-            this.type = Syntax.FunctionDeclaration;
-            this.id = id;
-            this.params = params;
-            this.defaults = defaults;
-            this.body = body;
-            this.generator = generator;
-            this.expression = false;
-            this.finish();
-            return this;
-        },
-
-        finishFunctionExpression: function (id, params, defaults, body, generator) {
-            this.type = Syntax.FunctionExpression;
+        finishFunctionExpression: function (id, type, params, defaults, body, generator) {
+            this.type = type;
             this.id = id;
             this.params = params;
             this.defaults = defaults;
@@ -2773,7 +2761,7 @@
         }
 
         strict = previousStrict;
-        return node.finishFunctionExpression(null, paramInfo.params, paramInfo.defaults, body, isGenerator);
+        return node.finishFunctionExpression(null, Syntax.FunctionExpression, paramInfo.params, paramInfo.defaults, body, isGenerator);
     }
 
     function parsePropertyMethodFunction() {
@@ -3899,7 +3887,7 @@
             case 'let':
                 return parseLexicalDeclaration({inFor: false});
             case 'function':
-                return parseFunctionDeclaration(new Node());
+                return parseFunctionDeclaration(new Node(), false);
             case 'class':
                 return parseClassDeclaration();
             }
@@ -4638,7 +4626,7 @@
             case 'for':
                 return parseForStatement(node);
             case 'function':
-                return parseFunctionDeclaration(node);
+                return parseFunctionDeclaration(node, false);
             case 'if':
                 return parseIfStatement(node);
             case 'return':
@@ -4839,8 +4827,17 @@
     }
 
     function parseFunctionDeclaration(node, identifierIsOptional) {
-        var id = null, params = [], defaults = [], body, token, stricted, tmp, firstRestricted, message, previousStrict,
-            isGenerator, previousAllowYield;
+        return parseFunction(node, identifierIsOptional, true);
+    }
+
+
+    function parseFunctionExpression() {
+        return parseFunction(new Node(), true, false);
+    }
+
+    function parseFunction(node, identifierIsOptional, isDeclaration) {
+
+        var id = null, params = [], defaults = [], body, token, stricted, tmp, firstRestricted, message, previousStrict, isGenerator, previousAllowYield, type;
 
         previousAllowYield = state.allowYield;
 
@@ -4849,11 +4846,15 @@
         isGenerator = match('*');
         if (isGenerator) {
             lex();
+        }
+
+        if (!isDeclaration) {
+            state.allowYield = !isGenerator;
         }
 
         if (!identifierIsOptional || !match('(')) {
             token = lookahead;
-            id = parseVariableIdentifier();
+            id = (!strict && !isGenerator && !isDeclaration && matchKeyword('yield')) ? parseNonComputedProperty() : parseVariableIdentifier();
             if (strict) {
                 if (isRestrictedWord(token.value)) {
                     tolerateUnexpectedToken(token, Messages.StrictFunctionName);
@@ -4869,63 +4870,8 @@
             }
         }
 
-        state.allowYield = !isGenerator;
-        tmp = parseParams(firstRestricted);
-        params = tmp.params;
-        defaults = tmp.defaults;
-        stricted = tmp.stricted;
-        firstRestricted = tmp.firstRestricted;
-        if (tmp.message) {
-            message = tmp.message;
-        }
-
-
-        previousStrict = strict;
-        body = parseFunctionSourceElements();
-        if (strict && firstRestricted) {
-            throwUnexpectedToken(firstRestricted, message);
-        }
-        if (strict && stricted) {
-            tolerateUnexpectedToken(stricted, message);
-        }
-
-        strict = previousStrict;
-        state.allowYield = previousAllowYield;
-
-        return node.finishFunctionDeclaration(id, params, defaults, body, isGenerator);
-    }
-
-    function parseFunctionExpression() {
-        var token, id = null, stricted, firstRestricted, message, tmp,
-            params = [], defaults = [], body, previousStrict, node = new Node(),
-            isGenerator, previousAllowYield;
-
-        previousAllowYield = state.allowYield;
-
-        expectKeyword('function');
-
-        isGenerator = match('*');
-        if (isGenerator) {
-            lex();
-        }
-
-        state.allowYield = !isGenerator;
-        if (!match('(')) {
-            token = lookahead;
-            id = (!strict && !isGenerator && matchKeyword('yield')) ? parseNonComputedProperty() : parseVariableIdentifier();
-            if (strict) {
-                if (isRestrictedWord(token.value)) {
-                    tolerateUnexpectedToken(token, Messages.StrictFunctionName);
-                }
-            } else {
-                if (isRestrictedWord(token.value)) {
-                    firstRestricted = token;
-                    message = Messages.StrictFunctionName;
-                } else if (isStrictModeReservedWord(token.value)) {
-                    firstRestricted = token;
-                    message = Messages.StrictReservedWord;
-                }
-            }
+        if (isDeclaration) {
+            state.allowYield = !isGenerator;
         }
 
         tmp = parseParams(firstRestricted);
@@ -4948,7 +4894,9 @@
         strict = previousStrict;
         state.allowYield = previousAllowYield;
 
-        return node.finishFunctionExpression(id, params, defaults, body, isGenerator);
+        type = isDeclaration ? Syntax.FunctionDeclaration : Syntax.FunctionExpression;
+
+        return node.finishFunctionExpression(id, type, params, defaults, body, isGenerator);
     }
 
     // 14.5 Class Definitions
