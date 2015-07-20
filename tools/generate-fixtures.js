@@ -50,7 +50,7 @@ function renderFixturesFile(ext, stringify) {
         var content = "";
         content += "var fixtures_" + ext + " = {};\n";
         content += fixtures;
-        content += "module.exports = fixtures_" + ext;
+        content += "\nif(typeof module !== 'undefined'){ module.exports = fixtures_" + ext + "}";
 
         return content;
     }
