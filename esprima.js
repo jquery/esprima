@@ -282,20 +282,20 @@
         };
     }
 
-    // 11.2 White Space
+    // ECMA-262 11.2 White Space
 
     function isWhiteSpace(ch) {
         return (ch === 0x20) || (ch === 0x09) || (ch === 0x0B) || (ch === 0x0C) || (ch === 0xA0) ||
             (ch >= 0x1680 && [0x1680, 0x180E, 0x2000, 0x2001, 0x2002, 0x2003, 0x2004, 0x2005, 0x2006, 0x2007, 0x2008, 0x2009, 0x200A, 0x202F, 0x205F, 0x3000, 0xFEFF].indexOf(ch) >= 0);
     }
 
-    // 11.3 Line Terminators
+    // ECMA-262 11.3 Line Terminators
 
     function isLineTerminator(ch) {
         return (ch === 0x0A) || (ch === 0x0D) || (ch === 0x2028) || (ch === 0x2029);
     }
 
-    // 11.6 Identifier Names and Identifiers
+    // ECMA-262 11.6 Identifier Names and Identifiers
 
     function isIdentifierStart(ch) {
         return (ch === 0x24) || (ch === 0x5F) ||  // $ (dollar) and _ (underscore)
@@ -314,7 +314,7 @@
             ((ch >= 0x80) && Regex.NonAsciiIdentifierPart.test(String.fromCharCode(ch)));
     }
 
-    // 11.6.2.2 Future Reserved Words
+    // ECMA-262 11.6.2.2 Future Reserved Words
 
     function isFutureReservedWord(id) {
         switch (id) {
@@ -349,7 +349,7 @@
         return id === 'eval' || id === 'arguments';
     }
 
-    // 11.6.2.1 Keywords
+    // ECMA-262 11.6.2.1 Keywords
 
     function isKeyword(id) {
 
@@ -384,7 +384,7 @@
         }
     }
 
-    // 11.4 Comments
+    // ECMA-262 11.4 Comments
 
     function addComment(type, value, start, end, loc) {
         var comment;
@@ -723,7 +723,7 @@
     }
 
 
-    // 11.7 Punctuators
+    // ECMA-262 11.7 Punctuators
 
     function scanPunctuator() {
         var token, str;
@@ -823,7 +823,7 @@
         return token;
     }
 
-    // 11.8.3 Numeric Literals
+    // ECMA-262 11.8.3 Numeric Literals
 
     function scanHexLiteral(start) {
         var number = '';
@@ -1027,7 +1027,7 @@
         };
     }
 
-    // 11.8.4 String Literals
+    // ECMA-262 11.8.4 String Literals
 
     function scanStringLiteral() {
         var str = '', quote, start, ch, unescaped, octToDec, octal = false;
@@ -1126,7 +1126,7 @@
         };
     }
 
-    // 11.8.6 Template Literal Lexical Components
+    // ECMA-262 11.8.6 Template Literal Lexical Components
 
     function scanTemplate() {
         var cooked = '', ch, start, rawOffset, terminated, head, tail, restore, unescaped;
@@ -1250,7 +1250,7 @@
         };
     }
 
-    // 11.8.5 Regular Expression Literals
+    // ECMA-262 11.8.5 Regular Expression Literals
 
     function testRegExp(pattern, flags) {
         // The BMP character to use as a replacement for astral symbols when
@@ -2621,7 +2621,7 @@
         return result;
     }
 
-    // 13.3.3 Destructuring Binding Patterns
+    // ECMA-262 13.3.3 Destructuring Binding Patterns
 
     function parseArrayPattern(params) {
         var node = new Node(), elements = [], rest, restNode;
@@ -2720,7 +2720,7 @@
         return pattern;
     }
 
-    // 12.2.5 Array Initializer
+    // ECMA-262 12.2.5 Array Initializer
 
     function parseArrayInitializer() {
         var elements = [], node = new Node(), restSpread;
@@ -2755,7 +2755,7 @@
         return node.finishArrayExpression(elements);
     }
 
-    // 12.2.6 Object Initializer
+    // ECMA-262 12.2.6 Object Initializer
 
     function parsePropertyFunction(node, paramInfo, isGenerator) {
         var previousStrict, body;
@@ -3026,7 +3026,7 @@
         }
     }
 
-    // 12.2.9 Template Literals
+    // ECMA-262 12.2.9 Template Literals
 
     function parseTemplateElement(option) {
         var node, token;
@@ -3057,7 +3057,7 @@
         return node.finishTemplateLiteral(quasis, expressions);
     }
 
-    // 12.2.10 The Grouping Operator
+    // ECMA-262 12.2.10 The Grouping Operator
 
     function parseGroupExpression() {
         var expr, expressions, startToken, i, params = [];
@@ -3160,7 +3160,7 @@
     }
 
 
-    // 12.2 Primary Expressions
+    // ECMA-262 12.2 Primary Expressions
 
     function parsePrimaryExpression() {
         var type, token, expr, node;
@@ -3238,7 +3238,7 @@
         return expr;
     }
 
-    // 12.3 Left-Hand-Side Expressions
+    // ECMA-262 12.3 Left-Hand-Side Expressions
 
     function parseArguments() {
         var args = [], expr;
@@ -3297,7 +3297,7 @@
         return expr;
     }
 
-    // 12.3.3 The new Operator
+    // ECMA-262 12.3.3 The new Operator
 
     function parseNewExpression() {
         var callee, args, node = new Node();
@@ -3323,7 +3323,7 @@
         return node.finishNewExpression(callee, args);
     }
 
-    // 12.3.4 Function Calls
+    // ECMA-262 12.3.4 Function Calls
 
     function parseLeftHandSideExpressionAllowCall() {
         var quasi, expr, args, property, startToken, previousAllowIn = state.allowIn;
@@ -3370,7 +3370,7 @@
         return expr;
     }
 
-    // 12.3 Left-Hand-Side Expressions
+    // ECMA-262 12.3 Left-Hand-Side Expressions
 
     function parseLeftHandSideExpression() {
         var quasi, expr, property, startToken;
@@ -3410,7 +3410,7 @@
         return expr;
     }
 
-    // 12.4 Postfix Expressions
+    // ECMA-262 12.4 Postfix Expressions
 
     function parsePostfixExpression() {
         var expr, token, startToken = lookahead;
@@ -3419,7 +3419,7 @@
 
         if (!hasLineTerminator && lookahead.type === Token.Punctuator) {
             if (match('++') || match('--')) {
-                // 11.3.1, 11.3.2
+                // ECMA-262 11.3.1, 11.3.2
                 if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                     tolerateError(Messages.StrictLHSPostfix);
                 }
@@ -3438,7 +3438,7 @@
         return expr;
     }
 
-    // 12.5 Unary Operators
+    // ECMA-262 12.5 Unary Operators
 
     function parseUnaryExpression() {
         var token, expr, startToken;
@@ -3449,7 +3449,7 @@
             startToken = lookahead;
             token = lex();
             expr = inheritCoverGrammar(parseUnaryExpression);
-            // 11.4.4, 11.4.5
+            // ECMA-262 11.4.4, 11.4.5
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 tolerateError(Messages.StrictLHSPrefix);
             }
@@ -3552,13 +3552,13 @@
         return prec;
     }
 
-    // 12.6 Multiplicative Operators
-    // 12.7 Additive Operators
-    // 12.8 Bitwise Shift Operators
-    // 12.9 Relational Operators
-    // 12.10 Equality Operators
-    // 12.11 Binary Bitwise Operators
-    // 12.12 Binary Logical Operators
+    // ECMA-262 12.6 Multiplicative Operators
+    // ECMA-262 12.7 Additive Operators
+    // ECMA-262 12.8 Bitwise Shift Operators
+    // ECMA-262 12.9 Relational Operators
+    // ECMA-262 12.10 Equality Operators
+    // ECMA-262 12.11 Binary Bitwise Operators
+    // ECMA-262 12.12 Binary Logical Operators
 
     function parseBinaryExpression() {
         var marker, markers, expr, token, prec, stack, right, operator, left, i;
@@ -3614,7 +3614,7 @@
     }
 
 
-    // 12.13 Conditional Operator
+    // ECMA-262 12.13 Conditional Operator
 
     function parseConditionalExpression() {
         var expr, previousAllowIn, consequent, alternate, startToken;
@@ -3638,7 +3638,7 @@
         return expr;
     }
 
-    // 14.2 Arrow Function Definitions
+    // ECMA-262 14.2 Arrow Function Definitions
 
     function parseConciseBody() {
         if (match('{')) {
@@ -3777,7 +3777,7 @@
         return node.finishArrowFunctionExpression(options.params, options.defaults, body, body.type !== Syntax.BlockStatement);
     }
 
-    // 14.4 Yield expression
+    // ECMA-262 14.4 Yield expression
 
     function parseYieldExpression() {
         var argument, expr, delegate, previousAllowYield;
@@ -3805,7 +3805,7 @@
         return expr.finishYieldExpression(argument, delegate);
     }
 
-    // 12.14 Assignment Operators
+    // ECMA-262 12.14 Assignment Operators
 
     function parseAssignmentExpression() {
         var token, expr, right, list, startToken;
@@ -3836,7 +3836,7 @@
                 tolerateError(Messages.InvalidLHSInAssignment);
             }
 
-            // 11.13.1
+            // ECMA-262 11.13.1
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 tolerateUnexpectedToken(token, Messages.StrictLHSAssignment);
             }
@@ -3856,7 +3856,7 @@
         return expr;
     }
 
-    // 12.15 Comma Operator
+    // ECMA-262 12.15 Comma Operator
 
     function parseExpression() {
         var expr, startToken = lookahead, expressions;
@@ -3880,7 +3880,7 @@
         return expr;
     }
 
-    // 13.2 Block
+    // ECMA-262 13.2 Block
 
     function parseStatementListItem() {
         if (lookahead.type === Token.Keyword) {
@@ -3932,7 +3932,7 @@
         return node.finishBlockStatement(block);
     }
 
-    // 13.3.2 Variable Statement
+    // ECMA-262 13.3.2 Variable Statement
 
     function parseVariableIdentifier() {
         var token, node = new Node();
@@ -3963,7 +3963,7 @@
 
         id = parsePattern(params);
 
-        // 12.2.1
+        // ECMA-262 12.2.1
         if (strict && isRestrictedWord(id.name)) {
             tolerateError(Messages.StrictVarName);
         }
@@ -4004,14 +4004,14 @@
         return node.finishVariableDeclaration(declarations);
     }
 
-    // 13.3.1 Let and Const Declarations
+    // ECMA-262 13.3.1 Let and Const Declarations
 
     function parseLexicalBinding(kind, options) {
         var init = null, id, node = new Node(), params = [];
 
         id = parsePattern(params);
 
-        // 12.2.1
+        // ECMA-262 12.2.1
         if (strict && id.type === Syntax.Identifier && isRestrictedWord(id.name)) {
             tolerateError(Messages.StrictVarName);
         }
@@ -4080,14 +4080,14 @@
         return node.finishRestElement(param);
     }
 
-    // 13.4 Empty Statement
+    // ECMA-262 13.4 Empty Statement
 
     function parseEmptyStatement(node) {
         expect(';');
         return node.finishEmptyStatement();
     }
 
-    // 12.4 Expression Statement
+    // ECMA-262 12.4 Expression Statement
 
     function parseExpressionStatement(node) {
         var expr = parseExpression();
@@ -4095,7 +4095,7 @@
         return node.finishExpressionStatement(expr);
     }
 
-    // 13.6 If statement
+    // ECMA-262 13.6 If statement
 
     function parseIfStatement(node) {
         var test, consequent, alternate;
@@ -4120,7 +4120,7 @@
         return node.finishIfStatement(test, consequent, alternate);
     }
 
-    // 13.7 Iteration Statements
+    // ECMA-262 13.7 Iteration Statements
 
     function parseDoWhileStatement(node) {
         var body, test, oldInIteration;
@@ -4299,7 +4299,7 @@
                     node.finishForOfStatement(left, right, body);
     }
 
-    // 13.8 The continue statement
+    // ECMA-262 13.8 The continue statement
 
     function parseContinueStatement(node) {
         var label = null, key;
@@ -4343,7 +4343,7 @@
         return node.finishContinueStatement(label);
     }
 
-    // 13.9 The break statement
+    // ECMA-262 13.9 The break statement
 
     function parseBreakStatement(node) {
         var label = null, key;
@@ -4387,7 +4387,7 @@
         return node.finishBreakStatement(label);
     }
 
-    // 13.10 The return statement
+    // ECMA-262 13.10 The return statement
 
     function parseReturnStatement(node) {
         var argument = null;
@@ -4423,7 +4423,7 @@
         return node.finishReturnStatement(argument);
     }
 
-    // 13.11 The with statement
+    // ECMA-262 13.11 The with statement
 
     function parseWithStatement(node) {
         var object, body;
@@ -4445,7 +4445,7 @@
         return node.finishWithStatement(object, body);
     }
 
-    // 13.12 The switch statement
+    // ECMA-262 13.12 The switch statement
 
     function parseSwitchCase() {
         var test, consequent = [], statement, node = new Node();
@@ -4515,7 +4515,7 @@
         return node.finishSwitchStatement(discriminant, cases);
     }
 
-    // 13.14 The throw statement
+    // ECMA-262 13.14 The throw statement
 
     function parseThrowStatement(node) {
         var argument;
@@ -4533,7 +4533,7 @@
         return node.finishThrowStatement(argument);
     }
 
-    // 13.15 The try statement
+    // ECMA-262 13.15 The try statement
 
     function parseCatchClause() {
         var param, params = [], paramMap = {}, key, i, body, node = new Node();
@@ -4554,7 +4554,7 @@
             paramMap[key] = true;
         }
 
-        // 12.14.1
+        // ECMA-262 12.14.1
         if (strict && isRestrictedWord(param.name)) {
             tolerateError(Messages.StrictCatchVariable);
         }
@@ -4587,7 +4587,7 @@
         return node.finishTryStatement(block, handler, finalizer);
     }
 
-    // 13.16 The debugger statement
+    // ECMA-262 13.16 The debugger statement
 
     function parseDebuggerStatement(node) {
         expectKeyword('debugger');
@@ -4662,7 +4662,7 @@
 
         expr = parseExpression();
 
-        // 12.12 Labelled Statements
+        // ECMA-262 12.12 Labelled Statements
         if ((expr.type === Syntax.Identifier) && match(':')) {
             lex();
 
@@ -4682,7 +4682,7 @@
         return node.finishExpressionStatement(expr);
     }
 
-    // 14.1 Function Definition
+    // ECMA-262 14.1 Function Definition
 
     function parseFunctionSourceElements() {
         var statement, body = [], token, directive, firstRestricted,
@@ -4951,7 +4951,7 @@
         return node.finishFunctionExpression(id, params, defaults, body, isGenerator);
     }
 
-    // 14.5 Class Definitions
+    // ECMA-262 14.5 Class Definitions
 
     function parseClassBody() {
         var classBody, token, isStatic, hasConstructor = false, body, method, computed, key;
@@ -5059,7 +5059,7 @@
         return classNode.finishClassExpression(id, superClass, classBody);
     }
 
-    // 15.2 Modules
+    // ECMA-262 15.2 Modules
 
     function parseModuleSpecifier() {
         var node = new Node();
@@ -5070,7 +5070,7 @@
         return node.finishLiteral(lex());
     }
 
-    // 15.2.3 Exports
+    // ECMA-262 15.2.3 Exports
 
     function parseExportSpecifier() {
         var exported, local, node = new Node(), def;
@@ -5211,7 +5211,7 @@
         return parseExportNamedDeclaration(node);
     }
 
-    // 15.2.2 Imports
+    // ECMA-262 15.2.2 Imports
 
     function parseImportSpecifier() {
         // import {<foo as bar>} ...;
@@ -5313,7 +5313,7 @@
         return node.finishImportDeclaration(specifiers, src);
     }
 
-    // 15.1 Scripts
+    // ECMA-262 15.1 Scripts
 
     function parseScriptBody() {
         var statement, body = [], token, directive, firstRestricted;
