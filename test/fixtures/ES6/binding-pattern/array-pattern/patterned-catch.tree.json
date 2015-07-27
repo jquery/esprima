@@ -942,5 +942,6 @@
             },
             "finalizer": null
         }
-    ]
+    ],
+    "sourceType": "script"
 }

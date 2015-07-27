@@ -125,5 +125,6 @@
             ],
             "kind": "let"
         }
-    ]
+    ],
+    "sourceType": "script"
 }

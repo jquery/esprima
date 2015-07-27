@@ -1,138 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "AssignmentExpression",
-                "operator": "=",
-                "left": {
-                    "type": "Identifier",
-                    "name": "x",
-                    "range": [
-                        0,
-                        1
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 0
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 1
-                        }
-                    }
-                },
-                "right": {
-                    "type": "ObjectExpression",
-                    "properties": [
-                        {
-                            "type": "Property",
-                            "key": {
-                                "type": "Literal",
-                                "value": "__proto__",
-                                "raw": "\"__proto__\"",
-                                "range": [
-                                    5,
-                                    16
-                                ],
-                                "loc": {
-                                    "start": {
-                                        "line": 1,
-                                        "column": 5
-                                    },
-                                    "end": {
-                                        "line": 1,
-                                        "column": 16
-                                    }
-                                }
-                            },
-                            "computed": false,
-                            "value": {
-                                "type": "Literal",
-                                "value": 2,
-                                "raw": "2",
-                                "range": [
-                                    18,
-                                    19
-                                ],
-                                "loc": {
-                                    "start": {
-                                        "line": 1,
-                                        "column": 18
-                                    },
-                                    "end": {
-                                        "line": 1,
-                                        "column": 19
-                                    }
-                                }
-                            },
-                            "kind": "init",
-                            "method": false,
-                            "shorthand": false,
-                            "range": [
-                                5,
-                                19
-                            ],
-                            "loc": {
-                                "start": {
-                                    "line": 1,
-                                    "column": 5
-                                },
-                                "end": {
-                                    "line": 1,
-                                    "column": 19
-                                }
-                            }
-                        }
-                    ],
-                    "range": [
-                        4,
-                        21
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 4
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 21
-                        }
-                    }
-                },
-                "range": [
-                    0,
-                    21
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 21
-                    }
-                }
-            },
-            "range": [
-                0,
-                21
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 21
-                }
-            }
-        }
-    ],
     "range": [
         0,
         21
@@ -146,5 +12,140 @@
             "line": 1,
             "column": 21
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                21
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 21
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    0,
+                    21
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 21
+                    }
+                },
+                "type": "AssignmentExpression",
+                "operator": "=",
+                "left": {
+                    "range": [
+                        0,
+                        1
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 1
+                        }
+                    },
+                    "type": "Identifier",
+                    "name": "x"
+                },
+                "right": {
+                    "range": [
+                        4,
+                        21
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 21
+                        }
+                    },
+                    "type": "ObjectExpression",
+                    "properties": [
+                        {
+                            "range": [
+                                5,
+                                19
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 5
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 19
+                                }
+                            },
+                            "type": "Property",
+                            "key": {
+                                "range": [
+                                    5,
+                                    16
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 5
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 16
+                                    }
+                                },
+                                "type": "Literal",
+                                "value": "__proto__",
+                                "raw": "\"__proto__\""
+                            },
+                            "computed": false,
+                            "value": {
+                                "range": [
+                                    18,
+                                    19
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 18
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 19
+                                    }
+                                },
+                                "type": "Literal",
+                                "value": 2,
+                                "raw": "2"
+                            },
+                            "kind": "init",
+                            "method": false,
+                            "shorthand": false
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "sourceType": "script"
 }

@@ -565,5 +565,6 @@
                 "expression": true
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }

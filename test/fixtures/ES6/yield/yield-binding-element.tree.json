@@ -146,5 +146,6 @@
             ],
             "kind": "var"
         }
-    ]
+    ],
+    "sourceType": "script"
 }

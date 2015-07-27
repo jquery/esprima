@@ -182,5 +182,6 @@
             ],
             "kind": "var"
         }
-    ]
+    ],
+    "sourceType": "script"
 }

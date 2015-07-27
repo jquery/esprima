@@ -1,6 +1,1 @@
-{
-    "index": 11,
-    "lineNumber": 1,
-    "column": 12,
-    "message": "Error: Line 1: Invalid left-hand side in for-in"
-}
+{"index":11,"lineNumber":1,"column":12,"message":"Error: Line 1: Invalid left-hand side in for-in","description":"Invalid left-hand side in for-in"}

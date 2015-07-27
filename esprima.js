@@ -2132,13 +2132,10 @@
             return this;
         },
 
-        finishProgram: function (body) {
+        finishProgram: function (body, sourceType) {
             this.type = Syntax.Program;
             this.body = body;
-            if (sourceType === 'module') {
-                // very restrictive for now
-                this.sourceType = sourceType;
-            }
+            this.sourceType = sourceType;
             this.finish();
             return this;
         },
@@ -5400,7 +5397,7 @@
         node = new Node();
 
         body = parseScriptBody();
-        return node.finishProgram(body);
+        return node.finishProgram(body, sourceType);
     }
 
     function filterTokenLocation() {

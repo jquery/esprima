@@ -72,5 +72,6 @@
                 "expression": false
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }

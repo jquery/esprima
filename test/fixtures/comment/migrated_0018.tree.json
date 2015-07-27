@@ -1,83 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "Literal",
-                "value": 42,
-                "raw": "42",
-                "range": [
-                    17,
-                    19
-                ],
-                "loc": {
-                    "start": {
-                        "line": 2,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 2,
-                        "column": 2
-                    }
-                }
-            },
-            "leadingComments": [
-                {
-                    "type": "Line",
-                    "value": " Hello, world!",
-                    "range": [
-                        0,
-                        16
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 0
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 16
-                        }
-                    }
-                }
-            ],
-            "range": [
-                17,
-                19
-            ],
-            "loc": {
-                "start": {
-                    "line": 2,
-                    "column": 0
-                },
-                "end": {
-                    "line": 2,
-                    "column": 2
-                }
-            }
-        }
-    ],
-    "comments": [
-        {
-            "type": "Line",
-            "value": " Hello, world!",
-            "range": [
-                0,
-                16
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 16
-                }
-            }
-        }
-    ],
     "range": [
         17,
         19
@@ -91,5 +12,45 @@
             "line": 2,
             "column": 2
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                17,
+                19
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 0
+                },
+                "end": {
+                    "line": 2,
+                    "column": 2
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    17,
+                    19
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 2
+                    }
+                },
+                "type": "Literal",
+                "value": 42,
+                "raw": "42"
+            }
+        }
+    ],
+    "sourceType": "script"
 }

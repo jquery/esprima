@@ -108,5 +108,6 @@
                 "expression": false
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }

@@ -91,5 +91,6 @@
                 "expression": false
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }

@@ -3,6 +3,16 @@
         5,
         35
     ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 5
+        },
+        "end": {
+            "line": 1,
+            "column": 35
+        }
+    },
     "type": "Program",
     "body": [
         {
@@ -10,12 +20,32 @@
                 5,
                 35
             ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 5
+                },
+                "end": {
+                    "line": 1,
+                    "column": 35
+                }
+            },
             "type": "FunctionDeclaration",
             "id": {
                 "range": [
                     14,
                     15
                 ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 15
+                    }
+                },
                 "type": "Identifier",
                 "name": "a"
             },
@@ -26,6 +56,16 @@
                     18,
                     35
                 ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 18
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 35
+                    }
+                },
                 "type": "BlockStatement",
                 "body": [
                     {
@@ -33,12 +73,32 @@
                             19,
                             34
                         ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 19
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 34
+                            }
+                        },
                         "type": "FunctionDeclaration",
                         "id": {
                             "range": [
                                 28,
                                 29
                             ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 28
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 29
+                                }
+                            },
                             "type": "Identifier",
                             "name": "o"
                         },
@@ -49,6 +109,16 @@
                                 32,
                                 34
                             ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 32
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 34
+                                }
+                            },
                             "type": "BlockStatement",
                             "body": []
                         },
@@ -58,27 +128,8 @@
                 ]
             },
             "generator": false,
-            "expression": false,
-            "leadingComments": [
-                {
-                    "type": "Block",
-                    "value": "",
-                    "range": [
-                        0,
-                        4
-                    ]
-                }
-            ]
+            "expression": false
         }
     ],
-    "comments": [
-        {
-            "type": "Block",
-            "value": "",
-            "range": [
-                0,
-                4
-            ]
-        }
-    ]
+    "sourceType": "script"
 }

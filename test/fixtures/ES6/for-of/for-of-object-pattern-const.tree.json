@@ -238,5 +238,6 @@
                 "type": "EmptyStatement"
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }

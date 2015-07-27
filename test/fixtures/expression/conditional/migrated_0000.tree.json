@@ -1,97 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "ConditionalExpression",
-                "test": {
-                    "type": "Identifier",
-                    "name": "y",
-                    "range": [
-                        0,
-                        1
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 0
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 1
-                        }
-                    }
-                },
-                "consequent": {
-                    "type": "Literal",
-                    "value": 1,
-                    "raw": "1",
-                    "range": [
-                        4,
-                        5
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 4
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 5
-                        }
-                    }
-                },
-                "alternate": {
-                    "type": "Literal",
-                    "value": 2,
-                    "raw": "2",
-                    "range": [
-                        8,
-                        9
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 8
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 9
-                        }
-                    }
-                },
-                "range": [
-                    0,
-                    9
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 9
-                    }
-                }
-            },
-            "range": [
-                0,
-                9
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 9
-                }
-            }
-        }
-    ],
     "range": [
         0,
         9
@@ -105,5 +12,99 @@
             "line": 1,
             "column": 9
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                9
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 9
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    0,
+                    9
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 9
+                    }
+                },
+                "type": "ConditionalExpression",
+                "test": {
+                    "range": [
+                        0,
+                        1
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 1
+                        }
+                    },
+                    "type": "Identifier",
+                    "name": "y"
+                },
+                "consequent": {
+                    "range": [
+                        4,
+                        5
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 5
+                        }
+                    },
+                    "type": "Literal",
+                    "value": 1,
+                    "raw": "1"
+                },
+                "alternate": {
+                    "range": [
+                        8,
+                        9
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 8
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 9
+                        }
+                    },
+                    "type": "Literal",
+                    "value": 2,
+                    "raw": "2"
+                }
+            }
+        }
+    ],
+    "sourceType": "script"
 }

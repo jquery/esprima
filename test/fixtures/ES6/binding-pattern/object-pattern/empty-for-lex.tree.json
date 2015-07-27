@@ -125,5 +125,6 @@
             },
             "each": false
         }
-    ]
+    ],
+    "sourceType": "script"
 }

@@ -200,5 +200,6 @@
                 "type": "EmptyStatement"
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }

@@ -146,5 +146,6 @@
                 "expression": true
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }

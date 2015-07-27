@@ -89,5 +89,6 @@
                 "expression": false
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }
