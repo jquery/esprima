@@ -79,6 +79,7 @@
         "travis": "npm test && npm run coveralls && npm run downstream",
 
         "generate-regex": "node tools/generate-identifier-regex.js",
-        "generate-fixtures": "node tools/generate-fixtures.js"
+        "generate-fixtures": "node tools/generate-fixtures.js",
+        "generate-testcase": "node tools/generate-testcase.js"
     }
 }

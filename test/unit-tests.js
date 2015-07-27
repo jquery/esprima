@@ -345,25 +345,6 @@ function testAPI(esprima, code, expected) {
     }
 }
 
-function generateTestCase(esprima, testCase) {
-    var tree, fileName = testCase.key + ".tree.json";
-    try {
-        tree = esprima.parse(testCase.case, {loc: true, range: true});
-        tree = JSON.stringify(tree, null, 4);
-    } catch (e) {
-        if (typeof e.index === 'undefined') {
-            console.error("Failed to generate test result.");
-            throw e;
-        }
-        tree = errorToObject(e);
-        tree.description = e.description;
-        tree = JSON.stringify(tree);
-        fileName = testCase.key + ".failure.json";
-    }
-    require('fs').writeFileSync(fileName, tree);
-    console.error("Done.");
-}
-
 
 function enumerateFixtures(root) {
     var dirs = fs.readdirSync(root), key, kind,
@@ -417,7 +398,6 @@ Object.keys(cases).forEach(function (key) {
                 testAPI(esprima, testCase.run, JSON.parse(testCase.result));
             } else {
                 console.error('Incomplete test case:' + testCase.key + '. Generating test result...');
-                generateTestCase(esprima, testCase);
             }
         } catch (e) {
             if (!e.expected) {
@@ -454,4 +434,3 @@ if (failures.length) {
     console.log(header);
 }
 process.exit(failures.length === 0 ? 0 : 1);
-
