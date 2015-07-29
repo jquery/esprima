@@ -8,6 +8,7 @@ module.exports = function(config) {
       'node_modules/lodash/index.js',
       'test/dist/fixtures_js.js',
       'test/dist/fixtures_json.js',
+      'test/utils/create-testcases.js',
       'test/utils/evaluate-testcase.js',
       'test/browser-tests.js',
     ],

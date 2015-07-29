@@ -25,92 +25,6 @@
 'use strict';
 
 /**
- * Reads jsFixtures and jsonFixtures into cases dictionary
- */
-function createTestCases(jsFixtures, jsonFixtures) {
-    var cases = {};
-
-    function addCase(key, kind, item) {
-        if (!cases[key]) {
-            cases[key] = { key: key };
-        }
-
-        cases[key][kind] = item;
-    }
-
-    function addJsonFixture(value, filePath) {
-        /**
-         * Determines which type of test it is based on the filepath
-         */
-        function getType() {
-            return _(['module', 'tree', 'tokens', 'failure', 'result']).find(function (type) {
-                var suffix = '.' + type;
-                return (filePath.slice(-suffix.length) === suffix);
-            });
-        }
-
-        function getKey() {
-            return filePath.slice(0, -getType().length - 1)
-        }
-
-        function getValue() {
-            return value;
-        }
-
-        return addCase(getKey(), getType(), getValue());
-    }
-
-    function addJSFixture(value, filePath) {
-        /**
-         * checks to see if filepath is a run or source type.
-         */
-        function checkType(type) {
-            var suffix = '.' + type;
-            return filePath.slice(-suffix.length) === suffix
-        }
-
-        /**
-         * builds a case key by stripping away the type
-         */
-        function getKey(type) {
-            return filePath.slice(0, -type.length - 1)
-        }
-
-        /**
-         * returns the js test case.
-         * In the case of source tests, the input needs to be evaluated.
-         */
-        function getValue(value, shouldEval) {
-            var source, newValue;
-
-            if (shouldEval) {
-                // strip away the `var` in `var source = "foo"`.
-                eval(value.substring(4));
-                newValue = source;
-            } else {
-                newValue = value;
-            }
-
-            return newValue;
-        }
-
-        if (checkType('run')) {
-            return addCase(getKey('run'), 'run', getValue(value));
-        }
-
-        if (checkType('source')) {
-            return addCase(getKey('source'), 'source', getValue(value, true));
-        }
-
-        return addCase(filePath, 'case', getValue(value));
-    }
-
-    _.each(jsFixtures, addJSFixture);
-    _.each(jsonFixtures, addJsonFixture);
-    return cases;
-}
-
-/**
  * Loops over the test cases and uses mocha `describe` and `it`
  * to run through the tests.
  */
@@ -164,7 +78,7 @@ function browserRunner(cases) {
                     evaluateTestCase(testCase);
                 });
             });
-        })
+        });
 
         // Create `describe` for test directories
         testDirectory = _.omit(tree, _.isNull);
@@ -179,5 +93,7 @@ function browserRunner(cases) {
     describeTests(buildTree(_.keys(cases)), '');
 }
 
-var cases = createTestCases(window.fixtures_js, window.fixtures_json);
+var evaluateTestCase = window.evaluateTestCase,
+    cases = createTestCases();
+
 browserRunner(cases);

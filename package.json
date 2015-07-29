@@ -69,7 +69,7 @@
     "unit-tests": "node test/unit-tests.js",
     "grammar-tests": "node test/grammar-tests.js",
     "regression-tests": "node test/regression-tests.js",
-    "tests": "npm run unit-tests && npm run grammar-tests && npm run regression-tests",
+    "tests": "npm run generate-fixtures && npm run unit-tests && npm run grammar-tests && npm run regression-tests",
     "generate-fixtures": "node tools/generate-fixtures.js",
     "browser-tests": "npm run generate-fixtures && karma start --single-run",
     "analyze-coverage": "istanbul cover test/unit-tests.js",
