@@ -42,7 +42,7 @@
     "everything.js": "~1.0.3",
     "glob": "^5.0.14",
     "istanbul": "~0.3.16",
-    "jscs": "~1.13.1",
+    "jscs": "~2.0.0",
     "json-diff": "~0.3.1",
     "karma": "^0.13.3",
     "karma-chrome-launcher": "^0.2.0",
