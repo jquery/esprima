@@ -1,7 +1,7 @@
 **Esprima** ([esprima.org](http://esprima.org), BSD license) is a high performance,
 standard-compliant [ECMAScript](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
 parser written in ECMAScript (also popularly known as
-[JavaScript](https://en.wikipedia.org/wiki/JavaScript).
+[JavaScript](https://en.wikipedia.org/wiki/JavaScript)).
 Esprima is created and maintained by [Ariya Hidayat](https://twitter.com/ariyahidayat),
 with the help of [many contributors](https://github.com/jquery/esprima/contributors).
 
