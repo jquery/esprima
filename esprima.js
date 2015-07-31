@@ -3824,10 +3824,10 @@
             delegate = match('*');
             if (delegate) {
                 lex();
-                argument = parseExpression();
+                argument = parseAssignmentExpression();
             } else {
                 if (!match(';') && !match('}') && !match(')') && lookahead.type !== Token.EOF) {
-                    argument = parseExpression();
+                    argument = parseAssignmentExpression();
                 }
             }
             state.allowYield = previousAllowYield;
