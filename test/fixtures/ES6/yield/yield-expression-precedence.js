@@ -1,1 +1,1 @@
-function *g() { yield a=b, c }
+function *g() { yield a=b, yield* c=d, e }
