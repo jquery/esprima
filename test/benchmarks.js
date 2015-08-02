@@ -73,10 +73,11 @@ function runTests(tests) {
             tree.push(syntax.body.length);
         }, {
             'onComplete': function (event) {
+                var result;
                 if (typeof gc === 'function') {
                     gc();
                 }
-                var result = pad(this.name, 20);
+                result = pad(this.name, 20);
                 result += pad(kb(size) + ' KiB', 12);
                 result += pad((1000 * this.stats.mean).toFixed(2), 10);
                 result += ' ms \xb1 ' + this.stats.rme.toFixed(2) + '%';

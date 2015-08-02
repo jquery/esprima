@@ -62,7 +62,7 @@
   ],
   "scripts": {
     "check-version": "node test/check-version.js",
-    "jscs": "jscs esprima.js && jscs test/*.js",
+    "jscs": "jscs -p crockford esprima.js && jscs -p crockford test/*.js",
     "eslint": "node node_modules/eslint/bin/eslint.js -c .lintrc esprima.js",
     "complexity": "node test/check-complexity.js",
     "static-analysis": "npm run check-version && npm run jscs && npm run eslint && npm run complexity",
