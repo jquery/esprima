@@ -1420,8 +1420,8 @@
     }
 
     function scanRegExp() {
-        scanning = true;
         var start, body, flags, value;
+        scanning = true;
 
         lookahead = null;
         skipComment();
@@ -2246,7 +2246,7 @@
             this.type = Syntax.TryStatement;
             this.block = block;
             this.guardedHandlers = [];
-            this.handlers = handler ? [ handler ] : [];
+            this.handlers = handler ? [handler] : [];
             this.handler = handler;
             this.finalizer = finalizer;
             this.finish();
@@ -3076,7 +3076,7 @@
         var quasi, quasis, expressions, node = new Node();
 
         quasi = parseTemplateElement({ head: true });
-        quasis = [ quasi ];
+        quasis = [quasi];
         expressions = [];
 
         while (!quasi.tail) {

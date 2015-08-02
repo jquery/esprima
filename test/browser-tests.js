@@ -24,6 +24,8 @@
 
 'use strict';
 
+var evaluateTestCase, cases;
+
 /**
  * Loops over the test cases and uses mocha `describe` and `it`
  * to run through the tests.
@@ -93,7 +95,7 @@ function browserRunner(cases) {
     describeTests(buildTree(_.keys(cases)), '');
 }
 
-var evaluateTestCase = window.evaluateTestCase,
-    cases = createTestCases();
+evaluateTestCase = window.evaluateTestCase;
+cases = createTestCases();
 
 browserRunner(cases);

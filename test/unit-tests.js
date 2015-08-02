@@ -73,9 +73,10 @@ header = total + ' tests. ' + failures.length + ' failures. ' + tick + ' ms';
 if (failures.length) {
     console.error(header);
     failures.forEach(function (failure) {
+       var expectedObject, actualObject;
        try {
-           var expectedObject = JSON.parse(failure.expected),
-               actualObject = JSON.parse(failure.actual);
+           expectedObject = JSON.parse(failure.expected);
+           actualObject = JSON.parse(failure.actual);
 
            console.error(failure.source + ': Expected\n    ' +
                failure.expected.split('\n').join('\n    ') +
