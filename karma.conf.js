@@ -1,7 +1,10 @@
 module.exports = function(config) {
   config.set({
     basePath: '',
-    frameworks: ['mocha'],
+    frameworks: [
+        'mocha',
+        'detectBrowsers'
+    ],
 
     files: [
       'esprima.js',
@@ -30,7 +33,19 @@ module.exports = function(config) {
     autoWatch: true,
     singleRun: false,
 
-    browsers: ['Chrome'], // ['PhantomJS'],
+    detectBrowsers: {
+      enabled: true,
+      usePhantomJS: false
+    },
+
+    plugins: [
+        'karma-mocha',
+        'karma-chrome-launcher',
+        'karma-firefox-launcher',
+        'karma-ie-launcher',
+        'karma-safari-launcher',
+        'karma-detect-browsers'
+    ]
 
   });
 }
