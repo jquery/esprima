@@ -3,7 +3,7 @@
       * Run the test suite in a browser environment (issue 1004)
       * Ensure a comma between imported default binding and named imports (issue 1046)
       * Distinguish `yield` as a keyword vs an identifier (issue 1186)
-      * Support ES5 meta property `new.target` (issue 1203)
+      * Support ES6 meta property `new.target` (issue 1203)
       * Fix the syntax node for yield with expression (issue 1223)
       * Fix the check of duplicated proto in property names (issue 1225)
       * Fix ES6 Unicode escape in identifier name (issue 1229)
