@@ -24,9 +24,12 @@
 
 'use strict';
 
-var evaluateTestCase = require('./utils/evaluate-testcase'),
+var esprima = require('../esprima'),
+    evaluateTestCase = require('./utils/evaluate-testcase'),
     createTestCases = require('./utils/create-testcases'),
+    errorToObject = require('./utils/error-to-object'),
     fs = require('fs'),
+    path = require('path'),
     diff = require('json-diff').diffString,
     total = 0,
     result,
@@ -36,6 +39,29 @@ var evaluateTestCase = require('./utils/evaluate-testcase'),
     tick = new Date(),
     testCase,
     header;
+
+function generateTestCase(testCase) {
+    var tree, filePath, fileName;
+
+    fileName = testCase.key + ".tree.json";
+    try {
+        tree = esprima.parse(testCase.case, {loc: true, range: true});
+        tree = JSON.stringify(tree, null, 4);
+    } catch (e) {
+        if (typeof e.index === 'undefined') {
+            console.error("Failed to generate test result.");
+            throw e;
+        }
+        tree = errorToObject(e);
+        tree.description = e.description;
+        tree = JSON.stringify(tree);
+        fileName = testCase.key + ".failure.json";
+    }
+
+    filePath = path.join(__dirname, 'fixtures', fileName);
+    fs.writeFileSync(filePath, tree);
+    console.error("Done.");
+}
 
 cases = createTestCases();
 total = Object.keys(cases).length;
@@ -62,7 +88,7 @@ Object.keys(cases).forEach(function (key) {
 
     } else {
         console.error('Incomplete test case:' + testCase.key + '. Generating test result...');
-        generateTestCase();
+        generateTestCase(testCase);
     }
 });
 

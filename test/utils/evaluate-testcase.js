@@ -26,11 +26,14 @@
 
 (function (root, factory) {
     if (typeof module === 'object' && module.exports) {
-        module.exports = factory(require('../../esprima'));
+        module.exports = factory(
+            require('../../esprima'),
+            require('./error-to-object')
+        );
     } else {
-        root.evaluateTestCase = factory(esprima);
+        root.evaluateTestCase = factory(esprima, errorToObject);
     }
-}(this, function (esprima) {
+}(this, function (esprima, errorToObject) {
     function NotMatchingError(expected, actual) {
         Error.call(this, 'Expected ');
         this.expected = expected;
@@ -42,25 +45,6 @@
         if (expected !== actual) {
             throw new NotMatchingError(expected, actual);
         }
-    }
-
-    function errorToObject(e) {
-        'use strict';
-        var msg = e.toString();
-
-        // Opera 9.64 produces an non-standard string in toString().
-        if (msg.substr(0, 6) !== 'Error:') {
-            if (typeof e.message === 'string') {
-                msg = 'Error: ' + e.message;
-            }
-        }
-
-        return {
-            index: e.index,
-            lineNumber: e.lineNumber,
-            column: e.column,
-            message: msg
-        };
     }
 
     function sortedObject(o) {
