@@ -69,6 +69,13 @@
         keys.forEach(function (key) {
             if (o.hasOwnProperty(key)) {
                 result[key] = sortedObject(o[key]);
+
+                // Nullify regex value for ES6 regex flags
+                if (key === 'value' && o.hasOwnProperty('regex')) {
+                    if (o.regex.flags.match(/[uy]/)) {
+                        result[key] = null;
+                    }
+                }
             }
         });
         return result;
