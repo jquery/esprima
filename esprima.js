@@ -1992,6 +1992,11 @@
         finishExpressionStatement: function (expression) {
             this.type = Syntax.ExpressionStatement;
             this.expression = expression;
+
+            if (expression.value == 'use strict') {
+                this.directive = expression.raw;
+            }
+
             this.finish();
             return this;
         },
