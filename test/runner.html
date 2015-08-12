@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <script src="../esprima.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
+
+        <!-- JSON Editor  -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/4.2.1/jsoneditor.css" rel="stylesheet" type="text/css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/4.2.1/jsoneditor.js"></script>
+
+
+        <!-- CODE Mirror -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.6.0/codemirror.css" rel="stylesheet" type="text/css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.6.0/codemirror.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.6.0/mode/javascript/javascript.js"></script>
+
+        <style>
+          .CodeMirror {
+            border-bottom: 1px solid #ccc;
+          }
+
+          #output-tree {
+            height: calc(100% - 110px);
+            margin-top: 10px;
+          }
+        </style>
+    </head>
+    <textarea id="source">x = function() {'use strict'; 2 +2; }</textarea>
+    <div id="output-tree"></div>
+
+    <script>
+      var jsonViewer, jsEditor;
+
+      function updateJsonViewer (editor, char) {
+          var output;
+          try {
+              output = esprima.parse(editor.doc.getValue());
+              jsonViewer.set(output);
+          } catch (e) {
+              output = e.stack;
+          }
+      }
+
+      function setupEditor() {
+        jsEditor = CodeMirror.fromTextArea($('#source').get(0), {
+          mode: "javascript",
+          gutter: true,
+          lineNumbers: true
+        })
+
+        jsEditor.on("keyHandled", updateJsonViewer);
+        jsEditor.setSize('100%', 100);
+        jsEditor.gutter = true;
+      }
+
+      function setupJsonEditor() {
+        jsonViewer = new JSONEditor($("#output-tree").get(0), {
+           mode: 'view'
+        });
+      }
+
+      $(function() {
+        setupEditor();
+        setupJsonEditor();
+        updateJsonViewer(jsEditor);
+      });
+    </script>
+</html>
