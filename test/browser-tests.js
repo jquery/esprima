@@ -59,6 +59,26 @@ function browserRunner(cases) {
         });
     }
 
+    /**
+     * builds a test case name to show in the mocha reporter
+     */
+    function testCaseName(testCase) {
+        var source, testCaseCase;
+
+        source = testCase.source || '';
+        testCaseCase = testCase.case || '';
+
+        // don't include the source in the name if it cannot
+        // be encoded as a URI component.
+        try {
+            encodeURIComponent(source);
+        } catch (e) {
+            source = ''
+        }
+
+        return testCase.key + " - " + source  + testCaseCase;
+    }
+
     function describeTests(tree, path) {
         var tests, testDirectory;
 
@@ -70,13 +90,7 @@ function browserRunner(cases) {
             })
 
             _.each(testCases, function (testCase) {
-                var source, testCaseCase, name;
-
-                source = testCase.source || '';
-                testCaseCase = testCase.case || '';
-                name = testCase.key + " - " + source  + testCaseCase;
-
-                it(name, function () {
+                it(testCaseName(testCase), function () {
                     evaluateTestCase(testCase);
                 });
             });
