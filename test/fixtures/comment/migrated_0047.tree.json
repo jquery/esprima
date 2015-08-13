@@ -3,6 +3,16 @@
         0,
         31
     ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 3,
+            "column": 2
+        }
+    },
     "type": "Program",
     "body": [
         {
@@ -10,12 +20,32 @@
                 0,
                 31
             ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 3,
+                    "column": 2
+                }
+            },
             "type": "ExpressionStatement",
             "expression": {
                 "range": [
                     14,
                     30
                 ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 1
+                    }
+                },
                 "type": "ObjectExpression",
                 "properties": [
                     {
@@ -23,12 +53,32 @@
                             20,
                             28
                         ],
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 12
+                            }
+                        },
                         "type": "Property",
                         "key": {
                             "range": [
                                 20,
                                 22
                             ],
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 4
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 6
+                                }
+                            },
                             "type": "Identifier",
                             "name": "p1"
                         },
@@ -38,6 +88,16 @@
                                 24,
                                 28
                             ],
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 8
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 12
+                                }
+                            },
                             "type": "Literal",
                             "value": null,
                             "raw": "null"
@@ -46,28 +106,9 @@
                         "method": false,
                         "shorthand": false
                     }
-                ],
-                "leadingComments": [
-                    {
-                        "type": "Block",
-                        "value": " comment ",
-                        "range": [
-                            1,
-                            14
-                        ]
-                    }
                 ]
             }
         }
     ],
-    "comments": [
-        {
-            "type": "Block",
-            "value": " comment ",
-            "range": [
-                1,
-                14
-            ]
-        }
-    ]
+    "sourceType": "script"
 }

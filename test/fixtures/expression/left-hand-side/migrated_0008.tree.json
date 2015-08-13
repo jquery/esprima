@@ -1,97 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "CallExpression",
-                "callee": {
-                    "type": "Identifier",
-                    "name": "foo",
-                    "range": [
-                        0,
-                        3
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 0
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 3
-                        }
-                    }
-                },
-                "arguments": [
-                    {
-                        "type": "Identifier",
-                        "name": "bar",
-                        "range": [
-                            4,
-                            7
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 4
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 7
-                            }
-                        }
-                    },
-                    {
-                        "type": "Identifier",
-                        "name": "baz",
-                        "range": [
-                            9,
-                            12
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 9
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 12
-                            }
-                        }
-                    }
-                ],
-                "range": [
-                    0,
-                    13
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 13
-                    }
-                }
-            },
-            "range": [
-                0,
-                13
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 13
-                }
-            }
-        }
-    ],
     "range": [
         0,
         13
@@ -105,5 +12,99 @@
             "line": 1,
             "column": 13
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                13
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 13
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    0,
+                    13
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 13
+                    }
+                },
+                "type": "CallExpression",
+                "callee": {
+                    "range": [
+                        0,
+                        3
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 3
+                        }
+                    },
+                    "type": "Identifier",
+                    "name": "foo"
+                },
+                "arguments": [
+                    {
+                        "range": [
+                            4,
+                            7
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 7
+                            }
+                        },
+                        "type": "Identifier",
+                        "name": "bar"
+                    },
+                    {
+                        "range": [
+                            9,
+                            12
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 9
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 12
+                            }
+                        },
+                        "type": "Identifier",
+                        "name": "baz"
+                    }
+                ]
+            }
+        }
+    ],
+    "sourceType": "script"
 }

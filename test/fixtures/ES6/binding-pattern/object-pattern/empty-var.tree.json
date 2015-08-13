@@ -89,5 +89,6 @@
             ],
             "kind": "var"
         }
-    ]
+    ],
+    "sourceType": "script"
 }

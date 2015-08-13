@@ -85,5 +85,6 @@
                 "type": "EmptyStatement"
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }

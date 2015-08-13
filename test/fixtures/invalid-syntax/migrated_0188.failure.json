@@ -1,6 +1,1 @@
-{
-    "index": 56,
-    "lineNumber": 1,
-    "column": 57,
-    "message": "Error: Line 1: Catch variable may not be eval or arguments in strict mode"
-}
+{"index":56,"lineNumber":1,"column":57,"message":"Error: Line 1: Catch variable may not be eval or arguments in strict mode","description":"Catch variable may not be eval or arguments in strict mode"}

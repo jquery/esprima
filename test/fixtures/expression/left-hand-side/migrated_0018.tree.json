@@ -1,188 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "CallExpression",
-                "callee": {
-                    "type": "MemberExpression",
-                    "computed": false,
-                    "object": {
-                        "type": "MemberExpression",
-                        "computed": false,
-                        "object": {
-                            "type": "MemberExpression",
-                            "computed": false,
-                            "object": {
-                                "type": "Identifier",
-                                "name": "earth",
-                                "range": [
-                                    0,
-                                    5
-                                ],
-                                "loc": {
-                                    "start": {
-                                        "line": 1,
-                                        "column": 0
-                                    },
-                                    "end": {
-                                        "line": 1,
-                                        "column": 5
-                                    }
-                                }
-                            },
-                            "property": {
-                                "type": "Identifier",
-                                "name": "asia",
-                                "range": [
-                                    6,
-                                    10
-                                ],
-                                "loc": {
-                                    "start": {
-                                        "line": 1,
-                                        "column": 6
-                                    },
-                                    "end": {
-                                        "line": 1,
-                                        "column": 10
-                                    }
-                                }
-                            },
-                            "range": [
-                                0,
-                                10
-                            ],
-                            "loc": {
-                                "start": {
-                                    "line": 1,
-                                    "column": 0
-                                },
-                                "end": {
-                                    "line": 1,
-                                    "column": 10
-                                }
-                            }
-                        },
-                        "property": {
-                            "type": "Identifier",
-                            "name": "Indonesia",
-                            "range": [
-                                11,
-                                20
-                            ],
-                            "loc": {
-                                "start": {
-                                    "line": 1,
-                                    "column": 11
-                                },
-                                "end": {
-                                    "line": 1,
-                                    "column": 20
-                                }
-                            }
-                        },
-                        "range": [
-                            0,
-                            20
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 0
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 20
-                            }
-                        }
-                    },
-                    "property": {
-                        "type": "Identifier",
-                        "name": "prepareForElection",
-                        "range": [
-                            21,
-                            39
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 21
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 39
-                            }
-                        }
-                    },
-                    "range": [
-                        0,
-                        39
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 0
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 39
-                        }
-                    }
-                },
-                "arguments": [
-                    {
-                        "type": "Literal",
-                        "value": 2014,
-                        "raw": "2014",
-                        "range": [
-                            40,
-                            44
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 40
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 44
-                            }
-                        }
-                    }
-                ],
-                "range": [
-                    0,
-                    45
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 45
-                    }
-                }
-            },
-            "range": [
-                0,
-                45
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 45
-                }
-            }
-        }
-    ],
     "range": [
         0,
         45
@@ -196,5 +12,190 @@
             "line": 1,
             "column": 45
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                45
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 45
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    0,
+                    45
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 45
+                    }
+                },
+                "type": "CallExpression",
+                "callee": {
+                    "range": [
+                        0,
+                        39
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 39
+                        }
+                    },
+                    "type": "MemberExpression",
+                    "computed": false,
+                    "object": {
+                        "range": [
+                            0,
+                            20
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 0
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 20
+                            }
+                        },
+                        "type": "MemberExpression",
+                        "computed": false,
+                        "object": {
+                            "range": [
+                                0,
+                                10
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 0
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 10
+                                }
+                            },
+                            "type": "MemberExpression",
+                            "computed": false,
+                            "object": {
+                                "range": [
+                                    0,
+                                    5
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 0
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 5
+                                    }
+                                },
+                                "type": "Identifier",
+                                "name": "earth"
+                            },
+                            "property": {
+                                "range": [
+                                    6,
+                                    10
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 10
+                                    }
+                                },
+                                "type": "Identifier",
+                                "name": "asia"
+                            }
+                        },
+                        "property": {
+                            "range": [
+                                11,
+                                20
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 11
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 20
+                                }
+                            },
+                            "type": "Identifier",
+                            "name": "Indonesia"
+                        }
+                    },
+                    "property": {
+                        "range": [
+                            21,
+                            39
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 21
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 39
+                            }
+                        },
+                        "type": "Identifier",
+                        "name": "prepareForElection"
+                    }
+                },
+                "arguments": [
+                    {
+                        "range": [
+                            40,
+                            44
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 40
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 44
+                            }
+                        },
+                        "type": "Literal",
+                        "value": 2014,
+                        "raw": "2014"
+                    }
+                ]
+            }
+        }
+    ],
+    "sourceType": "script"
 }

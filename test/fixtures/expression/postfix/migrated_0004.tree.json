@@ -1,61 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "UpdateExpression",
-                "operator": "++",
-                "argument": {
-                    "type": "Identifier",
-                    "name": "arguments",
-                    "range": [
-                        0,
-                        9
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 0
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 9
-                        }
-                    }
-                },
-                "prefix": false,
-                "range": [
-                    0,
-                    11
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 11
-                    }
-                }
-            },
-            "range": [
-                0,
-                11
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 11
-                }
-            }
-        }
-    ],
     "range": [
         0,
         11
@@ -69,5 +12,63 @@
             "line": 1,
             "column": 11
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                11
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 11
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    0,
+                    11
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 11
+                    }
+                },
+                "type": "UpdateExpression",
+                "operator": "++",
+                "argument": {
+                    "range": [
+                        0,
+                        9
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 9
+                        }
+                    },
+                    "type": "Identifier",
+                    "name": "arguments"
+                },
+                "prefix": false
+            }
+        }
+    ],
+    "sourceType": "script"
 }

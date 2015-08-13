@@ -1,6 +1,1 @@
-{
-    "index": 11,
-    "lineNumber": 1,
-    "column": 12,
-    "message": "Error: Line 1: Unexpected token false"
-}
+{"index":11,"lineNumber":1,"column":12,"message":"Error: Line 1: Unexpected token false","description":"Unexpected token false"}

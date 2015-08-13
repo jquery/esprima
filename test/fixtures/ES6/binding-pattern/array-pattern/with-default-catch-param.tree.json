@@ -270,5 +270,6 @@
             },
             "finalizer": null
         }
-    ]
+    ],
+    "sourceType": "script"
 }

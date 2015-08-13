@@ -127,5 +127,6 @@
                 "expression": true
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }

@@ -466,5 +466,6 @@
             ],
             "kind": "let"
         }
-    ]
+    ],
+    "sourceType": "script"
 }

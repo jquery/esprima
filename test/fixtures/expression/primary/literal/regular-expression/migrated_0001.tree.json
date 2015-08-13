@@ -1,126 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "ArrayExpression",
-                "elements": [
-                    {
-                        "type": "Literal",
-                        "value": {},
-                        "raw": "/q/",
-                        "regex": {
-                            "pattern": "q",
-                            "flags": ""
-                        },
-                        "range": [
-                            1,
-                            4
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 1
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 4
-                            }
-                        }
-                    }
-                ],
-                "range": [
-                    0,
-                    5
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 5
-                    }
-                }
-            },
-            "range": [
-                0,
-                5
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 5
-                }
-            }
-        }
-    ],
-    "tokens": [
-        {
-            "type": "Punctuator",
-            "value": "[",
-            "range": [
-                0,
-                1
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 1
-                }
-            }
-        },
-        {
-            "type": "RegularExpression",
-            "value": "/q/",
-            "regex": {
-                "pattern": "q",
-                "flags": ""
-            },
-            "range": [
-                1,
-                4
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 1
-                },
-                "end": {
-                    "line": 1,
-                    "column": 4
-                }
-            }
-        },
-        {
-            "type": "Punctuator",
-            "value": "]",
-            "range": [
-                4,
-                5
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 4
-                },
-                "end": {
-                    "line": 1,
-                    "column": 5
-                }
-            }
-        }
-    ],
     "range": [
         0,
         5
@@ -134,5 +12,68 @@
             "line": 1,
             "column": 5
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                5
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 5
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    0,
+                    5
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 5
+                    }
+                },
+                "type": "ArrayExpression",
+                "elements": [
+                    {
+                        "range": [
+                            1,
+                            4
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 1
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 4
+                            }
+                        },
+                        "type": "Literal",
+                        "value": {},
+                        "raw": "/q/",
+                        "regex": {
+                            "pattern": "q",
+                            "flags": ""
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "sourceType": "script"
 }

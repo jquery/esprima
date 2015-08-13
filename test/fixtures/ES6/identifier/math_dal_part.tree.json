@@ -71,5 +71,6 @@
             ],
             "kind": "var"
         }
-    ]
+    ],
+    "sourceType": "script"
 }

@@ -1,44 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ForStatement",
-            "init": null,
-            "test": null,
-            "update": null,
-            "body": {
-                "type": "EmptyStatement",
-                "range": [
-                    7,
-                    8
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 7
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 8
-                    }
-                }
-            },
-            "range": [
-                0,
-                8
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 8
-                }
-            }
-        }
-    ],
     "range": [
         0,
         8
@@ -52,5 +12,46 @@
             "line": 1,
             "column": 8
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                8
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 8
+                }
+            },
+            "type": "ForStatement",
+            "init": null,
+            "test": null,
+            "update": null,
+            "body": {
+                "range": [
+                    7,
+                    8
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 7
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 8
+                    }
+                },
+                "type": "EmptyStatement"
+            }
+        }
+    ],
+    "sourceType": "script"
 }

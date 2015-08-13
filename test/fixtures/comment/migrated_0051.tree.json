@@ -3,6 +3,16 @@
         0,
         51
     ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 4,
+            "column": 2
+        }
+    },
     "type": "Program",
     "body": [
         {
@@ -10,12 +20,32 @@
                 0,
                 51
             ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 4,
+                    "column": 2
+                }
+            },
             "type": "ExpressionStatement",
             "expression": {
                 "range": [
                     14,
                     50
                 ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 1
+                    }
+                },
                 "type": "ObjectExpression",
                 "properties": [
                     {
@@ -23,12 +53,32 @@
                             40,
                             48
                         ],
+                        "loc": {
+                            "start": {
+                                "line": 3,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 3,
+                                "column": 12
+                            }
+                        },
                         "type": "Property",
                         "key": {
                             "range": [
                                 40,
                                 42
                             ],
+                            "loc": {
+                                "start": {
+                                    "line": 3,
+                                    "column": 4
+                                },
+                                "end": {
+                                    "line": 3,
+                                    "column": 6
+                                }
+                            },
                             "type": "Identifier",
                             "name": "p1"
                         },
@@ -38,54 +88,27 @@
                                 44,
                                 48
                             ],
+                            "loc": {
+                                "start": {
+                                    "line": 3,
+                                    "column": 8
+                                },
+                                "end": {
+                                    "line": 3,
+                                    "column": 12
+                                }
+                            },
                             "type": "Literal",
                             "value": null,
                             "raw": "null"
                         },
                         "kind": "init",
                         "method": false,
-                        "shorthand": false,
-                        "leadingComments": [
-                            {
-                                "type": "Block",
-                                "value": " comment 2 ",
-                                "range": [
-                                    20,
-                                    35
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "leadingComments": [
-                    {
-                        "type": "Block",
-                        "value": " comment ",
-                        "range": [
-                            1,
-                            14
-                        ]
+                        "shorthand": false
                     }
                 ]
             }
         }
     ],
-    "comments": [
-        {
-            "type": "Block",
-            "value": " comment ",
-            "range": [
-                1,
-                14
-            ]
-        },
-        {
-            "type": "Block",
-            "value": " comment 2 ",
-            "range": [
-                20,
-                35
-            ]
-        }
-    ]
+    "sourceType": "script"
 }

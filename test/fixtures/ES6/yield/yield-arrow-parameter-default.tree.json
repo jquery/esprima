@@ -110,5 +110,6 @@
                 "expression": false
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }

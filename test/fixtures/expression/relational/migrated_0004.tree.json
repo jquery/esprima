@@ -1,78 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "BinaryExpression",
-                "operator": "in",
-                "left": {
-                    "type": "Identifier",
-                    "name": "x",
-                    "range": [
-                        0,
-                        1
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 0
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 1
-                        }
-                    }
-                },
-                "right": {
-                    "type": "Identifier",
-                    "name": "y",
-                    "range": [
-                        5,
-                        6
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 5
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 6
-                        }
-                    }
-                },
-                "range": [
-                    0,
-                    6
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 6
-                    }
-                }
-            },
-            "range": [
-                0,
-                6
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 6
-                }
-            }
-        }
-    ],
     "range": [
         0,
         6
@@ -86,5 +12,80 @@
             "line": 1,
             "column": 6
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                6
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 6
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    0,
+                    6
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 6
+                    }
+                },
+                "type": "BinaryExpression",
+                "operator": "in",
+                "left": {
+                    "range": [
+                        0,
+                        1
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 1
+                        }
+                    },
+                    "type": "Identifier",
+                    "name": "x"
+                },
+                "right": {
+                    "range": [
+                        5,
+                        6
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 5
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 6
+                        }
+                    },
+                    "type": "Identifier",
+                    "name": "y"
+                }
+            }
+        }
+    ],
+    "sourceType": "script"
 }

@@ -1,64 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "FunctionDeclaration",
-            "id": {
-                "type": "Identifier",
-                "name": "arguments",
-                "range": [
-                    9,
-                    18
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 9
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 18
-                    }
-                }
-            },
-            "params": [],
-            "defaults": [],
-            "body": {
-                "type": "BlockStatement",
-                "body": [],
-                "range": [
-                    21,
-                    24
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 21
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 24
-                    }
-                }
-            },
-            "generator": false,
-            "expression": false,
-            "range": [
-                0,
-                24
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 24
-                }
-            }
-        }
-    ],
     "range": [
         0,
         24
@@ -72,5 +12,66 @@
             "line": 1,
             "column": 24
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                24
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 24
+                }
+            },
+            "type": "FunctionDeclaration",
+            "id": {
+                "range": [
+                    9,
+                    18
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 18
+                    }
+                },
+                "type": "Identifier",
+                "name": "arguments"
+            },
+            "params": [],
+            "defaults": [],
+            "body": {
+                "range": [
+                    21,
+                    24
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 21
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 24
+                    }
+                },
+                "type": "BlockStatement",
+                "body": []
+            },
+            "generator": false,
+            "expression": false
+        }
+    ],
+    "sourceType": "script"
 }

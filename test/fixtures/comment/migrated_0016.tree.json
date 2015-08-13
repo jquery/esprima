@@ -1,43 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "Literal",
-                "value": 42,
-                "raw": "42",
-                "range": [
-                    16,
-                    18
-                ],
-                "loc": {
-                    "start": {
-                        "line": 2,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 2,
-                        "column": 2
-                    }
-                }
-            },
-            "range": [
-                16,
-                18
-            ],
-            "loc": {
-                "start": {
-                    "line": 2,
-                    "column": 0
-                },
-                "end": {
-                    "line": 2,
-                    "column": 2
-                }
-            }
-        }
-    ],
     "range": [
         16,
         18
@@ -51,5 +12,45 @@
             "line": 2,
             "column": 2
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                16,
+                18
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 0
+                },
+                "end": {
+                    "line": 2,
+                    "column": 2
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    16,
+                    18
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 2
+                    }
+                },
+                "type": "Literal",
+                "value": 42,
+                "raw": "42"
+            }
+        }
+    ],
+    "sourceType": "script"
 }

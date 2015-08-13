@@ -145,5 +145,6 @@
             "generator": false,
             "expression": false
         }
-    ]
+    ],
+    "sourceType": "script"
 }

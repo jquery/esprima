@@ -1,79 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "AssignmentExpression",
-                "operator": "-=",
-                "left": {
-                    "type": "Identifier",
-                    "name": "x",
-                    "range": [
-                        0,
-                        1
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 0
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 1
-                        }
-                    }
-                },
-                "right": {
-                    "type": "Literal",
-                    "value": 42,
-                    "raw": "42",
-                    "range": [
-                        5,
-                        7
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 5
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 7
-                        }
-                    }
-                },
-                "range": [
-                    0,
-                    7
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 7
-                    }
-                }
-            },
-            "range": [
-                0,
-                7
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 7
-                }
-            }
-        }
-    ],
     "range": [
         0,
         7
@@ -87,5 +12,81 @@
             "line": 1,
             "column": 7
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                7
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 7
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    0,
+                    7
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 7
+                    }
+                },
+                "type": "AssignmentExpression",
+                "operator": "-=",
+                "left": {
+                    "range": [
+                        0,
+                        1
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 1
+                        }
+                    },
+                    "type": "Identifier",
+                    "name": "x"
+                },
+                "right": {
+                    "range": [
+                        5,
+                        7
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 5
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 7
+                        }
+                    },
+                    "type": "Literal",
+                    "value": 42,
+                    "raw": "42"
+                }
+            }
+        }
+    ],
+    "sourceType": "script"
 }

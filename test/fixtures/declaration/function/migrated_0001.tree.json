@@ -1,64 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "FunctionDeclaration",
-            "id": {
-                "type": "Identifier",
-                "name": "eval",
-                "range": [
-                    9,
-                    13
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 9
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 13
-                    }
-                }
-            },
-            "params": [],
-            "defaults": [],
-            "body": {
-                "type": "BlockStatement",
-                "body": [],
-                "range": [
-                    16,
-                    19
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 16
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 19
-                    }
-                }
-            },
-            "generator": false,
-            "expression": false,
-            "range": [
-                0,
-                19
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 19
-                }
-            }
-        }
-    ],
     "range": [
         0,
         19
@@ -72,5 +12,66 @@
             "line": 1,
             "column": 19
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                19
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 19
+                }
+            },
+            "type": "FunctionDeclaration",
+            "id": {
+                "range": [
+                    9,
+                    13
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 13
+                    }
+                },
+                "type": "Identifier",
+                "name": "eval"
+            },
+            "params": [],
+            "defaults": [],
+            "body": {
+                "range": [
+                    16,
+                    19
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 19
+                    }
+                },
+                "type": "BlockStatement",
+                "body": []
+            },
+            "generator": false,
+            "expression": false
+        }
+    ],
+    "sourceType": "script"
 }

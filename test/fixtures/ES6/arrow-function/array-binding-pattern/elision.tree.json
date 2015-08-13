@@ -95,5 +95,6 @@
                 "expression": true
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }

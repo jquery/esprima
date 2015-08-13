@@ -375,5 +375,6 @@
                 "expression": true
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }

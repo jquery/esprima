@@ -1,6 +1,1 @@
-{
-    "index": 39,
-    "lineNumber": 1,
-    "column": 40,
-    "message": "Error: Line 1: Illegal break statement"
-}
+{"index":39,"lineNumber":1,"column":40,"message":"Error: Line 1: Illegal break statement","description":"Illegal break statement"}

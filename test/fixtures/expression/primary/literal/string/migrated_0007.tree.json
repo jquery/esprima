@@ -1,43 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "Literal",
-                "value": "Helloworld",
-                "raw": "\"Hello\\\nworld\"",
-                "range": [
-                    0,
-                    14
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 2,
-                        "column": 6
-                    }
-                }
-            },
-            "range": [
-                0,
-                14
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 2,
-                    "column": 6
-                }
-            }
-        }
-    ],
     "range": [
         0,
         14
@@ -51,5 +12,45 @@
             "line": 2,
             "column": 6
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                14
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 2,
+                    "column": 6
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    0,
+                    14
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 6
+                    }
+                },
+                "type": "Literal",
+                "value": "Helloworld",
+                "raw": "\"Hello\\\nworld\""
+            }
+        }
+    ],
+    "sourceType": "script"
 }

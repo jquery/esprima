@@ -185,5 +185,6 @@
             "generator": true,
             "expression": false
         }
-    ]
+    ],
+    "sourceType": "script"
 }

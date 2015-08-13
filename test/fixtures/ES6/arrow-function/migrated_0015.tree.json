@@ -1,83 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "ArrowFunctionExpression",
-                "id": null,
-                "params": [
-                    {
-                        "type": "Identifier",
-                        "name": "x",
-                        "range": [
-                            1,
-                            2
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 1
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 2
-                            }
-                        }
-                    }
-                ],
-                "defaults": [],
-                "body": {
-                    "type": "Identifier",
-                    "name": "x",
-                    "range": [
-                        6,
-                        7
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 6
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 7
-                        }
-                    }
-                },
-                "generator": false,
-                "expression": true,
-                "range": [
-                    1,
-                    7
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 1
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 7
-                    }
-                }
-            },
-            "range": [
-                0,
-                8
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 8
-                }
-            }
-        }
-    ],
     "range": [
         0,
         8
@@ -91,5 +12,85 @@
             "line": 1,
             "column": 8
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                8
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 8
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    1,
+                    7
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 1
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 7
+                    }
+                },
+                "type": "ArrowFunctionExpression",
+                "id": null,
+                "params": [
+                    {
+                        "range": [
+                            1,
+                            2
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 1
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 2
+                            }
+                        },
+                        "type": "Identifier",
+                        "name": "x"
+                    }
+                ],
+                "defaults": [],
+                "body": {
+                    "range": [
+                        6,
+                        7
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 6
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 7
+                        }
+                    },
+                    "type": "Identifier",
+                    "name": "x"
+                },
+                "generator": false,
+                "expression": true
+            }
+        }
+    ],
+    "sourceType": "script"
 }

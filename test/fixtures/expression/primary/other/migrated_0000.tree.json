@@ -1,61 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "ThisExpression",
-                "range": [
-                    0,
-                    4
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 4
-                    }
-                }
-            },
-            "range": [
-                0,
-                4
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 4
-                }
-            }
-        }
-    ],
-    "tokens": [
-        {
-            "type": "Keyword",
-            "value": "this",
-            "range": [
-                0,
-                4
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 4
-                }
-            }
-        }
-    ],
     "range": [
         0,
         4
@@ -69,5 +12,43 @@
             "line": 1,
             "column": 4
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                4
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 4
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    0,
+                    4
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 4
+                    }
+                },
+                "type": "ThisExpression"
+            }
+        }
+    ],
+    "sourceType": "script"
 }

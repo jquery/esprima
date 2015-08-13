@@ -88,5 +88,6 @@
             ],
             "kind": "let"
         }
-    ]
+    ],
+    "sourceType": "script"
 }

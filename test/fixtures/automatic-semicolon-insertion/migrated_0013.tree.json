@@ -1,96 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "BlockStatement",
-            "body": [
-                {
-                    "type": "ThrowStatement",
-                    "argument": {
-                        "type": "Identifier",
-                        "name": "error",
-                        "range": [
-                            8,
-                            13
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 8
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 13
-                            }
-                        }
-                    },
-                    "range": [
-                        2,
-                        13
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 2
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 13
-                        }
-                    }
-                },
-                {
-                    "type": "ExpressionStatement",
-                    "expression": {
-                        "type": "Identifier",
-                        "name": "error",
-                        "range": [
-                            14,
-                            19
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 2,
-                                "column": 0
-                            },
-                            "end": {
-                                "line": 2,
-                                "column": 5
-                            }
-                        }
-                    },
-                    "range": [
-                        14,
-                        20
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 2,
-                            "column": 0
-                        },
-                        "end": {
-                            "line": 2,
-                            "column": 6
-                        }
-                    }
-                }
-            ],
-            "range": [
-                0,
-                22
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 2,
-                    "column": 8
-                }
-            }
-        }
-    ],
     "range": [
         0,
         22
@@ -104,5 +12,98 @@
             "line": 2,
             "column": 8
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                22
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 2,
+                    "column": 8
+                }
+            },
+            "type": "BlockStatement",
+            "body": [
+                {
+                    "range": [
+                        2,
+                        13
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 2
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 13
+                        }
+                    },
+                    "type": "ThrowStatement",
+                    "argument": {
+                        "range": [
+                            8,
+                            13
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 8
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 13
+                            }
+                        },
+                        "type": "Identifier",
+                        "name": "error"
+                    }
+                },
+                {
+                    "range": [
+                        14,
+                        20
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 2,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 2,
+                            "column": 6
+                        }
+                    },
+                    "type": "ExpressionStatement",
+                    "expression": {
+                        "range": [
+                            14,
+                            19
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 0
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 5
+                            }
+                        },
+                        "type": "Identifier",
+                        "name": "error"
+                    }
+                }
+            ]
+        }
+    ],
+    "sourceType": "script"
 }

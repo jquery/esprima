@@ -1,0 +1,1 @@
+{"index":20,"lineNumber":1,"column":21,"message":"Error: Line 1: Prefix increment/decrement may not have eval or arguments operand in strict mode","description":"Prefix increment/decrement may not have eval or arguments operand in strict mode"}

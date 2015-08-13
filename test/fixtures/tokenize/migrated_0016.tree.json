@@ -1,0 +1,91 @@
+{
+    "range": [
+        0,
+        11
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 11
+        }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                11
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 11
+                }
+            },
+            "type": "ExpressionStatement",
+            "expression": {
+                "range": [
+                    0,
+                    10
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 10
+                    }
+                },
+                "type": "BinaryExpression",
+                "operator": "/",
+                "left": {
+                    "range": [
+                        0,
+                        4
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 4
+                        }
+                    },
+                    "type": "ThisExpression"
+                },
+                "right": {
+                    "range": [
+                        7,
+                        10
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 7
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 10
+                        }
+                    },
+                    "type": "Literal",
+                    "value": 100,
+                    "raw": "100"
+                }
+            }
+        }
+    ],
+    "sourceType": "script"
+}

@@ -1,118 +1,4 @@
 {
-    "type": "Program",
-    "body": [
-        {
-            "type": "FunctionDeclaration",
-            "id": {
-                "type": "Identifier",
-                "name": "hello",
-                "range": [
-                    9,
-                    14
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 9
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 14
-                    }
-                }
-            },
-            "params": [],
-            "defaults": [],
-            "body": {
-                "type": "BlockStatement",
-                "body": [
-                    {
-                        "type": "ExpressionStatement",
-                        "expression": {
-                            "type": "CallExpression",
-                            "callee": {
-                                "type": "Identifier",
-                                "name": "sayHi",
-                                "range": [
-                                    19,
-                                    24
-                                ],
-                                "loc": {
-                                    "start": {
-                                        "line": 1,
-                                        "column": 19
-                                    },
-                                    "end": {
-                                        "line": 1,
-                                        "column": 24
-                                    }
-                                }
-                            },
-                            "arguments": [],
-                            "range": [
-                                19,
-                                26
-                            ],
-                            "loc": {
-                                "start": {
-                                    "line": 1,
-                                    "column": 19
-                                },
-                                "end": {
-                                    "line": 1,
-                                    "column": 26
-                                }
-                            }
-                        },
-                        "range": [
-                            19,
-                            27
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 19
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 27
-                            }
-                        }
-                    }
-                ],
-                "range": [
-                    17,
-                    29
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 17
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 29
-                    }
-                }
-            },
-            "generator": false,
-            "expression": false,
-            "range": [
-                0,
-                29
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 29
-                }
-            }
-        }
-    ],
     "range": [
         0,
         29
@@ -126,5 +12,120 @@
             "line": 1,
             "column": 29
         }
-    }
+    },
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                29
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 29
+                }
+            },
+            "type": "FunctionDeclaration",
+            "id": {
+                "range": [
+                    9,
+                    14
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 14
+                    }
+                },
+                "type": "Identifier",
+                "name": "hello"
+            },
+            "params": [],
+            "defaults": [],
+            "body": {
+                "range": [
+                    17,
+                    29
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 17
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 29
+                    }
+                },
+                "type": "BlockStatement",
+                "body": [
+                    {
+                        "range": [
+                            19,
+                            27
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 19
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 27
+                            }
+                        },
+                        "type": "ExpressionStatement",
+                        "expression": {
+                            "range": [
+                                19,
+                                26
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 19
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 26
+                                }
+                            },
+                            "type": "CallExpression",
+                            "callee": {
+                                "range": [
+                                    19,
+                                    24
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 1,
+                                        "column": 19
+                                    },
+                                    "end": {
+                                        "line": 1,
+                                        "column": 24
+                                    }
+                                },
+                                "type": "Identifier",
+                                "name": "sayHi"
+                            },
+                            "arguments": []
+                        }
+                    }
+                ]
+            },
+            "generator": false,
+            "expression": false
+        }
+    ],
+    "sourceType": "script"
 }
