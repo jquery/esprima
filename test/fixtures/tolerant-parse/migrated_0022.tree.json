@@ -92,6 +92,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "errors": [
         {
             "index": 18,

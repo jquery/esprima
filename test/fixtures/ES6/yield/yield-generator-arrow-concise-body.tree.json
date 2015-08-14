@@ -1,18 +1,4 @@
 {
-    "range": [
-        0,
-        35
-    ],
-    "loc": {
-        "start": {
-            "line": 1,
-            "column": 0
-        },
-        "end": {
-            "line": 1,
-            "column": 35
-        }
-    },
     "type": "Program",
     "body": [
         {
@@ -185,5 +171,20 @@
             "generator": true,
             "expression": false
         }
-    ]
+    ],
+    "sourceType": "script",
+    "range": [
+        0,
+        35
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 35
+        }
+    }
 }

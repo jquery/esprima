@@ -1,6 +1,7 @@
 {
     "type": "Program",
     "body": [],
+    "sourceType": "script",
     "leadingComments": [
         {
             "type": "Line",

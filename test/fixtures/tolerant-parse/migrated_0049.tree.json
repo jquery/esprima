@@ -80,6 +80,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "errors": [
         {
             "index": 17,

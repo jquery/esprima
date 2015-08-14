@@ -8,5 +8,6 @@
                 "name": "test"
             }
         }
-    ]
+    ],
+    "sourceType": "script"
 }

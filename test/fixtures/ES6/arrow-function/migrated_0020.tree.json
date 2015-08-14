@@ -78,6 +78,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "tokens": [
         {
             "type": "Punctuator",

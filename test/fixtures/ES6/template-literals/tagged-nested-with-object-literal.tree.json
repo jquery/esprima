@@ -1,18 +1,4 @@
 {
-    "range": [
-        0,
-        44
-    ],
-    "loc": {
-        "start": {
-            "line": 1,
-            "column": 0
-        },
-        "end": {
-            "line": 1,
-            "column": 44
-        }
-    },
     "type": "Program",
     "body": [
         {
@@ -276,6 +262,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "tokens": [
         {
             "type": "Identifier",
@@ -439,5 +426,19 @@
                 }
             }
         }
-    ]
+    ],
+    "range": [
+        0,
+        44
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 44
+        }
+    }
 }

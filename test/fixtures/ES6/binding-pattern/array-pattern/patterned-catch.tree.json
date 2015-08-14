@@ -1,18 +1,4 @@
 {
-    "range": [
-        0,
-        49
-    ],
-    "loc": {
-        "start": {
-            "line": 1,
-            "column": 0
-        },
-        "end": {
-            "line": 1,
-            "column": 49
-        }
-    },
     "type": "Program",
     "body": [
         {
@@ -942,5 +928,20 @@
             },
             "finalizer": null
         }
-    ]
+    ],
+    "sourceType": "script",
+    "range": [
+        0,
+        49
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 49
+        }
+    }
 }

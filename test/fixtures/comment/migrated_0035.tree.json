@@ -230,6 +230,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "comments": [
         {
             "type": "Block",

@@ -73,6 +73,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "tokens": [
         {
             "type": "Identifier",

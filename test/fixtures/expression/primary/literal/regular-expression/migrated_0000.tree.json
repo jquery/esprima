@@ -42,6 +42,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "tokens": [
         {
             "type": "RegularExpression",

@@ -1,18 +1,4 @@
 {
-    "range": [
-        0,
-        84
-    ],
-    "loc": {
-        "start": {
-            "line": 1,
-            "column": 0
-        },
-        "end": {
-            "line": 4,
-            "column": 25
-        }
-    },
     "type": "Program",
     "body": [
         {
@@ -483,6 +469,7 @@
             "expression": false
         }
     ],
+    "sourceType": "script",
     "errors": [
         {
             "index": 28,
@@ -502,5 +489,19 @@
             "column": 20,
             "message": "Error: Line 4: Strict mode function may not have duplicate parameter names"
         }
-    ]
+    ],
+    "range": [
+        0,
+        84
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 4,
+            "column": 25
+        }
+    }
 }
