@@ -223,6 +223,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "range": [
         0,
         41

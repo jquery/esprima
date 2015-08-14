@@ -75,6 +75,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "range": [
         0,
         17

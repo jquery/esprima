@@ -20,6 +20,7 @@
             "kind": "var"
         }
     ],
+    "sourceType": "script",
     "comments": [
         {
             "type": "Line",

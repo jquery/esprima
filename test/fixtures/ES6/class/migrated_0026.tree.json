@@ -154,6 +154,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "errors": [
         {
             "index": 11,

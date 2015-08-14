@@ -36,6 +36,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "tokens": [
         {
             "type": "Keyword",

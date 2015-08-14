@@ -1,8 +1,4 @@
 {
-    "range": [
-        0,
-        31
-    ],
     "type": "Program",
     "body": [
         {
@@ -60,6 +56,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "comments": [
         {
             "type": "Block",
@@ -69,5 +66,9 @@
                 14
             ]
         }
+    ],
+    "range": [
+        0,
+        31
     ]
 }

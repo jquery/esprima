@@ -30,6 +30,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "tokens": [
         {
             "type": "Numeric",

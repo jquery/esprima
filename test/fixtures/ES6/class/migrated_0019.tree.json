@@ -215,6 +215,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "range": [
         0,
         47

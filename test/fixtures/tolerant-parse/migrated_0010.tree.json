@@ -330,6 +330,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "errors": [
         {
             "index": 28,

@@ -208,6 +208,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "errors": [
         {
             "index": 26,

@@ -74,6 +74,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "errors": [
         {
             "index": 0,

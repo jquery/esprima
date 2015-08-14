@@ -76,6 +76,7 @@
             }
         }
     ],
+    "sourceType": "script",
     "comments": [
         {
             "type": "Line",
