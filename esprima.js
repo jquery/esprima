@@ -48,7 +48,6 @@
         Regex,
         source,
         strict,
-        sourceType,
         index,
         lineNumber,
         lineStart,
@@ -3210,7 +3209,7 @@
         node = new Node();
 
         if (type === Token.Identifier) {
-            if (sourceType === 'module' && lookahead.value === 'await') {
+            if (state.sourceType === 'module' && lookahead.value === 'await') {
                 tolerateUnexpectedToken(lookahead);
             }
             expr = node.finishIdentifier(lex().value);
@@ -3914,12 +3913,12 @@
         if (lookahead.type === Token.Keyword) {
             switch (lookahead.value) {
             case 'export':
-                if (sourceType !== 'module') {
+                if (state.sourceType !== 'module') {
                     tolerateUnexpectedToken(lookahead, Messages.IllegalExportDeclaration);
                 }
                 return parseExportDeclaration();
             case 'import':
-                if (sourceType !== 'module') {
+                if (state.sourceType !== 'module') {
                     tolerateUnexpectedToken(lookahead, Messages.IllegalImportDeclaration);
                 }
                 return parseImportDeclaration();
@@ -3979,7 +3978,7 @@
             } else {
                 throwUnexpectedToken(token);
             }
-        } else if (sourceType === 'module' && token.type === Token.Identifier && token.value === 'await') {
+        } else if (state.sourceType === 'module' && token.type === Token.Identifier && token.value === 'await') {
             tolerateUnexpectedToken(token);
         }
 
@@ -5397,7 +5396,7 @@
         node = new Node();
 
         body = parseScriptBody();
-        return node.finishProgram(body, sourceType);
+        return node.finishProgram(body, state.sourceType);
     }
 
     function filterTokenLocation() {
@@ -5542,9 +5541,9 @@
             inIteration: false,
             inSwitch: false,
             lastCommentStart: -1,
-            curlyStack: []
+            curlyStack: [],
+            sourceType: 'script'
         };
-        sourceType = 'script';
         strict = false;
 
         extra = {};
@@ -5575,7 +5574,7 @@
             }
             if (options.sourceType === 'module') {
                 // very restrictive condition for now
-                sourceType = options.sourceType;
+                state.sourceType = options.sourceType;
                 strict = true;
             }
         }
