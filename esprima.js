@@ -2650,7 +2650,7 @@
 
     // ECMA-262 13.3.3 Destructuring Binding Patterns
 
-    function parseArrayPattern(params) {
+    function parseArrayPattern(params, kind) {
         var node = new Node(), elements = [], rest, restNode;
         expect('[');
 
@@ -2663,11 +2663,11 @@
                     restNode = new Node();
                     lex();
                     params.push(lookahead);
-                    rest = parseVariableIdentifier(params);
+                    rest = parseVariableIdentifier(params, kind);
                     elements.push(restNode.finishRestElement(rest));
                     break;
                 } else {
-                    elements.push(parsePatternWithDefault(params));
+                    elements.push(parsePatternWithDefault(params, kind));
                 }
                 if (!match(']')) {
                     expect(',');
@@ -2681,7 +2681,7 @@
         return node.finishArrayPattern(elements);
     }
 
-    function parsePropertyPattern(params) {
+    function parsePropertyPattern(params, kind) {
         var node = new Node(), key, keyToken, computed = match('['), init;
         if (lookahead.type === Token.Identifier) {
             keyToken = lookahead;
@@ -2699,20 +2699,20 @@
                 return node.finishProperty('init', key, false, key, false, true);
             }
         } else {
-            key = parseObjectPropertyKey(params);
+            key = parseObjectPropertyKey(params, kind);
         }
         expect(':');
-        init = parsePatternWithDefault(params);
+        init = parsePatternWithDefault(params, kind);
         return node.finishProperty('init', key, computed, init, false, false);
     }
 
-    function parseObjectPattern(params) {
+    function parseObjectPattern(params, kind) {
         var node = new Node(), properties = [];
 
         expect('{');
 
         while (!match('}')) {
-            properties.push(parsePropertyPattern(params));
+            properties.push(parsePropertyPattern(params, kind));
             if (!match('}')) {
                 expect(',');
             }
@@ -2723,19 +2723,19 @@
         return node.finishObjectPattern(properties);
     }
 
-    function parsePattern(params) {
+    function parsePattern(params, kind) {
         if (match('[')) {
-            return parseArrayPattern(params);
+            return parseArrayPattern(params, kind);
         } else if (match('{')) {
-            return parseObjectPattern(params);
+            return parseObjectPattern(params, kind);
         }
         params.push(lookahead);
-        return parseVariableIdentifier();
+        return parseVariableIdentifier(kind);
     }
 
-    function parsePatternWithDefault(params) {
+    function parsePatternWithDefault(params, kind) {
         var startToken = lookahead, pattern, previousAllowYield, right;
-        pattern = parsePattern(params);
+        pattern = parsePattern(params, kind);
         if (match('=')) {
             lex();
             previousAllowYield = state.allowYield;
@@ -3966,7 +3966,7 @@
 
     // ECMA-262 13.3.2 Variable Statement
 
-    function parseVariableIdentifier() {
+    function parseVariableIdentifier(kind) {
         var token, node = new Node();
 
         token = lex();
@@ -3981,7 +3981,9 @@
             if (strict && token.type === Token.Keyword && isStrictModeReservedWord(token.value)) {
                 tolerateUnexpectedToken(token, Messages.StrictReservedWord);
             } else {
-                throwUnexpectedToken(token);
+                if (strict || token.value !== 'let' || kind !== 'var') {
+                    throwUnexpectedToken(token);
+                }
             }
         } else if (state.sourceType === 'module' && token.type === Token.Identifier && token.value === 'await') {
             tolerateUnexpectedToken(token);
@@ -3993,7 +3995,7 @@
     function parseVariableDeclaration() {
         var init = null, id, node = new Node(), params = [];
 
-        id = parsePattern(params);
+        id = parsePattern(params, 'var');
 
         // ECMA-262 12.2.1
         if (strict && isRestrictedWord(id.name)) {
@@ -4041,7 +4043,7 @@
     function parseLexicalBinding(kind, options) {
         var init = null, id, node = new Node(), params = [];
 
-        id = parsePattern(params);
+        id = parsePattern(params, kind);
 
         // ECMA-262 12.2.1
         if (strict && id.type === Syntax.Identifier && isRestrictedWord(id.name)) {
