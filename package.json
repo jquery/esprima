@@ -36,7 +36,7 @@
   },
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "coveralls": "~2.11.2",
+    "codecov.io": "~0.1.5",
     "escomplex-js": "1.2.0",
     "eslint": "~0.23.0",
     "everything.js": "~1.0.3",
@@ -83,9 +83,9 @@
     "profile": "node --prof test/profile.js && mv isolate*.log v8.log && node-tick-processor",
     "benchmark": "node test/benchmarks.js",
     "benchmark-quick": "node test/benchmarks.js quick",
-    "coveralls": "coveralls < ./coverage/lcov.info",
+    "codecov": "codecov < ./coverage/lcov.info",
     "downstream": "node test/downstream.js",
-    "travis": "npm test && npm run coveralls && npm run downstream",
+    "travis": "npm test && npm run codecov && npm run downstream",
     "generate-regex": "node tools/generate-identifier-regex.js"
   }
 }
