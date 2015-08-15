@@ -1,0 +1,76 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "range": [
+                0,
+                8
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 8
+                }
+            },
+            "type": "VariableDeclaration",
+            "declarations": [
+                {
+                    "range": [
+                        4,
+                        7
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 7
+                        }
+                    },
+                    "type": "VariableDeclarator",
+                    "id": {
+                        "range": [
+                            4,
+                            7
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 7
+                            }
+                        },
+                        "type": "Identifier",
+                        "name": "let"
+                    },
+                    "init": null
+                }
+            ],
+            "kind": "var"
+        }
+    ],
+    "sourceType": "script",
+    "range": [
+        0,
+        8
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 8
+        }
+    }
+}
