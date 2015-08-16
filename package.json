@@ -83,7 +83,7 @@
     "profile": "node --prof test/profile.js && mv isolate*.log v8.log && node-tick-processor",
     "benchmark": "node test/benchmarks.js",
     "benchmark-quick": "node test/benchmarks.js quick",
-    "codecov": "codecov < ./coverage/lcov.info",
+    "codecov" : "istanbul report cobertura && codecov < ./coverage/cobertura-coverage.xml",
     "downstream": "node test/downstream.js",
     "travis": "npm test && npm run codecov && npm run downstream",
     "generate-regex": "node tools/generate-identifier-regex.js"
