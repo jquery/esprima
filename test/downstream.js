@@ -47,6 +47,7 @@ function test_project(project, repo) {
 
     console.log();
     execute('npm install');
+    execute('npm install -g grunt-cli');
 
     console.log();
     console.log('Replacing esprima.js with a fresh one...');
@@ -92,5 +93,6 @@ test_downstream({
     'escomplex-js': 'https://github.com/philbooth/escomplex-js.git',
     'js2coffee': 'https://github.com/js2coffee/js2coffee.git',
     'jscs': 'https://github.com/jscs-dev/node-jscs.git',
-    'istanbul': 'https://github.com/gotwarlost/istanbul.git'
+    'istanbul': 'https://github.com/gotwarlost/istanbul.git',
+    'jsfmt': 'https://github.com/rdio/jsfmt.git'
 });
