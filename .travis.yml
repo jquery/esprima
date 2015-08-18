@@ -6,4 +6,5 @@ node_js:
   - iojs
   - "0.12"
   - "0.10"
-
+env:
+  - NO_WATCH_TESTS=1
