@@ -2384,12 +2384,30 @@
         extra.errors.push(error);
     }
 
+    function constructError(msg, column) {
+        var error = new Error(msg);
+        try {
+            throw error;
+        } catch (base) {
+            /* istanbul ignore else */
+            if (Object.create && Object.defineProperty) {
+                error = Object.create(base);
+                Object.defineProperty(error, 'column', { value: column });
+            }
+        } finally {
+            return error;
+        }
+    }
+
     function createError(line, pos, description) {
-        var error = new Error('Line ' + line + ': ' + description);
-        error.index = pos;
+        var msg, column, error;
+
+        msg = 'Line ' + line + ': ' + description;
+        column = pos - (scanning ? lineStart : lastLineStart) + 1;
+        error = constructError(msg, column);
         error.lineNumber = line;
-        error.column = pos - (scanning ? lineStart : lastLineStart) + 1;
         error.description = description;
+        error.index = pos;
         return error;
     }
 
