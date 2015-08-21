@@ -40,6 +40,10 @@ function renderFixturesFile(ext, stringify) {
 
         content = fs.readFileSync(filePath, 'utf-8');
         relativeFilePath = path.relative(fixturePath, filePath);
+
+        // On Windows, convert the native separator (backslash) into slash.
+        relativeFilePath = relativeFilePath.split(path.sep).join('/');
+
         key = relativeFilePath.substring(0, relativeFilePath.length - ext.length - 1);
         value = stringify ? JSON.stringify(content) : content;
 
