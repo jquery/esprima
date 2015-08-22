@@ -23,7 +23,9 @@
 */
 
 var child_process = require('child_process'),
-    fs = require('fs');
+    fs = require('fs'),
+    temp = require('temp').track(),
+    source = fs.realpathSync('esprima.js');
 
 function execute(cmd) {
     child_process.execSync(cmd, { stdio: 'inherit' });
@@ -51,7 +53,7 @@ function test_project(project, repo) {
 
     console.log();
     console.log('Replacing esprima.js with a fresh one...');
-    copy_file('../../esprima.js', './node_modules/esprima/esprima.js');
+    copy_file(source, './node_modules/esprima/esprima.js');
 
     console.log();
     try {
@@ -65,7 +67,7 @@ function test_project(project, repo) {
 
 function test_downstream(projects) {
     var nodejs_version = 'v0.12',
-        downstream_path = 'downstream';
+        downstream_path;
 
     if (typeof child_process.execSync !== 'function') {
         console.error('This only works with Node.js that support execSync');
@@ -75,6 +77,9 @@ function test_downstream(projects) {
         console.error('This is intended to run only with Node.js', nodejs_version);
         process.exit(0);
     }
+
+    downstream_path = temp.mkdirSync('downstream');
+    console.log('Running the tests in', downstream_path);
 
     if (!fs.existsSync(downstream_path)) {
         fs.mkdirSync(downstream_path, 0766);

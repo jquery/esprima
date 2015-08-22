@@ -55,6 +55,7 @@
     "mocha": "^2.2.5",
     "node-tick-processor": "~0.0.2",
     "regenerate": "~0.6.2",
+    "temp": "~0.8.3",
     "unicode-7.0.0": "~0.1.5"
   },
   "keywords": [
