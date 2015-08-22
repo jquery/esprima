@@ -87,6 +87,7 @@
     "codecov" : "istanbul report cobertura && codecov < ./coverage/cobertura-coverage.xml",
     "downstream": "node test/downstream.js",
     "travis": "npm test && npm run codecov && npm run downstream",
+    "appveyor": "npm run tests && npm run browser-tests && npm run dynamic-analysis",
     "generate-regex": "node tools/generate-identifier-regex.js"
   }
 }
