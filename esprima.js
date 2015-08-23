@@ -255,14 +255,14 @@
     }
 
     function isOctalDigit(ch) {
-        return '01234567'.indexOf(ch) >= 0;
+        return (ch >= 0x30 && ch <= 0x37);   // 0..7
     }
 
     function octalToDecimal(ch) {
         // \0 is not octal escape sequence
         var octal = (ch !== '0'), code = '01234567'.indexOf(ch);
 
-        if (index < length && isOctalDigit(source[index])) {
+        if (index < length && isOctalDigit(source.charCodeAt(index))) {
             octal = true;
             code = code * 8 + '01234567'.indexOf(source[index++]);
 
@@ -270,7 +270,7 @@
             // with 0, 1, 2, 3
             if ('0123'.indexOf(ch) >= 0 &&
                     index < length &&
-                    isOctalDigit(source[index])) {
+                    isOctalDigit(source.charCodeAt(index))) {
                 code = code * 8 + '01234567'.indexOf(source[index++]);
             }
         }
@@ -914,7 +914,7 @@
     function scanOctalLiteral(prefix, start) {
         var number, octal;
 
-        if (isOctalDigit(prefix)) {
+        if (isOctalDigit(prefix.charCodeAt(0))) {
             octal = true;
             number = '0' + source[index++];
         } else {
@@ -924,7 +924,7 @@
         }
 
         while (index < length) {
-            if (!isOctalDigit(source[index])) {
+            if (!isOctalDigit(source.charCodeAt(index))) {
                 break;
             }
             number += source[index++];
@@ -960,7 +960,7 @@
             if (ch === '8' || ch === '9') {
                 return false;
             }
-            if (!isOctalDigit(ch)) {
+            if (!isOctalDigit(source.charCodeAt(i))) {
                 return true;
             }
         }
@@ -998,7 +998,7 @@
                     return scanOctalLiteral(ch, start);
                 }
 
-                if (isOctalDigit(ch)) {
+                if (isOctalDigit(ch.charCodeAt(0))) {
                     if (isImplicitOctalLiteral()) {
                         return scanOctalLiteral(ch, start);
                     }
@@ -1109,7 +1109,7 @@
                         break;
 
                     default:
-                        if (isOctalDigit(ch)) {
+                        if (isOctalDigit(ch.charCodeAt(0))) {
                             octToDec = octalToDecimal(ch);
 
                             octal = octToDec.octal || octal;
@@ -1222,7 +1222,7 @@
                                 throwError(Messages.TemplateOctalLiteral);
                             }
                             cooked += '\0';
-                        } else if (isOctalDigit(ch)) {
+                        } else if (isOctalDigit(ch.charCodeAt(0))) {
                             // Illegal: \1 \2
                             throwError(Messages.TemplateOctalLiteral);
                         } else {
