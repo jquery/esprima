@@ -1,0 +1,16 @@
+machine:
+  node:
+    version:
+      0.12.0
+  environment:
+    NO_WATCH_TESTS: 1
+
+dependencies:
+  pre:
+    - node --version
+    - npm --version
+    - npm install
+
+test:
+  override:
+    - npm run circleci
