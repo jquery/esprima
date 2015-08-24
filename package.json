@@ -86,7 +86,8 @@
     "benchmark-quick": "node test/benchmarks.js quick",
     "codecov" : "istanbul report cobertura && codecov < ./coverage/cobertura-coverage.xml",
     "downstream": "node test/downstream.js",
-    "travis": "npm test && npm run codecov && npm run downstream",
+    "travis": "npm test",
+    "circleci": "npm test && npm run codecov && npm run downstream",
     "appveyor": "npm run tests && npm run browser-tests && npm run dynamic-analysis",
     "generate-regex": "node tools/generate-identifier-regex.js"
   }
