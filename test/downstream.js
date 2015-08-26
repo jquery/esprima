@@ -49,7 +49,6 @@ function test_project(project, repo) {
 
     console.log();
     execute('npm install');
-    execute('npm install -g grunt-cli');
 
     console.log();
     console.log('Replacing esprima.js with a fresh one...');
