@@ -4,9 +4,8 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Esprima: Function Instrumentation</title>
+  <title>Esprima: Continuous Integration</title>
   <meta name="viewport" content="width=device-width" />
-  <link rel="stylesheet" href="../assets/orion/built-editor.css">
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="../assets/foundation/foundation.min.css">
 </head>
@@ -60,13 +59,13 @@
                 <li><a href="https://codecov.io/github/jquery/esprima">Coverage Analysis</a></li>
               </ul>
             </li>
-              <li class="has-dropdown">
-                  <a href="../doc/index.html">Documentation</a>
-                  <ul class="dropdown">
-                      <li><a href="../doc/index.html">Usage</a></li>
-                      <li><a href="../doc/videos.html">Videos</a></li>
-                  </ul>
-              </li>
+            <li class="has-dropdown">
+              <a href="../doc/index.html">Documentation</a>
+              <ul class="dropdown">
+                <li><a href="../doc/index.html">Usage</a></li>
+                <li><a href="../doc/videos.html">Videos</a></li>
+              </ul>
+            </li>
           </ul>
         </section>
       </nav>
@@ -76,7 +75,7 @@
   <!-- Title and subtitle -->
   <div class="row">
     <div class="twelve columns">
-       <h3 class="subheader"><strong>Function Instrumentation</strong> traces and reveals what is being called</h3>
+      <h3 class="subheader"><strong>Continuous integration</strong> maintains the code quality</h3>
     </div>
   </div>
 
@@ -84,47 +83,46 @@
   <div class="row">
     <div class="eight columns">
 
-<pre id="editor" spellcheck="false" style="height: 350px">
-Array.prototype.swap = function (i, j) {
-    var k = this[i]; this[i] = this[j]; this[j] = k;
-}
+      <h4>Unit tests and regression tests</h4>
+      <p>Thousands of Esprima's unit tests and regression tests are executed in a Node.js environment on Linux using
+      <strong>Travis CI</strong> and on Windows using <strong>AppVeyor</strong>.
+      It is integrated with the pull request workflow of GitHub so that a change that causes one or more failing tests
+      will be flagged appropriately.</p>
+      <p>Travis CI build information of Esprima is available at
+      <a href="../test/ci.html/">travis-ci.org/jquery/esprima</a>.<br/>
+      AppVeyor build status of Esprima is available at
+      <a href="https://ci.appveyor.com/project/ariya/esprima">ci.appveyor.com/project/ariya/esprima</a>.</p>
+      <img src="../assets/images/travisci.png" width="580" height="249"/>
+      <img src="../assets/images/appveyor.png" width="580" height="299"/>
 
-function bubbleSort(list) {
-    var items = list.slice(0), swapped = false, p, q;
-    for (p = 1; p &lt; items.length; ++p) {
-        for (q = 0; q &lt; items.length - p; ++q) {
-            if (items[q + 1] &lt; items[q]) {
-                items.swap(q, q + 1);
-                swapped =true;
-            }
-        }
-        if (!swapped) break;
-    }
-    return items;
-}
+      <h4>Code coverage tracking</h4>
+      <p>To prevent any potential coverage regression, the information on the code coverage after running the entire
+      unit tests is posted to <strong>Codecov.io</strong>. The coverage analysis itself is running on
+      <strong>Circle CI</strong>.
+      Using Codecov.io integration with Github, the change in code coverage (whether it stays the same, regresses, or
+      improves) for every pull request will be automatically posted as a comment.</p>
+      <p>Codecov.io dashboard for Esprima is available at
+      <a href="https://codecov.io/github/jquery/esprima">codecov.io/github/jquery/esprima</a>.</p>
+      <img src="../assets/images/codecov.png" width="580" height="165"/>
 
-var N = 100, data = []; while (N &gt; 0) data.push(N--);
-bubbleSort(data);
-</pre>
-
-      <div id="info" class="alert-box secondary">Ready.</div>
-
-      <div class="eight columns">
-      </div>
-      <div class="four columns">
-        <p><input class="medium radius button right" type="button" value="Run" id="run"></p>
-      </div>
+      <h4>Downstream project tests</h4>
+      <p>There are many widely used open-source projects out there, from
+      <a href="https://github.com/gotwarlost/istanbul">Istanbul</a> to
+      <a href="http://jscs.info/">JSCS</a>, which depend on Esprima. An unknown issue in Esprima during
+      its development, that is not caught by its own test suite, may cause those downstream projects to regress.
+      To prevent this from happening, the development version of Esprima is used to run the test suite of a selected
+      set of downstream projects. This is running on <strong>Circle CI</strong> and the entire process typically takes
+      around 13 minutes to complete.</p>
+      <p>Circle CI build status of Esprima is available at
+      <a href="https://circleci.com/gh/jquery/esprima">circleci.com/gh/jquery/esprima</a>.</p>
+      <img src="../assets/images/circleci.png" width="580" height="255"/>
 
     </div>
 
     <div class="four columns">
       <div class="panel">
-        <p>Pressing <strong>Run</strong> button will execute
-        (using <tt>eval</tt>) the code with some extra instrumentation
-        injected to track the execution. Placing the mouse cursor
-        on the indicator next to every function will show the number
-        of calls for that particular function.</p>
-        <p>Warning: <strong>Never run untrusted code!</strong></p>
+        <p><strong>Every</strong> single commit, including the one in every <strong>pull request</strong>, is subjected
+          to a set of tests to ensure the <strong>quality</strong> of the corresponding changes.</p>
       </div>
     </div>
   </div>
@@ -142,10 +140,5 @@ bubbleSort(data);
     </div>
   </div>
 
-<script src="../esprima.js"></script>
-<script src="../test/3rdparty/esmorph.js"></script>
-<script src="../assets/orion/built-editor.min.js"></script>
-<script src="../assets/orion/customeditor.js"></script>
-<script src="functiontrace.js"></script>
 </body>
 </html>
