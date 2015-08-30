@@ -1,3 +1,8 @@
+[![NPM version](https://img.shields.io/npm/v/esprima.svg)](https://www.npmjs.com/package/esprima)
+[![npm download](https://img.shields.io/npm/dm/esprima.svg)](https://www.npmjs.com/package/esprima)
+[![Build Status](https://img.shields.io/travis/jquery/esprima/master.svg)](https://travis-ci.org/jquery/esprima)
+[![Coverage Status](https://img.shields.io/codecov/c/github/jquery/esprima/master.svg)](https://codecov.io/github/jquery/esprima)
+
 **Esprima** ([esprima.org](http://esprima.org), BSD license) is a high performance,
 standard-compliant [ECMAScript](http://www.ecma-international.org/publications/standards/Ecma-262.htm)
 parser written in ECMAScript (also popularly known as

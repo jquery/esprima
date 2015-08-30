@@ -1,3 +1,11 @@
+2015-09-04: Version 2.6.0
+
+      * Properly allow or prohibit `let` in a binding identifier/pattern (issue 1048, 1098)
+      * Add sourceType field for Program node (issue 1159)
+      * Ensure that strict mode reserved word binding throw an error (issue 1171)
+      * Run the test suite with Node.js and IE 11 on Windows (issue 1294)
+      * Allow binding pattern with no initializer in a for statement (issue 1301)
+
 2015-07-31: Version 2.5.0
 
       * Run the test suite in a browser environment (issue 1004)
