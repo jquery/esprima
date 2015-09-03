@@ -2681,7 +2681,7 @@
                     restNode = new Node();
                     lex();
                     params.push(lookahead);
-                    rest = parseVariableIdentifier(params, kind);
+                    rest = parseVariableIdentifier(kind);
                     elements.push(restNode.finishRestElement(rest));
                     break;
                 } else {
@@ -2717,7 +2717,7 @@
                 return node.finishProperty('init', key, false, key, false, true);
             }
         } else {
-            key = parseObjectPropertyKey(params, kind);
+            key = parseObjectPropertyKey();
         }
         expect(':');
         init = parsePatternWithDefault(params, kind);
