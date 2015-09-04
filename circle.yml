@@ -13,4 +13,5 @@ dependencies:
 
 test:
   override:
-    - npm run circleci
+    - npm run circleci:
+        timeout: 1200  # 20 minutes
