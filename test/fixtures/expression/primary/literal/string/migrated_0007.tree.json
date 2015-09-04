@@ -39,6 +39,26 @@
         }
     ],
     "sourceType": "script",
+    "tokens": [
+        {
+            "type": "String",
+            "value": "\"Hello\\\nworld\"",
+            "range": [
+                0,
+                14
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 2,
+                    "column": 6
+                }
+            }
+        }
+    ],
     "range": [
         0,
         14

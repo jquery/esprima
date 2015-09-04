@@ -26,5 +26,23 @@
             "type": "Line",
             "value": "foo"
         }
+    ],
+    "tokens": [
+        {
+            "type": "Keyword",
+            "value": "var"
+        },
+        {
+            "type": "Identifier",
+            "value": "x"
+        },
+        {
+            "type": "Punctuator",
+            "value": "="
+        },
+        {
+            "type": "Numeric",
+            "value": "1"
+        }
     ]
 }

@@ -79,6 +79,26 @@
             }
         }
     ],
+    "tokens": [
+        {
+            "type": "Numeric",
+            "value": "42",
+            "range": [
+                3,
+                5
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 0
+                },
+                "end": {
+                    "line": 2,
+                    "column": 2
+                }
+            }
+        }
+    ],
     "range": [
         3,
         5

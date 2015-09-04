@@ -96,6 +96,104 @@
             ]
         }
     ],
+    "tokens": [
+        {
+            "type": "Keyword",
+            "value": "function",
+            "range": [
+                5,
+                13
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "a",
+            "range": [
+                14,
+                15
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "(",
+            "range": [
+                15,
+                16
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": ")",
+            "range": [
+                16,
+                17
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "{",
+            "range": [
+                18,
+                19
+            ]
+        },
+        {
+            "type": "Keyword",
+            "value": "function",
+            "range": [
+                23,
+                31
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "o",
+            "range": [
+                32,
+                33
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "(",
+            "range": [
+                33,
+                34
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": ")",
+            "range": [
+                34,
+                35
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "{",
+            "range": [
+                36,
+                37
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "}",
+            "range": [
+                37,
+                38
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "}",
+            "range": [
+                38,
+                39
+            ]
+        }
+    ],
     "range": [
         5,
         39

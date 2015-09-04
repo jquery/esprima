@@ -57,6 +57,48 @@
             ]
         }
     ],
+    "tokens": [
+        {
+            "type": "Keyword",
+            "value": "var",
+            "range": [
+                26,
+                29
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "a",
+            "range": [
+                30,
+                31
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "=",
+            "range": [
+                32,
+                33
+            ]
+        },
+        {
+            "type": "Numeric",
+            "value": "5",
+            "range": [
+                34,
+                35
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": ";",
+            "range": [
+                35,
+                36
+            ]
+        }
+    ],
     "range": [
         26,
         36

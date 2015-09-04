@@ -50,6 +50,56 @@
             ]
         }
     ],
+    "tokens": [
+        {
+            "type": "Keyword",
+            "value": "function",
+            "range": [
+                5,
+                13
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "a",
+            "range": [
+                14,
+                15
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "(",
+            "range": [
+                15,
+                16
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": ")",
+            "range": [
+                16,
+                17
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "{",
+            "range": [
+                18,
+                19
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "}",
+            "range": [
+                19,
+                20
+            ]
+        }
+    ],
     "range": [
         5,
         20
