@@ -37,6 +37,16 @@
             ]
         }
     ],
+    "tokens": [
+        {
+            "type": "Numeric",
+            "value": "42",
+            "range": [
+                0,
+                2
+            ]
+        }
+    ],
     "range": [
         0,
         21

@@ -41,11 +41,16 @@ var esprima = require('../esprima'),
     header;
 
 function generateTestCase(testCase) {
-    var tree, filePath, fileName;
+    var options, tree, filePath, fileName;
 
     fileName = testCase.key + ".tree.json";
     try {
-        tree = esprima.parse(testCase.case, {loc: true, range: true});
+        options = {
+            loc: true,
+            range: true,
+            tokens: true
+        };
+        tree = esprima.parse(testCase.case, options);
         tree = JSON.stringify(tree, null, 4);
     } catch (e) {
         if (typeof e.index === 'undefined') {

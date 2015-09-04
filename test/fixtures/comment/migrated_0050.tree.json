@@ -99,6 +99,80 @@
             ]
         }
     ],
+    "tokens": [
+        {
+            "type": "Keyword",
+            "value": "var",
+            "range": [
+                26,
+                29
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "a",
+            "range": [
+                30,
+                31
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "=",
+            "range": [
+                32,
+                33
+            ]
+        },
+        {
+            "type": "Numeric",
+            "value": "5",
+            "range": [
+                34,
+                35
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": ",",
+            "range": [
+                35,
+                36
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "b",
+            "range": [
+                79,
+                80
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "=",
+            "range": [
+                81,
+                82
+            ]
+        },
+        {
+            "type": "Numeric",
+            "value": "6",
+            "range": [
+                83,
+                84
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": ";",
+            "range": [
+                84,
+                85
+            ]
+        }
+    ],
     "range": [
         26,
         85

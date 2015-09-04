@@ -39,6 +39,26 @@
         }
     ],
     "sourceType": "script",
+    "tokens": [
+        {
+            "type": "Numeric",
+            "value": "42",
+            "range": [
+                42,
+                44
+            ],
+            "loc": {
+                "start": {
+                    "line": 5,
+                    "column": 11
+                },
+                "end": {
+                    "line": 5,
+                    "column": 13
+                }
+            }
+        }
+    ],
     "range": [
         42,
         44

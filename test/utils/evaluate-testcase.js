@@ -104,7 +104,7 @@
             comment: (typeof syntax.comments !== 'undefined'),
             range: true,
             loc: true,
-            tokens: (typeof syntax.tokens !== 'undefined'),
+            tokens: true,
             raw: true,
             tolerant: (typeof syntax.errors !== 'undefined'),
             source: null,

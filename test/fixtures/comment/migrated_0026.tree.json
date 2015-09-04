@@ -115,6 +115,26 @@
             }
         }
     ],
+    "tokens": [
+        {
+            "type": "Numeric",
+            "value": "42",
+            "range": [
+                37,
+                39
+            ],
+            "loc": {
+                "start": {
+                    "line": 4,
+                    "column": 0
+                },
+                "end": {
+                    "line": 4,
+                    "column": 2
+                }
+            }
+        }
+    ],
     "range": [
         37,
         39

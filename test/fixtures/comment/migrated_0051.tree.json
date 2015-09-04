@@ -85,6 +85,64 @@
             ]
         }
     ],
+    "tokens": [
+        {
+            "type": "Punctuator",
+            "value": "(",
+            "range": [
+                0,
+                1
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "{",
+            "range": [
+                14,
+                15
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "p1",
+            "range": [
+                40,
+                42
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": ":",
+            "range": [
+                42,
+                43
+            ]
+        },
+        {
+            "type": "Null",
+            "value": "null",
+            "range": [
+                44,
+                48
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "}",
+            "range": [
+                49,
+                50
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": ")",
+            "range": [
+                50,
+                51
+            ]
+        }
+    ],
     "range": [
         0,
         51
