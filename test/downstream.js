@@ -96,7 +96,7 @@ test_downstream({
     'esmangle': 'https://github.com/estools/esmangle.git',
     'escomplex-js': 'https://github.com/philbooth/escomplex-js.git',
     'js2coffee': 'https://github.com/js2coffee/js2coffee.git',
-    'jscs': 'https://github.com/jscs-dev/node-jscs.git',
+    // 'jscs': 'https://github.com/jscs-dev/node-jscs.git',
     'jsfmt': 'https://github.com/rdio/jsfmt.git',
     'istanbul': 'https://github.com/gotwarlost/istanbul.git',
     'webpack': 'https://github.com/webpack/webpack.git'
