@@ -4420,11 +4420,7 @@
             if (!(state.inIteration || state.inSwitch)) {
                 throwError(Messages.IllegalBreak);
             }
-
-            return node.finishBreakStatement(null);
-        }
-
-        if (lookahead.type === Token.Identifier) {
+        } else if (lookahead.type === Token.Identifier) {
             label = parseVariableIdentifier();
 
             key = '$' + label.name;
