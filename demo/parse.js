@@ -153,6 +153,17 @@ YUI({ gallery: 'gallery-2013.01.09-23-24' }).use('gallery-sm-treeview', function
 
 });
 
+function deduceSourceType(code) {
+    var type = 'module';
+
+    try {
+        esprima.parse(code, { sourceType: 'script' });
+        type = 'script';
+    } catch (e) {
+    }
+
+    return type;
+}
 
 function parse(delay) {
     if (parseId) {
@@ -177,7 +188,8 @@ function parse(delay) {
             attachComment: id('comment').checked,
             range: id('range').checked,
             loc: id('loc').checked,
-            tolerant: id('tolerant').checked
+            tolerant: id('tolerant').checked,
+            sourceType: deduceSourceType(code)
         };
 
         id('tokens').value = '';
