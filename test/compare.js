@@ -51,10 +51,10 @@ parsers = [
     name: 'Traceur',
     link: 'https://github.com/google/traceur-compiler',
     parse: function (code) {
-        var file, parser, tree;
+        var file, pp, tree;
         file = new traceur.syntax.SourceFile('name', code);
-        parser = new traceur.syntax.Parser(file, console);
-        tree = parser.parseScript();
+        pp = new traceur.syntax.Parser(file, console);
+        tree = pp.parseScript();
         return tree.scriptItemList.length;
     }
 },
@@ -73,22 +73,22 @@ parsers = [
     name: 'Shift',
     link: 'https://github.com/shapesecurity/shift-parser-js',
     parse: function (code) {
-        var syntax = window.shift.parseScript(code, { loc: true });
-        return syntax.body.statements[0].length;
+        var syntax = window.parser.parseScript(code, { loc: true });
+        return syntax.statements.length;
     }
 },
 {
     name: 'Shift (no early errors)',
     link: 'https://github.com/shapesecurity/shift-parser-js',
     parse: function (code) {
-        var syntax = window.shift.parseScript(code, { loc: true, earlyErrors: false });
-        return syntax.body.statements[0].length;
+        var syntax = window.parser.parseScript(code, { loc: true, earlyErrors: false });
+        return syntax.statements.length;
     }
 }
 ];
 
 fixtureList = [
-    'jQuery 1.9.1',
+    // 'jQuery 1.9.1',
     'jQuery.Mobile 1.4.2',
     'Angular 1.2.5',
     'React 0.13.3'
@@ -256,7 +256,7 @@ if (typeof window !== 'undefined') {
                 for (j = 0; j < parsers.length; j += 1) {
                     suite.push({
                         fixture: fixtureList[i],
-                        parser: parsers[j]
+                        parserInfo: parsers[j]
                     });
                 }
             }
@@ -272,7 +272,7 @@ if (typeof window !== 'undefined') {
             function reset() {
                 var i, name;
                 for (i = 0; i < suite.length; i += 1) {
-                    name = slug(suite[i].fixture) + '-' + slug(suite[i].parser.name);
+                    name = slug(suite[i].fixture) + '-' + slug(suite[i].parserInfo.name);
                     setText(name + '-time', '');
                 }
                 for (i = 0; i < parsers.length; i += 1) {
@@ -285,7 +285,7 @@ if (typeof window !== 'undefined') {
             }
 
             function run() {
-                var fixture, parser, test, source, fn, benchmark;
+                var fixture, pp, test, source, fn, benchmark;
 
                 if (index >= suite.length) {
                     setText('status', 'Ready.');
@@ -294,11 +294,11 @@ if (typeof window !== 'undefined') {
                 }
 
                 fixture = suite[index].fixture;
-                parser = suite[index].parser;
+                pp = suite[index].parserInfo;
 
                 source = window.data[slug(fixture)];
 
-                test = slug(fixture) + '-' + slug(parser.name);
+                test = slug(fixture) + '-' + slug(pp.name);
                 setText(test + '-time', 'Running...');
 
                 setText('status', 'Please wait. Parsing ' + fixture + '...');
@@ -311,7 +311,7 @@ if (typeof window !== 'undefined') {
                 console.reportError = console.error;
 
                 fn = function () {
-                    window.tree.push(parser.parse(source));
+                    window.tree.push(pp.parse(source));
                 };
 
                 benchmark = new window.Benchmark(test, fn, {
@@ -321,11 +321,11 @@ if (typeof window !== 'undefined') {
                         str += this.stats.rme.toFixed(1) + '%';
                         setText(this.name + '-time', str);
 
-                        if (!totalTime[parser.name]) {
-                            totalTime[parser.name] = 0;
+                        if (!totalTime[pp.name]) {
+                            totalTime[pp.name] = 0;
                         }
-                        totalTime[parser.name] += this.stats.mean;
-                        setText(slug(parser.name) + '-total', (1000 * totalTime[parser.name]).toFixed(1) + ' ms');
+                        totalTime[pp.name] += this.stats.mean;
+                        setText(slug(pp.name) + '-total', (1000 * totalTime[pp.name]).toFixed(1) + ' ms');
                     }
                 });
 
