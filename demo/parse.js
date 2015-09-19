@@ -188,7 +188,6 @@ function parse(delay) {
             attachComment: id('comment').checked,
             range: id('range').checked,
             loc: id('loc').checked,
-            tolerant: id('tolerant').checked,
             sourceType: deduceSourceType(code)
         };
 
@@ -230,13 +229,11 @@ window.onload = function () {
     document.getElementById('comment').onchange = quickParse;
     document.getElementById('range').onchange = quickParse;
     document.getElementById('loc').onchange = quickParse;
-    document.getElementById('tolerant').onchange = quickParse;
 
     // Special handling for IE.
     document.getElementById('comment').onclick = quickParse;
     document.getElementById('range').onclick = quickParse;
     document.getElementById('loc').onclick = quickParse;
-    document.getElementById('tolerant').onclick = quickParse;
 
     id('show_syntax').onclick = function () {
         id('tab_tree').className = id('show_tree').className = '';
