@@ -357,11 +357,6 @@
     // ECMA-262 11.6.2.1 Keywords
 
     function isKeyword(id) {
-
-        // 'const' is specialized as Keyword in V8.
-        // 'yield' and 'let' are for compatibility with SpiderMonkey and ES.next.
-        // Some others are from future reserved words.
-
         switch (id.length) {
         case 2:
             return (id === 'if') || (id === 'in') || (id === 'do');
@@ -2746,7 +2741,12 @@
             return parseArrayPattern(params, kind);
         } else if (match('{')) {
             return parseObjectPattern(params, kind);
+        } else if (matchKeyword('let')) {
+            if (kind === 'const' || kind === 'let') {
+                tolerateUnexpectedToken(lookahead, Messages.UnexpectedToken);
+            }
         }
+
         params.push(lookahead);
         return parseVariableIdentifier(kind);
     }
@@ -3251,6 +3251,9 @@
             }
             if (matchKeyword('class')) {
                 return parseClassExpression();
+            }
+            if (!strict && matchKeyword('let')) {
+                return node.finishIdentifier(lex().value);
             }
             throwUnexpectedToken(lex());
         } else if (type === Token.BooleanLiteral) {
@@ -3946,13 +3949,16 @@
                 }
                 return parseImportDeclaration();
             case 'const':
-            case 'let':
                 return parseLexicalDeclaration({inFor: false});
             case 'function':
                 return parseFunctionDeclaration(new Node());
             case 'class':
                 return parseClassDeclaration();
             }
+        }
+
+        if (matchKeyword('let') && isLexicalDeclaration()) {
+            return parseLexicalDeclaration({inFor: false});
         }
 
         return parseStatement();
@@ -4093,6 +4099,55 @@
         } while (startIndex < length);
 
         return list;
+    }
+
+
+    function tokenizerState() {
+        return {
+            index: index,
+            lineNumber: lineNumber,
+            lineStart: lineStart,
+            hasLineTerminator: hasLineTerminator,
+            lastIndex: lastIndex,
+            lastLineNumber: lastLineNumber,
+            lastLineStart: lastLineStart,
+            startIndex: startIndex,
+            startLineNumber: startLineNumber,
+            startLineStart: startLineStart,
+            lookahead: lookahead,
+            tokenCount: extra.tokens ? extra.tokens.length : 0
+        };
+    }
+
+    function resetTokenizerState(ts) {
+        index = ts.index;
+        lineNumber = ts.lineNumber;
+        lineStart = ts.lineStart;
+        hasLineTerminator = ts.hasLineTerminator;
+        lastIndex = ts.lastIndex;
+        lastLineNumber = ts.lastLineNumber;
+        lastLineStart = ts.lastLineStart;
+        startIndex = ts.startIndex;
+        startLineNumber = ts.startLineNumber;
+        startLineStart = ts.startLineStart;
+        lookahead = ts.lookahead;
+        if (extra.tokens) {
+            extra.tokens.splice(ts.tokenCount, extra.tokens.length);
+        }
+    }
+
+    function isLexicalDeclaration() {
+        var lexical, ts;
+
+        ts = tokenizerState();
+
+        lex();
+        lexical = (lookahead.type === Token.Identifier) || match('[') || match('{') ||
+            matchKeyword('let') || matchKeyword('yield');
+
+        resetTokenizerState(ts);
+
+        return lexical;
     }
 
     function parseLexicalDeclaration(options) {
@@ -5152,6 +5207,8 @@
             switch (lookahead.value) {
                 case 'let':
                 case 'const':
+                    declaration = parseLexicalDeclaration({inFor: false});
+                    return node.finishExportNamedDeclaration(declaration, specifiers, null);
                 case 'var':
                 case 'class':
                 case 'function':
