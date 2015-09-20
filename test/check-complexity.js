@@ -27,7 +27,7 @@
 var escomplex = require('escomplex-js'),
     content = require('fs').readFileSync('esprima.js', 'utf-8'),
     opt = { logicalor: false, switchcase: false },
-    MAX = 19,
+    MAX = 22,
     list = [], bad = [];
 
 escomplex.analyse(content, opt).functions.forEach(function (entry) {
