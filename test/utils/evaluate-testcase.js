@@ -84,7 +84,7 @@
     function hasAttachedComment(syntax) {
         var key;
         for (key in syntax) {
-            if (key === 'leadingComments' || key === 'trailingComments') {
+            if (key === 'leadingComments' || key === 'trailingComments' || key === 'innerComments') {
                 return true;
             }
             if (typeof syntax[key] === 'object' && syntax[key] !== null) {
@@ -157,7 +157,6 @@
         } catch (e) {
             throw new NotMatchingError(expected, e.toString());
         }
-
         assertEquality(expected, actual);
 
         function filter(key, value) {
