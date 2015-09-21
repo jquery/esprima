@@ -1748,6 +1748,7 @@
 
         processComment: function () {
             var lastChild,
+                innerComments,
                 leadingComments,
                 trailingComments,
                 bottomRight = extra.bottomRightStack,
@@ -1757,6 +1758,27 @@
 
             if (this.type === Syntax.Program) {
                 if (this.body.length > 0) {
+                    return;
+                }
+            }
+            /**
+             * patch innnerComments for properties empty block
+             * `function a() {/** comments **\/}`
+             */
+
+            if (this.type === Syntax.BlockStatement && this.body.length === 0) {
+                innerComments = [];
+                for (i = extra.leadingComments.length - 1; i >= 0; --i) {
+                    comment = extra.leadingComments[i];
+                    if (this.range[1] >= comment.range[1]) {
+                        innerComments.unshift(comment);
+                        extra.leadingComments.splice(i, 1);
+                        extra.trailingComments.splice(i, 1);
+                    }
+                }
+                if (innerComments.length) {
+                    this.innerComments = innerComments;
+                    //bottomRight.push(this);
                     return;
                 }
             }
