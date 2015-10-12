@@ -1643,10 +1643,21 @@
                     flags: token.regex.flags
                 };
             }
-            extra.tokens.push(entry);
             if (extra.tokenValues) {
                 extra.tokenValues.push((entry.type === 'Punctuator' || entry.type === 'Keyword') ? entry.value : null);
             }
+            if (extra.tokenize) {
+                if (!extra.range) {
+                    delete entry.range;
+                }
+                if (!extra.loc) {
+                    delete entry.loc;
+                }
+                if (extra.delegate) {
+                    entry = extra.delegate(entry);
+                }
+            }
+            extra.tokens.push(entry);
         }
 
         return token;
@@ -5519,7 +5530,7 @@
         extra.tokens = tokens;
     }
 
-    function tokenize(code, options) {
+    function tokenize(code, options, delegate) {
         var toString,
             tokens;
 
@@ -5558,6 +5569,8 @@
         extra.tokens = [];
         extra.tokenValues = [];
         extra.tokenize = true;
+        extra.delegate = delegate;
+
         // The following two fields are necessary to compute the Regex tokens.
         extra.openParenToken = -1;
         extra.openCurlyToken = -1;
@@ -5594,7 +5607,6 @@
                 }
             }
 
-            filterTokenLocation();
             tokens = extra.tokens;
             if (typeof extra.comments !== 'undefined') {
                 tokens.comments = extra.comments;
