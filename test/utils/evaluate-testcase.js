@@ -191,7 +191,7 @@
 
     function testTokenize(code, tokens) {
         'use strict';
-        var options, expected, actual, tree;
+        var options, expected, actual, list, entries, types;
 
         options = {
             comment: true,
@@ -203,11 +203,43 @@
         expected = JSON.stringify(tokens, null, 4);
 
         try {
-            tree = esprima.tokenize(code, options);
-            actual = JSON.stringify(tree, null, 4);
+            list = esprima.tokenize(code, options);
+            actual = JSON.stringify(list, null, 4);
         } catch (e) {
             throw new NotMatchingError(expected, e.toString());
         }
+        if (expected !== actual) {
+            throw new NotMatchingError(expected, actual);
+        }
+
+        // Use the delegate to collect the token separately.
+        try {
+            entries = [];
+            esprima.tokenize(code, options, function (token) {
+                entries.push(token);
+                return token;
+            });
+            actual = JSON.stringify(entries, null, 4);
+        } catch (e) {
+            throw new NotMatchingError(expected, e.toString());
+        }
+        if (expected !== actual) {
+            throw new NotMatchingError(expected, actual);
+        }
+
+        // Use the delegate to filter the token type.
+        try {
+            entries = esprima.tokenize(code, options, function (token) {
+                return token.type;
+            });
+            actual = JSON.stringify(entries, null, 4);
+        } catch (e) {
+            throw new NotMatchingError(expected, e.toString());
+        }
+        types = tokens.map(function (t) {
+            return t.type;
+        });
+        expected = JSON.stringify(types, null, 4);
         if (expected !== actual) {
             throw new NotMatchingError(expected, actual);
         }

@@ -38,10 +38,6 @@
     {
         "type": "RegularExpression",
         "value": "/42/",
-        "regex": {
-            "pattern": "42",
-            "flags": ""
-        },
         "range": [
             9,
             13
@@ -55,6 +51,10 @@
                 "line": 1,
                 "column": 13
             }
+        },
+        "regex": {
+            "pattern": "42",
+            "flags": ""
         }
     },
     {

@@ -128,10 +128,6 @@
     {
         "type": "RegularExpression",
         "value": "/42/",
-        "regex": {
-            "pattern": "42",
-            "flags": ""
-        },
         "range": [
             16,
             20
@@ -145,6 +141,10 @@
                 "line": 1,
                 "column": 20
             }
+        },
+        "regex": {
+            "pattern": "42",
+            "flags": ""
         }
     }
 ]
