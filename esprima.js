@@ -408,6 +408,13 @@
             extra.leadingComments.push(comment);
             extra.trailingComments.push(comment);
         }
+        if (extra.tokenize) {
+            comment.type = comment.type + 'Comment';
+            if (extra.delegate) {
+                comment = extra.delegate(comment);
+            }
+            extra.tokens.push(comment);
+        }
     }
 
     function skipSingleLineComment(offset) {
@@ -5608,9 +5615,6 @@
             }
 
             tokens = extra.tokens;
-            if (typeof extra.comments !== 'undefined') {
-                tokens.comments = extra.comments;
-            }
             if (typeof extra.errors !== 'undefined') {
                 tokens.errors = extra.errors;
             }
