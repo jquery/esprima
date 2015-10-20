@@ -1,3 +1,11 @@
+2015-10-22: Version 2.7.0
+
+      * Fix the handling of semicolon in a break statement (issue 1044)
+      * Run the test suite with major web browsers (issue 1259, 1317)
+      * Allow `let` as an identifier in non-strict mode (issue 1289)
+      * Attach orphaned comments as `innerComments` (issue 1328)
+      * Add the support for token delegator (issue 1332)
+
 2015-09-01: Version 2.6.0
 
       * Properly allow or prohibit `let` in a binding identifier/pattern (issue 1048, 1098)

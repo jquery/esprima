@@ -15,7 +15,7 @@ with the help of [many contributors](https://github.com/jquery/esprima/contribut
 - Full support for ECMAScript 6 ([ECMA-262](http://www.ecma-international.org/publications/standards/Ecma-262.htm))
 - Sensible [syntax tree format](https://github.com/estree/estree/blob/master/spec.md) as standardized by [ESTree project](https://github.com/estree/estree)
 - Optional tracking of syntax node location (index-based and line-column)
-- Heavily tested (~1200 [unit tests](https://github.com/jquery/esprima/tree/master/test/fixtures) with [full code coverage](https://codecov.io/github/jquery/esprima))
+- [Heavily tested](http://esprima.org/test/ci.html) (~1250 [unit tests](https://github.com/jquery/esprima/tree/master/test/fixtures) with [full code coverage](https://codecov.io/github/jquery/esprima))
 
 Esprima serves as a **building block** for some JavaScript
 language tools, from [code instrumentation](http://esprima.org/demo/functiontrace.html)
