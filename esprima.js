@@ -3370,16 +3370,26 @@
     // ECMA-262 12.3.3 The new Operator
 
     function parseNewExpression() {
-        var callee, args, node = new Node();
+        var callee, args, node = new Node(),
+        newNode, newToken, newId,
+        targetNode, targetId;
 
-        expectKeyword('new');
+        newNode = new Node();
+        newToken = lex();
+        if (newToken.type !== Token.Keyword || newToken.value !== 'new') {
+            throwUnexpectedToken(newToken);
+        }
+        newId = newNode.finishIdentifier(newToken.value);
+
 
         if (match('.')) {
             lex();
             if (lookahead.type === Token.Identifier && lookahead.value === 'target') {
                 if (state.inFunctionBody) {
-                    lex();
-                    return node.finishMetaProperty('new', 'target');
+                    targetNode = new Node();
+                    targetId = targetNode.finishIdentifier(lex().value);
+
+                    return node.finishMetaProperty(newId, targetId);
                 }
             }
             throwUnexpectedToken(lookahead);
