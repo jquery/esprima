@@ -1,10 +1,9 @@
 {
 	"compilerOptions": {
 		"target": "ES5",
-		"module": "amd",
-		"outDir": "../dist/"
+		"module": "commonjs"
 	},
 	"files": [
-		"esprima.ts"
+        "esprima.ts"
 	]
 }
