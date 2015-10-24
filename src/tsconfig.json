@@ -4,6 +4,13 @@
 		"module": "commonjs"
 	},
 	"files": [
-        "esprima.ts"
+		"assert.ts",
+		"messages.ts",
+		"character.ts",
+		"token.ts",
+		"syntax.ts",
+		"scanner.ts",
+		"parser.ts",
+		"esprima.ts"
 	]
 }
