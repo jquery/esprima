@@ -32,7 +32,7 @@ function findCanonicalVersion() {
     var matcher, lines, version;
 
     matcher = /exports\.version\s+=\s+\'([0-9\.\-a-zA-Z]+)\'/;
-    lines = fs.readFileSync('esprima.js', 'utf-8').split('\n');
+    lines = fs.readFileSync('dist/esprima.js', 'utf-8').split('\n');
     lines.forEach(function (line) {
         if (matcher.test(line)) {
             version = matcher.exec(line)[1];

@@ -22,27 +22,9 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-(function (root, factory) {
-    'use strict';
-
-    // Universal Module Definition (UMD) to support AMD, CommonJS/Node.js,
-    // Rhino, and plain browser loading.
-
-    /* istanbul ignore next */
-    if (typeof define === 'function' && define.amd) {
-        define(['exports'], factory);
-    } else if (typeof exports !== 'undefined') {
-        factory(exports);
-    } else {
-        factory((root.esprima = {}));
-    }
-}(this, function (exports) {
-    'use strict';
-
     var Token,
         TokenName,
         FnExprTokens,
-        Syntax,
         PlaceHolders,
         Messages,
         Regex,
@@ -103,7 +85,7 @@
                     '|', '^', '!', '~', '&&', '||', '?', ':', '===', '==', '>=',
                     '<=', '<', '>', '!=', '!=='];
 
-    Syntax = {
+    export var Syntax = {
         AssignmentExpression: 'AssignmentExpression',
         AssignmentPattern: 'AssignmentPattern',
         ArrayExpression: 'ArrayExpression',
@@ -1420,10 +1402,11 @@
         };
     }
 
-    function scanRegExp() {
+    function parseRegExpLiteral() {
         var start, body, flags, value;
         scanning = true;
 
+        scanning = true;
         lookahead = null;
         skipComment();
         start = index;
@@ -1432,20 +1415,6 @@
         flags = scanRegExpFlags();
         value = testRegExp(body.value, flags.value);
         scanning = false;
-        if (extra.tokenize) {
-            return {
-                type: Token.RegularExpression,
-                value: value,
-                regex: {
-                    pattern: body.value,
-                    flags: flags.value
-                },
-                lineNumber: lineNumber,
-                lineStart: lineStart,
-                start: start,
-                end: index
-            };
-        }
 
         return {
             literal: body.literal + flags.literal,
@@ -1454,6 +1423,33 @@
                 pattern: body.value,
                 flags: flags.value
             },
+            start: start,
+            end: index
+        };
+    }
+
+    function scanRegExp() {
+        var start, body, flags, value;
+
+        scanning = true;
+        lookahead = null;
+        skipComment();
+        start = index;
+
+        body = scanRegExpBody();
+        flags = scanRegExpFlags();
+        value = testRegExp(body.value, flags.value);
+        scanning = false;
+
+        return {
+            type: Token.RegularExpression,
+            value: value,
+            regex: {
+                pattern: body.value,
+                flags: flags.value
+            },
+            lineNumber: lineNumber,
+            lineStart: lineStart,
             start: start,
             end: index
         };
@@ -1472,7 +1468,7 @@
             }
         };
 
-        regex = scanRegExp();
+        regex = extra.tokenize ? scanRegExp() : parseRegExpLiteral();
 
         loc.end = {
             line: lineNumber,
@@ -2416,6 +2412,17 @@
         }
     }
 
+    declare class Error {
+        public name: string;
+        public message: string;
+        public stack: string;
+        public index: number;
+        public lineNumber: number;
+        public column: number;
+        public description: string;
+        constructor(message?: string);
+    }
+
     function createError(line, pos, description) {
         var msg, column, error;
 
@@ -2430,7 +2437,7 @@
 
     // Throw an exception
 
-    function throwError(messageFormat) {
+    function throwError(messageFormat, ...values) {
         var args, msg;
 
         args = Array.prototype.slice.call(arguments, 1);
@@ -2444,7 +2451,7 @@
         throw createError(lastLineNumber, lastIndex, msg);
     }
 
-    function tolerateError(messageFormat) {
+    function tolerateError(messageFormat, ...values) {
         var args, msg, error;
 
         args = Array.prototype.slice.call(arguments, 1);
@@ -2499,11 +2506,11 @@
             createError(scanning ? lineNumber : lastLineNumber, scanning ? index : lastIndex, msg);
     }
 
-    function throwUnexpectedToken(token, message) {
+    function throwUnexpectedToken(token?, message?) {
         throw unexpectedTokenError(token, message);
     }
 
-    function tolerateUnexpectedToken(token, message) {
+    function tolerateUnexpectedToken(token?, message?) {
         var error = unexpectedTokenError(token, message);
         if (extra.errors) {
             recordError(error);
@@ -2758,7 +2765,7 @@
         return node.finishObjectPattern(properties);
     }
 
-    function parsePattern(params, kind) {
+    function parsePattern(params, kind?) {
         if (match('[')) {
             return parseArrayPattern(params, kind);
         } else if (match('{')) {
@@ -2773,7 +2780,7 @@
         return parseVariableIdentifier(kind);
     }
 
-    function parsePatternWithDefault(params, kind) {
+    function parsePatternWithDefault(params, kind?) {
         var startToken = lookahead, pattern, previousAllowYield, right;
         pattern = parsePattern(params, kind);
         if (match('=')) {
@@ -3412,7 +3419,7 @@
             expr = inheritCoverGrammar(matchKeyword('new') ? parseNewExpression : parsePrimaryExpression);
         }
 
-        for (;;) {
+        while (true) {
             if (match('.')) {
                 isBindingElement = false;
                 isAssignmentTarget = true;
@@ -3459,7 +3466,7 @@
             expr = inheritCoverGrammar(matchKeyword('new') ? parseNewExpression : parsePrimaryExpression);
         }
 
-        for (;;) {
+        while (true) {
             if (match('[')) {
                 isBindingElement = false;
                 isAssignmentTarget = true;
@@ -4012,7 +4019,7 @@
 
     // ECMA-262 13.3.2 Variable Statement
 
-    function parseVariableIdentifier(kind) {
+    function parseVariableIdentifier(kind?) {
         var token, node = new Node();
 
         token = lex();
@@ -4937,7 +4944,7 @@
         return !match(')');
     }
 
-    function parseParams(firstRestricted) {
+    function parseParams(firstRestricted?) {
         var options;
 
         options = {
@@ -4974,7 +4981,7 @@
         };
     }
 
-    function parseFunctionDeclaration(node, identifierIsOptional) {
+    function parseFunctionDeclaration(node, identifierIsOptional?) {
         var id = null, params = [], defaults = [], body, token, stricted, tmp, firstRestricted, message, previousStrict,
             isGenerator, previousAllowYield;
 
@@ -5121,7 +5128,7 @@
                 }
                 method = tryParseMethodDefinition(token, key, computed, method);
                 if (method) {
-                    method['static'] = isStatic; // jscs:ignore requireDotNotation
+                    method.static = isStatic;
                     if (method.kind === 'init') {
                         method.kind = 'method';
                     }
@@ -5155,7 +5162,7 @@
         return classBody.finishClassBody(body);
     }
 
-    function parseClassDeclaration(identifierIsOptional) {
+    function parseClassDeclaration(identifierIsOptional?) {
         var id = null, superClass = null, classNode = new Node(), classBody, previousStrict = strict;
         strict = true;
 
@@ -5537,7 +5544,7 @@
         extra.tokens = tokens;
     }
 
-    function tokenize(code, options, delegate) {
+    export function tokenize(code, options, delegate) {
         var toString,
             tokens;
 
@@ -5626,7 +5633,7 @@
         return tokens;
     }
 
-    function parse(code, options) {
+    export function parse(code, options) {
         var program, toString;
 
         toString = String;
@@ -5711,33 +5718,4 @@
     }
 
     // Sync with *.json manifests.
-    exports.version = '2.7.0';
-
-    exports.tokenize = tokenize;
-
-    exports.parse = parse;
-
-    // Deep copy.
-    /* istanbul ignore next */
-    exports.Syntax = (function () {
-        var name, types = {};
-
-        if (typeof Object.create === 'function') {
-            types = Object.create(null);
-        }
-
-        for (name in Syntax) {
-            if (Syntax.hasOwnProperty(name)) {
-                types[name] = Syntax[name];
-            }
-        }
-
-        if (typeof Object.freeze === 'function') {
-            Object.freeze(types);
-        }
-
-        return types;
-    }());
-
-}));
-/* vim: set sw=4 ts=4 et tw=80 : */
+    export var version = '3.0.0-dev';

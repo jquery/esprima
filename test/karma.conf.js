@@ -7,7 +7,7 @@ module.exports = function (config) {
         ],
 
         files: [
-            'esprima.js',
+            'dist/esprima.js',
             'node_modules/lodash/index.js',
             'test/dist/fixtures_js.js',
             'test/dist/fixtures_json.js',

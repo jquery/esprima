@@ -98,14 +98,14 @@ function runTests(tests) {
 if (typeof require === 'undefined') {
     dirname = 'test';
     load(dirname + '/3rdparty/benchmark.js');
-    load(dirname + '/../esprima.js');
+    load(dirname + '/../dist/esprima.js');
     Benchmark = this.Benchmark;
     esprima = this.esprima;
     readFile = this.read;
     log = print;
 } else {
     Benchmark = require('./3rdparty/benchmark');
-    esprima = require('../esprima');
+    esprima = require('../dist/esprima');
     quick = process.argv[2] === 'quick' || process.argv[3] === 'quick';
     readFile = function (filename) {
         return require('fs').readFileSync(filename, 'utf-8');
