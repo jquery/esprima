@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"target": "ES5",
+		"module": "amd",
+		"outDir": "../dist/"
+	},
+	"files": [
+		"esprima.ts"
+	]
+}

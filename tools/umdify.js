@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /*
   Copyright (c) jQuery Foundation, Inc. and Contributors, All Rights Reserved.
 
@@ -22,16 +23,43 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-var esprima = require('../dist/esprima');
+var fs = require('fs');
 
-function readEverythingJsProgram(type) {
-    return require('fs').readFileSync(require.resolve('everything.js/' + type), 'utf-8');
+function prolog() {
+	return [
+      '(function (root, factory) {',
+      '    "use strict";',
+      '    /* istanbul ignore next */',
+      '    if (typeof define === \'function\' && define.amd) {',
+      '        define([\'exports\'], factory);',
+      '    } else if (typeof exports !== \'undefined\') {',
+      '        factory(exports);',
+      '    } else {',
+      '        factory((root.esprima = {}));',
+      '    }',
+      '}(this, function (exports) {',
+      '    "use strict";'
+	].join('\n');
 }
 
-try {
-    esprima.parse(readEverythingJsProgram('es2015-script'));
-    esprima.parse(readEverythingJsProgram('es2015-module'), { sourceType: 'module' });
-} catch (e) {
-    console.error('Error:', e.toString());
-    process.exit(1);
+function epilog() {
+	return '}));';
 }
+
+function umdify(filename) {
+	var content, lines, i, line;
+	content = fs.readFileSync(filename, 'utf-8');
+	lines = content.split('\n');
+  for (i = 0; i < lines.length; ++i) {
+      line = lines[i];
+      if (line.match(/require\,\ exports/)) {
+          lines[i] = prolog();
+          lines[lines.length - 2] = epilog();
+          content = lines.join('\n');
+          fs.writeFileSync(filename, content, 'utf-8');
+          break;
+      }
+  }
+}
+
+umdify('dist/esprima.js');

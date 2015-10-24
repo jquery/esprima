@@ -24,7 +24,7 @@
 
 'use strict';
 
-var esprima = require('../esprima'),
+var esprima = require('../dist/esprima'),
     evaluateTestCase = require('./utils/evaluate-testcase'),
     createTestCases = require('./utils/create-testcases'),
     errorToObject = require('./utils/error-to-object'),
@@ -104,21 +104,21 @@ header = total + ' tests. ' + failures.length + ' failures. ' + tick + ' ms';
 if (failures.length) {
     console.error(header);
     failures.forEach(function (failure) {
-       var expectedObject, actualObject;
-       try {
-           expectedObject = JSON.parse(failure.expected);
-           actualObject = JSON.parse(failure.actual);
+        var expectedObject, actualObject;
+        try {
+            expectedObject = JSON.parse(failure.expected);
+            actualObject = JSON.parse(failure.actual);
 
-           console.error(failure.source + ': Expected\n    ' +
+            console.error(failure.source + ': Expected\n    ' +
                failure.expected.split('\n').join('\n    ') +
                '\nto match\n    ' + failure.actual + '\nDiff:\n' +
                diff(expectedObject, actualObject));
-       } catch (ex) {
-           console.error(failure.source + ': Expected\n    ' +
+        } catch (ex) {
+            console.error(failure.source + ': Expected\n    ' +
                failure.expected.split('\n').join('\n    ') +
                '\nto match\n    ' + failure.actual);
-       }
-   });
+        }
+    });
 } else {
     console.log(header);
 }
