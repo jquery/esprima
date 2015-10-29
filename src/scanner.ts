@@ -87,7 +87,7 @@ export class Scanner {
     };
 
     popState() {
-        var state = this.stateStack.pop();
+        const state = this.stateStack.pop();
         assert(typeof state === 'object', 'Scanner state is not balanced');
 
         this.strict = state.strict;
@@ -112,23 +112,22 @@ export class Scanner {
     // ECMA-262 11.4 Comments
 
     skipSingleLineComment(offset: number): void {
-        var start, loc, ch, comment;
-
-        start = this.index - offset;
-        loc = {
+        let start = this.index - offset;
+        let loc = {
             start: {
                 line: this.lineNumber,
                 column: this.index - this.lineStart - offset
-            }
+            },
+            end: {}
         };
 
         while (!this.eof()) {
-            ch = this.source.charCodeAt(this.index);
+            let ch = this.source.charCodeAt(this.index);
             ++this.index;
             if (Character.isLineTerminator(ch)) {
                 this.hasLineTerminator = true;
                 if (this.addComment) {
-                    comment = this.source.slice(start + offset, this.index - 1);
+                    let comment = this.source.slice(start + offset, this.index - 1);
                     loc.end = {
                         line: this.lineNumber,
                         column: this.index - this.lineStart - 1
@@ -145,7 +144,7 @@ export class Scanner {
         }
 
         if (this.addComment) {
-            comment = this.source.slice(start + offset, this.index);
+            let comment = this.source.slice(start + offset, this.index);
             loc.end = {
                 line: this.lineNumber,
                 column: this.index - this.lineStart
@@ -155,7 +154,7 @@ export class Scanner {
     };
 
     skipMultiLineComment(): void {
-        var start, loc, ch, comment;
+        let start, loc;
 
         if (this.addComment) {
             start = this.index - 2;
@@ -168,7 +167,7 @@ export class Scanner {
         }
 
         while (!this.eof()) {
-            ch = this.source.charCodeAt(this.index);
+            const ch = this.source.charCodeAt(this.index);
             if (Character.isLineTerminator(ch)) {
                 if (ch === 0x0D && this.source.charCodeAt(this.index + 1) === 0x0A) {
                     ++this.index;
@@ -183,7 +182,7 @@ export class Scanner {
                     ++this.index;
                     ++this.index;
                     if (this.addComment) {
-                        comment = this.source.slice(start + 2, this.index - 2);
+                        const comment = this.source.slice(start + 2, this.index - 2);
                         loc.end = {
                             line: this.lineNumber,
                             column: this.index - this.lineStart
@@ -204,7 +203,7 @@ export class Scanner {
                 line: this.lineNumber,
                 column: this.index - this.lineStart
             };
-            comment = this.source.slice(start + 2, this.index);
+            const comment = this.source.slice(start + 2, this.index);
             this.addComment('Block', comment, start, this.index, loc);
         }
 
@@ -212,12 +211,11 @@ export class Scanner {
     };
 
     skipComment(): void {
-        var ch, start;
         this.hasLineTerminator = false;
 
-        start = (this.index === 0);
+        let start = (this.index === 0);
         while (!this.eof()) {
-            ch = this.source.charCodeAt(this.index);
+            let ch = this.source.charCodeAt(this.index);
 
             if (Character.isWhiteSpace(ch)) {
                 ++this.index;
@@ -335,13 +333,12 @@ export class Scanner {
     };
 
     codePointAt(i: number): number {
-        var cp, first, second;
+        let cp = this.source.charCodeAt(i);
 
-        cp = this.source.charCodeAt(i);
         if (cp >= 0xD800 && cp <= 0xDBFF) {
-            second = this.source.charCodeAt(i + 1);
+            let second = this.source.charCodeAt(i + 1);
             if (second >= 0xDC00 && second <= 0xDFFF) {
-                first = cp;
+                let first = cp;
                 cp = (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
             }
         }
@@ -350,10 +347,10 @@ export class Scanner {
     };
 
     scanHexEscape(prefix: string): string {
-        var i, len, code = 0;
+        const len = (prefix === 'u') ? 4 : 2;
+        let code = 0;
 
-        len = (prefix === 'u') ? 4 : 2;
-        for (i = 0; i < len; ++i) {
+        for (let i = 0; i < len; ++i) {
             if (!this.eof() && Character.isHexDigit(this.source.charCodeAt(this.index))) {
                 code = code * 16 + hexValue(this.source[this.index++]);
             } else {
@@ -364,10 +361,8 @@ export class Scanner {
     };
 
     scanUnicodeCodePointEscape(): string {
-        var ch, code;
-
-        ch = this.source[this.index];
-        code = 0;
+        let ch = this.source[this.index];
+        let code = 0;
 
         // At least, one hex digit is required.
         if (ch === '}') {
@@ -390,11 +385,9 @@ export class Scanner {
     };
 
     getIdentifier(): string {
-        var start, ch;
-
-        start = this.index++;
+        const start = this.index++;
         while (!this.eof()) {
-            ch = this.source.charCodeAt(this.index);
+            const ch = this.source.charCodeAt(this.index);
             if (ch === 0x5C) {
                 // Blackslash (U+005C) marks Unicode escape sequence.
                 this.index = start;
@@ -415,13 +408,12 @@ export class Scanner {
     };
 
     getComplexIdentifier(): string {
-        var cp, ch, id;
-
-        cp = this.codePointAt(this.index);
-        id = Character.fromCodePoint(cp);
+        let cp = this.codePointAt(this.index);
+        let id = Character.fromCodePoint(cp);
         this.index += id.length;
 
         // '\u' (U+005C, U+0075) denotes an escaped character.
+        let ch;
         if (cp === 0x5C) {
             if (this.source.charCodeAt(this.index) !== 0x75) {
                 this.throwUnexpectedToken();
@@ -475,7 +467,8 @@ export class Scanner {
 
     octalToDecimal(ch: string) {
         // \0 is not octal escape sequence
-        var octal = (ch !== '0'), code = octalValue(ch);
+        let octal = (ch !== '0');
+        let code = octalValue(ch);
 
         if (!this.eof() && Character.isOctalDigit(this.source.charCodeAt(this.index))) {
             octal = true;
@@ -497,13 +490,11 @@ export class Scanner {
     // ECMA-262 11.6 Names and Keywords
 
     scanIdentifier() {
-        var start, id, type;
-
-        start = this.index;
+        let type: Token;
+        const start = this.index;
 
         // Backslash (U+005C) starts an escaped character.
-        start = this.index;
-        id = (this.source.charCodeAt(this.index) === 0x5C) ? this.getComplexIdentifier() : this.getIdentifier();
+        const id = (this.source.charCodeAt(start) === 0x5C) ? this.getComplexIdentifier() : this.getIdentifier();
 
         // There is no keyword or literal with only one character.
         // Thus, it must be an identifier.
@@ -532,9 +523,7 @@ export class Scanner {
     // ECMA-262 11.7 Punctuators
 
     scanPunctuator() {
-        var token, str;
-
-        token = {
+        const token = {
             type: Token.Punctuator,
             value: '',
             lineNumber: this.lineNumber,
@@ -544,7 +533,7 @@ export class Scanner {
         };
 
         // Check for most common single-character punctuators.
-        str = this.source[this.index];
+        let str = this.source[this.index];
         switch (str) {
 
             case '(':
@@ -628,7 +617,7 @@ export class Scanner {
     // ECMA-262 11.8.3 Numeric Literals
 
     scanHexLiteral(start: number) {
-        var number = '';
+        let number = '';
 
         while (!this.eof()) {
             if (!Character.isHexDigit(this.source.charCodeAt(this.index))) {
@@ -656,9 +645,8 @@ export class Scanner {
     };
 
     scanBinaryLiteral(start: number) {
-        var ch, number;
-
-        number = '';
+        let number = '';
+        let ch;
 
         while (!this.eof()) {
             ch = this.source[this.index];
@@ -692,15 +680,14 @@ export class Scanner {
     };
 
     scanOctalLiteral(prefix: string, start: number) {
-        var number, octal;
+        let number = '';
+        let octal = false;
 
         if (Character.isOctalDigit(prefix.charCodeAt(0))) {
             octal = true;
             number = '0' + this.source[this.index++];
         } else {
-            octal = false;
             ++this.index;
-            number = '';
         }
 
         while (!this.eof()) {
@@ -731,12 +718,10 @@ export class Scanner {
     };
 
     isImplicitOctalLiteral(): boolean {
-        var i, ch;
-
         // Implicit octal, unless there is a non-octal digit.
         // (Annex B.1.1 on Numeric Literals)
-        for (i = this.index + 1; i < this.length; ++i) {
-            ch = this.source[i];
+        for (let i = this.index + 1; i < this.length; ++i) {
+            const ch = this.source[i];
             if (ch === '8' || ch === '9') {
                 return false;
             }
@@ -749,14 +734,12 @@ export class Scanner {
     };
 
     scanNumericLiteral() {
-        var number, start, ch;
-
-        ch = this.source[this.index];
+        const start = this.index;
+        let ch = this.source[start];
         assert(Character.isDecimalDigit(ch.charCodeAt(0)) || (ch === '.'),
             'Numeric literal must start with a decimal digit or a decimal point');
 
-        start = this.index;
-        number = '';
+        let number = '';
         if (ch !== '.') {
             number = this.source[this.index++];
             ch = this.source[this.index];
@@ -832,17 +815,17 @@ export class Scanner {
     // ECMA-262 11.8.4 String Literals
 
     scanStringLiteral() {
-        var str = '', quote, start, ch, unescaped, octToDec, octal = false;
-
-        quote = this.source[this.index];
+        const start = this.index;
+        let quote = this.source[start];
         assert((quote === '\'' || quote === '"'),
             'String literal must starts with a quote');
 
-        start = this.index;
         ++this.index;
+        let octal = false;
+        let str = '';
 
         while (!this.eof()) {
-            ch = this.source[this.index++];
+            let ch = this.source[this.index++];
 
             if (ch === quote) {
                 quote = '';
@@ -857,7 +840,7 @@ export class Scanner {
                                 ++this.index;
                                 str += this.scanUnicodeCodePointEscape();
                             } else {
-                                unescaped = this.scanHexEscape(ch);
+                                const unescaped = this.scanHexEscape(ch);
                                 if (!unescaped) {
                                     this.throwUnexpectedToken();
                                 }
@@ -890,7 +873,7 @@ export class Scanner {
 
                         default:
                             if (ch && Character.isOctalDigit(ch.charCodeAt(0))) {
-                                octToDec = this.octalToDecimal(ch);
+                                const octToDec = this.octalToDecimal(ch);
 
                                 octal = octToDec.octal || octal;
                                 str += String.fromCharCode(octToDec.code);
@@ -931,18 +914,18 @@ export class Scanner {
     // ECMA-262 11.8.6 Template Literal Lexical Components
 
     scanTemplate() {
-        var cooked = '', ch, start, rawOffset, terminated, head, tail, restore, unescaped;
+        let cooked = '';
+        let terminated = false;
+        let start = this.index;
 
-        terminated = false;
-        tail = false;
-        start = this.index;
-        head = (this.source[this.index] === '`');
-        rawOffset = 2;
+        let head = (this.source[start] === '`');
+        let tail = false;
+        let rawOffset = 2;
 
         ++this.index;
 
         while (!this.eof()) {
-            ch = this.source[this.index++];
+            let ch = this.source[this.index++];
             if (ch === '`') {
                 rawOffset = 1;
                 tail = true;
@@ -975,8 +958,8 @@ export class Scanner {
                                 ++this.index;
                                 cooked += this.scanUnicodeCodePointEscape();
                             } else {
-                                restore = this.index;
-                                unescaped = this.scanHexEscape(ch);
+                                const restore = this.index;
+                                const unescaped = this.scanHexEscape(ch);
                                 if (unescaped) {
                                     cooked += unescaped;
                                 } else {
@@ -1061,9 +1044,9 @@ export class Scanner {
         // Note: replacing with '\uFFFF' enables false positives in unlikely
         // scenarios. For example, `[\u{1044f}-\u{10440}]` is an invalid
         // pattern that would not be detected by this substitution.
-        var astralSubstitute = '\uFFFF',
-            tmp = pattern,
-            self = this;
+        const astralSubstitute = '\uFFFF';
+        let tmp = pattern;
+        let self = this;
 
         if (flags.indexOf('u') >= 0) {
             tmp = tmp
@@ -1072,7 +1055,7 @@ export class Scanner {
             // astral symbols. (See the above note on `astralSubstitute`
             // for more information.)
                 .replace(/\\u\{([0-9a-fA-F]+)\}|\\u([a-fA-F0-9]{4})/g, function($0, $1, $2) {
-                    var codePoint = parseInt($1 || $2, 16);
+                    const codePoint = parseInt($1 || $2, 16);
                     if (codePoint > 0x10FFFF) {
                         self.throwUnexpectedToken(null, Messages.InvalidRegExp);
                     }
@@ -1108,14 +1091,13 @@ export class Scanner {
     };
 
     scanRegExpBody() {
-        var ch, str, classMarker, terminated, body;
-
-        ch = this.source[this.index];
+        let ch = this.source[this.index];
         assert(ch === '/', 'Regular expression literal must start with a slash');
-        str = this.source[this.index++];
 
-        classMarker = false;
-        terminated = false;
+        let str = this.source[this.index++];
+        let classMarker = false;
+        let terminated = false;
+
         while (!this.eof()) {
             ch = this.source[this.index++];
             str += ch;
@@ -1147,7 +1129,7 @@ export class Scanner {
         }
 
         // Exclude leading and trailing slash.
-        body = str.substr(1, str.length - 2);
+        const body = str.substr(1, str.length - 2);
         return {
             value: body,
             literal: str
@@ -1155,12 +1137,10 @@ export class Scanner {
     };
 
     scanRegExpFlags() {
-        var ch, str, flags, restore;
-
-        str = '';
-        flags = '';
+        let str = '';
+        let flags = '';
         while (!this.eof()) {
-            ch = this.source[this.index];
+            let ch = this.source[this.index];
             if (!Character.isIdentifierPart(ch.charCodeAt(0))) {
                 break;
             }
@@ -1170,7 +1150,7 @@ export class Scanner {
                 ch = this.source[this.index];
                 if (ch === 'u') {
                     ++this.index;
-                    restore = this.index;
+                    let restore = this.index;
                     ch = this.scanHexEscape('u');
                     if (ch) {
                         flags += ch;
@@ -1200,16 +1180,14 @@ export class Scanner {
     };
 
     parseRegExpLiteral() {
-        var start, body, flags, value;
-
         this.scanning = true;
         this.lookahead = null;
         this.skipComment();
-        start = this.index;
+        const start = this.index;
 
-        body = this.scanRegExpBody();
-        flags = this.scanRegExpFlags();
-        value = this.testRegExp(body.value, flags.value);
+        const body = this.scanRegExpBody();
+        const flags = this.scanRegExpFlags();
+        const value = this.testRegExp(body.value, flags.value);
         this.scanning = false;
 
         return {
@@ -1225,16 +1203,14 @@ export class Scanner {
     };
 
     scanRegExp() {
-        var start, body, flags, value;
-
         this.scanning = true;
         this.lookahead = null;
         this.skipComment();
-        start = this.index;
+        const start = this.index;
 
-        body = this.scanRegExpBody();
-        flags = this.scanRegExpFlags();
-        value = this.testRegExp(body.value, flags.value);
+        const body = this.scanRegExpBody();
+        const flags = this.scanRegExpFlags();
+        const value = this.testRegExp(body.value, flags.value);
         this.scanning = false;
 
         return {
@@ -1252,8 +1228,6 @@ export class Scanner {
     };
 
     advance() {
-        var cp, token;
-
         if (this.eof()) {
             return {
                 type: Token.EOF,
@@ -1264,10 +1238,10 @@ export class Scanner {
             };
         }
 
-        cp = this.source.charCodeAt(this.index);
+        const cp = this.source.charCodeAt(this.index);
 
         if (Character.isIdentifierStart(cp)) {
-            token = this.scanIdentifier();
+            const token = this.scanIdentifier();
             if (this.strict && this.isStrictModeReservedWord(token.value)) {
                 token.type = Token.Keyword;
             }
@@ -1310,8 +1284,7 @@ export class Scanner {
 
         // Possible identifier start in a surrogate pair.
         if (cp >= 0xD800 && cp < 0xDFFF) {
-            cp = this.codePointAt(this.index);
-            if (Character.isIdentifierStart(cp)) {
+            if (Character.isIdentifierStart(this.codePointAt(this.index))) {
                 return this.scanIdentifier();
             }
         }
@@ -1338,7 +1311,6 @@ export class Scanner {
 
 
     lex() {
-        var token;
         this.scanning = true;
 
         this.lastIndex = this.index;
@@ -1347,7 +1319,7 @@ export class Scanner {
 
         this.skipComment();
 
-        token = this.lookahead;
+        const token = this.lookahead;
 
         this.startIndex = this.index;
         this.startLineNumber = this.lineNumber;
