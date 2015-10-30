@@ -3922,7 +3922,7 @@ function filterTokenLocation(tokens) {
     return result;
 }
 
-function initialize(code: any, opt: any, delegate: any): void {
+function initialize(code: string, opt: any, delegate: any): void {
     options = {
         range: false,
         loc: false,
@@ -3989,7 +3989,7 @@ function initialize(code: any, opt: any, delegate: any): void {
     }
 }
 
-export function tokenize(code, opt, delegate) {
+export function tokenize(code: string, opt, delegate) {
     initialize(code, opt, {});
 
     options.tokens = true;
@@ -4026,7 +4026,7 @@ export function tokenize(code, opt, delegate) {
     return tokens;
 }
 
-export function parse(code, opt) {
+export function parse(code: string, opt) {
     initialize(code, opt, {});
 
     scanner.start();
