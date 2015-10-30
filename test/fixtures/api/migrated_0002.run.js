@@ -1,1 +1,0 @@
-esprima.parse(42);

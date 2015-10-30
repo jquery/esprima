@@ -44,10 +44,7 @@ export class Scanner {
     throwUnexpectedToken: any;
     tolerateUnexpectedToken: any;
 
-    constructor(code: any, delegate: any) {
-        if (typeof code !== 'string' && !(code instanceof String)) {
-            code = String(code);
-        }
+    constructor(code: string, delegate: any) {
         this.source = code;
         this.length = code.length;
         this.strict = false;
