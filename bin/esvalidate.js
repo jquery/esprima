@@ -124,10 +124,13 @@ if (options.format === 'junit') {
 }
 
 count = 0;
-fnames.forEach(function (fname) {
-    var content, timestamp, syntax, name;
+
+function run(fname, content) {
+    var timestamp, syntax, name;
     try {
-        content = fs.readFileSync(fname, 'utf-8');
+        if (typeof content !== 'string') {
+            throw content;
+        }
 
         if (content[0] === '#' && content[1] === '!') {
             content = '//' + content.substr(2, content.length);
@@ -188,6 +191,16 @@ fnames.forEach(function (fname) {
             console.log('Error: ' + e.message);
         }
     }
+}
+
+fnames.forEach(function (fname) {
+    var content;
+    try {
+        content = fs.readFileSync(fname, 'utf-8');
+    } catch (e) {
+        content = e;
+    }
+    run(fname, content);
 });
 
 if (options.format === 'junit') {
