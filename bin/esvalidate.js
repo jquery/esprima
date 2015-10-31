@@ -26,7 +26,7 @@
 /*jslint sloppy:true plusplus:true node:true rhino:true */
 /*global phantom:true */
 
-var fs, system, esprima, options, fnames, count;
+var fs, system, esprima, options, fnames, forceFile, count;
 
 if (typeof esprima === 'undefined') {
     // PhantomJS can only require() relative files
@@ -80,7 +80,7 @@ if (typeof console === 'undefined' && typeof process === 'undefined') {
 
 function showUsage() {
     console.log('Usage:');
-    console.log('   esvalidate [options] file.js');
+    console.log('   esvalidate [options] [file.js...]');
     console.log();
     console.log('Available options:');
     console.log();
@@ -88,10 +88,6 @@ function showUsage() {
     console.log('  -v, --version  Print program version');
     console.log();
     process.exit(1);
-}
-
-if (process.argv.length <= 2) {
-    showUsage();
 }
 
 options = {
@@ -102,7 +98,9 @@ fnames = [];
 
 process.argv.splice(2).forEach(function (entry) {
 
-    if (entry === '-h' || entry === '--help') {
+    if (forceFile || entry === '-' || entry.slice(0, 1) !== '-') {
+        fnames.push(entry);
+    } else if (entry === '-h' || entry === '--help') {
         showUsage();
     } else if (entry === '-v' || entry === '--version') {
         console.log('ECMAScript Validator (using Esprima version', esprima.version, ')');
@@ -114,17 +112,16 @@ process.argv.splice(2).forEach(function (entry) {
             console.log('Error: unknown report format ' + options.format + '.');
             process.exit(1);
         }
-    } else if (entry.slice(0, 2) === '--') {
+    } else if (entry === '--') {
+        forceFile = true;
+    } else {
         console.log('Error: unknown option ' + entry + '.');
         process.exit(1);
-    } else {
-        fnames.push(entry);
     }
 });
 
 if (fnames.length === 0) {
-    console.log('Error: no input file.');
-    process.exit(1);
+    fnames.push('');
 }
 
 if (options.format === 'junit') {
@@ -205,7 +202,7 @@ function run(fname, content) {
 fnames.forEach(function (fname) {
     var content = '';
     try {
-        if (fname !== '-') {
+        if (fname && (fname !== '-' || forceFile)) {
             content = fs.readFileSync(fname, 'utf-8');
         } else {
             fname = '';
