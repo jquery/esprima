@@ -29,7 +29,11 @@ var fs, esprima, fname, content, options, syntax;
 
 if (typeof require === 'function') {
     fs = require('fs');
-    esprima = require('esprima');
+    try {
+        esprima = require('esprima');
+    } catch (e) {
+        esprima = require('../src/esprima');
+    }
 } else if (typeof load === 'function') {
     try {
         load('esprima.js');
