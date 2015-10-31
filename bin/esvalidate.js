@@ -55,7 +55,10 @@ if (typeof phantom === 'object') {
     fs.readFileSync = fs.read;
     process = {
         argv: [].slice.call(system.args),
-        exit: phantom.exit
+        exit: phantom.exit,
+        on: function (evt, callback) {
+            callback();
+        }
     };
     process.argv.unshift('phantomjs');
 }
@@ -64,7 +67,13 @@ if (typeof phantom === 'object') {
 if (typeof console === 'undefined' && typeof process === 'undefined') {
     console = { log: print };
     fs = { readFileSync: readFile };
-    process = { argv: arguments, exit: quit };
+    process = {
+        argv: arguments,
+        exit: quit,
+        on: function (evt, callback) {
+            callback();
+        }
+    };
     process.argv.unshift('esvalidate.js');
     process.argv.unshift('rhino');
 }
@@ -194,23 +203,37 @@ function run(fname, content) {
 }
 
 fnames.forEach(function (fname) {
-    var content;
+    var content = '';
     try {
-        content = fs.readFileSync(fname, 'utf-8');
+        if (fname !== '-') {
+            content = fs.readFileSync(fname, 'utf-8');
+        } else {
+            fname = '';
+            process.stdin.resume();
+            process.stdin.on('data', function(chunk) {
+                content += chunk;
+            });
+            process.stdin.on('end', function() {
+                run(fname, content);
+            });
+            return;
+        }
     } catch (e) {
         content = e;
     }
     run(fname, content);
 });
 
-if (options.format === 'junit') {
-    console.log('</testsuites>');
-}
+process.on('exit', function () {
+    if (options.format === 'junit') {
+        console.log('</testsuites>');
+    }
 
-if (count > 0) {
-    process.exit(1);
-}
+    if (count > 0) {
+        process.exit(1);
+    }
 
-if (count === 0 && typeof phantom === 'object') {
-    process.exit(0);
-}
+    if (count === 0 && typeof phantom === 'object') {
+        process.exit(0);
+    }
+});
