@@ -120,10 +120,24 @@ function adjustRegexLiteral(key, value) {
     return value;
 }
 
-try {
-    content = fs.readFileSync(fname, 'utf-8');
+function run(content) {
     syntax = esprima.parse(content, options);
     console.log(JSON.stringify(syntax, adjustRegexLiteral, 4));
+}
+
+try {
+    if (fname !== '-') {
+        run(fs.readFileSync(fname, 'utf-8'));
+    } else {
+        var content = '';
+        process.stdin.resume();
+        process.stdin.on('data', function(chunk) {
+            content += chunk;
+        });
+        process.stdin.on('end', function() {
+            run(content);
+        });
+    }
 } catch (e) {
     console.log('Error: ' + e.message);
     process.exit(1);
