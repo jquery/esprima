@@ -32,7 +32,7 @@ if (typeof require === 'function') {
     try {
         esprima = require('esprima');
     } catch (e) {
-        esprima = require('../src/esprima');
+        esprima = require('../dist/esprima');
     }
 } else if (typeof load === 'function') {
     try {
