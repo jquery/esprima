@@ -21,62 +21,6 @@
                     }
                 }
             },
-            "guardedHandlers": [],
-            "handlers": [
-                {
-                    "type": "CatchClause",
-                    "param": {
-                        "type": "Identifier",
-                        "name": "e",
-                        "range": [
-                            15,
-                            16
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 15
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 16
-                            }
-                        }
-                    },
-                    "body": {
-                        "type": "BlockStatement",
-                        "body": [],
-                        "range": [
-                            18,
-                            21
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 18
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 21
-                            }
-                        }
-                    },
-                    "range": [
-                        8,
-                        21
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 1,
-                            "column": 8
-                        },
-                        "end": {
-                            "line": 1,
-                            "column": 21
-                        }
-                    }
-                }
-            ],
             "handler": {
                 "type": "CatchClause",
                 "param": {

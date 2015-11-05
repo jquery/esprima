@@ -549,8 +549,6 @@ Node.prototype = {
     finishTryStatement: function(block, handler, finalizer) {
         this.type = Syntax.TryStatement;
         this.block = block;
-        this.guardedHandlers = [];
-        this.handlers = handler ? [handler] : [];
         this.handler = handler;
         this.finalizer = finalizer;
         this.finish();
