@@ -21,8 +21,6 @@
                     }
                 }
             },
-            "guardedHandlers": [],
-            "handlers": [],
             "handler": null,
             "finalizer": {
                 "type": "BlockStatement",

@@ -98,6 +98,5 @@ test_downstream({
     'js2coffee': 'https://github.com/js2coffee/js2coffee.git',
     'jscs': 'https://github.com/jscs-dev/node-jscs.git',
     'jsfmt': 'https://github.com/rdio/jsfmt.git',
-    'istanbul': 'https://github.com/gotwarlost/istanbul.git',
-    'webpack': 'https://github.com/webpack/webpack.git'
+    'istanbul': 'https://github.com/gotwarlost/istanbul.git'
 });
