@@ -2428,14 +2428,13 @@ function parseVariableDeclaration(options) {
 }
 
 function parseVariableDeclarationList(options) {
-    let list = [];
-    do {
-        list.push(parseVariableDeclaration({ inFor: options.inFor }));
-        if (!match(',')) {
-            break;
-        }
+    let opt = { inFor: options.inFor };
+    let list = [parseVariableDeclaration(opt)];
+
+    while (match(',')) {
         scanner.lex();
-    } while (scanner.startIndex < scanner.length);
+        list.push(parseVariableDeclaration(opt));
+    }
 
     return list;
 }
@@ -2475,14 +2474,12 @@ function parseLexicalBinding(kind, options) {
 }
 
 function parseBindingList(kind, options) {
-    let list = [];
-    do {
-        list.push(parseLexicalBinding(kind, options));
-        if (!match(',')) {
-            break;
-        }
+    let list = [parseLexicalBinding(kind, options)];
+
+    while (match(',')) {
         scanner.lex();
-    } while (scanner.startIndex < scanner.length);
+        list.push(parseLexicalBinding(kind, options));
+    }
 
     return list;
 }
