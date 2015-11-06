@@ -4059,15 +4059,15 @@
     }
 
     function parseVariableDeclarationList(options) {
-        var list = [];
+        var opt, list;
 
-        do {
-            list.push(parseVariableDeclaration({ inFor: options.inFor }));
-            if (!match(',')) {
-                break;
-            }
+        opt = { inFor: options.inFor };
+        list = [parseVariableDeclaration(opt)];
+
+        while (match(',')) {
             lex();
-        } while (startIndex < length);
+            list.push(parseVariableDeclaration(opt));
+        }
 
         return list;
     }
@@ -4110,15 +4110,12 @@
     }
 
     function parseBindingList(kind, options) {
-        var list = [];
+        var list = [parseLexicalBinding(kind, options)];
 
-        do {
-            list.push(parseLexicalBinding(kind, options));
-            if (!match(',')) {
-                break;
-            }
+        while (match(',')) {
             lex();
-        } while (startIndex < length);
+            list.push(parseLexicalBinding(kind, options));
+        }
 
         return list;
     }
