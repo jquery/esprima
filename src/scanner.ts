@@ -47,7 +47,6 @@ export class Scanner {
     constructor(code: string, delegate: any) {
         this.source = code;
         this.length = code.length;
-        this.strict = false;
         this.index = 0;
         this.lineNumber = (code.length > 0) ? 1 : 0;
         this.lineStart = 0;
@@ -67,7 +66,6 @@ export class Scanner {
 
     pushState() {
         this.stateStack.push({
-            strict: this.strict,
             index: this.index,
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
@@ -87,7 +85,6 @@ export class Scanner {
         const state = this.stateStack.pop();
         assert(typeof state === 'object', 'Scanner state is not balanced');
 
-        this.strict = state.strict;
         this.index = state.index;
         this.lineNumber = state.lineNumber;
         this.lineStart = state.lineStart;
@@ -1238,11 +1235,7 @@ export class Scanner {
         const cp = this.source.charCodeAt(this.index);
 
         if (Character.isIdentifierStart(cp)) {
-            const token = this.scanIdentifier();
-            if (this.strict && this.isStrictModeReservedWord(token.value)) {
-                token.type = Token.Keyword;
-            }
-            return token;
+            return this.scanIdentifier();
         }
 
         // Very common: ( and ) and ;
