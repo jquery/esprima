@@ -16,8 +16,6 @@ export class Scanner {
     source: string;
     length: number;
 
-    strict: boolean;
-
     index: number;
     lineNumber: number;
     lineStart: number;
