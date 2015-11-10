@@ -1171,29 +1171,6 @@ export class Scanner {
         };
     };
 
-    parseRegExpLiteral() {
-        this.scanning = true;
-        this.lookahead = null;
-        this.skipComment();
-        const start = this.index;
-
-        const body = this.scanRegExpBody();
-        const flags = this.scanRegExpFlags();
-        const value = this.testRegExp(body.value, flags.value);
-        this.scanning = false;
-
-        return {
-            literal: body.literal + flags.literal,
-            value: value,
-            regex: {
-                pattern: body.value,
-                flags: flags.value
-            },
-            start: start,
-            end: this.index
-        };
-    };
-
     scanRegExp() {
         this.scanning = true;
         this.lookahead = null;
@@ -1208,6 +1185,7 @@ export class Scanner {
         return {
             type: Token.RegularExpression,
             value: value,
+            literal: body.literal + flags.literal,
             regex: {
                 pattern: body.value,
                 flags: flags.value

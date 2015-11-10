@@ -28,6 +28,57 @@ function nextToken() {
     return token;
 }
 
+function nextRegexToken() {
+    let pos, loc;
+
+    if (options.tokens) {
+        scanner.skipComment();
+
+        pos = scanner.index;
+        loc = {
+            start: {
+                line: scanner.lineNumber,
+                column: scanner.index - scanner.lineStart
+            },
+            end: {}
+        };
+    }
+
+    const token = scanner.scanRegExp();
+    const regex = {
+        literal: token.literal,
+        value: token.value,
+        regex: token.regex,
+        start: token.start,
+        end: token.end
+    };
+
+    if (options.tokens) {
+        loc.end = {
+            line: scanner.lineNumber,
+            column: scanner.index - scanner.lineStart
+        };
+
+        // Pop the previous token, '/' or '/='
+        // This is added from the lookahead token.
+        state.tokens.pop();
+
+        state.tokens.push({
+            type: 'RegularExpression',
+            value: regex.literal,
+            regex: regex.regex,
+            range: [pos, scanner.index],
+            loc: loc
+        });
+    }
+
+    // Prime the next lookahead.
+    scanner.lex();
+    scanner.lookahead = upgradeToken(scanner.lookahead);
+
+    return regex;
+}
+
 function Node(startToken?) {
     if (startToken) {
         if (options.range) {
@@ -922,50 +973,6 @@ function consumeSemicolon() {
     }
 }
 
-function collectRegex() {
-    let regex;
-    scanner.skipComment();
-
-    const pos = scanner.index;
-    let loc = {
-        start: {
-            line: scanner.lineNumber,
-            column: scanner.index - scanner.lineStart
-        },
-        end: {}
-    };
-
-    regex = state.tokenizeOnly ? scanner.scanRegExp() : scanner.parseRegExpLiteral();
-
-    loc.end = {
-        line: scanner.lineNumber,
-        column: scanner.index - scanner.lineStart
-    };
-
-    /* istanbul ignore next */
-    if (!state.tokenizeOnly) {
-        // Pop the previous token, which is likely '/' or '/='
-        if (state.tokens.length > 0) {
-            let token = state.tokens[state.tokens.length - 1];
-            if (token.range[0] === pos && token.type === 'Punctuator') {
-                if (token.value === '/' || token.value === '/=') {
-                    state.tokens.pop();
-                }
-            }
-        }
-
-        state.tokens.push({
-            type: 'RegularExpression',
-            value: regex.literal,
-            regex: regex.regex,
-            range: [pos, scanner.index],
-            loc: loc
-        });
-    }
-
-    return regex;
-}
-
 function isIdentifierName(token) {
     return token.type === Token.Identifier ||
         token.type === Token.Keyword ||
@@ -1023,7 +1030,7 @@ function advanceSlash() {
             }
     }
 
-    return regex ? collectRegex() : scanner.scanPunctuator();
+    return regex ? scanner.scanRegExp() : scanner.scanPunctuator();
 }
 
 // Cover grammar support.
@@ -1704,8 +1711,7 @@ function parsePrimaryExpression() {
     } else if (match('/') || match('/=')) {
         state.isAssignmentTarget = state.isBindingElement = false;
         scanner.index = scanner.startIndex;
-        let token = options.tokens ? collectRegex() : scanner.scanRegExp();
-        nextToken();
+        let token = nextRegexToken();
         expr = node.finishLiteral(token);
     } else if (type === Token.Template) {
         expr = parseTemplateLiteral();
