@@ -457,7 +457,7 @@ Node.prototype = {
     finishProgram: function(body, sourceType) {
         this.type = Syntax.Program;
         this.body = body;
-        this.sourceType = state.sourceType;
+        this.sourceType = sourceType;
         this.finish();
         return this;
     },
