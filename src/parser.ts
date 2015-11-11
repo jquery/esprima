@@ -111,7 +111,7 @@ function Node(startToken?) {
 
 Node.prototype = {
 
-    processComment: function() {
+    processComment() {
         let bottomRight = state.bottomRightStack;
         let last = bottomRight[bottomRight.length - 1];
 
@@ -200,7 +200,7 @@ Node.prototype = {
         bottomRight.push(this);
     },
 
-    finish: function() {
+    finish() {
         if (options.range) {
             this.range[1] = scanner.lastIndex;
         }
@@ -219,21 +219,21 @@ Node.prototype = {
         }
     },
 
-    finishArrayExpression: function(elements) {
+    finishArrayExpression(elements) {
         this.type = Syntax.ArrayExpression;
         this.elements = elements;
         this.finish();
         return this;
     },
 
-    finishArrayPattern: function(elements) {
+    finishArrayPattern(elements) {
         this.type = Syntax.ArrayPattern;
         this.elements = elements;
         this.finish();
         return this;
     },
 
-    finishArrowFunctionExpression: function(params, defaults, body, expression) {
+    finishArrowFunctionExpression(params, defaults, body, expression) {
         this.type = Syntax.ArrowFunctionExpression;
         this.id = null;
         this.params = params;
@@ -245,7 +245,7 @@ Node.prototype = {
         return this;
     },
 
-    finishAssignmentExpression: function(operator, left, right) {
+    finishAssignmentExpression(operator, left, right) {
         this.type = Syntax.AssignmentExpression;
         this.operator = operator;
         this.left = left;
@@ -254,7 +254,7 @@ Node.prototype = {
         return this;
     },
 
-    finishAssignmentPattern: function(left, right) {
+    finishAssignmentPattern(left, right) {
         this.type = Syntax.AssignmentPattern;
         this.left = left;
         this.right = right;
@@ -262,7 +262,7 @@ Node.prototype = {
         return this;
     },
 
-    finishBinaryExpression: function(operator, left, right) {
+    finishBinaryExpression(operator, left, right) {
         this.type = (operator === '||' || operator === '&&') ? Syntax.LogicalExpression : Syntax.BinaryExpression;
         this.operator = operator;
         this.left = left;
@@ -271,21 +271,21 @@ Node.prototype = {
         return this;
     },
 
-    finishBlockStatement: function(body) {
+    finishBlockStatement(body) {
         this.type = Syntax.BlockStatement;
         this.body = body;
         this.finish();
         return this;
     },
 
-    finishBreakStatement: function(label) {
+    finishBreakStatement(label) {
         this.type = Syntax.BreakStatement;
         this.label = label;
         this.finish();
         return this;
     },
 
-    finishCallExpression: function(callee, args) {
+    finishCallExpression(callee, args) {
         this.type = Syntax.CallExpression;
         this.callee = callee;
         this.arguments = args;
@@ -293,7 +293,7 @@ Node.prototype = {
         return this;
     },
 
-    finishCatchClause: function(param, body) {
+    finishCatchClause(param, body) {
         this.type = Syntax.CatchClause;
         this.param = param;
         this.body = body;
@@ -301,14 +301,14 @@ Node.prototype = {
         return this;
     },
 
-    finishClassBody: function(body) {
+    finishClassBody(body) {
         this.type = Syntax.ClassBody;
         this.body = body;
         this.finish();
         return this;
     },
 
-    finishClassDeclaration: function(id, superClass, body) {
+    finishClassDeclaration(id, superClass, body) {
         this.type = Syntax.ClassDeclaration;
         this.id = id;
         this.superClass = superClass;
@@ -317,7 +317,7 @@ Node.prototype = {
         return this;
     },
 
-    finishClassExpression: function(id, superClass, body) {
+    finishClassExpression(id, superClass, body) {
         this.type = Syntax.ClassExpression;
         this.id = id;
         this.superClass = superClass;
@@ -326,7 +326,7 @@ Node.prototype = {
         return this;
     },
 
-    finishConditionalExpression: function(test, consequent, alternate) {
+    finishConditionalExpression(test, consequent, alternate) {
         this.type = Syntax.ConditionalExpression;
         this.test = test;
         this.consequent = consequent;
@@ -335,20 +335,20 @@ Node.prototype = {
         return this;
     },
 
-    finishContinueStatement: function(label) {
+    finishContinueStatement(label) {
         this.type = Syntax.ContinueStatement;
         this.label = label;
         this.finish();
         return this;
     },
 
-    finishDebuggerStatement: function() {
+    finishDebuggerStatement() {
         this.type = Syntax.DebuggerStatement;
         this.finish();
         return this;
     },
 
-    finishDoWhileStatement: function(body, test) {
+    finishDoWhileStatement(body, test) {
         this.type = Syntax.DoWhileStatement;
         this.body = body;
         this.test = test;
@@ -356,20 +356,20 @@ Node.prototype = {
         return this;
     },
 
-    finishEmptyStatement: function() {
+    finishEmptyStatement() {
         this.type = Syntax.EmptyStatement;
         this.finish();
         return this;
     },
 
-    finishExpressionStatement: function(expression) {
+    finishExpressionStatement(expression) {
         this.type = Syntax.ExpressionStatement;
         this.expression = expression;
         this.finish();
         return this;
     },
 
-    finishForStatement: function(init, test, update, body) {
+    finishForStatement(init, test, update, body) {
         this.type = Syntax.ForStatement;
         this.init = init;
         this.test = test;
@@ -379,7 +379,7 @@ Node.prototype = {
         return this;
     },
 
-    finishForOfStatement: function(left, right, body) {
+    finishForOfStatement(left, right, body) {
         this.type = Syntax.ForOfStatement;
         this.left = left;
         this.right = right;
@@ -388,7 +388,7 @@ Node.prototype = {
         return this;
     },
 
-    finishForInStatement: function(left, right, body) {
+    finishForInStatement(left, right, body) {
         this.type = Syntax.ForInStatement;
         this.left = left;
         this.right = right;
@@ -398,7 +398,7 @@ Node.prototype = {
         return this;
     },
 
-    finishFunctionDeclaration: function(id, params, defaults, body, generator) {
+    finishFunctionDeclaration(id, params, defaults, body, generator) {
         this.type = Syntax.FunctionDeclaration;
         this.id = id;
         this.params = params;
@@ -410,7 +410,7 @@ Node.prototype = {
         return this;
     },
 
-    finishFunctionExpression: function(id, params, defaults, body, generator) {
+    finishFunctionExpression(id, params, defaults, body, generator) {
         this.type = Syntax.FunctionExpression;
         this.id = id;
         this.params = params;
@@ -422,14 +422,14 @@ Node.prototype = {
         return this;
     },
 
-    finishIdentifier: function(name) {
+    finishIdentifier(name) {
         this.type = Syntax.Identifier;
         this.name = name;
         this.finish();
         return this;
     },
 
-    finishIfStatement: function(test, consequent, alternate) {
+    finishIfStatement(test, consequent, alternate) {
         this.type = Syntax.IfStatement;
         this.test = test;
         this.consequent = consequent;
@@ -438,7 +438,7 @@ Node.prototype = {
         return this;
     },
 
-    finishLabeledStatement: function(label, body) {
+    finishLabeledStatement(label, body) {
         this.type = Syntax.LabeledStatement;
         this.label = label;
         this.body = body;
@@ -446,7 +446,7 @@ Node.prototype = {
         return this;
     },
 
-    finishLiteral: function(token) {
+    finishLiteral(token) {
         this.type = Syntax.Literal;
         this.value = token.value;
         this.raw = scanner.source.slice(token.start, token.end);
@@ -457,7 +457,7 @@ Node.prototype = {
         return this;
     },
 
-    finishMemberExpression: function(accessor, object, property) {
+    finishMemberExpression(accessor, object, property) {
         this.type = Syntax.MemberExpression;
         this.computed = accessor === '[';
         this.object = object;
@@ -466,7 +466,7 @@ Node.prototype = {
         return this;
     },
 
-    finishMetaProperty: function(meta, property) {
+    finishMetaProperty(meta, property) {
         this.type = Syntax.MetaProperty;
         this.meta = meta;
         this.property = property;
@@ -474,7 +474,7 @@ Node.prototype = {
         return this;
     },
 
-    finishNewExpression: function(callee, args) {
+    finishNewExpression(callee, args) {
         this.type = Syntax.NewExpression;
         this.callee = callee;
         this.arguments = args;
@@ -482,21 +482,21 @@ Node.prototype = {
         return this;
     },
 
-    finishObjectExpression: function(properties) {
+    finishObjectExpression(properties) {
         this.type = Syntax.ObjectExpression;
         this.properties = properties;
         this.finish();
         return this;
     },
 
-    finishObjectPattern: function(properties) {
+    finishObjectPattern(properties) {
         this.type = Syntax.ObjectPattern;
         this.properties = properties;
         this.finish();
         return this;
     },
 
-    finishPostfixExpression: function(operator, argument) {
+    finishPostfixExpression(operator, argument) {
         this.type = Syntax.UpdateExpression;
         this.operator = operator;
         this.argument = argument;
@@ -505,7 +505,7 @@ Node.prototype = {
         return this;
     },
 
-    finishProgram: function(body, sourceType) {
+    finishProgram(body, sourceType) {
         this.type = Syntax.Program;
         this.body = body;
         this.sourceType = sourceType;
@@ -513,7 +513,7 @@ Node.prototype = {
         return this;
     },
 
-    finishProperty: function(kind, key, computed, value, method, shorthand) {
+    finishProperty(kind, key, computed, value, method, shorthand) {
         this.type = Syntax.Property;
         this.key = key;
         this.computed = computed;
@@ -525,35 +525,35 @@ Node.prototype = {
         return this;
     },
 
-    finishRestElement: function(argument) {
+    finishRestElement(argument) {
         this.type = Syntax.RestElement;
         this.argument = argument;
         this.finish();
         return this;
     },
 
-    finishReturnStatement: function(argument) {
+    finishReturnStatement(argument) {
         this.type = Syntax.ReturnStatement;
         this.argument = argument;
         this.finish();
         return this;
     },
 
-    finishSequenceExpression: function(expressions) {
+    finishSequenceExpression(expressions) {
         this.type = Syntax.SequenceExpression;
         this.expressions = expressions;
         this.finish();
         return this;
     },
 
-    finishSpreadElement: function(argument) {
+    finishSpreadElement(argument) {
         this.type = Syntax.SpreadElement;
         this.argument = argument;
         this.finish();
         return this;
     },
 
-    finishSwitchCase: function(test, consequent) {
+    finishSwitchCase(test, consequent) {
         this.type = Syntax.SwitchCase;
         this.test = test;
         this.consequent = consequent;
@@ -561,13 +561,13 @@ Node.prototype = {
         return this;
     },
 
-    finishSuper: function() {
+    finishSuper() {
         this.type = Syntax.Super;
         this.finish();
         return this;
     },
 
-    finishSwitchStatement: function(discriminant, cases) {
+    finishSwitchStatement(discriminant, cases) {
         this.type = Syntax.SwitchStatement;
         this.discriminant = discriminant;
         this.cases = cases;
@@ -575,7 +575,7 @@ Node.prototype = {
         return this;
     },
 
-    finishTaggedTemplateExpression: function(tag, quasi) {
+    finishTaggedTemplateExpression(tag, quasi) {
         this.type = Syntax.TaggedTemplateExpression;
         this.tag = tag;
         this.quasi = quasi;
@@ -583,7 +583,7 @@ Node.prototype = {
         return this;
     },
 
-    finishTemplateElement: function(value, tail) {
+    finishTemplateElement(value, tail) {
         this.type = Syntax.TemplateElement;
         this.value = value;
         this.tail = tail;
@@ -591,7 +591,7 @@ Node.prototype = {
         return this;
     },
 
-    finishTemplateLiteral: function(quasis, expressions) {
+    finishTemplateLiteral(quasis, expressions) {
         this.type = Syntax.TemplateLiteral;
         this.quasis = quasis;
         this.expressions = expressions;
@@ -599,20 +599,20 @@ Node.prototype = {
         return this;
     },
 
-    finishThisExpression: function() {
+    finishThisExpression() {
         this.type = Syntax.ThisExpression;
         this.finish();
         return this;
     },
 
-    finishThrowStatement: function(argument) {
+    finishThrowStatement(argument) {
         this.type = Syntax.ThrowStatement;
         this.argument = argument;
         this.finish();
         return this;
     },
 
-    finishTryStatement: function(block, handler, finalizer) {
+    finishTryStatement(block, handler, finalizer) {
         this.type = Syntax.TryStatement;
         this.block = block;
         this.handler = handler;
@@ -621,7 +621,7 @@ Node.prototype = {
         return this;
     },
 
-    finishUnaryExpression: function(operator, argument) {
+    finishUnaryExpression(operator, argument) {
         this.type = (operator === '++' || operator === '--') ? Syntax.UpdateExpression : Syntax.UnaryExpression;
         this.operator = operator;
         this.argument = argument;
@@ -630,7 +630,7 @@ Node.prototype = {
         return this;
     },
 
-    finishVariableDeclaration: function(declarations) {
+    finishVariableDeclaration(declarations) {
         this.type = Syntax.VariableDeclaration;
         this.declarations = declarations;
         this.kind = 'var';
@@ -638,7 +638,7 @@ Node.prototype = {
         return this;
     },
 
-    finishLexicalDeclaration: function(declarations, kind) {
+    finishLexicalDeclaration(declarations, kind) {
         this.type = Syntax.VariableDeclaration;
         this.declarations = declarations;
         this.kind = kind;
@@ -646,7 +646,7 @@ Node.prototype = {
         return this;
     },
 
-    finishVariableDeclarator: function(id, init) {
+    finishVariableDeclarator(id, init) {
         this.type = Syntax.VariableDeclarator;
         this.id = id;
         this.init = init;
@@ -654,7 +654,7 @@ Node.prototype = {
         return this;
     },
 
-    finishWhileStatement: function(test, body) {
+    finishWhileStatement(test, body) {
         this.type = Syntax.WhileStatement;
         this.test = test;
         this.body = body;
@@ -662,7 +662,7 @@ Node.prototype = {
         return this;
     },
 
-    finishWithStatement: function(object, body) {
+    finishWithStatement(object, body) {
         this.type = Syntax.WithStatement;
         this.object = object;
         this.body = body;
@@ -670,7 +670,7 @@ Node.prototype = {
         return this;
     },
 
-    finishExportSpecifier: function(local, exported) {
+    finishExportSpecifier(local, exported) {
         this.type = Syntax.ExportSpecifier;
         this.exported = exported || local;
         this.local = local;
@@ -678,21 +678,21 @@ Node.prototype = {
         return this;
     },
 
-    finishImportDefaultSpecifier: function(local) {
+    finishImportDefaultSpecifier(local) {
         this.type = Syntax.ImportDefaultSpecifier;
         this.local = local;
         this.finish();
         return this;
     },
 
-    finishImportNamespaceSpecifier: function(local) {
+    finishImportNamespaceSpecifier(local) {
         this.type = Syntax.ImportNamespaceSpecifier;
         this.local = local;
         this.finish();
         return this;
     },
 
-    finishExportNamedDeclaration: function(declaration, specifiers, src) {
+    finishExportNamedDeclaration(declaration, specifiers, src) {
         this.type = Syntax.ExportNamedDeclaration;
         this.declaration = declaration;
         this.specifiers = specifiers;
@@ -701,21 +701,21 @@ Node.prototype = {
         return this;
     },
 
-    finishExportDefaultDeclaration: function(declaration) {
+    finishExportDefaultDeclaration(declaration) {
         this.type = Syntax.ExportDefaultDeclaration;
         this.declaration = declaration;
         this.finish();
         return this;
     },
 
-    finishExportAllDeclaration: function(src) {
+    finishExportAllDeclaration(src) {
         this.type = Syntax.ExportAllDeclaration;
         this.source = src;
         this.finish();
         return this;
     },
 
-    finishImportSpecifier: function(local, imported) {
+    finishImportSpecifier(local, imported) {
         this.type = Syntax.ImportSpecifier;
         this.local = local || imported;
         this.imported = imported;
@@ -723,7 +723,7 @@ Node.prototype = {
         return this;
     },
 
-    finishImportDeclaration: function(specifiers, src) {
+    finishImportDeclaration(specifiers, src) {
         this.type = Syntax.ImportDeclaration;
         this.specifiers = specifiers;
         this.source = src;
@@ -731,7 +731,7 @@ Node.prototype = {
         return this;
     },
 
-    finishYieldExpression: function(argument, delegate) {
+    finishYieldExpression(argument, delegate) {
         this.type = Syntax.YieldExpression;
         this.argument = argument;
         this.delegate = delegate;
