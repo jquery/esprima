@@ -13,18 +13,70 @@ let PlaceHolders = {
     ArrowParameterPlaceHolder: 'ArrowParameterPlaceHolder'
 };
 
-function upgradeToken(token) {
-    if (token && state.strict && token.type === Token.Identifier) {
-        if (scanner.isStrictModeReservedWord(token.value)) {
-            token.type = Token.Keyword;
-        }
-    }
-    return token;
+let TokenName = {};
+TokenName[Token.BooleanLiteral] = 'Boolean';
+TokenName[Token.EOF] = '<end>';
+TokenName[Token.Identifier] = 'Identifier';
+TokenName[Token.Keyword] = 'Keyword';
+TokenName[Token.NullLiteral] = 'Null';
+TokenName[Token.NumericLiteral] = 'Numeric';
+TokenName[Token.Punctuator] = 'Punctuator';
+TokenName[Token.StringLiteral] = 'String';
+TokenName[Token.RegularExpression] = 'RegularExpression';
+TokenName[Token.Template] = 'Template';
+
+// From internal representation to an external structure
+function convertToken(token) {
+    return {
+        type: TokenName[token.type],
+        value: scanner.source.slice(token.start, token.end),
+        range: [token.start, token.end],
+        loc: {
+            start: {
+                line: state.startLineNumber,
+                column: state.startIndex - state.startLineStart
+            },
+            end: {
+                line: scanner.lineNumber,
+                column: scanner.index - scanner.lineStart
+            }
+        },
+        regex: token.regex
+    };
 }
 
 function nextToken() {
-    const token = scanner.lex();
-    scanner.lookahead = upgradeToken(scanner.lookahead);
+    const token = state.lookahead;
+
+    state.lastIndex = scanner.index;
+    state.lastLineNumber = scanner.lineNumber;
+    state.lastLineStart = scanner.lineStart;
+
+    state.scanning = true;
+    scanner.skipComment();
+    state.scanning = false;
+
+    state.startIndex = scanner.index;
+    state.startLineNumber = scanner.lineNumber;
+    state.startLineStart = scanner.lineStart;
+
+    let next;
+    state.scanning = true;
+    next = scanner.lex();
+    state.hasLineTerminator = (token && next) ? (token.lineNumber !== next.lineNumber) : false;
+    state.scanning = false;
+
+    if (next && state.strict && next.type === Token.Identifier) {
+        if (scanner.isStrictModeReservedWord(next.value)) {
+            next.type = Token.Keyword;
+        }
+    }
+    state.lookahead = next;
+
+    if (options.tokens && next.type !== Token.EOF) {
+        state.tokens.push(convertToken(next));
+    }
+
     return token;
 }
 
@@ -44,7 +96,9 @@ function nextRegexToken() {
         };
     }
 
+    state.scanning = true;
     const token = scanner.scanRegExp();
+    state.scanning = false;
     const regex = {
         literal: token.literal,
         value: token.value,
@@ -73,8 +127,8 @@ function nextRegexToken() {
     }
 
     // Prime the next lookahead.
-    scanner.lex();
-    scanner.lookahead = upgradeToken(scanner.lookahead);
+    state.lookahead = token;
+    nextToken();
 
     return regex;
 }
@@ -95,13 +149,13 @@ function Node(startToken?) {
         }
     } else {
         if (options.range) {
-            this.range = [scanner.startIndex, 0];
+            this.range = [state.startIndex, 0];
         }
         if (options.loc) {
             this.loc = {
                 start: {
-                    line: scanner.startLineNumber,
-                    column: scanner.startIndex - scanner.startLineStart
+                    line: state.startLineNumber,
+                    column: state.startIndex - state.startLineStart
                 },
                 end: null
             };
@@ -202,12 +256,12 @@ Node.prototype = {
 
     finish: function() {
         if (options.range) {
-            this.range[1] = scanner.lastIndex;
+            this.range[1] = state.lastIndex;
         }
         if (options.loc) {
             this.loc.end = {
-                line: scanner.lastLineNumber,
-                column: scanner.lastIndex - scanner.lastLineStart
+                line: state.lastLineNumber,
+                column: state.lastIndex - state.lastLineStart
             };
             if (options.source) {
                 this.loc.source = options.source;
@@ -781,7 +835,7 @@ function constructError(msg: string, column: number): Error {
 
 function createError(line: number, pos: number, description: string): Error {
     const msg = 'Line ' + line + ': ' + description;
-    const column = pos - (scanner.scanning ? scanner.lineStart : scanner.lastLineStart) + 1;
+    const column = pos - (state.scanning ? scanner.lineStart : state.lastLineStart) + 1;
     const error = constructError(msg, column);
     error.lineNumber = line;
     error.description = description;
@@ -798,7 +852,7 @@ function throwError(messageFormat: string, ...values): void {
         }
     );
 
-    throw createError(scanner.lastLineNumber, scanner.lastIndex, msg);
+    throw createError(state.lastLineNumber, state.lastIndex, msg);
 }
 
 function tolerateError(messageFormat, ...values) {
@@ -811,7 +865,7 @@ function tolerateError(messageFormat, ...values) {
         }
     );
 
-    const error = createError(scanner.lineNumber, scanner.lastIndex, msg);
+    const error = createError(scanner.lineNumber, state.lastIndex, msg);
     if (options.tolerant) {
         recordError(error);
     } else {
@@ -846,7 +900,7 @@ function unexpectedTokenError(token?: any, message?: string): Error {
     } else {
         value = 'ILLEGAL';
         if (message === Messages.TemplateOctalLiteral) {
-            throw createError(scanner.lastLineNumber, scanner.lastIndex, msg);
+            throw createError(state.lastLineNumber, state.lastIndex, msg);
         }
     }
 
@@ -854,7 +908,7 @@ function unexpectedTokenError(token?: any, message?: string): Error {
 
     return (token && typeof token.lineNumber === 'number') ?
         createError(token.lineNumber, token.start, msg) :
-        createError(scanner.scanning ? scanner.lineNumber : scanner.lastLineNumber, scanner.scanning ? scanner.index : scanner.lastIndex, msg);
+        createError(state.scanning ? scanner.lineNumber : state.lastLineNumber, state.scanning ? scanner.index : state.lastIndex, msg);
 }
 
 function throwUnexpectedToken(token?, message?) {
@@ -888,7 +942,7 @@ function expect(value) {
  */
 function expectCommaSeparator() {
     if (options.tolerant) {
-        let token = scanner.lookahead;
+        let token = state.lookahead;
         if (token.type === Token.Punctuator && token.value === ',') {
             nextToken();
         } else if (token.type === Token.Punctuator && token.value === ';') {
@@ -915,29 +969,29 @@ function expectKeyword(keyword) {
 // Return true if the next token matches the specified punctuator.
 
 function match(value) {
-    return scanner.lookahead.type === Token.Punctuator && scanner.lookahead.value === value;
+    return state.lookahead.type === Token.Punctuator && state.lookahead.value === value;
 }
 
 // Return true if the next token matches the specified keyword
 
 function matchKeyword(keyword) {
-    return scanner.lookahead.type === Token.Keyword && scanner.lookahead.value === keyword;
+    return state.lookahead.type === Token.Keyword && state.lookahead.value === keyword;
 }
 
 // Return true if the next token matches the specified contextual keyword
 // (where an identifier is sometimes a keyword depending on the context)
 
 function matchContextualKeyword(keyword) {
-    return scanner.lookahead.type === Token.Identifier && scanner.lookahead.value === keyword;
+    return state.lookahead.type === Token.Identifier && state.lookahead.value === keyword;
 }
 
 // Return true if the next token is an assignment operator
 
 function matchAssign() {
-    if (scanner.lookahead.type !== Token.Punctuator) {
+    if (state.lookahead.type !== Token.Punctuator) {
         return false;
     }
-    const op = scanner.lookahead.value;
+    const op = state.lookahead.value;
     return op === '=' ||
         op === '*=' ||
         op === '/=' ||
@@ -954,22 +1008,22 @@ function matchAssign() {
 
 function consumeSemicolon() {
     // Catch the very common case first: immediately a semicolon (U+003B).
-    if (scanner.source.charCodeAt(scanner.startIndex) === 0x3B || match(';')) {
+    if (scanner.source.charCodeAt(state.startIndex) === 0x3B || match(';')) {
         nextToken();
         return;
     }
 
-    if (scanner.hasLineTerminator) {
+    if (state.hasLineTerminator) {
         return;
     }
 
     // FIXME(ikarienator): this is seemingly an issue in the previous location info convention.
-    scanner.lastIndex = scanner.startIndex;
-    scanner.lastLineNumber = scanner.startLineNumber;
-    scanner.lastLineStart = scanner.startLineStart;
+    state.lastIndex = state.startIndex;
+    state.lastLineNumber = state.startLineNumber;
+    state.lastLineStart = state.startLineStart;
 
-    if (scanner.lookahead.type !== Token.EOF && !match('}')) {
-        throwUnexpectedToken(scanner.lookahead);
+    if (state.lookahead.type !== Token.EOF && !match('}')) {
+        throwUnexpectedToken(state.lookahead);
     }
 }
 
@@ -978,59 +1032,6 @@ function isIdentifierName(token) {
         token.type === Token.Keyword ||
         token.type === Token.BooleanLiteral ||
         token.type === Token.NullLiteral;
-}
-
-// A function following one of those tokens is an expression.
-function beforeFunctionExpression(t: string): boolean {
-    return ['(', '{', '[', 'in', 'typeof', 'instanceof', 'new',
-        'return', 'case', 'delete', 'throw', 'void',
-    // assignment operators
-        '=', '+=', '-=', '*=', '/=', '%=', '<<=', '>>=', '>>>=',
-        '&=', '|=', '^=', ',',
-    // binary/unary operators
-        '+', '-', '*', '/', '%', '++', '--', '<<', '>>', '>>>', '&',
-        '|', '^', '!', '~', '&&', '||', '?', ':', '===', '==', '>=',
-        '<=', '<', '>', '!=', '!=='].indexOf(t) >= 0;
-}
-
-// Using the following algorithm:
-// https://github.com/mozilla/sweet.js/wiki/design
-
-function advanceSlash() {
-    function testKeyword(value) {
-        return value && (value.length > 1) && (value[0] >= 'a') && (value[0] <= 'z');
-    }
-
-    const previous = state.tokenValues[state.tokenValues.length - 1];
-    let regex = (previous !== null);
-
-    switch (previous) {
-        case 'this':
-        case ']':
-            regex = false;
-            break;
-
-        case ')':
-            const check = state.tokenValues[state.openParenToken - 1];
-            regex = (check === 'if' || check === 'while' || check === 'for' || check === 'with');
-            break;
-
-        case '}':
-            // Dividing a function by anything makes little sense,
-            // but we have to check for that.
-            regex = false;
-            if (testKeyword(state.tokenValues[state.openCurlyToken - 3])) {
-                // Anonymous function, e.g. function(){} /42
-                const check = state.tokenValues[state.openCurlyToken - 4];
-                regex = check ? !beforeFunctionExpression(check) : false;
-            } else if (testKeyword(state.tokenValues[state.openCurlyToken - 4])) {
-                // Named function, e.g. function f(){} /42/
-                const check = state.tokenValues[state.openCurlyToken - 5];
-                regex = check ? !beforeFunctionExpression(check) : true;
-            }
-    }
-
-    return regex ? scanner.scanRegExp() : scanner.scanPunctuator();
 }
 
 // Cover grammar support.
@@ -1118,7 +1119,7 @@ function parseArrayPattern(params, kind) {
             if (match('...')) {
                 const restNode = new Node();
                 nextToken();
-                params.push(scanner.lookahead);
+                params.push(state.lookahead);
                 const rest = parseVariableIdentifier(kind);
                 elements.push(restNode.finishRestElement(rest));
                 break;
@@ -1141,8 +1142,8 @@ function parsePropertyPattern(params, kind) {
     const computed = match('[');
 
     let init, key;
-    if (scanner.lookahead.type === Token.Identifier) {
-        const keyToken = scanner.lookahead;
+    if (state.lookahead.type === Token.Identifier) {
+        const keyToken = state.lookahead;
         key = parseVariableIdentifier();
         if (match('=')) {
             params.push(keyToken);
@@ -1188,16 +1189,16 @@ function parsePattern(params, kind?) {
         return parseObjectPattern(params, kind);
     } else if (matchKeyword('let')) {
         if (kind === 'const' || kind === 'let') {
-            tolerateUnexpectedToken(scanner.lookahead, Messages.UnexpectedToken);
+            tolerateUnexpectedToken(state.lookahead, Messages.UnexpectedToken);
         }
     }
 
-    params.push(scanner.lookahead);
+    params.push(state.lookahead);
     return parseVariableIdentifier(kind);
 }
 
 function parsePatternWithDefault(params, kind?) {
-    let startToken = scanner.lookahead;
+    let startToken = state.lookahead;
     let pattern = parsePattern(params, kind);
 
     if (match('=')) {
@@ -1311,7 +1312,7 @@ function parseObjectPropertyKey() {
 }
 
 function lookaheadPropertyName() {
-    switch (scanner.lookahead.type) {
+    switch (state.lookahead.type) {
         case Token.Identifier:
         case Token.StringLiteral:
         case Token.BooleanLiteral:
@@ -1320,7 +1321,7 @@ function lookaheadPropertyName() {
         case Token.Keyword:
             return true;
         case Token.Punctuator:
-            return scanner.lookahead.value === '[';
+            return state.lookahead.value === '[';
     }
     return false;
 }
@@ -1369,7 +1370,7 @@ function tryParseMethodDefinition(token, key, computed, node) {
                 paramSet: {}
             };
             if (match(')')) {
-                tolerateUnexpectedToken(scanner.lookahead);
+                tolerateUnexpectedToken(state.lookahead);
             } else {
                 state.allowYield = false;
                 parseParam(options);
@@ -1414,7 +1415,7 @@ function tryParseMethodDefinition(token, key, computed, node) {
 function parseObjectProperty(hasProto) {
     const node = new Node();
 
-    const token = scanner.lookahead;
+    const token = state.lookahead;
     const computed = match('[');
     let key;
     if (match('*')) {
@@ -1429,7 +1430,7 @@ function parseObjectProperty(hasProto) {
     }
 
     if (!key) {
-        throwUnexpectedToken(scanner.lookahead);
+        throwUnexpectedToken(state.lookahead);
     }
 
     // Check for duplicated __proto__
@@ -1453,7 +1454,7 @@ function parseObjectProperty(hasProto) {
 
     if (token.type === Token.Identifier) {
         if (match('=')) {
-            state.firstCoverInitializedNameError = scanner.lookahead;
+            state.firstCoverInitializedNameError = state.lookahead;
             nextToken();
             const value = isolateCoverGrammar(parseAssignmentExpression);
             return node.finishProperty('init', key, computed,
@@ -1462,7 +1463,7 @@ function parseObjectProperty(hasProto) {
         return node.finishProperty('init', key, computed, key, false, true);
     }
 
-    throwUnexpectedToken(scanner.lookahead);
+    throwUnexpectedToken(state.lookahead);
 }
 
 function parseObjectInitializer() {
@@ -1521,7 +1522,7 @@ function reinterpretExpressionAsPattern(expr) {
 // ECMA-262 12.2.9 Template Literals
 
 function parseTemplateElement(option) {
-    if (scanner.lookahead.type !== Token.Template || (option.head && !scanner.lookahead.head)) {
+    if (state.lookahead.type !== Token.Template || (option.head && !state.lookahead.head)) {
         throwUnexpectedToken();
     }
 
@@ -1561,7 +1562,7 @@ function parseGroupExpression() {
         };
     }
 
-    const startToken = scanner.lookahead;
+    const startToken = state.lookahead;
     let params = [];
     let expr;
 
@@ -1584,7 +1585,7 @@ function parseGroupExpression() {
         state.isAssignmentTarget = false;
         let expressions = [expr];
 
-        while (scanner.startIndex < scanner.length) {
+        while (state.startIndex < scanner.length) {
             if (!match(',')) {
                 break;
             }
@@ -1592,7 +1593,7 @@ function parseGroupExpression() {
 
             if (match('...')) {
                 if (!state.isBindingElement) {
-                    throwUnexpectedToken(scanner.lookahead);
+                    throwUnexpectedToken(state.lookahead);
                 }
                 expressions.push(parseRestElement(params));
                 expect(')');
@@ -1627,7 +1628,7 @@ function parseGroupExpression() {
         }
 
         if (!state.isBindingElement) {
-            throwUnexpectedToken(scanner.lookahead);
+            throwUnexpectedToken(state.lookahead);
         }
 
         if (expr.type === Syntax.SequenceExpression) {
@@ -1664,19 +1665,19 @@ function parsePrimaryExpression() {
         return inheritCoverGrammar(parseObjectInitializer);
     }
 
-    const type = scanner.lookahead.type;
+    const type = state.lookahead.type;
     const node = new Node();
     let expr;
 
     if (type === Token.Identifier) {
-        if (state.sourceType === 'module' && scanner.lookahead.value === 'await') {
-            tolerateUnexpectedToken(scanner.lookahead);
+        if (state.sourceType === 'module' && state.lookahead.value === 'await') {
+            tolerateUnexpectedToken(state.lookahead);
         }
         expr = node.finishIdentifier(nextToken().value);
     } else if (type === Token.StringLiteral || type === Token.NumericLiteral) {
         state.isAssignmentTarget = state.isBindingElement = false;
-        if (state.strict && scanner.lookahead.octal) {
-            tolerateUnexpectedToken(scanner.lookahead, Messages.StrictOctalLiteral);
+        if (state.strict && state.lookahead.octal) {
+            tolerateUnexpectedToken(state.lookahead, Messages.StrictOctalLiteral);
         }
         expr = node.finishLiteral(nextToken());
     } else if (type === Token.Keyword) {
@@ -1710,7 +1711,7 @@ function parsePrimaryExpression() {
         expr = node.finishLiteral(token);
     } else if (match('/') || match('/=')) {
         state.isAssignmentTarget = state.isBindingElement = false;
-        scanner.index = scanner.startIndex;
+        scanner.index = state.startIndex;
         let token = nextRegexToken();
         expr = node.finishLiteral(token);
     } else if (type === Token.Template) {
@@ -1729,7 +1730,7 @@ function parseArguments() {
 
     expect('(');
     if (!match(')')) {
-        while (scanner.startIndex < scanner.length) {
+        while (state.startIndex < scanner.length) {
             let expr;
             if (match('...')) {
                 expr = new Node();
@@ -1781,13 +1782,13 @@ function parseNewExpression() {
     expectKeyword('new');
     if (match('.')) {
         nextToken();
-        if (scanner.lookahead.type === Token.Identifier && scanner.lookahead.value === 'target') {
+        if (state.lookahead.type === Token.Identifier && state.lookahead.value === 'target') {
             if (state.inFunctionBody) {
                 nextToken();
                 return node.finishMetaProperty('new', 'target');
             }
         }
-        throwUnexpectedToken(scanner.lookahead);
+        throwUnexpectedToken(state.lookahead);
     }
 
     const callee = isolateCoverGrammar(parseLeftHandSideExpression);
@@ -1800,7 +1801,7 @@ function parseNewExpression() {
 // ECMA-262 12.3.4 Function Calls
 
 function parseLeftHandSideExpressionAllowCall() {
-    const startToken = scanner.lookahead;
+    const startToken = state.lookahead;
     const previousAllowIn = state.allowIn;
     state.allowIn = true;
 
@@ -1810,7 +1811,7 @@ function parseLeftHandSideExpressionAllowCall() {
         nextToken();
         expr = expr.finishSuper();
         if (!match('(') && !match('.') && !match('[')) {
-            throwUnexpectedToken(scanner.lookahead);
+            throwUnexpectedToken(state.lookahead);
         }
     } else {
         expr = inheritCoverGrammar(matchKeyword('new') ? parseNewExpression : parsePrimaryExpression);
@@ -1832,7 +1833,7 @@ function parseLeftHandSideExpressionAllowCall() {
             state.isAssignmentTarget = true;
             const property = parseComputedMember();
             expr = new Node(startToken).finishMemberExpression('[', expr, property);
-        } else if (scanner.lookahead.type === Token.Template && scanner.lookahead.head) {
+        } else if (state.lookahead.type === Token.Template && state.lookahead.head) {
             const quasi = parseTemplateLiteral();
             expr = new Node(startToken).finishTaggedTemplateExpression(expr, quasi);
         } else {
@@ -1849,14 +1850,14 @@ function parseLeftHandSideExpressionAllowCall() {
 function parseLeftHandSideExpression() {
     assert(state.allowIn, 'callee of new expression always allow in keyword.');
 
-    const startToken = scanner.lookahead;
+    const startToken = state.lookahead;
     let expr;
     if (matchKeyword('super') && state.inFunctionBody) {
         expr = new Node();
         nextToken();
         expr = expr.finishSuper();
         if (!match('[') && !match('.')) {
-            throwUnexpectedToken(scanner.lookahead);
+            throwUnexpectedToken(state.lookahead);
         }
     } else {
         expr = inheritCoverGrammar(matchKeyword('new') ? parseNewExpression : parsePrimaryExpression);
@@ -1873,7 +1874,7 @@ function parseLeftHandSideExpression() {
             state.isAssignmentTarget = true;
             const property = parseNonComputedMember();
             expr = new Node(startToken).finishMemberExpression('.', expr, property);
-        } else if (scanner.lookahead.type === Token.Template && scanner.lookahead.head) {
+        } else if (state.lookahead.type === Token.Template && state.lookahead.head) {
             const quasi = parseTemplateLiteral();
             expr = new Node(startToken).finishTaggedTemplateExpression(expr, quasi);
         } else {
@@ -1886,10 +1887,10 @@ function parseLeftHandSideExpression() {
 // ECMA-262 12.4 Postfix Expressions
 
 function parsePostfixExpression() {
-    const startToken = scanner.lookahead;
+    const startToken = state.lookahead;
     let expr = inheritCoverGrammar(parseLeftHandSideExpressionAllowCall);
 
-    if (!scanner.hasLineTerminator && scanner.lookahead.type === Token.Punctuator) {
+    if (!state.hasLineTerminator && state.lookahead.type === Token.Punctuator) {
         if (match('++') || match('--')) {
             // ECMA-262 11.3.1, 11.3.2
             if (state.strict && expr.type === Syntax.Identifier && scanner.isRestrictedWord(expr.name)) {
@@ -1914,10 +1915,10 @@ function parsePostfixExpression() {
 
 function parseUnaryExpression() {
     let expr;
-    if (scanner.lookahead.type !== Token.Punctuator && scanner.lookahead.type !== Token.Keyword) {
+    if (state.lookahead.type !== Token.Punctuator && state.lookahead.type !== Token.Keyword) {
         expr = parsePostfixExpression();
     } else if (match('++') || match('--')) {
-        const startToken = scanner.lookahead;
+        const startToken = state.lookahead;
         const token = nextToken();
         expr = inheritCoverGrammar(parseUnaryExpression);
         // ECMA-262 11.4.4, 11.4.5
@@ -1931,13 +1932,13 @@ function parseUnaryExpression() {
         expr = new Node(startToken).finishUnaryExpression(token.value, expr);
         state.isAssignmentTarget = state.isBindingElement = false;
     } else if (match('+') || match('-') || match('~') || match('!')) {
-        const startToken = scanner.lookahead;
+        const startToken = state.lookahead;
         const token = nextToken();
         expr = inheritCoverGrammar(parseUnaryExpression);
         expr = new Node(startToken).finishUnaryExpression(token.value, expr);
         state.isAssignmentTarget = state.isBindingElement = false;
     } else if (matchKeyword('delete') || matchKeyword('void') || matchKeyword('typeof')) {
-        const startToken = scanner.lookahead;
+        const startToken = state.lookahead;
         const token = nextToken();
         expr = inheritCoverGrammar(parseUnaryExpression);
         expr = new Node(startToken).finishUnaryExpression(token.value, expr);
@@ -2032,11 +2033,11 @@ function binaryPrecedence(token, allowIn) {
 // ECMA-262 12.12 Binary Logical Operators
 
 function parseBinaryExpression() {
-    const marker = scanner.lookahead;
+    const marker = state.lookahead;
 
     let left = inheritCoverGrammar(parseUnaryExpression);
 
-    let token = scanner.lookahead;
+    let token = state.lookahead;
     let prec = binaryPrecedence(token, state.allowIn);
     if (prec === 0) {
         return left;
@@ -2045,12 +2046,12 @@ function parseBinaryExpression() {
     token.prec = prec;
     nextToken();
 
-    let markers = [marker, scanner.lookahead];
+    let markers = [marker, state.lookahead];
     let right = isolateCoverGrammar(parseUnaryExpression);
 
     let stack = [left, token, right];
 
-    while ((prec = binaryPrecedence(scanner.lookahead, state.allowIn)) > 0) {
+    while ((prec = binaryPrecedence(state.lookahead, state.allowIn)) > 0) {
         let expr;
 
         // Reduce: make a binary expression from the three topmost entries.
@@ -2067,7 +2068,7 @@ function parseBinaryExpression() {
         token = nextToken();
         token.prec = prec;
         stack.push(token);
-        markers.push(scanner.lookahead);
+        markers.push(state.lookahead);
         expr = isolateCoverGrammar(parseUnaryExpression);
         stack.push(expr);
     }
@@ -2088,7 +2089,7 @@ function parseBinaryExpression() {
 // ECMA-262 12.13 Conditional Operator
 
 function parseConditionalExpression() {
-    const startToken = scanner.lookahead;
+    const startToken = state.lookahead;
 
     let expr = inheritCoverGrammar(parseBinaryExpression);
     if (match('?')) {
@@ -2173,7 +2174,7 @@ function reinterpretAsCoverFormalsList(expr) {
                 params[i] = param.left;
                 if (param.right.type === Syntax.YieldExpression) {
                     if (param.right.argument) {
-                        throwUnexpectedToken(scanner.lookahead);
+                        throwUnexpectedToken(state.lookahead);
                     }
                     param.right.type = Syntax.Identifier;
                     param.right.name = 'yield';
@@ -2196,7 +2197,7 @@ function reinterpretAsCoverFormalsList(expr) {
         for (let i = 0; i < params.length; ++i) {
             const param = params[i];
             if (param.type === Syntax.YieldExpression) {
-                throwUnexpectedToken(scanner.lookahead);
+                throwUnexpectedToken(state.lookahead);
             }
         }
     }
@@ -2220,8 +2221,8 @@ function reinterpretAsCoverFormalsList(expr) {
 }
 
 function parseArrowFunctionExpression(options, node) {
-    if (scanner.hasLineTerminator) {
-        tolerateUnexpectedToken(scanner.lookahead);
+    if (state.hasLineTerminator) {
+        tolerateUnexpectedToken(state.lookahead);
     }
     expect('=>');
 
@@ -2252,7 +2253,7 @@ function parseYieldExpression() {
 
     let argument = null;
     let delegate;
-    if (!scanner.hasLineTerminator) {
+    if (!state.hasLineTerminator) {
         const previousAllowYield = state.allowYield;
         state.allowYield = false;
         delegate = match('*');
@@ -2260,7 +2261,7 @@ function parseYieldExpression() {
             nextToken();
             argument = parseAssignmentExpression();
         } else {
-            if (!match(';') && !match('}') && !match(')') && scanner.lookahead.type !== Token.EOF) {
+            if (!match(';') && !match('}') && !match(')') && state.lookahead.type !== Token.EOF) {
                 argument = parseAssignmentExpression();
             }
         }
@@ -2277,7 +2278,7 @@ function parseAssignmentExpression() {
         return parseYieldExpression();
     }
 
-    const startToken = scanner.lookahead;
+    const startToken = state.lookahead;
     let token = startToken;
     let expr = parseConditionalExpression();
 
@@ -2326,13 +2327,13 @@ function parseAssignmentExpression() {
 // ECMA-262 12.15 Comma Operator
 
 function parseExpression() {
-    const startToken = scanner.lookahead;
+    const startToken = state.lookahead;
     let expr = isolateCoverGrammar(parseAssignmentExpression);
 
     if (match(',')) {
         let expressions = [expr];
 
-        while (scanner.startIndex < scanner.length) {
+        while (state.startIndex < scanner.length) {
             if (!match(',')) {
                 break;
             }
@@ -2349,16 +2350,16 @@ function parseExpression() {
 // ECMA-262 13.2 Block
 
 function parseStatementListItem() {
-    if (scanner.lookahead.type === Token.Keyword) {
-        switch (scanner.lookahead.value) {
+    if (state.lookahead.type === Token.Keyword) {
+        switch (state.lookahead.value) {
             case 'export':
                 if (state.sourceType !== 'module') {
-                    tolerateUnexpectedToken(scanner.lookahead, Messages.IllegalExportDeclaration);
+                    tolerateUnexpectedToken(state.lookahead, Messages.IllegalExportDeclaration);
                 }
                 return parseExportDeclaration();
             case 'import':
                 if (state.sourceType !== 'module') {
-                    tolerateUnexpectedToken(scanner.lookahead, Messages.IllegalImportDeclaration);
+                    tolerateUnexpectedToken(state.lookahead, Messages.IllegalImportDeclaration);
                 }
                 return parseImportDeclaration();
             case 'const':
@@ -2379,7 +2380,7 @@ function parseStatementListItem() {
 
 function parseStatementList() {
     let list = [];
-    while (scanner.startIndex < scanner.length) {
+    while (state.startIndex < scanner.length) {
         if (match('}')) {
             break;
         }
@@ -2506,16 +2507,27 @@ function parseBindingList(kind, options) {
 }
 
 function isLexicalDeclaration() {
-    // Prevent adding a duplicated token during the second look-ahead.
-    const previousAddToken = scanner.addToken;
-    scanner.addToken = null;
+    const location = {
+        index: scanner.index,
+        lineNumber: scanner.lineNumber,
+        lineStart: scanner.lineStart
+    };
 
-    scanner.pushState();
-    nextToken();
-    const lexical = (scanner.lookahead.type === Token.Identifier) || match('[') || match('{') ||
-        matchKeyword('let') || matchKeyword('yield');
-    scanner.popState();
-    scanner.addToken = previousAddToken;
+    let next;
+    state.scanning = true;
+    scanner.skipComment();
+    next = scanner.lex();
+    state.scanning = false;
+
+    const lexical = (next.type === Token.Identifier) ||
+        (next.type === Token.Punctuator && next.value === '[') ||
+        (next.type === Token.Punctuator && next.value === '{') ||
+        (next.type === Token.Keyword && next.value === 'let') ||
+        (next.type === Token.Keyword && next.value === 'yield');
+
+    scanner.index = location.index;
+    scanner.lineNumber = location.lineNumber;
+    scanner.lineStart = location.lineStart;
 
     return lexical;
 }
@@ -2539,7 +2551,7 @@ function parseRestElement(params) {
         throwError(Messages.ObjectPatternAsRestParameter);
     }
 
-    params.push(scanner.lookahead);
+    params.push(state.lookahead);
 
     const param = parseVariableIdentifier();
     if (match('=')) {
@@ -2665,7 +2677,7 @@ function parseForStatement(node) {
             init = new Node();
             const kind = nextToken().value;
 
-            if (!state.strict && scanner.lookahead.value === 'in') {
+            if (!state.strict && state.lookahead.value === 'in') {
                 init = init.finishIdentifier(kind);
                 nextToken();
                 left = init;
@@ -2696,7 +2708,7 @@ function parseForStatement(node) {
                 }
             }
         } else {
-            const initStartToken = scanner.lookahead;
+            const initStartToken = state.lookahead;
             const previousAllowIn = state.allowIn;
             state.allowIn = false;
             init = inheritCoverGrammar(parseAssignmentExpression);
@@ -2768,7 +2780,7 @@ function parseContinueStatement(node) {
     expectKeyword('continue');
 
     // Optimize the most common form: 'continue;'.
-    if (scanner.source.charCodeAt(scanner.startIndex) === 0x3B) {
+    if (scanner.source.charCodeAt(state.startIndex) === 0x3B) {
         nextToken();
 
         if (!state.inIteration) {
@@ -2778,7 +2790,7 @@ function parseContinueStatement(node) {
         return node.finishContinueStatement(null);
     }
 
-    if (scanner.hasLineTerminator) {
+    if (state.hasLineTerminator) {
         if (!state.inIteration) {
             throwError(Messages.IllegalContinue);
         }
@@ -2787,7 +2799,7 @@ function parseContinueStatement(node) {
     }
 
     let label = null;
-    if (scanner.lookahead.type === Token.Identifier) {
+    if (state.lookahead.type === Token.Identifier) {
         label = parseVariableIdentifier();
 
         const key = '$' + label.name;
@@ -2811,7 +2823,7 @@ function parseBreakStatement(node) {
     expectKeyword('break');
 
     // Catch the very common case first: immediately a semicolon (U+003B).
-    if (scanner.source.charCodeAt(scanner.lastIndex) === 0x3B) {
+    if (scanner.source.charCodeAt(state.lastIndex) === 0x3B) {
         nextToken();
 
         if (!(state.inIteration || state.inSwitch)) {
@@ -2822,11 +2834,11 @@ function parseBreakStatement(node) {
     }
 
     let label = null;
-    if (scanner.hasLineTerminator) {
+    if (state.hasLineTerminator) {
         if (!(state.inIteration || state.inSwitch)) {
             throwError(Messages.IllegalBreak);
         }
-    } else if (scanner.lookahead.type === Token.Identifier) {
+    } else if (state.lookahead.type === Token.Identifier) {
         label = parseVariableIdentifier();
 
         const key = '$' + label.name;
@@ -2853,14 +2865,14 @@ function parseReturnStatement(node) {
         tolerateError(Messages.IllegalReturn);
     }
 
-    if (scanner.hasLineTerminator) {
+    if (state.hasLineTerminator) {
         // HACK
         return node.finishReturnStatement(null);
     }
 
     let argument = null;
     if (!match(';')) {
-        if (!match('}') && scanner.lookahead.type !== Token.EOF) {
+        if (!match('}') && state.lookahead.type !== Token.EOF) {
             argument = parseExpression();
         }
     }
@@ -2902,7 +2914,7 @@ function parseSwitchCase() {
     expect(':');
 
     let consequent = [];
-    while (scanner.startIndex < scanner.length) {
+    while (state.startIndex < scanner.length) {
         if (match('}') || matchKeyword('default') || matchKeyword('case')) {
             break;
         }
@@ -2931,7 +2943,7 @@ function parseSwitchStatement(node) {
     state.inSwitch = true;
 
     let defaultFound = false;
-    while (scanner.startIndex < scanner.length) {
+    while (state.startIndex < scanner.length) {
         if (match('}')) {
             break;
         }
@@ -2957,7 +2969,7 @@ function parseSwitchStatement(node) {
 function parseThrowStatement(node) {
     expectKeyword('throw');
 
-    if (scanner.hasLineTerminator) {
+    if (state.hasLineTerminator) {
         throwError(Messages.NewlineAfterThrow);
     }
 
@@ -2976,7 +2988,7 @@ function parseCatchClause() {
 
     expect('(');
     if (match(')')) {
-        throwUnexpectedToken(scanner.lookahead);
+        throwUnexpectedToken(state.lookahead);
     }
 
     let params = [];
@@ -3035,20 +3047,20 @@ function parseDebuggerStatement(node) {
 // 13 Statements
 
 function parseStatement() {
-    const type = scanner.lookahead.type;
+    const type = state.lookahead.type;
 
     if (type === Token.EOF) {
-        throwUnexpectedToken(scanner.lookahead);
+        throwUnexpectedToken(state.lookahead);
     }
 
-    if (type === Token.Punctuator && scanner.lookahead.value === '{') {
+    if (type === Token.Punctuator && state.lookahead.value === '{') {
         return parseBlock();
     }
     state.isAssignmentTarget = state.isBindingElement = true;
     const node = new Node();
 
     if (type === Token.Punctuator) {
-        switch (scanner.lookahead.value) {
+        switch (state.lookahead.value) {
             case ';':
                 return parseEmptyStatement(node);
             case '(':
@@ -3057,7 +3069,7 @@ function parseStatement() {
                 break;
         }
     } else if (type === Token.Keyword) {
-        switch (scanner.lookahead.value) {
+        switch (state.lookahead.value) {
             case 'break':
                 return parseBreakStatement(node);
             case 'continue':
@@ -3122,11 +3134,11 @@ function parseFunctionSourceElements() {
 
     let firstRestricted = null;
     let body = [];
-    while (scanner.startIndex < scanner.length) {
-        if (scanner.lookahead.type !== Token.StringLiteral) {
+    while (state.startIndex < scanner.length) {
+        if (state.lookahead.type !== Token.StringLiteral) {
             break;
         }
-        const token = scanner.lookahead;
+        const token = state.lookahead;
 
         let statement = parseStatementListItem();
         body.push(statement);
@@ -3159,7 +3171,7 @@ function parseFunctionSourceElements() {
     state.inFunctionBody = true;
     state.parenthesizedCount = 0;
 
-    while (scanner.startIndex < scanner.length) {
+    while (state.startIndex < scanner.length) {
         if (match('}')) {
             break;
         }
@@ -3207,7 +3219,7 @@ function parseParam(options) {
     let param;
     let params = [];
 
-    const token = scanner.lookahead;
+    const token = state.lookahead;
     if (token.value === '...') {
         param = parseRestElement(params);
         validateParam(options, param.argument, param.argument.name);
@@ -3247,7 +3259,7 @@ function parseParams(firstRestricted?) {
     expect('(');
     if (!match(')')) {
         options.paramSet = {};
-        while (scanner.startIndex < scanner.length) {
+        while (state.startIndex < scanner.length) {
             if (!parseParam(options)) {
                 break;
             }
@@ -3282,7 +3294,7 @@ function parseFunctionDeclaration(node, identifierIsOptional?) {
     let firstRestricted = null;
 
     if (!identifierIsOptional || !match('(')) {
-        const token = scanner.lookahead;
+        const token = state.lookahead;
         id = parseVariableIdentifier();
         if (state.strict) {
             if (scanner.isRestrictedWord(token.value)) {
@@ -3344,7 +3356,7 @@ function parseFunctionExpression() {
     state.allowYield = !isGenerator;
 
     if (!match('(')) {
-        const token = scanner.lookahead;
+        const token = state.lookahead;
         id = (!state.strict && !isGenerator && matchKeyword('yield')) ? parseNonComputedProperty() : parseVariableIdentifier();
         if (state.strict) {
             if (scanner.isRestrictedWord(token.value)) {
@@ -3397,7 +3409,7 @@ function parseClassBody() {
             nextToken();
         } else {
             let method = new Node();
-            let token = scanner.lookahead;
+            let token = state.lookahead;
             let isStatic = false;
             let computed = match('[');
             let key;
@@ -3407,7 +3419,7 @@ function parseClassBody() {
             } else {
                 key = parseObjectPropertyKey();
                 if (key.name === 'static' && (lookaheadPropertyName() || match('*'))) {
-                    token = scanner.lookahead;
+                    token = state.lookahead;
                     isStatic = true;
                     computed = match('[');
                     if (match('*')) {
@@ -3445,7 +3457,7 @@ function parseClassBody() {
                 delete method.shorthand;
                 body.push(method);
             } else {
-                throwUnexpectedToken(scanner.lookahead);
+                throwUnexpectedToken(state.lookahead);
             }
         }
     }
@@ -3463,7 +3475,7 @@ function parseClassDeclaration(identifierIsOptional?) {
     expectKeyword('class');
 
     let id = null;
-    if (!identifierIsOptional || scanner.lookahead.type === Token.Identifier) {
+    if (!identifierIsOptional || state.lookahead.type === Token.Identifier) {
         id = parseVariableIdentifier();
     }
 
@@ -3487,7 +3499,7 @@ function parseClassExpression() {
     expectKeyword('class');
 
     let id = null;
-    if (scanner.lookahead.type === Token.Identifier) {
+    if (state.lookahead.type === Token.Identifier) {
         id = parseVariableIdentifier();
     }
 
@@ -3507,7 +3519,7 @@ function parseClassExpression() {
 function parseModuleSpecifier() {
     const node = new Node();
 
-    if (scanner.lookahead.type !== Token.StringLiteral) {
+    if (state.lookahead.type !== Token.StringLiteral) {
         throwError(Messages.InvalidModuleSpecifier);
     }
     return node.finishLiteral(nextToken());
@@ -3538,11 +3550,11 @@ function parseExportNamedDeclaration(node) {
     let specifiers = [];
 
     // non-default export
-    if (scanner.lookahead.type === Token.Keyword) {
+    if (state.lookahead.type === Token.Keyword) {
         // covers:
         // export var f = 1;
         let declaration;
-        switch (scanner.lookahead.value) {
+        switch (state.lookahead.value) {
             case 'let':
             case 'const':
                 declaration = parseLexicalDeclaration({ inFor: false });
@@ -3580,8 +3592,8 @@ function parseExportNamedDeclaration(node) {
     } else if (isExportFromIdentifier) {
         // covering:
         // export {default}; // missing fromClause
-        throwError(scanner.lookahead.value ?
-            Messages.UnexpectedToken : Messages.MissingFromClause, scanner.lookahead.value);
+        throwError(state.lookahead.value ?
+            Messages.UnexpectedToken : Messages.MissingFromClause, state.lookahead.value);
     } else {
         // cover
         // export {foo};
@@ -3608,7 +3620,7 @@ function parseExportDefaultDeclaration(node) {
     }
 
     if (matchContextualKeyword('from')) {
-        throwError(Messages.UnexpectedToken, scanner.lookahead.value);
+        throwError(Messages.UnexpectedToken, state.lookahead.value);
     }
 
     // covers:
@@ -3632,8 +3644,8 @@ function parseExportAllDeclaration(node) {
     // export * from 'foo';
     expect('*');
     if (!matchContextualKeyword('from')) {
-        throwError(scanner.lookahead.value ?
-            Messages.UnexpectedToken : Messages.MissingFromClause, scanner.lookahead.value);
+        throwError(state.lookahead.value ?
+            Messages.UnexpectedToken : Messages.MissingFromClause, state.lookahead.value);
     }
     nextToken();
     const src = parseModuleSpecifier();
@@ -3724,7 +3736,7 @@ function parseImportDeclaration() {
     let src;
     let specifiers = [];
 
-    if (scanner.lookahead.type === Token.StringLiteral) {
+    if (state.lookahead.type === Token.StringLiteral) {
         // import 'foo';
         src = parseModuleSpecifier();
     } else {
@@ -3735,7 +3747,7 @@ function parseImportDeclaration() {
         } else if (match('*')) {
             // import * as foo
             specifiers.push(parseImportNamespaceSpecifier());
-        } else if (isIdentifierName(scanner.lookahead) && !matchKeyword('default')) {
+        } else if (isIdentifierName(state.lookahead) && !matchKeyword('default')) {
             // import foo
             specifiers.push(parseImportDefaultSpecifier());
             if (match(',')) {
@@ -3747,7 +3759,7 @@ function parseImportDeclaration() {
                     // import foo, {bar}
                     specifiers = specifiers.concat(parseNamedImports());
                 } else {
-                    throwUnexpectedToken(scanner.lookahead);
+                    throwUnexpectedToken(state.lookahead);
                 }
             }
         } else {
@@ -3755,8 +3767,8 @@ function parseImportDeclaration() {
         }
 
         if (!matchContextualKeyword('from')) {
-            throwError(scanner.lookahead.value ?
-                Messages.UnexpectedToken : Messages.MissingFromClause, scanner.lookahead.value);
+            throwError(state.lookahead.value ?
+                Messages.UnexpectedToken : Messages.MissingFromClause, state.lookahead.value);
         }
         nextToken();
         src = parseModuleSpecifier();
@@ -3772,8 +3784,8 @@ function parseScriptBody() {
     let body = [];
 
     let firstRestricted = null;
-    while (scanner.startIndex < scanner.length) {
-        const token = scanner.lookahead;
+    while (state.startIndex < scanner.length) {
+        const token = state.lookahead;
         if (token.type !== Token.StringLiteral) {
             break;
         }
@@ -3797,7 +3809,7 @@ function parseScriptBody() {
         }
     }
 
-    while (scanner.startIndex < scanner.length) {
+    while (state.startIndex < scanner.length) {
         let statement = parseStatementListItem();
         /* istanbul ignore if */
         if (typeof statement === 'undefined') {
@@ -3845,71 +3857,125 @@ function addComment(type, value, start, end, loc) {
     }
 }
 
-function markBracket(type) {
-    switch (type) {
-        case '{':
-            state.openCurlyToken = state.tokenValues.length;
-            break;
-        case '(':
-            state.openParenToken = state.tokenValues.length;
-            break;
-        /* istanbul ignore next */
-        default:
-            break;
+function initialize(code: string, opt: any): void {
+    options = {
+        range: false,
+        loc: false,
+        source: null,
+        tokens: false,
+        comment: false,
+        attachComment: false,
+        tolerant: false,
+        sourceType: 'script'
+    };
+
+    if (typeof opt !== 'undefined') {
+        options = {
+            range: (typeof opt.range === 'boolean') && opt.range,
+            loc: (typeof opt.loc === 'boolean') && opt.loc,
+            tokens: (typeof opt.tokens === 'boolean' && opt.tokens),
+            comment: (typeof opt.comment === 'boolean' && opt.comment),
+            attachComment: (typeof opt.attachComment === 'boolean') && opt.attachComment,
+            tolerant: (typeof opt.tolerant === 'boolean' && opt.tolerant),
+            sourceType: (opt.sourceType === 'module') ? 'module' : 'script'
+        };
+        if (options.loc && opt.source !== null && opt.source !== undefined) {
+            options.source = String(opt.source);
+        }
+    }
+
+
+    scanner = new Scanner(code);
+    scanner.addComment = (options.comment) ? addComment : null;
+    scanner.throwUnexpectedToken = throwUnexpectedToken;
+    scanner.tolerateUnexpectedToken = tolerateUnexpectedToken;
+
+    state = {
+        allowIn: true,
+        allowYield: true,
+        comments: [],
+        errors: [],
+        firstCoverInitializedNameError: null,
+        hasLineTerminator: false,
+        isAssignmentTarget: false,
+        isBindingElement: false,
+        labelSet: {},
+        lastIndex: 0,
+        lastLineNumber: scanner.lineNumber,
+        lastLineStart: 0,
+        lookahead: null,
+        inFunctionBody: false,
+        inIteration: false,
+        inSwitch: false,
+        lastCommentStart: -1,
+        scanning: false,
+        source: null,
+        sourceType: options.sourceType,
+        startIndex: 0,
+        startLineNumber: scanner.lineNumber,
+        startLineStart: 0,
+        strict: (options.sourceType === 'module'),
+        tokenizeOnly: false,
+        tokens: []
+    };
+
+    if (options.attachComment) {
+        options.range = true;
+        state.bottomRightStack = [];
+        state.trailingComments = [];
+        state.leadingComments = [];
     }
 }
 
-let TokenName = {};
-TokenName[Token.BooleanLiteral] = 'Boolean';
-TokenName[Token.EOF] = '<end>';
-TokenName[Token.Identifier] = 'Identifier';
-TokenName[Token.Keyword] = 'Keyword';
-TokenName[Token.NullLiteral] = 'Null';
-TokenName[Token.NumericLiteral] = 'Numeric';
-TokenName[Token.Punctuator] = 'Punctuator';
-TokenName[Token.StringLiteral] = 'String';
-TokenName[Token.RegularExpression] = 'RegularExpression';
-TokenName[Token.Template] = 'Template';
+export function tokenize(code: string, opt, delegate) {
+    initialize(code, opt);
 
-function addToken(token) {
-    let entry;
-    if (token.type !== Token.EOF) {
-        token = upgradeToken(token);
-        entry = {
-            type: TokenName[token.type],
-            value: scanner.source.slice(token.start, token.end),
-            range: [token.start, token.end],
-            loc: {
-                start: {
-                    line: scanner.startLineNumber,
-                    column: scanner.startIndex - scanner.startLineStart
-                },
-                end: {
-                    line: scanner.lineNumber,
-                    column: scanner.index - scanner.lineStart
+    options.tokens = true;
+    state.tokenizeOnly = true;
+    state.delegate = delegate;
+
+    try {
+        while (!scanner.eof()) {
+            state.lastIndex = scanner.index;
+            state.lastLineNumber = scanner.lineNumber;
+            state.lastLineStart = scanner.lineStart;
+
+            state.scanning = true;
+            scanner.skipComment();
+            state.scanning = false;
+
+            state.startIndex = scanner.index;
+            state.startLineNumber = scanner.lineNumber;
+            state.startLineStart = scanner.lineStart;
+
+            state.scanning = true;
+            const token = scanner.advance();
+            state.scanning = false;
+
+            if (token.type !== Token.EOF) {
+                let entry = convertToken(token);
+                if (!options.range) {
+                    delete entry.range;
                 }
-            }
-        };
-        if (token.regex) {
-            entry.regex = {
-                pattern: token.regex.pattern,
-                flags: token.regex.flags
-            };
-        }
-        if (state.tokenizeOnly) {
-            state.tokenValues.push((entry.type === 'Punctuator' || entry.type === 'Keyword') ? entry.value : null);
-            if (!options.range) {
-                delete entry.range;
-            }
-            if (!options.loc) {
-                delete entry.loc;
-            }
-            if (state.delegate) {
-                entry = state.delegate(entry);
+                if (!options.loc) {
+                    delete entry.loc;
+                }
+                if (state.delegate) {
+                    entry = state.delegate(entry);
+                }
+                state.tokens.push(entry);
             }
         }
-        state.tokens.push(entry);
+    } catch (e) {
+        if (options.tolerant) {
+            recordError(e);
+        } else {
+            throw e;
+        }
     }
+
+    state.tokens.errors = state.errors;
+    return state.tokens;
 }
 
 function filterTokenLocation(tokens) {
@@ -3939,113 +4005,13 @@ function filterTokenLocation(tokens) {
     return result;
 }
 
-function initialize(code: string, opt: any, delegate: any): void {
-    options = {
-        range: false,
-        loc: false,
-        source: null,
-        tokens: false,
-        comment: false,
-        attachComment: false,
-        tolerant: false,
-        sourceType: 'script'
-    };
-
-    if (typeof opt !== 'undefined') {
-        options = {
-            range: (typeof opt.range === 'boolean') && opt.range,
-            loc: (typeof opt.loc === 'boolean') && opt.loc,
-            tokens: (typeof opt.tokens === 'boolean' && opt.tokens),
-            comment: (typeof opt.comment === 'boolean' && opt.comment),
-            attachComment: (typeof opt.attachComment === 'boolean') && opt.attachComment,
-            tolerant: (typeof opt.tolerant === 'boolean' && opt.tolerant),
-            sourceType: (opt.sourceType === 'module') ? 'module' : 'script'
-        };
-        if (options.loc && opt.source !== null && opt.source !== undefined) {
-            options.source = String(opt.source);
-        }
-    }
-
-    delegate.addComment = (options.comment) ? addComment : delegate.addComment;
-    delegate.throwUnexpectedToken = throwUnexpectedToken;
-    delegate.tolerateUnexpectedToken = tolerateUnexpectedToken;
-
-    scanner = new Scanner(code, delegate);
-    scanner.addToken = (options.tokens) ? addToken : scanner.addToken;
-
-    state = {
-        allowIn: true,
-        allowYield: true,
-        comments: [],
-        errors: [],
-        firstCoverInitializedNameError: null,
-        isAssignmentTarget: false,
-        isBindingElement: false,
-        labelSet: {},
-        inFunctionBody: false,
-        inIteration: false,
-        inSwitch: false,
-        lastCommentStart: -1,
-        openCurlyToken: -1,
-        openParenToken: -1,
-        source: null,
-        sourceType: options.sourceType,
-        strict: (options.sourceType === 'module'),
-        tokenizeOnly: false,
-        tokens: [],
-        tokenValues: []
-    };
-
-    if (options.attachComment) {
-        options.range = true;
-        state.bottomRightStack = [];
-        state.trailingComments = [];
-        state.leadingComments = [];
-    }
-}
-
-export function tokenize(code: string, opt, delegate) {
-    initialize(code, opt, {});
-
-    options.tokens = true;
-    state.tokenizeOnly = true;
-    state.delegate = delegate;
-    scanner.addToken = addToken;
-    scanner.markBracket = markBracket;
-    scanner.handleSlash = advanceSlash;
-
-    scanner.start();
-    if (scanner.lookahead.type === Token.EOF) {
-        return state.tokens;
-    }
+export function parse(code: string, opt) {
+    initialize(code, opt);
 
     nextToken();
-    while (!scanner.eof()) {
-        try {
-            nextToken();
-        } catch (lexError) {
-            if (options.tolerant) {
-                recordError(lexError);
-                // We have to break on the first error
-                // to avoid infinite loops.
-                break;
-            } else {
-                throw lexError;
-            }
-        }
-    }
-
-    const tokens = state.tokens;
-    tokens.errors = state.errors;
-
-    return tokens;
-}
-
-export function parse(code: string, opt) {
-    initialize(code, opt, {});
-
-    scanner.start();
-    scanner.lookahead = upgradeToken(scanner.lookahead);
+    state.lastIndex = scanner.index;
+    state.lastLineNumber = scanner.lineNumber;
+    state.lastLineStart = scanner.lineStart;
 
     const program = parseProgram();
     if (options.comment) {
