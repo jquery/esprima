@@ -65,17 +65,13 @@ function test_project(project, repo) {
 }
 
 function test_downstream(projects) {
-    var nodejs_version = 'v0.12',
-        downstream_path;
+    var downstream_path;
 
     if (typeof child_process.execSync !== 'function') {
         console.error('This only works with Node.js that support execSync');
         process.exit(0);
     }
-    if (process.version.indexOf(nodejs_version) !== 0) {
-        console.error('This is intended to run only with Node.js', nodejs_version);
-        process.exit(0);
-    }
+    console.error('Using Node.js', process.version);
 
     downstream_path = temp.mkdirSync('downstream');
     console.log('Running the tests in', downstream_path);
@@ -98,7 +94,7 @@ test_downstream({
     'js2coffee': 'https://github.com/js2coffee/js2coffee.git',
     'redeyed': 'https://github.com/thlorenz/redeyed.git',
     'jsfmt': 'https://github.com/rdio/jsfmt.git',
-    'istanbul': 'https://github.com/gotwarlost/istanbul.git',
-    'documentjs': 'https://github.com/bitovi/documentjs.git',
+    // 'istanbul': 'https://github.com/gotwarlost/istanbul.git',
+    // 'documentjs': 'https://github.com/bitovi/documentjs.git',
     'jscs': 'https://github.com/jscs-dev/node-jscs.git'
 });
