@@ -11,6 +11,20 @@ function octalValue(ch: string): number {
     return '01234567'.indexOf(ch);
 }
 
+// A function following one of those tokens is an expression.
+function beforeFunctionExpression(t: string): boolean {
+    return ['(', '{', '[', 'in', 'typeof', 'instanceof', 'new',
+        'return', 'case', 'delete', 'throw', 'void',
+    // assignment operators
+        '=', '+=', '-=', '*=', '/=', '%=', '<<=', '>>=', '>>>=',
+        '&=', '|=', '^=', ',',
+    // binary/unary operators
+        '+', '-', '*', '/', '%', '++', '--', '<<', '>>', '>>>', '&',
+        '|', '^', '!', '~', '&&', '||', '?', ':', '===', '==', '>=',
+        '<=', '<', '>', '!=', '!=='].indexOf(t) >= 0;
+}
+
+
 export class Scanner {
 
     source: string;
@@ -20,82 +34,29 @@ export class Scanner {
     lineNumber: number;
     lineStart: number;
 
-    startIndex: number;
-    startLineNumber: number;
-    startLineStart: number;
-
-    lastIndex: number;
-    lastLineNumber: number;
-    lastLineStart: number;
-
-    scanning: boolean;
-    lookahead: any;
-    hasLineTerminator: boolean;
     curlyStack: string[];
 
-    stateStack: any[];
+    tokenValues: string[];
+    openCurlyToken: number;
+    openParenToken: number;
 
-    addComment = null;
-    addToken = null;
-    markBracket = null;
-    handleSlash = null;
+    addComment: any;
     throwUnexpectedToken: any;
     tolerateUnexpectedToken: any;
 
-    constructor(code: string, delegate: any) {
+    constructor(code: string) {
         this.source = code;
         this.length = code.length;
         this.index = 0;
         this.lineNumber = (code.length > 0) ? 1 : 0;
         this.lineStart = 0;
-        this.startIndex = this.lastIndex = 0;
-        this.startLineNumber = this.lastLineNumber = this.lineNumber;
-        this.startLineStart = this.lastLineStart = 0;
-        this.scanning = false;
-        this.lookahead = null;
-        this.hasLineTerminator = false;
+
         this.curlyStack = [];
-        this.stateStack = [];
 
-        this.addComment = delegate.addComment;
-        this.throwUnexpectedToken = delegate.throwUnexpectedToken;
-        this.tolerateUnexpectedToken = delegate.tolerateUnexpectedToken;
+        this.tokenValues = [];
+        this.openCurlyToken = -1;
+        this.openParenToken = -1;
     };
-
-    pushState() {
-        this.stateStack.push({
-            index: this.index,
-            lineNumber: this.lineNumber,
-            lineStart: this.lineStart,
-            startIndex: this.startIndex,
-            startLineNumber: this.startLineNumber,
-            startLineStart: this.startLineStart,
-            lastIndex: this.lastIndex,
-            lastLineNumber: this.lastLineNumber,
-            lastLineStart: this.lastLineStart,
-            scanning: this.scanning,
-            lookahead: this.lookahead,
-            hasLineTerminator: this.hasLineTerminator
-        });
-    };
-
-    popState() {
-        const state = this.stateStack.pop();
-        assert(typeof state === 'object', 'Scanner state is not balanced');
-
-        this.index = state.index;
-        this.lineNumber = state.lineNumber;
-        this.lineStart = state.lineStart;
-        this.startIndex = state.startIndex;
-        this.startLineNumber = state.startLineNumber;
-        this.startLineStart = state.startLineStart;
-        this.lastIndex = state.lastIndex;
-        this.lastLineNumber = state.lastLineNumber;
-        this.lastLineStart = state.lastLineStart;
-        this.scanning = state.scanning;
-        this.lookahead = state.lookahead;
-        this.hasLineTerminator = state.hasLineTerminator;
-    }
 
     eof(): boolean {
         return this.index >= this.length;
@@ -117,7 +78,6 @@ export class Scanner {
             let ch = this.source.charCodeAt(this.index);
             ++this.index;
             if (Character.isLineTerminator(ch)) {
-                this.hasLineTerminator = true;
                 if (this.addComment) {
                     let comment = this.source.slice(start + offset, this.index - 1);
                     loc.end = {
@@ -164,7 +124,6 @@ export class Scanner {
                 if (ch === 0x0D && this.source.charCodeAt(this.index + 1) === 0x0A) {
                     ++this.index;
                 }
-                this.hasLineTerminator = true;
                 ++this.lineNumber;
                 ++this.index;
                 this.lineStart = this.index;
@@ -203,8 +162,6 @@ export class Scanner {
     };
 
     skipComment(): void {
-        this.hasLineTerminator = false;
-
         let start = (this.index === 0);
         while (!this.eof()) {
             let ch = this.source.charCodeAt(this.index);
@@ -212,7 +169,6 @@ export class Scanner {
             if (Character.isWhiteSpace(ch)) {
                 ++this.index;
             } else if (Character.isLineTerminator(ch)) {
-                this.hasLineTerminator = true;
                 ++this.index;
                 if (ch === 0x0D && this.source.charCodeAt(this.index) === 0x0A) {
                     ++this.index;
@@ -530,9 +486,6 @@ export class Scanner {
 
             case '(':
             case '{':
-                if (this.markBracket) {
-                    this.markBracket(str);
-                }
                 if (str === '{') {
                     this.curlyStack.push('{');
                 }
@@ -896,8 +849,8 @@ export class Scanner {
             type: Token.StringLiteral,
             value: str,
             octal: octal,
-            lineNumber: this.startLineNumber,
-            lineStart: this.startLineStart,
+            lineNumber: this.lineNumber,
+            lineStart: this.lineStart,
             start: start,
             end: this.index
         };
@@ -1172,15 +1125,11 @@ export class Scanner {
     };
 
     scanRegExp() {
-        this.scanning = true;
-        this.lookahead = null;
-        this.skipComment();
         const start = this.index;
 
         const body = this.scanRegExpBody();
         const flags = this.scanRegExpFlags();
         const value = this.testRegExp(body.value, flags.value);
-        this.scanning = false;
 
         return {
             type: Token.RegularExpression,
@@ -1197,7 +1146,7 @@ export class Scanner {
         };
     };
 
-    advance() {
+    lex() {
         if (this.eof()) {
             return {
                 type: Token.EOF,
@@ -1237,11 +1186,6 @@ export class Scanner {
             return this.scanNumericLiteral();
         }
 
-        // Slash (/) U+002F can also start a regex.
-        if (cp === 0x2F && this.handleSlash) {
-            return this.handleSlash();
-        }
-
         // Template literals start with ` (U+0060) for template head
         // or } (U+007D) for template middle or template tail.
         if (cp === 0x60 || (cp === 0x7D && this.curlyStack[this.curlyStack.length - 1] === '${')) {
@@ -1258,46 +1202,57 @@ export class Scanner {
         return this.scanPunctuator();
     };
 
-    start() {
-        this.scanning = true;
+    advance() {
+        let token;
+        if (this.source[this.index] !== '/') {
+            token = this.lex();
+        } else {
+            // Using the following algorithm:
+            // https://github.com/mozilla/sweet.js/wiki/design
 
-        this.skipComment();
+            const previous = this.tokenValues[this.tokenValues.length - 1];
+            let regex = (previous !== null);
 
-        this.startIndex = this.lastIndex = this.index;
-        this.startLineNumber = this.lastLineNumber = this.lineNumber;
-        this.startLineStart = this.lastLineStart = this.lineStart;
+            switch (previous) {
+                case 'this':
+                case ']':
+                    regex = false;
+                    break;
 
-        this.lookahead = this.advance();
-        if (this.addToken) {
-            this.addToken(this.lookahead);
+                case ')':
+                    const check = this.tokenValues[this.openParenToken - 1];
+                    regex = (check === 'if' || check === 'while' || check === 'for' || check === 'with');
+                    break;
+
+                case '}':
+                    // Dividing a function by anything makes little sense,
+                    // but we have to check for that.
+                    regex = false;
+                    if (this.tokenValues[this.openCurlyToken - 3] === 'function') {
+                        // Anonymous function, e.g. function(){} /42
+                        const check = this.tokenValues[this.openCurlyToken - 4];
+                        regex = check ? !beforeFunctionExpression(check) : false;
+                    } else if (this.tokenValues[this.openCurlyToken - 4] === 'function') {
+                        // Named function, e.g. function f(){} /42/
+                        const check = this.tokenValues[this.openCurlyToken - 5];
+                        regex = check ? !beforeFunctionExpression(check) : true;
+                    }
+            }
+            token = regex ? this.scanRegExp() : this.scanPunctuator();
         }
 
-        this.scanning = false;
-    };
-
-
-    lex() {
-        this.scanning = true;
-
-        this.lastIndex = this.index;
-        this.lastLineNumber = this.lineNumber;
-        this.lastLineStart = this.lineStart;
-
-        this.skipComment();
-
-        const token = this.lookahead;
-
-        this.startIndex = this.index;
-        this.startLineNumber = this.lineNumber;
-        this.startLineStart = this.lineStart;
-
-        this.lookahead = this.advance();
-        if (this.addToken) {
-            this.addToken(this.lookahead);
+        let value = null;
+        if (token.type === Token.Punctuator || token.type === Token.Keyword) {
+            value = this.source.slice(token.start, token.end);
+            if (value === '{') {
+                this.openCurlyToken = this.tokenValues.length;
+            } if (value === '(') {
+                this.openParenToken = this.tokenValues.length;
+            }
         }
+        this.tokenValues.push(value);
 
-        this.scanning = false;
         return token;
-    };
+    }
 
 }
