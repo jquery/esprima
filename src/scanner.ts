@@ -24,6 +24,12 @@ function beforeFunctionExpression(t: string): boolean {
         '<=', '<', '>', '!=', '!=='].indexOf(t) >= 0;
 }
 
+export interface Comment {
+    multiLine: boolean;
+    slice: number[];
+    range: number[];
+    loc: any;
+}
 
 export class Scanner {
 
@@ -34,13 +40,13 @@ export class Scanner {
     lineNumber: number;
     lineStart: number;
 
+    trackComment: boolean;
     curlyStack: string[];
 
     tokenValues: string[];
     openCurlyToken: number;
     openParenToken: number;
 
-    addComment: any;
     throwUnexpectedToken: any;
     tolerateUnexpectedToken: any;
 
@@ -51,6 +57,7 @@ export class Scanner {
         this.lineNumber = (code.length > 0) ? 1 : 0;
         this.lineStart = 0;
 
+        this.trackComment = false;
         this.curlyStack = [];
 
         this.tokenValues = [];
@@ -64,57 +71,78 @@ export class Scanner {
 
     // ECMA-262 11.4 Comments
 
-    skipSingleLineComment(offset: number): void {
-        let start = this.index - offset;
-        let loc = {
-            start: {
-                line: this.lineNumber,
-                column: this.index - this.lineStart - offset
-            },
-            end: {}
-        };
+    skipSingleLineComment(offset: number): Comment[] {
+        let comments: Comment[];
+        let start, loc;
+
+        if (this.trackComment) {
+            comments = [];
+            start = this.index - offset;
+            loc = {
+                start: {
+                    line: this.lineNumber,
+                    column: this.index - this.lineStart - offset
+                },
+                end: {}
+            };
+        }
 
         while (!this.eof()) {
             let ch = this.source.charCodeAt(this.index);
             ++this.index;
             if (Character.isLineTerminator(ch)) {
-                if (this.addComment) {
-                    let comment = this.source.slice(start + offset, this.index - 1);
+                if (this.trackComment) {
                     loc.end = {
                         line: this.lineNumber,
                         column: this.index - this.lineStart - 1
                     };
-                    this.addComment('Line', comment, start, this.index - 1, loc);
+                    const entry: Comment = {
+                        multiLine: false,
+                        slice: [start + offset, this.index - 1],
+                        range: [start, this.index - 1],
+                        loc: loc
+                    };
+                    comments.push(entry);
                 }
                 if (ch === 13 && this.source.charCodeAt(this.index) === 10) {
                     ++this.index;
                 }
                 ++this.lineNumber;
                 this.lineStart = this.index;
-                return;
+                return comments;
             }
         }
 
-        if (this.addComment) {
-            let comment = this.source.slice(start + offset, this.index);
+        if (this.trackComment) {
             loc.end = {
                 line: this.lineNumber,
                 column: this.index - this.lineStart
             };
-            this.addComment('Line', comment, start, this.index, loc);
+            const entry: Comment = {
+                multiLine: false,
+                slice: [start + offset, this.index],
+                range: [start, this.index],
+                loc: loc
+            };
+            comments.push(entry);
         }
+
+        return comments;
     };
 
-    skipMultiLineComment(): void {
+    skipMultiLineComment(): Comment[] {
+        let comments: Comment[];
         let start, loc;
 
-        if (this.addComment) {
+        if (this.trackComment) {
+            comments = [];
             start = this.index - 2;
             loc = {
                 start: {
                     line: this.lineNumber,
                     column: this.index - this.lineStart - 2
-                }
+                },
+                end: {}
             };
         }
 
@@ -130,17 +158,21 @@ export class Scanner {
             } else if (ch === 0x2A) {
                 // Block comment ends with '*/'.
                 if (this.source.charCodeAt(this.index + 1) === 0x2F) {
-                    ++this.index;
-                    ++this.index;
-                    if (this.addComment) {
-                        const comment = this.source.slice(start + 2, this.index - 2);
+                    this.index += 2;
+                    if (this.trackComment) {
                         loc.end = {
                             line: this.lineNumber,
                             column: this.index - this.lineStart
                         };
-                        this.addComment('Block', comment, start, this.index, loc);
+                        const entry: Comment = {
+                            multiLine: true,
+                            slice: [start + 2, this.index - 2],
+                            range: [start, this.index],
+                            loc: loc
+                        };
+                        comments.push(entry);
                     }
-                    return;
+                    return comments;
                 }
                 ++this.index;
             } else {
@@ -149,19 +181,30 @@ export class Scanner {
         }
 
         // Ran off the end of the file - the whole thing is a comment
-        if (this.addComment) {
+        if (this.trackComment) {
             loc.end = {
                 line: this.lineNumber,
                 column: this.index - this.lineStart
             };
-            const comment = this.source.slice(start + 2, this.index);
-            this.addComment('Block', comment, start, this.index, loc);
+            const entry: Comment = {
+                multiLine: true,
+                slice: [start + 2, this.index],
+                range: [start, this.index],
+                loc: loc
+            };
+            comments.push(entry);
         }
 
         this.tolerateUnexpectedToken();
+        return comments;
     };
 
-    skipComment(): void {
+    scanComments() {
+        let comments;
+        if (this.trackComment) {
+            comments = [];
+        }
+
         let start = (this.index === 0);
         while (!this.eof()) {
             let ch = this.source.charCodeAt(this.index);
@@ -179,14 +222,18 @@ export class Scanner {
             } else if (ch === 0x2F) { // U+002F is '/'
                 ch = this.source.charCodeAt(this.index + 1);
                 if (ch === 0x2F) {
-                    ++this.index;
-                    ++this.index;
-                    this.skipSingleLineComment(2);
+                    this.index += 2;
+                    const comment = this.skipSingleLineComment(2);
+                    if (this.trackComment) {
+                        comments = comments.concat(comment);
+                    }
                     start = true;
                 } else if (ch === 0x2A) {  // U+002A is '*'
-                    ++this.index;
-                    ++this.index;
-                    this.skipMultiLineComment();
+                    this.index += 2;
+                    const comment = this.skipMultiLineComment();
+                    if (this.trackComment) {
+                        comments = comments.concat(comment);
+                    }
                 } else {
                     break;
                 }
@@ -195,17 +242,20 @@ export class Scanner {
                 if ((this.source.charCodeAt(this.index + 1) === 0x2D) && (this.source.charCodeAt(this.index + 2) === 0x3E)) {
                     // '-->' is a single-line comment
                     this.index += 3;
-                    this.skipSingleLineComment(3);
+                    const comment = this.skipSingleLineComment(3);
+                    if (this.trackComment) {
+                        comments = comments.concat(comment);
+                    }
                 } else {
                     break;
                 }
             } else if (ch === 0x3C) { // U+003C is '<'
                 if (this.source.slice(this.index + 1, this.index + 4) === '!--') {
-                    ++this.index; // `<`
-                    ++this.index; // `!`
-                    ++this.index; // `-`
-                    ++this.index; // `-`
-                    this.skipSingleLineComment(4);
+                    this.index += 4; // `<!--`
+                    const comment = this.skipSingleLineComment(4);
+                    if (this.trackComment) {
+                        comments = comments.concat(comment);
+                    }
                 } else {
                     break;
                 }
@@ -213,6 +263,8 @@ export class Scanner {
                 break;
             }
         }
+
+        return comments;
     };
 
     // ECMA-262 11.6.2.2 Future Reserved Words

@@ -203,6 +203,15 @@
         expected = JSON.stringify(tokens, null, 4);
 
         try {
+            // Some variations of the options (tolerant mode, to avoid premature error)
+            esprima.tokenize(code, { tolerant: true, comment: false, loc: false, range: false });
+            esprima.tokenize(code, { tolerant: true, comment: false, loc: false, range: true });
+            esprima.tokenize(code, { tolerant: true, comment: false, loc: true,  range: false });
+            esprima.tokenize(code, { tolerant: true, comment: false, loc: true,  range: true });
+            esprima.tokenize(code, { tolerant: true, comment: true,  loc: false, range: false });
+            esprima.tokenize(code, { tolerant: true, comment: true,  loc: false, range: true });
+            esprima.tokenize(code, { tolerant: true, comment: true,  loc: true,  range: false });
+
             list = esprima.tokenize(code, options);
             actual = JSON.stringify(list, null, 4);
         } catch (e) {
