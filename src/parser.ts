@@ -4,7 +4,7 @@ import { Messages} from './messages';
 import { Token } from './token';
 import { Syntax } from './syntax';
 
-import { Scanner } from './scanner';
+import { Comment, Scanner } from './scanner';
 
 let scanner: Scanner;
 let options, state;
@@ -24,6 +24,36 @@ TokenName[Token.Punctuator] = 'Punctuator';
 TokenName[Token.StringLiteral] = 'String';
 TokenName[Token.RegularExpression] = 'RegularExpression';
 TokenName[Token.Template] = 'Template';
+
+
+function collectComments() {
+    state.scanning = true;
+    const comments: Comment[] = scanner.scanComments();
+    state.scanning = false;
+
+    if (options.comment && comments.length > 0) {
+        for (let i = 0; i < comments.length; ++i) {
+            const e: Comment = comments[i];
+            let comment;
+            let value = scanner.source.slice(e.slice[0], e.slice[1]);
+            comment = {
+                type: e.multiLine ? 'Block' : 'Line',
+                value: value
+            };
+            if (options.range) {
+                comment.range = e.range;
+            }
+            if (options.loc) {
+                comment.loc = e.loc;
+            }
+            state.comments.push(comment);
+            if (options.attachComment) {
+                state.leadingComments.push(comment);
+                state.trailingComments.push(comment);
+            }
+        }
+    }
+}
 
 // From internal representation to an external structure
 function convertToken(token) {
@@ -52,9 +82,7 @@ function nextToken() {
     state.lastLineNumber = scanner.lineNumber;
     state.lastLineStart = scanner.lineStart;
 
-    state.scanning = true;
-    scanner.skipComment();
-    state.scanning = false;
+    collectComments();
 
     state.startIndex = scanner.index;
     state.startLineNumber = scanner.lineNumber;
@@ -84,7 +112,7 @@ function nextRegexToken() {
     let pos, loc;
 
     if (options.tokens) {
-        scanner.skipComment();
+        collectComments();
 
         pos = scanner.index;
         loc = {
@@ -2513,9 +2541,10 @@ function isLexicalDeclaration() {
         lineStart: scanner.lineStart
     };
 
+    collectComments();
+
     let next;
     state.scanning = true;
-    scanner.skipComment();
     next = scanner.lex();
     state.scanning = false;
 
@@ -3826,37 +3855,6 @@ function parseProgram() {
     return node.finishProgram(body, state.sourceType);
 }
 
-function addComment(type, value, start, end, loc) {
-    let comment;
-
-    assert(typeof start === 'number', 'Comment must have valid position');
-
-    state.lastCommentStart = start;
-
-    comment = {
-        type: type,
-        value: value
-    };
-    if (options.range) {
-        comment.range = [start, end];
-    }
-    if (options.loc) {
-        comment.loc = loc;
-    }
-    state.comments.push(comment);
-    if (options.attachComment) {
-        state.leadingComments.push(comment);
-        state.trailingComments.push(comment);
-    }
-    if (state.tokenizeOnly) {
-        comment.type = comment.type + 'Comment';
-        if (state.delegate) {
-            comment = state.delegate(comment);
-        }
-        state.tokens.push(comment);
-    }
-}
-
 function initialize(code: string, opt: any): void {
     options = {
         range: false,
@@ -3886,7 +3884,7 @@ function initialize(code: string, opt: any): void {
 
 
     scanner = new Scanner(code);
-    scanner.addComment = (options.comment) ? addComment : null;
+    scanner.trackComment = options.comment;
     scanner.throwUnexpectedToken = throwUnexpectedToken;
     scanner.tolerateUnexpectedToken = tolerateUnexpectedToken;
 
@@ -3907,7 +3905,6 @@ function initialize(code: string, opt: any): void {
         inFunctionBody: false,
         inIteration: false,
         inSwitch: false,
-        lastCommentStart: -1,
         scanning: false,
         source: null,
         sourceType: options.sourceType,
@@ -3940,9 +3937,28 @@ export function tokenize(code: string, opt, delegate) {
             state.lastLineNumber = scanner.lineNumber;
             state.lastLineStart = scanner.lineStart;
 
-            state.scanning = true;
-            scanner.skipComment();
-            state.scanning = false;
+            const comments: Comment[] = scanner.scanComments();
+            if (options.comment && comments.length > 0) {
+                for (let i = 0; i < comments.length; ++i) {
+                    const e: Comment = comments[i];
+                    let comment;
+                    let value = scanner.source.slice(e.slice[0], e.slice[1]);
+                    comment = {
+                        type: e.multiLine ? 'BlockComment' : 'LineComment',
+                        value: value
+                    };
+                    if (options.range) {
+                        comment.range = e.range;
+                    }
+                    if (options.loc) {
+                        comment.loc = e.loc;
+                    }
+                    if (state.delegate) {
+                        comment = state.delegate(comment);
+                    }
+                    state.tokens.push(comment);
+                }
+            }
 
             state.startIndex = scanner.index;
             state.startLineNumber = scanner.lineNumber;
