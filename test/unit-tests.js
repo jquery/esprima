@@ -24,7 +24,7 @@
 
 'use strict';
 
-var esprima = require('../dist/esprima'),
+var esprima = require('../'),
     evaluateTestCase = require('./utils/evaluate-testcase'),
     createTestCases = require('./utils/create-testcases'),
     errorToObject = require('./utils/error-to-object'),

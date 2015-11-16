@@ -27,7 +27,7 @@
 (function (root, factory) {
     if (typeof module === 'object' && module.exports) {
         module.exports = factory(
-            require('../../dist/esprima'),
+            require('../../'),
             require('./error-to-object')
         );
     } else {

@@ -39,7 +39,7 @@ if (typeof esprima === 'undefined') {
         try {
             esprima = require('esprima');
         } catch (e) {
-            esprima = require('../dist/esprima');
+            esprima = require('../');
         }
     } else if (typeof load === 'function') {
         try {
