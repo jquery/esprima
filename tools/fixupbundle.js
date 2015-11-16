@@ -42,4 +42,4 @@ function fixupbundle(filename) {
     fs.writeFileSync(filename, content, 'utf-8');
 }
 
-fixupbundle('dist/esprima.js');
+fixupbundle(require.resolve('../'));

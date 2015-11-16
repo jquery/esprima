@@ -105,7 +105,7 @@ if (typeof require === 'undefined') {
     log = print;
 } else {
     Benchmark = require('./3rdparty/benchmark');
-    esprima = require('../dist/esprima');
+    esprima = require('../');
     quick = process.argv[2] === 'quick' || process.argv[3] === 'quick';
     readFile = function (filename) {
         return require('fs').readFileSync(filename, 'utf-8');

@@ -22,7 +22,7 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-var esprima = require('../dist/esprima');
+var esprima = require('../');
 
 function readEverythingJsProgram(type) {
     return require('fs').readFileSync(require.resolve('everything.js/' + type), 'utf-8');

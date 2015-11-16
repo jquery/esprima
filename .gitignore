@@ -2,3 +2,4 @@ coverage
 node_modules
 test/dist
 src/*.js
+dist/esprima.js

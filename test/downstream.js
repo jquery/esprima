@@ -25,7 +25,7 @@
 var child_process = require('child_process'),
     fs = require('fs'),
     temp = require('temp').track(),
-    source = fs.realpathSync('dist/esprima.js');
+    source = fs.realpathSync(require.resolve('../'));
 
 function execute(cmd) {
     child_process.execSync(cmd, { stdio: 'inherit' });

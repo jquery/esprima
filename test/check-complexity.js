@@ -25,7 +25,7 @@
 'use strict';
 
 var escomplex = require('escomplex-js'),
-    content = require('fs').readFileSync('dist/esprima.js', 'utf-8'),
+    content = require('fs').readFileSync(require.resolve('../'), 'utf-8'),
     opt = { logicalor: false, switchcase: false },
     MAX = 22,
     list = [], bad = [];
