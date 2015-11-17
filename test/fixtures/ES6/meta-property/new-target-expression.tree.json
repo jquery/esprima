@@ -1,4 +1,18 @@
 {
+    "range": [
+        0,
+        34
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 34
+        }
+    },
     "type": "Program",
     "body": [
         {
@@ -120,8 +134,42 @@
                                             }
                                         },
                                         "type": "MetaProperty",
-                                        "meta": "new",
-                                        "property": "target"
+                                        "meta": {
+                                            "range": [
+                                                21,
+                                                24
+                                            ],
+                                            "loc": {
+                                                "start": {
+                                                    "line": 1,
+                                                    "column": 21
+                                                },
+                                                "end": {
+                                                    "line": 1,
+                                                    "column": 24
+                                                }
+                                            },
+                                            "type": "Identifier",
+                                            "name": "new"
+                                        },
+                                        "property": {
+                                            "range": [
+                                                25,
+                                                31
+                                            ],
+                                            "loc": {
+                                                "start": {
+                                                    "line": 1,
+                                                    "column": 25
+                                                },
+                                                "end": {
+                                                    "line": 1,
+                                                    "column": 31
+                                                }
+                                            },
+                                            "type": "Identifier",
+                                            "name": "target"
+                                        }
                                     }
                                 }
                             ]
@@ -352,19 +400,5 @@
                 }
             }
         }
-    ],
-    "range": [
-        0,
-        34
-    ],
-    "loc": {
-        "start": {
-            "line": 1,
-            "column": 0
-        },
-        "end": {
-            "line": 1,
-            "column": 34
-        }
-    }
+    ]
 }
