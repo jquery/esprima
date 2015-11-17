@@ -1712,6 +1712,9 @@ function parsePrimaryExpression() {
         if (!state.strict && state.allowYield && matchKeyword('yield')) {
             return parseNonComputedProperty();
         }
+        if (!state.strict && matchKeyword('let')) {
+            return node.finishIdentifier(nextToken().value);
+        }
         state.isAssignmentTarget = state.isBindingElement = false;
         if (matchKeyword('function')) {
             return parseFunctionExpression();
@@ -1722,9 +1725,6 @@ function parsePrimaryExpression() {
         }
         if (matchKeyword('class')) {
             return parseClassExpression();
-        }
-        if (!state.strict && matchKeyword('let')) {
-            return node.finishIdentifier(nextToken().value);
         }
         throwUnexpectedToken(nextToken());
     } else if (type === Token.BooleanLiteral) {
