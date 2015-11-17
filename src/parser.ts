@@ -1807,13 +1807,18 @@ function parseComputedMember() {
 function parseNewExpression() {
     const node = new Node();
 
-    expectKeyword('new');
+    const newNode = new Node();
+    const newToken = nextToken();
+    assert(newToken.value === 'new', 'New expression must start with `new`');
+    const newId = newNode.finishIdentifier(newToken.value);
+
     if (match('.')) {
         nextToken();
         if (state.lookahead.type === Token.Identifier && state.lookahead.value === 'target') {
             if (state.inFunctionBody) {
-                nextToken();
-                return node.finishMetaProperty('new', 'target');
+                const targetNode = new Node();
+                const targetId = targetNode.finishIdentifier(nextToken().value);
+                return node.finishMetaProperty(newId, targetId);
             }
         }
         throwUnexpectedToken(state.lookahead);
