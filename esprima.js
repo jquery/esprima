@@ -3263,6 +3263,9 @@
             if (!strict && state.allowYield && matchKeyword('yield')) {
                 return parseNonComputedProperty();
             }
+            if (!strict && matchKeyword('let')) {
+                return node.finishIdentifier(lex().value);
+            }
             isAssignmentTarget = isBindingElement = false;
             if (matchKeyword('function')) {
                 return parseFunctionExpression();
@@ -3273,9 +3276,6 @@
             }
             if (matchKeyword('class')) {
                 return parseClassExpression();
-            }
-            if (!strict && matchKeyword('let')) {
-                return node.finishIdentifier(lex().value);
             }
             throwUnexpectedToken(lex());
         } else if (type === Token.BooleanLiteral) {
