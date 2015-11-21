@@ -6,6 +6,7 @@
 	"files": [
 		"assert.ts",
 		"messages.ts",
+		"error-handler.ts",
 		"character.ts",
 		"token.ts",
 		"syntax.ts",
