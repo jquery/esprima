@@ -2,6 +2,7 @@ import { assert } from './assert';
 import { Messages} from './messages';
 import { Character} from './character';
 import { Token } from './token';
+import { ErrorHandler } from './error-handler';
 
 function hexValue(ch: string): number {
     return '0123456789abcdef'.indexOf(ch.toLowerCase());
@@ -47,10 +48,9 @@ export class Scanner {
     openCurlyToken: number;
     openParenToken: number;
 
-    throwUnexpectedToken: any;
-    tolerateUnexpectedToken: any;
+    errorHandler: ErrorHandler;
 
-    constructor(code: string) {
+    constructor(code: string, handler: ErrorHandler) {
         this.source = code;
         this.length = code.length;
         this.index = 0;
@@ -63,10 +63,22 @@ export class Scanner {
         this.tokenValues = [];
         this.openCurlyToken = -1;
         this.openParenToken = -1;
+
+        this.errorHandler = handler;
     };
 
     eof(): boolean {
         return this.index >= this.length;
+    };
+
+    throwUnexpectedToken(message = Messages.UnexpectedTokenIllegal) {
+        this.errorHandler.throwError(this.index, this.lineNumber,
+            this.index - this.lineStart + 1, message);
+    };
+
+    tolerateUnexpectedToken() {
+        this.errorHandler.tolerateError(this.index, this.lineNumber,
+            this.index - this.lineStart + 1, Messages.UnexpectedTokenIllegal);
     };
 
     // ECMA-262 11.4 Comments
@@ -979,12 +991,12 @@ export class Scanner {
                             if (ch === '0') {
                                 if (Character.isDecimalDigit(this.source.charCodeAt(this.index))) {
                                     // Illegal: \01 \02 and so on
-                                    this.throwUnexpectedToken(null, Messages.TemplateOctalLiteral);
+                                    this.throwUnexpectedToken(Messages.TemplateOctalLiteral);
                                 }
                                 cooked += '\0';
                             } else if (Character.isOctalDigit(ch.charCodeAt(0))) {
                                 // Illegal: \1 \2
-                                this.throwUnexpectedToken(null, Messages.TemplateOctalLiteral);
+                                this.throwUnexpectedToken(Messages.TemplateOctalLiteral);
                             } else {
                                 cooked += ch;
                             }
@@ -1054,7 +1066,7 @@ export class Scanner {
                 .replace(/\\u\{([0-9a-fA-F]+)\}|\\u([a-fA-F0-9]{4})/g, function($0, $1, $2) {
                     const codePoint = parseInt($1 || $2, 16);
                     if (codePoint > 0x10FFFF) {
-                        self.throwUnexpectedToken(null, Messages.InvalidRegExp);
+                        self.throwUnexpectedToken(Messages.InvalidRegExp);
                     }
                     if (codePoint <= 0xFFFF) {
                         return String.fromCharCode(codePoint);
@@ -1074,7 +1086,7 @@ export class Scanner {
         try {
             RegExp(tmp);
         } catch (e) {
-            this.throwUnexpectedToken(null, Messages.InvalidRegExp);
+            this.throwUnexpectedToken(Messages.InvalidRegExp);
         }
 
         // Return a regular expression object for this pattern-flag pair, or
@@ -1102,11 +1114,11 @@ export class Scanner {
                 ch = this.source[this.index++];
                 // ECMA-262 7.8.5
                 if (Character.isLineTerminator(ch.charCodeAt(0))) {
-                    this.throwUnexpectedToken(null, Messages.UnterminatedRegExp);
+                    this.throwUnexpectedToken(Messages.UnterminatedRegExp);
                 }
                 str += ch;
             } else if (Character.isLineTerminator(ch.charCodeAt(0))) {
-                this.throwUnexpectedToken(null, Messages.UnterminatedRegExp);
+                this.throwUnexpectedToken(Messages.UnterminatedRegExp);
             } else if (classMarker) {
                 if (ch === ']') {
                     classMarker = false;
@@ -1122,7 +1134,7 @@ export class Scanner {
         }
 
         if (!terminated) {
-            this.throwUnexpectedToken(null, Messages.UnterminatedRegExp);
+            this.throwUnexpectedToken(Messages.UnterminatedRegExp);
         }
 
         // Exclude leading and trailing slash.

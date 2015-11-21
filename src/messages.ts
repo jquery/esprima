@@ -1,6 +1,7 @@
 // Error messages should be identical to V8.
 export const Messages = {
     UnexpectedToken: 'Unexpected token %0',
+    UnexpectedTokenIllegal: 'Unexpected token ILLEGAL',
     UnexpectedNumber: 'Unexpected number',
     UnexpectedString: 'Unexpected string',
     UnexpectedIdentifier: 'Unexpected identifier',

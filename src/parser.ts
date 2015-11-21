@@ -1,12 +1,14 @@
 import { assert } from './assert';
 import { Messages} from './messages';
 
+import { ErrorHandler } from './error-handler';
 import { Token } from './token';
 import { Syntax } from './syntax';
 
 import { Comment, Scanner } from './scanner';
 
 let scanner: Scanner;
+let errorHandler: ErrorHandler;
 let options, state;
 
 let PlaceHolders = {
@@ -821,136 +823,6 @@ Node.prototype = {
         return this;
     }
 };
-
-declare class Error {
-    public name: string;
-    public message: string;
-    public stack: string;
-    public index: number;
-    public lineNumber: number;
-    public column: number;
-    public description: string;
-    constructor(message?: string);
-}
-
-function recordError(error) {
-    for (let e = 0; e < state.errors.length; e++) {
-        const existing = state.errors[e];
-        // Prevent duplicated error.
-        /* istanbul ignore next */
-        if (existing.index === error.index && existing.message === error.message) {
-            return;
-        }
-    }
-
-    state.errors.push(error);
-}
-
-function constructError(msg: string, column: number): Error {
-    let error = new Error(msg);
-    try {
-        throw error;
-    } catch (base) {
-        /* istanbul ignore else */
-        if (Object.create && Object.defineProperty) {
-            error = Object.create(base);
-            Object.defineProperty(error, 'column', { value: column });
-        }
-    } finally {
-        return error;
-    }
-}
-
-function createError(line: number, pos: number, description: string): Error {
-    const msg = 'Line ' + line + ': ' + description;
-    const column = pos - (state.scanning ? scanner.lineStart : state.lastLineStart) + 1;
-    const error = constructError(msg, column);
-    error.lineNumber = line;
-    error.description = description;
-    error.index = pos;
-    return error;
-}
-
-function throwError(messageFormat: string, ...values): void {
-    const args = Array.prototype.slice.call(arguments, 1);
-    const msg = messageFormat.replace(/%(\d)/g,
-        function(whole, idx) {
-            assert(idx < args.length, 'Message reference must be in range');
-            return args[idx];
-        }
-    );
-
-    throw createError(state.lastLineNumber, state.lastIndex, msg);
-}
-
-function tolerateError(messageFormat, ...values) {
-    const args = Array.prototype.slice.call(arguments, 1);
-    /* istanbul ignore next */
-    const msg = messageFormat.replace(/%(\d)/g,
-        function(whole, idx) {
-            assert(idx < args.length, 'Message reference must be in range');
-            return args[idx];
-        }
-    );
-
-    const error = createError(scanner.lineNumber, state.lastIndex, msg);
-    if (options.tolerant) {
-        recordError(error);
-    } else {
-        throw error;
-    }
-}
-
-// Throw an exception because of the token.
-function unexpectedTokenError(token?: any, message?: string): Error {
-    let msg = message || Messages.UnexpectedToken;
-
-    let value;
-    if (token) {
-        if (!message) {
-            msg = (token.type === Token.EOF) ? Messages.UnexpectedEOS :
-                (token.type === Token.Identifier) ? Messages.UnexpectedIdentifier :
-                    (token.type === Token.NumericLiteral) ? Messages.UnexpectedNumber :
-                        (token.type === Token.StringLiteral) ? Messages.UnexpectedString :
-                            (token.type === Token.Template) ? Messages.UnexpectedTemplate :
-                                Messages.UnexpectedToken;
-
-            if (token.type === Token.Keyword) {
-                if (scanner.isFutureReservedWord(token.value)) {
-                    msg = Messages.UnexpectedReserved;
-                } else if (state.strict && scanner.isStrictModeReservedWord(token.value)) {
-                    msg = Messages.StrictReservedWord;
-                }
-            }
-        }
-
-        value = (token.type === Token.Template) ? token.value.raw : token.value;
-    } else {
-        value = 'ILLEGAL';
-        if (message === Messages.TemplateOctalLiteral) {
-            throw createError(state.lastLineNumber, state.lastIndex, msg);
-        }
-    }
-
-    msg = msg.replace('%0', value);
-
-    return (token && typeof token.lineNumber === 'number') ?
-        createError(token.lineNumber, token.start, msg) :
-        createError(state.scanning ? scanner.lineNumber : state.lastLineNumber, state.scanning ? scanner.index : state.lastIndex, msg);
-}
-
-function throwUnexpectedToken(token?, message?) {
-    throw unexpectedTokenError(token, message);
-}
-
-function tolerateUnexpectedToken(token?, message?) {
-    const error = unexpectedTokenError(token, message);
-    if (options.tolerant) {
-        recordError(error);
-    } else {
-        throw error;
-    }
-}
 
 // Expect the next token to match the specified punctuator.
 // If not, an exception will be thrown.
@@ -3860,6 +3732,88 @@ function parseProgram() {
     return node.finishProgram(body, state.sourceType);
 }
 
+function throwError(messageFormat: string, ...values): void {
+    const args = Array.prototype.slice.call(arguments, 1);
+    const msg = messageFormat.replace(/%(\d)/g,
+        function(whole, idx) {
+            assert(idx < args.length, 'Message reference must be in range');
+            return args[idx];
+        }
+    );
+
+    const index = state.lastIndex;
+    const line = state.lastLineNumber;
+    const column = state.lastIndex - state.lastLineStart + 1;
+    throw errorHandler.createError(index, line, column, msg);
+}
+
+function tolerateError(messageFormat, ...values) {
+    const args = Array.prototype.slice.call(arguments, 1);
+    /* istanbul ignore next */
+    const msg = messageFormat.replace(/%(\d)/g,
+        function(whole, idx) {
+            assert(idx < args.length, 'Message reference must be in range');
+            return args[idx];
+        }
+    );
+
+    const index = state.lastIndex;
+    const line = scanner.lineNumber;
+    const column = state.lastIndex - state.lastLineStart + 1;
+    errorHandler.tolerateError(index, line, column, msg);
+}
+
+// Throw an exception because of the token.
+function unexpectedTokenError(token?: any, message?: string): Error {
+    let msg = message || Messages.UnexpectedToken;
+
+    let value;
+    if (token) {
+        if (!message) {
+            msg = (token.type === Token.EOF) ? Messages.UnexpectedEOS :
+                (token.type === Token.Identifier) ? Messages.UnexpectedIdentifier :
+                    (token.type === Token.NumericLiteral) ? Messages.UnexpectedNumber :
+                        (token.type === Token.StringLiteral) ? Messages.UnexpectedString :
+                            (token.type === Token.Template) ? Messages.UnexpectedTemplate :
+                                Messages.UnexpectedToken;
+
+            if (token.type === Token.Keyword) {
+                if (scanner.isFutureReservedWord(token.value)) {
+                    msg = Messages.UnexpectedReserved;
+                } else if (state.strict && scanner.isStrictModeReservedWord(token.value)) {
+                    msg = Messages.StrictReservedWord;
+                }
+            }
+        }
+
+        value = (token.type === Token.Template) ? token.value.raw : token.value;
+    } else {
+        value = 'ILLEGAL';
+    }
+
+    msg = msg.replace('%0', value);
+
+    if (token && typeof token.lineNumber === 'number') {
+        const index = token.start;
+        const line = token.lineNumber;
+        const column = token.start - state.lastLineStart + 1;
+        return errorHandler.createError(index, line, column, msg);
+    } else {
+        const index = state.lastIndex;
+        const line = state.lastLineNumber;
+        const column = index - state.lastLineStart + 1;
+        return errorHandler.createError(index, line, column, msg);
+    }
+}
+
+function throwUnexpectedToken(token?, message?) {
+    throw unexpectedTokenError(token, message);
+}
+
+function tolerateUnexpectedToken(token?, message?) {
+    errorHandler.tolerate(unexpectedTokenError(token, message));
+}
+
 function initialize(code: string, opt: any): void {
     options = {
         range: false,
@@ -3887,17 +3841,16 @@ function initialize(code: string, opt: any): void {
         }
     }
 
+    errorHandler = new ErrorHandler();
+    errorHandler.tolerant = options.tolerant;
 
-    scanner = new Scanner(code);
+    scanner = new Scanner(code, errorHandler);
     scanner.trackComment = options.comment;
-    scanner.throwUnexpectedToken = throwUnexpectedToken;
-    scanner.tolerateUnexpectedToken = tolerateUnexpectedToken;
 
     state = {
         allowIn: true,
         allowYield: true,
         comments: [],
-        errors: [],
         firstCoverInitializedNameError: null,
         hasLineTerminator: false,
         isAssignmentTarget: false,
@@ -3938,9 +3891,6 @@ export function tokenize(code: string, opt, delegate) {
 
     try {
         while (!scanner.eof()) {
-            state.lastIndex = scanner.index;
-            state.lastLineNumber = scanner.lineNumber;
-            state.lastLineStart = scanner.lineStart;
 
             const comments: Comment[] = scanner.scanComments();
             if (options.comment && comments.length > 0) {
@@ -3969,10 +3919,7 @@ export function tokenize(code: string, opt, delegate) {
             state.startLineNumber = scanner.lineNumber;
             state.startLineStart = scanner.lineStart;
 
-            state.scanning = true;
             const token = scanner.advance();
-            state.scanning = false;
-
             if (token.type !== Token.EOF) {
                 let entry = convertToken(token);
                 if (!options.range) {
@@ -3988,14 +3935,13 @@ export function tokenize(code: string, opt, delegate) {
             }
         }
     } catch (e) {
-        if (options.tolerant) {
-            recordError(e);
-        } else {
-            throw e;
-        }
+        errorHandler.tolerate(e);
     }
 
-    state.tokens.errors = state.errors;
+    if (errorHandler.tolerant) {
+        state.tokens.errors = errorHandler.errors;
+    }
+
     return state.tokens;
 }
 
@@ -4041,8 +3987,9 @@ export function parse(code: string, opt) {
     if (options.tokens) {
         program.tokens = filterTokenLocation(state.tokens);
     }
-    if (options.tolerant) {
-        program.errors = state.errors;
+
+    if (errorHandler.tolerant) {
+        program.errors = errorHandler.errors;
     }
 
     return program;
