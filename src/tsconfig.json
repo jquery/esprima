@@ -11,6 +11,7 @@
 		"token.ts",
 		"syntax.ts",
 		"scanner.ts",
+		"tokenizer.ts",
 		"parser.ts",
 		"esprima.ts"
 	]
