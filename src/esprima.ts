@@ -24,7 +24,8 @@
 
 export { Syntax } from './syntax';
 
-export { tokenize, parse } from './parser';
+export { tokenize } from './tokenizer';
+export { parse } from './parser';
 
 // Sync with *.json manifests.
 export const version = '3.0.0-dev';

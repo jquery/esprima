@@ -2,7 +2,7 @@ import { assert } from './assert';
 import { Messages} from './messages';
 
 import { ErrorHandler } from './error-handler';
-import { Token } from './token';
+import { Token, TokenName } from './token';
 import { Syntax } from './syntax';
 
 import { Comment, Scanner } from './scanner';
@@ -14,19 +14,6 @@ let options, state;
 let PlaceHolders = {
     ArrowParameterPlaceHolder: 'ArrowParameterPlaceHolder'
 };
-
-let TokenName = {};
-TokenName[Token.BooleanLiteral] = 'Boolean';
-TokenName[Token.EOF] = '<end>';
-TokenName[Token.Identifier] = 'Identifier';
-TokenName[Token.Keyword] = 'Keyword';
-TokenName[Token.NullLiteral] = 'Null';
-TokenName[Token.NumericLiteral] = 'Numeric';
-TokenName[Token.Punctuator] = 'Punctuator';
-TokenName[Token.StringLiteral] = 'String';
-TokenName[Token.RegularExpression] = 'RegularExpression';
-TokenName[Token.Template] = 'Template';
-
 
 function collectComments() {
     state.scanning = true;
@@ -3870,7 +3857,6 @@ function initialize(code: string, opt: any): void {
         startLineNumber: scanner.lineNumber,
         startLineStart: 0,
         strict: (options.sourceType === 'module'),
-        tokenizeOnly: false,
         tokens: []
     };
 
@@ -3880,69 +3866,6 @@ function initialize(code: string, opt: any): void {
         state.trailingComments = [];
         state.leadingComments = [];
     }
-}
-
-export function tokenize(code: string, opt, delegate) {
-    initialize(code, opt);
-
-    options.tokens = true;
-    state.tokenizeOnly = true;
-    state.delegate = delegate;
-
-    try {
-        while (!scanner.eof()) {
-
-            const comments: Comment[] = scanner.scanComments();
-            if (options.comment && comments.length > 0) {
-                for (let i = 0; i < comments.length; ++i) {
-                    const e: Comment = comments[i];
-                    let comment;
-                    let value = scanner.source.slice(e.slice[0], e.slice[1]);
-                    comment = {
-                        type: e.multiLine ? 'BlockComment' : 'LineComment',
-                        value: value
-                    };
-                    if (options.range) {
-                        comment.range = e.range;
-                    }
-                    if (options.loc) {
-                        comment.loc = e.loc;
-                    }
-                    if (state.delegate) {
-                        comment = state.delegate(comment);
-                    }
-                    state.tokens.push(comment);
-                }
-            }
-
-            state.startIndex = scanner.index;
-            state.startLineNumber = scanner.lineNumber;
-            state.startLineStart = scanner.lineStart;
-
-            const token = scanner.advance();
-            if (token.type !== Token.EOF) {
-                let entry = convertToken(token);
-                if (!options.range) {
-                    delete entry.range;
-                }
-                if (!options.loc) {
-                    delete entry.loc;
-                }
-                if (state.delegate) {
-                    entry = state.delegate(entry);
-                }
-                state.tokens.push(entry);
-            }
-        }
-    } catch (e) {
-        errorHandler.tolerate(e);
-    }
-
-    if (errorHandler.tolerant) {
-        state.tokens.errors = errorHandler.errors;
-    }
-
-    return state.tokens;
 }
 
 function filterTokenLocation(tokens) {

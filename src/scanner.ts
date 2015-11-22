@@ -12,19 +12,6 @@ function octalValue(ch: string): number {
     return '01234567'.indexOf(ch);
 }
 
-// A function following one of those tokens is an expression.
-function beforeFunctionExpression(t: string): boolean {
-    return ['(', '{', '[', 'in', 'typeof', 'instanceof', 'new',
-        'return', 'case', 'delete', 'throw', 'void',
-    // assignment operators
-        '=', '+=', '-=', '*=', '/=', '%=', '<<=', '>>=', '>>>=',
-        '&=', '|=', '^=', ',',
-    // binary/unary operators
-        '+', '-', '*', '/', '%', '++', '--', '<<', '>>', '>>>', '&',
-        '|', '^', '!', '~', '&&', '||', '?', ':', '===', '==', '>=',
-        '<=', '<', '>', '!=', '!=='].indexOf(t) >= 0;
-}
-
 export interface Comment {
     multiLine: boolean;
     slice: number[];
@@ -35,36 +22,25 @@ export interface Comment {
 export class Scanner {
 
     source: string;
-    length: number;
+    errorHandler: ErrorHandler;
+    trackComment: boolean;
 
+    length: number;
     index: number;
     lineNumber: number;
     lineStart: number;
-
-    trackComment: boolean;
     curlyStack: string[];
-
-    tokenValues: string[];
-    openCurlyToken: number;
-    openParenToken: number;
-
-    errorHandler: ErrorHandler;
 
     constructor(code: string, handler: ErrorHandler) {
         this.source = code;
+        this.errorHandler = handler;
+        this.trackComment = false;
+
         this.length = code.length;
         this.index = 0;
         this.lineNumber = (code.length > 0) ? 1 : 0;
         this.lineStart = 0;
-
-        this.trackComment = false;
         this.curlyStack = [];
-
-        this.tokenValues = [];
-        this.openCurlyToken = -1;
-        this.openParenToken = -1;
-
-        this.errorHandler = handler;
     };
 
     eof(): boolean {
@@ -1265,58 +1241,5 @@ export class Scanner {
 
         return this.scanPunctuator();
     };
-
-    advance() {
-        let token;
-        if (this.source[this.index] !== '/') {
-            token = this.lex();
-        } else {
-            // Using the following algorithm:
-            // https://github.com/mozilla/sweet.js/wiki/design
-
-            const previous = this.tokenValues[this.tokenValues.length - 1];
-            let regex = (previous !== null);
-
-            switch (previous) {
-                case 'this':
-                case ']':
-                    regex = false;
-                    break;
-
-                case ')':
-                    const check = this.tokenValues[this.openParenToken - 1];
-                    regex = (check === 'if' || check === 'while' || check === 'for' || check === 'with');
-                    break;
-
-                case '}':
-                    // Dividing a function by anything makes little sense,
-                    // but we have to check for that.
-                    regex = false;
-                    if (this.tokenValues[this.openCurlyToken - 3] === 'function') {
-                        // Anonymous function, e.g. function(){} /42
-                        const check = this.tokenValues[this.openCurlyToken - 4];
-                        regex = check ? !beforeFunctionExpression(check) : false;
-                    } else if (this.tokenValues[this.openCurlyToken - 4] === 'function') {
-                        // Named function, e.g. function f(){} /42/
-                        const check = this.tokenValues[this.openCurlyToken - 5];
-                        regex = check ? !beforeFunctionExpression(check) : true;
-                    }
-            }
-            token = regex ? this.scanRegExp() : this.scanPunctuator();
-        }
-
-        let value = null;
-        if (token.type === Token.Punctuator || token.type === Token.Keyword) {
-            value = this.source.slice(token.start, token.end);
-            if (value === '{') {
-                this.openCurlyToken = this.tokenValues.length;
-            } if (value === '(') {
-                this.openParenToken = this.tokenValues.length;
-            }
-        }
-        this.tokenValues.push(value);
-
-        return token;
-    }
 
 }
