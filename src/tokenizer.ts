@@ -2,24 +2,79 @@ import { Comment, Scanner } from './scanner';
 import { ErrorHandler } from './error-handler';
 import { Token, TokenName } from './token';
 
-// A function following one of those tokens is an expression.
-function beforeFunctionExpression(t: string): boolean {
-    return ['(', '{', '[', 'in', 'typeof', 'instanceof', 'new',
-        'return', 'case', 'delete', 'throw', 'void',
-    // assignment operators
-        '=', '+=', '-=', '*=', '/=', '%=', '<<=', '>>=', '>>>=',
-        '&=', '|=', '^=', ',',
-    // binary/unary operators
-        '+', '-', '*', '/', '%', '++', '--', '<<', '>>', '>>>', '&',
-        '|', '^', '!', '~', '&&', '||', '?', ':', '===', '==', '>=',
-        '<=', '<', '>', '!=', '!=='].indexOf(t) >= 0;
-}
-
-interface ReaderState {
+class Reader {
     values: string[];
     curly: number;
     paren: number;
+
+    constructor() {
+        this.values = [];
+        this.curly = this.paren = -1;
+    };
+
+    // A function following one of those tokens is an expression.
+    beforeFunctionExpression(t: string): boolean {
+        return ['(', '{', '[', 'in', 'typeof', 'instanceof', 'new',
+            'return', 'case', 'delete', 'throw', 'void',
+        // assignment operators
+            '=', '+=', '-=', '*=', '/=', '%=', '<<=', '>>=', '>>>=',
+            '&=', '|=', '^=', ',',
+        // binary/unary operators
+            '+', '-', '*', '/', '%', '++', '--', '<<', '>>', '>>>', '&',
+            '|', '^', '!', '~', '&&', '||', '?', ':', '===', '==', '>=',
+            '<=', '<', '>', '!=', '!=='].indexOf(t) >= 0;
+    };
+
+    // Determine if forward slash (/) is an operator or part of a regular expression
+    // https://github.com/mozilla/sweet.js/wiki/design
+    isRegexStart() {
+        const previous = this.values[this.values.length - 1];
+        let regex = (previous !== null);
+
+        switch (previous) {
+            case 'this':
+            case ']':
+                regex = false;
+                break;
+
+            case ')':
+                const check = this.values[this.paren - 1];
+                regex = (check === 'if' || check === 'while' || check === 'for' || check === 'with');
+                break;
+
+            case '}':
+                // Dividing a function by anything makes little sense,
+                // but we have to check for that.
+                regex = false;
+                if (this.values[this.curly - 3] === 'function') {
+                    // Anonymous function, e.g. function(){} /42
+                    const check = this.values[this.curly - 4];
+                    regex = check ? !this.beforeFunctionExpression(check) : false;
+                } else if (this.values[this.curly - 4] === 'function') {
+                    // Named function, e.g. function f(){} /42/
+                    const check = this.values[this.curly - 5];
+                    regex = check ? !this.beforeFunctionExpression(check) : true;
+                }
+        }
+
+        return regex;
+    };
+
+    push(token): void {
+        if (token.type === Token.Punctuator || token.type === Token.Keyword) {
+            if (token.value === '{') {
+                this.curly = this.values.length;
+            } else if (token.value === '(') {
+                this.paren = this.values.length;
+            }
+            this.values.push(token.value);
+        } else {
+            this.values.push(null);
+        }
+    };
+
 }
+
 
 class Tokenizer {
     errorHandler: ErrorHandler;
@@ -27,7 +82,7 @@ class Tokenizer {
     trackRange: boolean;
     trackLoc: boolean;
     buffer: any[];
-    reader: ReaderState;
+    reader: Reader;
 
     constructor(code: string, config: any) {
         this.errorHandler = new ErrorHandler();
@@ -39,11 +94,7 @@ class Tokenizer {
         this.trackRange = config ? (typeof config.range === 'boolean' && config.range) : false;
         this.trackLoc = config ? (typeof config.loc === 'boolean' && config.loc) : false;
         this.buffer = [];
-        this.reader = {
-            values: [],
-            curly: -1,
-            paren: -1
-        };
+        this.reader = new Reader();
     };
 
     errors() {
@@ -76,7 +127,7 @@ class Tokenizer {
             }
 
             if (!this.scanner.eof()) {
-                let range, loc;
+                let loc;
 
                 if (this.trackLoc) {
                     loc = {
@@ -88,75 +139,33 @@ class Tokenizer {
                     };
                 }
 
-                let token = null;
+                let token;
                 if (this.scanner.source[this.scanner.index] === '/') {
-                    // https://github.com/mozilla/sweet.js/wiki/design
-
-                    const previous = this.reader.values[this.reader.values.length - 1];
-                    let regex = (previous !== null);
-
-                    switch (previous) {
-                        case 'this':
-                        case ']':
-                            regex = false;
-                            break;
-
-                        case ')':
-                            const check = this.reader.values[this.reader.paren - 1];
-                            regex = (check === 'if' || check === 'while' || check === 'for' || check === 'with');
-                            break;
-
-                        case '}':
-                            // Dividing a function by anything makes little sense,
-                            // but we have to check for that.
-                            regex = false;
-                            if (this.reader.values[this.reader.curly - 3] === 'function') {
-                                // Anonymous function, e.g. function(){} /42
-                                const check = this.reader.values[this.reader.curly - 4];
-                                regex = check ? !beforeFunctionExpression(check) : false;
-                            } else if (this.reader.values[this.reader.curly - 4] === 'function') {
-                                // Named function, e.g. function f(){} /42/
-                                const check = this.reader.values[this.reader.curly - 5];
-                                regex = check ? !beforeFunctionExpression(check) : true;
-                            }
-                    }
-                    if (regex) {
-                        token = this.scanner.scanRegExp();
-                    }
-                }
-                if (!token) {
+                    token = this.reader.isRegexStart() ? this.scanner.scanRegExp() : this.scanner.scanPunctuator();
+                } else {
                     token = this.scanner.lex();
                 }
+                this.reader.push(token);
 
-                let value = null;
-                if (token.type === Token.Punctuator || token.type === Token.Keyword) {
-                    value = this.scanner.source.slice(token.start, token.end);
-                    if (value === '{') {
-                        this.reader.curly = this.reader.values.length;
-                    } if (value === '(') {
-                        this.reader.paren = this.reader.values.length;
-                    }
-                }
-                this.reader.values.push(value);
-
-
+                let entry;
+                entry = {
+                    type: TokenName[token.type],
+                    value: this.scanner.source.slice(token.start, token.end)
+                };
                 if (this.trackRange) {
-                    range = [token.start, token.end];
+                    entry.range = [token.start, token.end];
                 }
                 if (this.trackLoc) {
                     loc.end = {
                         line: this.scanner.lineNumber,
                         column: this.scanner.index - this.scanner.lineStart
                     };
+                    entry.loc = loc;
+                }
+                if (token.regex) {
+                    entry.regex = token.regex;
                 }
 
-                const entry = {
-                    type: TokenName[token.type],
-                    value: this.scanner.source.slice(token.start, token.end),
-                    range: range,
-                    loc: loc,
-                    regex: token.regex
-                };
                 this.buffer.push(entry);
             }
         }
