@@ -50,7 +50,7 @@ function kb(bytes) {
     return (bytes / 1024).toFixed(1);
 }
 
-function runTests(tests) {
+function runParserTests(tests) {
     var tree = [],
         totalTime = 0,
         totalSize = 0,
@@ -93,6 +93,61 @@ function runTests(tests) {
             Math.sqrt(totalRme / totalTime).toFixed(2) + '%'
         );
     }).run();
+}
+
+function runTokenizerTests(tests) {
+    var buffer = [],
+        totalTime = 0,
+        totalSize = 0,
+        totalRme = 0;
+
+    function pad(str, len) {
+        var result = str;
+        while (result.length < len) {
+            result = ' ' + result;
+        }
+        return result;
+    }
+
+    tests.reduce(function (suite, filename) {
+        var source = readFile(dirname + '/3rdparty/' + slug(filename) + '.js'),
+            size = source.length;
+        totalSize += size;
+        return suite.add(filename, function () {
+            var tokens = esprima.tokenize(source, { range: true, loc: true });
+            buffer.push(tokens.length);
+        }, {
+            'onComplete': function (event) {
+                var result;
+                if (typeof gc === 'function') {
+                    gc();
+                }
+                result = pad(this.name, 20);
+                result += pad(kb(size) + ' KiB', 12);
+                result += pad((1000 * this.stats.mean).toFixed(2), 10);
+                result += ' ms \xb1 ' + this.stats.rme.toFixed(2) + '%';
+                log(result);
+                totalTime += this.stats.mean;
+                totalRme += this.stats.mean * this.stats.rme * this.stats.rme;
+            }
+        });
+    }, new Benchmark.Suite()).on('complete', function () {
+        log('                     ------------------------');
+        log(pad(kb(totalSize) + ' KiB', 32) +
+            pad((1000 * totalTime).toFixed(2), 10) + ' ms \xb1 ' +
+            Math.sqrt(totalRme / totalTime).toFixed(2) + '%'
+        );
+    }).run();
+}
+
+function runTests(fixture) {
+    log('');
+    log('Parsing speed:');
+    runParserTests(fixture);
+
+    log('');
+    log('Tokenizing speed:');
+    runTokenizerTests(fixture);
 }
 
 if (typeof require === 'undefined') {
