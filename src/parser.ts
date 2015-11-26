@@ -3,9 +3,10 @@ import { Messages} from './messages';
 
 import { ErrorHandler } from './error-handler';
 import { Token, TokenName } from './token';
-import { Syntax } from './syntax';
-
 import { Comment, Scanner } from './scanner';
+
+import { Syntax } from './syntax';
+import * as Node from './nodes';
 
 let scanner: Scanner;
 let errorHandler: ErrorHandler;
@@ -150,666 +151,139 @@ function nextRegexToken() {
     return regex;
 }
 
-function Node(startToken?) {
-    if (startToken) {
-        if (options.range) {
-            this.range = [startToken.start, 0];
-        }
-        if (options.loc) {
-            this.loc = {
-                start: {
-                    line: startToken.lineNumber,
-                    column: startToken.start - startToken.lineStart
-                },
-                end: null
-            };
-        }
-    } else {
-        if (options.range) {
-            this.range = [state.startIndex, 0];
-        }
-        if (options.loc) {
-            this.loc = {
-                start: {
-                    line: state.startLineNumber,
-                    column: state.startIndex - state.startLineStart
-                },
-                end: null
-            };
-        }
-    }
+function createNode() {
+    return {
+        index: state.startIndex,
+        line: state.startLineNumber,
+        column: state.startIndex - state.startLineStart
+    };
 }
 
-Node.prototype = {
+function startNode(token) {
+    return {
+        index: token.start,
+        line: token.lineNumber,
+        column: token.start - token.lineStart
+    };
+}
 
-    processComment: function() {
-        let bottomRight = state.bottomRightStack;
-        let last = bottomRight[bottomRight.length - 1];
+function finalize(meta, node) {
+    if (options.range) {
+        node.range = [meta.index, state.lastIndex];
+    }
 
-        if (this.type === Syntax.Program && this.body.length > 0) {
-            return;
-        }
-
-        /**
-         * patch innnerComments for properties empty block
-         * `function a() {/** comments **\/}`
-         */
-
-        if (this.type === Syntax.BlockStatement && this.body.length === 0) {
-            let innerComments = [];
-            for (let i = state.leadingComments.length - 1; i >= 0; --i) {
-                let comment = state.leadingComments[i];
-                if (this.range[1] >= comment.range[1]) {
-                    innerComments.unshift(comment);
-                    state.leadingComments.splice(i, 1);
-                    state.trailingComments.splice(i, 1);
-                }
-            }
-            if (innerComments.length) {
-                this.innerComments = innerComments;
-                return;
-            }
-        }
-
-        let trailingComments = [];
-        if (state.trailingComments.length > 0) {
-            for (let i = state.trailingComments.length - 1; i >= 0; --i) {
-                let comment = state.trailingComments[i];
-                if (comment.range[0] >= this.range[1]) {
-                    trailingComments.unshift(comment);
-                    state.trailingComments.splice(i, 1);
-                }
-            }
-            state.trailingComments = [];
-        } else {
-            if (last && last.trailingComments && last.trailingComments[0].range[0] >= this.range[1]) {
-                trailingComments = last.trailingComments;
-                delete last.trailingComments;
-            }
-        }
-
-        // Eating the stack.
-        let lastChild;
-        while (last && last.range[0] >= this.range[0]) {
-            lastChild = bottomRight.pop();
-            last = bottomRight[bottomRight.length - 1];
-        }
-
-        let leadingComments = [];
-        if (lastChild) {
-            if (lastChild.leadingComments) {
-                for (let i = lastChild.leadingComments.length - 1; i >= 0; --i) {
-                    let comment = lastChild.leadingComments[i];
-                    if (comment.range[1] <= this.range[0]) {
-                        leadingComments.unshift(comment);
-                        lastChild.leadingComments.splice(i, 1);
-                    }
-                }
-
-                if (!lastChild.leadingComments.length) {
-                    lastChild.leadingComments = undefined;
-                }
-            }
-        } else if (state.leadingComments.length > 0) {
-            for (let i = state.leadingComments.length - 1; i >= 0; --i) {
-                let comment = state.leadingComments[i];
-                if (comment.range[1] <= this.range[0]) {
-                    leadingComments.unshift(comment);
-                    state.leadingComments.splice(i, 1);
-                }
-            }
-        }
-
-
-        if (leadingComments && leadingComments.length > 0) {
-            this.leadingComments = leadingComments;
-        }
-        if (trailingComments && trailingComments.length > 0) {
-            this.trailingComments = trailingComments;
-        }
-
-        bottomRight.push(this);
-    },
-
-    finish: function() {
-        if (options.range) {
-            this.range[1] = state.lastIndex;
-        }
-        if (options.loc) {
-            this.loc.end = {
+    if (options.loc) {
+        node.loc = {
+            start: {
+                line: meta.line,
+                column: meta.column
+            },
+            end: {
                 line: state.lastLineNumber,
                 column: state.lastIndex - state.lastLineStart
-            };
-            if (options.source) {
-                this.loc.source = options.source;
+            }
+        };
+        if (options.source) {
+            node.loc.source = options.source;
+        }
+    }
+
+    if (options.attachComment) {
+        node = handleComment(node);
+    }
+
+    return node;
+}
+
+function handleComment(node) {
+    if (node.type === Syntax.Program && node.body.length > 0) {
+        return node;
+    }
+
+    /**
+     * patch innnerComments for properties empty block
+     * `function a() {/** comments **\/}`
+     */
+
+    if (node.type === Syntax.BlockStatement && node.body.length === 0) {
+        let innerComments = [];
+        for (let i = state.leadingComments.length - 1; i >= 0; --i) {
+            let comment = state.leadingComments[i];
+            if (node.range[1] >= comment.range[1]) {
+                innerComments.unshift(comment);
+                state.leadingComments.splice(i, 1);
+                state.trailingComments.splice(i, 1);
             }
         }
-
-        if (options.attachComment) {
-            this.processComment();
+        if (innerComments.length) {
+            node.innerComments = innerComments;
+            return node;
         }
-    },
-
-    finishArrayExpression: function(elements) {
-        this.type = Syntax.ArrayExpression;
-        this.elements = elements;
-        this.finish();
-        return this;
-    },
-
-    finishArrayPattern: function(elements) {
-        this.type = Syntax.ArrayPattern;
-        this.elements = elements;
-        this.finish();
-        return this;
-    },
-
-    finishArrowFunctionExpression: function(params, defaults, body, expression) {
-        this.type = Syntax.ArrowFunctionExpression;
-        this.id = null;
-        this.params = params;
-        this.defaults = defaults;
-        this.body = body;
-        this.generator = false;
-        this.expression = expression;
-        this.finish();
-        return this;
-    },
-
-    finishAssignmentExpression: function(operator, left, right) {
-        this.type = Syntax.AssignmentExpression;
-        this.operator = operator;
-        this.left = left;
-        this.right = right;
-        this.finish();
-        return this;
-    },
-
-    finishAssignmentPattern: function(left, right) {
-        this.type = Syntax.AssignmentPattern;
-        this.left = left;
-        this.right = right;
-        this.finish();
-        return this;
-    },
-
-    finishBinaryExpression: function(operator, left, right) {
-        this.type = (operator === '||' || operator === '&&') ? Syntax.LogicalExpression : Syntax.BinaryExpression;
-        this.operator = operator;
-        this.left = left;
-        this.right = right;
-        this.finish();
-        return this;
-    },
-
-    finishBlockStatement: function(body) {
-        this.type = Syntax.BlockStatement;
-        this.body = body;
-        this.finish();
-        return this;
-    },
-
-    finishBreakStatement: function(label) {
-        this.type = Syntax.BreakStatement;
-        this.label = label;
-        this.finish();
-        return this;
-    },
-
-    finishCallExpression: function(callee, args) {
-        this.type = Syntax.CallExpression;
-        this.callee = callee;
-        this.arguments = args;
-        this.finish();
-        return this;
-    },
-
-    finishCatchClause: function(param, body) {
-        this.type = Syntax.CatchClause;
-        this.param = param;
-        this.body = body;
-        this.finish();
-        return this;
-    },
-
-    finishClassBody: function(body) {
-        this.type = Syntax.ClassBody;
-        this.body = body;
-        this.finish();
-        return this;
-    },
-
-    finishClassDeclaration: function(id, superClass, body) {
-        this.type = Syntax.ClassDeclaration;
-        this.id = id;
-        this.superClass = superClass;
-        this.body = body;
-        this.finish();
-        return this;
-    },
-
-    finishClassExpression: function(id, superClass, body) {
-        this.type = Syntax.ClassExpression;
-        this.id = id;
-        this.superClass = superClass;
-        this.body = body;
-        this.finish();
-        return this;
-    },
-
-    finishConditionalExpression: function(test, consequent, alternate) {
-        this.type = Syntax.ConditionalExpression;
-        this.test = test;
-        this.consequent = consequent;
-        this.alternate = alternate;
-        this.finish();
-        return this;
-    },
-
-    finishContinueStatement: function(label) {
-        this.type = Syntax.ContinueStatement;
-        this.label = label;
-        this.finish();
-        return this;
-    },
-
-    finishDebuggerStatement: function() {
-        this.type = Syntax.DebuggerStatement;
-        this.finish();
-        return this;
-    },
-
-    finishDoWhileStatement: function(body, test) {
-        this.type = Syntax.DoWhileStatement;
-        this.body = body;
-        this.test = test;
-        this.finish();
-        return this;
-    },
-
-    finishEmptyStatement: function() {
-        this.type = Syntax.EmptyStatement;
-        this.finish();
-        return this;
-    },
-
-    finishExpressionStatement: function(expression) {
-        this.type = Syntax.ExpressionStatement;
-        this.expression = expression;
-        this.finish();
-        return this;
-    },
-
-    finishForStatement: function(init, test, update, body) {
-        this.type = Syntax.ForStatement;
-        this.init = init;
-        this.test = test;
-        this.update = update;
-        this.body = body;
-        this.finish();
-        return this;
-    },
-
-    finishForOfStatement: function(left, right, body) {
-        this.type = Syntax.ForOfStatement;
-        this.left = left;
-        this.right = right;
-        this.body = body;
-        this.finish();
-        return this;
-    },
-
-    finishForInStatement: function(left, right, body) {
-        this.type = Syntax.ForInStatement;
-        this.left = left;
-        this.right = right;
-        this.body = body;
-        this.each = false;
-        this.finish();
-        return this;
-    },
-
-    finishFunctionDeclaration: function(id, params, defaults, body, generator) {
-        this.type = Syntax.FunctionDeclaration;
-        this.id = id;
-        this.params = params;
-        this.defaults = defaults;
-        this.body = body;
-        this.generator = generator;
-        this.expression = false;
-        this.finish();
-        return this;
-    },
-
-    finishFunctionExpression: function(id, params, defaults, body, generator) {
-        this.type = Syntax.FunctionExpression;
-        this.id = id;
-        this.params = params;
-        this.defaults = defaults;
-        this.body = body;
-        this.generator = generator;
-        this.expression = false;
-        this.finish();
-        return this;
-    },
-
-    finishIdentifier: function(name) {
-        this.type = Syntax.Identifier;
-        this.name = name;
-        this.finish();
-        return this;
-    },
-
-    finishIfStatement: function(test, consequent, alternate) {
-        this.type = Syntax.IfStatement;
-        this.test = test;
-        this.consequent = consequent;
-        this.alternate = alternate;
-        this.finish();
-        return this;
-    },
-
-    finishLabeledStatement: function(label, body) {
-        this.type = Syntax.LabeledStatement;
-        this.label = label;
-        this.body = body;
-        this.finish();
-        return this;
-    },
-
-    finishLiteral: function(token) {
-        this.type = Syntax.Literal;
-        this.value = token.value;
-        this.raw = scanner.source.slice(token.start, token.end);
-        if (token.regex) {
-            this.regex = token.regex;
-        }
-        this.finish();
-        return this;
-    },
-
-    finishMemberExpression: function(accessor, object, property) {
-        this.type = Syntax.MemberExpression;
-        this.computed = accessor === '[';
-        this.object = object;
-        this.property = property;
-        this.finish();
-        return this;
-    },
-
-    finishMetaProperty: function(meta, property) {
-        this.type = Syntax.MetaProperty;
-        this.meta = meta;
-        this.property = property;
-        this.finish();
-        return this;
-    },
-
-    finishNewExpression: function(callee, args) {
-        this.type = Syntax.NewExpression;
-        this.callee = callee;
-        this.arguments = args;
-        this.finish();
-        return this;
-    },
-
-    finishObjectExpression: function(properties) {
-        this.type = Syntax.ObjectExpression;
-        this.properties = properties;
-        this.finish();
-        return this;
-    },
-
-    finishObjectPattern: function(properties) {
-        this.type = Syntax.ObjectPattern;
-        this.properties = properties;
-        this.finish();
-        return this;
-    },
-
-    finishPostfixExpression: function(operator, argument) {
-        this.type = Syntax.UpdateExpression;
-        this.operator = operator;
-        this.argument = argument;
-        this.prefix = false;
-        this.finish();
-        return this;
-    },
-
-    finishProgram: function(body, sourceType) {
-        this.type = Syntax.Program;
-        this.body = body;
-        this.sourceType = sourceType;
-        this.finish();
-        return this;
-    },
-
-    finishProperty: function(kind, key, computed, value, method, shorthand) {
-        this.type = Syntax.Property;
-        this.key = key;
-        this.computed = computed;
-        this.value = value;
-        this.kind = kind;
-        this.method = method;
-        this.shorthand = shorthand;
-        this.finish();
-        return this;
-    },
-
-    finishRestElement: function(argument) {
-        this.type = Syntax.RestElement;
-        this.argument = argument;
-        this.finish();
-        return this;
-    },
-
-    finishReturnStatement: function(argument) {
-        this.type = Syntax.ReturnStatement;
-        this.argument = argument;
-        this.finish();
-        return this;
-    },
-
-    finishSequenceExpression: function(expressions) {
-        this.type = Syntax.SequenceExpression;
-        this.expressions = expressions;
-        this.finish();
-        return this;
-    },
-
-    finishSpreadElement: function(argument) {
-        this.type = Syntax.SpreadElement;
-        this.argument = argument;
-        this.finish();
-        return this;
-    },
-
-    finishSwitchCase: function(test, consequent) {
-        this.type = Syntax.SwitchCase;
-        this.test = test;
-        this.consequent = consequent;
-        this.finish();
-        return this;
-    },
-
-    finishSuper: function() {
-        this.type = Syntax.Super;
-        this.finish();
-        return this;
-    },
-
-    finishSwitchStatement: function(discriminant, cases) {
-        this.type = Syntax.SwitchStatement;
-        this.discriminant = discriminant;
-        this.cases = cases;
-        this.finish();
-        return this;
-    },
-
-    finishTaggedTemplateExpression: function(tag, quasi) {
-        this.type = Syntax.TaggedTemplateExpression;
-        this.tag = tag;
-        this.quasi = quasi;
-        this.finish();
-        return this;
-    },
-
-    finishTemplateElement: function(value, tail) {
-        this.type = Syntax.TemplateElement;
-        this.value = value;
-        this.tail = tail;
-        this.finish();
-        return this;
-    },
-
-    finishTemplateLiteral: function(quasis, expressions) {
-        this.type = Syntax.TemplateLiteral;
-        this.quasis = quasis;
-        this.expressions = expressions;
-        this.finish();
-        return this;
-    },
-
-    finishThisExpression: function() {
-        this.type = Syntax.ThisExpression;
-        this.finish();
-        return this;
-    },
-
-    finishThrowStatement: function(argument) {
-        this.type = Syntax.ThrowStatement;
-        this.argument = argument;
-        this.finish();
-        return this;
-    },
-
-    finishTryStatement: function(block, handler, finalizer) {
-        this.type = Syntax.TryStatement;
-        this.block = block;
-        this.handler = handler;
-        this.finalizer = finalizer;
-        this.finish();
-        return this;
-    },
-
-    finishUnaryExpression: function(operator, argument) {
-        this.type = (operator === '++' || operator === '--') ? Syntax.UpdateExpression : Syntax.UnaryExpression;
-        this.operator = operator;
-        this.argument = argument;
-        this.prefix = true;
-        this.finish();
-        return this;
-    },
-
-    finishVariableDeclaration: function(declarations) {
-        this.type = Syntax.VariableDeclaration;
-        this.declarations = declarations;
-        this.kind = 'var';
-        this.finish();
-        return this;
-    },
-
-    finishLexicalDeclaration: function(declarations, kind) {
-        this.type = Syntax.VariableDeclaration;
-        this.declarations = declarations;
-        this.kind = kind;
-        this.finish();
-        return this;
-    },
-
-    finishVariableDeclarator: function(id, init) {
-        this.type = Syntax.VariableDeclarator;
-        this.id = id;
-        this.init = init;
-        this.finish();
-        return this;
-    },
-
-    finishWhileStatement: function(test, body) {
-        this.type = Syntax.WhileStatement;
-        this.test = test;
-        this.body = body;
-        this.finish();
-        return this;
-    },
-
-    finishWithStatement: function(object, body) {
-        this.type = Syntax.WithStatement;
-        this.object = object;
-        this.body = body;
-        this.finish();
-        return this;
-    },
-
-    finishExportSpecifier: function(local, exported) {
-        this.type = Syntax.ExportSpecifier;
-        this.exported = exported || local;
-        this.local = local;
-        this.finish();
-        return this;
-    },
-
-    finishImportDefaultSpecifier: function(local) {
-        this.type = Syntax.ImportDefaultSpecifier;
-        this.local = local;
-        this.finish();
-        return this;
-    },
-
-    finishImportNamespaceSpecifier: function(local) {
-        this.type = Syntax.ImportNamespaceSpecifier;
-        this.local = local;
-        this.finish();
-        return this;
-    },
-
-    finishExportNamedDeclaration: function(declaration, specifiers, src) {
-        this.type = Syntax.ExportNamedDeclaration;
-        this.declaration = declaration;
-        this.specifiers = specifiers;
-        this.source = src;
-        this.finish();
-        return this;
-    },
-
-    finishExportDefaultDeclaration: function(declaration) {
-        this.type = Syntax.ExportDefaultDeclaration;
-        this.declaration = declaration;
-        this.finish();
-        return this;
-    },
-
-    finishExportAllDeclaration: function(src) {
-        this.type = Syntax.ExportAllDeclaration;
-        this.source = src;
-        this.finish();
-        return this;
-    },
-
-    finishImportSpecifier: function(local, imported) {
-        this.type = Syntax.ImportSpecifier;
-        this.local = local || imported;
-        this.imported = imported;
-        this.finish();
-        return this;
-    },
-
-    finishImportDeclaration: function(specifiers, src) {
-        this.type = Syntax.ImportDeclaration;
-        this.specifiers = specifiers;
-        this.source = src;
-        this.finish();
-        return this;
-    },
-
-    finishYieldExpression: function(argument, delegate) {
-        this.type = Syntax.YieldExpression;
-        this.argument = argument;
-        this.delegate = delegate;
-        this.finish();
-        return this;
     }
-};
+
+    let bottomRight = state.bottomRightStack;
+    let last = bottomRight[bottomRight.length - 1];
+
+    let trailingComments = [];
+    if (state.trailingComments.length > 0) {
+        for (let i = state.trailingComments.length - 1; i >= 0; --i) {
+            let comment = state.trailingComments[i];
+            if (comment.range[0] >= node.range[1]) {
+                trailingComments.unshift(comment);
+                state.trailingComments.splice(i, 1);
+            }
+        }
+        state.trailingComments = [];
+    } else {
+        if (last && last.trailingComments && last.trailingComments[0].range[0] >= node.range[1]) {
+            trailingComments = last.trailingComments;
+            delete last.trailingComments;
+        }
+    }
+
+    // Eating the stack.
+    let lastChild;
+    while (last && last.range[0] >= node.range[0]) {
+        lastChild = bottomRight.pop();
+        last = bottomRight[bottomRight.length - 1];
+    }
+
+    let leadingComments = [];
+    if (lastChild) {
+        if (lastChild.leadingComments) {
+            for (let i = lastChild.leadingComments.length - 1; i >= 0; --i) {
+                let comment = lastChild.leadingComments[i];
+                if (comment.range[1] <= node.range[0]) {
+                    leadingComments.unshift(comment);
+                    lastChild.leadingComments.splice(i, 1);
+                }
+            }
+
+            if (!lastChild.leadingComments.length) {
+                lastChild.leadingComments = undefined;
+            }
+        }
+    } else if (state.leadingComments.length > 0) {
+        for (let i = state.leadingComments.length - 1; i >= 0; --i) {
+            let comment = state.leadingComments[i];
+            if (comment.range[1] <= node.range[0]) {
+                leadingComments.unshift(comment);
+                state.leadingComments.splice(i, 1);
+            }
+        }
+    }
+
+
+    if (leadingComments && leadingComments.length > 0) {
+        node.leadingComments = leadingComments;
+    }
+    if (trailingComments && trailingComments.length > 0) {
+        node.trailingComments = trailingComments;
+    }
+
+    bottomRight.push(node);
+    return node;
+}
 
 // Expect the next token to match the specified punctuator.
 // If not, an exception will be thrown.
@@ -994,7 +468,7 @@ function inheritCoverGrammar(parser) {
 // ECMA-262 13.3.3 Destructuring Binding Patterns
 
 function parseArrayPattern(params, kind) {
-    const node = new Node();
+    const node = createNode();
 
     expect('[');
     let elements = [];
@@ -1004,11 +478,11 @@ function parseArrayPattern(params, kind) {
             elements.push(null);
         } else {
             if (match('...')) {
-                const restNode = new Node();
+                const restNode = createNode();
                 nextToken();
                 params.push(state.lookahead);
                 const rest = parseVariableIdentifier(kind);
-                elements.push(restNode.finishRestElement(rest));
+                elements.push(finalize(restNode, new Node.RestElement(rest)));
                 break;
             } else {
                 elements.push(parsePatternWithDefault(params, kind));
@@ -1021,11 +495,11 @@ function parseArrayPattern(params, kind) {
     }
     expect(']');
 
-    return node.finishArrayPattern(elements);
+    return finalize(node, new Node.ArrayPattern(elements));
 }
 
 function parsePropertyPattern(params, kind) {
-    const node = new Node();
+    const node = createNode();
     const computed = match('[');
 
     let init, key;
@@ -1036,13 +510,11 @@ function parsePropertyPattern(params, kind) {
             params.push(keyToken);
             nextToken();
             init = parseAssignmentExpression();
-
-            return node.finishProperty(
-                'init', key, false,
-                new Node(keyToken).finishAssignmentPattern(key, init), false, false);
+            const value = finalize(startNode(keyToken), new Node.AssignmentPattern(key, init));
+            return finalize(node, new Node.Property('init', key, false, value, false, false));
         } else if (!match(':')) {
             params.push(keyToken);
-            return node.finishProperty('init', key, false, key, false, true);
+            return finalize(node, new Node.Property('init', key, false, key, false, true));
         }
     } else {
         key = parseObjectPropertyKey();
@@ -1050,11 +522,11 @@ function parsePropertyPattern(params, kind) {
 
     expect(':');
     init = parsePatternWithDefault(params, kind);
-    return node.finishProperty('init', key, computed, init, false, false);
+    return finalize(node, new Node.Property('init', key, computed, init, false, false));
 }
 
 function parseObjectPattern(params, kind) {
-    const node = new Node();
+    const node = createNode();
     let properties = [];
 
     expect('{');
@@ -1066,7 +538,7 @@ function parseObjectPattern(params, kind) {
     }
     expect('}');
 
-    return node.finishObjectPattern(properties);
+    return finalize(node, new Node.ObjectPattern(properties));
 }
 
 function parsePattern(params, kind?) {
@@ -1085,7 +557,7 @@ function parsePattern(params, kind?) {
 }
 
 function parsePatternWithDefault(params, kind?) {
-    let startToken = state.lookahead;
+    const startToken = state.lookahead;
     let pattern = parsePattern(params, kind);
 
     if (match('=')) {
@@ -1094,7 +566,7 @@ function parsePatternWithDefault(params, kind?) {
         state.allowYield = true;
         const right = isolateCoverGrammar(parseAssignmentExpression);
         state.allowYield = previousAllowYield;
-        pattern = new Node(startToken).finishAssignmentPattern(pattern, right);
+        pattern = finalize(startNode(startToken), new Node.AssignmentPattern(pattern, right));
     }
 
     return pattern;
@@ -1103,7 +575,7 @@ function parsePatternWithDefault(params, kind?) {
 // ECMA-262 12.2.5 Array Initializer
 
 function parseArrayInitializer() {
-    const node = new Node();
+    const node = createNode();
     let elements = [];
 
     expect('[');
@@ -1112,15 +584,16 @@ function parseArrayInitializer() {
             nextToken();
             elements.push(null);
         } else if (match('...')) {
-            const restSpread = new Node();
+            let element = createNode();
             nextToken();
-            restSpread.finishSpreadElement(inheritCoverGrammar(parseAssignmentExpression));
+            const arg = inheritCoverGrammar(parseAssignmentExpression);
+            element = finalize(element, new Node.SpreadElement(arg));
 
             if (!match(']')) {
                 state.isAssignmentTarget = state.isBindingElement = false;
                 expect(',');
             }
-            elements.push(restSpread);
+            elements.push(element);
         } else {
             elements.push(inheritCoverGrammar(parseAssignmentExpression));
 
@@ -1131,7 +604,7 @@ function parseArrayInitializer() {
     }
     expect(']');
 
-    return node.finishArrayExpression(elements);
+    return finalize(node, new Node.ArrayExpression(elements));
 }
 
 // ECMA-262 12.2.6 Object Initializer
@@ -1150,11 +623,11 @@ function parsePropertyFunction(node, paramInfo, isGenerator) {
     }
 
     state.strict = previousStrict;
-    return node.finishFunctionExpression(null, paramInfo.params, paramInfo.defaults, body, isGenerator);
+    return finalize(node, new Node.FunctionExpression(null, paramInfo.params, paramInfo.defaults, body, isGenerator));
 }
 
 function parsePropertyMethodFunction() {
-    const node = new Node();
+    const node = createNode();
 
     const previousAllowYield = state.allowYield;
     state.allowYield = false;
@@ -1169,7 +642,7 @@ function parsePropertyMethodFunction() {
 }
 
 function parseObjectPropertyKey() {
-    const node = new Node();
+    const node = createNode();
     const token = nextToken();
 
     // Note: This function is called only from parseObjectProperty(), where
@@ -1181,12 +654,13 @@ function parseObjectPropertyKey() {
             if (state.strict && token.octal) {
                 tolerateUnexpectedToken(token, Messages.StrictOctalLiteral);
             }
-            return node.finishLiteral(token);
+            const raw = scanner.source.slice(token.start, token.end);
+            return finalize(node, new Node.Literal(token.value, raw));
         case Token.Identifier:
         case Token.BooleanLiteral:
         case Token.NullLiteral:
         case Token.Keyword:
-            return node.finishIdentifier(token.value);
+            return finalize(node, new Node.Identifier(token.value));
         case Token.Punctuator:
             if (token.value === '[') {
                 const expr = isolateCoverGrammar(parseAssignmentExpression);
@@ -1228,7 +702,7 @@ function tryParseMethodDefinition(token, key, computed, node) {
         if (token.value === 'get' && lookaheadPropertyName()) {
             computed = match('[');
             key = parseObjectPropertyKey();
-            let methodNode = new Node();
+            let methodNode = createNode();
             expect('(');
             expect(')');
 
@@ -1242,11 +716,11 @@ function tryParseMethodDefinition(token, key, computed, node) {
             }, false);
             state.allowYield = previousAllowYield;
 
-            return node.finishProperty('get', key, computed, value, false, false);
+            return finalize(node, new Node.Property('get', key, computed, value, false, false));
         } else if (token.value === 'set' && lookaheadPropertyName()) {
             computed = match('[');
             key = parseObjectPropertyKey();
-            let methodNode = new Node();
+            let methodNode = createNode();
             expect('(');
 
             options = {
@@ -1272,12 +746,12 @@ function tryParseMethodDefinition(token, key, computed, node) {
             value = parsePropertyFunction(methodNode, options, false);
             state.allowYield = previousAllowYield;
 
-            return node.finishProperty('set', key, computed, value, false, false);
+            return finalize(node, new Node.Property('set', key, computed, value, false, false));
         }
     } else if (token.type === Token.Punctuator && token.value === '*' && lookaheadPropertyName()) {
         computed = match('[');
         key = parseObjectPropertyKey();
-        let methodNode = new Node();
+        let methodNode = createNode();
 
         state.allowYield = true;
         const params = parseParams();
@@ -1287,12 +761,12 @@ function tryParseMethodDefinition(token, key, computed, node) {
         const value = parsePropertyFunction(methodNode, params, true);
         state.allowYield = previousAllowYield;
 
-        return node.finishProperty('init', key, computed, value, true, false);
+        return finalize(node, new Node.Property('init', key, computed, value, true, false));
     }
 
     if (key && match('(')) {
         const value = parsePropertyMethodFunction();
-        return node.finishProperty('init', key, computed, value, true, false);
+        return finalize(node, new Node.Property('init', key, computed, value, true, false));
     }
 
     // Not a MethodDefinition.
@@ -1300,7 +774,7 @@ function tryParseMethodDefinition(token, key, computed, node) {
 }
 
 function parseObjectProperty(hasProto) {
-    const node = new Node();
+    const node = createNode();
 
     const token = state.lookahead;
     const computed = match('[');
@@ -1336,25 +810,25 @@ function parseObjectProperty(hasProto) {
     if (match(':')) {
         nextToken();
         const value = inheritCoverGrammar(parseAssignmentExpression);
-        return node.finishProperty('init', key, computed, value, false, false);
+        return finalize(node, new Node.Property('init', key, computed, value, false, false));
     }
 
     if (token.type === Token.Identifier) {
         if (match('=')) {
             state.firstCoverInitializedNameError = state.lookahead;
             nextToken();
-            const value = isolateCoverGrammar(parseAssignmentExpression);
-            return node.finishProperty('init', key, computed,
-                new Node(token).finishAssignmentPattern(key, value), false, true);
+            const init = isolateCoverGrammar(parseAssignmentExpression);
+            const value = finalize(startNode(token), new Node.AssignmentPattern(key, init));
+            return finalize(node, new Node.Property('init', key, computed, value, false, true));
         }
-        return node.finishProperty('init', key, computed, key, false, true);
+        return finalize(node, new Node.Property('init', key, computed, key, false, true));
     }
 
     throwUnexpectedToken(state.lookahead);
 }
 
 function parseObjectInitializer() {
-    const node = new Node();
+    const node = createNode();
     let hasProto = { value: false };
     let properties = [];
 
@@ -1368,7 +842,7 @@ function parseObjectInitializer() {
     }
     expect('}');
 
-    return node.finishObjectExpression(properties);
+    return finalize(node, new Node.ObjectExpression(properties));
 }
 
 function reinterpretExpressionAsPattern(expr) {
@@ -1413,14 +887,18 @@ function parseTemplateElement(option) {
         throwUnexpectedToken();
     }
 
-    const node = new Node();
+    const node = createNode();
     const token = nextToken();
+    const value = {
+        raw: token.value.raw,
+        cooked: token.value.cooked
+    };
 
-    return node.finishTemplateElement({ raw: token.value.raw, cooked: token.value.cooked }, token.tail);
+    return finalize(node, new Node.TemplateElement(value, token.tail));
 }
 
 function parseTemplateLiteral() {
-    const node = new Node();
+    const node = createNode();
     let quasi = parseTemplateElement({ head: true });
     let quasis = [quasi];
     let expressions = [];
@@ -1430,7 +908,7 @@ function parseTemplateLiteral() {
         quasis.push(quasi);
     }
 
-    return node.finishTemplateLiteral(quasis, expressions);
+    return finalize(node, new Node.TemplateLiteral(quasis, expressions));
 }
 
 // ECMA-262 12.2.10 The Grouping Operator
@@ -1500,7 +978,7 @@ function parseGroupExpression() {
             expressions.push(inheritCoverGrammar(parseAssignmentExpression));
         }
 
-        expr = new Node(startToken).finishSequenceExpression(expressions);
+        expr = finalize(startNode(startToken), new Node.SequenceExpression(expressions));
     }
 
 
@@ -1553,26 +1031,28 @@ function parsePrimaryExpression() {
     }
 
     const type = state.lookahead.type;
-    const node = new Node();
+    const node = createNode();
     let expr;
 
     if (type === Token.Identifier) {
         if (state.sourceType === 'module' && state.lookahead.value === 'await') {
             tolerateUnexpectedToken(state.lookahead);
         }
-        expr = node.finishIdentifier(nextToken().value);
+        expr = finalize(node, new Node.Identifier(nextToken().value));
     } else if (type === Token.StringLiteral || type === Token.NumericLiteral) {
         state.isAssignmentTarget = state.isBindingElement = false;
         if (state.strict && state.lookahead.octal) {
             tolerateUnexpectedToken(state.lookahead, Messages.StrictOctalLiteral);
         }
-        expr = node.finishLiteral(nextToken());
+        const token = nextToken();
+        const raw = scanner.source.slice(token.start, token.end);
+        expr = finalize(node, new Node.Literal(token.value, raw));
     } else if (type === Token.Keyword) {
         if (!state.strict && state.allowYield && matchKeyword('yield')) {
             return parseNonComputedProperty();
         }
         if (!state.strict && matchKeyword('let')) {
-            return node.finishIdentifier(nextToken().value);
+            return finalize(node, new Node.Identifier(nextToken().value));
         }
         state.isAssignmentTarget = state.isBindingElement = false;
         if (matchKeyword('function')) {
@@ -1580,7 +1060,7 @@ function parsePrimaryExpression() {
         }
         if (matchKeyword('this')) {
             nextToken();
-            return node.finishThisExpression();
+            return finalize(node, new Node.ThisExpression());
         }
         if (matchKeyword('class')) {
             return parseClassExpression();
@@ -1590,17 +1070,20 @@ function parsePrimaryExpression() {
         state.isAssignmentTarget = state.isBindingElement = false;
         let token = nextToken();
         token.value = (token.value === 'true');
-        expr = node.finishLiteral(token);
+        const raw = scanner.source.slice(token.start, token.end);
+        expr = finalize(node, new Node.Literal(token.value, raw));
     } else if (type === Token.NullLiteral) {
         state.isAssignmentTarget = state.isBindingElement = false;
         let token = nextToken();
         token.value = null;
-        expr = node.finishLiteral(token);
+        const raw = scanner.source.slice(token.start, token.end);
+        expr = finalize(node, new Node.Literal(token.value, raw));
     } else if (match('/') || match('/=')) {
         state.isAssignmentTarget = state.isBindingElement = false;
         scanner.index = state.startIndex;
         let token = nextRegexToken();
-        expr = node.finishLiteral(token);
+        const raw = scanner.source.slice(token.start, token.end);
+        expr = finalize(node, new Node.RegexLiteral(token.value, raw, token.regex));
     } else if (type === Token.Template) {
         expr = parseTemplateLiteral();
     } else {
@@ -1620,9 +1103,10 @@ function parseArguments() {
         while (state.startIndex < scanner.length) {
             let expr;
             if (match('...')) {
-                expr = new Node();
+                expr = createNode();
                 nextToken();
-                expr.finishSpreadElement(isolateCoverGrammar(parseAssignmentExpression));
+                const arg = isolateCoverGrammar(parseAssignmentExpression);
+                expr = finalize(expr, new Node.SpreadElement(arg));
             } else {
                 expr = isolateCoverGrammar(parseAssignmentExpression);
             }
@@ -1639,13 +1123,13 @@ function parseArguments() {
 }
 
 function parseNonComputedProperty() {
-    const node = new Node();
+    const node = createNode();
     const token = nextToken();
     if (!isIdentifierName(token)) {
         throwUnexpectedToken(token);
     }
 
-    return node.finishIdentifier(token.value);
+    return finalize(node, new Node.Identifier(token.value));
 }
 
 function parseNonComputedMember() {
@@ -1664,20 +1148,20 @@ function parseComputedMember() {
 // ECMA-262 12.3.3 The new Operator
 
 function parseNewExpression() {
-    const node = new Node();
+    const node = createNode();
 
-    const newNode = new Node();
+    const newNode = createNode();
     const newToken = nextToken();
     assert(newToken.value === 'new', 'New expression must start with `new`');
-    const newId = newNode.finishIdentifier(newToken.value);
+    const newId = finalize(newNode, new Node.Identifier(newToken.value));
 
     if (match('.')) {
         nextToken();
         if (state.lookahead.type === Token.Identifier && state.lookahead.value === 'target') {
             if (state.inFunctionBody) {
-                const targetNode = new Node();
-                const targetId = targetNode.finishIdentifier(nextToken().value);
-                return node.finishMetaProperty(newId, targetId);
+                const targetNode = createNode();
+                const targetId = finalize(targetNode, new Node.Identifier(nextToken().value));
+                return finalize(node, new Node.MetaProperty(newId, targetId));
             }
         }
         throwUnexpectedToken(state.lookahead);
@@ -1687,7 +1171,7 @@ function parseNewExpression() {
     const args = match('(') ? parseArguments() : [];
 
     state.isAssignmentTarget = state.isBindingElement = false;
-    return node.finishNewExpression(callee, args);
+    return finalize(node, new Node.NewExpression(callee, args));
 }
 
 // ECMA-262 12.3.4 Function Calls
@@ -1699,9 +1183,9 @@ function parseLeftHandSideExpressionAllowCall() {
 
     let expr;
     if (matchKeyword('super') && state.inFunctionBody) {
-        expr = new Node();
+        expr = createNode();
         nextToken();
-        expr = expr.finishSuper();
+        expr = finalize(expr, new Node.Super());
         if (!match('(') && !match('.') && !match('[')) {
             throwUnexpectedToken(state.lookahead);
         }
@@ -1714,20 +1198,20 @@ function parseLeftHandSideExpressionAllowCall() {
             state.isBindingElement = false;
             state.isAssignmentTarget = true;
             const property = parseNonComputedMember();
-            expr = new Node(startToken).finishMemberExpression('.', expr, property);
+            expr = finalize(startNode(startToken), new Node.StaticMemberExpression(expr, property));
         } else if (match('(')) {
             state.isBindingElement = false;
             state.isAssignmentTarget = false;
             const args = parseArguments();
-            expr = new Node(startToken).finishCallExpression(expr, args);
+            expr = finalize(startNode(startToken), new Node.CallExpression(expr, args));
         } else if (match('[')) {
             state.isBindingElement = false;
             state.isAssignmentTarget = true;
             const property = parseComputedMember();
-            expr = new Node(startToken).finishMemberExpression('[', expr, property);
+            expr = finalize(startNode(startToken), new Node.ComputedMemberExpression(expr, property));
         } else if (state.lookahead.type === Token.Template && state.lookahead.head) {
             const quasi = parseTemplateLiteral();
-            expr = new Node(startToken).finishTaggedTemplateExpression(expr, quasi);
+            expr = finalize(startNode(startToken), new Node.TaggedTemplateExpression(expr, quasi));
         } else {
             break;
         }
@@ -1742,12 +1226,12 @@ function parseLeftHandSideExpressionAllowCall() {
 function parseLeftHandSideExpression() {
     assert(state.allowIn, 'callee of new expression always allow in keyword.');
 
-    const startToken = state.lookahead;
+    const node = startNode(state.lookahead);
     let expr;
     if (matchKeyword('super') && state.inFunctionBody) {
-        expr = new Node();
+        expr = createNode();
         nextToken();
-        expr = expr.finishSuper();
+        expr = finalize(expr, new Node.Super());
         if (!match('[') && !match('.')) {
             throwUnexpectedToken(state.lookahead);
         }
@@ -1760,15 +1244,15 @@ function parseLeftHandSideExpression() {
             state.isBindingElement = false;
             state.isAssignmentTarget = true;
             const property = parseComputedMember();
-            expr = new Node(startToken).finishMemberExpression('[', expr, property);
+            expr = finalize(node, new Node.ComputedMemberExpression(expr, property));
         } else if (match('.')) {
             state.isBindingElement = false;
             state.isAssignmentTarget = true;
             const property = parseNonComputedMember();
-            expr = new Node(startToken).finishMemberExpression('.', expr, property);
+            expr = finalize(node, new Node.StaticMemberExpression(expr, property));
         } else if (state.lookahead.type === Token.Template && state.lookahead.head) {
             const quasi = parseTemplateLiteral();
-            expr = new Node(startToken).finishTaggedTemplateExpression(expr, quasi);
+            expr = finalize(node, new Node.TaggedTemplateExpression(expr, quasi));
         } else {
             break;
         }
@@ -1796,7 +1280,7 @@ function parsePostfixExpression() {
             state.isAssignmentTarget = state.isBindingElement = false;
 
             const token = nextToken();
-            expr = new Node(startToken).finishPostfixExpression(token.value, expr);
+            expr = finalize(startNode(startToken), new Node.PostfixExpression(token.value, expr));
         }
     }
 
@@ -1810,7 +1294,7 @@ function parseUnaryExpression() {
     if (state.lookahead.type !== Token.Punctuator && state.lookahead.type !== Token.Keyword) {
         expr = parsePostfixExpression();
     } else if (match('++') || match('--')) {
-        const startToken = state.lookahead;
+        const node = startNode(state.lookahead);
         const token = nextToken();
         expr = inheritCoverGrammar(parseUnaryExpression);
         // ECMA-262 11.4.4, 11.4.5
@@ -1821,19 +1305,19 @@ function parseUnaryExpression() {
         if (!state.isAssignmentTarget) {
             tolerateError(Messages.InvalidLHSInAssignment);
         }
-        expr = new Node(startToken).finishUnaryExpression(token.value, expr);
+        expr = finalize(node, new Node.UnaryExpression(token.value, expr));
         state.isAssignmentTarget = state.isBindingElement = false;
     } else if (match('+') || match('-') || match('~') || match('!')) {
-        const startToken = state.lookahead;
+        const node = startNode(state.lookahead);
         const token = nextToken();
         expr = inheritCoverGrammar(parseUnaryExpression);
-        expr = new Node(startToken).finishUnaryExpression(token.value, expr);
+        expr = finalize(node, new Node.UnaryExpression(token.value, expr));
         state.isAssignmentTarget = state.isBindingElement = false;
     } else if (matchKeyword('delete') || matchKeyword('void') || matchKeyword('typeof')) {
-        const startToken = state.lookahead;
+        const node = startNode(state.lookahead);
         const token = nextToken();
         expr = inheritCoverGrammar(parseUnaryExpression);
-        expr = new Node(startToken).finishUnaryExpression(token.value, expr);
+        expr = finalize(node, new Node.UnaryExpression(token.value, expr));
         if (state.strict && expr.operator === 'delete' && expr.argument.type === Syntax.Identifier) {
             tolerateError(Messages.StrictDelete);
         }
@@ -1944,7 +1428,6 @@ function parseBinaryExpression() {
     let stack = [left, token, right];
 
     while ((prec = binaryPrecedence(state.lookahead, state.allowIn)) > 0) {
-        let expr;
 
         // Reduce: make a binary expression from the three topmost entries.
         while ((stack.length > 2) && (prec <= stack[stack.length - 2].prec)) {
@@ -1952,8 +1435,8 @@ function parseBinaryExpression() {
             const operator = stack.pop().value;
             left = stack.pop();
             markers.pop();
-            expr = new Node(markers[markers.length - 1]).finishBinaryExpression(operator, left, right);
-            stack.push(expr);
+            const node = startNode(markers[markers.length - 1]);
+            stack.push(finalize(node, new Node.BinaryExpression(operator, left, right)));
         }
 
         // Shift.
@@ -1961,8 +1444,7 @@ function parseBinaryExpression() {
         token.prec = prec;
         stack.push(token);
         markers.push(state.lookahead);
-        expr = isolateCoverGrammar(parseUnaryExpression);
-        stack.push(expr);
+        stack.push(isolateCoverGrammar(parseUnaryExpression));
     }
 
     // Final reduce to clean-up the stack.
@@ -1970,13 +1452,13 @@ function parseBinaryExpression() {
     let expr = stack[i];
     markers.pop();
     while (i > 1) {
-        expr = new Node(markers.pop()).finishBinaryExpression(stack[i - 1].value, stack[i - 2], expr);
+        const node = startNode(markers.pop());
+        expr = finalize(node, new Node.BinaryExpression(stack[i - 1].value, stack[i - 2], expr));
         i -= 2;
     }
 
     return expr;
 }
-
 
 // ECMA-262 12.13 Conditional Operator
 
@@ -1995,7 +1477,7 @@ function parseConditionalExpression() {
         expect(':');
         const alternate = isolateCoverGrammar(parseAssignmentExpression);
 
-        expr = new Node(startToken).finishConditionalExpression(expr, consequent, alternate);
+        expr = finalize(startNode(startToken), new Node.ConditionalExpression(expr, consequent, alternate));
         state.isAssignmentTarget = state.isBindingElement = false;
     }
 
@@ -2134,13 +1616,13 @@ function parseArrowFunctionExpression(options, node) {
     state.strict = previousStrict;
     state.allowYield = previousAllowYield;
 
-    return node.finishArrowFunctionExpression(options.params, options.defaults, body, body.type !== Syntax.BlockStatement);
+    return finalize(node, new Node.ArrowFunctionExpression(options.params, options.defaults, body, body.type !== Syntax.BlockStatement));
 }
 
 // ECMA-262 14.4 Yield expression
 
 function parseYieldExpression() {
-    let expr = new Node();
+    let expr = createNode();
     expectKeyword('yield');
 
     let argument = null;
@@ -2160,7 +1642,7 @@ function parseYieldExpression() {
         state.allowYield = previousAllowYield;
     }
 
-    return expr.finishYieldExpression(argument, delegate);
+    return finalize(expr, new Node.YieldExpression(argument, delegate));
 }
 
 // ECMA-262 12.14 Assignment Operators
@@ -2180,7 +1662,7 @@ function parseAssignmentExpression() {
 
         if (list) {
             state.firstCoverInitializedNameError = null;
-            return parseArrowFunctionExpression(list, new Node(startToken));
+            return parseArrowFunctionExpression(list, startNode(startToken));
         }
 
         return expr;
@@ -2209,7 +1691,7 @@ function parseAssignmentExpression() {
 
         token = nextToken();
         const right = isolateCoverGrammar(parseAssignmentExpression);
-        expr = new Node(startToken).finishAssignmentExpression(token.value, expr, right);
+        expr = finalize(startNode(startToken), new Node.AssignmentExpression(token.value, expr, right));
         state.firstCoverInitializedNameError = null;
     }
 
@@ -2233,7 +1715,7 @@ function parseExpression() {
             expressions.push(isolateCoverGrammar(parseAssignmentExpression));
         }
 
-        expr = new Node(startToken).finishSequenceExpression(expressions);
+        expr = finalize(startNode(startToken), new Node.SequenceExpression(expressions));
     }
 
     return expr;
@@ -2257,7 +1739,7 @@ function parseStatementListItem() {
             case 'const':
                 return parseLexicalDeclaration({ inFor: false });
             case 'function':
-                return parseFunctionDeclaration(new Node());
+                return parseFunctionDeclaration(createNode());
             case 'class':
                 return parseClassDeclaration();
         }
@@ -2283,19 +1765,19 @@ function parseStatementList() {
 }
 
 function parseBlock() {
-    const node = new Node();
+    const node = createNode();
 
     expect('{');
     const block = parseStatementList();
     expect('}');
 
-    return node.finishBlockStatement(block);
+    return finalize(node, new Node.BlockStatement(block));
 }
 
 // ECMA-262 13.3.2 Variable Statement
 
 function parseVariableIdentifier(kind?) {
-    const node = new Node();
+    const node = createNode();
     const token = nextToken();
 
     if (token.type === Token.Keyword && token.value === 'yield') {
@@ -2316,11 +1798,11 @@ function parseVariableIdentifier(kind?) {
         tolerateUnexpectedToken(token);
     }
 
-    return node.finishIdentifier(token.value);
+    return finalize(node, new Node.Identifier(token.value));
 }
 
 function parseVariableDeclaration(options) {
-    const node = new Node();
+    const node = createNode();
 
     let params = [];
     const id = parsePattern(params, 'var');
@@ -2338,7 +1820,7 @@ function parseVariableDeclaration(options) {
         expect('=');
     }
 
-    return node.finishVariableDeclarator(id, init);
+    return finalize(node, new Node.VariableDeclarator(id, init));
 }
 
 function parseVariableDeclarationList(options) {
@@ -2358,13 +1840,13 @@ function parseVariableStatement(node) {
     const declarations = parseVariableDeclarationList({ inFor: false });
     consumeSemicolon();
 
-    return node.finishVariableDeclaration(declarations);
+    return finalize(node, new Node.VariableDeclaration(declarations, 'var'));
 }
 
 // ECMA-262 13.3.1 Let and Const Declarations
 
 function parseLexicalBinding(kind, options) {
-    const node = new Node();
+    const node = createNode();
     let params = [];
     const id = parsePattern(params, kind);
 
@@ -2384,7 +1866,7 @@ function parseLexicalBinding(kind, options) {
         init = isolateCoverGrammar(parseAssignmentExpression);
     }
 
-    return node.finishVariableDeclarator(id, init);
+    return finalize(node, new Node.VariableDeclarator(id, init));
 }
 
 function parseBindingList(kind, options) {
@@ -2426,18 +1908,18 @@ function isLexicalDeclaration() {
 }
 
 function parseLexicalDeclaration(options) {
-    const node = new Node();
+    const node = createNode();
     const kind = nextToken().value;
     assert(kind === 'let' || kind === 'const', 'Lexical declaration must be either let or const');
 
     const declarations = parseBindingList(kind, options);
     consumeSemicolon();
 
-    return node.finishLexicalDeclaration(declarations, kind);
+    return finalize(node, new Node.VariableDeclaration(declarations, kind));
 }
 
 function parseRestElement(params) {
-    const node = new Node();
+    const node = createNode();
 
     nextToken();
     if (match('{')) {
@@ -2455,14 +1937,14 @@ function parseRestElement(params) {
         throwError(Messages.ParameterAfterRestParameter);
     }
 
-    return node.finishRestElement(param);
+    return finalize(node, new Node.RestElement(param));
 }
 
 // ECMA-262 13.4 Empty Statement
 
 function parseEmptyStatement(node) {
     expect(';');
-    return node.finishEmptyStatement();
+    return finalize(node, new Node.EmptyStatement());
 }
 
 // ECMA-262 12.4 Expression Statement
@@ -2470,7 +1952,7 @@ function parseEmptyStatement(node) {
 function parseExpressionStatement(node) {
     const expr = parseExpression();
     consumeSemicolon();
-    return node.finishExpressionStatement(expr);
+    return finalize(node, new Node.ExpressionStatement(expr));
 }
 
 // ECMA-262 13.6 If statement
@@ -2488,7 +1970,7 @@ function parseIfStatement(node) {
         alternate = parseStatement();
     }
 
-    return node.finishIfStatement(test, consequent, alternate);
+    return finalize(node, new Node.IfStatement(test, consequent, alternate));
 }
 
 // ECMA-262 13.7 Iteration Statements
@@ -2509,7 +1991,7 @@ function parseDoWhileStatement(node) {
         nextToken();
     }
 
-    return node.finishDoWhileStatement(body, test);
+    return finalize(node, new Node.DoWhileStatement(body, test));
 }
 
 function parseWhileStatement(node) {
@@ -2524,7 +2006,7 @@ function parseWhileStatement(node) {
     const body = parseStatement();
     state.inIteration = oldInIteration;
 
-    return node.finishWhileStatement(test, body);
+    return finalize(node, new Node.WhileStatement(test, body));
 }
 
 function parseForStatement(node) {
@@ -2541,7 +2023,7 @@ function parseForStatement(node) {
         nextToken();
     } else {
         if (matchKeyword('var')) {
-            init = new Node();
+            init = createNode();
             nextToken();
 
             const previousAllowIn = state.allowIn;
@@ -2550,28 +2032,28 @@ function parseForStatement(node) {
             state.allowIn = previousAllowIn;
 
             if (declarations.length === 1 && matchKeyword('in')) {
-                init = init.finishVariableDeclaration(declarations);
+                init = finalize(init, new Node.VariableDeclaration(declarations, 'var'));
                 nextToken();
                 left = init;
                 right = parseExpression();
                 init = null;
             } else if (declarations.length === 1 && declarations[0].init === null && matchContextualKeyword('of')) {
-                init = init.finishVariableDeclaration(declarations);
+                init = finalize(init, new Node.VariableDeclaration(declarations, 'var'));
                 nextToken();
                 left = init;
                 right = parseAssignmentExpression();
                 init = null;
                 forIn = false;
             } else {
-                init = init.finishVariableDeclaration(declarations);
+                init = finalize(init, new Node.VariableDeclaration(declarations, 'var'));
                 expect(';');
             }
         } else if (matchKeyword('const') || matchKeyword('let')) {
-            init = new Node();
+            init = createNode();
             const kind = nextToken().value;
 
             if (!state.strict && state.lookahead.value === 'in') {
-                init = init.finishIdentifier(kind);
+                init = finalize(init, new Node.Identifier(kind));
                 nextToken();
                 left = init;
                 right = parseExpression();
@@ -2583,13 +2065,13 @@ function parseForStatement(node) {
                 state.allowIn = previousAllowIn;
 
                 if (declarations.length === 1 && declarations[0].init === null && matchKeyword('in')) {
-                    init = init.finishLexicalDeclaration(declarations, kind);
+                    init = finalize(init, new Node.VariableDeclaration(declarations, kind));
                     nextToken();
                     left = init;
                     right = parseExpression();
                     init = null;
                 } else if (declarations.length === 1 && declarations[0].init === null && matchContextualKeyword('of')) {
-                    init = init.finishLexicalDeclaration(declarations, kind);
+                    init = finalize(init, new Node.VariableDeclaration(declarations, kind));
                     nextToken();
                     left = init;
                     right = parseAssignmentExpression();
@@ -2597,7 +2079,7 @@ function parseForStatement(node) {
                     forIn = false;
                 } else {
                     consumeSemicolon();
-                    init = init.finishLexicalDeclaration(declarations, kind);
+                    init = finalize(init, new Node.VariableDeclaration(declarations, kind));
                 }
             }
         } else {
@@ -2635,7 +2117,7 @@ function parseForStatement(node) {
                         nextToken();
                         initSeq.push(isolateCoverGrammar(parseAssignmentExpression));
                     }
-                    init = new Node(initStartToken).finishSequenceExpression(initSeq);
+                    init = finalize(startNode(initStartToken), new Node.SequenceExpression(initSeq));
                 }
                 expect(';');
             }
@@ -2662,9 +2144,9 @@ function parseForStatement(node) {
     state.inIteration = oldInIteration;
 
     return (typeof left === 'undefined') ?
-        node.finishForStatement(init, test, update, body) :
-        forIn ? node.finishForInStatement(left, right, body) :
-            node.finishForOfStatement(left, right, body);
+        finalize(node, new Node.ForStatement(init, test, update, body)) :
+        forIn ? finalize(node, new Node.ForInStatement(left, right, body)) :
+            finalize(node, new Node.ForOfStatement(left, right, body));
 }
 
 // ECMA-262 13.8 The continue statement
@@ -2680,7 +2162,7 @@ function parseContinueStatement(node) {
             throwError(Messages.IllegalContinue);
         }
 
-        return node.finishContinueStatement(null);
+        return finalize(node, new Node.ContinueStatement(null));
     }
 
     if (state.hasLineTerminator) {
@@ -2688,7 +2170,7 @@ function parseContinueStatement(node) {
             throwError(Messages.IllegalContinue);
         }
 
-        return node.finishContinueStatement(null);
+        return finalize(node, new Node.ContinueStatement(null));
     }
 
     let label = null;
@@ -2707,7 +2189,7 @@ function parseContinueStatement(node) {
         throwError(Messages.IllegalContinue);
     }
 
-    return node.finishContinueStatement(label);
+    return finalize(node, new Node.ContinueStatement(label));
 }
 
 // ECMA-262 13.9 The break statement
@@ -2723,7 +2205,7 @@ function parseBreakStatement(node) {
             throwError(Messages.IllegalBreak);
         }
 
-        return node.finishBreakStatement(null);
+        return finalize(node, new Node.BreakStatement(null));
     }
 
     let label = null;
@@ -2746,7 +2228,7 @@ function parseBreakStatement(node) {
         throwError(Messages.IllegalBreak);
     }
 
-    return node.finishBreakStatement(label);
+    return finalize(node, new Node.BreakStatement(label));
 }
 
 // ECMA-262 13.10 The return statement
@@ -2758,21 +2240,15 @@ function parseReturnStatement(node) {
         tolerateError(Messages.IllegalReturn);
     }
 
-    if (state.hasLineTerminator) {
-        // HACK
-        return node.finishReturnStatement(null);
-    }
-
     let argument = null;
-    if (!match(';')) {
+    if (!state.hasLineTerminator && !match(';')) {
         if (!match('}') && state.lookahead.type !== Token.EOF) {
             argument = parseExpression();
         }
     }
 
     consumeSemicolon();
-
-    return node.finishReturnStatement(argument);
+    return finalize(node, new Node.ReturnStatement(argument));
 }
 
 // ECMA-262 13.11 The with statement
@@ -2788,13 +2264,13 @@ function parseWithStatement(node) {
     expect(')');
 
     const body = parseStatement();
-    return node.finishWithStatement(object, body);
+    return finalize(node, new Node.WithStatement(object, body));
 }
 
 // ECMA-262 13.12 The switch statement
 
 function parseSwitchCase() {
-    const node = new Node();
+    const node = createNode();
 
     let test;
     if (matchKeyword('default')) {
@@ -2815,7 +2291,7 @@ function parseSwitchCase() {
         consequent.push(statement);
     }
 
-    return node.finishSwitchCase(test, consequent);
+    return finalize(node, new Node.SwitchCase(test, consequent));
 }
 
 function parseSwitchStatement(node) {
@@ -2829,7 +2305,7 @@ function parseSwitchStatement(node) {
     expect('{');
     if (match('}')) {
         nextToken();
-        return node.finishSwitchStatement(discriminant, cases);
+        return finalize(node, new Node.SwitchStatement(discriminant, cases));
     }
 
     const oldInSwitch = state.inSwitch;
@@ -2854,7 +2330,7 @@ function parseSwitchStatement(node) {
 
     expect('}');
 
-    return node.finishSwitchStatement(discriminant, cases);
+    return finalize(node, new Node.SwitchStatement(discriminant, cases));
 }
 
 // ECMA-262 13.14 The throw statement
@@ -2869,13 +2345,13 @@ function parseThrowStatement(node) {
     const argument = parseExpression();
     consumeSemicolon();
 
-    return node.finishThrowStatement(argument);
+    return finalize(node, new Node.ThrowStatement(argument));
 }
 
 // ECMA-262 13.15 The try statement
 
 function parseCatchClause() {
-    const node = new Node();
+    const node = createNode();
 
     expectKeyword('catch');
 
@@ -2903,7 +2379,7 @@ function parseCatchClause() {
     expect(')');
 
     const body = parseBlock();
-    return node.finishCatchClause(param, body);
+    return finalize(node, new Node.CatchClause(param, body));
 }
 
 function parseTryStatement(node) {
@@ -2926,7 +2402,7 @@ function parseTryStatement(node) {
         throwError(Messages.NoCatchOrFinally);
     }
 
-    return node.finishTryStatement(block, handler, finalizer);
+    return finalize(node, new Node.TryStatement(block, handler, finalizer));
 }
 
 // ECMA-262 13.16 The debugger statement
@@ -2934,7 +2410,7 @@ function parseTryStatement(node) {
 function parseDebuggerStatement(node) {
     expectKeyword('debugger');
     consumeSemicolon();
-    return node.finishDebuggerStatement();
+    return finalize(node, new Node.DebuggerStatement());
 }
 
 // 13 Statements
@@ -2950,7 +2426,7 @@ function parseStatement() {
         return parseBlock();
     }
     state.isAssignmentTarget = state.isBindingElement = true;
-    const node = new Node();
+    const node = createNode();
 
     if (type === Token.Punctuator) {
         switch (state.lookahead.value) {
@@ -3010,18 +2486,18 @@ function parseStatement() {
         state.labelSet[key] = true;
         const labeledBody = parseStatement();
         delete state.labelSet[key];
-        return node.finishLabeledStatement(expr, labeledBody);
+        return finalize(node, new Node.LabeledStatement(expr, labeledBody));
     }
 
     consumeSemicolon();
 
-    return node.finishExpressionStatement(expr);
+    return finalize(node, new Node.ExpressionStatement(expr));
 }
 
 // ECMA-262 14.1 Function Definition
 
 function parseFunctionSourceElements() {
-    const node = new Node();
+    const node = createNode();
 
     expect('{');
 
@@ -3079,7 +2555,7 @@ function parseFunctionSourceElements() {
     state.inFunctionBody = oldInFunctionBody;
     state.parenthesizedCount = oldParenthesisCount;
 
-    return node.finishBlockStatement(body);
+    return finalize(node, new Node.BlockStatement(body));
 }
 
 function validateParam(options, param, name) {
@@ -3228,11 +2704,11 @@ function parseFunctionDeclaration(node, identifierIsOptional?) {
     state.strict = previousStrict;
     state.allowYield = previousAllowYield;
 
-    return node.finishFunctionDeclaration(id, params, defaults, body, isGenerator);
+    return finalize(node, new Node.FunctionDeclaration(id, params, defaults, body, isGenerator));
 }
 
 function parseFunctionExpression() {
-    const node = new Node();
+    const node = createNode();
 
     expectKeyword('function');
 
@@ -3286,13 +2762,13 @@ function parseFunctionExpression() {
     state.strict = previousStrict;
     state.allowYield = previousAllowYield;
 
-    return node.finishFunctionExpression(id, params, defaults, body, isGenerator);
+    return finalize(node, new Node.FunctionExpression(id, params, defaults, body, isGenerator));
 }
 
 // ECMA-262 14.5 Class Definitions
 
 function parseClassBody() {
-    const node = new Node();
+    const node = createNode();
     let hasConstructor = false;
     let body = [];
 
@@ -3301,7 +2777,7 @@ function parseClassBody() {
         if (match(';')) {
             nextToken();
         } else {
-            let method = new Node();
+            let node = createNode();
             let token = state.lookahead;
             let isStatic = false;
             let computed = match('[');
@@ -3322,7 +2798,7 @@ function parseClassBody() {
                     }
                 }
             }
-            method = tryParseMethodDefinition(token, key, computed, method);
+            let method = tryParseMethodDefinition(token, key, computed, node);
             if (method) {
                 method.static = isStatic;
                 if (method.kind === 'init') {
@@ -3356,11 +2832,11 @@ function parseClassBody() {
     }
     expect('}');
 
-    return node.finishClassBody(body);
+    return finalize(node, new Node.ClassBody(body));
 }
 
 function parseClassDeclaration(identifierIsOptional?) {
-    const node = new Node();
+    const node = createNode();
 
     const previousStrict = state.strict;
     state.strict = true;
@@ -3380,11 +2856,11 @@ function parseClassDeclaration(identifierIsOptional?) {
     const classBody = parseClassBody();
     state.strict = previousStrict;
 
-    return node.finishClassDeclaration(id, superClass, classBody);
+    return finalize(node, new Node.ClassDeclaration(id, superClass, classBody));
 }
 
 function parseClassExpression() {
-    const node = new Node();
+    const node = createNode();
 
     const previousStrict = state.strict;
     state.strict = true;
@@ -3404,30 +2880,33 @@ function parseClassExpression() {
     const classBody = parseClassBody();
     state.strict = previousStrict;
 
-    return node.finishClassExpression(id, superClass, classBody);
+    return finalize(node, new Node.ClassExpression(id, superClass, classBody));
 }
 
 // ECMA-262 15.2 Modules
 
 function parseModuleSpecifier() {
-    const node = new Node();
+    const node = createNode();
 
     if (state.lookahead.type !== Token.StringLiteral) {
         throwError(Messages.InvalidModuleSpecifier);
     }
-    return node.finishLiteral(nextToken());
+
+    const token = nextToken();
+    const raw = scanner.source.slice(token.start, token.end);
+    return finalize(node, new Node.Literal(token.value, raw));
 }
 
 // ECMA-262 15.2.3 Exports
 
 function parseExportSpecifier() {
-    const node = new Node();
+    const node = createNode();
     let local, exported;
     if (matchKeyword('default')) {
         // export {default} from 'something';
-        let def = new Node();
+        let def = createNode();
         nextToken();
-        local = def.finishIdentifier('default');
+        local = finalize(def, new Node.Identifier('default'));
     } else {
         local = parseVariableIdentifier();
     }
@@ -3435,7 +2914,7 @@ function parseExportSpecifier() {
         nextToken();
         exported = parseNonComputedProperty();
     }
-    return node.finishExportSpecifier(local, exported);
+    return finalize(node, new Node.ExportSpecifier(local, exported));
 }
 
 function parseExportNamedDeclaration(node) {
@@ -3451,12 +2930,12 @@ function parseExportNamedDeclaration(node) {
             case 'let':
             case 'const':
                 declaration = parseLexicalDeclaration({ inFor: false });
-                return node.finishExportNamedDeclaration(declaration, specifiers, null);
+                return finalize(node, new Node.ExportNamedDeclaration(declaration, specifiers, null));
             case 'var':
             case 'class':
             case 'function':
                 declaration = parseStatementListItem();
-                return node.finishExportNamedDeclaration(declaration, specifiers, null);
+                return finalize(node, new Node.ExportNamedDeclaration(declaration, specifiers, null));
         }
     }
 
@@ -3492,7 +2971,7 @@ function parseExportNamedDeclaration(node) {
         // export {foo};
         consumeSemicolon();
     }
-    return node.finishExportNamedDeclaration(null, specifiers, src);
+    return finalize(node, new Node.ExportNamedDeclaration(null, specifiers, src));
 }
 
 function parseExportDefaultDeclaration(node) {
@@ -3504,12 +2983,12 @@ function parseExportDefaultDeclaration(node) {
         // covers:
         // export default function foo () {}
         // export default function () {}
-        let declaration = parseFunctionDeclaration(new Node(), true);
-        return node.finishExportDefaultDeclaration(declaration);
+        let declaration = parseFunctionDeclaration(createNode(), true);
+        return finalize(node, new Node.ExportDefaultDeclaration(declaration));
     }
     if (matchKeyword('class')) {
         let declaration = parseClassDeclaration(true);
-        return node.finishExportDefaultDeclaration(declaration);
+        return finalize(node, new Node.ExportDefaultDeclaration(declaration));
     }
 
     if (matchContextualKeyword('from')) {
@@ -3529,7 +3008,7 @@ function parseExportDefaultDeclaration(node) {
         expression = parseAssignmentExpression();
     }
     consumeSemicolon();
-    return node.finishExportDefaultDeclaration(expression);
+    return finalize(node, new Node.ExportDefaultDeclaration(expression));
 }
 
 function parseExportAllDeclaration(node) {
@@ -3544,11 +3023,11 @@ function parseExportAllDeclaration(node) {
     const src = parseModuleSpecifier();
     consumeSemicolon();
 
-    return node.finishExportAllDeclaration(src);
+    return finalize(node, new Node.ExportAllDeclaration(src));
 }
 
 function parseExportDeclaration() {
-    const node = new Node();
+    const node = createNode();
     if (state.inFunctionBody) {
         throwError(Messages.IllegalExportDeclaration);
     }
@@ -3568,7 +3047,7 @@ function parseExportDeclaration() {
 
 function parseImportSpecifier() {
     // import {<foo as bar>} ...;
-    const node = new Node();
+    const node = createNode();
 
     let local;
     const imported = parseNonComputedProperty();
@@ -3577,7 +3056,7 @@ function parseImportSpecifier() {
         local = parseVariableIdentifier();
     }
 
-    return node.finishImportSpecifier(local, imported);
+    return finalize(node, new Node.ImportSpecifier(local, imported));
 }
 
 function parseNamedImports() {
@@ -3599,14 +3078,14 @@ function parseNamedImports() {
 
 function parseImportDefaultSpecifier() {
     // import <foo> ...;
-    const node = new Node();
+    const node = createNode();
     const local = parseNonComputedProperty();
-    return node.finishImportDefaultSpecifier(local);
+    return finalize(node, new Node.ImportDefaultSpecifier(local));
 }
 
 function parseImportNamespaceSpecifier() {
     // import <* as foo> ...;
-    const node = new Node();
+    const node = createNode();
 
     expect('*');
     if (!matchContextualKeyword('as')) {
@@ -3615,7 +3094,7 @@ function parseImportNamespaceSpecifier() {
     nextToken();
     const local = parseNonComputedProperty();
 
-    return node.finishImportNamespaceSpecifier(local);
+    return finalize(node, new Node.ImportNamespaceSpecifier(local));
 }
 
 function parseImportDeclaration() {
@@ -3623,7 +3102,7 @@ function parseImportDeclaration() {
         throwError(Messages.IllegalImportDeclaration);
     }
 
-    const node = new Node();
+    const node = createNode();
     expectKeyword('import');
 
     let src;
@@ -3668,7 +3147,7 @@ function parseImportDeclaration() {
     }
 
     consumeSemicolon();
-    return node.finishImportDeclaration(specifiers, src);
+    return finalize(node, new Node.ImportDeclaration(specifiers, src));
 }
 
 // ECMA-262 15.1 Scripts
@@ -3714,9 +3193,9 @@ function parseScriptBody() {
 }
 
 function parseProgram() {
-    const node = new Node();
+    const node = createNode();
     const body = parseScriptBody();
-    return node.finishProgram(body, state.sourceType);
+    return finalize(node, new Node.Program(body, state.sourceType));
 }
 
 function throwError(messageFormat: string, ...values): void {
