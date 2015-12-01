@@ -2494,28 +2494,30 @@ function parseStatement() {
     return finalize(node, new Node.ExpressionStatement(expr));
 }
 
-// ECMA-262 14.1 Function Definition
+// ECMA-262 14.1.1 Directive Prologues
 
-function parseFunctionSourceElements() {
-    const node = createNode();
-
-    expect('{');
-
+function parseDirectivePrologues() {
     let firstRestricted = null;
-    let body = [];
-    while (state.startIndex < scanner.length) {
+
+    const body = [];
+    while (!scanner.eof()) {
         if (state.lookahead.type !== Token.StringLiteral) {
             break;
         }
-        const token = state.lookahead;
 
-        let statement = parseStatementListItem();
+        const token = state.lookahead;
+        const node = createNode();
+        const statement = parseExpressionStatement(node);
         body.push(statement);
+
         if (statement.expression.type !== Syntax.Literal) {
             // this is not directive
             break;
         }
+
+        // Trim the initial and trailing quotes.
         const directive = scanner.source.slice(token.start + 1, token.end - 1);
+
         if (directive === 'use strict') {
             state.strict = true;
             if (firstRestricted) {
@@ -2527,6 +2529,17 @@ function parseFunctionSourceElements() {
             }
         }
     }
+
+    return body;
+}
+
+// ECMA-262 14.1 Function Definition
+
+function parseFunctionSourceElements() {
+    const node = createNode();
+
+    expect('{');
+    const body = parseDirectivePrologues();
 
     const oldLabelSet = state.labelSet;
     const oldInIteration = state.inIteration;
@@ -3153,34 +3166,7 @@ function parseImportDeclaration() {
 // ECMA-262 15.1 Scripts
 
 function parseScriptBody() {
-    let body = [];
-
-    let firstRestricted = null;
-    while (state.startIndex < scanner.length) {
-        const token = state.lookahead;
-        if (token.type !== Token.StringLiteral) {
-            break;
-        }
-
-        let statement = parseStatementListItem();
-        body.push(statement);
-        if (statement.expression.type !== Syntax.Literal) {
-            // this is not directive
-            break;
-        }
-        const directive = scanner.source.slice(token.start + 1, token.end - 1);
-        if (directive === 'use strict') {
-            state.strict = true;
-            if (firstRestricted) {
-                tolerateUnexpectedToken(firstRestricted, Messages.StrictOctalLiteral);
-            }
-        } else {
-            if (!firstRestricted && token.octal) {
-                firstRestricted = token;
-            }
-        }
-    }
-
+    const body = parseDirectivePrologues();
     while (state.startIndex < scanner.length) {
         let statement = parseStatementListItem();
         /* istanbul ignore if */
