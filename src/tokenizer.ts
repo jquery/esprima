@@ -16,10 +16,10 @@ class Reader {
     beforeFunctionExpression(t: string): boolean {
         return ['(', '{', '[', 'in', 'typeof', 'instanceof', 'new',
             'return', 'case', 'delete', 'throw', 'void',
-        // assignment operators
+            // assignment operators
             '=', '+=', '-=', '*=', '/=', '%=', '<<=', '>>=', '>>>=',
             '&=', '|=', '^=', ',',
-        // binary/unary operators
+            // binary/unary operators
             '+', '-', '*', '/', '%', '++', '--', '<<', '>>', '>>>', '&',
             '|', '^', '!', '~', '&&', '||', '?', ':', '===', '==', '>=',
             '<=', '<', '>', '!=', '!=='].indexOf(t) >= 0;

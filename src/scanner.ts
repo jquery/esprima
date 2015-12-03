@@ -1035,10 +1035,10 @@ export class Scanner {
 
         if (flags.indexOf('u') >= 0) {
             tmp = tmp
-            // Replace every Unicode escape sequence with the equivalent
-            // BMP character or a constant ASCII code point in the case of
-            // astral symbols. (See the above note on `astralSubstitute`
-            // for more information.)
+                // Replace every Unicode escape sequence with the equivalent
+                // BMP character or a constant ASCII code point in the case of
+                // astral symbols. (See the above note on `astralSubstitute`
+                // for more information.)
                 .replace(/\\u\{([0-9a-fA-F]+)\}|\\u([a-fA-F0-9]{4})/g, function($0, $1, $2) {
                     const codePoint = parseInt($1 || $2, 16);
                     if (codePoint > 0x10FFFF) {
@@ -1049,9 +1049,9 @@ export class Scanner {
                     }
                     return astralSubstitute;
                 })
-            // Replace each paired surrogate with a single ASCII symbol to
-            // avoid throwing on regular expressions that are only valid in
-            // combination with the "u" flag.
+                // Replace each paired surrogate with a single ASCII symbol to
+                // avoid throwing on regular expressions that are only valid in
+                // combination with the "u" flag.
                 .replace(
                 /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
                 astralSubstitute

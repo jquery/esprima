@@ -55,9 +55,9 @@
     "node-tick-processor": "~0.0.2",
     "regenerate": "~1.2.1",
     "temp": "~0.8.3",
-    "tslint": "~3.0.0",
-    "typescript": "~1.6.2",
-    "typescript-formatter": "~1.1.0",
+    "tslint": "~3.1.1",
+    "typescript": "~1.7.3",
+    "typescript-formatter": "~1.2.0",
     "unicode-7.0.0": "~0.1.5",
     "webpack": "~1.12.1"
   },
