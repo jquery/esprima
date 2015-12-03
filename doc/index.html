@@ -205,10 +205,6 @@ esprima.tokenize(code, options);
         <td>Nodes have an index-based location range (array)</td>
     </tr>
     <tr>
-        <td>raw</td>
-        <td>Literals have extra property which stores the verbatim source</td>
-    </tr>
-    <tr>
         <td>tokens</td>
         <td>An extra array containing all found tokens</td>
     </tr>
@@ -225,8 +221,6 @@ esprima.tokenize(code, options);
 
 
 <p>The easiest way to see the different output based on various option settings is to use the <a href="../demo/parse.html">online parser demo</a>.
-
-<p><b>Note</b>: In version &gt; 1.0, <code>raw</code> is ignored since literals always include the verbatim source.</p>
 
 <h4 id="ast">Syntax Tree Format</h4>
 
