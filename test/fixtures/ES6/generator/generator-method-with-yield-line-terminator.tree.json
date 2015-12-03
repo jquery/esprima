@@ -137,7 +137,8 @@
                                                 }
                                             },
                                             "type": "YieldExpression",
-                                            "argument": null
+                                            "argument": null,
+                                            "delegate": false
                                         }
                                     },
                                     {

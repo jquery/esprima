@@ -3854,6 +3854,7 @@
 
         argument = null;
         expr = new Node();
+        delegate = false;
 
         expectKeyword('yield');
 
