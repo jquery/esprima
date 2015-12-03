@@ -219,8 +219,22 @@ esprima.tokenize(code, options);
     </tr>
 </table>
 
-
 <p>The easiest way to see the different output based on various option settings is to use the <a href="../demo/parse.html">online parser demo</a>.
+
+<p>With the latest <a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm">6th edition of ECMA-262</a>
+(also known as ES2015 or ES6), it is important to distinguish parsing
+<a href="http://www.ecma-international.org/ecma-262/6.0/index.html#sec-scripts">a script</a> vs parsing
+<a href="http://www.ecma-international.org/ecma-262/6.0/index.html#sec-modules">a module</a>.</td>
+This is achieved by using the <code>sourceType</code> option (default to <code>'script'</code>),
+as illustrated in the following example:</p>
+
+<pre class="prettyprint lang-js">
+// Parsing a script
+esprima.parse('var answer = 42', { sourceType: 'script' });
+
+// Parsing a module
+esprima.parse('export var answer = 42', { sourceType: 'module' });
+</pre>
 
 <h4 id="ast">Syntax Tree Format</h4>
 
