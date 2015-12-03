@@ -1626,7 +1626,7 @@ function parseYieldExpression() {
     expectKeyword('yield');
 
     let argument = null;
-    let delegate;
+    let delegate = false;
     if (!state.hasLineTerminator) {
         const previousAllowYield = state.allowYield;
         state.allowYield = false;
