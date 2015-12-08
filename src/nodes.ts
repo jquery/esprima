@@ -1,9 +1,31 @@
 import { Syntax } from './syntax';
 
+export type ArgumentListElement = Expression | SpreadElement;
+export type ArrayExpressionElement = Expression | SpreadElement;
+export type ArrayPatternElement = AssignmentPattern | BindingIdentifier | BindingPattern | RestElement;
+export type BindingPattern = ArrayPattern | ObjectPattern;
+export type BindingIdentifier = Identifier;
+export type Declaration = ClassDeclaration | ExportDeclaration | FunctionDeclaration | ImportDeclaration | VariableDeclaration;
+export type ExportDeclaration = ExportAllDeclaration | ExportDefaultDeclaration | ExportNamedDeclaration;
+export type Expression = ArrayExpression | ArrowFunctionExpression | AssignmentExpression |
+    BinaryExpression | CallExpression | ClassExpression | ComputedMemberExpression |
+    ConditionalExpression | FunctionExpression | NewExpression | ObjectExpression |
+    PostfixExpression | SequenceExpression | StaticMemberExpression | TaggedTemplateExpression |
+    ThisExpression | YieldExpression;
+export type FunctionParameter = AssignmentPattern | BindingIdentifier | BindingPattern;
+export type ImportDeclarationSpecifier = ImportDefaultSpecifier | ImportNamespaceSpecifier | ImportSpecifier;
+export type Statement = BreakStatement | ContinueStatement | DebuggerStatement | DoWhileStatement |
+    EmptyStatement | ExpressionStatement | ForStatement | ForInStatement | ForOfStatement |
+    FunctionDeclaration | IfStatement | ReturnStatement | SwitchStatement | ThrowStatement |
+    TryStatement | VariableDeclaration | WhileStatement | WithStatement;
+export type PropertyKey = Identifier | Literal;
+export type PropertyValue = AssignmentPattern | BindingIdentifier | BindingPattern | FunctionExpression;
+export type StatementListItem = Declaration | Statement;
+
 export class ArrayExpression {
     type: string;
-    elements: any[];
-    constructor(elements) {
+    elements: ArrayExpressionElement[];
+    constructor(elements: ArrayExpressionElement[]) {
         this.type = Syntax.ArrayExpression;
         this.elements = elements;
     }
@@ -11,8 +33,8 @@ export class ArrayExpression {
 
 export class ArrayPattern {
     type: string;
-    elements: any[];
-    constructor(elements) {
+    elements: ArrayPatternElement[];
+    constructor(elements: ArrayPatternElement[]) {
         this.type = Syntax.ArrayPattern;
         this.elements = elements;
     }
@@ -20,13 +42,13 @@ export class ArrayPattern {
 
 export class ArrowFunctionExpression {
     type: string;
-    id: any;
-    params: any;
-    defaults: any;
-    body: any;
+    id: Identifier;
+    params: FunctionParameter[];
+    defaults: Expression[];
+    body: BlockStatement | Expression;
     generator: boolean;
     expression: boolean;
-    constructor(params, defaults, body, expression) {
+    constructor(params: FunctionParameter[], defaults: Expression[], body: BlockStatement | Expression, expression: boolean) {
         this.type = Syntax.ArrowFunctionExpression;
         this.id = null;
         this.params = params;
@@ -40,9 +62,9 @@ export class ArrowFunctionExpression {
 export class AssignmentExpression {
     type: string;
     operator: string;
-    left: any;
-    right: any;
-    constructor(operator, left, right) {
+    left: Expression;
+    right: Expression;
+    constructor(operator: string, left: Expression, right: Expression) {
         this.type = Syntax.AssignmentExpression;
         this.operator = operator;
         this.left = left;
@@ -52,9 +74,9 @@ export class AssignmentExpression {
 
 export class AssignmentPattern {
     type: string;
-    left: any;
-    right: any;
-    constructor(left, right) {
+    left: BindingIdentifier | BindingPattern;
+    right: Expression;
+    constructor(left: BindingIdentifier | BindingPattern, right: Expression) {
         this.type = Syntax.AssignmentPattern;
         this.left = left;
         this.right = right;
@@ -64,9 +86,9 @@ export class AssignmentPattern {
 export class BinaryExpression {
     type: string;
     operator: string;
-    left: any;
-    right: any;
-    constructor(operator, left, right) {
+    left: Expression;
+    right: Expression;
+    constructor(operator: string, left: Expression, right: Expression) {
         const logical = (operator === '||' || operator === '&&');
         this.type = logical ? Syntax.LogicalExpression : Syntax.BinaryExpression;
         this.operator = operator;
@@ -77,7 +99,7 @@ export class BinaryExpression {
 
 export class BlockStatement {
     type: string;
-    body: any[];
+    body: Statement[];
     constructor(body) {
         this.type = Syntax.BlockStatement;
         this.body = body;
@@ -87,7 +109,7 @@ export class BlockStatement {
 export class BreakStatement {
     type: string;
     label: Identifier;
-    constructor(label) {
+    constructor(label: Identifier) {
         this.type = Syntax.BreakStatement;
         this.label = label;
     }
@@ -95,8 +117,8 @@ export class BreakStatement {
 
 export class CallExpression {
     type: string;
-    callee: any;
-    arguments: any;
+    callee: Expression;
+    arguments: ArgumentListElement[];
     constructor(callee, args) {
         this.type = Syntax.CallExpression;
         this.callee = callee;
@@ -106,9 +128,9 @@ export class CallExpression {
 
 export class CatchClause {
     type: string;
-    param: any;
-    body: any;
-    constructor(param, body) {
+    param: BindingIdentifier | BindingPattern;
+    body: BlockStatement;
+    constructor(param: BindingIdentifier | BindingPattern, body: BlockStatement) {
         this.type = Syntax.CatchClause;
         this.param = param;
         this.body = body;
@@ -117,8 +139,8 @@ export class CatchClause {
 
 export class ClassBody {
     type: string;
-    body: any[];
-    constructor(body) {
+    body: Property[];
+    constructor(body: Property[]) {
         this.type = Syntax.ClassBody;
         this.body = body;
     }
@@ -127,9 +149,9 @@ export class ClassBody {
 export class ClassDeclaration {
     type: string;
     id: Identifier;
-    superClass: any;
+    superClass: Identifier;
     body: ClassBody;
-    constructor(id, superClass, body) {
+    constructor(id: Identifier, superClass: Identifier, body: ClassBody) {
         this.type = Syntax.ClassDeclaration;
         this.id = id;
         this.superClass = superClass;
@@ -140,9 +162,9 @@ export class ClassDeclaration {
 export class ClassExpression {
     type: string;
     id: Identifier;
-    superClass: any;
+    superClass: Identifier;
     body: ClassBody;
-    constructor(id, superClass, body) {
+    constructor(id: Identifier, superClass: Identifier, body: ClassBody) {
         this.type = Syntax.ClassExpression;
         this.id = id;
         this.superClass = superClass;
@@ -153,9 +175,9 @@ export class ClassExpression {
 export class ComputedMemberExpression {
     type: string;
     computed: boolean;
-    object: any;
-    property: any;
-    constructor(object, property) {
+    object: Expression;
+    property: Expression;
+    constructor(object: Expression, property: Expression) {
         this.type = Syntax.MemberExpression;
         this.computed = true;
         this.object = object;
@@ -165,22 +187,21 @@ export class ComputedMemberExpression {
 
 export class ConditionalExpression {
     type: string;
-    test: any;
-    consequent: any;
-    alternate: any;
-    constructor(test, consequent, alternate) {
+    test: Expression;
+    consequent: Expression;
+    alternate: Expression;
+    constructor(test: Expression, consequent: Expression, alternate: Expression) {
         this.type = Syntax.ConditionalExpression;
         this.test = test;
         this.consequent = consequent;
         this.alternate = alternate;
     }
-
 }
 
 export class ContinueStatement {
     type: string;
     label: Identifier;
-    constructor(label) {
+    constructor(label: Identifier) {
         this.type = Syntax.ContinueStatement;
         this.label = label;
     }
@@ -195,9 +216,9 @@ export class DebuggerStatement {
 
 export class DoWhileStatement {
     type: string;
-    body: any;
-    test: any;
-    constructor(body, test) {
+    body: Statement;
+    test: Expression;
+    constructor(body: Statement, test: Expression) {
         this.type = Syntax.DoWhileStatement;
         this.body = body;
         this.test = test;
@@ -213,8 +234,8 @@ export class EmptyStatement {
 
 export class ExportAllDeclaration {
     type: string;
-    source: any;
-    constructor(source) {
+    source: Literal;
+    constructor(source: Literal) {
         this.type = Syntax.ExportAllDeclaration;
         this.source = source;
     }
@@ -222,8 +243,8 @@ export class ExportAllDeclaration {
 
 export class ExportDefaultDeclaration {
     type: string;
-    declaration: any;
-    constructor(declaration) {
+    declaration: BindingIdentifier | BindingPattern | ClassDeclaration | Expression | FunctionDeclaration;
+    constructor(declaration: BindingIdentifier | BindingPattern | ClassDeclaration | Expression | FunctionDeclaration) {
         this.type = Syntax.ExportDefaultDeclaration;
         this.declaration = declaration;
     }
@@ -231,10 +252,10 @@ export class ExportDefaultDeclaration {
 
 export class ExportNamedDeclaration {
     type: string;
-    declaration: any;
+    declaration: ClassDeclaration | Function | VariableDeclaration;
     specifiers: ExportSpecifier[];
-    source: any;
-    constructor(declaration, specifiers, source) {
+    source: Literal;
+    constructor(declaration: ClassDeclaration | Function | VariableDeclaration, specifiers: ExportSpecifier[], source: Literal) {
         this.type = Syntax.ExportNamedDeclaration;
         this.declaration = declaration;
         this.specifiers = specifiers;
@@ -244,19 +265,19 @@ export class ExportNamedDeclaration {
 
 export class ExportSpecifier {
     type: string;
-    exported: any;
-    local: any;
-    constructor(local, exported) {
+    exported: Identifier;
+    local: Identifier;
+    constructor(local: Identifier, exported: Identifier) {
         this.type = Syntax.ExportSpecifier;
-        this.exported = exported || local;
+        this.exported = exported;
         this.local = local;
     }
 }
 
 export class ExpressionStatement {
     type: string;
-    expression: any;
-    constructor(expression) {
+    expression: Expression;
+    constructor(expression: Expression) {
         this.type = Syntax.ExpressionStatement;
         this.expression = expression;
     }
@@ -264,11 +285,11 @@ export class ExpressionStatement {
 
 export class ForInStatement {
     type: string;
-    left: any;
-    right: any;
-    body: any;
+    left: Expression;
+    right: Expression;
+    body: Statement;
     each: boolean;
-    constructor(left, right, body) {
+    constructor(left: Expression, right: Expression, body: Statement) {
         this.type = Syntax.ForInStatement;
         this.left = left;
         this.right = right;
@@ -279,10 +300,10 @@ export class ForInStatement {
 
 export class ForOfStatement {
     type: string;
-    left: any;
-    right: any;
-    body: any;
-    constructor(left, right, body) {
+    left: Expression;
+    right: Expression;
+    body: Statement;
+    constructor(left: Expression, right: Expression, body: Statement) {
         this.type = Syntax.ForOfStatement;
         this.left = left;
         this.right = right;
@@ -292,11 +313,11 @@ export class ForOfStatement {
 
 export class ForStatement {
     type: string;
-    init: any;
-    test: any;
-    update: any;
-    body: any;
-    constructor(init, test, update, body) {
+    init: Expression;
+    test: Expression;
+    update: Expression;
+    body: Statement;
+    constructor(init: Expression, test: Expression, update: Expression, body: Statement) {
         this.type = Syntax.ForStatement;
         this.init = init;
         this.test = test;
@@ -307,13 +328,13 @@ export class ForStatement {
 
 export class FunctionDeclaration {
     type: string;
-    id: any;
-    params: any[];
-    defaults: any[];
-    body: any;
+    id: Identifier;
+    params: FunctionParameter[];
+    defaults: Expression[];
+    body: BlockStatement;
     generator: boolean;
     expression: boolean;
-    constructor(id, params, defaults, body, generator) {
+    constructor(id: Identifier, params: FunctionParameter[], defaults: Expression[], body: BlockStatement, generator: boolean) {
         this.type = Syntax.FunctionDeclaration;
         this.id = id;
         this.params = params;
@@ -326,13 +347,13 @@ export class FunctionDeclaration {
 
 export class FunctionExpression {
     type: string;
-    id: any;
-    params: any[];
-    defaults: any[];
-    body: any;
+    id: Identifier;
+    params: FunctionParameter[];
+    defaults: Expression[];
+    body: BlockStatement;
     generator: boolean;
     expression: boolean;
-    constructor(id, params, defaults, body, generator) {
+    constructor(id: Identifier, params: FunctionParameter[], defaults: Expression[], body: BlockStatement, generator: boolean) {
         this.type = Syntax.FunctionExpression;
         this.id = id;
         this.params = params;
@@ -354,10 +375,10 @@ export class Identifier {
 
 export class IfStatement {
     type: string;
-    test: any;
-    consequent: any;
-    alternate: any;
-    constructor(test, consequent, alternate) {
+    test: Expression;
+    consequent: Statement;
+    alternate: Statement;
+    constructor(test: Expression, consequent: Statement, alternate: Statement) {
         this.type = Syntax.IfStatement;
         this.test = test;
         this.consequent = consequent;
@@ -367,8 +388,8 @@ export class IfStatement {
 
 export class ImportDeclaration {
     type: string;
-    specifiers: ImportSpecifier[];
-    source: any;
+    specifiers: ImportDeclarationSpecifier[];
+    source: Literal;
     constructor(specifiers, source) {
         this.type = Syntax.ImportDeclaration;
         this.specifiers = specifiers;
@@ -378,8 +399,8 @@ export class ImportDeclaration {
 
 export class ImportDefaultSpecifier {
     type: string;
-    local: any;
-    constructor(local) {
+    local: Identifier;
+    constructor(local: Identifier) {
         this.type = Syntax.ImportDefaultSpecifier;
         this.local = local;
     }
@@ -387,8 +408,8 @@ export class ImportDefaultSpecifier {
 
 export class ImportNamespaceSpecifier {
     type: string;
-    local: any;
-    constructor(local) {
+    local: Identifier;
+    constructor(local: Identifier) {
         this.type = Syntax.ImportNamespaceSpecifier;
         this.local = local;
     }
@@ -396,11 +417,11 @@ export class ImportNamespaceSpecifier {
 
 export class ImportSpecifier {
     type: string;
-    local: any;
-    imported: any;
-    constructor(local, imported) {
+    local: Identifier;
+    imported: Identifier;
+    constructor(local: Identifier, imported: Identifier) {
         this.type = Syntax.ImportSpecifier;
-        this.local = local || imported;
+        this.local = local;
         this.imported = imported;
     }
 }
@@ -408,8 +429,8 @@ export class ImportSpecifier {
 export class LabeledStatement {
     type: string;
     label: Identifier;
-    body: any;
-    constructor(label, body) {
+    body: Statement;
+    constructor(label: Identifier, body: Statement) {
         this.type = Syntax.LabeledStatement;
         this.label = label;
         this.body = body;
@@ -420,7 +441,7 @@ export class Literal {
     type: string;
     value: string;
     raw: string;
-    constructor(value, raw) {
+    constructor(value: string, raw: string) {
         this.type = Syntax.Literal;
         this.value = value;
         this.raw = raw;
@@ -429,9 +450,9 @@ export class Literal {
 
 export class MetaProperty {
     type: string;
-    meta: any;
-    property: any;
-    constructor(meta, property) {
+    meta: Identifier;
+    property: Identifier;
+    constructor(meta: Identifier, property: Identifier) {
         this.type = Syntax.MetaProperty;
         this.meta = meta;
         this.property = property;
@@ -440,9 +461,9 @@ export class MetaProperty {
 
 export class NewExpression {
     type: string;
-    callee: any;
-    arguments: any;
-    constructor(callee, args) {
+    callee: Expression;
+    arguments: ArgumentListElement[];
+    constructor(callee: Expression, args: ArgumentListElement[]) {
         this.type = Syntax.NewExpression;
         this.callee = callee;
         this.arguments = args;
@@ -452,7 +473,7 @@ export class NewExpression {
 export class ObjectExpression {
     type: string;
     properties: Property[];
-    constructor(properties) {
+    constructor(properties: Property[]) {
         this.type = Syntax.ObjectExpression;
         this.properties = properties;
     }
@@ -461,7 +482,7 @@ export class ObjectExpression {
 export class ObjectPattern {
     type: string;
     properties: Property[];
-    constructor(properties) {
+    constructor(properties: Property[]) {
         this.type = Syntax.ObjectPattern;
         this.properties = properties;
     }
@@ -470,9 +491,9 @@ export class ObjectPattern {
 export class PostfixExpression {
     type: string;
     operator: string;
-    argument: any;
+    argument: Expression;
     prefix: boolean;
-    constructor(operator, argument) {
+    constructor(operator: string, argument: Expression) {
         this.type = Syntax.UpdateExpression;
         this.operator = operator;
         this.argument = argument;
@@ -482,9 +503,9 @@ export class PostfixExpression {
 
 export class Program {
     type: string;
-    body: any[];
+    body: StatementListItem[];
     sourceType: string;
-    constructor(body, sourceType) {
+    constructor(body: StatementListItem[], sourceType: string) {
         this.type = Syntax.Program;
         this.body = body;
         this.sourceType = sourceType;
@@ -493,13 +514,13 @@ export class Program {
 
 export class Property {
     type: string;
-    key: any;
+    key: PropertyKey;
     computed: boolean;
-    value: any;
+    value: PropertyValue;
     kind: string;
     method: boolean;
     shorthand: boolean;
-    constructor(kind, key, computed, value, method, shorthand) {
+    constructor(kind: string, key: PropertyKey, computed: boolean, value: PropertyValue, method: boolean, shorthand: boolean) {
         this.type = Syntax.Property;
         this.key = key;
         this.computed = computed;
@@ -514,7 +535,7 @@ export class RegexLiteral {
     value: string;
     raw: string;
     regex: any;
-    constructor(value, raw, regex) {
+    constructor(value: string, raw: string, regex) {
         this.type = Syntax.Literal;
         this.value = value;
         this.raw = raw;
@@ -524,8 +545,8 @@ export class RegexLiteral {
 
 export class RestElement {
     type: string;
-    argument: any;
-    constructor(argument) {
+    argument: Identifier;
+    constructor(argument: Identifier) {
         this.type = Syntax.RestElement;
         this.argument = argument;
     }
@@ -533,8 +554,8 @@ export class RestElement {
 
 export class ReturnStatement {
     type: string;
-    argument: any;
-    constructor(argument) {
+    argument: Expression;
+    constructor(argument: Expression) {
         this.type = Syntax.ReturnStatement;
         this.argument = argument;
     }
@@ -542,8 +563,8 @@ export class ReturnStatement {
 
 export class SequenceExpression {
     type: string;
-    expressions: any;
-    constructor(expressions) {
+    expressions: Expression[];
+    constructor(expressions: Expression[]) {
         this.type = Syntax.SequenceExpression;
         this.expressions = expressions;
     }
@@ -551,8 +572,8 @@ export class SequenceExpression {
 
 export class SpreadElement {
     type: string;
-    argument: any;
-    constructor(argument) {
+    argument: Expression;
+    constructor(argument: Expression) {
         this.type = Syntax.SpreadElement;
         this.argument = argument;
     }
@@ -561,9 +582,9 @@ export class SpreadElement {
 export class StaticMemberExpression {
     type: string;
     computed: boolean;
-    object: any;
-    property: any;
-    constructor(object, property) {
+    object: Expression;
+    property: Expression;
+    constructor(object: Expression, property: Expression) {
         this.type = Syntax.MemberExpression;
         this.computed = false;
         this.object = object;
@@ -580,9 +601,9 @@ export class Super {
 
 export class SwitchCase {
     type: string;
-    test: any;
-    consequent: any;
-    constructor(test, consequent) {
+    test: Expression;
+    consequent: Statement[];
+    constructor(test: Expression, consequent: Statement[]) {
         this.type = Syntax.SwitchCase;
         this.test = test;
         this.consequent = consequent;
@@ -591,9 +612,9 @@ export class SwitchCase {
 
 export class SwitchStatement {
     type: string;
-    discriminant: any;
+    discriminant: Expression;
     cases: SwitchCase[];
-    constructor(discriminant, cases) {
+    constructor(discriminant: Expression, cases: SwitchCase[]) {
         this.type = Syntax.SwitchStatement;
         this.discriminant = discriminant;
         this.cases = cases;
@@ -602,20 +623,25 @@ export class SwitchStatement {
 
 export class TaggedTemplateExpression {
     type: string;
-    tag: any;
+    tag: Expression;
     quasi: TemplateLiteral;
-    constructor(tag, quasi) {
+    constructor(tag: Expression, quasi: TemplateLiteral) {
         this.type = Syntax.TaggedTemplateExpression;
         this.tag = tag;
         this.quasi = quasi;
     }
 }
 
+interface TemplateElementValue {
+    cooked: string;
+    raw: string;
+}
+
 export class TemplateElement {
     type: string;
-    value: any;
-    tail: any;
-    constructor(value, tail) {
+    value: TemplateElementValue;
+    tail: boolean;
+    constructor(value: TemplateElementValue, tail: boolean) {
         this.type = Syntax.TemplateElement;
         this.value = value;
         this.tail = tail;
@@ -625,8 +651,8 @@ export class TemplateElement {
 export class TemplateLiteral {
     type: string;
     quasis: TemplateElement[];
-    expressions: any[];
-    constructor(quasis, expressions) {
+    expressions: Expression[];
+    constructor(quasis: TemplateElement[], expressions: Expression[]) {
         this.type = Syntax.TemplateLiteral;
         this.quasis = quasis;
         this.expressions = expressions;
@@ -642,8 +668,8 @@ export class ThisExpression {
 
 export class ThrowStatement {
     type: string;
-    argument: any;
-    constructor(argument) {
+    argument: Expression;
+    constructor(argument: Expression) {
         this.type = Syntax.ThrowStatement;
         this.argument = argument;
     }
@@ -651,10 +677,10 @@ export class ThrowStatement {
 
 export class TryStatement {
     type: string;
-    block: any;
-    handler: any;
-    finalizer: any;
-    constructor(block, handler, finalizer) {
+    block: BlockStatement;
+    handler: CatchClause;
+    finalizer: BlockStatement;
+    constructor(block: BlockStatement, handler: CatchClause, finalizer: BlockStatement) {
         this.type = Syntax.TryStatement;
         this.block = block;
         this.handler = handler;
@@ -665,7 +691,7 @@ export class TryStatement {
 export class UnaryExpression {
     type: string;
     operator: string;
-    argument: any;
+    argument: Expression;
     prefix: boolean;
     constructor(operator, argument) {
         const update = (operator === '++' || operator === '--');
@@ -680,7 +706,7 @@ export class VariableDeclaration {
     type: string;
     declarations: VariableDeclarator[];
     kind: string;
-    constructor(declarations, kind) {
+    constructor(declarations: VariableDeclarator[], kind: string) {
         this.type = Syntax.VariableDeclaration;
         this.declarations = declarations;
         this.kind = kind;
@@ -689,9 +715,9 @@ export class VariableDeclaration {
 
 export class VariableDeclarator {
     type: string;
-    id: any;
-    init: any;
-    constructor(id, init) {
+    id: BindingIdentifier | BindingPattern;
+    init: Expression;
+    constructor(id: BindingIdentifier | BindingPattern, init: Expression) {
         this.type = Syntax.VariableDeclarator;
         this.id = id;
         this.init = init;
@@ -700,9 +726,9 @@ export class VariableDeclarator {
 
 export class WhileStatement {
     type: string;
-    test: string;
-    body: string;
-    constructor(test, body) {
+    test: Expression;
+    body: Statement;
+    constructor(test: Expression, body: Statement) {
         this.type = Syntax.WhileStatement;
         this.test = test;
         this.body = body;
@@ -711,9 +737,9 @@ export class WhileStatement {
 
 export class WithStatement {
     type: string;
-    object: string;
-    body: string;
-    constructor(object, body) {
+    object: Expression;
+    body: Statement;
+    constructor(object: Expression, body: Statement) {
         this.type = Syntax.WithStatement;
         this.object = object;
         this.body = body;
@@ -722,9 +748,9 @@ export class WithStatement {
 
 export class YieldExpression {
     type: string;
-    argument: any;
-    delegate: any;
-    constructor(argument, delegate) {
+    argument: Expression;
+    delegate: boolean;
+    constructor(argument: Expression, delegate: boolean) {
         this.type = Syntax.YieldExpression;
         this.argument = argument;
         this.delegate = delegate;
