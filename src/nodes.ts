@@ -9,7 +9,7 @@ export type Declaration = ClassDeclaration | ExportDeclaration | FunctionDeclara
 export type ExportDeclaration = ExportAllDeclaration | ExportDefaultDeclaration | ExportNamedDeclaration;
 export type Expression = ArrayExpression | ArrowFunctionExpression | AssignmentExpression |
     BinaryExpression | CallExpression | ClassExpression | ComputedMemberExpression |
-    ConditionalExpression | FunctionExpression | NewExpression | ObjectExpression |
+    ConditionalExpression | Identifier | FunctionExpression | NewExpression | ObjectExpression |
     PostfixExpression | SequenceExpression | StaticMemberExpression | TaggedTemplateExpression |
     ThisExpression | YieldExpression;
 export type FunctionParameter = AssignmentPattern | BindingIdentifier | BindingPattern;
