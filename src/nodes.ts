@@ -10,7 +10,7 @@ export type ExportDeclaration = ExportAllDeclaration | ExportDefaultDeclaration 
 export type Expression = ArrayExpression | ArrowFunctionExpression | AssignmentExpression |
     BinaryExpression | CallExpression | ClassExpression | ComputedMemberExpression |
     ConditionalExpression | FunctionExpression | NewExpression | ObjectExpression |
-    PostfixExpression | SequenceExpression | StaticMemberExpression | TaggedTemplateExpression |
+    SequenceExpression | StaticMemberExpression | TaggedTemplateExpression |
     ThisExpression | YieldExpression;
 export type FunctionParameter = AssignmentPattern | BindingIdentifier | BindingPattern;
 export type ImportDeclarationSpecifier = ImportDefaultSpecifier | ImportNamespaceSpecifier | ImportSpecifier;
@@ -488,19 +488,6 @@ export class ObjectPattern {
     }
 }
 
-export class PostfixExpression {
-    type: string;
-    operator: string;
-    argument: Expression;
-    prefix: boolean;
-    constructor(operator: string, argument: Expression) {
-        this.type = Syntax.UpdateExpression;
-        this.operator = operator;
-        this.argument = argument;
-        this.prefix = false;
-    }
-}
-
 export class Program {
     type: string;
     body: StatementListItem[];
@@ -694,11 +681,23 @@ export class UnaryExpression {
     argument: Expression;
     prefix: boolean;
     constructor(operator, argument) {
-        const update = (operator === '++' || operator === '--');
-        this.type = update ? Syntax.UpdateExpression : Syntax.UnaryExpression;
+        this.type = Syntax.UnaryExpression;
         this.operator = operator;
         this.argument = argument;
         this.prefix = true;
+    }
+}
+
+export class UpdateExpression {
+    type: string;
+    operator: string;
+    argument: Expression;
+    prefix: boolean;
+    constructor(operator, argument, prefix) {
+        this.type = Syntax.UpdateExpression;
+        this.operator = operator;
+        this.argument = argument;
+        this.prefix = prefix;
     }
 }
 
