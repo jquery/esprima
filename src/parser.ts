@@ -1396,7 +1396,8 @@ class Parser {
                 this.context.isAssignmentTarget = false;
                 this.context.isBindingElement = false;
                 const operator = this.nextToken().value;
-                expr = this.finalize(this.startNode(startToken), new Node.PostfixExpression(operator, expr));
+                const prefix = false;
+                expr = this.finalize(this.startNode(startToken), new Node.UpdateExpression(operator, expr, prefix));
             }
         }
 
@@ -1405,7 +1406,7 @@ class Parser {
 
     // ECMA-262 12.5 Unary Operators
 
-    parseUnaryExpression() {
+    parseUnaryExpression(): Node.Expression {
         let expr;
 
         if (this.lookahead.type !== Token.Punctuator && this.lookahead.type !== Token.Keyword) {
@@ -1421,7 +1422,8 @@ class Parser {
             if (!this.context.isAssignmentTarget) {
                 this.tolerateError(Messages.InvalidLHSInAssignment);
             }
-            expr = this.finalize(node, new Node.UnaryExpression(token.value, expr));
+            const prefix = true;
+            expr = this.finalize(node, new Node.UpdateExpression(token.value, expr, prefix));
             this.context.isAssignmentTarget = false;
             this.context.isBindingElement = false;
 
@@ -1471,7 +1473,7 @@ class Parser {
         return precedence;
     }
 
-    parseBinaryExpression() {
+    parseBinaryExpression(): Node.Expression {
         const startToken = this.lookahead;
 
         let expr = this.inheritCoverGrammar(this.parseUnaryExpression);
