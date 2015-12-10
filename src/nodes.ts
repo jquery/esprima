@@ -459,6 +459,23 @@ export class MetaProperty {
     }
 }
 
+export class MethodDefinition {
+    type: string;
+    key: Expression;
+    computed: boolean;
+    value: FunctionExpression;
+    kind: string;
+    static: boolean;
+    constructor(key: Expression, computed: boolean, value: FunctionExpression, kind: string, isStatic: boolean) {
+        this.type = Syntax.MethodDefinition;
+        this.key = key;
+        this.computed = computed;
+        this.value = value;
+        this.kind = kind;
+        this.static = isStatic;
+    }
+}
+
 export class NewExpression {
     type: string;
     callee: Expression;

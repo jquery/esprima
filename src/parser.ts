@@ -913,11 +913,13 @@ class Parser {
         return key;
     }
 
-    checkDuplicatedProto(key, hasProto) {
-        const proto = (key.type === Syntax.Identifier && key.name === '__proto__') ||
-            (key.type === Syntax.Literal && key.value === '__proto__');
+    isPropertyKey(key, value) {
+        return (key.type === Syntax.Identifier && key.name === value) ||
+            (key.type === Syntax.Literal && key.value === value);
+    }
 
-        if (proto) {
+    checkDuplicatedProto(key, hasProto) {
+        if (this.isPropertyKey(key, '__proto__')) {
             if (hasProto.value) {
                 this.tolerateError(Messages.DuplicateProtoProperty);
             } else {
@@ -3062,10 +3064,11 @@ class Parser {
         let token = this.lookahead;
         let node = this.createNode();
 
-        let kind, key, value;
+        let kind: string;
+        let key: Node.PropertyKey;
+        let value: Node.FunctionExpression;
         let computed = false;
         let method = false;
-        const shorthand = false;
         let isStatic = false;
 
         if (this.match('*')) {
@@ -3073,7 +3076,8 @@ class Parser {
         } else {
             computed = this.match('[');
             key = this.parseObjectPropertyKey();
-            if (key.name === 'static' && (this.qualifiedPropertyName(this.lookahead) || this.match('*'))) {
+            const id = <Node.Identifier>key;
+            if (id.name === 'static' && (this.qualifiedPropertyName(this.lookahead) || this.match('*'))) {
                 token = this.lookahead;
                 isStatic = true;
                 computed = this.match('[');
@@ -3117,14 +3121,16 @@ class Parser {
             this.throwUnexpectedToken(this.lookahead);
         }
 
-        let property = this.finalize(node, new Node.Property(kind, key, computed, value, method, shorthand));
-        property.static = isStatic;
-        if (property.kind === 'init') {
-            property.kind = 'method';
+        if (kind === 'init') {
+            kind = 'method';
         }
-        if (!isStatic) {
-            if (!property.computed && (property.key.name || property.key.value.toString()) === 'constructor') {
-                if (property.kind !== 'method' || !property.method || property.value.generator) {
+
+        if (!computed) {
+            if (isStatic && this.isPropertyKey(key, 'prototype')) {
+                this.throwUnexpectedToken(token, Messages.StaticPrototype);
+            }
+            if (!isStatic && this.isPropertyKey(key, 'constructor')) {
+                if (kind !== 'method' || !method || value.generator) {
                     this.throwUnexpectedToken(token, Messages.ConstructorSpecialMethod);
                 }
                 if (hasConstructor.value) {
@@ -3132,18 +3138,12 @@ class Parser {
                 } else {
                     hasConstructor.value = true;
                 }
-                property.kind = 'constructor';
-            }
-        } else {
-            if (!property.computed && (property.key.name || property.key.value.toString()) === 'prototype') {
-                this.throwUnexpectedToken(token, Messages.StaticPrototype);
+                kind = 'constructor';
             }
         }
-        property.type = Syntax.MethodDefinition;
-        delete property.method;
-        delete property.shorthand;
 
-        return property;
+
+        return this.finalize(node, new Node.MethodDefinition(key, computed, value, kind, isStatic));
     }
 
     parseClassElementList(): Node.Property[] {
