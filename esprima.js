@@ -3263,6 +3263,9 @@
             if (!strict && state.allowYield && matchKeyword('yield')) {
                 return parseNonComputedProperty();
             }
+            if (!strict && matchKeyword('let')) {
+                return node.finishIdentifier(lex().value);
+            }
             isAssignmentTarget = isBindingElement = false;
             if (matchKeyword('function')) {
                 return parseFunctionExpression();
@@ -3273,9 +3276,6 @@
             }
             if (matchKeyword('class')) {
                 return parseClassExpression();
-            }
-            if (!strict && matchKeyword('let')) {
-                return node.finishIdentifier(lex().value);
             }
             throwUnexpectedToken(lex());
         } else if (type === Token.BooleanLiteral) {
@@ -3854,6 +3854,7 @@
 
         argument = null;
         expr = new Node();
+        delegate = false;
 
         expectKeyword('yield');
 
@@ -4059,15 +4060,15 @@
     }
 
     function parseVariableDeclarationList(options) {
-        var list = [];
+        var opt, list;
 
-        do {
-            list.push(parseVariableDeclaration({ inFor: options.inFor }));
-            if (!match(',')) {
-                break;
-            }
+        opt = { inFor: options.inFor };
+        list = [parseVariableDeclaration(opt)];
+
+        while (match(',')) {
             lex();
-        } while (startIndex < length);
+            list.push(parseVariableDeclaration(opt));
+        }
 
         return list;
     }
@@ -4110,15 +4111,12 @@
     }
 
     function parseBindingList(kind, options) {
-        var list = [];
+        var list = [parseLexicalBinding(kind, options)];
 
-        do {
-            list.push(parseLexicalBinding(kind, options));
-            if (!match(',')) {
-                break;
-            }
+        while (match(',')) {
             lex();
-        } while (startIndex < length);
+            list.push(parseLexicalBinding(kind, options));
+        }
 
         return list;
     }
@@ -5711,7 +5709,7 @@
     }
 
     // Sync with *.json manifests.
-    exports.version = '2.7.0';
+    exports.version = '2.7.1';
 
     exports.tokenize = tokenize;
 
