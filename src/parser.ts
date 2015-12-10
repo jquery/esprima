@@ -1281,7 +1281,7 @@ class Parser {
         return this.finalize(node, expr);
     }
 
-    parseLeftHandSideExpressionAllowCall() {
+    parseLeftHandSideExpressionAllowCall(): Node.Expression {
         const startToken = this.lookahead;
         const previousAllowIn = this.context.allowIn;
         this.context.allowIn = true;
@@ -2524,12 +2524,12 @@ class Parser {
         return this.finalize(node, new Node.CatchClause(param, body));
     }
 
-    parseFinallyClause() {
+    parseFinallyClause(): Node.BlockStatement {
         this.expectKeyword('finally');
         return this.parseBlock();
     }
 
-    parseTryStatement() {
+    parseTryStatement(): Node.TryStatement {
         const node = this.createNode();
         this.expectKeyword('try');
 
