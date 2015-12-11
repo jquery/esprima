@@ -274,33 +274,6 @@ class Parser {
         }
     }
 
-    filterTokenLocation(tokens) {
-        const result = [];
-        for (let i = 0; i < tokens.length; ++i) {
-            let token;
-            const entry = tokens[i];
-            token = {
-                type: entry.type,
-                value: entry.value
-            };
-            if (entry.regex) {
-                token.regex = {
-                    pattern: entry.regex.pattern,
-                    flags: entry.regex.flags
-                };
-            }
-            if (this.config.range) {
-                token.range = entry.range;
-            }
-            if (this.config.loc) {
-                token.loc = entry.loc;
-            }
-            result.push(token);
-        }
-
-        return result;
-    }
-
     attachComent(node) {
         if (node.type === Syntax.Program && node.body.length > 0) {
             return node;
@@ -394,11 +367,17 @@ class Parser {
     }
 
     convertToken(token) {
-        return {
+        let t;
+
+        t = {
             type: TokenName[token.type],
-            value: this.getTokenRaw(token),
-            range: [token.start, token.end],
-            loc: {
+            value: this.getTokenRaw(token)
+        };
+        if (this.config.range) {
+            t.range = [token.start, token.end];
+        }
+        if (this.config.loc) {
+            t.loc = {
                 start: {
                     line: this.startMarker.lineNumber,
                     column: this.startMarker.index - this.startMarker.lineStart
@@ -407,9 +386,13 @@ class Parser {
                     line: this.scanner.lineNumber,
                     column: this.scanner.index - this.scanner.lineStart
                 }
-            },
-            regex: token.regex
-        };
+            };
+        }
+        if (token.regex) {
+            t.regex = token.regex;
+        }
+
+        return t;
     }
 
     nextToken() {
@@ -444,54 +427,22 @@ class Parser {
     }
 
     nextRegexToken() {
-        let pos, loc;
-
-        if (this.config.tokens) {
-            this.collectComments();
-
-            pos = this.scanner.index;
-            loc = {
-                start: {
-                    line: this.scanner.lineNumber,
-                    column: this.scanner.index - this.scanner.lineStart
-                },
-                end: {}
-            };
-        }
+        this.collectComments();
 
         const token = this.scanner.scanRegExp();
-        const regex = {
-            literal: token.literal,
-            value: token.value,
-            regex: token.regex,
-            start: token.start,
-            end: token.end
-        };
-
         if (this.config.tokens) {
-            loc.end = {
-                line: this.scanner.lineNumber,
-                column: this.scanner.index - this.scanner.lineStart
-            };
-
             // Pop the previous token, '/' or '/='
             // This is added from the lookahead token.
             this.tokens.pop();
 
-            this.tokens.push({
-                type: 'RegularExpression',
-                value: regex.literal,
-                regex: regex.regex,
-                range: [pos, this.scanner.index],
-                loc: loc
-            });
+            this.tokens.push(this.convertToken(token));
         }
 
         // Prime the next lookahead.
         this.lookahead = token;
         this.nextToken();
 
-        return regex;
+        return token;
     }
 
     createNode(): MetaNode {
@@ -3461,7 +3412,7 @@ export function parse(code, options) {
         ast.comments = parser.comments;
     }
     if (parser.config.tokens) {
-        ast.tokens = parser.filterTokenLocation(parser.tokens);
+        ast.tokens = parser.tokens;
     }
     if (parser.config.tolerant) {
         ast.errors = parser.errorHandler.errors;
