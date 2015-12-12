@@ -54,7 +54,7 @@ interface DeclarationOptions {
     inFor: boolean;
 }
 
-class Parser {
+export class Parser {
     config: Config;
     errorHandler: ErrorHandler;
     scanner: Scanner;
@@ -3402,21 +3402,4 @@ class Parser {
         return exportDeclaration;
     }
 
-}
-
-export function parse(code, options) {
-    const parser = new Parser(code, options);
-    const ast = <any>(parser.parseProgram());
-
-    if (parser.config.comment) {
-        ast.comments = parser.comments;
-    }
-    if (parser.config.tokens) {
-        ast.tokens = parser.tokens;
-    }
-    if (parser.config.tolerant) {
-        ast.errors = parser.errorHandler.errors;
-    }
-
-    return ast;
 }

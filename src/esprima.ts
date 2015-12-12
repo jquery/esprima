@@ -22,10 +22,52 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-export { Syntax } from './syntax';
+import { Parser } from './parser';
+import { Tokenizer } from './tokenizer';
 
-export { tokenize } from './tokenizer';
-export { parse } from './parser';
+export function parse(code, options) {
+    const parser = new Parser(code, options);
+    const ast = <any>(parser.parseProgram());
+
+    if (parser.config.comment) {
+        ast.comments = parser.comments;
+    }
+    if (parser.config.tokens) {
+        ast.tokens = parser.tokens;
+    }
+    if (parser.config.tolerant) {
+        ast.errors = parser.errorHandler.errors;
+    }
+
+    return ast;
+}
+
+export function tokenize(code: string, options, delegate) {
+    const tokenizer = new Tokenizer(code, options);
+
+    let tokens;
+    tokens = [];
+
+    try {
+        while (true) {
+            let token = tokenizer.getNextToken();
+            if (!token) {
+                break;
+            }
+            if (delegate) {
+                token = delegate(token);
+            }
+            tokens.push(token);
+        }
+    } catch (e) {
+        tokenizer.errorHandler.tolerate(e);
+    }
+
+    tokens.errors = tokenizer.errors();
+    return tokens;
+}
+
+export { Syntax } from './syntax';
 
 // Sync with *.json manifests.
 export const version = '3.0.0-dev';
