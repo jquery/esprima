@@ -75,8 +75,7 @@ class Reader {
 
 }
 
-
-class Tokenizer {
+export class Tokenizer {
     errorHandler: ErrorHandler;
     scanner: Scanner;
     trackRange: boolean;
@@ -173,29 +172,4 @@ class Tokenizer {
         return this.buffer.shift();
     };
 
-}
-
-export function tokenize(code: string, options, delegate) {
-    let tokenizer: Tokenizer = new Tokenizer(code, options);
-
-    let tokens;
-    tokens = [];
-
-    try {
-        while (true) {
-            let token = tokenizer.getNextToken();
-            if (!token) {
-                break;
-            }
-            if (delegate) {
-                token = delegate(token);
-            }
-            tokens.push(token);
-        }
-    } catch (e) {
-        tokenizer.errorHandler.tolerate(e);
-    }
-
-    tokens.errors = tokenizer.errors();
-    return tokens;
 }
