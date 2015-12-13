@@ -63,7 +63,10 @@ export function tokenize(code: string, options, delegate) {
         tokenizer.errorHandler.tolerate(e);
     }
 
-    tokens.errors = tokenizer.errors();
+    if (tokenizer.errorHandler.tolerant) {
+        tokens.errors = tokenizer.errors();
+    }
+
     return tokens;
 }
 
