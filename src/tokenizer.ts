@@ -97,9 +97,7 @@ export class Tokenizer {
     };
 
     errors() {
-        if (this.errorHandler.tolerant) {
-            return this.errorHandler.errors;
-        }
+        return this.errorHandler.errors;
     };
 
     getNextToken() {

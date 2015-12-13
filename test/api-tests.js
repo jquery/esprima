@@ -261,6 +261,11 @@ describe('esprima.tokenize', function () {
         assert.ifError(tokens[0].range);
     });
 
+    it('should exclude list of errors in non-tolerant mode', function () {
+        var tokens = esprima.tokenize('x', { tolerant: false });
+        assert.deepEqual(tokens, [{ type: 'Identifier', value: 'x' }]);
+    });
+
     it('should include index-based location for the tokens when specified', function () {
         var tokens = esprima.tokenize('answer = 42', { range: true });
         assert.deepEqual(tokens.length, 3);
