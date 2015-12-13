@@ -185,8 +185,14 @@
         } catch (e) {
             throw new NotMatchingError(expected, e.toString());
         }
-
         assertEquality(expected, actual);
+
+        // Exercise more code paths
+        try {
+            esprima.parse(code);
+        } catch (e) {
+            // Ignore, do nothing
+        }
     }
 
     function testTokenize(code, tokens) {
@@ -251,6 +257,14 @@
         expected = JSON.stringify(types, null, 4);
         if (expected !== actual) {
             throw new NotMatchingError(expected, actual);
+        }
+
+        // Exercise more code paths
+        try {
+            esprima.tokenize(code);
+            esprima.tokenize(code, { tolerant: false });
+        } catch (e) {
+            // Ignore, do nothing
         }
     }
 
@@ -358,16 +372,6 @@
         }
     }
 
-    function testAPI(code, expected) {
-        var result;
-        // API test.
-        expected = JSON.stringify(expected, null, 4);
-        result = eval(code);
-        result = JSON.stringify(result, null, 4);
-
-        assertEquality(expected, result);
-    }
-
     return function (testCase) {
         var code = testCase.case || testCase.source || "";
         if (testCase.hasOwnProperty('module')) {
@@ -378,8 +382,6 @@
             testTokenize(testCase.case, testCase.tokens);
         } else if (testCase.hasOwnProperty('failure')) {
             testError(code, testCase.failure);
-        } else if (testCase.hasOwnProperty('result')) {
-            testAPI(testCase.run, testCase.result);
         }
     }
 }));
