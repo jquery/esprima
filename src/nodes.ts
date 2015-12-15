@@ -9,9 +9,9 @@ export type Declaration = ClassDeclaration | ExportDeclaration | FunctionDeclara
 export type ExportDeclaration = ExportAllDeclaration | ExportDefaultDeclaration | ExportNamedDeclaration;
 export type Expression = ArrayExpression | ArrowFunctionExpression | AssignmentExpression |
     BinaryExpression | CallExpression | ClassExpression | ComputedMemberExpression |
-    ConditionalExpression | FunctionExpression | NewExpression | ObjectExpression |
-    SequenceExpression | StaticMemberExpression | TaggedTemplateExpression |
-    ThisExpression | YieldExpression;
+    ConditionalExpression | Identifier | FunctionExpression | Literal | NewExpression | ObjectExpression |
+    RegexLiteral | SequenceExpression | StaticMemberExpression | TaggedTemplateExpression |
+    ThisExpression | UnaryExpression | UpdateExpression | YieldExpression;
 export type FunctionParameter = AssignmentPattern | BindingIdentifier | BindingPattern;
 export type ImportDeclarationSpecifier = ImportDefaultSpecifier | ImportNamespaceSpecifier | ImportSpecifier;
 export type Statement = BreakStatement | ContinueStatement | DebuggerStatement | DoWhileStatement |
