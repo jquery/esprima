@@ -56,6 +56,7 @@ interface DeclarationOptions {
 
 export class Parser {
     config: Config;
+    delegate: any;
     errorHandler: ErrorHandler;
     scanner: Scanner;
     operatorPrecedence: any;
@@ -74,7 +75,7 @@ export class Parser {
     leadingComments: any[];
     trailingComments: any[];
 
-    constructor(code: string, options: any = {}) {
+    constructor(code: string, options: any = {}, delegate) {
         this.config = {
             range: (typeof options.range === 'boolean') && options.range,
             loc: (typeof options.loc === 'boolean') && options.loc,
@@ -90,6 +91,8 @@ export class Parser {
         if (this.config.attachComment) {
             this.config.range = true;
         }
+
+        this.delegate = delegate;
 
         this.errorHandler = new ErrorHandler();
         this.errorHandler.tolerant = this.config.tolerant;
@@ -269,6 +272,32 @@ export class Parser {
                 if (this.config.attachComment) {
                     this.leadingComments.push(comment);
                     this.trailingComments.push(comment);
+                }
+                if (this.delegate) {
+                    let node;
+                    node = {
+                        type: e.multiLine ? 'BlockComment' : 'LineComment',
+                        value: value
+                    };
+                    if (this.config.range) {
+                        node.range = e.range;
+                    }
+                    if (this.config.loc) {
+                        node.loc = e.loc;
+                    }
+                    const metadata = {
+                        start: {
+                            line: e.loc.start.line,
+                            column: e.loc.start.column,
+                            offset: e.range[0]
+                        },
+                        end: {
+                            line: e.loc.end.line,
+                            column: e.loc.end.column,
+                            offset: e.range[1]
+                        }
+                    };
+                    this.delegate(node, metadata);
                 }
             }
         }
@@ -480,6 +509,22 @@ export class Parser {
             if (this.config.source) {
                 node.loc.source = this.config.source;
             }
+        }
+
+        if (this.delegate) {
+            const metadata = {
+                start: {
+                    line: meta.line,
+                    column: meta.column,
+                    offset: meta.index
+                },
+                end: {
+                    line: this.lastMarker.lineNumber,
+                    column: this.lastMarker.index - this.lastMarker.lineStart,
+                    offset: this.lastMarker.index
+                }
+            };
+            this.delegate(node, metadata);
         }
 
         if (this.config.attachComment) {
