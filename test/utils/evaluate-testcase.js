@@ -98,7 +98,7 @@
 
     function testParse(code, syntax) {
         'use strict';
-        var expected, tree, actual, options, i, len;
+        var expected, tree, actual, options, i, len, nodes;
 
         options = {
             comment: (typeof syntax.comments !== 'undefined'),
@@ -187,9 +187,47 @@
         }
         assertEquality(expected, actual);
 
-        // Exercise more code paths
+        function collect(node) {
+            nodes.push(node);
+        }
+
+        function filter(node) {
+            if (node.type === 'Program') {
+                nodes.push(node);
+            }
+        }
+
+        // Use the delegate to collect the nodes.
+        try {
+            nodes = [];
+            esprima.parse(code, options, collect);
+        } catch (e) {
+            throw new NotMatchingError(expected, e.toString());
+        }
+        // The last one, the most top-level node, is always a Program node.
+        assertEquality('Program', nodes.pop().type);
+
+        // Use the delegate to filter the nodes.
+        try {
+            nodes = [];
+            esprima.parse(code, options, filter);
+        } catch (e) {
+            throw new NotMatchingError(expected, e.toString());
+        }
+        // Every tree will have exactly one Program node.
+        assertEquality('Program', nodes[0].type);
+
+        // Exercise more code paths with the delegate
         try {
             esprima.parse(code);
+            esprima.parse(code, { range: false, loc: false, comment: false }, filter);
+            esprima.parse(code, { range: true,  loc: false, comment: false }, filter);
+            esprima.parse(code, { range: false, loc: true,  comment: false }, filter);
+            esprima.parse(code, { range: true,  loc: true,  comment: false }, filter);
+            esprima.parse(code, { range: false, loc: false, comment: true }, filter);
+            esprima.parse(code, { range: true,  loc: false, comment: true }, filter);
+            esprima.parse(code, { range: false, loc: true,  comment: true }, filter);
+            esprima.parse(code, { range: true,  loc: true,  comment: true }, filter);
         } catch (e) {
             // Ignore, do nothing
         }
@@ -270,7 +308,7 @@
 
     function testModule(code, exception) {
         'use strict';
-        var i, options, expected, actual, err, handleInvalidRegexFlag, tokenize;
+        var i, options, expected, actual, err, handleInvalidRegexFlag;
 
         // Different parsing options should give the same error.
         options = [

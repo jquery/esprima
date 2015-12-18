@@ -126,10 +126,12 @@ describe('esprima.parse', function () {
         });
     });
 
-    it('should ignore a third parameter', function () {
-        var random = { p: 1, q: 2 };
+    it('should accept three parameters (source, options, and delegate)', function () {
+        var options = { range: false };
         assert.doesNotThrow(function () {
-            esprima.parse('var x', {}, random);
+            esprima.parse('var x', options, function f(entry) {
+                return entry;
+            });
         });
     });
 
@@ -214,6 +216,122 @@ describe('esprima.parse', function () {
         assert.deepEqual(ast.tokens[0].loc.start, { line: 1, column: 0 });
         assert.deepEqual(ast.tokens[0].loc.end, { line: 1, column: 1 });
         assert.ifError(ast.tokens[0].range);
+    });
+
+});
+
+describe('esprima.parse delegate', function () {
+
+    it('should receive all the nodes', function () {
+        var list = [];
+        function collect(node) {
+            list.push(node.type);
+        }
+        esprima.parse('/* universe */ answer = 42', {}, collect);
+
+        assert.deepEqual(list.length, 5);
+        assert.deepEqual(list, ['Identifier', 'Literal', 'AssignmentExpression', 'ExpressionStatement', 'Program']);
+    });
+
+    it('should receive the comments if specified', function () {
+        var list = [];
+        function collect(node) {
+            list.push(node);
+        }
+        esprima.parse('/* prolog */ answer = 42 // epilog', { comment: true }, collect);
+
+        assert.deepEqual(list.length, 7);
+        assert.deepEqual(list[0], { type: 'BlockComment', value: ' prolog ' });
+        assert.deepEqual(list[1], { type: 'Identifier', name: 'answer' });
+        assert.deepEqual(list[2], { type: 'LineComment', value: ' epilog' });
+        assert.deepEqual(list[3], { type: 'Literal', value: 42, raw: '42' });
+        assert.deepEqual(list[4].type, 'AssignmentExpression');
+        assert.deepEqual(list[5].type, 'ExpressionStatement');
+        assert.deepEqual(list[6].type, 'Program');
+    });
+
+    it('should be able to walk the tree and pick a node', function () {
+        var constant = null;
+        function walk(node) {
+            if (node.type === 'Literal') {
+                constant = node;
+            }
+        }
+        esprima.parse('answer = 42 // universe', {}, walk);
+        assert.deepEqual(constant, { type: 'Literal', value: 42, raw: '42' });
+    });
+
+    it('should be able to mutate each node', function () {
+        var ast = esprima.parse('42', { range: true }, function (node) {
+            node.start = node.range[0];
+            node.end = node.range[1];
+        });
+        assert.deepEqual(ast.start, 0);
+        assert.deepEqual(ast.end, 2);
+    });
+
+    it('should be affected by cover grammars', function () {
+        var list = [];
+        esprima.parse('(x, y) => z', {}, function (n) {
+            list.push(n.type)
+        });
+
+        // (x, y) will be a SequenceExpression first before being reinterpreted as
+        // the formal parameter list for an ArrowFunctionExpression
+
+        assert.deepEqual(list.length, 7);
+        assert.deepEqual(list[0], 'Identifier');               // x
+        assert.deepEqual(list[1], 'Identifier');               // y
+        assert.deepEqual(list[2], 'SequenceExpression');       // x, y
+        assert.deepEqual(list[3], 'Identifier');               // z
+        assert.deepEqual(list[4], 'ArrowFunctionExpression');  // (x, y) => z
+        assert.deepEqual(list[5], 'ExpressionStatement');
+    });
+
+    it('should receive metadata of each node', function () {
+        var starts = [], ends = [];
+        esprima.parse('x = y + z', { range: false }, function (node, metadata) {
+            starts.push(metadata.start);
+            ends.push(metadata.end);
+        });
+
+        assert.deepEqual(starts.length, 7);
+        assert.deepEqual(starts[0], { line: 1, column: 0, offset: 0 }); // x
+        assert.deepEqual(starts[1], { line: 1, column: 4, offset: 4 }); // y
+        assert.deepEqual(starts[2], { line: 1, column: 8, offset: 8 }); // z
+        assert.deepEqual(starts[3], { line: 1, column: 4, offset: 4 }); // y + z
+        assert.deepEqual(starts[4], { line: 1, column: 0, offset: 0 }); // x = y + z
+        assert.deepEqual(starts[5], { line: 1, column: 0, offset: 0 }); // x = y + z
+        assert.deepEqual(starts[6], { line: 1, column: 0, offset: 0 }); // x = y + z
+
+        assert.deepEqual(ends.length, 7);
+        assert.deepEqual(ends[0], { line: 1, column: 1, offset: 1 }); // x
+        assert.deepEqual(ends[1], { line: 1, column: 5, offset: 5 }); // y
+        assert.deepEqual(ends[2], { line: 1, column: 9, offset: 9 }); // z
+        assert.deepEqual(ends[3], { line: 1, column: 9, offset: 9 }); // y + z
+        assert.deepEqual(ends[4], { line: 1, column: 9, offset: 9 }); // x = y + z
+        assert.deepEqual(ends[5], { line: 1, column: 9, offset: 9 }); // x = y + z
+        assert.deepEqual(ends[6], { line: 1, column: 9, offset: 9 }); // x = y + z
+    });
+
+    it('should receive metadata of comments', function () {
+        var starts = [], ends = [];
+        esprima.parse('42 // answer', { comment: true }, function (node, metadata) {
+            starts.push(metadata.start);
+            ends.push(metadata.end);
+        });
+
+        assert.deepEqual(starts.length, 4);
+        assert.deepEqual(starts[0], { line: 1, column: 3, offset: 3 });
+        assert.deepEqual(starts[1], { line: 1, column: 0, offset: 0 });
+        assert.deepEqual(starts[2], { line: 1, column: 0, offset: 0 });
+        assert.deepEqual(starts[3], { line: 1, column: 0, offset: 0 });
+
+        assert.deepEqual(ends.length, 4);
+        assert.deepEqual(ends[0], { line: 1, column: 12, offset: 12 });
+        assert.deepEqual(ends[1], { line: 1, column: 2, offset: 2 });
+        assert.deepEqual(ends[2], { line: 1, column: 12, offset: 12 });
+        assert.deepEqual(ends[3], { line: 1, column: 12, offset: 12 });
     });
 
 });
