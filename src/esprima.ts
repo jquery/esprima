@@ -25,8 +25,8 @@
 import { Parser } from './parser';
 import { Tokenizer } from './tokenizer';
 
-export function parse(code, options) {
-    const parser = new Parser(code, options);
+export function parse(code, options, delegate) {
+    const parser = new Parser(code, options, delegate);
     const ast = <any>(parser.parseProgram());
 
     if (parser.config.comment) {
