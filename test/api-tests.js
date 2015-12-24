@@ -193,6 +193,18 @@ describe('esprima.parse', function () {
         assert.ifError(ast.comments[0].range);
     });
 
+    it('should be able to attach comments', function () {
+        var ast, statement, expression, comments;
+
+        ast = esprima.parse('/* universe */ 42', { attachComment: true});
+        statement = ast.body[0];
+        expression = statement.expression;
+        comments = statement.leadingComments;
+
+        assert.deepEqual(expression, { type: 'Literal', value: 42, raw: '42' });
+        assert.deepEqual(statement.leadingComments, [{ type: 'Block', value: ' universe ', range: [0, 14] }]);
+    });
+
     it('should include the list of tokens when specified', function () {
         var ast = esprima.parse('x = 1', { tokens: true });
         assert.deepEqual(ast.tokens.length, 3);
@@ -332,6 +344,67 @@ describe('esprima.parse delegate', function () {
         assert.deepEqual(ends[1], { line: 1, column: 2, offset: 2 });
         assert.deepEqual(ends[2], { line: 1, column: 12, offset: 12 });
         assert.deepEqual(ends[3], { line: 1, column: 12, offset: 12 });
+    });
+
+    it('can be used for custom comment attachment', function () {
+        var code, attacher, tree;
+
+        function LineAttacher() {
+            this.variableDeclarations = [];
+            this.lineComments = [];
+        }
+
+        // Attach a line comment to a variable declaration in the same line.
+        // Example: `var foo = 42; // bar` will have "bar" in the new property
+        // called `annotation` of the variable declaration statement.
+
+        LineAttacher.prototype.attach = function () {
+            var i, j, declaration, comment;
+
+            for (i = 0; i < this.variableDeclarations.length; ++i) {
+                declaration = this.variableDeclarations[i];
+                for (j = 0; j < this.lineComments.length; ++j) {
+                    comment = this.lineComments[j];
+                    if (declaration.line === comment.line) {
+                        declaration.node.annotation = comment.comment;
+                        break;
+                    }
+                }
+            }
+        }
+
+        LineAttacher.prototype.visit = function (node, metadata) {
+            if (node.type === 'VariableDeclaration') {
+                this.variableDeclarations.push({
+                    node: node,
+                    line: metadata.start.line
+                });
+            } else if (node.type === 'LineComment') {
+                this.lineComments.push({
+                    comment: node,
+                    line: metadata.start.line
+                });
+            }
+            this.attach();
+        }
+
+        code = [
+            'var x = 42 // answer',
+            'var y = 3',
+            '// foobar'
+        ].join('\n');
+
+        attacher = new LineAttacher();
+        tree = esprima.parse(code, { comment: true }, function (node, metadata) {
+            attacher.visit(node, metadata);
+        });
+
+        // There will be two variable declaration statement.
+        // Only the first one will have `annotation` since there is
+        // a line comment in the same line.
+        assert.deepEqual(tree.body.length, 2);
+        assert.deepEqual(tree.body[0].annotation, { type: 'LineComment', value: ' answer' });
+        assert.deepEqual(tree.body[1].annotation, undefined);
     });
 
 });
