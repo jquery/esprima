@@ -14,7 +14,6 @@ interface Config {
     source: string;
     tokens: boolean;
     comment: boolean;
-    attachComment: boolean;
     tolerant: boolean;
 }
 
@@ -66,14 +65,9 @@ export class Parser {
     hasLineTerminator: boolean;
 
     context: Context;
-    comments: any[];
     tokens: any[];
     startMarker: Marker;
     lastMarker: Marker;
-
-    bottomRightStack: any[];
-    leadingComments: any[];
-    trailingComments: any[];
 
     constructor(code: string, options: any = {}, delegate) {
         this.config = {
@@ -82,14 +76,10 @@ export class Parser {
             source: null,
             tokens: (typeof options.tokens === 'boolean') && options.tokens,
             comment: (typeof options.comment === 'boolean') && options.comment,
-            attachComment: (typeof options.attachComment === 'boolean') && options.attachComment,
             tolerant: (typeof options.tolerant === 'boolean') && options.tolerant
         };
         if (this.config.loc && options.source && options.source !== null) {
             this.config.source = String(options.source);
-        }
-        if (this.config.attachComment) {
-            this.config.range = true;
         }
 
         this.delegate = delegate;
@@ -144,12 +134,7 @@ export class Parser {
             labelSet: {},
             strict: (this.sourceType === 'module')
         };
-        this.comments = [];
         this.tokens = [];
-
-        this.bottomRightStack = [];
-        this.leadingComments = [];
-        this.trailingComments = [];
 
         this.startMarker = {
             index: 0,
@@ -251,33 +236,17 @@ export class Parser {
     }
 
     collectComments() {
-        const comments: Comment[] = this.scanner.scanComments();
-
-        if (this.config.comment && comments.length > 0) {
-            for (let i = 0; i < comments.length; ++i) {
-                const e: Comment = comments[i];
-                let comment;
-                let value = this.scanner.source.slice(e.slice[0], e.slice[1]);
-                comment = {
-                    type: e.multiLine ? 'Block' : 'Line',
-                    value: value
-                };
-                if (this.config.range) {
-                    comment.range = e.range;
-                }
-                if (this.config.loc) {
-                    comment.loc = e.loc;
-                }
-                this.comments.push(comment);
-                if (this.config.attachComment) {
-                    this.leadingComments.push(comment);
-                    this.trailingComments.push(comment);
-                }
-                if (this.delegate) {
+        if (!this.config.comment) {
+            this.scanner.scanComments();
+        } else {
+            const comments: Comment[] = this.scanner.scanComments();
+            if (comments.length > 0 && this.delegate) {
+                for (let i = 0; i < comments.length; ++i) {
+                    const e: Comment = comments[i];
                     let node;
                     node = {
                         type: e.multiLine ? 'BlockComment' : 'LineComment',
-                        value: value
+                        value: this.scanner.source.slice(e.slice[0], e.slice[1])
                     };
                     if (this.config.range) {
                         node.range = e.range;
@@ -301,92 +270,6 @@ export class Parser {
                 }
             }
         }
-    }
-
-    attachComent(node) {
-        if (node.type === Syntax.Program && node.body.length > 0) {
-            return node;
-        }
-
-        // patch innnerComments for properties empty block
-        // `function a() {/** comments **\/}`
-        if (node.type === Syntax.BlockStatement && node.body.length === 0) {
-            let innerComments = [];
-            for (let i = this.leadingComments.length - 1; i >= 0; --i) {
-                let comment = this.leadingComments[i];
-                if (node.range[1] >= comment.range[1]) {
-                    innerComments.unshift(comment);
-                    this.leadingComments.splice(i, 1);
-                    this.trailingComments.splice(i, 1);
-                }
-            }
-            if (innerComments.length) {
-                node.innerComments = innerComments;
-                return node;
-            }
-        }
-
-        let bottomRight = this.bottomRightStack;
-        let last = bottomRight[bottomRight.length - 1];
-
-        let trailingComments = [];
-        if (this.trailingComments.length > 0) {
-            for (let i = this.trailingComments.length - 1; i >= 0; --i) {
-                let comment = this.trailingComments[i];
-                if (comment.range[0] >= node.range[1]) {
-                    trailingComments.unshift(comment);
-                    this.trailingComments.splice(i, 1);
-                }
-            }
-            this.trailingComments = [];
-        } else {
-            if (last && last.trailingComments && last.trailingComments[0].range[0] >= node.range[1]) {
-                trailingComments = last.trailingComments;
-                delete last.trailingComments;
-            }
-        }
-
-        // Eating the stack.
-        let lastChild;
-        while (last && last.range[0] >= node.range[0]) {
-            lastChild = bottomRight.pop();
-            last = bottomRight[bottomRight.length - 1];
-        }
-
-        let leadingComments = [];
-        if (lastChild) {
-            if (lastChild.leadingComments) {
-                for (let i = lastChild.leadingComments.length - 1; i >= 0; --i) {
-                    let comment = lastChild.leadingComments[i];
-                    if (comment.range[1] <= node.range[0]) {
-                        leadingComments.unshift(comment);
-                        lastChild.leadingComments.splice(i, 1);
-                    }
-                }
-
-                if (!lastChild.leadingComments.length) {
-                    lastChild.leadingComments = undefined;
-                }
-            }
-        } else if (this.leadingComments.length > 0) {
-            for (let i = this.leadingComments.length - 1; i >= 0; --i) {
-                let comment = this.leadingComments[i];
-                if (comment.range[1] <= node.range[0]) {
-                    leadingComments.unshift(comment);
-                    this.leadingComments.splice(i, 1);
-                }
-            }
-        }
-
-        if (leadingComments && leadingComments.length > 0) {
-            node.leadingComments = leadingComments;
-        }
-        if (trailingComments && trailingComments.length > 0) {
-            node.trailingComments = trailingComments;
-        }
-
-        bottomRight.push(node);
-        return node;
     }
 
     // From internal representation to an external structure
@@ -525,10 +408,6 @@ export class Parser {
                 }
             };
             this.delegate(node, metadata);
-        }
-
-        if (this.config.attachComment) {
-            node = this.attachComent(node);
         }
 
         return node;

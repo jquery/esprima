@@ -22,15 +22,38 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+import { CommentHandler } from './comment-handler';
 import { Parser } from './parser';
 import { Tokenizer } from './tokenizer';
 
 export function parse(code, options, delegate) {
-    const parser = new Parser(code, options, delegate);
+    let commentHandler: CommentHandler = null;
+    const proxyDelegate = function(node, metadata) {
+        if (delegate) {
+            delegate(node, metadata);
+        }
+        if (commentHandler) {
+            commentHandler.visit(node, metadata);
+        }
+    };
+
+    let parserDelegate = (typeof delegate === 'function') ? proxyDelegate : null;
+    if (options) {
+        const collectComment = (typeof options.comment === 'boolean' && options.comment);
+        const attachComment = (typeof options.attachComment === 'boolean' && options.attachComment);
+        if (collectComment || attachComment) {
+            commentHandler = new CommentHandler();
+            commentHandler.attach = attachComment;
+            options.comment = true;
+            parserDelegate = proxyDelegate;
+        }
+    }
+
+    const parser = new Parser(code, options, parserDelegate);
     const ast = <any>(parser.parseProgram());
 
     if (parser.config.comment) {
-        ast.comments = parser.comments;
+        ast.comments = commentHandler.comments;
     }
     if (parser.config.tokens) {
         ast.tokens = parser.tokens;
