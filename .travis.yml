@@ -1,6 +1,6 @@
 sudo: false
 language: node_js
-install: "npm update -g npm; npm install"
+install: "npm install"
 script: "npm run travis"
 node_js:
   - iojs
