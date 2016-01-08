@@ -24,21 +24,15 @@
 
 'use strict';
 
-var esprima, Benchmark, readFile, dirname, quick, log, fullFixture, quickFixture;
+var esprima, Benchmark, readFile, dirname, log, fixture;
 
-fullFixture = [
+fixture = [
     'Underscore 1.5.2',
     'Backbone 1.1.0',
     'MooTools 1.4.5',
     'jQuery 1.9.1',
     'YUI 3.12.0',
     'jQuery.Mobile 1.4.2',
-    'Angular 1.2.5'
-];
-
-quickFixture = [
-    'Backbone 1.1.0',
-    'jQuery 1.9.1',
     'Angular 1.2.5'
 ];
 
@@ -95,61 +89,6 @@ function runParserTests(tests) {
     }).run();
 }
 
-function runTokenizerTests(tests) {
-    var buffer = [],
-        totalTime = 0,
-        totalSize = 0,
-        totalRme = 0;
-
-    function pad(str, len) {
-        var result = str;
-        while (result.length < len) {
-            result = ' ' + result;
-        }
-        return result;
-    }
-
-    tests.reduce(function (suite, filename) {
-        var source = readFile(dirname + '/3rdparty/' + slug(filename) + '.js'),
-            size = source.length;
-        totalSize += size;
-        return suite.add(filename, function () {
-            var tokens = esprima.tokenize(source, { range: true, loc: true });
-            buffer.push(tokens.length);
-        }, {
-            'onComplete': function (event) {
-                var result;
-                if (typeof gc === 'function') {
-                    gc();
-                }
-                result = pad(this.name, 20);
-                result += pad(kb(size) + ' KiB', 12);
-                result += pad((1000 * this.stats.mean).toFixed(2), 10);
-                result += ' ms \xb1 ' + this.stats.rme.toFixed(2) + '%';
-                log(result);
-                totalTime += this.stats.mean;
-                totalRme += this.stats.mean * this.stats.rme * this.stats.rme;
-            }
-        });
-    }, new Benchmark.Suite()).on('complete', function () {
-        log('                     ------------------------');
-        log(pad(kb(totalSize) + ' KiB', 32) +
-            pad((1000 * totalTime).toFixed(2), 10) + ' ms \xb1 ' +
-            Math.sqrt(totalRme / totalTime).toFixed(2) + '%'
-        );
-    }).run();
-}
-
-function runTests(fixture) {
-    log('');
-    log('Parsing speed:');
-    runParserTests(fixture);
-
-    log('');
-    log('Tokenizing speed:');
-    runTokenizerTests(fixture);
-}
-
 if (typeof require === 'undefined') {
     dirname = 'test';
     load(dirname + '/3rdparty/benchmark.js');
@@ -161,7 +100,6 @@ if (typeof require === 'undefined') {
 } else {
     Benchmark = require('./3rdparty/benchmark');
     esprima = require('../');
-    quick = process.argv[2] === 'quick' || process.argv[3] === 'quick';
     readFile = function (filename) {
         return require('fs').readFileSync(filename, 'utf-8');
     };
@@ -169,8 +107,5 @@ if (typeof require === 'undefined') {
     log = console.log.bind(console);
 }
 
-log ((typeof gc === 'function') ?
-    'Has exposed gc().' :
-    'Doesn\'t have exposed gc().');
-
-runTests(quick ? quickFixture : fullFixture);
+log('Parsing speed (with' + (typeof gc === 'function' ? '' : 'out') + ' gc):');
+runParserTests(fixture);
