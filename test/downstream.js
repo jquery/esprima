@@ -48,7 +48,9 @@ function test_project(project, repo) {
     execute('git log -n1');
 
     console.log();
-    execute('npm install');
+    console.log('Starting npm install...');
+    execute('npm install --verbose');
+    console.log('npm install completed');
 
     console.log();
     console.log('Replacing esprima.js with a fresh one...');
@@ -92,13 +94,5 @@ function test_downstream(projects) {
 
 
 test_downstream({
-    'escope': 'https://github.com/estools/escope.git',
-    'esmangle': 'https://github.com/estools/esmangle.git',
-    'escomplex-js': 'https://github.com/philbooth/escomplex-js.git',
-    'js2coffee': 'https://github.com/js2coffee/js2coffee.git',
-    'redeyed': 'https://github.com/thlorenz/redeyed.git',
-    'jsfmt': 'https://github.com/rdio/jsfmt.git',
-    'istanbul': 'https://github.com/gotwarlost/istanbul.git',
-    'documentjs': 'https://github.com/bitovi/documentjs.git'
-    // 'jscs': 'https://github.com/jscs-dev/node-jscs.git'
+    'jscs': 'https://github.com/jscs-dev/node-jscs.git'
 });
