@@ -1981,16 +1981,23 @@ export class Parser {
 
     parseIfStatement(): Node.IfStatement {
         const node = this.createNode();
+        let consequent;
+        let alternate = null;
+
         this.expectKeyword('if');
         this.expect('(');
         const test = this.parseExpression();
-        this.expect(')');
 
-        const consequent = this.parseStatement();
-        let alternate = null;
-        if (this.matchKeyword('else')) {
-            this.nextToken();
-            alternate = this.parseStatement();
+        if (!this.match(')') && this.config.tolerant) {
+            this.tolerateUnexpectedToken(this.nextToken());
+            consequent = this.finalize(this.createNode(), new Node.EmptyStatement());
+        } else {
+            this.expect(')');
+            consequent = this.parseStatement();
+            if (this.matchKeyword('else')) {
+                this.nextToken();
+                alternate = this.parseStatement();
+            }
         }
 
         return this.finalize(node, new Node.IfStatement(test, consequent, alternate));
@@ -2022,16 +2029,23 @@ export class Parser {
 
     parseWhileStatement(): Node.WhileStatement {
         const node = this.createNode();
-        this.expectKeyword('while');
+        let body;
 
+        this.expectKeyword('while');
         this.expect('(');
         const test = this.parseExpression();
-        this.expect(')');
 
-        const previousInIteration = this.context.inIteration;
-        this.context.inIteration = true;
-        const body = this.parseStatement();
-        this.context.inIteration = previousInIteration;
+        if (!this.match(')') && this.config.tolerant) {
+            this.tolerateUnexpectedToken(this.nextToken());
+            body = this.finalize(this.createNode(), new Node.EmptyStatement());
+        } else {
+            this.expect(')');
+
+            const previousInIteration = this.context.inIteration;
+            this.context.inIteration = true;
+            body = this.parseStatement();
+            this.context.inIteration = previousInIteration;
+        }
 
         return this.finalize(node, new Node.WhileStatement(test, body));
     }
@@ -2165,12 +2179,18 @@ export class Parser {
             }
         }
 
-        this.expect(')');
+        let body;
+        if (!this.match(')') && this.config.tolerant) {
+            this.tolerateUnexpectedToken(this.nextToken());
+            body = this.finalize(this.createNode(), new Node.EmptyStatement());
+        } else {
+            this.expect(')');
 
-        const previousInIteration = this.context.inIteration;
-        this.context.inIteration = true;
-        const body = this.isolateCoverGrammar(this.parseStatement);
-        this.context.inIteration = previousInIteration;
+            const previousInIteration = this.context.inIteration;
+            this.context.inIteration = true;
+            body = this.isolateCoverGrammar(this.parseStatement);
+            this.context.inIteration = previousInIteration;
+        }
 
         return (typeof left === 'undefined') ?
             this.finalize(node, new Node.ForStatement(init, test, update, body)) :
