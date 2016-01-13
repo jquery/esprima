@@ -45,7 +45,8 @@ function test_project(project, repo) {
     process.chdir(project);
     console.log();
     console.log('HEAD is');
-    execute('git log -n1');
+    execute('git log -n1 > commit.top');
+    console.log(fs.readFileSync('commit.top', 'utf-8'));
 
     console.log();
     execute('npm install');
@@ -99,6 +100,6 @@ test_downstream({
     'redeyed': 'https://github.com/thlorenz/redeyed.git',
     'jsfmt': 'https://github.com/rdio/jsfmt.git',
     'istanbul': 'https://github.com/gotwarlost/istanbul.git',
-    'documentjs': 'https://github.com/bitovi/documentjs.git'
-    // 'jscs': 'https://github.com/jscs-dev/node-jscs.git'
+    'documentjs': 'https://github.com/bitovi/documentjs.git',
+    'jscs': 'https://github.com/jscs-dev/node-jscs.git'
 });
