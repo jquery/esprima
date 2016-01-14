@@ -72,6 +72,7 @@
                                             }
                                         }
                                     },
+                                    "directive": "use strict",
                                     "range": [
                                         37,
                                         50

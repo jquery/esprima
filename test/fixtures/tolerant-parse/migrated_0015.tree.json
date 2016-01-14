@@ -34,6 +34,7 @@
                                         }
                                     }
                                 },
+                                "directive": "use strict",
                                 "range": [
                                     15,
                                     28

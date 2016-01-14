@@ -47,6 +47,7 @@
                                 }
                             }
                         },
+                        "directive": "octal directive\\1",
                         "range": [
                             19,
                             39
@@ -83,6 +84,7 @@
                                 }
                             }
                         },
+                        "directive": "use strict",
                         "range": [
                             40,
                             53

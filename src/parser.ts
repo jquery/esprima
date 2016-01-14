@@ -2805,27 +2805,37 @@ export class Parser {
 
     // ECMA-262 14.1.1 Directive Prologues
 
+    parseDirective(): Node.Directive | Node.ExpressionStatement {
+        const token = this.lookahead;
+        let directive = null;
+
+        const node = this.createNode();
+        const expr = this.parseExpression();
+        if (expr.type === Syntax.Literal) {
+            directive = this.getTokenRaw(token).slice(1, -1);
+        }
+        this.consumeSemicolon();
+
+        return this.finalize(node, directive ? new Node.Directive(expr, directive) :
+            new Node.ExpressionStatement(expr));
+    }
+
     parseDirectivePrologues(): Node.Statement[] {
         let firstRestricted = null;
 
         const body = [];
         while (true) {
-            if (this.lookahead.type !== Token.StringLiteral) {
-                break;
-            }
-
             const token = this.lookahead;
-            const statement = this.parseExpressionStatement();
-            body.push(statement);
-
-            if (statement.expression.type !== Syntax.Literal) {
-                // this is not directive
+            if (token.type !== Token.StringLiteral) {
                 break;
             }
 
-            // Trim the initial and trailing quotes.
-            const raw = this.getTokenRaw(token);
-            const directive = raw.slice(1, -1);
+            const statement = this.parseDirective();
+            body.push(statement);
+            const directive = (<Node.Directive>statement).directive;
+            if (typeof directive !== 'string') {
+                break;
+            }
 
             if (directive === 'use strict') {
                 this.context.strict = true;
