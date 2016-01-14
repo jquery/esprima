@@ -34,6 +34,7 @@
                                         }
                                     }
                                 },
+                                "directive": "use\\x20strict",
                                 "range": [
                                     15,
                                     31

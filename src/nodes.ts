@@ -15,7 +15,7 @@ export type Expression = ArrayExpression | ArrowFunctionExpression | AssignmentE
 export type FunctionParameter = AssignmentPattern | BindingIdentifier | BindingPattern;
 export type ImportDeclarationSpecifier = ImportDefaultSpecifier | ImportNamespaceSpecifier | ImportSpecifier;
 export type Statement = BreakStatement | ContinueStatement | DebuggerStatement | DoWhileStatement |
-    EmptyStatement | ExpressionStatement | ForStatement | ForInStatement | ForOfStatement |
+    EmptyStatement | ExpressionStatement | Directive | ForStatement | ForInStatement | ForOfStatement |
     FunctionDeclaration | IfStatement | ReturnStatement | SwitchStatement | ThrowStatement |
     TryStatement | VariableDeclaration | WhileStatement | WithStatement;
 export type PropertyKey = Identifier | Literal;
@@ -211,6 +211,17 @@ export class DebuggerStatement {
     type: string;
     constructor() {
         this.type = Syntax.DebuggerStatement;
+    }
+}
+
+export class Directive {
+    type: string;
+    expression: Expression;
+    directive: string;
+    constructor(expression: Expression, directive: string) {
+        this.type = Syntax.ExpressionStatement;
+        this.expression = expression;
+        this.directive = directive;
     }
 }
 
