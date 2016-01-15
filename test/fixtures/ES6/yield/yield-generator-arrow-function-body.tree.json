@@ -36,7 +36,6 @@
                 "name": "g"
             },
             "params": [],
-            "defaults": [],
             "body": {
                 "range": [
                     14,
@@ -107,7 +106,6 @@
                                     "name": "z"
                                 }
                             ],
-                            "defaults": [],
                             "body": {
                                 "range": [
                                     23,

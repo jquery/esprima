@@ -36,7 +36,6 @@
                 "name": "foo"
             },
             "params": [],
-            "defaults": [],
             "body": {
                 "range": [
                     16,

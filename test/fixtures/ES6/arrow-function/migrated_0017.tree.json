@@ -26,7 +26,6 @@
                         }
                     }
                 ],
-                "defaults": [],
                 "body": {
                     "type": "ArrowFunctionExpression",
                     "id": null,
@@ -68,7 +67,6 @@
                             }
                         }
                     ],
-                    "defaults": [],
                     "body": {
                         "type": "SequenceExpression",
                         "expressions": [

@@ -50,7 +50,6 @@
                 "name": "f"
             },
             "params": [],
-            "defaults": [],
             "body": {
                 "range": [
                     13,
