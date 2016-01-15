@@ -44,15 +44,13 @@ export class ArrowFunctionExpression {
     type: string;
     id: Identifier;
     params: FunctionParameter[];
-    defaults: Expression[];
     body: BlockStatement | Expression;
     generator: boolean;
     expression: boolean;
-    constructor(params: FunctionParameter[], defaults: Expression[], body: BlockStatement | Expression, expression: boolean) {
+    constructor(params: FunctionParameter[], body: BlockStatement | Expression, expression: boolean) {
         this.type = Syntax.ArrowFunctionExpression;
         this.id = null;
         this.params = params;
-        this.defaults = defaults;
         this.body = body;
         this.generator = false;
         this.expression = expression;
@@ -341,15 +339,13 @@ export class FunctionDeclaration {
     type: string;
     id: Identifier;
     params: FunctionParameter[];
-    defaults: Expression[];
     body: BlockStatement;
     generator: boolean;
     expression: boolean;
-    constructor(id: Identifier, params: FunctionParameter[], defaults: Expression[], body: BlockStatement, generator: boolean) {
+    constructor(id: Identifier, params: FunctionParameter[], body: BlockStatement, generator: boolean) {
         this.type = Syntax.FunctionDeclaration;
         this.id = id;
         this.params = params;
-        this.defaults = defaults;
         this.body = body;
         this.generator = generator;
         this.expression = false;
@@ -360,15 +356,13 @@ export class FunctionExpression {
     type: string;
     id: Identifier;
     params: FunctionParameter[];
-    defaults: Expression[];
     body: BlockStatement;
     generator: boolean;
     expression: boolean;
-    constructor(id: Identifier, params: FunctionParameter[], defaults: Expression[], body: BlockStatement, generator: boolean) {
+    constructor(id: Identifier, params: FunctionParameter[], body: BlockStatement, generator: boolean) {
         this.type = Syntax.FunctionExpression;
         this.id = id;
         this.params = params;
-        this.defaults = defaults;
         this.body = body;
         this.generator = generator;
         this.expression = false;

@@ -743,11 +743,11 @@ export class Parser {
 
         const previousAllowYield = this.context.allowYield;
         this.context.allowYield = false;
-        const params = this.parseParams();
+        const params = this.parseFormalParameters();
         const method = this.parsePropertyMethod(params);
         this.context.allowYield = previousAllowYield;
 
-        return this.finalize(node, new Node.FunctionExpression(null, params.params, params.defaults, method, isGenerator));
+        return this.finalize(node, new Node.FunctionExpression(null, params.params, method, isGenerator));
     }
 
     parseObjectPropertyKey(): Node.PropertyKey {
@@ -1481,8 +1481,6 @@ export class Parser {
             paramSet: {}
         };
 
-        let defaults = [];
-        let defaultCount = 0;
         for (let i = 0; i < params.length; ++i) {
             const param = params[i];
             switch (param.type) {
@@ -1497,14 +1495,11 @@ export class Parser {
                         delete param.right.argument;
                         delete param.right.delegate;
                     }
-                    defaults.push(param.right);
-                    ++defaultCount;
                     this.checkPatternParam(options, param.left);
                     break;
                 default:
                     this.checkPatternParam(options, param);
                     params[i] = param;
-                    defaults.push(null);
                     break;
             }
         }
@@ -1523,13 +1518,8 @@ export class Parser {
             this.throwUnexpectedToken(token, options.message);
         }
 
-        if (defaultCount === 0) {
-            defaults = [];
-        }
-
         return {
             params: params,
-            defaults: defaults,
             stricted: options.stricted,
             firstRestricted: options.firstRestricted,
             message: options.message
@@ -1575,7 +1565,7 @@ export class Parser {
                     if (this.context.strict && list.stricted) {
                         this.tolerateUnexpectedToken(list.stricted, list.message);
                     }
-                    expr = this.finalize(node, new Node.ArrowFunctionExpression(list.params, list.defaults, body, expression));
+                    expr = this.finalize(node, new Node.ArrowFunctionExpression(list.params, body, expression));
 
                     this.context.strict = previousStrict;
                     this.context.allowYield = previousAllowYield;
@@ -2622,7 +2612,7 @@ export class Parser {
         return this.finalize(node, new Node.RestElement(param));
     }
 
-    parseParam(options) {
+    parseFormalParameter(options) {
         let param;
         let params = [];
 
@@ -2631,7 +2621,6 @@ export class Parser {
             param = this.parseRestElement(params);
             this.validateParam(options, param.argument, param.argument.name);
             options.params.push(param);
-            options.defaults.push(null);
             return false;
         }
 
@@ -2639,27 +2628,16 @@ export class Parser {
         for (let i = 0; i < params.length; i++) {
             this.validateParam(options, params[i], params[i].value);
         }
-
-        let def;
-        if (param.type === Syntax.AssignmentPattern) {
-            def = param.right;
-            param = param.left;
-            ++options.defaultCount;
-        }
-
         options.params.push(param);
-        options.defaults.push(def);
 
         return !this.match(')');
     }
 
-    parseParams(firstRestricted?) {
+    parseFormalParameters(firstRestricted?) {
         let options;
 
         options = {
             params: [],
-            defaultCount: 0,
-            defaults: [],
             firstRestricted: firstRestricted
         };
 
@@ -2667,7 +2645,7 @@ export class Parser {
         if (!this.match(')')) {
             options.paramSet = {};
             while (this.startMarker.index < this.scanner.length) {
-                if (!this.parseParam(options)) {
+                if (!this.parseFormalParameter(options)) {
                     break;
                 }
                 this.expect(',');
@@ -2675,13 +2653,8 @@ export class Parser {
         }
         this.expect(')');
 
-        if (options.defaultCount === 0) {
-            options.defaults = [];
-        }
-
         return {
             params: options.params,
-            defaults: options.defaults,
             stricted: options.stricted,
             firstRestricted: options.firstRestricted,
             message: options.message
@@ -2722,13 +2695,12 @@ export class Parser {
         const previousAllowYield = this.context.allowYield;
         this.context.allowYield = !isGenerator;
 
-        const tmp = this.parseParams(firstRestricted);
-        const params = tmp.params;
-        const defaults = tmp.defaults;
-        const stricted = tmp.stricted;
-        firstRestricted = tmp.firstRestricted;
-        if (tmp.message) {
-            message = tmp.message;
+        const formalParameters = this.parseFormalParameters(firstRestricted);
+        const params = formalParameters.params;
+        const stricted = formalParameters.stricted;
+        firstRestricted = formalParameters.firstRestricted;
+        if (formalParameters.message) {
+            message = formalParameters.message;
         }
 
         const previousStrict = this.context.strict;
@@ -2743,7 +2715,7 @@ export class Parser {
         this.context.strict = previousStrict;
         this.context.allowYield = previousAllowYield;
 
-        return this.finalize(node, new Node.FunctionDeclaration(id, params, defaults, body, isGenerator));
+        return this.finalize(node, new Node.FunctionDeclaration(id, params, body, isGenerator));
     }
 
     parseFunctionExpression(): Node.FunctionExpression {
@@ -2780,13 +2752,12 @@ export class Parser {
             }
         }
 
-        const tmp = this.parseParams(firstRestricted);
-        const params = tmp.params;
-        const defaults = tmp.defaults;
-        const stricted = tmp.stricted;
-        firstRestricted = tmp.firstRestricted;
-        if (tmp.message) {
-            message = tmp.message;
+        const formalParameters = this.parseFormalParameters(firstRestricted);
+        const params = formalParameters.params;
+        const stricted = formalParameters.stricted;
+        firstRestricted = formalParameters.firstRestricted;
+        if (formalParameters.message) {
+            message = formalParameters.message;
         }
 
         const previousStrict = this.context.strict;
@@ -2800,7 +2771,7 @@ export class Parser {
         this.context.strict = previousStrict;
         this.context.allowYield = previousAllowYield;
 
-        return this.finalize(node, new Node.FunctionExpression(id, params, defaults, body, isGenerator));
+        return this.finalize(node, new Node.FunctionExpression(id, params, body, isGenerator));
     }
 
     // ECMA-262 14.1.1 Directive Prologues
@@ -2877,7 +2848,6 @@ export class Parser {
         const isGenerator = false;
         const params = {
             params: [],
-            defaults: [],
             stricted: null,
             firstRestricted: null,
             message: null
@@ -2887,7 +2857,7 @@ export class Parser {
         const method = this.parsePropertyMethod(params);
         this.context.allowYield = previousAllowYield;
 
-        return this.finalize(node, new Node.FunctionExpression(null, params.params, params.defaults, method, isGenerator));
+        return this.finalize(node, new Node.FunctionExpression(null, params.params, method, isGenerator));
     }
 
     parseSetterMethod(): Node.FunctionExpression {
@@ -2895,8 +2865,6 @@ export class Parser {
 
         let options = {
             params: [],
-            defaultCount: 0,
-            defaults: [],
             firstRestricted: null,
             paramSet: {}
         };
@@ -2909,17 +2877,14 @@ export class Parser {
         if (this.match(')')) {
             this.tolerateUnexpectedToken(this.lookahead);
         } else {
-            this.parseParam(options);
-            if (options.defaultCount === 0) {
-                options.defaults = [];
-            }
+            this.parseFormalParameter(options);
         }
         this.expect(')');
 
         const method = this.parsePropertyMethod(options);
         this.context.allowYield = previousAllowYield;
 
-        return this.finalize(node, new Node.FunctionExpression(null, options.params, options.defaults, method, isGenerator));
+        return this.finalize(node, new Node.FunctionExpression(null, options.params, method, isGenerator));
     }
 
     parseGeneratorMethod(): Node.FunctionExpression {
@@ -2929,12 +2894,12 @@ export class Parser {
         const previousAllowYield = this.context.allowYield;
 
         this.context.allowYield = true;
-        const params = this.parseParams();
+        const params = this.parseFormalParameters();
         this.context.allowYield = false;
         const method = this.parsePropertyMethod(params);
         this.context.allowYield = previousAllowYield;
 
-        return this.finalize(node, new Node.FunctionExpression(null, params.params, params.defaults, method, isGenerator));
+        return this.finalize(node, new Node.FunctionExpression(null, params.params, method, isGenerator));
     }
 
     // ECMA-262 14.4 Yield expression
