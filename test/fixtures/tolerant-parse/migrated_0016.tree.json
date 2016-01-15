@@ -22,6 +22,7 @@
                     }
                 }
             },
+            "directive": "use strict",
             "range": [
                 0,
                 13
