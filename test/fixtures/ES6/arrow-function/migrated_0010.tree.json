@@ -26,7 +26,6 @@
                         }
                     }
                 ],
-                "defaults": [],
                 "body": {
                     "type": "Literal",
                     "value": 42,

@@ -107,7 +107,6 @@
                                             }
                                         }
                                     ],
-                                    "defaults": [],
                                     "body": {
                                         "type": "BlockStatement",
                                         "body": [],

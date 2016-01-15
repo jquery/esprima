@@ -26,7 +26,6 @@
                         }
                     }
                 ],
-                "defaults": [],
                 "body": {
                     "type": "Identifier",
                     "name": "x",

@@ -36,7 +36,6 @@
                 "name": "g"
             },
             "params": [],
-            "defaults": [],
             "body": {
                 "range": [
                     14,
@@ -142,7 +141,6 @@
                                             "name": "yield"
                                         }
                                     ],
-                                    "defaults": [],
                                     "body": {
                                         "range": [
                                             40,
