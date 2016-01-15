@@ -32,37 +32,52 @@
                             "id": null,
                             "params": [
                                 {
-                                    "type": "Identifier",
-                                    "name": "a",
+                                    "type": "AssignmentPattern",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "a",
+                                        "range": [
+                                            8,
+                                            9
+                                        ],
+                                        "loc": {
+                                            "start": {
+                                                "line": 1,
+                                                "column": 8
+                                            },
+                                            "end": {
+                                                "line": 1,
+                                                "column": 9
+                                            }
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "Literal",
+                                        "value": 0,
+                                        "raw": "0",
+                                        "range": [
+                                            10,
+                                            11
+                                        ],
+                                        "loc": {
+                                            "start": {
+                                                "line": 1,
+                                                "column": 10
+                                            },
+                                            "end": {
+                                                "line": 1,
+                                                "column": 11
+                                            }
+                                        }
+                                    },
                                     "range": [
                                         8,
-                                        9
-                                    ],
-                                    "loc": {
-                                        "start": {
-                                            "line": 1,
-                                            "column": 8
-                                        },
-                                        "end": {
-                                            "line": 1,
-                                            "column": 9
-                                        }
-                                    }
-                                }
-                            ],
-                            "defaults": [
-                                {
-                                    "type": "Literal",
-                                    "value": 0,
-                                    "raw": "0",
-                                    "range": [
-                                        10,
                                         11
                                     ],
                                     "loc": {
                                         "start": {
                                             "line": 1,
-                                            "column": 10
+                                            "column": 8
                                         },
                                         "end": {
                                             "line": 1,
@@ -157,6 +172,20 @@
         }
     ],
     "sourceType": "script",
+    "range": [
+        0,
+        16
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 16
+        }
+    },
     "tokens": [
         {
             "type": "Punctuator",
@@ -392,20 +421,5 @@
                 }
             }
         }
-    ],
-    "errors": [],
-    "range": [
-        0,
-        16
-    ],
-    "loc": {
-        "start": {
-            "line": 1,
-            "column": 0
-        },
-        "end": {
-            "line": 1,
-            "column": 16
-        }
-    }
+    ]
 }

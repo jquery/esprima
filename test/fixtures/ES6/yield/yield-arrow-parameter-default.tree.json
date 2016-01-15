@@ -54,26 +54,6 @@
                         "name": "x"
                     }
                 ],
-                "defaults": [
-                    {
-                        "range": [
-                            5,
-                            10
-                        ],
-                        "loc": {
-                            "start": {
-                                "line": 1,
-                                "column": 5
-                            },
-                            "end": {
-                                "line": 1,
-                                "column": 10
-                            }
-                        },
-                        "type": "Identifier",
-                        "name": "yield"
-                    }
-                ],
                 "body": {
                     "range": [
                         15,
