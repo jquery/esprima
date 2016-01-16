@@ -90,7 +90,6 @@
                     }
                 }
             ],
-            "defaults": [],
             "body": {
                 "range": [
                     20,

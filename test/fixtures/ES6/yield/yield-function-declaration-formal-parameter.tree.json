@@ -55,7 +55,6 @@
                     "name": "yield"
                 }
             ],
-            "defaults": [],
             "body": {
                 "range": [
                     18,

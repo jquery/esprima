@@ -145,7 +145,6 @@
                             "type": "FunctionExpression",
                             "id": null,
                             "params": [],
-                            "defaults": [],
                             "body": {
                                 "range": [
                                     35,
@@ -243,7 +242,6 @@
                                     "name": "x"
                                 }
                             ],
-                            "defaults": [],
                             "body": {
                                 "range": [
                                     55,

@@ -50,7 +50,6 @@
                             "type": "FunctionExpression",
                             "id": null,
                             "params": [],
-                            "defaults": [],
                             "body": {
                                 "type": "BlockStatement",
                                 "body": [],
@@ -128,7 +127,6 @@
                             "type": "FunctionExpression",
                             "id": null,
                             "params": [],
-                            "defaults": [],
                             "body": {
                                 "type": "BlockStatement",
                                 "body": [],
