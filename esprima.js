@@ -2728,7 +2728,7 @@
 
                 return node.finishProperty(
                     'init', key, false,
-                    new WrappingNode(keyToken).finishAssignmentPattern(key, init), false, false);
+                    new WrappingNode(keyToken).finishAssignmentPattern(key, init), false, true);
             } else if (!match(':')) {
                 params.push(keyToken);
                 return node.finishProperty('init', key, false, key, false, true);

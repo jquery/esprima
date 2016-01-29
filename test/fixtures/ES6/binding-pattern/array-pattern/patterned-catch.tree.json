@@ -456,7 +456,7 @@
                                         },
                                         "kind": "init",
                                         "method": false,
-                                        "shorthand": false
+                                        "shorthand": true
                                     }
                                 ]
                             }
@@ -901,7 +901,7 @@
                                     },
                                     "kind": "init",
                                     "method": false,
-                                    "shorthand": false
+                                    "shorthand": true
                                 }
                             ]
                         }
