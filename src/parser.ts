@@ -1804,6 +1804,7 @@ export class Parser {
             const id = this.parseVariableIdentifier();
             if (this.match('=')) {
                 params.push(keyToken);
+                shorthand = true;
                 this.nextToken();
                 key = id;
                 const expr = this.parseAssignmentExpression();
