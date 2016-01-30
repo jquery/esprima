@@ -99,7 +99,8 @@ test_downstream({
     // 'js2coffee': 'https://github.com/js2coffee/js2coffee.git',
     'redeyed': 'https://github.com/thlorenz/redeyed.git',
     'jsfmt': 'https://github.com/rdio/jsfmt.git',
-    'istanbul': 'https://github.com/gotwarlost/istanbul.git',
+    'recast': 'https://github.com/benjamn/recast.git',
+    'rocambole': 'https://github.com/millermedeiros/rocambole.git',
     'documentjs': 'https://github.com/bitovi/documentjs.git',
-    'jscs': 'https://github.com/jscs-dev/node-jscs.git'
+    'istanbul': 'https://github.com/gotwarlost/istanbul.git'
 });
