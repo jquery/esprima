@@ -1136,6 +1136,7 @@
         }
 
         if (quote !== '') {
+            index = start;
             throwUnexpectedToken();
         }
 
