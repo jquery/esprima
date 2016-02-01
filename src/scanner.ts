@@ -882,6 +882,7 @@ export class Scanner {
         }
 
         if (quote !== '') {
+            this.index = start;
             this.throwUnexpectedToken();
         }
 
