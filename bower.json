@@ -1,6 +1,6 @@
 {
     "name": "esprima",
-    "version": "2.7.1",
+    "version": "2.7.2",
     "main": "./esprima.js",
     "scripts": [
         "esprima.js"
