@@ -73,6 +73,7 @@
     "check-version": "node test/check-version.js",
     "tslint": "tslint src/*.ts",
     "code-style": "tsfmt --verify src/*.ts && jscs -p crockford test/*.js",
+    "format-code": "tsfmt -r src/*.ts",
     "complexity": "node test/check-complexity.js",
     "static-analysis": "npm run check-version && npm run tslint && npm run code-style && npm run complexity",
     "unit-tests": "node test/unit-tests.js",
