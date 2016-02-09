@@ -46,6 +46,7 @@ function generateTestCase(testCase) {
     fileName = testCase.key + ".tree.json";
     try {
         options = {
+            jsx: true,
             loc: true,
             range: true,
             tokens: true

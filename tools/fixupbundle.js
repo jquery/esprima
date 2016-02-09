@@ -37,6 +37,9 @@ function fixupbundle(filename) {
         if (line.match(/if\(installedModules\[moduleId\]/)) {
             lines[i] = '/* istanbul ignore if */\n' + line;
         }
+        if (line.match(/var __extends/)) {
+            lines[i] = '/* istanbul ignore next */\n' + line;
+        }
     }
     content = lines.join('\n');
     fs.writeFileSync(filename, content, 'utf-8');

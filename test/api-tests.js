@@ -230,6 +230,29 @@ describe('esprima.parse', function () {
         assert.ifError(ast.tokens[0].range);
     });
 
+    it('should not understand JSX syntax by default', function () {
+        assert.throws(function () {
+            esprima.parse('<head/>');
+        });
+    });
+
+    it('should not understand JSX syntax if it is explicitly not to be supported', function () {
+        assert.throws(function () {
+            esprima.parse('<b/>', { jsx: false });
+        });
+    });
+
+    it('should understand JSX syntax if specified', function () {
+        var ast, statement, expression;
+        ast = esprima.parse('<title/>', { jsx: true });
+        statement = ast.body[0];
+        expression = statement.expression;
+
+        assert.deepEqual(expression.type, 'JSXElement');
+        assert.deepEqual(expression.openingElement.type, 'JSXOpeningElement');
+        assert.deepEqual(expression.openingElement.name, { type: 'JSXIdentifier', name: 'title'});
+        assert.deepEqual(expression.closingElement, null);
+    });
 });
 
 describe('esprima.parse delegate', function () {
