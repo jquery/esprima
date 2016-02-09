@@ -101,6 +101,7 @@
         var expected, tree, actual, options, i, len, nodes;
 
         options = {
+            jsx: true,
             comment: (typeof syntax.comments !== 'undefined'),
             range: true,
             loc: true,
@@ -137,9 +138,9 @@
         expected = JSON.stringify(syntax, null, 4);
         try {
             // Some variations of the options.
-            tree = esprima.parse(code, { tolerant: options.tolerant, sourceType: options.sourceType });
-            tree = esprima.parse(code, { tolerant: options.tolerant, sourceType: options.sourceType, range: true });
-            tree = esprima.parse(code, { tolerant: options.tolerant, sourceType: options.sourceType, loc: true });
+            tree = esprima.parse(code, { jsx: options.jsx, tolerant: options.tolerant, sourceType: options.sourceType });
+            tree = esprima.parse(code, { jsx: options.jsx, tolerant: options.tolerant, sourceType: options.sourceType, range: true });
+            tree = esprima.parse(code, { jsx: options.jsx, tolerant: options.tolerant, sourceType: options.sourceType, loc: true });
 
             tree = esprima.parse(code, options);
 
@@ -356,10 +357,10 @@
 
         // Different parsing options should give the same error.
         options = [
-            {},
-            { comment: true },
-            { raw: true },
-            { raw: true, comment: true }
+            { jsx: true },
+            { jsx: true, comment: true },
+            { jsx: true, raw: true },
+            { jsx: true, raw: true, comment: true }
         ];
 
         // If handleInvalidRegexFlag is true, an invalid flag in a regular expression

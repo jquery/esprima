@@ -24,6 +24,7 @@
 
 import { CommentHandler } from './comment-handler';
 import { Parser } from './parser';
+import { JSXParser } from './jsx-parser';
 import { Tokenizer } from './tokenizer';
 
 export function parse(code, options, delegate) {
@@ -49,7 +50,13 @@ export function parse(code, options, delegate) {
         }
     }
 
-    const parser = new Parser(code, options, parserDelegate);
+    let parser: Parser;
+    if (options && typeof options.jsx === 'boolean' && options.jsx) {
+        parser = new JSXParser(code, options, parserDelegate);
+    } else {
+        parser = new Parser(code, options, parserDelegate);
+    }
+
     const ast = <any>(parser.parseProgram());
 
     if (parser.config.comment) {

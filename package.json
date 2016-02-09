@@ -101,6 +101,7 @@
     "circleci": "npm test && npm run codecov && npm run downstream",
     "appveyor": "npm run compile && npm run all-tests && npm run browser-tests",
     "droneio": "npm test && npm run saucelabs-evergreen && npm run saucelabs-ie && npm run saucelabs-safari",
-    "generate-regex": "node tools/generate-identifier-regex.js"
+    "generate-regex": "node tools/generate-identifier-regex.js",
+    "generate-xhtml-entities": "node tools/generate-xhtml-entities.js"
   }
 }
