@@ -444,9 +444,9 @@ export class LabeledStatement {
 
 export class Literal {
     type: string;
-    value: string;
+    value: boolean | number | string;
     raw: string;
-    constructor(value: string, raw: string) {
+    constructor(value: boolean | number | string, raw: string) {
         this.type = Syntax.Literal;
         this.value = value;
         this.raw = raw;
