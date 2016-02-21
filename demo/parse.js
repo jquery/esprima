@@ -33,6 +33,10 @@ function id(i) {
     return document.getElementById(i);
 }
 
+function escapeHTML(str) {
+    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/\//g, "&#x2F;");
+}
+
 YUI({ gallery: 'gallery-2013.01.09-23-24' }).use('gallery-sm-treeview', function (Y) {
 
     window.updateTree = function (syntax) {
@@ -83,24 +87,24 @@ YUI({ gallery: 'gallery-2013.01.09-23-24' }).use('gallery-sm-treeview', function
             case 'string':
             case 'number':
             case 'boolean':
-                item.label = name + ': ' + node.toString();
+                item.label = escapeHTML(name + ': ' + node.toString());
                 break;
 
             case 'object':
                 if (!node) {
-                    item.label = name + ': null';
+                    item.label = escapeHTML(name + ': null');
                     return item;
                 }
                 if (node instanceof RegExp) {
-                    item.label = name + ': ' + node.toString();
+                    item.label = escapeHTML(name + ': ' + node.toString());
                     return item;
                 }
-                item.label = name;
+                item.label = escapeHTML(name);
                 if (isArray(node)) {
                     if (node.length === 2 && name === 'range') {
-                        item.label = name + ': [' + node[0] + ', ' + node[1] + ']';
+                        item.label = escapeHTML(name + ': [' + node[0] + ', ' + node[1] + ']');
                     } else {
-                        item.label = item.label + ' [' + node.length + ']';
+                        item.label = escapeHTML(item.label + ' [' + node.length + ']');
                         for (i = 0; i < node.length; i += 1) {
                             subitem = convert(String(i), node[i]);
                             if (subitem.children.length === 1) {
@@ -113,9 +117,9 @@ YUI({ gallery: 'gallery-2013.01.09-23-24' }).use('gallery-sm-treeview', function
 
                 } else {
                     if (typeof node.type !== 'undefined') {
-                        item.label = name;
+                        item.label = escapeHTML(name);
                         subitem = tree.createNode();
-                        subitem.label = node.type;
+                        subitem.label = escapeHTML(node.type);
                         item.append(subitem);
                         for (key in node) {
                             if (Object.prototype.hasOwnProperty.call(node, key)) {
