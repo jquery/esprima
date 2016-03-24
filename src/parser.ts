@@ -2590,7 +2590,13 @@ export class Parser {
                 options.message = Messages.StrictParamDupe;
             }
         }
-        options.paramSet[key] = true;
+
+        /* istanbul ignore next */
+        if (typeof Object.defineProperty === 'function') {
+            Object.defineProperty(options.paramSet, key, { value: true, enumerable: true, writable: true, configurable: true });
+        } else {
+            options.paramSet[key] = true;
+        }
     }
 
     parseRestElement(params): Node.RestElement {
