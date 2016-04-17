@@ -26,13 +26,16 @@
 
 'use strict';
 
-var fs = require('fs');
+function readFile(filename) {
+    var fs = require('fs');
+    return fs.readFileSync(filename, 'utf-8').split('\n');
+}
 
 function findCanonicalVersion() {
     var matcher, lines, version;
 
     matcher = /exports\.version\s+=\s+\'([0-9\.\-a-zA-Z]+)\'/;
-    lines = fs.readFileSync(require.resolve('../'), 'utf-8').split('\n');
+    lines = readFile(require.resolve('../'));
     lines.forEach(function (line) {
         if (matcher.test(line)) {
             version = matcher.exec(line)[1];
@@ -47,7 +50,7 @@ function ensureVersion(manifestFile, expectedVersion) {
 
     console.log('Checking', manifestFile, '...');
     matcher = /"version"\s*\:\s*"([0-9\.\-a-zA-Z]+)"/;
-    lines = fs.readFileSync(manifestFile, 'utf-8').split('\n');
+    lines = readFile(manifestFile);
     lines.forEach(function (line) {
         if (matcher.test(line)) {
             version = matcher.exec(line)[1];
