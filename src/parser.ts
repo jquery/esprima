@@ -42,6 +42,26 @@ interface MetaNode {
     column: number;
 }
 
+function deepClone(obj) {
+    let res = {}, prop, value;
+    if (!obj) {
+        return obj;
+    }
+
+    for (prop in obj) {
+        if (!obj.hasOwnProperty(prop)) {
+            continue;
+        }
+        value = obj[prop];
+        if (typeof value === 'object') {
+            res[prop] = deepClone(value);
+        } else {
+            res[prop] = value;
+        }
+    }
+    return res;
+}
+
 const ArrowParameterPlaceHolder = 'ArrowParameterPlaceHolder';
 
 interface ArrowParameterPlaceHolderNode {
@@ -871,10 +891,10 @@ export class Parser {
                     this.nextToken();
                     shorthand = true;
                     const init = this.isolateCoverGrammar(this.parseAssignmentExpression);
-                    value = this.finalize(node, new Node.AssignmentPattern(id, init));
+                    value = this.finalize(node, new Node.AssignmentPattern(deepClone(id), init));
                 } else {
                     shorthand = true;
-                    value = id;
+                    value = deepClone(id);
                 }
             } else {
                 this.throwUnexpectedToken(this.nextToken());
@@ -1808,11 +1828,12 @@ export class Parser {
                 this.nextToken();
                 key = id;
                 const expr = this.parseAssignmentExpression();
-                value = this.finalize(this.startNode(keyToken), new Node.AssignmentPattern(id, expr));
+                value = this.finalize(this.startNode(keyToken), new Node.AssignmentPattern(deepClone(id), expr));
             } else if (!this.match(':')) {
                 params.push(keyToken);
                 shorthand = true;
-                key = value = id;
+                key = id;
+                value = deepClone(id);
             } else {
                 this.expect(':');
                 key = id;
