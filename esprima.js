@@ -1325,6 +1325,7 @@
         try {
             return new RegExp(pattern, flags);
         } catch (exception) {
+            /* istanbul ignore next */
             return null;
         }
     }
