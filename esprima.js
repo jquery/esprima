@@ -1521,7 +1521,7 @@
             return value && (value.length > 1) && (value[0] >= 'a') && (value[0] <= 'z');
         }
 
-        previous = extra.tokenValues[extra.tokens.length - 1];
+        previous = extra.tokenValues[extra.tokenValues.length - 1];
         regex = (previous !== null);
 
         switch (previous) {
