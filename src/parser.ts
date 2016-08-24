@@ -864,8 +864,8 @@ export class Parser {
                 method = true;
 
             } else if (token.type === Token.Identifier) {
+                const id = this.finalize(node, new Node.Identifier(token.value));
                 this.checkDuplicatedProto(key, hasProto);
-                const id = <Node.Identifier>key;
                 if (this.match('=')) {
                     this.context.firstCoverInitializedNameError = this.lookahead;
                     this.nextToken();
@@ -1801,21 +1801,20 @@ export class Parser {
 
         if (this.lookahead.type === Token.Identifier) {
             const keyToken = this.lookahead;
-            const id = this.parseVariableIdentifier();
+            key = this.parseVariableIdentifier();
+            const init = this.finalize(node, new Node.Identifier(keyToken.value));
             if (this.match('=')) {
                 params.push(keyToken);
                 shorthand = true;
                 this.nextToken();
-                key = id;
                 const expr = this.parseAssignmentExpression();
-                value = this.finalize(this.startNode(keyToken), new Node.AssignmentPattern(id, expr));
+                value = this.finalize(this.startNode(keyToken), new Node.AssignmentPattern(init, expr));
             } else if (!this.match(':')) {
                 params.push(keyToken);
                 shorthand = true;
-                key = value = id;
+                value = init;
             } else {
                 this.expect(':');
-                key = id;
                 value = this.parsePatternWithDefault(params, kind);
             }
         } else {
