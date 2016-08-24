@@ -253,6 +253,21 @@ describe('esprima.parse', function () {
         assert.deepEqual(expression.openingElement.name, { type: 'JSXIdentifier', name: 'title'});
         assert.deepEqual(expression.closingElement, null);
     });
+
+    it('should never produce shallow copied nodes', function () {
+        var ast, pattern, expr;
+        ast = esprima.parse('let {a, b} = {x, y, z}');
+        pattern = ast.body[0].declarations[0].id;
+        expr = ast.body[0].declarations[0].init;
+        pattern.properties[0].key.name = 'foo';
+        expr.properties[0].key.name = 'bar';
+
+        assert.deepEqual(pattern.properties[0].value, { type: 'Identifier', name: 'a' });
+        assert.deepEqual(pattern.properties[1].value, { type: 'Identifier', name: 'b' });
+        assert.deepEqual(expr.properties[0].value, { type: 'Identifier', name: 'x' });
+        assert.deepEqual(expr.properties[1].value, { type: 'Identifier', name: 'y' });
+        assert.deepEqual(expr.properties[2].value, { type: 'Identifier', name: 'z' });
+    });
 });
 
 describe('esprima.parse delegate', function () {
