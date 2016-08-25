@@ -479,6 +479,7 @@ export class Parser {
         const op = this.lookahead.value;
         return op === '=' ||
             op === '*=' ||
+            op === '**=' ||
             op === '/=' ||
             op === '%=' ||
             op === '+=' ||
@@ -1256,41 +1257,14 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 12.4 Postfix Expressions
+    // ECMA-262 12.4 Update Expressions
 
-    parsePostfixExpression(): Node.Expression {
-        const startToken = this.lookahead;
-        let expr = this.inheritCoverGrammar(this.parseLeftHandSideExpressionAllowCall);
-
-        if (!this.hasLineTerminator && this.lookahead.type === Token.Punctuator) {
-            if (this.match('++') || this.match('--')) {
-                if (this.context.strict && expr.type === Syntax.Identifier && this.scanner.isRestrictedWord(expr.name)) {
-                    this.tolerateError(Messages.StrictLHSPostfix);
-                }
-                if (!this.context.isAssignmentTarget) {
-                    this.tolerateError(Messages.InvalidLHSInAssignment);
-                }
-                this.context.isAssignmentTarget = false;
-                this.context.isBindingElement = false;
-                const operator = this.nextToken().value;
-                const prefix = false;
-                expr = this.finalize(this.startNode(startToken), new Node.UpdateExpression(operator, expr, prefix));
-            }
-        }
-
-        return expr;
-    }
-
-    // ECMA-262 12.5 Unary Operators
-
-    parseUnaryExpression(): Node.Expression {
+    parseUpdateExpression(): Node.Expression {
         let expr;
+        const startToken = this.lookahead;
 
-        if (this.lookahead.type !== Token.Punctuator && this.lookahead.type !== Token.Keyword) {
-            expr = this.parsePostfixExpression();
-
-        } else if (this.match('++') || this.match('--')) {
-            const node = this.startNode(this.lookahead);
+        if (this.match('++') || this.match('--')) {
+            const node = this.startNode(startToken);
             const token = this.nextToken();
             expr = this.inheritCoverGrammar(this.parseUnaryExpression);
             if (this.context.strict && expr.type === Syntax.Identifier && this.scanner.isRestrictedWord(expr.name)) {
@@ -1303,8 +1277,34 @@ export class Parser {
             expr = this.finalize(node, new Node.UpdateExpression(token.value, expr, prefix));
             this.context.isAssignmentTarget = false;
             this.context.isBindingElement = false;
+        } else {
+            expr = this.inheritCoverGrammar(this.parseLeftHandSideExpressionAllowCall);
+            if (!this.hasLineTerminator && this.lookahead.type === Token.Punctuator) {
+                if (this.match('++') || this.match('--')) {
+                    if (this.context.strict && expr.type === Syntax.Identifier && this.scanner.isRestrictedWord(expr.name)) {
+                        this.tolerateError(Messages.StrictLHSPostfix);
+                    }
+                    if (!this.context.isAssignmentTarget) {
+                        this.tolerateError(Messages.InvalidLHSInAssignment);
+                    }
+                    this.context.isAssignmentTarget = false;
+                    this.context.isBindingElement = false;
+                    const operator = this.nextToken().value;
+                    const prefix = false;
+                    expr = this.finalize(this.startNode(startToken), new Node.UpdateExpression(operator, expr, prefix));
+                }
+            }
+        }
 
-        } else if (this.match('+') || this.match('-') || this.match('~') || this.match('!')) {
+        return expr;
+    }
+
+    // ECMA-262 12.5 Unary Operators
+
+    parseUnaryExpression(): Node.Expression {
+        let expr;
+
+        if (this.match('+') || this.match('-') || this.match('~') || this.match('!')) {
             const node = this.startNode(this.lookahead);
             const token = this.nextToken();
             expr = this.inheritCoverGrammar(this.parseUnaryExpression);
@@ -1324,11 +1324,28 @@ export class Parser {
             this.context.isBindingElement = false;
 
         } else {
-            expr = this.parsePostfixExpression();
+            expr = this.parseUpdateExpression();
         }
 
         return expr;
     }
+
+    parseExponentiationExpression(): Node.Expression {
+        const startToken = this.lookahead;
+
+        let expr = this.inheritCoverGrammar(this.parseUnaryExpression);
+        if (expr.type !== Syntax.UnaryExpression && this.match('**')) {
+            this.nextToken();
+            this.context.isAssignmentTarget = false;
+            this.context.isBindingElement = false;
+            const left = expr;
+            const right = this.isolateCoverGrammar(this.parseExponentiationExpression);
+            expr = this.finalize(this.startNode(startToken), new Node.BinaryExpression('**', left, right));
+        }
+
+        return expr;
+    }
+
     // ECMA-262 12.6 Multiplicative Operators
     // ECMA-262 12.7 Additive Operators
     // ECMA-262 12.8 Bitwise Shift Operators
@@ -1353,7 +1370,7 @@ export class Parser {
     parseBinaryExpression(): Node.Expression {
         const startToken = this.lookahead;
 
-        let expr = this.inheritCoverGrammar(this.parseUnaryExpression);
+        let expr = this.inheritCoverGrammar(this.parseExponentiationExpression);
 
         let token = this.lookahead;
         let prec = this.binaryPrecedence(token);
@@ -1366,7 +1383,7 @@ export class Parser {
 
             const markers = [startToken, this.lookahead];
             let left = expr;
-            let right = this.isolateCoverGrammar(this.parseUnaryExpression);
+            let right = this.isolateCoverGrammar(this.parseExponentiationExpression);
 
             const stack = [left, token, right];
             while (true) {
@@ -1390,7 +1407,7 @@ export class Parser {
                 token.prec = prec;
                 stack.push(token);
                 markers.push(this.lookahead);
-                stack.push(this.isolateCoverGrammar(this.parseUnaryExpression));
+                stack.push(this.isolateCoverGrammar(this.parseExponentiationExpression));
             }
 
             // Final reduce to clean-up the stack.
