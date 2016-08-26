@@ -14,13 +14,16 @@ module.exports = function (config) {
             browserName: 'internet explorer',
             platform: 'Windows 7',
             version: '10.0'
-        },
+        }
+
+        /*
         IE_9: {
             base: 'SauceLabs',
             browserName: 'internet explorer',
             platform: 'Windows 7',
             version: '9.0'
         }
+        */
     });
 
 }
