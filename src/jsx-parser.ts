@@ -363,13 +363,12 @@ export class JSXParser extends Parser {
 
         this.expectJSX('{');
         let expression = null;
-        if (this.matchJSX('}')) {
+        this.finishJSX();
+        if (this.match('}')) {
             this.tolerateError('JSX attributes must only be assigned a non-empty expression');
-        } else {
-            this.finishJSX();
-            expression = this.parseAssignmentExpression();
-            this.startJSX();
         }
+        expression = this.parseAssignmentExpression();
+        this.startJSX();
         this.expectJSX('}');
 
         return this.finalize(node, new JSXNode.JSXExpressionContainer(expression));
