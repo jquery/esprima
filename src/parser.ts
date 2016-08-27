@@ -1483,25 +1483,19 @@ export class Parser {
 
         for (let i = 0; i < params.length; ++i) {
             const param = params[i];
-            switch (param.type) {
-                case Syntax.AssignmentPattern:
-                    params[i] = param.left;
-                    if (param.right.type === Syntax.YieldExpression) {
-                        if (param.right.argument) {
-                            this.throwUnexpectedToken(this.lookahead);
-                        }
-                        param.right.type = Syntax.Identifier;
-                        param.right.name = 'yield';
-                        delete param.right.argument;
-                        delete param.right.delegate;
+            if (param.type === Syntax.AssignmentPattern) {
+                if (param.right.type === Syntax.YieldExpression) {
+                    if (param.right.argument) {
+                        this.throwUnexpectedToken(this.lookahead);
                     }
-                    this.checkPatternParam(options, param.left);
-                    break;
-                default:
-                    this.checkPatternParam(options, param);
-                    params[i] = param;
-                    break;
+                    param.right.type = Syntax.Identifier;
+                    param.right.name = 'yield';
+                    delete param.right.argument;
+                    delete param.right.delegate;
+                }
             }
+            this.checkPatternParam(options, param);
+            params[i] = param;
         }
 
         if (this.context.strict || !this.context.allowYield) {

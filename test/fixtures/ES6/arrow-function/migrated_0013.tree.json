@@ -8,11 +8,48 @@
                 "id": null,
                 "params": [
                     {
-                        "type": "Identifier",
-                        "name": "eval",
+                        "type": "AssignmentPattern",
+                        "operator": "=",
+                        "left": {
+                            "type": "Identifier",
+                            "name": "eval",
+                            "range": [
+                                1,
+                                5
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 1
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 5
+                                }
+                            }
+                        },
+                        "right": {
+                            "type": "Literal",
+                            "value": 10,
+                            "raw": "10",
+                            "range": [
+                                8,
+                                10
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 8
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 10
+                                }
+                            }
+                        },
                         "range": [
                             1,
-                            5
+                            10
                         ],
                         "loc": {
                             "start": {
@@ -21,7 +58,7 @@
                             },
                             "end": {
                                 "line": 1,
-                                "column": 5
+                                "column": 10
                             }
                         }
                     }
@@ -79,6 +116,20 @@
         }
     ],
     "sourceType": "script",
+    "range": [
+        0,
+        17
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 17
+        }
+    },
     "tokens": [
         {
             "type": "Punctuator",
@@ -206,19 +257,5 @@
                 }
             }
         }
-    ],
-    "range": [
-        0,
-        17
-    ],
-    "loc": {
-        "start": {
-            "line": 1,
-            "column": 0
-        },
-        "end": {
-            "line": 1,
-            "column": 17
-        }
-    }
+    ]
 }
