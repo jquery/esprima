@@ -2,43 +2,53 @@
     "type": "Program",
     "body": [
         {
-            "range": [
-                0,
-                17
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 0
-                },
-                "end": {
-                    "line": 1,
-                    "column": 17
-                }
-            },
             "type": "ExpressionStatement",
             "expression": {
-                "range": [
-                    0,
-                    17
-                ],
-                "loc": {
-                    "start": {
-                        "line": 1,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 1,
-                        "column": 17
-                    }
-                },
                 "type": "ArrowFunctionExpression",
                 "id": null,
                 "params": [
                     {
+                        "type": "AssignmentPattern",
+                        "operator": "=",
+                        "left": {
+                            "type": "Identifier",
+                            "name": "x",
+                            "range": [
+                                1,
+                                2
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 1
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 2
+                                }
+                            }
+                        },
+                        "right": {
+                            "type": "Identifier",
+                            "name": "yield",
+                            "range": [
+                                5,
+                                10
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 5
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 10
+                                }
+                            }
+                        },
                         "range": [
                             1,
-                            2
+                            10
                         ],
                         "loc": {
                             "start": {
@@ -47,14 +57,14 @@
                             },
                             "end": {
                                 "line": 1,
-                                "column": 2
+                                "column": 10
                             }
-                        },
-                        "type": "Identifier",
-                        "name": "x"
+                        }
                     }
                 ],
                 "body": {
+                    "type": "BlockStatement",
+                    "body": [],
                     "range": [
                         15,
                         17
@@ -68,16 +78,56 @@
                             "line": 1,
                             "column": 17
                         }
-                    },
-                    "type": "BlockStatement",
-                    "body": []
+                    }
                 },
                 "generator": false,
-                "expression": false
+                "expression": false,
+                "range": [
+                    0,
+                    17
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 17
+                    }
+                }
+            },
+            "range": [
+                0,
+                17
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 17
+                }
             }
         }
     ],
     "sourceType": "script",
+    "range": [
+        0,
+        17
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 17
+        }
+    },
     "tokens": [
         {
             "type": "Punctuator",
@@ -223,19 +273,5 @@
                 }
             }
         }
-    ],
-    "range": [
-        0,
-        17
-    ],
-    "loc": {
-        "start": {
-            "line": 1,
-            "column": 0
-        },
-        "end": {
-            "line": 1,
-            "column": 17
-        }
-    }
+    ]
 }
