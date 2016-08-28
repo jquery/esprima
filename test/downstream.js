@@ -97,7 +97,7 @@ test_downstream({
     'esmangle': 'https://github.com/estools/esmangle.git',
     'escomplex-js': 'https://github.com/philbooth/escomplex-js.git',
     // 'js2coffee': 'https://github.com/js2coffee/js2coffee.git',
-    'redeyed': 'https://github.com/thlorenz/redeyed.git',
+    // 'redeyed': 'https://github.com/thlorenz/redeyed.git',
     'jsfmt': 'https://github.com/rdio/jsfmt.git',
     'recast': 'https://github.com/benjamn/recast.git',
     'rocambole': 'https://github.com/millermedeiros/rocambole.git',
