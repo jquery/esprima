@@ -2719,10 +2719,11 @@
     }
 
     function parsePropertyPattern(params, kind) {
-        var node = new Node(), key, keyToken, computed = match('['), init;
+        var node = new Node(), key, id, keyToken, computed = match('['), init;
         if (lookahead.type === Token.Identifier) {
             keyToken = lookahead;
             key = parseVariableIdentifier();
+            id = new WrappingNode(keyToken).finishIdentifier(keyToken.value);
             if (match('=')) {
                 params.push(keyToken);
                 lex();
@@ -2730,10 +2731,10 @@
 
                 return node.finishProperty(
                     'init', key, false,
-                    new WrappingNode(keyToken).finishAssignmentPattern(key, init), false, true);
+                    new WrappingNode(keyToken).finishAssignmentPattern(id, init), false, true);
             } else if (!match(':')) {
                 params.push(keyToken);
-                return node.finishProperty('init', key, false, key, false, true);
+                return node.finishProperty('init', key, false, id, false, true);
             }
         } else {
             key = parseObjectPropertyKey();
@@ -2994,7 +2995,7 @@
     }
 
     function parseObjectProperty(hasProto) {
-        var token = lookahead, node = new Node(), computed, key, maybeMethod, proto, value;
+        var token = lookahead, node = new Node(), computed, key, maybeMethod, proto, init, value;
 
         computed = match('[');
         if (match('*')) {
@@ -3028,14 +3029,15 @@
         }
 
         if (token.type === Token.Identifier) {
+            init = new WrappingNode(token).finishIdentifier(token.value);
             if (match('=')) {
                 firstCoverInitializedNameError = lookahead;
                 lex();
                 value = isolateCoverGrammar(parseAssignmentExpression);
                 return node.finishProperty('init', key, computed,
-                    new WrappingNode(token).finishAssignmentPattern(key, value), false, true);
+                    new WrappingNode(token).finishAssignmentPattern(init, value), false, true);
             }
-            return node.finishProperty('init', key, computed, key, false, true);
+            return node.finishProperty('init', key, computed, init, false, true);
         }
 
         throwUnexpectedToken(lookahead);
