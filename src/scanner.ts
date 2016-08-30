@@ -566,7 +566,7 @@ export class Scanner {
                     // 3-character punctuators.
                     str = str.substr(0, 3);
                     if (str === '===' || str === '!==' || str === '>>>' ||
-                        str === '<<=' || str === '>>=') {
+                        str === '<<=' || str === '>>=' || str === '**=') {
                         this.index += 3;
                     } else {
 
@@ -576,7 +576,7 @@ export class Scanner {
                             str === '+=' || str === '-=' || str === '*=' || str === '/=' ||
                             str === '++' || str === '--' || str === '<<' || str === '>>' ||
                             str === '&=' || str === '|=' || str === '^=' || str === '%=' ||
-                            str === '<=' || str === '>=' || str === '=>') {
+                            str === '<=' || str === '>=' || str === '=>' || str === '**') {
                             this.index += 2;
                         } else {
 
