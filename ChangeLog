@@ -1,3 +1,13 @@
+2016-09-03: Version 3.0.0
+
+      * Support ES2016 exponentiation expression (issue 1490)
+      * Support JSX syntax (issue 1467)
+      * Use the latest Unicode 8.0 (issue 1475)
+      * Add the support for syntax node delegate (issue 1435)
+      * Fix ESTree compatibility on meta property (issue 1338)
+      * Fix ESTree compatibility on default parameter value (issue 1081)
+      * Fix ESTree compatibility on try handler (issue 1030)
+
 2016-08-23: Version 2.7.3
 
       * Fix tokenizer confusion with a comment (issue 1493, 1516)
