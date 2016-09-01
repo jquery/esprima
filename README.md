@@ -26,3 +26,8 @@ Esprima runs on many popular web browsers, as well as other ECMAScript platforms
 [Rhino](http://www.mozilla.org/rhino), [Nashorn](http://openjdk.java.net/projects/nashorn/), and [Node.js](https://npmjs.org/package/esprima).
 
 For more information, check the web site [esprima.org](http://esprima.org).
+
+### CDN Availability
+The un-minified version of esprima delivered throug CDN, can be found here:
+	- for dev/staging environments: [https://rawgit.com/ariya/esprima/master/esprima.js](https://rawgit.com/ariya/esprima/master/esprima.js)
+	- for production environments: [https://cdn.rawgit.com/ariya/esprima/master/esprima.js](https://cdn.rawgit.com/ariya/esprima/master/esprima.js)
