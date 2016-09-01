@@ -76,7 +76,6 @@ function checkVersion() {
     console.log('Library version is', version);
 
     ensureVersion('package.json', version);
-    ensureVersion('bower.json', version);
 }
 
 
