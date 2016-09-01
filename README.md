@@ -12,17 +12,37 @@ with the help of [many contributors](https://github.com/jquery/esprima/contribut
 
 ### Features
 
-- Full support for ECMAScript 6 ([ECMA-262](http://www.ecma-international.org/publications/standards/Ecma-262.htm))
+- Full support for ECMAScript 2016 ([ECMA-262 7th Edition](http://www.ecma-international.org/publications/standards/Ecma-262.htm))
 - Sensible [syntax tree format](https://github.com/estree/estree/blob/master/es5.md) as standardized by [ESTree project](https://github.com/estree/estree)
 - Experimental support for [JSX](https://facebook.github.io/jsx/), a syntax extension for [React](https://facebook.github.io/react/)
 - Optional tracking of syntax node location (index-based and line-column)
 - [Heavily tested](http://esprima.org/test/ci.html) (~1300 [unit tests](https://github.com/jquery/esprima/tree/master/test/fixtures) with [full code coverage](https://codecov.io/github/jquery/esprima))
 
-Esprima serves as a **building block** for some JavaScript
-language tools, from [code instrumentation](http://esprima.org/demo/functiontrace.html)
-to [editor autocompletion](http://esprima.org/demo/autocomplete.html).
+### API
 
-Esprima runs on many popular web browsers, as well as other ECMAScript platforms such as
-[Rhino](http://www.mozilla.org/rhino), [Nashorn](http://openjdk.java.net/projects/nashorn/), and [Node.js](https://npmjs.org/package/esprima).
+Esprima can be used to perform [lexical analysis](https://en.wikipedia.org/wiki/Lexical_analysis) (tokenization) or [syntactic analysis](https://en.wikipedia.org/wiki/Parsing) (parsing) of a JavaScript programs.
 
-For more information, check the web site [esprima.org](http://esprima.org).
+A simple example:
+
+```javascript
+var esprima = require('esprima');
+var code = 'const answer = 42';
+var tokens = esprima.tokenize(code);
+var ast = esprima.parse(code);
+```
+which gives a list of [tokens](https://en.wikipedia.org/wiki/Lexical_analysis#Token):
+```javascript
+[ { type: 'Keyword', value: 'const' },
+  { type: 'Identifier', value: 'answer' },
+  { type: 'Punctuator', value: '=' },
+  { type: 'Numeric', value: '42' } ]
+```
+and an [abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree):
+```javascript
+{ type: 'Program',
+  body:
+   [ { type: 'VariableDeclaration',
+       declarations: [Object],
+       kind: 'const' } ],
+  sourceType: 'script' }
+```
