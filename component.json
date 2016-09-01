@@ -1,20 +1,18 @@
 {
     "name": "esprima",
-    "version": "3.0.0-dev",
+    "version": "1.1.0-dev",
     "main": "./esprima.js",
-    "dependencies": {},
-    "ignore": [
-        "examples",
-        "test",
-        "tools"
+    "scripts": [
+        "esprima.js"
     ],
+    "dependencies": {},
     "repository": {
         "type": "git",
-        "url": "http://github.com/jquery/esprima.git"
+        "url": "http://github.com/ariya/esprima.git"
     },
     "licenses": [{
         "type": "BSD",
-        "url": "http://github.com/jquery/esprima/raw/master/LICENSE.BSD"
+        "url": "http://github.com/ariya/esprima/raw/master/LICENSE.BSD"
     }],
     "keywords": [
         "ast",
