@@ -23,7 +23,7 @@
 */
 
 var fs = require('fs'),
-    esprima = require('../esprima'),
+    esprima = require('../'),
     N, fixture;
 
 // Loops for parsing, useful for stress-testing/profiling.
