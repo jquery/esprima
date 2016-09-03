@@ -1304,15 +1304,8 @@ export class Parser {
     parseUnaryExpression(): Node.Expression {
         let expr;
 
-        if (this.match('+') || this.match('-') || this.match('~') || this.match('!')) {
-            const node = this.startNode(this.lookahead);
-            const token = this.nextToken();
-            expr = this.inheritCoverGrammar(this.parseUnaryExpression);
-            expr = this.finalize(node, new Node.UnaryExpression(token.value, expr));
-            this.context.isAssignmentTarget = false;
-            this.context.isBindingElement = false;
-
-        } else if (this.matchKeyword('delete') || this.matchKeyword('void') || this.matchKeyword('typeof')) {
+        if (this.match('+') || this.match('-') || this.match('~') || this.match('!') ||
+            this.matchKeyword('delete') || this.matchKeyword('void') || this.matchKeyword('typeof')) {
             const node = this.startNode(this.lookahead);
             const token = this.nextToken();
             expr = this.inheritCoverGrammar(this.parseUnaryExpression);
@@ -1322,7 +1315,6 @@ export class Parser {
             }
             this.context.isAssignmentTarget = false;
             this.context.isBindingElement = false;
-
         } else {
             expr = this.parseUpdateExpression();
         }
