@@ -20,25 +20,21 @@ with the help of [many contributors](https://github.com/jquery/esprima/contribut
 
 ### API
 
-Esprima can be used to perform [lexical analysis](https://en.wikipedia.org/wiki/Lexical_analysis) (tokenization) or [syntactic analysis](https://en.wikipedia.org/wiki/Parsing) (parsing) of a JavaScript programs.
+Esprima can be used to perform [lexical analysis](https://en.wikipedia.org/wiki/Lexical_analysis) (tokenization) or [syntactic analysis](https://en.wikipedia.org/wiki/Parsing) (parsing) of a JavaScript program.
 
-A simple example:
+A simple example on Node.js REPL:
 
 ```javascript
-var esprima = require('esprima');
-var code = 'const answer = 42';
-var tokens = esprima.tokenize(code);
-var ast = esprima.parse(code);
-```
-which gives a list of [tokens](https://en.wikipedia.org/wiki/Lexical_analysis#Token):
-```javascript
+> var esprima = require('esprima');
+> var program = 'const answer = 42';
+
+> esprima.tokenize(program);
 [ { type: 'Keyword', value: 'const' },
   { type: 'Identifier', value: 'answer' },
   { type: 'Punctuator', value: '=' },
   { type: 'Numeric', value: '42' } ]
-```
-and an [abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree):
-```javascript
+  
+> esprima.parse(program);
 { type: 'Program',
   body:
    [ { type: 'VariableDeclaration',
