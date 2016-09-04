@@ -13,7 +13,7 @@
     "dist/esprima.js"
   ],
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.12.0"
   },
   "author": {
     "name": "Ariya Hidayat",
@@ -87,6 +87,7 @@
     "saucelabs-evergreen": "cd test && karma start saucelabs-evergreen.conf.js",
     "saucelabs-safari": "cd test && karma start saucelabs-safari.conf.js",
     "saucelabs-ie": "cd test && karma start saucelabs-ie.conf.js",
+    "saucelabs": "npm run saucelabs-evergreen && npm run saucelabs-ie && npm run saucelabs-safari",
     "analyze-coverage": "istanbul cover test/unit-tests.js",
     "check-coverage": "istanbul check-coverage --statement 100 --branch 100 --function 100",
     "dynamic-analysis": "npm run analyze-coverage && npm run check-coverage",
@@ -102,7 +103,7 @@
     "travis": "npm test",
     "circleci": "npm test && npm run codecov && npm run downstream",
     "appveyor": "npm run compile && npm run all-tests && npm run browser-tests",
-    "droneio": "npm test && npm run saucelabs-evergreen && npm run saucelabs-ie && npm run saucelabs-safari",
+    "droneio": "npm run compile && npm run all-tests && npm run saucelabs",
     "generate-regex": "node tools/generate-identifier-regex.js",
     "generate-xhtml-entities": "node tools/generate-xhtml-entities.js"
   }
