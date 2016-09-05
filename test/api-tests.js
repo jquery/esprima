@@ -196,7 +196,7 @@ describe('esprima.parse', function () {
     it('should be able to attach comments', function () {
         var ast, statement, expression, comments;
 
-        ast = esprima.parse('/* universe */ 42', { attachComment: true});
+        ast = esprima.parse('/* universe */ 42', { attachComment: true });
         statement = ast.body[0];
         expression = statement.expression;
         comments = statement.leadingComments;
@@ -250,7 +250,7 @@ describe('esprima.parse', function () {
 
         assert.deepEqual(expression.type, 'JSXElement');
         assert.deepEqual(expression.openingElement.type, 'JSXOpeningElement');
-        assert.deepEqual(expression.openingElement.name, { type: 'JSXIdentifier', name: 'title'});
+        assert.deepEqual(expression.openingElement.name, { type: 'JSXIdentifier', name: 'title' });
         assert.deepEqual(expression.closingElement, null);
     });
 

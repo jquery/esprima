@@ -55,4 +55,3 @@ fixture.forEach(function (name) {
         process.exit(1);
     }
 });
-

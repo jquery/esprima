@@ -34,8 +34,8 @@ module.exports = function (config, name, launchers) {
         singleRun: true,
         captureTimeout: 2 * 60 * 1000,
         browserNoActivityTimeout: 3 * 60 * 1000,
-        browserDisconnectTimeout : 3 * 60 * 1000,
-        browserDisconnectTolerance : 2,
+        browserDisconnectTimeout: 3 * 60 * 1000,
+        browserDisconnectTolerance: 2,
 
         sauceLabs: {
             testName: name,

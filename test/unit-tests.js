@@ -35,7 +35,7 @@ var esprima = require('../'),
     result,
     failures = [],
     cases = {},
-    context = {source: '', result: null},
+    context = { source: '', result: null },
     tick = new Date(),
     testCase,
     header;
@@ -111,13 +111,13 @@ if (failures.length) {
             actualObject = JSON.parse(failure.actual);
 
             console.error(failure.source + ': Expected\n    ' +
-               failure.expected.split('\n').join('\n    ') +
-               '\nto match\n    ' + failure.actual + '\nDiff:\n' +
-               diff(expectedObject, actualObject));
+                failure.expected.split('\n').join('\n    ') +
+                '\nto match\n    ' + failure.actual + '\nDiff:\n' +
+                diff(expectedObject, actualObject));
         } catch (ex) {
             console.error(failure.source + ': Expected\n    ' +
-               failure.expected.split('\n').join('\n    ') +
-               '\nto match\n    ' + failure.actual);
+                failure.expected.split('\n').join('\n    ') +
+                '\nto match\n    ' + failure.actual);
         }
     });
 } else {
