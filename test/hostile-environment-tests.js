@@ -40,7 +40,7 @@ Object.defineProperty = defineProperty;
 
 if (typeof Object.defineProperty === 'function') {
     Object.defineProperty(Object.prototype, '$a', {
-        get: function () {},
+        get: function () { },
         configurable: true
     });
     try {

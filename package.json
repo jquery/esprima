@@ -40,7 +40,6 @@
     "everything.js": "~1.0.3",
     "glob": "~7.0.0",
     "istanbul": "~0.4.0",
-    "jscs": "~3.0.3",
     "json-diff": "~0.3.1",
     "karma": "~1.2.0",
     "karma-chrome-launcher": "~2.0.0",
@@ -57,7 +56,7 @@
     "temp": "~0.8.3",
     "tslint": "~3.15.1",
     "typescript": "~1.8.10",
-    "typescript-formatter": "~1.2.0",
+    "typescript-formatter": "~2.3.0",
     "unicode-8.0.0": "~0.7.0",
     "webpack": "~1.13.2"
   },
@@ -72,8 +71,8 @@
   "scripts": {
     "check-version": "node test/check-version.js",
     "tslint": "tslint src/*.ts",
-    "code-style": "tsfmt --verify src/*.ts && jscs -p crockford test/*.js",
-    "format-code": "tsfmt -r src/*.ts",
+    "code-style": "tsfmt --verify src/*.ts && tsfmt --verify test/*.js",
+    "format-code": "tsfmt -r src/*.ts && tsfmt -r test/*.js",
     "complexity": "node test/check-complexity.js",
     "static-analysis": "npm run check-version && npm run tslint && npm run code-style && npm run complexity",
     "hostile-env-tests": "node test/hostile-environment-tests.js",

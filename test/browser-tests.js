@@ -76,7 +76,7 @@ function browserRunner(cases) {
             source = ''
         }
 
-        return testCase.key + " - " + source  + testCaseCase;
+        return testCase.key + " - " + source + testCaseCase;
     }
 
     function describeTests(tree, path) {
