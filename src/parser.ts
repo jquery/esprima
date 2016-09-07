@@ -794,16 +794,6 @@ export class Parser {
             (key.type === Syntax.Literal && key.value === value);
     }
 
-    checkDuplicatedProto(key, hasProto) {
-        if (this.isPropertyKey(key, '__proto__')) {
-            if (hasProto.value) {
-                this.tolerateError(Messages.DuplicateProtoProperty);
-            } else {
-                hasProto.value = true;
-            }
-        }
-    }
-
     parseObjectProperty(hasProto): Node.Property {
         const node = this.createNode();
         const token = this.lookahead;
@@ -854,8 +844,11 @@ export class Parser {
 
             kind = 'init';
             if (this.match(':')) {
-                if (!computed) {
-                    this.checkDuplicatedProto(key, hasProto);
+                if (!computed && this.isPropertyKey(key, '__proto__')) {
+                    if (hasProto.value) {
+                        this.tolerateError(Messages.DuplicateProtoProperty);
+                    }
+                    hasProto.value = true;
                 }
                 this.nextToken();
                 value = this.inheritCoverGrammar(this.parseAssignmentExpression);
@@ -866,7 +859,6 @@ export class Parser {
 
             } else if (token.type === Token.Identifier) {
                 const id = this.finalize(node, new Node.Identifier(token.value));
-                this.checkDuplicatedProto(key, hasProto);
                 if (this.match('=')) {
                     this.context.firstCoverInitializedNameError = this.lookahead;
                     this.nextToken();
