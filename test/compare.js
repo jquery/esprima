@@ -70,6 +70,17 @@ parsers = [
     }
 },
 {
+    name: 'Espree',
+    link: 'https://github.com/eslint/espree',
+    version: function () {
+        return window.espree.version;
+    },
+    parse: function (code) {
+        var syntax = window.espree.parse(code, { range: true, loc: true });
+        return syntax.body.length;
+    }
+},
+{
     name: 'Shift',
     link: 'https://github.com/shapesecurity/shift-parser-js',
     parse: function (code) {
@@ -251,6 +262,7 @@ if (typeof window !== 'undefined') {
         function setupParser() {
             var i, j;
 
+            window.espree = require('espree');
             suite = [];
             for (i = 0; i < fixtureList.length; i += 1) {
                 for (j = 0; j < parsers.length; j += 1) {
