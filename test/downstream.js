@@ -35,6 +35,21 @@ function copy_file(source, target) {
     fs.writeFileSync(target, fs.readFileSync(source));
 }
 
+function fixRecastConstInit() {
+    var filename = 'test/es6tests.js', lines, i, line;
+
+    lines = fs.readFileSync(filename, 'utf-8').split('\n');
+    for (i = 0; i < lines.length; ++i) {
+        line = lines[i];
+        if (line.indexOf('export const bar;') > 0) {
+            console.log('-- Patching', filename);
+            lines[i + 1] = '"Missing initializer in const declaration"';
+            break;
+        }
+    }
+    fs.writeFileSync(filename, lines.join('\n'));
+}
+
 function test_project(project, repo) {
     console.log();
     console.log('==========', project);
@@ -57,6 +72,9 @@ function test_project(project, repo) {
 
     console.log();
     try {
+        if (project === 'recast') {
+            fixRecastConstInit();
+        }
         execute('npm test');
     } catch (e) {
         console.log('Failing: ', e.toString());
