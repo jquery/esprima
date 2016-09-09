@@ -1697,8 +1697,12 @@ export class Parser {
         let init = null;
         if (kind === 'const') {
             if (!this.matchKeyword('in') && !this.matchContextualKeyword('of')) {
-                this.expect('=');
-                init = this.isolateCoverGrammar(this.parseAssignmentExpression);
+                if (this.match('=')) {
+                    this.nextToken();
+                    init = this.isolateCoverGrammar(this.parseAssignmentExpression);
+                } else {
+                    this.throwError(Messages.DeclarationMissingInitializer, 'const');
+                }
             }
         } else if ((!options.inFor && id.type !== Syntax.Identifier) || this.match('=')) {
             this.expect('=');
