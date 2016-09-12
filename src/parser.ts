@@ -1851,7 +1851,7 @@ export class Parser {
             pattern = this.parseObjectPattern(params, kind);
         } else {
             if (this.matchKeyword('let') && (kind === 'const' || kind === 'let')) {
-                this.tolerateUnexpectedToken(this.lookahead, Messages.UnexpectedToken);
+                this.tolerateUnexpectedToken(this.lookahead, Messages.LetInLexicalBinding);
             }
             params.push(this.lookahead);
             pattern = this.parseVariableIdentifier(kind);

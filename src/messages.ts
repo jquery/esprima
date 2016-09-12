@@ -47,5 +47,6 @@ export const Messages = {
     IllegalImportDeclaration: 'Unexpected token',
     IllegalExportDeclaration: 'Unexpected token',
     DuplicateBinding: 'Duplicate binding %0',
-    DeclarationMissingInitializer: 'Missing initializer in %0 declaration'
+    DeclarationMissingInitializer: 'Missing initializer in %0 declaration',
+    LetInLexicalBinding: 'let is disallowed as a lexically bound name'
 };
