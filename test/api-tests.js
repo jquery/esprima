@@ -205,6 +205,11 @@ describe('esprima.parse', function () {
         assert.deepEqual(statement.leadingComments, [{ type: 'Block', value: ' universe ', range: [0, 14] }]);
     });
 
+    it('should not implicity collect comments when comment attachment is specified', function () {
+        var ast = esprima.parse('/* universe */ 42', { attachComment: true });
+        assert.equal(ast.comments, undefined);
+    });
+
     it('should include the list of tokens when specified', function () {
         var ast = esprima.parse('x = 1', { tokens: true });
         assert.deepEqual(ast.tokens.length, 3);
