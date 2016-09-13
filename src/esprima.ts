@@ -39,8 +39,9 @@ export function parse(code, options, delegate) {
     };
 
     let parserDelegate = (typeof delegate === 'function') ? proxyDelegate : null;
+    let collectComment = false;
     if (options) {
-        const collectComment = (typeof options.comment === 'boolean' && options.comment);
+        collectComment = (typeof options.comment === 'boolean' && options.comment);
         const attachComment = (typeof options.attachComment === 'boolean' && options.attachComment);
         if (collectComment || attachComment) {
             commentHandler = new CommentHandler();
@@ -59,7 +60,7 @@ export function parse(code, options, delegate) {
 
     const ast = <any>(parser.parseProgram());
 
-    if (parser.config.comment) {
+    if (collectComment) {
         ast.comments = commentHandler.comments;
     }
     if (parser.config.tokens) {
