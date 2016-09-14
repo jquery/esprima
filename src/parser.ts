@@ -2120,7 +2120,7 @@ export class Parser {
                 this.context.allowIn = previousAllowIn;
 
                 if (this.matchKeyword('in')) {
-                    if (!this.context.isAssignmentTarget) {
+                    if (!this.context.isAssignmentTarget || init.type === Syntax.AssignmentExpression) {
                         this.tolerateError(Messages.InvalidLHSInForIn);
                     }
 
@@ -2130,7 +2130,7 @@ export class Parser {
                     right = this.parseExpression();
                     init = null;
                 } else if (this.matchContextualKeyword('of')) {
-                    if (!this.context.isAssignmentTarget) {
+                    if (!this.context.isAssignmentTarget || init.type === Syntax.AssignmentExpression) {
                         this.tolerateError(Messages.InvalidLHSInForLoop);
                     }
 
