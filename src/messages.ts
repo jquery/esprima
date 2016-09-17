@@ -46,5 +46,6 @@ export const Messages = {
     InvalidModuleSpecifier: 'Unexpected token',
     IllegalImportDeclaration: 'Unexpected token',
     IllegalExportDeclaration: 'Unexpected token',
-    DuplicateBinding: 'Duplicate binding %0'
+    DuplicateBinding: 'Duplicate binding %0',
+    ForInOfLoopInitializer: '%0 loop variable declaration may not have an initializer'
 };

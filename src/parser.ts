@@ -2062,6 +2062,10 @@ export class Parser {
                 this.context.allowIn = previousAllowIn;
 
                 if (declarations.length === 1 && this.matchKeyword('in')) {
+                    const decl = declarations[0];
+                    if (decl.init && (decl.id.type === Syntax.ArrayPattern || decl.id.type === Syntax.ObjectPattern || this.context.strict)) {
+                        this.tolerateError(Messages.ForInOfLoopInitializer, 'for-in');
+                    }
                     init = this.finalize(init, new Node.VariableDeclaration(declarations, 'var'));
                     this.nextToken();
                     left = init;
