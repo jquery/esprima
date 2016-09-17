@@ -48,5 +48,6 @@ export const Messages = {
     IllegalExportDeclaration: 'Unexpected token',
     DuplicateBinding: 'Duplicate binding %0',
     DeclarationMissingInitializer: 'Missing initializer in %0 declaration',
-    LetInLexicalBinding: 'let is disallowed as a lexically bound name'
+    LetInLexicalBinding: 'let is disallowed as a lexically bound name',
+    ForInOfLoopInitializer: '%0 loop variable declaration may not have an initializer'
 };
