@@ -1102,6 +1102,9 @@ export class Parser {
                     break;
                 }
                 this.expectCommaSeparator();
+                if (this.match(')')) {
+                    break;
+                }
             }
         }
         this.expect(')');
@@ -2638,8 +2641,6 @@ export class Parser {
             this.validateParam(options, params[i], params[i].value);
         }
         options.params.push(param);
-
-        return !this.match(')');
     }
 
     parseFormalParameters(firstRestricted?) {
@@ -2654,10 +2655,14 @@ export class Parser {
         if (!this.match(')')) {
             options.paramSet = {};
             while (this.startMarker.index < this.scanner.length) {
-                if (!this.parseFormalParameter(options)) {
+                this.parseFormalParameter(options);
+                if (this.match(')')) {
                     break;
                 }
                 this.expect(',');
+                if (this.match(')')) {
+                    break;
+                }
             }
         }
         this.expect(')');
