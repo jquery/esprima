@@ -1,5 +1,5 @@
 import { assert } from './assert';
-import { Messages} from './messages';
+import { Messages } from './messages';
 
 import { ErrorHandler } from './error-handler';
 import { Token, TokenName } from './token';
@@ -3054,14 +3054,14 @@ export class Parser {
         return this.finalize(node, new Node.ClassBody(elementList));
     }
 
-    parseClassDeclaration(): Node.ClassDeclaration {
+    parseClassDeclaration(identifierIsOptional?: boolean): Node.ClassDeclaration {
         const node = this.createNode();
 
         const previousStrict = this.context.strict;
         this.context.strict = true;
         this.expectKeyword('class');
 
-        let id = this.parseVariableIdentifier();
+        const id = (identifierIsOptional && (this.lookahead.type !== Token.Identifier)) ? null : this.parseVariableIdentifier();
         let superClass = null;
         if (this.matchKeyword('extends')) {
             this.nextToken();
@@ -3254,8 +3254,7 @@ export class Parser {
                 exportDeclaration = this.finalize(node, new Node.ExportDefaultDeclaration(declaration));
             } else if (this.matchKeyword('class')) {
                 // export default class foo {}
-                let declaration = this.parseClassExpression();
-                declaration.type = Syntax.ClassDeclaration;
+                const declaration = this.parseClassDeclaration(true);
                 exportDeclaration = this.finalize(node, new Node.ExportDefaultDeclaration(declaration));
             } else {
                 if (this.matchContextualKeyword('from')) {
