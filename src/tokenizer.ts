@@ -2,8 +2,10 @@ import { Comment, Scanner } from './scanner';
 import { ErrorHandler } from './error-handler';
 import { Token, TokenName } from './token';
 
+type ReaderEntry = string | null;
+
 class Reader {
-    values: string[];
+    readonly values: ReaderEntry[];
     curly: number;
     paren: number;
 
@@ -76,12 +78,12 @@ class Reader {
 }
 
 export class Tokenizer {
-    errorHandler: ErrorHandler;
+    readonly errorHandler: ErrorHandler;
     scanner: Scanner;
-    trackRange: boolean;
-    trackLoc: boolean;
-    buffer: any[];
-    reader: Reader;
+    readonly trackRange: boolean;
+    readonly trackLoc: boolean;
+    readonly buffer: any[];
+    readonly reader: Reader;
 
     constructor(code: string, config: any) {
         this.errorHandler = new ErrorHandler();

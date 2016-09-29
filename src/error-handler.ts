@@ -9,7 +9,7 @@ declare class Error {
 }
 
 export class ErrorHandler {
-    errors: Error[];
+    readonly errors: Error[];
     tolerant: boolean;
 
     constructor() {
@@ -42,6 +42,8 @@ export class ErrorHandler {
         } finally {
             return error;
         }
+        /* istanbul ignore next */
+        return error;
     };
 
     createError(index: number, line: number, col: number, description: string): Error {
