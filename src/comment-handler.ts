@@ -36,7 +36,7 @@ export class CommentHandler {
         //  innnerComments for properties empty block
         //  `function a() {/** comments **\/}`
         if (node.type === Syntax.BlockStatement && node.body.length === 0) {
-            const innerComments = [];
+            const innerComments: Comment[] = [];
             for (let i = this.leading.length - 1; i >= 0; --i) {
                 const entry = this.leading[i];
                 if (metadata.end.offset >= entry.start) {
@@ -51,8 +51,8 @@ export class CommentHandler {
         }
     }
 
-    findTrailingComments(node, metadata) {
-        let trailingComments = [];
+    findTrailingComments(metadata) {
+        let trailingComments: Comment[] = [];
 
         if (this.trailing.length > 0) {
             for (let i = this.trailing.length - 1; i >= 0; --i) {
@@ -76,14 +76,15 @@ export class CommentHandler {
         return trailingComments;
     }
 
-    findLeadingComments(node, metadata) {
-        const leadingComments = [];
+    findLeadingComments(metadata) {
+        const leadingComments: Comment[] = [];
 
         let target;
         while (this.stack.length > 0) {
             const entry = this.stack[this.stack.length - 1];
             if (entry && entry.start >= metadata.start.offset) {
-                target = this.stack.pop().node;
+                target = entry.node;
+                this.stack.pop();
             } else {
                 break;
             }
@@ -120,8 +121,8 @@ export class CommentHandler {
         }
 
         this.insertInnerComments(node, metadata);
-        const trailingComments = this.findTrailingComments(node, metadata);
-        const leadingComments = this.findLeadingComments(node, metadata);
+        const trailingComments = this.findTrailingComments(metadata);
+        const leadingComments = this.findLeadingComments(metadata);
         if (leadingComments.length > 0) {
             node.leadingComments = leadingComments;
         }

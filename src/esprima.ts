@@ -28,7 +28,7 @@ import { JSXParser } from './jsx-parser';
 import { Tokenizer } from './tokenizer';
 
 export function parse(code, options, delegate) {
-    let commentHandler: CommentHandler = null;
+    let commentHandler: CommentHandler | null = null;
     const proxyDelegate = function(node, metadata) {
         if (delegate) {
             delegate(node, metadata);
@@ -60,7 +60,7 @@ export function parse(code, options, delegate) {
 
     const ast = <any>(parser.parseProgram());
 
-    if (collectComment) {
+    if (collectComment && commentHandler) {
         ast.comments = commentHandler.comments;
     }
     if (parser.config.tokens) {

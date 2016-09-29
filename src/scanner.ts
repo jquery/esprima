@@ -1,6 +1,6 @@
 import { assert } from './assert';
-import { Messages} from './messages';
-import { Character} from './character';
+import { Messages } from './messages';
+import { Character } from './character';
 import { Token } from './token';
 import { ErrorHandler } from './error-handler';
 
@@ -21,11 +21,11 @@ export interface Comment {
 
 export class Scanner {
 
-    source: string;
-    errorHandler: ErrorHandler;
+    readonly source: string;
+    readonly errorHandler: ErrorHandler;
     trackComment: boolean;
 
-    length: number;
+    readonly length: number;
     index: number;
     lineNumber: number;
     lineStart: number;
@@ -60,7 +60,7 @@ export class Scanner {
     // ECMA-262 11.4 Comments
 
     skipSingleLineComment(offset: number): Comment[] {
-        let comments: Comment[];
+        let comments: Comment[] = [];
         let start, loc;
 
         if (this.trackComment) {
@@ -119,7 +119,7 @@ export class Scanner {
     };
 
     skipMultiLineComment(): Comment[] {
-        let comments: Comment[];
+        let comments: Comment[] = [];
         let start, loc;
 
         if (this.trackComment) {

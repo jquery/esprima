@@ -1,4 +1,4 @@
-import { Character} from './character';
+import { Character } from './character';
 import { Token, TokenName } from './token';
 
 import { Parser } from './parser';
@@ -17,7 +17,7 @@ interface MetaJSXNode {
 interface MetaJSXElement {
     node: MetaJSXNode;
     opening: JSXNode.JSXOpeningElement;
-    closing: JSXNode.JSXClosingElement;
+    closing: JSXNode.JSXClosingElement | null;
     children: JSXNode.JSXChild[];
 }
 
@@ -362,7 +362,8 @@ export class JSXParser extends Parser {
         const node = this.createJSXNode();
 
         this.expectJSX('{');
-        let expression = null;
+        let expression: Node.Expression | null;
+        expression = null;
         this.finishJSX();
         if (this.match('}')) {
             this.tolerateError('JSX attributes must only be assigned a non-empty expression');
@@ -382,7 +383,7 @@ export class JSXParser extends Parser {
     parseJSXNameValueAttribute(): JSXNode.JSXAttribute {
         const node = this.createJSXNode();
         const name = this.parseJSXAttributeName();
-        let value = null;
+        let value: JSXNode.JSXAttributeValue | null = null;
         if (this.matchJSX('=')) {
             this.expectJSX('=');
             value = this.parseJSXAttributeValue();
@@ -404,7 +405,7 @@ export class JSXParser extends Parser {
     }
 
     parseJSXAttributes(): JSXNode.JSXElementAttribute[] {
-        const attributes = [];
+        const attributes: JSXNode.JSXElementAttribute[] = [];
 
         while (!this.matchJSX('/') && !this.matchJSX('>')) {
             const attribute = this.matchJSX('{') ? this.parseJSXSpreadAttribute() :
@@ -484,7 +485,7 @@ export class JSXParser extends Parser {
     }
 
     parseJSXChildren(): JSXNode.JSXChild[] {
-        const children = [];
+        const children: JSXNode.JSXChild[] = [];
 
         while (!this.scanner.eof()) {
             const node = this.createJSXChildNode();
@@ -531,8 +532,9 @@ export class JSXParser extends Parser {
                 }
                 if (stack.length > 0) {
                     const child = this.finalize(el.node, new JSXNode.JSXElement(el.opening, el.children, el.closing));
-                    el = stack.pop();
+                    el = stack[stack.length - 1];
                     el.children.push(child);
+                    stack.pop();
                 } else {
                     break;
                 }
@@ -546,8 +548,8 @@ export class JSXParser extends Parser {
         const node = this.createJSXNode();
 
         const opening = this.parseJSXOpeningElement();
-        let children = [];
-        let closing = null;
+        let children: JSXNode.JSXChild[] = [];
+        let closing: JSXNode.JSXClosingElement | null = null;
 
         if (!opening.selfClosing) {
             const el = this.parseComplexJSXElement({ node, opening, closing, children });
