@@ -482,6 +482,17 @@ export class MethodDefinition {
     }
 }
 
+export class Module {
+    readonly type: string;
+    readonly body: StatementListItem[];
+    readonly sourceType: string;
+    constructor(body: StatementListItem[]) {
+        this.type = Syntax.Program;
+        this.body = body;
+        this.sourceType = 'module';
+    }
+}
+
 export class NewExpression {
     readonly type: string;
     readonly callee: Expression;
@@ -508,17 +519,6 @@ export class ObjectPattern {
     constructor(properties: Property[]) {
         this.type = Syntax.ObjectPattern;
         this.properties = properties;
-    }
-}
-
-export class Program {
-    readonly type: string;
-    readonly body: StatementListItem[];
-    readonly sourceType: string;
-    constructor(body: StatementListItem[], sourceType: string) {
-        this.type = Syntax.Program;
-        this.body = body;
-        this.sourceType = sourceType;
     }
 }
 
@@ -569,6 +569,17 @@ export class ReturnStatement {
     constructor(argument: Expression | null) {
         this.type = Syntax.ReturnStatement;
         this.argument = argument;
+    }
+}
+
+export class Script {
+    readonly type: string;
+    readonly body: StatementListItem[];
+    readonly sourceType: string;
+    constructor(body: StatementListItem[]) {
+        this.type = Syntax.Program;
+        this.body = body;
+        this.sourceType = 'script';
     }
 }
 

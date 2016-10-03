@@ -142,7 +142,8 @@
             tree = esprima.parse(code, { jsx: options.jsx, tolerant: options.tolerant, sourceType: options.sourceType, range: true });
             tree = esprima.parse(code, { jsx: options.jsx, tolerant: options.tolerant, sourceType: options.sourceType, loc: true });
 
-            tree = esprima.parse(code, options);
+            tree = (options.sourceType === 'script') ? esprima.parseScript(code, options) : esprima.parseModule(code, options);
+            esprima.parse(code, options);
 
             if (options.tolerant) {
                 for (i = 0, len = tree.errors.length; i < len; i += 1) {
@@ -221,6 +222,7 @@
         // Exercise more code paths with the delegate
         try {
             esprima.parse(code);
+            (options.sourceType === 'module') ? esprima.parseModule(code) : esprima.parseScript(code);
             esprima.parse(code, { range: false, loc: false, comment: false }, filter);
             esprima.parse(code, { range: true,  loc: false, comment: false }, filter);
             esprima.parse(code, { range: false, loc: true,  comment: false }, filter);
