@@ -18,6 +18,7 @@ interface Config {
 }
 
 interface Context {
+    isModule: boolean;
     allowIn: boolean;
     allowYield: boolean;
     firstCoverInitializedNameError: any;
@@ -60,7 +61,6 @@ export class Parser {
     readonly scanner: Scanner;
     readonly operatorPrecedence: any;
 
-    readonly sourceType: string;
     lookahead: any;
     hasLineTerminator: boolean;
 
@@ -118,11 +118,11 @@ export class Parser {
             '%': 11
         };
 
-        this.sourceType = (options && options.sourceType === 'module') ? 'module' : 'script';
         this.lookahead = null;
         this.hasLineTerminator = false;
 
         this.context = {
+            isModule: false,
             allowIn: true,
             allowYield: true,
             firstCoverInitializedNameError: null,
@@ -132,7 +132,7 @@ export class Parser {
             inIteration: false,
             inSwitch: false,
             labelSet: {},
-            strict: (this.sourceType === 'module')
+            strict: false
         };
         this.tokens = [];
 
@@ -586,7 +586,7 @@ export class Parser {
 
         switch (this.lookahead.type) {
             case Token.Identifier:
-                if (this.sourceType === 'module' && this.lookahead.value === 'await') {
+                if (this.context.isModule && this.lookahead.value === 'await') {
                     this.tolerateUnexpectedToken(this.lookahead);
                 }
                 expr = this.finalize(node, new Node.Identifier(this.nextToken().value));
@@ -1633,13 +1633,13 @@ export class Parser {
         if (this.lookahead.type === Token.Keyword) {
             switch (this.lookahead.value) {
                 case 'export':
-                    if (this.sourceType !== 'module') {
+                    if (!this.context.isModule) {
                         this.tolerateUnexpectedToken(this.lookahead, Messages.IllegalExportDeclaration);
                     }
                     statement = this.parseExportDeclaration();
                     break;
                 case 'import':
-                    if (this.sourceType !== 'module') {
+                    if (!this.context.isModule) {
                         this.tolerateUnexpectedToken(this.lookahead, Messages.IllegalImportDeclaration);
                     }
                     statement = this.parseImportDeclaration();
@@ -1899,7 +1899,7 @@ export class Parser {
                     this.throwUnexpectedToken(token);
                 }
             }
-        } else if (this.sourceType === 'module' && token.type === Token.Identifier && token.value === 'await') {
+        } else if (this.context.isModule && token.type === Token.Identifier && token.value === 'await') {
             this.tolerateUnexpectedToken(token);
         }
 
@@ -3092,13 +3092,24 @@ export class Parser {
     // ECMA-262 15.1 Scripts
     // ECMA-262 15.2 Modules
 
-    parseProgram(): Node.Program {
+    parseModule(): Node.Module {
+        this.context.strict = true;
+        this.context.isModule = true;
         const node = this.createNode();
         const body = this.parseDirectivePrologues();
         while (this.startMarker.index < this.scanner.length) {
             body.push(this.parseStatementListItem());
         }
-        return this.finalize(node, new Node.Program(body, this.sourceType));
+        return this.finalize(node, new Node.Module(body));
+    }
+
+    parseScript(): Node.Script {
+        const node = this.createNode();
+        const body = this.parseDirectivePrologues();
+        while (this.startMarker.index < this.scanner.length) {
+            body.push(this.parseStatementListItem());
+        }
+        return this.finalize(node, new Node.Script(body));
     }
 
     // ECMA-262 15.2.2 Imports
