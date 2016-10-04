@@ -3216,7 +3216,7 @@ export class Parser {
     parseExportSpecifier(): Node.ExportSpecifier {
         const node = this.createNode();
 
-        const local = this.matchKeyword('default') ? this.parseNonComputedProperty() : this.parseVariableIdentifier();
+        const local = this.parseNonComputedProperty();
         let exported = local;
         if (this.matchContextualKeyword('as')) {
             this.nextToken();
