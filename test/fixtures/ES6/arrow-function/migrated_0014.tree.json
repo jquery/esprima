@@ -27,7 +27,6 @@
                     },
                     {
                         "type": "AssignmentPattern",
-                        "operator": "=",
                         "left": {
                             "type": "Identifier",
                             "name": "a",
