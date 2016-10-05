@@ -9,7 +9,6 @@
                 "params": [
                     {
                         "type": "AssignmentPattern",
-                        "operator": "=",
                         "left": {
                             "type": "Identifier",
                             "name": "x",
