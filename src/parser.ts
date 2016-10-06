@@ -655,7 +655,7 @@ export class Parser {
 
             case Token.Keyword:
                 if (!this.context.strict && this.context.allowYield && this.matchKeyword('yield')) {
-                    expr = this.parseNonComputedProperty();
+                    expr = this.parseIdentifierName();
                 } else if (!this.context.strict && this.matchKeyword('let')) {
                     expr = this.finalize(node, new Node.Identifier(this.nextToken().value));
                 } else {
@@ -1117,7 +1117,7 @@ export class Parser {
             token.type === Token.NullLiteral;
     }
 
-    parseNonComputedProperty(): Node.Identifier {
+    parseIdentifierName(): Node.Identifier {
         const node = this.createNode();
         const token = this.nextToken();
         if (!this.isIdentifierName(token)) {
@@ -1129,14 +1129,14 @@ export class Parser {
     parseNewExpression(): Node.MetaProperty | Node.NewExpression {
         const node = this.createNode();
 
-        const id = this.parseNonComputedProperty();
+        const id = this.parseIdentifierName();
         assert(id.name === 'new', 'New expression must start with `new`');
 
         let expr;
         if (this.match('.')) {
             this.nextToken();
             if (this.lookahead.type === Token.Identifier && this.context.inFunctionBody && this.lookahead.value === 'target') {
-                const property = this.parseNonComputedProperty();
+                const property = this.parseIdentifierName();
                 expr = new Node.MetaProperty(id, property);
             } else {
                 this.throwUnexpectedToken(this.lookahead);
@@ -1174,7 +1174,7 @@ export class Parser {
                 this.context.isBindingElement = false;
                 this.context.isAssignmentTarget = true;
                 this.expect('.');
-                const property = this.parseNonComputedProperty();
+                const property = this.parseIdentifierName();
                 expr = this.finalize(this.startNode(startToken), new Node.StaticMemberExpression(expr, property));
 
             } else if (this.match('(')) {
@@ -1235,7 +1235,7 @@ export class Parser {
                 this.context.isBindingElement = false;
                 this.context.isAssignmentTarget = true;
                 this.expect('.');
-                const property = this.parseNonComputedProperty();
+                const property = this.parseIdentifierName();
                 expr = this.finalize(node, new Node.StaticMemberExpression(expr, property));
 
             } else if (this.lookahead.type === Token.Template && this.lookahead.head) {
@@ -2742,7 +2742,7 @@ export class Parser {
 
         if (!this.match('(')) {
             const token = this.lookahead;
-            id = (!this.context.strict && !isGenerator && this.matchKeyword('yield')) ? this.parseNonComputedProperty() : this.parseVariableIdentifier();
+            id = (!this.context.strict && !isGenerator && this.matchKeyword('yield')) ? this.parseIdentifierName() : this.parseVariableIdentifier();
             if (this.context.strict) {
                 if (this.scanner.isRestrictedWord(token.value)) {
                     this.tolerateUnexpectedToken(token, Messages.StrictFunctionName);
@@ -3114,7 +3114,7 @@ export class Parser {
         const node = this.createNode();
 
         let local;
-        const imported = this.parseNonComputedProperty();
+        const imported = this.parseIdentifierName();
         if (this.matchContextualKeyword('as')) {
             this.nextToken();
             local = this.parseVariableIdentifier();
@@ -3143,7 +3143,7 @@ export class Parser {
     // import <foo> ...;
     parseImportDefaultSpecifier(): Node.ImportDefaultSpecifier {
         const node = this.createNode();
-        const local = this.parseNonComputedProperty();
+        const local = this.parseIdentifierName();
         return this.finalize(node, new Node.ImportDefaultSpecifier(local));
     }
 
@@ -3156,7 +3156,7 @@ export class Parser {
             this.throwError(Messages.NoAsAfterImportNamespace);
         }
         this.nextToken();
-        const local = this.parseNonComputedProperty();
+        const local = this.parseIdentifierName();
 
         return this.finalize(node, new Node.ImportNamespaceSpecifier(local));
     }
@@ -3217,11 +3217,11 @@ export class Parser {
     parseExportSpecifier(): Node.ExportSpecifier {
         const node = this.createNode();
 
-        const local = this.parseNonComputedProperty();
+        const local = this.parseIdentifierName();
         let exported = local;
         if (this.matchContextualKeyword('as')) {
             this.nextToken();
-            exported = this.parseNonComputedProperty();
+            exported = this.parseIdentifierName();
         }
 
         return this.finalize(node, new Node.ExportSpecifier(local, exported));
