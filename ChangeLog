@@ -1,3 +1,11 @@
+2016-10-09: Version 3.1.0
+
+      * Do not implicitly collect comments when comment attachment is specified (issue 1553)
+      * Fix incorrect handling of duplicated proto shorthand fields (issue 1485)
+      * Prohibit initialization in some variants of for statements (issue 1309, 1561)
+      * Fix incorrect parsing of export specifier (issue 1578)
+      * Fix ESTree compatibility for assignment pattern (issue 1575)
+
 2016-09-03: Version 3.0.0
 
       * Support ES2016 exponentiation expression (issue 1490)
