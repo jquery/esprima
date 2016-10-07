@@ -1334,13 +1334,14 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 12.6 Multiplicative Operators
-    // ECMA-262 12.7 Additive Operators
-    // ECMA-262 12.8 Bitwise Shift Operators
-    // ECMA-262 12.9 Relational Operators
-    // ECMA-262 12.10 Equality Operators
-    // ECMA-262 12.11 Binary Bitwise Operators
-    // ECMA-262 12.12 Binary Logical Operators
+    // ECMA-262 12.6 Exponentiation Operators
+    // ECMA-262 12.7 Multiplicative Operators
+    // ECMA-262 12.8 Additive Operators
+    // ECMA-262 12.9 Bitwise Shift Operators
+    // ECMA-262 12.10 Relational Operators
+    // ECMA-262 12.11 Equality Operators
+    // ECMA-262 12.12 Binary Bitwise Operators
+    // ECMA-262 12.13 Binary Logical Operators
 
     binaryPrecedence(token): number {
         const op = token.value;
@@ -1412,7 +1413,7 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 12.13 Conditional Operator
+    // ECMA-262 12.14 Conditional Operator
 
     parseConditionalExpression(): Node.Expression {
         const startToken = this.lookahead;
@@ -1437,7 +1438,7 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 12.14 Assignment Operators
+    // ECMA-262 12.15 Assignment Operators
 
     checkPatternParam(options, param) {
         switch (param.type) {
@@ -1604,7 +1605,7 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 12.15 Comma Operator
+    // ECMA-262 12.16 Comma Operator
 
     parseExpression(): Node.Expression | Node.SequenceExpression {
         const startToken = this.lookahead;
@@ -2915,7 +2916,7 @@ export class Parser {
         return this.finalize(node, new Node.FunctionExpression(null, params.params, method, isGenerator));
     }
 
-    // ECMA-262 14.4 Yield expression
+    // ECMA-262 14.4 Generator Function Definitions
 
     parseYieldExpression(): Node.YieldExpression {
         const node = this.createNode();
