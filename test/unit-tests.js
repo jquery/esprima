@@ -49,7 +49,8 @@ function generateTestCase(testCase) {
             jsx: true,
             loc: true,
             range: true,
-            tokens: true
+            tokens: true,
+            sourceType: testCase.key.match(/\.module$/) ? 'module' : 'script'
         };
         tree = esprima.parse(testCase.case, options);
         tree = JSON.stringify(tree, null, 4);
@@ -75,8 +76,7 @@ total = Object.keys(cases).length;
 Object.keys(cases).forEach(function (key) {
     testCase = cases[key];
 
-    if (testCase.hasOwnProperty('module')
-        || testCase.hasOwnProperty('tree')
+    if (testCase.hasOwnProperty('tree')
         || testCase.hasOwnProperty('tokens')
         || testCase.hasOwnProperty('failure')
         || testCase.hasOwnProperty('result')) {
