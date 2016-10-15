@@ -51,7 +51,7 @@
          * Determines which type of test it is based on the filepath
          */
         function getType() {
-            return _(['module', 'tree', 'tokens', 'failure', 'result']).find(function (type) {
+            return _(['tree', 'tokens', 'failure']).find(function (type) {
                 var suffix = '.' + type;
                 return (filePath.slice(-suffix.length) === suffix);
             });
