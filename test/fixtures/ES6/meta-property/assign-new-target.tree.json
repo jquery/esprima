@@ -178,7 +178,8 @@
                 ]
             },
             "generator": false,
-            "expression": false
+            "expression": false,
+            "async": false
         }
     ],
     "sourceType": "script",

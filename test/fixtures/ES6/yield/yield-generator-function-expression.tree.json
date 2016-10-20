@@ -158,7 +158,8 @@
                                         "body": []
                                     },
                                     "generator": false,
-                                    "expression": false
+                                    "expression": false,
+                                    "async": false
                                 }
                             }
                         ],
@@ -167,7 +168,8 @@
                 ]
             },
             "generator": true,
-            "expression": false
+            "expression": false,
+            "async": false
         }
     ],
     "sourceType": "script",

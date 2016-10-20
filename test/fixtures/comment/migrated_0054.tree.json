@@ -48,6 +48,7 @@
                         },
                         "generator": false,
                         "expression": false,
+                        "async": false,
                         "leadingComments": [
                             {
                                 "type": "Block",
@@ -63,6 +64,7 @@
             },
             "generator": false,
             "expression": false,
+            "async": false,
             "leadingComments": [
                 {
                     "type": "Block",
