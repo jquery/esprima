@@ -195,7 +195,8 @@
                                 ]
                             },
                             "generator": false,
-                            "expression": false
+                            "expression": false,
+                            "async": false
                         },
                         "kind": "constructor",
                         "static": false

@@ -148,7 +148,8 @@
                 "body": []
             },
             "generator": false,
-            "expression": false
+            "expression": false,
+            "async": false
         },
         {
             "range": [
@@ -277,7 +278,8 @@
                 "body": []
             },
             "generator": false,
-            "expression": false
+            "expression": false,
+            "async": false
         },
         {
             "range": [
@@ -464,7 +466,8 @@
                 "body": []
             },
             "generator": false,
-            "expression": false
+            "expression": false,
+            "async": false
         }
     ],
     "sourceType": "script",

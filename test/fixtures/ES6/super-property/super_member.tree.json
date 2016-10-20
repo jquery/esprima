@@ -213,7 +213,8 @@
                                 ]
                             },
                             "generator": false,
-                            "expression": false
+                            "expression": false,
+                            "async": false
                         },
                         "kind": "method",
                         "static": false

@@ -47,12 +47,14 @@
                             "body": []
                         },
                         "generator": false,
-                        "expression": false
+                        "expression": false,
+                        "async": false
                     }
                 ]
             },
             "generator": false,
             "expression": false,
+            "async": false,
             "leadingComments": [
                 {
                     "type": "Block",

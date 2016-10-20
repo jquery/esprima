@@ -48,6 +48,7 @@ export class ArrowFunctionExpression {
     readonly body: BlockStatement | Expression;
     readonly generator: boolean;
     readonly expression: boolean;
+    readonly async: boolean;
     constructor(params: FunctionParameter[], body: BlockStatement | Expression, expression: boolean) {
         this.type = Syntax.ArrowFunctionExpression;
         this.id = null;
@@ -55,6 +56,7 @@ export class ArrowFunctionExpression {
         this.body = body;
         this.generator = false;
         this.expression = expression;
+        this.async = false;
     }
 }
 
@@ -343,6 +345,7 @@ export class FunctionDeclaration {
     readonly body: BlockStatement;
     readonly generator: boolean;
     readonly expression: boolean;
+    readonly async: boolean;
     constructor(id: Identifier | null, params: FunctionParameter[], body: BlockStatement, generator: boolean) {
         this.type = Syntax.FunctionDeclaration;
         this.id = id;
@@ -350,6 +353,7 @@ export class FunctionDeclaration {
         this.body = body;
         this.generator = generator;
         this.expression = false;
+        this.async = false;
     }
 }
 
@@ -360,6 +364,7 @@ export class FunctionExpression {
     readonly body: BlockStatement;
     readonly generator: boolean;
     readonly expression: boolean;
+    readonly async: boolean;
     constructor(id: Identifier | null, params: FunctionParameter[], body: BlockStatement, generator: boolean) {
         this.type = Syntax.FunctionExpression;
         this.id = id;
@@ -367,6 +372,7 @@ export class FunctionExpression {
         this.body = body;
         this.generator = generator;
         this.expression = false;
+        this.async = false;
     }
 }
 

@@ -109,7 +109,8 @@
                     }
                 },
                 "generator": false,
-                "expression": true
+                "expression": true,
+                "async": false
             }
         }
     ],

@@ -164,7 +164,8 @@
                                 "body": []
                             },
                             "generator": false,
-                            "expression": false
+                            "expression": false,
+                            "async": false
                         },
                         "kind": "get",
                         "method": false,
@@ -261,7 +262,8 @@
                                 "body": []
                             },
                             "generator": false,
-                            "expression": false
+                            "expression": false,
+                            "async": false
                         },
                         "kind": "set",
                         "method": false,

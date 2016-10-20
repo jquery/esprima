@@ -161,7 +161,8 @@
                                 "body": []
                             },
                             "generator": true,
-                            "expression": false
+                            "expression": false,
+                            "async": false
                         },
                         "kind": "init",
                         "method": true,

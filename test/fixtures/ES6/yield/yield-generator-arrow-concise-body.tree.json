@@ -161,13 +161,15 @@
                                 }
                             },
                             "generator": false,
-                            "expression": true
+                            "expression": true,
+                            "async": false
                         }
                     }
                 ]
             },
             "generator": true,
-            "expression": false
+            "expression": false,
+            "async": false
         }
     ],
     "sourceType": "script",
