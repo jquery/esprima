@@ -34,6 +34,7 @@ describe('esprima.Syntax', function () {
             ArrowFunctionExpression: 'ArrowFunctionExpression',
             AssignmentExpression: 'AssignmentExpression',
             AssignmentPattern: 'AssignmentPattern',
+            AwaitExpression: 'AwaitExpression',
             BinaryExpression: 'BinaryExpression',
             BlockStatement: 'BlockStatement',
             BreakStatement: 'BreakStatement',
@@ -699,6 +700,24 @@ describe('esprima.parse delegate', function () {
         assert.deepEqual(list[2], 'SequenceExpression');       // x, y
         assert.deepEqual(list[3], 'Identifier');               // z
         assert.deepEqual(list[4], 'ArrowFunctionExpression');  // (x, y) => z
+        assert.deepEqual(list[5], 'ExpressionStatement');
+    });
+
+    it('should be affected by async arrow function cover grammar', function () {
+        var list = [];
+        esprima.parse('async (a) => 1', {}, function (n) {
+            list.push(n.type)
+        });
+
+        // async (a) will be a CallExpression first before being reinterpreted as
+        // the formal parameter list for an (async) ArrowFunctionExpression
+
+        assert.deepEqual(list.length, 7);
+        assert.deepEqual(list[0], 'Identifier');               // async
+        assert.deepEqual(list[1], 'Identifier');               // a
+        assert.deepEqual(list[2], 'CallExpression');           // async (a)
+        assert.deepEqual(list[3], 'Literal');                  // 1
+        assert.deepEqual(list[4], 'ArrowFunctionExpression');  // async (a) => 1
         assert.deepEqual(list[5], 'ExpressionStatement');
     });
 
