@@ -21,6 +21,7 @@ interface Context {
     isModule: boolean;
     allowIn: boolean;
     allowYield: boolean;
+    await: boolean;
     firstCoverInitializedNameError: any;
     isAssignmentTarget: boolean;
     isBindingElement: boolean;
@@ -48,6 +49,7 @@ const ArrowParameterPlaceHolder = 'ArrowParameterPlaceHolder';
 interface ArrowParameterPlaceHolderNode {
     type: string;
     params: Node.Expression[];
+    async: boolean;
 }
 
 interface DeclarationOptions {
@@ -123,6 +125,7 @@ export class Parser {
 
         this.context = {
             isModule: false,
+            await: false,
             allowIn: true,
             allowYield: true,
             firstCoverInitializedNameError: null,
@@ -586,10 +589,10 @@ export class Parser {
 
         switch (this.lookahead.type) {
             case Token.Identifier:
-                if (this.context.isModule && this.lookahead.value === 'await') {
+                if ((this.context.isModule || this.context.await) && this.lookahead.value === 'await') {
                     this.tolerateUnexpectedToken(this.lookahead);
                 }
-                expr = this.finalize(node, new Node.Identifier(this.nextToken().value));
+                expr = this.matchAsyncFunction() ? this.parseFunctionExpression() : this.finalize(node, new Node.Identifier(this.nextToken().value));
                 break;
 
             case Token.NumericLiteral:
@@ -751,6 +754,21 @@ export class Parser {
         return this.finalize(node, new Node.FunctionExpression(null, params.params, method, isGenerator));
     }
 
+    parsePropertyMethodAsyncFunction(): Node.FunctionExpression {
+        const node = this.createNode();
+
+        const previousAllowYield = this.context.allowYield;
+        const previousAwait = this.context.await;
+        this.context.allowYield = false;
+        this.context.await = true;
+        const params = this.parseFormalParameters();
+        const method = this.parsePropertyMethod(params);
+        this.context.allowYield = previousAllowYield;
+        this.context.await = previousAwait;
+
+        return this.finalize(node, new Node.AsyncFunctionExpression(null, params.params, method));
+    }
+
     parseObjectPropertyKey(): Node.PropertyKey {
         const node = this.createNode();
         const token = this.nextToken();
@@ -796,7 +814,7 @@ export class Parser {
 
     parseObjectProperty(hasProto): Node.Property {
         const node = this.createNode();
-        const token = this.lookahead;
+        let token = this.lookahead;
 
         let kind: string;
         let key: Node.PropertyKey | null = null;
@@ -805,10 +823,20 @@ export class Parser {
         let computed = false;
         let method = false;
         let shorthand = false;
+        let isAsync = false;
 
         if (token.type === Token.Identifier) {
+            let id = token.value;
             this.nextToken();
-            key = this.finalize(node, new Node.Identifier(token.value));
+            if (id === 'async') {
+                isAsync = !this.hasLineTerminator && (this.lookahead.type === Token.Identifier);
+                if (isAsync) {
+                    token = this.lookahead;
+                    id = token.value;
+                    this.nextToken();
+                }
+            }
+            key = this.finalize(node, new Node.Identifier(id));
         } else if (this.match('*')) {
             this.nextToken();
         } else {
@@ -817,14 +845,14 @@ export class Parser {
         }
 
         const lookaheadPropertyKey = this.qualifiedPropertyName(this.lookahead);
-        if (token.type === Token.Identifier && token.value === 'get' && lookaheadPropertyKey) {
+        if (token.type === Token.Identifier && !isAsync && token.value === 'get' && lookaheadPropertyKey) {
             kind = 'get';
             computed = this.match('[');
             key = this.parseObjectPropertyKey();
             this.context.allowYield = false;
             value = this.parseGetterMethod();
 
-        } else if (token.type === Token.Identifier && token.value === 'set' && lookaheadPropertyKey) {
+        } else if (token.type === Token.Identifier && !isAsync && token.value === 'set' && lookaheadPropertyKey) {
             kind = 'set';
             computed = this.match('[');
             key = this.parseObjectPropertyKey();
@@ -854,7 +882,7 @@ export class Parser {
                 value = this.inheritCoverGrammar(this.parseAssignmentExpression);
 
             } else if (this.match('(')) {
-                value = this.parsePropertyMethodFunction();
+                value = isAsync ? this.parsePropertyMethodAsyncFunction() : this.parsePropertyMethodFunction();
                 method = true;
 
             } else if (token.type === Token.Identifier) {
@@ -990,7 +1018,8 @@ export class Parser {
             }
             expr = {
                 type: ArrowParameterPlaceHolder,
-                params: []
+                params: [],
+                async: false
             };
         } else {
             const startToken = this.lookahead;
@@ -1003,7 +1032,8 @@ export class Parser {
                 }
                 expr = {
                     type: ArrowParameterPlaceHolder,
-                    params: [expr]
+                    params: [expr],
+                    async: false
                 };
             } else {
                 let arrow = false;
@@ -1037,7 +1067,8 @@ export class Parser {
                             arrow = true;
                             expr = {
                                 type: ArrowParameterPlaceHolder,
-                                params: expressions
+                                params: expressions,
+                                async: false
                             };
                         } else {
                             expressions.push(this.inheritCoverGrammar(this.parseAssignmentExpression));
@@ -1058,7 +1089,8 @@ export class Parser {
                             arrow = true;
                             expr = {
                                 type: ArrowParameterPlaceHolder,
-                                params: [expr]
+                                params: [expr],
+                                async: false
                             };
                         }
                         if (!arrow) {
@@ -1077,7 +1109,8 @@ export class Parser {
                             const params = (expr.type === Syntax.SequenceExpression ? expr.expressions : [expr]);
                             expr = {
                                 type: ArrowParameterPlaceHolder,
-                                params: params
+                                params: params,
+                                async: false
                             };
                         }
                     }
@@ -1155,8 +1188,38 @@ export class Parser {
         return this.finalize(node, expr);
     }
 
+    parseAsyncArgument() {
+        const arg = this.parseAssignmentExpression();
+        this.context.firstCoverInitializedNameError = null;
+        return arg;
+    }
+
+    parseAsyncArguments(): Node.ArgumentListElement[] {
+        this.expect('(');
+        const args: Node.ArgumentListElement[] = [];
+        if (!this.match(')')) {
+            while (true) {
+                const expr = this.match('...') ? this.parseSpreadElement() :
+                    this.isolateCoverGrammar(this.parseAsyncArgument);
+                args.push(expr);
+                if (this.match(')')) {
+                    break;
+                }
+                this.expectCommaSeparator();
+                if (this.match(')')) {
+                    break;
+                }
+            }
+        }
+        this.expect(')');
+
+        return args;
+    }
+
     parseLeftHandSideExpressionAllowCall(): Node.Expression {
         const startToken = this.lookahead;
+        const maybeAsync = this.matchContextualKeyword('async');
+
         const previousAllowIn = this.context.allowIn;
         this.context.allowIn = true;
 
@@ -1181,11 +1244,18 @@ export class Parser {
                 expr = this.finalize(this.startNode(startToken), new Node.StaticMemberExpression(expr, property));
 
             } else if (this.match('(')) {
+                const asyncArrow = maybeAsync && (startToken.lineNumber === this.lookahead.lineNumber);
                 this.context.isBindingElement = false;
                 this.context.isAssignmentTarget = false;
-                const args = this.parseArguments();
+                const args = asyncArrow ? this.parseAsyncArguments() : this.parseArguments();
                 expr = this.finalize(this.startNode(startToken), new Node.CallExpression(expr, args));
-
+                if (asyncArrow && this.match('=>')) {
+                    expr = {
+                        type: ArrowParameterPlaceHolder,
+                        params: args,
+                        async: true
+                    };
+                }
             } else if (this.match('[')) {
                 this.context.isBindingElement = false;
                 this.context.isAssignmentTarget = true;
@@ -1297,6 +1367,13 @@ export class Parser {
 
     // ECMA-262 12.5 Unary Operators
 
+    parseAwaitExpression(): Node.AwaitExpression {
+        const node = this.createNode();
+        this.nextToken();
+        const argument = this.parseUnaryExpression();
+        return this.finalize(node, new Node.AwaitExpression(argument));
+    }
+
     parseUnaryExpression(): Node.Expression {
         let expr;
 
@@ -1311,6 +1388,8 @@ export class Parser {
             }
             this.context.isAssignmentTarget = false;
             this.context.isBindingElement = false;
+        } else if (this.context.await && this.matchContextualKeyword('await')) {
+            expr = this.parseAwaitExpression();
         } else {
             expr = this.parseUpdateExpression();
         }
@@ -1458,13 +1537,12 @@ export class Parser {
                     }
                 }
                 break;
-            case Syntax.YieldExpression:
-                break;
-            default:
-                assert(param.type === Syntax.ObjectPattern, 'Invalid type');
+            case Syntax.ObjectPattern:
                 for (let i = 0; i < param.properties.length; i++) {
                     this.checkPatternParam(options, param.properties[i].value);
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -1473,11 +1551,13 @@ export class Parser {
         let params = [expr];
         let options;
 
+        let asyncArrow = false;
         switch (expr.type) {
             case Syntax.Identifier:
                 break;
             case ArrowParameterPlaceHolder:
                 params = expr.params;
+                asyncArrow = expr.async;
                 break;
             default:
                 return null;
@@ -1499,6 +1579,8 @@ export class Parser {
                     delete param.right.argument;
                     delete param.right.delegate;
                 }
+            } else if (asyncArrow && param.type === Syntax.Identifier && param.name === 'await') {
+                this.throwUnexpectedToken(this.lookahead);
             }
             this.checkPatternParam(options, param);
             params[i] = param;
@@ -1536,11 +1618,21 @@ export class Parser {
             let token = startToken;
             expr = this.parseConditionalExpression();
 
+            if (token.type === Token.Identifier && (token.lineNumber === this.lookahead.lineNumber) && token.value === 'async' && (this.lookahead.type === Token.Identifier)) {
+                const arg = this.parsePrimaryExpression();
+                expr = {
+                    type: ArrowParameterPlaceHolder,
+                    params: [arg],
+                    async: true
+                };
+            }
+
             if (expr.type === ArrowParameterPlaceHolder || this.match('=>')) {
 
                 // ECMA-262 14.2 Arrow Function Definitions
                 this.context.isAssignmentTarget = false;
                 this.context.isBindingElement = false;
+                const isAsync = expr.async;
                 const list = this.reinterpretAsCoverFormalsList(expr);
 
                 if (list) {
@@ -1551,7 +1643,9 @@ export class Parser {
 
                     const previousStrict = this.context.strict;
                     const previousAllowYield = this.context.allowYield;
+                    const previousAwait = this.context.await;
                     this.context.allowYield = true;
+                    this.context.await = isAsync;
 
                     const node = this.startNode(startToken);
                     this.expect('=>');
@@ -1565,10 +1659,12 @@ export class Parser {
                     if (this.context.strict && list.stricted) {
                         this.tolerateUnexpectedToken(list.stricted, list.message);
                     }
-                    expr = this.finalize(node, new Node.ArrowFunctionExpression(list.params, body, expression));
+                    expr = isAsync ? this.finalize(node, new Node.AsyncArrowFunctionExpression(list.params, body, expression)) :
+                        this.finalize(node, new Node.ArrowFunctionExpression(list.params, body, expression));
 
                     this.context.strict = previousStrict;
                     this.context.allowYield = previousAllowYield;
+                    this.context.await = previousAwait;
                 }
             } else {
 
@@ -1901,7 +1997,7 @@ export class Parser {
                     this.throwUnexpectedToken(token);
                 }
             }
-        } else if (this.context.isModule && token.type === Token.Identifier && token.value === 'await') {
+        } else if ((this.context.isModule || this.context.await) && token.type === Token.Identifier && token.value === 'await') {
             this.tolerateUnexpectedToken(token);
         }
 
@@ -2481,7 +2577,7 @@ export class Parser {
                 break;
 
             case Token.Identifier:
-                statement = this.parseLabelledStatement();
+                statement = this.matchAsyncFunction() ? this.parseFunctionDeclaration() : this.parseLabelledStatement();
                 break;
 
             case Token.Keyword:
@@ -2679,11 +2775,35 @@ export class Parser {
         };
     }
 
-    parseFunctionDeclaration(identifierIsOptional?: boolean): Node.FunctionDeclaration {
+    matchAsyncFunction(): boolean {
+        let match = this.matchContextualKeyword('async');
+        if (match) {
+            const previousIndex = this.scanner.index;
+            const previousLineNumber = this.scanner.lineNumber;
+            const previousLineStart = this.scanner.lineStart;
+            this.collectComments();
+            const next = <any>this.scanner.lex();
+            this.scanner.index = previousIndex;
+            this.scanner.lineNumber = previousLineNumber;
+            this.scanner.lineStart = previousLineStart;
+
+            match = (previousLineNumber === next.lineNumber) && ((next.type === Token.Keyword) || (next.value === 'function'));
+        }
+
+        return match;
+    }
+
+    parseFunctionDeclaration(identifierIsOptional?: boolean): Node.AsyncFunctionDeclaration | Node.FunctionDeclaration {
         const node = this.createNode();
+
+        const isAsync = this.matchContextualKeyword('async');
+        if (isAsync) {
+            this.nextToken();
+        }
+
         this.expectKeyword('function');
 
-        const isGenerator = this.match('*');
+        const isGenerator = isAsync ? false : this.match('*');
         if (isGenerator) {
             this.nextToken();
         }
@@ -2710,7 +2830,9 @@ export class Parser {
             }
         }
 
+        const previousAllowAwait = this.context.await;
         const previousAllowYield = this.context.allowYield;
+        this.context.await = isAsync;
         this.context.allowYield = !isGenerator;
 
         const formalParameters = this.parseFormalParameters(firstRestricted);
@@ -2731,16 +2853,24 @@ export class Parser {
         }
 
         this.context.strict = previousStrict;
+        this.context.await = previousAllowAwait;
         this.context.allowYield = previousAllowYield;
 
-        return this.finalize(node, new Node.FunctionDeclaration(id, params, body, isGenerator));
+        return isAsync ? this.finalize(node, new Node.AsyncFunctionDeclaration(id, params, body)) :
+            this.finalize(node, new Node.FunctionDeclaration(id, params, body, isGenerator));
     }
 
-    parseFunctionExpression(): Node.FunctionExpression {
+    parseFunctionExpression(): Node.AsyncFunctionExpression | Node.FunctionExpression {
         const node = this.createNode();
+
+        const isAsync = this.matchContextualKeyword('async');
+        if (isAsync) {
+            this.nextToken();
+        }
+
         this.expectKeyword('function');
 
-        const isGenerator = this.match('*');
+        const isGenerator = isAsync ? false : this.match('*');
         if (isGenerator) {
             this.nextToken();
         }
@@ -2749,7 +2879,9 @@ export class Parser {
         let id: Node.Identifier | null = null;
         let firstRestricted;
 
+        const previousAllowAwait = this.context.await;
         const previousAllowYield = this.context.allowYield;
+        this.context.await = isAsync;
         this.context.allowYield = !isGenerator;
 
         if (!this.match('(')) {
@@ -2787,9 +2919,11 @@ export class Parser {
             this.tolerateUnexpectedToken(stricted, message);
         }
         this.context.strict = previousStrict;
+        this.context.await = previousAllowAwait;
         this.context.allowYield = previousAllowYield;
 
-        return this.finalize(node, new Node.FunctionExpression(id, params, body, isGenerator));
+        return isAsync ? this.finalize(node, new Node.AsyncFunctionExpression(id, params, body)) :
+            this.finalize(node, new Node.FunctionExpression(id, params, body, isGenerator));
     }
 
     // ECMA-262 14.1.1 Directive Prologues
@@ -2954,6 +3088,7 @@ export class Parser {
         let computed = false;
         let method = false;
         let isStatic = false;
+        let isAsync = false;
 
         if (this.match('*')) {
             this.nextToken();
@@ -2969,6 +3104,14 @@ export class Parser {
                     this.nextToken();
                 } else {
                     key = this.parseObjectPropertyKey();
+                }
+            }
+            isAsync = (token.type === Token.Identifier) && !this.hasLineTerminator && (this.lookahead.type === Token.Identifier) && (token.value === 'async');
+            if (isAsync) {
+                token = this.lookahead;
+                key = this.parseObjectPropertyKey();
+                if (token.type === Token.Identifier && ['get', 'set', 'constructor'].indexOf(token.value) >= 0) {
+                    this.tolerateUnexpectedToken(token);
                 }
             }
         }
@@ -2997,7 +3140,7 @@ export class Parser {
 
         if (!kind && key && this.match('(')) {
             kind = 'init';
-            value = this.parsePropertyMethodFunction();
+            value = isAsync ? this.parsePropertyMethodAsyncFunction() : this.parsePropertyMethodFunction();
             method = true;
         }
 
@@ -3308,6 +3451,10 @@ export class Parser {
                 default:
                     this.throwUnexpectedToken(this.lookahead);
             }
+            exportDeclaration = this.finalize(node, new Node.ExportNamedDeclaration(declaration, [], null));
+
+        } else if (this.matchAsyncFunction()) {
+            const declaration = this.parseFunctionDeclaration();
             exportDeclaration = this.finalize(node, new Node.ExportNamedDeclaration(declaration, [], null));
 
         } else {
