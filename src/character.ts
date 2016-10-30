@@ -55,8 +55,8 @@ export const Character = {
 
     isHexDigit(cp: number): boolean {
         return (cp >= 0x30 && cp <= 0x39) ||    // 0..9
-            (cp >= 0x41 && cp <= 0x48) ||       // A..H
-            (cp >= 0x61 && cp <= 0x68);         // a..h
+            (cp >= 0x41 && cp <= 0x46) ||       // A..F
+            (cp >= 0x61 && cp <= 0x66);         // a..f
     },
 
     isOctalDigit(cp: number): boolean {
