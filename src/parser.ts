@@ -1629,6 +1629,8 @@ export class Parser {
 
     parseStatementListItem(): Node.StatementListItem {
         let statement = null;
+        this.context.isAssignmentTarget = true;
+        this.context.isBindingElement = true;
         if (this.lookahead.type === Token.Keyword) {
             switch (this.lookahead.value) {
                 case 'export':
@@ -2444,9 +2446,6 @@ export class Parser {
     // ECMA-262 13 Statements
 
     parseStatement(): Node.Statement {
-        this.context.isAssignmentTarget = true;
-        this.context.isBindingElement = true;
-
         let statement = null;
         switch (this.lookahead.type) {
             case Token.BooleanLiteral:
