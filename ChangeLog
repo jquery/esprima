@@ -1,3 +1,8 @@
+2016-10-31: Version 3.1.1
+
+      * Fix assignment expression problem in an export declaration (issue 1596)
+      * Fix incorrect tokenization of hex digits (issue 1605)
+
 2016-10-09: Version 3.1.0
 
       * Do not implicitly collect comments when comment attachment is specified (issue 1553)
