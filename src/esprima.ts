@@ -104,4 +104,4 @@ export function tokenize(code: string, options, delegate) {
 export { Syntax } from './syntax';
 
 // Sync with *.json manifests.
-export const version = '3.1.0';
+export const version = '3.1.1';
