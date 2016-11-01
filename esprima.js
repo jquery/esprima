@@ -155,7 +155,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var syntax_1 = __webpack_require__(2);
 	exports.Syntax = syntax_1.Syntax;
 	// Sync with *.json manifests.
-	exports.version = '3.1.0';
+	exports.version = '3.1.1';
 
 
 /***/ },
@@ -1786,6 +1786,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // ECMA-262 13.2 Block
 	    Parser.prototype.parseStatementListItem = function () {
 	        var statement = null;
+	        this.context.isAssignmentTarget = true;
+	        this.context.isBindingElement = true;
 	        if (this.lookahead.type === token_1.Token.Keyword) {
 	            switch (this.lookahead.value) {
 	                case 'export':
@@ -2483,8 +2485,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    // ECMA-262 13 Statements
 	    Parser.prototype.parseStatement = function () {
-	        this.context.isAssignmentTarget = true;
-	        this.context.isBindingElement = true;
 	        var statement = null;
 	        switch (this.lookahead.type) {
 	            case token_1.Token.BooleanLiteral:
@@ -4664,8 +4664,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    isHexDigit: function (cp) {
 	        return (cp >= 0x30 && cp <= 0x39) ||
-	            (cp >= 0x41 && cp <= 0x48) ||
-	            (cp >= 0x61 && cp <= 0x68); // a..h
+	            (cp >= 0x41 && cp <= 0x46) ||
+	            (cp >= 0x61 && cp <= 0x66); // a..f
 	    },
 	    isOctalDigit: function (cp) {
 	        return (cp >= 0x30 && cp <= 0x37); // 0..7
