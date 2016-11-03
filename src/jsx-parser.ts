@@ -75,6 +75,16 @@ export class JSXParser extends Parser {
         this.nextToken();
     }
 
+    reenterJSX() {
+        this.startJSX();
+        this.expectJSX('}');
+
+        // Pop the closing '}' added from the lookahead.
+        if (this.config.tokens) {
+            this.tokens.pop();
+        }
+    }
+
     createJSXNode(): MetaJSXNode {
         this.collectComments();
         return {
@@ -362,14 +372,14 @@ export class JSXParser extends Parser {
         const node = this.createJSXNode();
 
         this.expectJSX('{');
-        let expression = null;
         this.finishJSX();
+
         if (this.match('}')) {
             this.tolerateError('JSX attributes must only be assigned a non-empty expression');
         }
-        expression = this.parseAssignmentExpression();
-        this.startJSX();
-        this.expectJSX('}');
+
+        const expression = this.parseAssignmentExpression();
+        this.reenterJSX();
 
         return this.finalize(node, new JSXNode.JSXExpressionContainer(expression));
     }
@@ -397,9 +407,8 @@ export class JSXParser extends Parser {
 
         this.finishJSX();
         const argument = this.parseAssignmentExpression();
-        this.startJSX();
+        this.reenterJSX();
 
-        this.expectJSX('}');
         return this.finalize(node, new JSXNode.JSXSpreadAttribute(argument));
     }
 
@@ -461,25 +470,20 @@ export class JSXParser extends Parser {
         return this.finalize(node, new JSXNode.JSXEmptyExpression());
     }
 
-    parseJSXExpression(): Node.Expression | JSXNode.JSXEmptyExpression {
-        let expression;
-
-        if (this.matchJSX('}')) {
-            expression = this.parseJSXEmptyExpression();
-        } else {
-            this.finishJSX();
-            expression = this.parseAssignmentExpression();
-            this.startJSX();
-        }
-
-        return expression;
-    }
-
     parseJSXExpressionContainer(): JSXNode.JSXExpressionContainer {
         const node = this.createJSXNode();
         this.expectJSX('{');
-        const expression = this.parseJSXExpression();
-        this.expectJSX('}');
+
+        let expression: Node.Expression | JSXNode.JSXEmptyExpression;
+        if (this.matchJSX('}')) {
+            expression = this.parseJSXEmptyExpression();
+            this.expectJSX('}');
+        } else {
+            this.finishJSX();
+            expression = this.parseAssignmentExpression();
+            this.reenterJSX();
+        }
+
         return this.finalize(node, new JSXNode.JSXExpressionContainer(expression));
     }
 
