@@ -3274,13 +3274,24 @@ export class Parser {
     parseImportSpecifier(): Node.ImportSpecifier {
         const node = this.createNode();
 
-        let local;
-        const imported = this.parseIdentifierName();
-        if (this.matchContextualKeyword('as')) {
-            this.nextToken();
-            local = this.parseVariableIdentifier();
-        } else {
+        let imported: Node.Identifier;
+        let local: Node.Identifier;
+        if (this.lookahead.type === Token.Identifier) {
+            imported = this.parseVariableIdentifier();
             local = imported;
+            if (this.matchContextualKeyword('as')) {
+                this.nextToken();
+                local = this.parseVariableIdentifier();
+            }
+        } else {
+            imported = this.parseIdentifierName();
+            local = imported;
+            if (this.matchContextualKeyword('as')) {
+                this.nextToken();
+                local = this.parseVariableIdentifier();
+            } else {
+                this.throwUnexpectedToken(this.nextToken());
+            }
         }
 
         return this.finalize(node, new Node.ImportSpecifier(local, imported));
