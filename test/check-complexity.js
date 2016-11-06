@@ -27,7 +27,7 @@
 var escomplex = require('escomplex-js'),
     content = require('fs').readFileSync(require.resolve('../'), 'utf-8'),
     opt = { logicalor: false, switchcase: false },
-    MAX = 22,
+    MAX = 24,
     list = [], bad = [];
 
 escomplex.analyse(content, opt).functions.forEach(function (entry) {
