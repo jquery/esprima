@@ -1050,8 +1050,18 @@ export class Parser {
                             break;
                         }
                         this.nextToken();
-
-                        if (this.match('...')) {
+                        if (this.match(')')) {
+                            this.nextToken();
+                            for (let i = 0; i < expressions.length; i++) {
+                                this.reinterpretExpressionAsPattern(expressions[i]);
+                            }
+                            arrow = true;
+                            expr = {
+                                type: ArrowParameterPlaceHolder,
+                                params: expressions,
+                                async: false
+                            };
+                        } else if (this.match('...')) {
                             if (!this.context.isBindingElement) {
                                 this.throwUnexpectedToken(this.lookahead);
                             }
