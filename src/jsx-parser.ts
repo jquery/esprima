@@ -189,6 +189,18 @@ export class JSXParser extends Parser {
             };
         }
 
+        // `
+        if (cp === 96) {
+            // Only placeholder, since it will be rescanned as a real assignment expression.
+            return {
+                type: Token.Template,
+                lineNumber: this.scanner.lineNumber,
+                lineStart: this.scanner.lineStart,
+                start: this.scanner.index,
+                end: this.scanner.index
+            };
+        }
+
         // Identifer can not contain backslash (char code 92).
         if (Character.isIdentifierStart(cp) && (cp !== 92)) {
             const start = this.scanner.index;
