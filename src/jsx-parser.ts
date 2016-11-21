@@ -102,27 +102,54 @@ export class JSXParser extends Parser {
         };
     }
 
-    scanXHTMLEntity() {
+    scanXHTMLEntity(quote: string) {
         let result = '&';
 
-        let str = '';
-        while (!this.scanner.eof()) {
-            const ch = this.scanner.source[this.scanner.index++];
-            if (ch === ';') {
-                if (str[0] === '#') {
-                    str = str.substr(1);
-                    const hex = (str[0] === 'x');
-                    const cp = hex ? parseInt('0' + str, 16) : parseInt(str, 10);
-                    result = String.fromCharCode(cp);
-                } else if (XHTMLEntities[str]) {
-                    result = XHTMLEntities[str];
-                } else {
-                    result += ch;
-                }
+        let valid = true;
+        let terminated = false;
+        let numeric = false;
+        let hex = false;
+
+        while (!this.scanner.eof() && valid && !terminated) {
+            const ch = this.scanner.source[this.scanner.index];
+            if (ch === quote) {
                 break;
             }
-            str += ch;
+            terminated = (ch === ';');
             result += ch;
+            ++this.scanner.index;
+            if (!terminated) {
+                switch (result.length) {
+                    case 2:
+                        // e.g. '&#123;'
+                        numeric = (ch === '#');
+                        break;
+                    case 3:
+                        if (numeric) {
+                            // e.g. '&#x41;'
+                            hex = (ch === 'x');
+                            valid = hex || Character.isDecimalDigit(ch.charCodeAt(0));
+                            numeric = numeric && !hex;
+                        }
+                        break;
+                    default:
+                        valid = valid && !(numeric && !Character.isDecimalDigit(ch.charCodeAt(0)));
+                        valid = valid && !(hex && !Character.isHexDigit(ch.charCodeAt(0)));
+                        break;
+                }
+            }
+        }
+
+        if (valid && terminated && result.length > 2) {
+            // e.g. '&#x41;' becomes just '#x41'
+            const str = result.substr(1, result.length - 2);
+            if (numeric && str.length > 1) {
+                result = String.fromCharCode(parseInt(str.substr(1), 10));
+            } else if (hex && str.length > 2) {
+                result = String.fromCharCode(parseInt('0' + str.substr(1), 16));
+            } else if (!numeric && !hex && XHTMLEntities[str]) {
+                result = XHTMLEntities[str];
+            }
         }
 
         return result;
@@ -156,7 +183,7 @@ export class JSXParser extends Parser {
                 if (ch === quote) {
                     break;
                 } else if (ch === '&') {
-                    str += this.scanXHTMLEntity();
+                    str += this.scanXHTMLEntity(quote);
                 } else {
                     str += ch;
                 }
