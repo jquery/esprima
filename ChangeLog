@@ -1,3 +1,10 @@
+2016-11-24: Version 3.1.2
+
+      * Ensure that import specifier is more restrictive (issue 1615)
+      * Fix duplicated JSX tokens (issue 1613)
+      * Scan template literal in a JSX expression container (issue 1622)
+      * Improve XHTML entity scanning in JSX (issue 1629)
+
 2016-10-31: Version 3.1.1
 
       * Fix assignment expression problem in an export declaration (issue 1596)
