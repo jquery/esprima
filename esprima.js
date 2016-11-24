@@ -58,7 +58,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
-	  Copyright (c) jQuery Foundation, Inc. and Contributors, All Rights Reserved.
+	  Copyright JS Foundation and other contributors, https://js.foundation/
 
 	  Redistribution and use in source and binary forms, with or without
 	  modification, are permitted provided that the following conditions are met:
@@ -155,7 +155,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var syntax_1 = __webpack_require__(2);
 	exports.Syntax = syntax_1.Syntax;
 	// Sync with *.json manifests.
-	exports.version = '3.1.1';
+	exports.version = '3.1.2';
 
 
 /***/ },
@@ -3068,14 +3068,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // import {<foo as bar>} ...;
 	    Parser.prototype.parseImportSpecifier = function () {
 	        var node = this.createNode();
+	        var imported;
 	        var local;
-	        var imported = this.parseIdentifierName();
-	        if (this.matchContextualKeyword('as')) {
-	            this.nextToken();
-	            local = this.parseVariableIdentifier();
+	        if (this.lookahead.type === token_1.Token.Identifier) {
+	            imported = this.parseVariableIdentifier();
+	            local = imported;
+	            if (this.matchContextualKeyword('as')) {
+	                this.nextToken();
+	                local = this.parseVariableIdentifier();
+	            }
 	        }
 	        else {
+	            imported = this.parseIdentifierName();
 	            local = imported;
+	            if (this.matchContextualKeyword('as')) {
+	                this.nextToken();
+	                local = this.parseVariableIdentifier();
+	            }
+	            else {
+	                this.throwUnexpectedToken(this.nextToken());
+	            }
 	        }
 	        return this.finalize(node, new Node.ImportSpecifier(local, imported));
 	    };
@@ -5356,6 +5368,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // Prime the next lookahead.
 	        this.nextToken();
 	    };
+	    JSXParser.prototype.reenterJSX = function () {
+	        this.startJSX();
+	        this.expectJSX('}');
+	        // Pop the closing '}' added from the lookahead.
+	        if (this.config.tokens) {
+	            this.tokens.pop();
+	        }
+	    };
 	    JSXParser.prototype.createJSXNode = function () {
 	        this.collectComments();
 	        return {
@@ -5371,28 +5391,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	            column: this.scanner.index - this.scanner.lineStart
 	        };
 	    };
-	    JSXParser.prototype.scanXHTMLEntity = function () {
+	    JSXParser.prototype.scanXHTMLEntity = function (quote) {
 	        var result = '&';
-	        var str = '';
-	        while (!this.scanner.eof()) {
-	            var ch = this.scanner.source[this.scanner.index++];
-	            if (ch === ';') {
-	                if (str[0] === '#') {
-	                    str = str.substr(1);
-	                    var hex = (str[0] === 'x');
-	                    var cp = hex ? parseInt('0' + str, 16) : parseInt(str, 10);
-	                    result = String.fromCharCode(cp);
-	                }
-	                else if (xhtml_entities_1.XHTMLEntities[str]) {
-	                    result = xhtml_entities_1.XHTMLEntities[str];
-	                }
-	                else {
-	                    result += ch;
-	                }
+	        var valid = true;
+	        var terminated = false;
+	        var numeric = false;
+	        var hex = false;
+	        while (!this.scanner.eof() && valid && !terminated) {
+	            var ch = this.scanner.source[this.scanner.index];
+	            if (ch === quote) {
 	                break;
 	            }
-	            str += ch;
+	            terminated = (ch === ';');
 	            result += ch;
+	            ++this.scanner.index;
+	            if (!terminated) {
+	                switch (result.length) {
+	                    case 2:
+	                        // e.g. '&#123;'
+	                        numeric = (ch === '#');
+	                        break;
+	                    case 3:
+	                        if (numeric) {
+	                            // e.g. '&#x41;'
+	                            hex = (ch === 'x');
+	                            valid = hex || character_1.Character.isDecimalDigit(ch.charCodeAt(0));
+	                            numeric = numeric && !hex;
+	                        }
+	                        break;
+	                    default:
+	                        valid = valid && !(numeric && !character_1.Character.isDecimalDigit(ch.charCodeAt(0)));
+	                        valid = valid && !(hex && !character_1.Character.isHexDigit(ch.charCodeAt(0)));
+	                        break;
+	                }
+	            }
+	        }
+	        if (valid && terminated && result.length > 2) {
+	            // e.g. '&#x41;' becomes just '#x41'
+	            var str = result.substr(1, result.length - 2);
+	            if (numeric && str.length > 1) {
+	                result = String.fromCharCode(parseInt(str.substr(1), 10));
+	            }
+	            else if (hex && str.length > 2) {
+	                result = String.fromCharCode(parseInt('0' + str.substr(1), 16));
+	            }
+	            else if (!numeric && !hex && xhtml_entities_1.XHTMLEntities[str]) {
+	                result = xhtml_entities_1.XHTMLEntities[str];
+	            }
 	        }
 	        return result;
 	    };
@@ -5422,7 +5467,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    break;
 	                }
 	                else if (ch === '&') {
-	                    str += this.scanXHTMLEntity();
+	                    str += this.scanXHTMLEntity(quote);
 	                }
 	                else {
 	                    str += ch;
@@ -5450,6 +5495,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                lineNumber: this.scanner.lineNumber,
 	                lineStart: this.scanner.lineStart,
 	                start: start,
+	                end: this.scanner.index
+	            };
+	        }
+	        // `
+	        if (cp === 96) {
+	            // Only placeholder, since it will be rescanned as a real assignment expression.
+	            return {
+	                type: token_1.Token.Template,
+	                lineNumber: this.scanner.lineNumber,
+	                lineStart: this.scanner.lineStart,
+	                start: this.scanner.index,
 	                end: this.scanner.index
 	            };
 	        }
@@ -5611,14 +5667,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    JSXParser.prototype.parseJSXExpressionAttribute = function () {
 	        var node = this.createJSXNode();
 	        this.expectJSX('{');
-	        var expression = null;
 	        this.finishJSX();
 	        if (this.match('}')) {
 	            this.tolerateError('JSX attributes must only be assigned a non-empty expression');
 	        }
-	        expression = this.parseAssignmentExpression();
-	        this.startJSX();
-	        this.expectJSX('}');
+	        var expression = this.parseAssignmentExpression();
+	        this.reenterJSX();
 	        return this.finalize(node, new JSXNode.JSXExpressionContainer(expression));
 	    };
 	    JSXParser.prototype.parseJSXAttributeValue = function () {
@@ -5641,8 +5695,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.expectJSX('...');
 	        this.finishJSX();
 	        var argument = this.parseAssignmentExpression();
-	        this.startJSX();
-	        this.expectJSX('}');
+	        this.reenterJSX();
 	        return this.finalize(node, new JSXNode.JSXSpreadAttribute(argument));
 	    };
 	    JSXParser.prototype.parseJSXAttributes = function () {
@@ -5692,23 +5745,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.lastMarker.lineStart = this.scanner.lineStart;
 	        return this.finalize(node, new JSXNode.JSXEmptyExpression());
 	    };
-	    JSXParser.prototype.parseJSXExpression = function () {
+	    JSXParser.prototype.parseJSXExpressionContainer = function () {
+	        var node = this.createJSXNode();
+	        this.expectJSX('{');
 	        var expression;
 	        if (this.matchJSX('}')) {
 	            expression = this.parseJSXEmptyExpression();
+	            this.expectJSX('}');
 	        }
 	        else {
 	            this.finishJSX();
 	            expression = this.parseAssignmentExpression();
-	            this.startJSX();
+	            this.reenterJSX();
 	        }
-	        return expression;
-	    };
-	    JSXParser.prototype.parseJSXExpressionContainer = function () {
-	        var node = this.createJSXNode();
-	        this.expectJSX('{');
-	        var expression = this.parseJSXExpression();
-	        this.expectJSX('}');
 	        return this.finalize(node, new JSXNode.JSXExpressionContainer(expression));
 	    };
 	    JSXParser.prototype.parseJSXChildren = function () {
