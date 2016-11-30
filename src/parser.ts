@@ -828,15 +828,24 @@ export class Parser {
         if (token.type === Token.Identifier) {
             let id = token.value;
             this.nextToken();
-            if (id === 'async') {
-                isAsync = !this.hasLineTerminator && (this.lookahead.type === Token.Identifier);
-                if (isAsync) {
-                    token = this.lookahead;
-                    id = token.value;
-                    this.nextToken();
+            if (id === 'async' && !this.hasLineTerminator) {
+                computed = this.match('[');
+                if (computed) {
+                    isAsync = true;
+                    key = this.parseObjectPropertyKey();
+                } else {
+                    const punctuator = this.lookahead.value;
+                    if (punctuator !== ':' && punctuator !== '(' && punctuator !== '*') {
+                        isAsync = true;
+                        token = this.lookahead;
+                        id = token.value;
+                        this.nextToken();
+                    }
+                    key = this.finalize(node, new Node.Identifier(id));
                 }
+            } else {
+                key = this.finalize(node, new Node.Identifier(id));
             }
-            key = this.finalize(node, new Node.Identifier(id));
         } else if (this.match('*')) {
             this.nextToken();
         } else {
@@ -871,7 +880,7 @@ export class Parser {
             }
 
             kind = 'init';
-            if (this.match(':')) {
+            if (this.match(':') && !isAsync) {
                 if (!computed && this.isPropertyKey(key, '__proto__')) {
                     if (hasProto.value) {
                         this.tolerateError(Messages.DuplicateProtoProperty);
