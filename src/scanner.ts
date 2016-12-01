@@ -30,6 +30,7 @@ export class Scanner {
     lineNumber: number;
     lineStart: number;
     curlyStack: string[];
+    escapedChars: number;
 
     constructor(code: string, handler: ErrorHandler) {
         this.source = code;
@@ -392,10 +393,7 @@ export class Scanner {
             }
         }
 
-        return {
-            escapedChars: 0,
-            id: this.source.slice(start, this.index);
-        };
+        return this.source.slice(start, this.index);
     };
 
     getComplexIdentifier(): string {
@@ -403,7 +401,7 @@ export class Scanner {
         let id = Character.fromCodePoint(cp);
         this.index += id.length;
 
-        let escapedChars = 0;
+        this.escapedChars = 0;
 
         // '\u' (U+005C, U+0075) denotes an escaped character.
         let ch;
@@ -423,7 +421,7 @@ export class Scanner {
                 }
             }
             id = ch;
-            ++escapedChars;
+            ++this.escapedChars;
         }
 
         while (!this.eof()) {
@@ -453,14 +451,11 @@ export class Scanner {
                     }
                 }
                 id += ch;
-                ++escapedChars;
+                ++this.escapedChars;
             }
         }
 
-        return {
-            escapedChars: escapedChars,
-            id: id
-        };
+        return id;
     };
 
     octalToDecimal(ch: string) {
@@ -491,10 +486,8 @@ export class Scanner {
         let type: Token;
         const start = this.index;
 
-        const idResult = (this.source.charCodeAt(start) === 0x5C) ? this.getComplexIdentifier() : this.getIdentifier();
-
         // Backslash (U+005C) starts an escaped character.
-        const id = idResult.id;
+        const id = (this.source.charCodeAt(start) === 0x5C) ? this.getComplexIdentifier() : this.getIdentifier();
 
         // There is no keyword or literal with only one character.
         // Thus, it must be an identifier.
@@ -510,7 +503,7 @@ export class Scanner {
             type = Token.Identifier;
         }
 
-        if (idResult.escapedChars && type !== Token.Identifier)
+        if (this.escapedChars && type !== Token.Identifier)
             this.errorHandler.throwError(this.index, this.lineNumber,
             this.index - this.lineStart, "Keyword must not contain escaped characters");
 
