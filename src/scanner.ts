@@ -392,13 +392,18 @@ export class Scanner {
             }
         }
 
-        return this.source.slice(start, this.index);
+        return {
+            escapedChars: 0,
+            id: this.source.slice(start, this.index);
+        };
     };
 
     getComplexIdentifier(): string {
         let cp = this.codePointAt(this.index);
         let id = Character.fromCodePoint(cp);
         this.index += id.length;
+
+        let escapedChars = 0;
 
         // '\u' (U+005C, U+0075) denotes an escaped character.
         let ch;
@@ -418,6 +423,7 @@ export class Scanner {
                 }
             }
             id = ch;
+            ++escapedChars;
         }
 
         while (!this.eof()) {
@@ -447,10 +453,14 @@ export class Scanner {
                     }
                 }
                 id += ch;
+                ++escapedChars;
             }
         }
 
-        return id;
+        return {
+            escapedChars: escapedChars,
+            id: id
+        };
     };
 
     octalToDecimal(ch: string) {
@@ -481,8 +491,10 @@ export class Scanner {
         let type: Token;
         const start = this.index;
 
+        const idResult = (this.source.charCodeAt(start) === 0x5C) ? this.getComplexIdentifier() : this.getIdentifier();
+
         // Backslash (U+005C) starts an escaped character.
-        const id = (this.source.charCodeAt(start) === 0x5C) ? this.getComplexIdentifier() : this.getIdentifier();
+        const id = idResult.id;
 
         // There is no keyword or literal with only one character.
         // Thus, it must be an identifier.
@@ -497,6 +509,9 @@ export class Scanner {
         } else {
             type = Token.Identifier;
         }
+
+        if (idResult.escapedChars && type !== Token.Identifier)
+            throw new Error("Keyword must not contain escaped characters");
 
         return {
             type: type,
