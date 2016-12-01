@@ -511,7 +511,8 @@ export class Scanner {
         }
 
         if (idResult.escapedChars && type !== Token.Identifier)
-            throw new Error("Keyword must not contain escaped characters");
+            this.errorHandler.throwError(this.index, this.lineNumber,
+            this.index - this.lineStart, "Keyword must not contain escaped characters");
 
         return {
             type: type,
