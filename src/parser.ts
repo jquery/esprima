@@ -3124,12 +3124,15 @@ export class Parser {
                     key = this.parseObjectPropertyKey();
                 }
             }
-            isAsync = (token.type === Token.Identifier) && !this.hasLineTerminator && (this.lookahead.type === Token.Identifier) && (token.value === 'async');
-            if (isAsync) {
-                token = this.lookahead;
-                key = this.parseObjectPropertyKey();
-                if (token.type === Token.Identifier && ['get', 'set', 'constructor'].indexOf(token.value) >= 0) {
-                    this.tolerateUnexpectedToken(token);
+            if ((token.type === Token.Identifier) && !this.hasLineTerminator && (token.value === 'async')) {
+                const punctuator = this.lookahead.value;
+                if (punctuator !== ':' && punctuator !== '(' && punctuator !== '*') {
+                    isAsync = true;
+                    token = this.lookahead;
+                    key = this.parseObjectPropertyKey();
+                    if (token.type === Token.Identifier && ['get', 'set', 'constructor'].indexOf(token.value) >= 0) {
+                        this.tolerateUnexpectedToken(token);
+                    }
                 }
             }
         }
