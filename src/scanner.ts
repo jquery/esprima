@@ -506,8 +506,7 @@ export class Scanner {
 
         if (this.escapedChars && type !== Token.Identifier) {
         	let col: number = ( start - this.lineStart ) + 1;
-            this.errorHandler.throwError(start, this.lineNumber,
-            col, "Keyword must not contain escaped characters");
+            this.errorHandler.throwError(start, this.lineNumber, col, "Keyword must not contain escaped characters");
         }
 
         return {
