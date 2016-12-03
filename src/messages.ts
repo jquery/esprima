@@ -49,5 +49,6 @@ export const Messages = {
     DuplicateBinding: 'Duplicate binding %0',
     DeclarationMissingInitializer: 'Missing initializer in %0 declaration',
     LetInLexicalBinding: 'let is disallowed as a lexically bound name',
-    ForInOfLoopInitializer: '%0 loop variable declaration may not have an initializer'
+    ForInOfLoopInitializer: '%0 loop variable declaration may not have an initializer',
+    ConstructorIsAsync: 'Class constructor may not be an async method'
 };
