@@ -1,12 +1,10 @@
 import { Character } from './character';
-import { Token, TokenName } from './token';
-
-import { Parser } from './parser';
-
-import { XHTMLEntities } from './xhtml-entities';
+import * as JSXNode from './jsx-nodes';
 import { JSXSyntax } from './jsx-syntax';
 import * as Node from './nodes';
-import * as JSXNode from './jsx-nodes';
+import { Parser } from './parser';
+import { Token, TokenName } from './token';
+import { XHTMLEntities } from './xhtml-entities';
 
 interface MetaJSXNode {
     index: number;
@@ -47,6 +45,9 @@ function getQualifiedElementName(elementName: JSXNode.JSXElementName): string {
             const expr = <JSXNode.JSXMemberExpression>(elementName);
             qualifiedName = getQualifiedElementName(expr.object) + '.' +
                 getQualifiedElementName(expr.property);
+            break;
+        /* istanbul ignore next */
+        default:
             break;
     }
 

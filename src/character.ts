@@ -9,6 +9,8 @@ let Regex = {
 
 export const Character = {
 
+    /* tslint:disable:no-bitwise */
+
     fromCodePoint(cp: number): string {
         return (cp < 0x10000) ? String.fromCharCode(cp) :
             String.fromCharCode(0xD800 + ((cp - 0x10000) >> 10)) +
