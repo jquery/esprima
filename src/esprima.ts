@@ -23,13 +23,13 @@
 */
 
 import { CommentHandler } from './comment-handler';
-import { Parser } from './parser';
 import { JSXParser } from './jsx-parser';
+import { Parser } from './parser';
 import { Tokenizer } from './tokenizer';
 
 export function parse(code: string, options, delegate) {
     let commentHandler: CommentHandler | null = null;
-    const proxyDelegate = function(node, metadata) {
+    const proxyDelegate = (node, metadata) => {
         if (delegate) {
             delegate(node, metadata);
         }

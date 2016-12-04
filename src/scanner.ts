@@ -1,8 +1,8 @@
 import { assert } from './assert';
-import { Messages } from './messages';
 import { Character } from './character';
-import { Token } from './token';
 import { ErrorHandler } from './error-handler';
+import { Messages } from './messages';
+import { Token } from './token';
 
 function hexValue(ch: string): number {
     return '0123456789abcdef'.indexOf(ch.toLowerCase());
@@ -41,21 +41,21 @@ export class Scanner {
         this.lineNumber = (code.length > 0) ? 1 : 0;
         this.lineStart = 0;
         this.curlyStack = [];
-    };
+    }
 
     eof(): boolean {
         return this.index >= this.length;
-    };
+    }
 
     throwUnexpectedToken(message = Messages.UnexpectedTokenIllegal) {
         this.errorHandler.throwError(this.index, this.lineNumber,
             this.index - this.lineStart + 1, message);
-    };
+    }
 
     tolerateUnexpectedToken() {
         this.errorHandler.tolerateError(this.index, this.lineNumber,
             this.index - this.lineStart + 1, Messages.UnexpectedTokenIllegal);
-    };
+    }
 
     // ECMA-262 11.4 Comments
 
@@ -116,7 +116,7 @@ export class Scanner {
         }
 
         return comments;
-    };
+    }
 
     skipMultiLineComment(): Comment[] {
         let comments: Comment[] = [];
@@ -185,7 +185,7 @@ export class Scanner {
 
         this.tolerateUnexpectedToken();
         return comments;
-    };
+    }
 
     scanComments() {
         let comments;
@@ -253,7 +253,7 @@ export class Scanner {
         }
 
         return comments;
-    };
+    }
 
     // ECMA-262 11.6.2.2 Future Reserved Words
 
@@ -267,7 +267,7 @@ export class Scanner {
             default:
                 return false;
         }
-    };
+    }
 
     isStrictModeReservedWord(id: string): boolean {
         switch (id) {
@@ -284,11 +284,11 @@ export class Scanner {
             default:
                 return false;
         }
-    };
+    }
 
     isRestrictedWord(id: string): boolean {
         return id === 'eval' || id === 'arguments';
-    };
+    }
 
     // ECMA-262 11.6.2.1 Keywords
 
@@ -318,7 +318,7 @@ export class Scanner {
             default:
                 return false;
         }
-    };
+    }
 
     codePointAt(i: number): number {
         let cp = this.source.charCodeAt(i);
@@ -332,7 +332,7 @@ export class Scanner {
         }
 
         return cp;
-    };
+    }
 
     scanHexEscape(prefix: string): string {
         const len = (prefix === 'u') ? 4 : 2;
@@ -346,7 +346,7 @@ export class Scanner {
             }
         }
         return String.fromCharCode(code);
-    };
+    }
 
     scanUnicodeCodePointEscape(): string {
         let ch = this.source[this.index];
@@ -370,7 +370,7 @@ export class Scanner {
         }
 
         return Character.fromCodePoint(code);
-    };
+    }
 
     getIdentifier(): string {
         const start = this.index++;
@@ -393,7 +393,7 @@ export class Scanner {
         }
 
         return this.source.slice(start, this.index);
-    };
+    }
 
     getComplexIdentifier(): string {
         let cp = this.codePointAt(this.index);
@@ -451,7 +451,7 @@ export class Scanner {
         }
 
         return id;
-    };
+    }
 
     octalToDecimal(ch: string) {
         // \0 is not octal escape sequence
@@ -473,7 +473,7 @@ export class Scanner {
             code: code,
             octal: octal
         };
-    };
+    }
 
     // ECMA-262 11.6 Names and Keywords
 
@@ -506,7 +506,7 @@ export class Scanner {
             start: start,
             end: this.index
         };
-    };
+    }
 
     // ECMA-262 11.7 Punctuators
 
@@ -597,21 +597,21 @@ export class Scanner {
         token.end = this.index;
         token.value = str;
         return token;
-    };
+    }
 
     // ECMA-262 11.8.3 Numeric Literals
 
     scanHexLiteral(start: number) {
-        let number = '';
+        let num = '';
 
         while (!this.eof()) {
             if (!Character.isHexDigit(this.source.charCodeAt(this.index))) {
                 break;
             }
-            number += this.source[this.index++];
+            num += this.source[this.index++];
         }
 
-        if (number.length === 0) {
+        if (num.length === 0) {
             this.throwUnexpectedToken();
         }
 
@@ -621,16 +621,16 @@ export class Scanner {
 
         return {
             type: Token.NumericLiteral,
-            value: parseInt('0x' + number, 16),
+            value: parseInt('0x' + num, 16),
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
             end: this.index
         };
-    };
+    }
 
     scanBinaryLiteral(start: number) {
-        let number = '';
+        let num = '';
         let ch;
 
         while (!this.eof()) {
@@ -638,10 +638,10 @@ export class Scanner {
             if (ch !== '0' && ch !== '1') {
                 break;
             }
-            number += this.source[this.index++];
+            num += this.source[this.index++];
         }
 
-        if (number.length === 0) {
+        if (num.length === 0) {
             // only 0b or 0B
             this.throwUnexpectedToken();
         }
@@ -656,21 +656,21 @@ export class Scanner {
 
         return {
             type: Token.NumericLiteral,
-            value: parseInt(number, 2),
+            value: parseInt(num, 2),
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
             end: this.index
         };
-    };
+    }
 
     scanOctalLiteral(prefix: string, start: number) {
-        let number = '';
+        let num = '';
         let octal = false;
 
         if (Character.isOctalDigit(prefix.charCodeAt(0))) {
             octal = true;
-            number = '0' + this.source[this.index++];
+            num = '0' + this.source[this.index++];
         } else {
             ++this.index;
         }
@@ -679,10 +679,10 @@ export class Scanner {
             if (!Character.isOctalDigit(this.source.charCodeAt(this.index))) {
                 break;
             }
-            number += this.source[this.index++];
+            num += this.source[this.index++];
         }
 
-        if (!octal && number.length === 0) {
+        if (!octal && num.length === 0) {
             // only 0o or 0O
             this.throwUnexpectedToken();
         }
@@ -693,14 +693,14 @@ export class Scanner {
 
         return {
             type: Token.NumericLiteral,
-            value: parseInt(number, 8),
+            value: parseInt(num, 8),
             octal: octal,
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
             end: this.index
         };
-    };
+    }
 
     isImplicitOctalLiteral(): boolean {
         // Implicit octal, unless there is a non-octal digit.
@@ -716,7 +716,7 @@ export class Scanner {
         }
 
         return true;
-    };
+    }
 
     scanNumericLiteral() {
         const start = this.index;
@@ -724,16 +724,16 @@ export class Scanner {
         assert(Character.isDecimalDigit(ch.charCodeAt(0)) || (ch === '.'),
             'Numeric literal must start with a decimal digit or a decimal point');
 
-        let number = '';
+        let num = '';
         if (ch !== '.') {
-            number = this.source[this.index++];
+            num = this.source[this.index++];
             ch = this.source[this.index];
 
             // Hex number starts with '0x'.
             // Octal number starts with '0'.
             // Octal number in ES6 starts with '0o'.
             // Binary number in ES6 starts with '0b'.
-            if (number === '0') {
+            if (num === '0') {
                 if (ch === 'x' || ch === 'X') {
                     ++this.index;
                     return this.scanHexLiteral(start);
@@ -754,29 +754,29 @@ export class Scanner {
             }
 
             while (Character.isDecimalDigit(this.source.charCodeAt(this.index))) {
-                number += this.source[this.index++];
+                num += this.source[this.index++];
             }
             ch = this.source[this.index];
         }
 
         if (ch === '.') {
-            number += this.source[this.index++];
+            num += this.source[this.index++];
             while (Character.isDecimalDigit(this.source.charCodeAt(this.index))) {
-                number += this.source[this.index++];
+                num += this.source[this.index++];
             }
             ch = this.source[this.index];
         }
 
         if (ch === 'e' || ch === 'E') {
-            number += this.source[this.index++];
+            num += this.source[this.index++];
 
             ch = this.source[this.index];
             if (ch === '+' || ch === '-') {
-                number += this.source[this.index++];
+                num += this.source[this.index++];
             }
             if (Character.isDecimalDigit(this.source.charCodeAt(this.index))) {
                 while (Character.isDecimalDigit(this.source.charCodeAt(this.index))) {
-                    number += this.source[this.index++];
+                    num += this.source[this.index++];
                 }
             } else {
                 this.throwUnexpectedToken();
@@ -789,13 +789,13 @@ export class Scanner {
 
         return {
             type: Token.NumericLiteral,
-            value: parseFloat(number),
+            value: parseFloat(num),
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
             end: this.index
         };
-    };
+    }
 
     // ECMA-262 11.8.4 String Literals
 
@@ -895,7 +895,7 @@ export class Scanner {
             start: start,
             end: this.index
         };
-    };
+    }
 
     // ECMA-262 11.8.6 Template Literal Lexical Components
 
@@ -1019,7 +1019,7 @@ export class Scanner {
             start: start,
             end: this.index
         };
-    };
+    }
 
     // ECMA-262 11.8.5 Regular Expression Literals
 
@@ -1040,7 +1040,7 @@ export class Scanner {
                 // BMP character or a constant ASCII code point in the case of
                 // astral symbols. (See the above note on `astralSubstitute`
                 // for more information.)
-                .replace(/\\u\{([0-9a-fA-F]+)\}|\\u([a-fA-F0-9]{4})/g, function($0, $1, $2) {
+                .replace(/\\u\{([0-9a-fA-F]+)\}|\\u([a-fA-F0-9]{4})/g, ($0, $1, $2) => {
                     const codePoint = parseInt($1 || $2, 16);
                     if (codePoint > 0x10FFFF) {
                         self.throwUnexpectedToken(Messages.InvalidRegExp);
@@ -1075,7 +1075,7 @@ export class Scanner {
             /* istanbul ignore next */
             return null;
         }
-    };
+    }
 
     scanRegExpBody() {
         let ch = this.source[this.index];
@@ -1121,7 +1121,7 @@ export class Scanner {
             value: body,
             literal: str
         };
-    };
+    }
 
     scanRegExpFlags() {
         let str = '';
@@ -1164,7 +1164,7 @@ export class Scanner {
             value: flags,
             literal: str
         };
-    };
+    }
 
     scanRegExp() {
         const start = this.index;
@@ -1186,7 +1186,7 @@ export class Scanner {
             start: start,
             end: this.index
         };
-    };
+    }
 
     lex() {
         if (this.eof()) {
@@ -1242,6 +1242,6 @@ export class Scanner {
         }
 
         return this.scanPunctuator();
-    };
+    }
 
 }

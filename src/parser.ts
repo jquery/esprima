@@ -1,12 +1,10 @@
 import { assert } from './assert';
-import { Messages } from './messages';
-
 import { ErrorHandler } from './error-handler';
-import { Token, TokenName } from './token';
-import { Comment, Scanner } from './scanner';
-
-import { Syntax } from './syntax';
+import { Messages } from './messages';
 import * as Node from './nodes';
+import { Comment, Scanner } from './scanner';
+import { Syntax } from './syntax';
+import { Token, TokenName } from './token';
 
 interface Config {
     range: boolean;
@@ -159,11 +157,10 @@ export class Parser {
 
     throwError(messageFormat: string, ...values): void {
         const args = Array.prototype.slice.call(arguments, 1);
-        const msg = messageFormat.replace(/%(\d)/g,
-            function(whole, idx) {
-                assert(idx < args.length, 'Message reference must be in range');
-                return args[idx];
-            }
+        const msg = messageFormat.replace(/%(\d)/g, (whole, idx) => {
+            assert(idx < args.length, 'Message reference must be in range');
+            return args[idx];
+        }
         );
 
         const index = this.lastMarker.index;
@@ -174,11 +171,10 @@ export class Parser {
 
     tolerateError(messageFormat, ...values) {
         const args = Array.prototype.slice.call(arguments, 1);
-        const msg = messageFormat.replace(/%(\d)/g,
-            function(whole, idx) {
-                assert(idx < args.length, 'Message reference must be in range');
-                return args[idx];
-            }
+        const msg = messageFormat.replace(/%(\d)/g, (whole, idx) => {
+            assert(idx < args.length, 'Message reference must be in range');
+            return args[idx];
+        }
         );
 
         const index = this.lastMarker.index;
@@ -2007,7 +2003,7 @@ export class Parser {
         if (token.type === Token.Keyword && token.value === 'yield') {
             if (this.context.strict) {
                 this.tolerateUnexpectedToken(token, Messages.StrictReservedWord);
-            } if (!this.context.allowYield) {
+            } else if (!this.context.allowYield) {
                 this.throwUnexpectedToken(token);
             }
         } else if (token.type !== Token.Identifier) {
@@ -3002,6 +2998,8 @@ export class Parser {
                 return true;
             case Token.Punctuator:
                 return token.value === '[';
+            default:
+                break;
         }
         return false;
     }
@@ -3193,7 +3191,6 @@ export class Parser {
                 kind = 'constructor';
             }
         }
-
 
         return this.finalize(node, new Node.MethodDefinition(key, computed, value, kind, isStatic));
     }

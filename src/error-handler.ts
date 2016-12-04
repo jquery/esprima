@@ -1,3 +1,5 @@
+/* tslint:disable:max-classes-per-file */
+
 declare class Error {
     public name: string;
     public message: string;
@@ -15,11 +17,11 @@ export class ErrorHandler {
     constructor() {
         this.errors = [];
         this.tolerant = false;
-    };
+    }
 
     recordError(error: Error): void {
         this.errors.push(error);
-    };
+    }
 
     tolerate(error): void {
         if (this.tolerant) {
@@ -27,7 +29,7 @@ export class ErrorHandler {
         } else {
             throw error;
         }
-    };
+    }
 
     constructError(msg: string, column: number): Error {
         let error = new Error(msg);
@@ -39,12 +41,10 @@ export class ErrorHandler {
                 error = Object.create(base);
                 Object.defineProperty(error, 'column', { value: column });
             }
-        } finally {
-            return error;
         }
         /* istanbul ignore next */
         return error;
-    };
+    }
 
     createError(index: number, line: number, col: number, description: string): Error {
         const msg = 'Line ' + line + ': ' + description;
@@ -53,11 +53,11 @@ export class ErrorHandler {
         error.lineNumber = line;
         error.description = description;
         return error;
-    };
+    }
 
     throwError(index: number, line: number, col: number, description: string) {
         throw this.createError(index, line, col, description);
-    };
+    }
 
     tolerateError(index: number, line: number, col: number, description: string) {
         const error = this.createError(index, line, col, description);
@@ -66,6 +66,6 @@ export class ErrorHandler {
         } else {
             throw error;
         }
-    };
+    }
 
 }

@@ -1,5 +1,5 @@
-import { Comment, Scanner } from './scanner';
 import { ErrorHandler } from './error-handler';
+import { Comment, Scanner } from './scanner';
 import { Token, TokenName } from './token';
 
 type ReaderEntry = string | null;
@@ -12,7 +12,7 @@ class Reader {
     constructor() {
         this.values = [];
         this.curly = this.paren = -1;
-    };
+    }
 
     // A function following one of those tokens is an expression.
     beforeFunctionExpression(t: string): boolean {
@@ -25,7 +25,7 @@ class Reader {
             '+', '-', '*', '**', '/', '%', '++', '--', '<<', '>>', '>>>', '&',
             '|', '^', '!', '~', '&&', '||', '?', ':', '===', '==', '>=',
             '<=', '<', '>', '!=', '!=='].indexOf(t) >= 0;
-    };
+    }
 
     // Determine if forward slash (/) is an operator or part of a regular expression
     // https://github.com/mozilla/sweet.js/wiki/design
@@ -57,10 +57,13 @@ class Reader {
                     const check = this.values[this.curly - 5];
                     regex = check ? !this.beforeFunctionExpression(check) : true;
                 }
+                break;
+            default:
+                break;
         }
 
         return regex;
-    };
+    }
 
     push(token): void {
         if (token.type === Token.Punctuator || token.type === Token.Keyword) {
@@ -73,9 +76,11 @@ class Reader {
         } else {
             this.values.push(null);
         }
-    };
+    }
 
 }
+
+/* tslint:disable:max-classes-per-file */
 
 export class Tokenizer {
     readonly errorHandler: ErrorHandler;
@@ -96,11 +101,11 @@ export class Tokenizer {
         this.trackLoc = config ? (typeof config.loc === 'boolean' && config.loc) : false;
         this.buffer = [];
         this.reader = new Reader();
-    };
+    }
 
     errors() {
         return this.errorHandler.errors;
-    };
+    }
 
     getNextToken() {
         if (this.buffer.length === 0) {
@@ -170,6 +175,6 @@ export class Tokenizer {
         }
 
         return this.buffer.shift();
-    };
+    }
 
 }
