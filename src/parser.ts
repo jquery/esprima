@@ -2086,6 +2086,13 @@ export class Parser {
 
     // ECMA-262 13.6 If statement
 
+    parseIfClause(): Node.Statement {
+        if (this.context.strict && this.matchKeyword('function')) {
+            this.tolerateError(Messages.StrictFunction);
+        }
+        return this.parseStatement();
+    }
+
     parseIfStatement(): Node.IfStatement {
         const node = this.createNode();
         let consequent: Node.Statement;
@@ -2100,10 +2107,10 @@ export class Parser {
             consequent = this.finalize(this.createNode(), new Node.EmptyStatement());
         } else {
             this.expect(')');
-            consequent = this.parseStatement();
+            consequent = this.parseIfClause();
             if (this.matchKeyword('else')) {
                 this.nextToken();
-                alternate = this.parseStatement();
+                alternate = this.parseIfClause();
             }
         }
 
