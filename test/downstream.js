@@ -108,6 +108,7 @@ if (typeof child_process.execSync !== 'function') {
 }
 
 test_downstream({
+    'envify': 'https://github.com/hughsk/envify.git',
     'escope': 'https://github.com/estools/escope.git',
     'esmangle': 'https://github.com/estools/esmangle.git',
     'escomplex-js': 'https://github.com/philbooth/escomplex-js.git',
