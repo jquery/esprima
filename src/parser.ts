@@ -3090,6 +3090,33 @@ export class Parser {
 
     // ECMA-262 14.4 Generator Function Definitions
 
+    isStartOfExpression(): boolean {
+        let start = true;
+
+        const value = this.lookahead.value;
+        switch (this.lookahead.type) {
+            case Token.Punctuator:
+                start = (value === '[') || (value === '(') || (value === '{') ||
+                    (value === '+') || (value === '-') ||
+                    (value === '!') || (value === '~') ||
+                    (value === '++') || (value === '--') ||
+                    (value === '/') || (value === '/=');  // regular expression literal
+                break;
+
+            case Token.Keyword:
+                start = (value === 'class') || (value === 'delete') ||
+                    (value === 'function') || (value === 'let') || (value === 'new') ||
+                    (value === 'super') || (value === 'this') || (value === 'typeof') ||
+                    (value === 'void') || (value === 'yield');
+                break;
+
+            default:
+                break;
+        }
+
+        return start;
+    }
+
     parseYieldExpression(): Node.YieldExpression {
         const node = this.createNode();
         this.expectKeyword('yield');
@@ -3103,10 +3130,8 @@ export class Parser {
             if (delegate) {
                 this.nextToken();
                 argument = this.parseAssignmentExpression();
-            } else {
-                if (!this.match(';') && !this.match('}') && !this.match(')') && this.lookahead.type !== Token.EOF) {
-                    argument = this.parseAssignmentExpression();
-                }
+            } else if (this.isStartOfExpression()) {
+                argument = this.parseAssignmentExpression();
             }
             this.context.allowYield = previousAllowYield;
         }
