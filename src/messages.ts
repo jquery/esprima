@@ -34,6 +34,7 @@ export const Messages = {
     StrictLHSPrefix: 'Prefix increment/decrement may not have eval or arguments operand in strict mode',
     StrictReservedWord: 'Use of future reserved word in strict mode',
     StrictFunction: 'In strict mode code, functions can only be declared at top level or inside a block',
+    GeneratorInLegacyContext: 'Generator declarations are not allowed in legacy contexts',
     TemplateOctalLiteral: 'Octal literals are not allowed in template strings.',
     ParameterAfterRestParameter: 'Rest parameter must be last formal parameter',
     DefaultRestParameter: 'Unexpected token =',
