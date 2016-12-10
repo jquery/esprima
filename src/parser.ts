@@ -2478,10 +2478,25 @@ export class Parser {
             }
 
             this.context.labelSet[key] = true;
-            const labeledBody = this.parseStatement();
+            let body: Node.Statement;
+            if (this.matchKeyword('class')) {
+                this.tolerateUnexpectedToken(this.lookahead);
+                body = this.parseClassDeclaration();
+            } else if (this.matchKeyword('function')) {
+                const token = this.lookahead;
+                const declaration = this.parseFunctionDeclaration();
+                if (this.context.strict) {
+                    this.tolerateUnexpectedToken(token, Messages.StrictFunction);
+                } else if (declaration.generator) {
+                    this.tolerateUnexpectedToken(token, Messages.GeneratorInLegacyContext);
+                }
+                body = declaration;
+            } else {
+                body = this.parseStatement();
+            }
             delete this.context.labelSet[key];
 
-            statement = new Node.LabeledStatement(id, labeledBody);
+            statement = new Node.LabeledStatement(id, body);
         } else {
             this.consumeSemicolon();
             statement = new Node.ExpressionStatement(expr);
