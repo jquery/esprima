@@ -334,7 +334,7 @@ export class Scanner {
         return cp;
     }
 
-    scanHexEscape(prefix: string): string {
+    scanHexEscape(prefix: string): string | null {
         const len = (prefix === 'u') ? 4 : 2;
         let code = 0;
 
@@ -342,7 +342,7 @@ export class Scanner {
             if (!this.eof() && Character.isHexDigit(this.source.charCodeAt(this.index))) {
                 code = code * 16 + hexValue(this.source[this.index++]);
             } else {
-                return '';
+                return null;
             }
         }
         return String.fromCharCode(code);
@@ -412,8 +412,7 @@ export class Scanner {
                 ch = this.scanUnicodeCodePointEscape();
             } else {
                 ch = this.scanHexEscape('u');
-                cp = ch.charCodeAt(0);
-                if (!ch || ch === '\\' || !Character.isIdentifierStart(cp)) {
+                if (ch === null || ch === '\\' || !Character.isIdentifierStart(ch.charCodeAt(0))) {
                     this.throwUnexpectedToken();
                 }
             }
@@ -441,8 +440,7 @@ export class Scanner {
                     ch = this.scanUnicodeCodePointEscape();
                 } else {
                     ch = this.scanHexEscape('u');
-                    cp = ch.charCodeAt(0);
-                    if (!ch || ch === '\\' || !Character.isIdentifierPart(cp)) {
+                    if (ch === null || ch === '\\' || !Character.isIdentifierPart(ch.charCodeAt(0))) {
                         this.throwUnexpectedToken();
                     }
                 }
@@ -820,17 +818,23 @@ export class Scanner {
                 if (!ch || !Character.isLineTerminator(ch.charCodeAt(0))) {
                     switch (ch) {
                         case 'u':
-                        case 'x':
                             if (this.source[this.index] === '{') {
                                 ++this.index;
                                 str += this.scanUnicodeCodePointEscape();
                             } else {
                                 const unescaped = this.scanHexEscape(ch);
-                                if (!unescaped) {
+                                if (unescaped === null) {
                                     this.throwUnexpectedToken();
                                 }
                                 str += unescaped;
                             }
+                            break;
+                        case 'x':
+                            const unescaped = this.scanHexEscape(ch);
+                            if (unescaped === null) {
+                                this.throwUnexpectedToken(Messages.InvalidHexEscapeSequence);
+                            }
+                            str += unescaped;
                             break;
                         case 'n':
                             str += '\n';
@@ -939,20 +943,26 @@ export class Scanner {
                             cooked += '\t';
                             break;
                         case 'u':
-                        case 'x':
                             if (this.source[this.index] === '{') {
                                 ++this.index;
                                 cooked += this.scanUnicodeCodePointEscape();
                             } else {
                                 const restore = this.index;
                                 const unescaped = this.scanHexEscape(ch);
-                                if (unescaped) {
+                                if (unescaped !== null) {
                                     cooked += unescaped;
                                 } else {
                                     this.index = restore;
                                     cooked += ch;
                                 }
                             }
+                            break;
+                        case 'x':
+                            const unescaped = this.scanHexEscape(ch);
+                            if (unescaped === null) {
+                                this.throwUnexpectedToken(Messages.InvalidHexEscapeSequence);
+                            }
+                            cooked += unescaped;
                             break;
                         case 'b':
                             cooked += '\b';
@@ -1138,9 +1148,9 @@ export class Scanner {
                 if (ch === 'u') {
                     ++this.index;
                     let restore = this.index;
-                    ch = this.scanHexEscape('u');
-                    if (ch) {
-                        flags += ch;
+                    const char = this.scanHexEscape('u');
+                    if (char !== null) {
+                        flags += char;
                         for (str += '\\u'; restore < this.index; ++restore) {
                             str += this.source[restore];
                         }
