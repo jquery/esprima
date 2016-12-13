@@ -14,6 +14,7 @@ export const Messages = {
     IllegalExportDeclaration: 'Unexpected token',
     IllegalImportDeclaration: 'Unexpected token',
     IllegalReturn: 'Illegal return statement',
+    InvalidHexEscapeSequence: 'Invalid hexadecimal escape sequence',
     InvalidLHSInAssignment: 'Invalid left-hand side in assignment',
     InvalidLHSInForIn: 'Invalid left-hand side in for-in',
     InvalidLHSInForLoop: 'Invalid left-hand side in for-loop',
