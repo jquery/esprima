@@ -52,9 +52,9 @@ export class Scanner {
             this.index - this.lineStart + 1, message);
     }
 
-    tolerateUnexpectedToken() {
+    tolerateUnexpectedToken(message = Messages.UnexpectedTokenIllegal) {
         this.errorHandler.tolerateError(this.index, this.lineNumber,
-            this.index - this.lineStart + 1, Messages.UnexpectedTokenIllegal);
+            this.index - this.lineStart + 1, message);
     }
 
     // ECMA-262 11.4 Comments
@@ -494,6 +494,13 @@ export class Scanner {
             type = Token.BooleanLiteral;
         } else {
             type = Token.Identifier;
+        }
+
+        if (type !== Token.Identifier && (start + id.length !== this.index)) {
+            const restore = this.index;
+            this.index = start;
+            this.tolerateUnexpectedToken(Messages.InvalidEscapedReservedWord);
+            this.index = restore;
         }
 
         return {
