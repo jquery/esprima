@@ -30,6 +30,7 @@ export class Scanner {
     lineNumber: number;
     lineStart: number;
     curlyStack: string[];
+    escapedChars: number;
 
     constructor(code: string, handler: ErrorHandler) {
         this.source = code;
@@ -400,6 +401,8 @@ export class Scanner {
         let id = Character.fromCodePoint(cp);
         this.index += id.length;
 
+        this.escapedChars = 0;
+
         // '\u' (U+005C, U+0075) denotes an escaped character.
         let ch;
         if (cp === 0x5C) {
@@ -417,6 +420,7 @@ export class Scanner {
                 }
             }
             id = ch;
+            ++this.escapedChars;
         }
 
         while (!this.eof()) {
@@ -445,6 +449,7 @@ export class Scanner {
                     }
                 }
                 id += ch;
+                ++this.escapedChars;
             }
         }
 
@@ -495,6 +500,10 @@ export class Scanner {
         } else {
             type = Token.Identifier;
         }
+
+        if (this.escapedChars && type !== Token.Identifier)
+            this.errorHandler.throwError(this.index, this.lineNumber,
+            this.index - this.lineStart, "Keyword must not contain escaped characters");
 
         return {
             type: type,
