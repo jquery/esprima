@@ -53,24 +53,6 @@ function workaroundRecastTest() {
     execute('git diff');
 }
 
-function workaroundAssetGraphTest() {
-    var filename = 'package.json', lines, i, line;
-
-    console.log();
-    console.log('Applying a workaround...');
-    lines = fs.readFileSync(filename, 'utf-8').split('\n');
-    for (i = 0; i < lines.length; ++i) {
-        line = lines[i];
-        if (line.indexOf('"eslint":') > 0) {
-            console.log('-- Patching', filename);
-            lines[i] = '"eslint": "~3.3.1",';
-            fs.writeFileSync(filename, lines.join('\n'));
-            break;
-        }
-    }
-    execute('git diff');
-}
-
 function test_project(project, repo) {
     console.log();
     console.log('==========', project);
@@ -86,8 +68,6 @@ function test_project(project, repo) {
 
     if (project === 'recast') {
         workaroundRecastTest();
-    } else if (project === 'assetgraph') {
-        workaroundAssetGraphTest();
     }
 
     console.log();
