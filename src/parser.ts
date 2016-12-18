@@ -1983,6 +1983,7 @@ export class Parser {
 
         let pattern = this.parsePattern(params, kind);
         if (this.match('=')) {
+            pattern.hasDefault = true;
             this.nextToken();
             const previousAllowYield = this.context.allowYield;
             this.context.allowYield = true;
@@ -2773,14 +2774,17 @@ export class Parser {
         }
 
         param = this.parsePatternWithDefault(params);
+        const {hasDefault} = param;
         for (let i = 0; i < params.length; i++) {
             this.validateParam(options, params[i], params[i].value);
         }
         options.params.push(param);
+        return hasDefault;
     }
 
     parseFormalParameters(firstRestricted?) {
         let options;
+        let isSimpleParameterList = true;
 
         options = {
             params: [],
@@ -2791,7 +2795,8 @@ export class Parser {
         if (!this.match(')')) {
             options.paramSet = {};
             while (this.startMarker.index < this.scanner.length) {
-                this.parseFormalParameter(options);
+                const hasDefault = this.parseFormalParameter(options);
+                isSimpleParameterList = !hasDefault;
                 if (this.match(')')) {
                     break;
                 }
@@ -2807,6 +2812,7 @@ export class Parser {
             params: options.params,
             stricted: options.stricted,
             firstRestricted: options.firstRestricted,
+            isSimpleParameterList: isSimpleParameterList,
             message: options.message
         };
     }
@@ -2868,12 +2874,15 @@ export class Parser {
 
         const previousAllowAwait = this.context.await;
         const previousAllowYield = this.context.allowYield;
+        const previousisSimpleParameterList = this.context.isSimpleParameterList;
         this.context.await = isAsync;
         this.context.allowYield = !isGenerator;
 
         const formalParameters = this.parseFormalParameters(firstRestricted);
-        const params = formalParameters.params;
-        const stricted = formalParameters.stricted;
+        const {isSimpleParameterList, params, stricted} = formalParameters;
+
+        this.context.isSimpleParameterList = isSimpleParameterList;
+
         firstRestricted = formalParameters.firstRestricted;
         if (formalParameters.message) {
             message = formalParameters.message;
@@ -2891,6 +2900,7 @@ export class Parser {
         this.context.strict = previousStrict;
         this.context.await = previousAllowAwait;
         this.context.allowYield = previousAllowYield;
+        this.context.isSimpleParameterList = previousisSimpleParameterList;
 
         return isAsync ? this.finalize(node, new Node.AsyncFunctionDeclaration(id, params, body)) :
             this.finalize(node, new Node.FunctionDeclaration(id, params, body, isGenerator));
@@ -2996,6 +3006,9 @@ export class Parser {
                 this.context.strict = true;
                 if (firstRestricted) {
                     this.tolerateUnexpectedToken(firstRestricted, Messages.StrictOctalLiteral);
+                }
+                if (!this.context.isSimpleParameterList) {
+                    this.tolerateUnexpectedToken(statement, Messages.IllegalUseStrictWNSPL);
                 }
             } else {
                 if (!firstRestricted && token.octal) {
