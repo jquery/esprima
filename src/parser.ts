@@ -28,6 +28,7 @@ interface Context {
     inSwitch: boolean;
     labelSet: any;
     strict: boolean;
+    isSimpleParameterList: boolean | null;
 }
 
 interface Marker {
@@ -131,6 +132,7 @@ export class Parser {
             isBindingElement: false,
             inFunctionBody: false,
             inIteration: false,
+            isSimpleParameterList: null,
             inSwitch: false,
             labelSet: {},
             strict: false
@@ -2874,7 +2876,7 @@ export class Parser {
 
         const previousAllowAwait = this.context.await;
         const previousAllowYield = this.context.allowYield;
-        const previousisSimpleParameterList = this.context.isSimpleParameterList;
+        const previousIsSimpleParameterList = this.context.isSimpleParameterList;
         this.context.await = isAsync;
         this.context.allowYield = !isGenerator;
 
@@ -2900,7 +2902,7 @@ export class Parser {
         this.context.strict = previousStrict;
         this.context.await = previousAllowAwait;
         this.context.allowYield = previousAllowYield;
-        this.context.isSimpleParameterList = previousisSimpleParameterList;
+        this.context.isSimpleParameterList = previousIsSimpleParameterList;
 
         return isAsync ? this.finalize(node, new Node.AsyncFunctionDeclaration(id, params, body)) :
             this.finalize(node, new Node.FunctionDeclaration(id, params, body, isGenerator));
@@ -3007,7 +3009,7 @@ export class Parser {
                 if (firstRestricted) {
                     this.tolerateUnexpectedToken(firstRestricted, Messages.StrictOctalLiteral);
                 }
-                if (!this.context.isSimpleParameterList) {
+                if (this.context.inFunctionBody && !this.context.isSimpleParameterList) {
                     this.tolerateUnexpectedToken(statement, Messages.IllegalUseStrictWNSPL);
                 }
             } else {
