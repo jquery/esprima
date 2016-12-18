@@ -13,6 +13,7 @@ export const Messages = {
     IllegalContinue: 'Illegal continue statement',
     IllegalExportDeclaration: 'Unexpected token',
     IllegalImportDeclaration: 'Unexpected token',
+    IllegalLanguageModeDirective: 'Illegal \'use strict\' directive in function with non-simple parameter list',
     IllegalReturn: 'Illegal return statement',
     InvalidEscapedReservedWord: 'Keyword must not contain escaped characters',
     InvalidHexEscapeSequence: 'Invalid hexadecimal escape sequence',
