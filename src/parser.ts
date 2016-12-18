@@ -18,6 +18,7 @@ interface Config {
 interface Context {
     isModule: boolean;
     allowIn: boolean;
+    allowStrictDirective: boolean;
     allowYield: boolean;
     await: boolean;
     firstCoverInitializedNameError: any;
@@ -125,6 +126,7 @@ export class Parser {
             isModule: false,
             await: false,
             allowIn: true,
+            allowStrictDirective: true,
             allowYield: true,
             firstCoverInitializedNameError: null,
             isAssignmentTarget: false,
@@ -725,6 +727,8 @@ export class Parser {
         this.context.isBindingElement = false;
 
         const previousStrict = this.context.strict;
+        const previousAllowStrictDirective = this.context.allowStrictDirective;
+        this.context.allowStrictDirective = params.simple;
         const body = this.isolateCoverGrammar(this.parseFunctionSourceElements);
         if (this.context.strict && params.firstRestricted) {
             this.tolerateUnexpectedToken(params.firstRestricted, params.message);
@@ -733,6 +737,7 @@ export class Parser {
             this.tolerateUnexpectedToken(params.stricted, params.message);
         }
         this.context.strict = previousStrict;
+        this.context.allowStrictDirective = previousAllowStrictDirective;
 
         return body;
     }
@@ -1560,6 +1565,7 @@ export class Parser {
             default:
                 break;
         }
+        options.simple = options.simple && (param instanceof Node.Identifier);
     }
 
     reinterpretAsCoverFormalsList(expr) {
@@ -1579,6 +1585,7 @@ export class Parser {
         }
 
         options = {
+            simple: true,
             paramSet: {}
         };
 
@@ -1616,6 +1623,7 @@ export class Parser {
         }
 
         return {
+            simple: options.simple,
             params: params,
             stricted: options.stricted,
             firstRestricted: options.firstRestricted,
@@ -1657,6 +1665,9 @@ export class Parser {
                     this.context.firstCoverInitializedNameError = null;
 
                     const previousStrict = this.context.strict;
+                    const previousAllowStrictDirective = this.context.allowStrictDirective;
+                    this.context.allowStrictDirective = list.simple;
+
                     const previousAllowYield = this.context.allowYield;
                     const previousAwait = this.context.await;
                     this.context.allowYield = true;
@@ -1678,6 +1689,7 @@ export class Parser {
                         this.finalize(node, new Node.ArrowFunctionExpression(list.params, body, expression));
 
                     this.context.strict = previousStrict;
+                    this.context.allowStrictDirective = previousAllowStrictDirective;
                     this.context.allowYield = previousAllowYield;
                     this.context.await = previousAwait;
                 }
@@ -2769,6 +2781,7 @@ export class Parser {
             param = this.parseRestElement(params);
             this.validateParam(options, param.argument, param.argument.name);
             options.params.push(param);
+            options.simple = false;
             return;
         }
 
@@ -2776,6 +2789,7 @@ export class Parser {
         for (let i = 0; i < params.length; i++) {
             this.validateParam(options, params[i], params[i].value);
         }
+        options.simple = options.simple && (param instanceof Node.Identifier);
         options.params.push(param);
     }
 
@@ -2783,6 +2797,7 @@ export class Parser {
         let options;
 
         options = {
+            simple: true,
             params: [],
             firstRestricted: firstRestricted
         };
@@ -2804,6 +2819,7 @@ export class Parser {
         this.expect(')');
 
         return {
+            simple: options.simple,
             params: options.params,
             stricted: options.stricted,
             firstRestricted: options.firstRestricted,
@@ -2880,6 +2896,8 @@ export class Parser {
         }
 
         const previousStrict = this.context.strict;
+        const previousAllowStrictDirective = this.context.allowStrictDirective;
+        this.context.allowStrictDirective = formalParameters.simple;
         const body = this.parseFunctionSourceElements();
         if (this.context.strict && firstRestricted) {
             this.throwUnexpectedToken(firstRestricted, message);
@@ -2889,6 +2907,7 @@ export class Parser {
         }
 
         this.context.strict = previousStrict;
+        this.context.allowStrictDirective = previousAllowStrictDirective;
         this.context.await = previousAllowAwait;
         this.context.allowYield = previousAllowYield;
 
@@ -2947,6 +2966,8 @@ export class Parser {
         }
 
         const previousStrict = this.context.strict;
+        const previousAllowStrictDirective = this.context.allowStrictDirective;
+        this.context.allowStrictDirective = formalParameters.simple;
         const body = this.parseFunctionSourceElements();
         if (this.context.strict && firstRestricted) {
             this.throwUnexpectedToken(firstRestricted, message);
@@ -2955,6 +2976,7 @@ export class Parser {
             this.tolerateUnexpectedToken(stricted, message);
         }
         this.context.strict = previousStrict;
+        this.context.allowStrictDirective = previousAllowStrictDirective;
         this.context.await = previousAllowAwait;
         this.context.allowYield = previousAllowYield;
 
@@ -2997,6 +3019,9 @@ export class Parser {
                 if (firstRestricted) {
                     this.tolerateUnexpectedToken(firstRestricted, Messages.StrictOctalLiteral);
                 }
+                if (!this.context.allowStrictDirective) {
+                    this.tolerateUnexpectedToken(token, Messages.IllegalLanguageModeDirective);
+                }
             } else {
                 if (!firstRestricted && token.octal) {
                     firstRestricted = token;
@@ -3033,6 +3058,7 @@ export class Parser {
 
         const isGenerator = false;
         const params = {
+            simple: true,
             params: [],
             stricted: null,
             firstRestricted: null,
@@ -3050,6 +3076,7 @@ export class Parser {
         const node = this.createNode();
 
         let options = {
+            simple: true,
             params: [],
             firstRestricted: null,
             paramSet: {}
