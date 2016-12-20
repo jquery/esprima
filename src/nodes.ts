@@ -631,8 +631,8 @@ export class RegexLiteral {
 
 export class RestElement {
     readonly type: string;
-    readonly argument: Identifier;
-    constructor(argument: Identifier) {
+    readonly argument: BindingIdentifier | BindingPattern;
+    constructor(argument: BindingIdentifier | BindingPattern) {
         this.type = Syntax.RestElement;
         this.argument = argument;
     }

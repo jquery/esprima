@@ -28,7 +28,6 @@ export const Messages = {
     NewlineAfterThrow: 'Illegal newline after throw',
     NoAsAfterImportNamespace: 'Unexpected token',
     NoCatchOrFinally: 'Missing catch or finally after try',
-    ObjectPatternAsRestParameter: 'Unexpected token {',
     ParameterAfterRestParameter: 'Rest parameter must be last formal parameter',
     Redeclaration: '%0 \'%1\' has already been declared',
     StaticPrototype: 'Classes may not have static property named prototype',
