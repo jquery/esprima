@@ -554,8 +554,8 @@ export class RegexLiteral {
 
 export class RestElement {
     type: string;
-    argument: Identifier;
-    constructor(argument: Identifier) {
+    argument: BindingIdentifier | BindingPattern;
+    constructor(argument: BindingIdentifier | BindingPattern) {
         this.type = Syntax.RestElement;
         this.argument = argument;
     }

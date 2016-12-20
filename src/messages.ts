@@ -36,7 +36,6 @@ export const Messages = {
     TemplateOctalLiteral: 'Octal literals are not allowed in template strings.',
     ParameterAfterRestParameter: 'Rest parameter must be last formal parameter',
     DefaultRestParameter: 'Unexpected token =',
-    ObjectPatternAsRestParameter: 'Unexpected token {',
     DuplicateProtoProperty: 'Duplicate __proto__ fields are not allowed in object literals',
     ConstructorSpecialMethod: 'Class constructor may not be an accessor',
     DuplicateConstructor: 'A class may only have one constructor',

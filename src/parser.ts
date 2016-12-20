@@ -1755,9 +1755,10 @@ export class Parser {
 
     parseBindingRestElement(params, kind: string): Node.RestElement {
         const node = this.createNode();
+
         this.expect('...');
-        params.push(this.lookahead);
-        const arg = this.parseVariableIdentifier(kind);
+        const arg = this.parsePattern(params, kind);
+
         return this.finalize(node, new Node.RestElement(arg));
     }
 
@@ -2601,13 +2602,8 @@ export class Parser {
     parseRestElement(params): Node.RestElement {
         const node = this.createNode();
 
-        this.nextToken();
-        if (this.match('{')) {
-            this.throwError(Messages.ObjectPatternAsRestParameter);
-        }
-        params.push(this.lookahead);
-
-        const param = this.parseVariableIdentifier();
+        this.expect('...');
+        const arg = this.parsePattern(params);
         if (this.match('=')) {
             this.throwError(Messages.DefaultRestParameter);
         }
@@ -2615,22 +2611,12 @@ export class Parser {
             this.throwError(Messages.ParameterAfterRestParameter);
         }
 
-        return this.finalize(node, new Node.RestElement(param));
+        return this.finalize(node, new Node.RestElement(arg));
     }
 
     parseFormalParameter(options) {
-        let param;
-        let params = [];
-
-        const token = this.lookahead;
-        if (token.value === '...') {
-            param = this.parseRestElement(params);
-            this.validateParam(options, param.argument, param.argument.name);
-            options.params.push(param);
-            return false;
-        }
-
-        param = this.parsePatternWithDefault(params);
+        let params: any[] = [];
+        const param = this.match('...') ? this.parseRestElement(params) : this.parsePatternWithDefault(params);
         for (let i = 0; i < params.length; i++) {
             this.validateParam(options, params[i], params[i].value);
         }
