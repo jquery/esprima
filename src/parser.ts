@@ -577,7 +577,7 @@ export class Parser {
         }
     }
 
-    // ECMA-262 12.2 Primary Expressions
+    // https://tc39.github.io/ecma262/#sec-primary-expression
 
     parsePrimaryExpression(): Node.Expression {
         const node = this.createNode();
@@ -682,7 +682,7 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 12.2.5 Array Initializer
+    // https://tc39.github.io/ecma262/#sec-array-initializer
 
     parseSpreadElement(): Node.SpreadElement {
         const node = this.createNode();
@@ -720,7 +720,7 @@ export class Parser {
         return this.finalize(node, new Node.ArrayExpression(elements));
     }
 
-    // ECMA-262 12.2.6 Object Initializer
+    // https://tc39.github.io/ecma262/#sec-object-initializer
 
     parsePropertyMethod(params): Node.BlockStatement {
         this.context.isAssignmentTarget = false;
@@ -932,7 +932,7 @@ export class Parser {
         return this.finalize(node, new Node.ObjectExpression(properties));
     }
 
-    // ECMA-262 12.2.9 Template Literals
+    // https://tc39.github.io/ecma262/#sec-template-literals
 
     parseTemplateHead(): Node.TemplateElement {
         assert(this.lookahead.head, 'Template literal must start with a template head');
@@ -979,7 +979,7 @@ export class Parser {
         return this.finalize(node, new Node.TemplateLiteral(quasis, expressions));
     }
 
-    // ECMA-262 12.2.10 The Grouping Operator
+    // https://tc39.github.io/ecma262/#sec-grouping-operator
 
     reinterpretExpressionAsPattern(expr) {
         switch (expr.type) {
@@ -1142,7 +1142,7 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 12.3 Left-Hand-Side Expressions
+    // https://tc39.github.io/ecma262/#sec-left-hand-side-expressions
 
     parseArguments(): Node.ArgumentListElement[] {
         this.expect('(');
@@ -1343,7 +1343,7 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 12.4 Update Expressions
+    // https://tc39.github.io/ecma262/#sec-update-expressions
 
     parseUpdateExpression(): Node.Expression {
         let expr;
@@ -1385,7 +1385,7 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 12.5 Unary Operators
+    // https://tc39.github.io/ecma262/#sec-unary-operators
 
     parseAwaitExpression(): Node.AwaitExpression {
         const node = this.createNode();
@@ -1433,14 +1433,14 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 12.6 Exponentiation Operators
-    // ECMA-262 12.7 Multiplicative Operators
-    // ECMA-262 12.8 Additive Operators
-    // ECMA-262 12.9 Bitwise Shift Operators
-    // ECMA-262 12.10 Relational Operators
-    // ECMA-262 12.11 Equality Operators
-    // ECMA-262 12.12 Binary Bitwise Operators
-    // ECMA-262 12.13 Binary Logical Operators
+    // https://tc39.github.io/ecma262/#sec-exp-operator
+    // https://tc39.github.io/ecma262/#sec-multiplicative-operators
+    // https://tc39.github.io/ecma262/#sec-additive-operators
+    // https://tc39.github.io/ecma262/#sec-bitwise-shift-operators
+    // https://tc39.github.io/ecma262/#sec-relational-operators
+    // https://tc39.github.io/ecma262/#sec-equality-operators
+    // https://tc39.github.io/ecma262/#sec-binary-bitwise-operators
+    // https://tc39.github.io/ecma262/#sec-binary-logical-operators
 
     binaryPrecedence(token): number {
         const op = token.value;
@@ -1512,7 +1512,7 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 12.14 Conditional Operator
+    // https://tc39.github.io/ecma262/#sec-conditional-operator
 
     parseConditionalExpression(): Node.Expression {
         const startToken = this.lookahead;
@@ -1537,7 +1537,7 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 12.15 Assignment Operators
+    // https://tc39.github.io/ecma262/#sec-assignment-operators
 
     checkPatternParam(options, param) {
         switch (param.type) {
@@ -1652,7 +1652,7 @@ export class Parser {
 
             if (expr.type === ArrowParameterPlaceHolder || this.match('=>')) {
 
-                // ECMA-262 14.2 Arrow Function Definitions
+                // https://tc39.github.io/ecma262/#sec-arrow-function-definitions
                 this.context.isAssignmentTarget = false;
                 this.context.isBindingElement = false;
                 const isAsync = expr.async;
@@ -1728,7 +1728,7 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 12.16 Comma Operator
+    // https://tc39.github.io/ecma262/#sec-comma-operator
 
     parseExpression(): Node.Expression | Node.SequenceExpression {
         const startToken = this.lookahead;
@@ -1751,7 +1751,7 @@ export class Parser {
         return expr;
     }
 
-    // ECMA-262 13.2 Block
+    // https://tc39.github.io/ecma262/#sec-block
 
     parseStatementListItem(): Node.StatementListItem {
         let statement: Node.StatementListItem;
@@ -1810,14 +1810,13 @@ export class Parser {
         return this.finalize(node, new Node.BlockStatement(block));
     }
 
-    // ECMA-262 13.3.1 Let and Const Declarations
+    // https://tc39.github.io/ecma262/#sec-let-and-const-declarations
 
     parseLexicalBinding(kind: string, options): Node.VariableDeclarator {
         const node = this.createNode();
         let params = [];
         const id = this.parsePattern(params, kind);
 
-        // ECMA-262 12.2.1
         if (this.context.strict && id.type === Syntax.Identifier) {
             if (this.scanner.isRestrictedWord((<Node.Identifier>(id)).name)) {
                 this.tolerateError(Messages.StrictVarName);
@@ -1881,7 +1880,7 @@ export class Parser {
         return this.finalize(node, new Node.VariableDeclaration(declarations, kind));
     }
 
-    // ECMA-262 13.3.3 Destructuring Binding Patterns
+    // https://tc39.github.io/ecma262/#sec-destructuring-binding-patterns
 
     parseBindingRestElement(params, kind?: string): Node.RestElement {
         const node = this.createNode();
@@ -2007,7 +2006,7 @@ export class Parser {
         return pattern;
     }
 
-    // ECMA-262 13.3.2 Variable Statement
+    // https://tc39.github.io/ecma262/#sec-variable-statement
 
     parseVariableIdentifier(kind?: string): Node.Identifier {
         const node = this.createNode();
@@ -2040,7 +2039,6 @@ export class Parser {
         let params = [];
         const id = this.parsePattern(params, 'var');
 
-        // ECMA-262 12.2.1
         if (this.context.strict && id.type === Syntax.Identifier) {
             if (this.scanner.isRestrictedWord((<Node.Identifier>(id)).name)) {
                 this.tolerateError(Messages.StrictVarName);
@@ -2080,7 +2078,7 @@ export class Parser {
         return this.finalize(node, new Node.VariableDeclaration(declarations, 'var'));
     }
 
-    // ECMA-262 13.4 Empty Statement
+    // https://tc39.github.io/ecma262/#sec-empty-statement
 
     parseEmptyStatement(): Node.EmptyStatement {
         const node = this.createNode();
@@ -2088,7 +2086,7 @@ export class Parser {
         return this.finalize(node, new Node.EmptyStatement());
     }
 
-    // ECMA-262 13.5 Expression Statement
+    // https://tc39.github.io/ecma262/#sec-expression-statement
 
     parseExpressionStatement(): Node.ExpressionStatement {
         const node = this.createNode();
@@ -2097,7 +2095,7 @@ export class Parser {
         return this.finalize(node, new Node.ExpressionStatement(expr));
     }
 
-    // ECMA-262 13.6 If statement
+    // https://tc39.github.io/ecma262/#sec-if-statement
 
     parseIfClause(): Node.Statement {
         if (this.context.strict && this.matchKeyword('function')) {
@@ -2130,7 +2128,7 @@ export class Parser {
         return this.finalize(node, new Node.IfStatement(test, consequent, alternate));
     }
 
-    // ECMA-262 13.7.2 The do-while Statement
+    // https://tc39.github.io/ecma262/#sec-do-while-statement
 
     parseDoWhileStatement(): Node.DoWhileStatement {
         const node = this.createNode();
@@ -2152,7 +2150,7 @@ export class Parser {
         return this.finalize(node, new Node.DoWhileStatement(body, test));
     }
 
-    // ECMA-262 13.7.3 The while Statement
+    // https://tc39.github.io/ecma262/#sec-while-statement
 
     parseWhileStatement(): Node.WhileStatement {
         const node = this.createNode();
@@ -2177,8 +2175,8 @@ export class Parser {
         return this.finalize(node, new Node.WhileStatement(test, body));
     }
 
-    // ECMA-262 13.7.4 The for Statement
-    // ECMA-262 13.7.5 The for-in and for-of Statements
+    // https://tc39.github.io/ecma262/#sec-for-statement
+    // https://tc39.github.io/ecma262/#sec-for-in-and-for-of-statements
 
     parseForStatement(): Node.ForStatement | Node.ForInStatement | Node.ForOfStatement {
         let init: any = null;
@@ -2329,7 +2327,7 @@ export class Parser {
                 this.finalize(node, new Node.ForOfStatement(left, right, body));
     }
 
-    // ECMA-262 13.8 The continue statement
+    // https://tc39.github.io/ecma262/#sec-continue-statement
 
     parseContinueStatement(): Node.ContinueStatement {
         const node = this.createNode();
@@ -2354,7 +2352,7 @@ export class Parser {
         return this.finalize(node, new Node.ContinueStatement(label));
     }
 
-    // ECMA-262 13.9 The break statement
+    // https://tc39.github.io/ecma262/#sec-break-statement
 
     parseBreakStatement(): Node.BreakStatement {
         const node = this.createNode();
@@ -2379,7 +2377,7 @@ export class Parser {
         return this.finalize(node, new Node.BreakStatement(label));
     }
 
-    // ECMA-262 13.10 The return statement
+    // https://tc39.github.io/ecma262/#sec-return-statement
 
     parseReturnStatement(): Node.ReturnStatement {
         if (!this.context.inFunctionBody) {
@@ -2397,7 +2395,7 @@ export class Parser {
         return this.finalize(node, new Node.ReturnStatement(argument));
     }
 
-    // ECMA-262 13.11 The with statement
+    // https://tc39.github.io/ecma262/#sec-with-statement
 
     parseWithStatement(): Node.WithStatement {
         if (this.context.strict) {
@@ -2414,7 +2412,7 @@ export class Parser {
         return this.finalize(node, new Node.WithStatement(object, body));
     }
 
-    // ECMA-262 13.12 The switch statement
+    // https://tc39.github.io/ecma262/#sec-switch-statement
 
     parseSwitchCase(): Node.SwitchCase {
         const node = this.createNode();
@@ -2474,7 +2472,7 @@ export class Parser {
         return this.finalize(node, new Node.SwitchStatement(discriminant, cases));
     }
 
-    // ECMA-262 13.13 Labelled Statements
+    // https://tc39.github.io/ecma262/#sec-labelled-statements
 
     parseLabelledStatement(): Node.LabeledStatement | Node.ExpressionStatement {
         const node = this.createNode();
@@ -2518,7 +2516,7 @@ export class Parser {
         return this.finalize(node, statement);
     }
 
-    // ECMA-262 13.14 The throw statement
+    // https://tc39.github.io/ecma262/#sec-throw-statement
 
     parseThrowStatement(): Node.ThrowStatement {
         const node = this.createNode();
@@ -2534,7 +2532,7 @@ export class Parser {
         return this.finalize(node, new Node.ThrowStatement(argument));
     }
 
-    // ECMA-262 13.15 The try statement
+    // https://tc39.github.io/ecma262/#sec-try-statement
 
     parseCatchClause(): Node.CatchClause {
         const node = this.createNode();
@@ -2589,7 +2587,7 @@ export class Parser {
         return this.finalize(node, new Node.TryStatement(block, handler, finalizer));
     }
 
-    // ECMA-262 13.16 The debugger statement
+    // https://tc39.github.io/ecma262/#sec-debugger-statement
 
     parseDebuggerStatement(): Node.DebuggerStatement {
         const node = this.createNode();
@@ -2598,7 +2596,7 @@ export class Parser {
         return this.finalize(node, new Node.DebuggerStatement());
     }
 
-    // ECMA-262 13 Statements
+    // https://tc39.github.io/ecma262/#sec-ecmascript-language-statements-and-declarations
 
     parseStatement(): Node.Statement {
         let statement: Node.Statement;
@@ -2686,7 +2684,7 @@ export class Parser {
         return statement;
     }
 
-    // ECMA-262 14.1 Function Definition
+    // https://tc39.github.io/ecma262/#sec-function-definitions
 
     parseFunctionSourceElements(): Node.BlockStatement {
         const node = this.createNode();
@@ -2969,7 +2967,7 @@ export class Parser {
             this.finalize(node, new Node.FunctionExpression(id, params, body, isGenerator));
     }
 
-    // ECMA-262 14.1.1 Directive Prologues
+    // https://tc39.github.io/ecma262/#sec-directive-prologues-and-the-use-strict-directive
 
     parseDirective(): Node.Directive | Node.ExpressionStatement {
         const token = this.lookahead;
@@ -3017,7 +3015,7 @@ export class Parser {
         return body;
     }
 
-    // ECMA-262 14.3 Method Definitions
+    // https://tc39.github.io/ecma262/#sec-method-definitions
 
     qualifiedPropertyName(token): boolean {
         switch (token.type) {
@@ -3100,7 +3098,7 @@ export class Parser {
         return this.finalize(node, new Node.FunctionExpression(null, params.params, method, isGenerator));
     }
 
-    // ECMA-262 14.4 Generator Function Definitions
+    // https://tc39.github.io/ecma262/#sec-generator-function-definitions
 
     isStartOfExpression(): boolean {
         let start = true;
@@ -3151,7 +3149,7 @@ export class Parser {
         return this.finalize(node, new Node.YieldExpression(argument, delegate));
     }
 
-    // ECMA-262 14.5 Class Definitions
+    // https://tc39.github.io/ecma262/#sec-class-definitions
 
     parseClassElement(hasConstructor): Node.Property {
         let token = this.lookahead;
@@ -3315,8 +3313,8 @@ export class Parser {
         return this.finalize(node, new Node.ClassExpression(id, superClass, classBody));
     }
 
-    // ECMA-262 15.1 Scripts
-    // ECMA-262 15.2 Modules
+    // https://tc39.github.io/ecma262/#sec-scripts
+    // https://tc39.github.io/ecma262/#sec-modules
 
     parseModule(): Node.Module {
         this.context.strict = true;
@@ -3338,7 +3336,7 @@ export class Parser {
         return this.finalize(node, new Node.Script(body));
     }
 
-    // ECMA-262 15.2.2 Imports
+    // https://tc39.github.io/ecma262/#sec-imports
 
     parseModuleSpecifier(): Node.Literal {
         const node = this.createNode();
@@ -3466,7 +3464,7 @@ export class Parser {
         return this.finalize(node, new Node.ImportDeclaration(specifiers, src));
     }
 
-    // ECMA-262 15.2.3 Exports
+    // https://tc39.github.io/ecma262/#sec-exports
 
     parseExportSpecifier(): Node.ExportSpecifier {
         const node = this.createNode();
