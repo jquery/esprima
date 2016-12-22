@@ -1,3 +1,8 @@
+2016-12-22: Version 3.1.3
+
+      * Support binding patterns as rest element (issue 1681)
+      * Account for different possible arguments of a yield expression (issue 1469)
+
 2016-11-24: Version 3.1.2
 
       * Ensure that import specifier is more restrictive (issue 1615)
