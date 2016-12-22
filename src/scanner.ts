@@ -57,7 +57,7 @@ export class Scanner {
             this.index - this.lineStart + 1, message);
     }
 
-    // ECMA-262 11.4 Comments
+    // https://tc39.github.io/ecma262/#sec-comments
 
     skipSingleLineComment(offset: number): Comment[] {
         let comments: Comment[] = [];
@@ -255,7 +255,7 @@ export class Scanner {
         return comments;
     }
 
-    // ECMA-262 11.6.2.2 Future Reserved Words
+    // https://tc39.github.io/ecma262/#sec-future-reserved-words
 
     isFutureReservedWord(id: string): boolean {
         switch (id) {
@@ -290,7 +290,7 @@ export class Scanner {
         return id === 'eval' || id === 'arguments';
     }
 
-    // ECMA-262 11.6.2.1 Keywords
+    // https://tc39.github.io/ecma262/#sec-keywords
 
     isKeyword(id: string): boolean {
         switch (id.length) {
@@ -473,7 +473,7 @@ export class Scanner {
         };
     }
 
-    // ECMA-262 11.6 Names and Keywords
+    // https://tc39.github.io/ecma262/#sec-names-and-keywords
 
     scanIdentifier() {
         let type: Token;
@@ -513,7 +513,7 @@ export class Scanner {
         };
     }
 
-    // ECMA-262 11.7 Punctuators
+    // https://tc39.github.io/ecma262/#sec-punctuators
 
     scanPunctuator() {
         const token = {
@@ -604,7 +604,7 @@ export class Scanner {
         return token;
     }
 
-    // ECMA-262 11.8.3 Numeric Literals
+    // https://tc39.github.io/ecma262/#sec-literals-numeric-literals
 
     scanHexLiteral(start: number) {
         let num = '';
@@ -802,7 +802,7 @@ export class Scanner {
         };
     }
 
-    // ECMA-262 11.8.4 String Literals
+    // https://tc39.github.io/ecma262/#sec-literals-string-literals
 
     scanStringLiteral() {
         const start = this.index;
@@ -908,7 +908,7 @@ export class Scanner {
         };
     }
 
-    // ECMA-262 11.8.6 Template Literal Lexical Components
+    // https://tc39.github.io/ecma262/#sec-template-literal-lexical-components
 
     scanTemplate() {
         let cooked = '';
@@ -1038,7 +1038,7 @@ export class Scanner {
         };
     }
 
-    // ECMA-262 11.8.5 Regular Expression Literals
+    // https://tc39.github.io/ecma262/#sec-literals-regular-expression-literals
 
     testRegExp(pattern: string, flags: string) {
         // The BMP character to use as a replacement for astral symbols when
@@ -1107,7 +1107,7 @@ export class Scanner {
             str += ch;
             if (ch === '\\') {
                 ch = this.source[this.index++];
-                // ECMA-262 7.8.5
+                // https://tc39.github.io/ecma262/#sec-literals-regular-expression-literals
                 if (Character.isLineTerminator(ch.charCodeAt(0))) {
                     this.throwUnexpectedToken(Messages.UnterminatedRegExp);
                 }
