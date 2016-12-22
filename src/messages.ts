@@ -1,5 +1,7 @@
 // Error messages should be identical to V8.
 export const Messages = {
+    BadGetterArity: 'Getter must not have any formal parameters',
+    BadSetterArity: 'Setter must have exactly one formal parameter',
     ConstructorIsAsync: 'Class constructor may not be an async method',
     ConstructorSpecialMethod: 'Class constructor may not be an accessor',
     DeclarationMissingInitializer: 'Missing initializer in %0 declaration',

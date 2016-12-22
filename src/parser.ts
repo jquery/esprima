@@ -3038,51 +3038,34 @@ export class Parser {
 
     parseGetterMethod(): Node.FunctionExpression {
         const node = this.createNode();
-        this.expect('(');
-        this.expect(')');
 
         const isGenerator = false;
-        const params = {
-            simple: true,
-            params: [],
-            stricted: null,
-            firstRestricted: null,
-            message: null
-        };
         const previousAllowYield = this.context.allowYield;
         this.context.allowYield = false;
-        const method = this.parsePropertyMethod(params);
+        const formalParameters = this.parseFormalParameters();
+        if (formalParameters.params.length > 0) {
+            this.tolerateError(Messages.BadGetterArity);
+        }
+        const method = this.parsePropertyMethod(formalParameters);
         this.context.allowYield = previousAllowYield;
 
-        return this.finalize(node, new Node.FunctionExpression(null, params.params, method, isGenerator));
+        return this.finalize(node, new Node.FunctionExpression(null, formalParameters.params, method, isGenerator));
     }
 
     parseSetterMethod(): Node.FunctionExpression {
         const node = this.createNode();
 
-        let options = {
-            simple: true,
-            params: [],
-            firstRestricted: null,
-            paramSet: {}
-        };
-
         const isGenerator = false;
         const previousAllowYield = this.context.allowYield;
         this.context.allowYield = false;
-
-        this.expect('(');
-        if (this.match(')')) {
-            this.tolerateUnexpectedToken(this.lookahead);
-        } else {
-            this.parseFormalParameter(options);
+        const formalParameters = this.parseFormalParameters();
+        if (formalParameters.params.length !== 1) {
+            this.tolerateError(Messages.BadSetterArity);
         }
-        this.expect(')');
-
-        const method = this.parsePropertyMethod(options);
+        const method = this.parsePropertyMethod(formalParameters);
         this.context.allowYield = previousAllowYield;
 
-        return this.finalize(node, new Node.FunctionExpression(null, options.params, method, isGenerator));
+        return this.finalize(node, new Node.FunctionExpression(null, formalParameters.params, method, isGenerator));
     }
 
     parseGeneratorMethod(): Node.FunctionExpression {
