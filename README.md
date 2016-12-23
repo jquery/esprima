@@ -42,3 +42,5 @@ A simple example on Node.js REPL:
        kind: 'const' } ],
   sourceType: 'script' }
 ```
+
+For more information, please read the [complete documentation](http://esprima.org/doc).
