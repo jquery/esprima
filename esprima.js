@@ -155,7 +155,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var syntax_1 = __webpack_require__(2);
 	exports.Syntax = syntax_1.Syntax;
 	// Sync with *.json manifests.
-	exports.version = '3.1.2';
+	exports.version = '3.1.3';
 
 
 /***/ },
@@ -1896,8 +1896,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Parser.prototype.parseBindingRestElement = function (params, kind) {
 	        var node = this.createNode();
 	        this.expect('...');
-	        params.push(this.lookahead);
-	        var arg = this.parseVariableIdentifier(kind);
+	        var arg = this.parsePattern(params, kind);
 	        return this.finalize(node, new Node.RestElement(arg));
 	    };
 	    Parser.prototype.parseArrayPattern = function (params, kind) {
@@ -2629,31 +2628,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	    Parser.prototype.parseRestElement = function (params) {
 	        var node = this.createNode();
-	        this.nextToken();
-	        if (this.match('{')) {
-	            this.throwError(messages_1.Messages.ObjectPatternAsRestParameter);
-	        }
-	        params.push(this.lookahead);
-	        var param = this.parseVariableIdentifier();
+	        this.expect('...');
+	        var arg = this.parsePattern(params);
 	        if (this.match('=')) {
 	            this.throwError(messages_1.Messages.DefaultRestParameter);
 	        }
 	        if (!this.match(')')) {
 	            this.throwError(messages_1.Messages.ParameterAfterRestParameter);
 	        }
-	        return this.finalize(node, new Node.RestElement(param));
+	        return this.finalize(node, new Node.RestElement(arg));
 	    };
 	    Parser.prototype.parseFormalParameter = function (options) {
-	        var param;
 	        var params = [];
-	        var token = this.lookahead;
-	        if (token.value === '...') {
-	            param = this.parseRestElement(params);
-	            this.validateParam(options, param.argument, param.argument.name);
-	            options.params.push(param);
-	            return false;
-	        }
-	        param = this.parsePatternWithDefault(params);
+	        var param = this.match('...') ? this.parseRestElement(params) : this.parsePatternWithDefault(params);
 	        for (var i = 0; i < params.length; i++) {
 	            this.validateParam(options, params[i], params[i].value);
 	        }
@@ -2891,6 +2878,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.finalize(node, new Node.FunctionExpression(null, params.params, method, isGenerator));
 	    };
 	    // ECMA-262 14.4 Generator Function Definitions
+	    Parser.prototype.isStartOfExpression = function () {
+	        var start = true;
+	        var value = this.lookahead.value;
+	        switch (this.lookahead.type) {
+	            case token_1.Token.Punctuator:
+	                start = (value === '[') || (value === '(') || (value === '{') ||
+	                    (value === '+') || (value === '-') ||
+	                    (value === '!') || (value === '~') ||
+	                    (value === '++') || (value === '--') ||
+	                    (value === '/') || (value === '/='); // regular expression literal
+	                break;
+	            case token_1.Token.Keyword:
+	                start = (value === 'class') || (value === 'delete') ||
+	                    (value === 'function') || (value === 'let') || (value === 'new') ||
+	                    (value === 'super') || (value === 'this') || (value === 'typeof') ||
+	                    (value === 'void') || (value === 'yield');
+	                break;
+	            default:
+	                break;
+	        }
+	        return start;
+	    };
 	    Parser.prototype.parseYieldExpression = function () {
 	        var node = this.createNode();
 	        this.expectKeyword('yield');
@@ -2904,10 +2913,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.nextToken();
 	                argument = this.parseAssignmentExpression();
 	            }
-	            else {
-	                if (!this.match(';') && !this.match('}') && !this.match(')') && this.lookahead.type !== token_1.Token.EOF) {
-	                    argument = this.parseAssignmentExpression();
-	                }
+	            else if (this.isStartOfExpression()) {
+	                argument = this.parseAssignmentExpression();
 	            }
 	            this.context.allowYield = previousAllowYield;
 	        }
@@ -3347,7 +3354,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    TemplateOctalLiteral: 'Octal literals are not allowed in template strings.',
 	    ParameterAfterRestParameter: 'Rest parameter must be last formal parameter',
 	    DefaultRestParameter: 'Unexpected token =',
-	    ObjectPatternAsRestParameter: 'Unexpected token {',
 	    DuplicateProtoProperty: 'Duplicate __proto__ fields are not allowed in object literals',
 	    ConstructorSpecialMethod: 'Class constructor may not be an accessor',
 	    DuplicateConstructor: 'A class may only have one constructor',
