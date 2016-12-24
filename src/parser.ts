@@ -3483,6 +3483,12 @@ export class Parser {
                 // export default class foo {}
                 const declaration = this.parseClassDeclaration(true);
                 exportDeclaration = this.finalize(node, new Node.ExportDefaultDeclaration(declaration));
+            } else if (this.matchContextualKeyword('async')) {
+                // export default async function f () {}
+                // export default async function () {}
+                // export default async x => x
+                const declaration = this.matchAsyncFunction() ? this.parseFunctionDeclaration(true) : this.parseAssignmentExpression();
+                exportDeclaration = this.finalize(node, new Node.ExportDefaultDeclaration(declaration));
             } else {
                 if (this.matchContextualKeyword('from')) {
                     this.throwError(Messages.UnexpectedToken, this.lookahead.value);
