@@ -2142,9 +2142,14 @@ export class Parser {
         this.expectKeyword('while');
         this.expect('(');
         const test = this.parseExpression();
-        this.expect(')');
-        if (this.match(';')) {
-            this.nextToken();
+
+        if (!this.match(')') && this.config.tolerant) {
+            this.tolerateUnexpectedToken(this.nextToken());
+        } else {
+            this.expect(')');
+            if (this.match(';')) {
+                this.nextToken();
+            }
         }
 
         return this.finalize(node, new Node.DoWhileStatement(body, test));
@@ -2403,11 +2408,19 @@ export class Parser {
         }
 
         const node = this.createNode();
+        let body;
+
         this.expectKeyword('with');
         this.expect('(');
         const object = this.parseExpression();
-        this.expect(')');
-        const body = this.parseStatement();
+
+        if (!this.match(')') && this.config.tolerant) {
+            this.tolerateUnexpectedToken(this.nextToken());
+            body = this.finalize(this.createNode(), new Node.EmptyStatement());
+        } else {
+            this.expect(')');
+            body = this.parseStatement();
+        }
 
         return this.finalize(node, new Node.WithStatement(object, body));
     }
