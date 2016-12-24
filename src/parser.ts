@@ -3059,6 +3059,8 @@ export class Parser {
         const formalParameters = this.parseFormalParameters();
         if (formalParameters.params.length !== 1) {
             this.tolerateError(Messages.BadSetterArity);
+        } else if (formalParameters.params[0] instanceof Node.RestElement) {
+            this.tolerateError(Messages.BadSetterRestParameter);
         }
         const method = this.parsePropertyMethod(formalParameters);
         this.context.allowYield = previousAllowYield;
