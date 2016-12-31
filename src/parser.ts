@@ -1465,7 +1465,6 @@ export class Parser {
         if (prec > 0) {
             this.nextToken();
 
-            token.prec = prec;
             this.context.isAssignmentTarget = false;
             this.context.isBindingElement = false;
 
@@ -1473,7 +1472,8 @@ export class Parser {
             let left = expr;
             let right = this.isolateCoverGrammar(this.parseExponentiationExpression);
 
-            const stack = [left, token, right];
+            const stack = [left, token.value, right];
+            const precedences: number[] = [prec];
             while (true) {
                 prec = this.binaryPrecedence(this.lookahead);
                 if (prec <= 0) {
@@ -1481,9 +1481,10 @@ export class Parser {
                 }
 
                 // Reduce: make a binary expression from the three topmost entries.
-                while ((stack.length > 2) && (prec <= stack[stack.length - 2].prec)) {
+                while ((stack.length > 2) && (prec <= precedences[precedences.length - 1])) {
                     right = stack.pop();
-                    const operator = stack.pop().value;
+                    const operator = stack.pop();
+                    precedences.pop();
                     left = stack.pop();
                     markers.pop();
                     const node = this.startNode(markers[markers.length - 1]);
@@ -1492,8 +1493,8 @@ export class Parser {
 
                 // Shift.
                 token = this.nextToken();
-                token.prec = prec;
-                stack.push(token);
+                stack.push(token.value);
+                precedences.push(prec);
                 markers.push(this.lookahead);
                 stack.push(this.isolateCoverGrammar(this.parseExponentiationExpression));
             }
@@ -1504,7 +1505,8 @@ export class Parser {
             markers.pop();
             while (i > 1) {
                 const node = this.startNode(markers.pop());
-                expr = this.finalize(node, new Node.BinaryExpression(stack[i - 1].value, stack[i - 2], expr));
+                const operator = stack[i - 1];
+                expr = this.finalize(node, new Node.BinaryExpression(operator, stack[i - 2], expr));
                 i -= 2;
             }
         }

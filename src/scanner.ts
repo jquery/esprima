@@ -516,14 +516,7 @@ export class Scanner {
     // https://tc39.github.io/ecma262/#sec-punctuators
 
     scanPunctuator() {
-        const token = {
-            type: Token.Punctuator,
-            value: '',
-            lineNumber: this.lineNumber,
-            lineStart: this.lineStart,
-            start: this.index,
-            end: this.index
-        };
+        const start = this.index;
 
         // Check for most common single-character punctuators.
         let str = this.source[this.index];
@@ -595,13 +588,18 @@ export class Scanner {
                 }
         }
 
-        if (this.index === token.start) {
+        if (this.index === start) {
             this.throwUnexpectedToken();
         }
 
-        token.end = this.index;
-        token.value = str;
-        return token;
+        return {
+            type: Token.Punctuator,
+            value: str,
+            lineNumber: this.lineNumber,
+            lineStart: this.lineStart,
+            start: start,
+            end: this.index
+        };
     }
 
     // https://tc39.github.io/ecma262/#sec-literals-numeric-literals
