@@ -64,7 +64,7 @@ export function parse(code: string, options, delegate) {
     }
 
     const program = isModule ? parser.parseModule() : parser.parseScript();
-    const ast = <any>(program);
+    const ast = program as any;
 
     if (collectComment && commentHandler) {
         ast.comments = commentHandler.comments;

@@ -33,16 +33,16 @@ function getQualifiedElementName(elementName: JSXNode.JSXElementName): string {
 
     switch (elementName.type) {
         case JSXSyntax.JSXIdentifier:
-            const id = <JSXNode.JSXIdentifier>(elementName);
+            const id = elementName as JSXNode.JSXIdentifier;
             qualifiedName = id.name;
             break;
         case JSXSyntax.JSXNamespacedName:
-            const ns = <JSXNode.JSXNamespacedName>(elementName);
+            const ns = elementName as JSXNode.JSXNamespacedName;
             qualifiedName = getQualifiedElementName(ns.namespace) + ':' +
                 getQualifiedElementName(ns.name);
             break;
         case JSXSyntax.JSXMemberExpression:
-            const expr = <JSXNode.JSXMemberExpression>(elementName);
+            const expr = elementName as JSXNode.JSXMemberExpression;
             qualifiedName = getQualifiedElementName(expr.object) + '.' +
                 getQualifiedElementName(expr.property);
             break;
@@ -557,7 +557,7 @@ export class JSXParser extends Parser {
             const node = this.createJSXChildNode();
             const element = this.parseJSXBoundaryElement();
             if (element.type === JSXSyntax.JSXOpeningElement) {
-                const opening = <JSXNode.JSXOpeningElement>(element);
+                const opening = element as JSXNode.JSXOpeningElement;
                 if (opening.selfClosing) {
                     const child = this.finalize(node, new JSXNode.JSXElement(opening, [], null));
                     el.children.push(child);
@@ -567,7 +567,7 @@ export class JSXParser extends Parser {
                 }
             }
             if (element.type === JSXSyntax.JSXClosingElement) {
-                el.closing = <JSXNode.JSXClosingElement>(element);
+                el.closing = element as JSXNode.JSXClosingElement;
                 const open = getQualifiedElementName(el.opening.name);
                 const close = getQualifiedElementName(el.closing.name);
                 if (open !== close) {
