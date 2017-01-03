@@ -2,7 +2,7 @@ import { assert } from './assert';
 import { ErrorHandler } from './error-handler';
 import { Messages } from './messages';
 import * as Node from './nodes';
-import { Comment, Scanner } from './scanner';
+import { Comment, RawToken, Scanner, SourceLocation } from './scanner';
 import { Syntax } from './syntax';
 import { Token, TokenName } from './token';
 
@@ -21,7 +21,7 @@ interface Context {
     allowStrictDirective: boolean;
     allowYield: boolean;
     await: boolean;
-    firstCoverInitializedNameError: any;
+    firstCoverInitializedNameError: RawToken | null;
     isAssignmentTarget: boolean;
     isBindingElement: boolean;
     inFunctionBody: boolean;
@@ -55,6 +55,17 @@ interface DeclarationOptions {
     inFor: boolean;
 }
 
+interface TokenEntry {
+    type: string;
+    value: string;
+    regex?: {
+        pattern: string;
+        flags: string;
+    };
+    range?: [number, number];
+    loc?: SourceLocation;
+}
+
 export class Parser {
     readonly config: Config;
     readonly delegate: any;
@@ -62,7 +73,7 @@ export class Parser {
     readonly scanner: Scanner;
     readonly operatorPrecedence: any;
 
-    lookahead: any;
+    lookahead: RawToken;
     hasLineTerminator: boolean;
 
     context: Context;
@@ -119,7 +130,14 @@ export class Parser {
             '%': 11
         };
 
-        this.lookahead = null;
+        this.lookahead = {
+            type: Token.EOF,
+            value: '',
+            lineNumber: this.scanner.lineNumber,
+            lineStart: 0,
+            start: 0,
+            end: 0
+        };
         this.hasLineTerminator = false;
 
         this.context = {
@@ -208,7 +226,7 @@ export class Parser {
                 }
             }
 
-            value = (token.type === Token.Template) ? token.value.raw : token.value;
+            value = token.value;
         } else {
             value = 'ILLEGAL';
         }
@@ -279,10 +297,8 @@ export class Parser {
         return this.scanner.source.slice(token.start, token.end);
     }
 
-    convertToken(token) {
-        let t;
-
-        t = {
+    convertToken(token: RawToken): TokenEntry {
+        let t: TokenEntry = {
             type: TokenName[token.type],
             value: this.getTokenRaw(token)
         };
@@ -301,14 +317,16 @@ export class Parser {
                 }
             };
         }
-        if (token.regex) {
-            t.regex = token.regex;
+        if (token.type === Token.RegularExpression) {
+            const pattern = token.pattern as string;
+            const flags = token.flags as string;
+            t.regex = { pattern, flags };
         }
 
         return t;
     }
 
-    nextToken() {
+    nextToken(): RawToken {
         const token = this.lookahead;
 
         this.lastMarker.index = this.scanner.index;
@@ -321,12 +339,11 @@ export class Parser {
         this.startMarker.lineNumber = this.scanner.lineNumber;
         this.startMarker.lineStart = this.scanner.lineStart;
 
-        let next;
-        next = this.scanner.lex();
-        this.hasLineTerminator = (token && next) ? (token.lineNumber !== next.lineNumber) : false;
+        const next = this.scanner.lex();
+        this.hasLineTerminator = (token.lineNumber !== next.lineNumber);
 
         if (next && this.context.strict && next.type === Token.Identifier) {
-            if (this.scanner.isStrictModeReservedWord(next.value)) {
+            if (this.scanner.isStrictModeReservedWord(next.value as string)) {
                 next.type = Token.Keyword;
             }
         }
@@ -339,7 +356,7 @@ export class Parser {
         return token;
     }
 
-    nextRegexToken() {
+    nextRegexToken(): RawToken {
         this.collectComments();
 
         const token = this.scanner.scanRegExp();
@@ -428,7 +445,7 @@ export class Parser {
 
     expectCommaSeparator() {
         if (this.config.tolerant) {
-            let token = this.lookahead;
+            const token = this.lookahead;
             if (token.type === Token.Punctuator && token.value === ',') {
                 this.nextToken();
             } else if (token.type === Token.Punctuator && token.value === ';') {
@@ -647,7 +664,7 @@ export class Parser {
                         this.scanner.index = this.startMarker.index;
                         token = this.nextRegexToken();
                         raw = this.getTokenRaw(token);
-                        expr = this.finalize(node, new Node.RegexLiteral(token.value, raw, token.regex));
+                        expr = this.finalize(node, new Node.RegexLiteral(token.regex as RegExp, raw, token.pattern, token.flags));
                         break;
                     default:
                         expr = this.throwUnexpectedToken(this.nextToken());
@@ -782,7 +799,7 @@ export class Parser {
                     this.tolerateUnexpectedToken(token, Messages.StrictOctalLiteral);
                 }
                 const raw = this.getTokenRaw(token);
-                key = this.finalize(node, new Node.Literal(token.value, raw));
+                key = this.finalize(node, new Node.Literal(token.value as string, raw));
                 break;
 
             case Token.Identifier:
@@ -935,16 +952,14 @@ export class Parser {
     // https://tc39.github.io/ecma262/#sec-template-literals
 
     parseTemplateHead(): Node.TemplateElement {
-        assert(this.lookahead.head, 'Template literal must start with a template head');
+        assert(this.lookahead.head as boolean, 'Template literal must start with a template head');
 
         const node = this.createNode();
         const token = this.nextToken();
-        const value = {
-            raw: token.value.raw,
-            cooked: token.value.cooked
-        };
+        const raw = token.value as string;
+        const cooked = token.cooked as string;
 
-        return this.finalize(node, new Node.TemplateElement(value, token.tail));
+        return this.finalize(node, new Node.TemplateElement({ raw, cooked }, token.tail as boolean));
     }
 
     parseTemplateElement(): Node.TemplateElement {
@@ -954,12 +969,10 @@ export class Parser {
 
         const node = this.createNode();
         const token = this.nextToken();
-        const value = {
-            raw: token.value.raw,
-            cooked: token.value.cooked
-        };
+        const raw = token.value as string;
+        const cooked = token.cooked as string;
 
-        return this.finalize(node, new Node.TemplateElement(value, token.tail));
+        return this.finalize(node, new Node.TemplateElement({ raw, cooked }, token.tail as boolean));
     }
 
     parseTemplateLiteral(): Node.TemplateLiteral {
@@ -1460,7 +1473,7 @@ export class Parser {
 
         let expr = this.inheritCoverGrammar(this.parseExponentiationExpression);
 
-        let token = this.lookahead;
+        const token = this.lookahead;
         let prec = this.binaryPrecedence(token);
         if (prec > 0) {
             this.nextToken();
@@ -1492,8 +1505,7 @@ export class Parser {
                 }
 
                 // Shift.
-                token = this.nextToken();
-                stack.push(token.value);
+                stack.push(this.nextToken().value);
                 precedences.push(prec);
                 markers.push(this.lookahead);
                 stack.push(this.isolateCoverGrammar(this.parseExponentiationExpression));
@@ -1720,8 +1732,9 @@ export class Parser {
                     }
 
                     token = this.nextToken();
+                    const operator = token.value as string;
                     const right = this.isolateCoverGrammar(this.parseAssignmentExpression);
-                    expr = this.finalize(this.startNode(startToken), new Node.AssignmentExpression(token.value, expr, right));
+                    expr = this.finalize(this.startNode(startToken), new Node.AssignmentExpression(operator, expr, right));
                     this.context.firstCoverInitializedNameError = null;
                 }
             }
@@ -1859,7 +1872,7 @@ export class Parser {
         const previousLineNumber = this.scanner.lineNumber;
         const previousLineStart = this.scanner.lineStart;
         this.collectComments();
-        const next = this.scanner.lex() as any;
+        const next = this.scanner.lex();
         this.scanner.index = previousIndex;
         this.scanner.lineNumber = previousLineNumber;
         this.scanner.lineStart = previousLineStart;
@@ -1873,7 +1886,7 @@ export class Parser {
 
     parseLexicalDeclaration(options): Node.VariableDeclaration {
         const node = this.createNode();
-        const kind = this.nextToken().value;
+        const kind = this.nextToken().value as string;
         assert(kind === 'let' || kind === 'const', 'Lexical declaration must be either let or const');
 
         const declarations = this.parseBindingList(kind, options);
@@ -2021,7 +2034,7 @@ export class Parser {
                 this.throwUnexpectedToken(token);
             }
         } else if (token.type !== Token.Identifier) {
-            if (this.context.strict && token.type === Token.Keyword && this.scanner.isStrictModeReservedWord(token.value)) {
+            if (this.context.strict && token.type === Token.Keyword && this.scanner.isStrictModeReservedWord(token.value as string)) {
                 this.tolerateUnexpectedToken(token, Messages.StrictReservedWord);
             } else {
                 if (this.context.strict || token.value !== 'let' || kind !== 'var') {
@@ -2231,7 +2244,7 @@ export class Parser {
                 }
             } else if (this.matchKeyword('const') || this.matchKeyword('let')) {
                 init = this.createNode();
-                const kind = this.nextToken().value;
+                const kind = this.nextToken().value as string;
 
                 if (!this.context.strict && this.lookahead.value === 'in') {
                     init = this.finalize(init, new Node.Identifier(kind));
@@ -2832,7 +2845,7 @@ export class Parser {
             const previousLineNumber = this.scanner.lineNumber;
             const previousLineStart = this.scanner.lineStart;
             this.collectComments();
-            const next = this.scanner.lex() as any;
+            const next = this.scanner.lex();
             this.scanner.index = previousIndex;
             this.scanner.lineNumber = previousLineNumber;
             this.scanner.lineStart = previousLineStart;
@@ -2860,20 +2873,20 @@ export class Parser {
 
         let message;
         let id: Node.Identifier | null = null;
-        let firstRestricted = null;
+        let firstRestricted: RawToken | null = null;
 
         if (!identifierIsOptional || !this.match('(')) {
             const token = this.lookahead;
             id = this.parseVariableIdentifier();
             if (this.context.strict) {
-                if (this.scanner.isRestrictedWord(token.value)) {
+                if (this.scanner.isRestrictedWord(token.value as string)) {
                     this.tolerateUnexpectedToken(token, Messages.StrictFunctionName);
                 }
             } else {
-                if (this.scanner.isRestrictedWord(token.value)) {
+                if (this.scanner.isRestrictedWord(token.value as string)) {
                     firstRestricted = token;
                     message = Messages.StrictFunctionName;
-                } else if (this.scanner.isStrictModeReservedWord(token.value)) {
+                } else if (this.scanner.isStrictModeReservedWord(token.value as string)) {
                     firstRestricted = token;
                     message = Messages.StrictReservedWord;
                 }
@@ -2941,14 +2954,14 @@ export class Parser {
             const token = this.lookahead;
             id = (!this.context.strict && !isGenerator && this.matchKeyword('yield')) ? this.parseIdentifierName() : this.parseVariableIdentifier();
             if (this.context.strict) {
-                if (this.scanner.isRestrictedWord(token.value)) {
+                if (this.scanner.isRestrictedWord(token.value as string)) {
                     this.tolerateUnexpectedToken(token, Messages.StrictFunctionName);
                 }
             } else {
-                if (this.scanner.isRestrictedWord(token.value)) {
+                if (this.scanner.isRestrictedWord(token.value as string)) {
                     firstRestricted = token;
                     message = Messages.StrictFunctionName;
-                } else if (this.scanner.isStrictModeReservedWord(token.value)) {
+                } else if (this.scanner.isStrictModeReservedWord(token.value as string)) {
                     firstRestricted = token;
                     message = Messages.StrictReservedWord;
                 }
@@ -2996,7 +3009,7 @@ export class Parser {
     }
 
     parseDirectivePrologues(): Node.Statement[] {
-        let firstRestricted = null;
+        let firstRestricted: RawToken | null = null;
 
         const body: Node.Statement[] = [];
         while (true) {
@@ -3347,7 +3360,7 @@ export class Parser {
 
         const token = this.nextToken();
         const raw = this.getTokenRaw(token);
-        return this.finalize(node, new Node.Literal(token.value, raw));
+        return this.finalize(node, new Node.Literal(token.value as string, raw));
     }
 
     // import {<foo as bar>} ...;

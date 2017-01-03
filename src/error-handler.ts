@@ -55,7 +55,7 @@ export class ErrorHandler {
         return error;
     }
 
-    throwError(index: number, line: number, col: number, description: string) {
+    throwError(index: number, line: number, col: number, description: string): never {
         throw this.createError(index, line, col, description);
     }
 

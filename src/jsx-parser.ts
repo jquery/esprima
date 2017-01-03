@@ -24,6 +24,15 @@ enum JSXToken {
     Text
 }
 
+interface RawJSXToken {
+    type: Token | JSXToken;
+    value: string;
+    lineNumber: number;
+    lineStart: number;
+    start: number;
+    end: number;
+}
+
 TokenName[JSXToken.Identifier] = 'JSXIdentifier';
 TokenName[JSXToken.Text] = 'JSXText';
 
@@ -103,7 +112,7 @@ export class JSXParser extends Parser {
         };
     }
 
-    scanXHTMLEntity(quote: string) {
+    scanXHTMLEntity(quote: string): string {
         let result = '&';
 
         let valid = true;
@@ -158,7 +167,7 @@ export class JSXParser extends Parser {
 
     // Scan the next JSX token. This replaces Scanner#lex when in JSX mode.
 
-    lexJSX(): any {
+    lexJSX(): RawJSXToken {
         const cp = this.scanner.source.charCodeAt(this.scanner.index);
 
         // < > / : = { }
@@ -222,6 +231,7 @@ export class JSXParser extends Parser {
             // Only placeholder, since it will be rescanned as a real assignment expression.
             return {
                 type: Token.Template,
+                value: '',
                 lineNumber: this.scanner.lineNumber,
                 lineStart: this.scanner.lineStart,
                 start: this.scanner.index,
@@ -255,10 +265,10 @@ export class JSXParser extends Parser {
             };
         }
 
-        this.scanner.throwUnexpectedToken();
+        return this.scanner.throwUnexpectedToken();
     }
 
-    nextJSXToken() {
+    nextJSXToken(): RawJSXToken {
         this.collectComments();
 
         this.startMarker.index = this.scanner.index;
@@ -270,13 +280,13 @@ export class JSXParser extends Parser {
         this.lastMarker.lineStart = this.scanner.lineStart;
 
         if (this.config.tokens) {
-            this.tokens.push(this.convertToken(token));
+            this.tokens.push(this.convertToken(token as any));
         }
 
         return token;
     }
 
-    nextJSXText() {
+    nextJSXText(): RawJSXToken {
         this.startMarker.index = this.scanner.index;
         this.startMarker.lineNumber = this.scanner.lineNumber;
         this.startMarker.lineStart = this.scanner.lineStart;
@@ -314,13 +324,13 @@ export class JSXParser extends Parser {
         };
 
         if ((text.length > 0) && this.config.tokens) {
-            this.tokens.push(this.convertToken(token));
+            this.tokens.push(this.convertToken(token as any));
         }
 
         return token;
     }
 
-    peekJSXToken() {
+    peekJSXToken(): RawJSXToken {
         const previousIndex = this.scanner.index;
         const previousLineNumber = this.scanner.lineNumber;
         const previousLineStart = this.scanner.lineStart;
