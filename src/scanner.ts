@@ -12,11 +12,38 @@ function octalValue(ch: string): number {
     return '01234567'.indexOf(ch);
 }
 
+export interface Position {
+    line: number;
+    column: number;
+}
+
+export interface SourceLocation {
+    start: Position;
+    end: Position;
+    source?: string;
+}
+
 export interface Comment {
     multiLine: boolean;
     slice: number[];
-    range: number[];
-    loc: any;
+    range: [number, number];
+    loc: SourceLocation;
+}
+
+export interface RawToken {
+    type: Token;
+    value: string | number;
+    pattern?: string;
+    flags?: string;
+    regex?: RegExp | null;
+    octal?: boolean;
+    cooked?: string;
+    head?: boolean;
+    tail?: boolean;
+    lineNumber: number;
+    lineStart: number;
+    start: number;
+    end: number;
 }
 
 export class Scanner {
@@ -47,8 +74,8 @@ export class Scanner {
         return this.index >= this.length;
     }
 
-    throwUnexpectedToken(message = Messages.UnexpectedTokenIllegal) {
-        this.errorHandler.throwError(this.index, this.lineNumber,
+    throwUnexpectedToken(message = Messages.UnexpectedTokenIllegal): never {
+        return this.errorHandler.throwError(this.index, this.lineNumber,
             this.index - this.lineStart + 1, message);
     }
 
@@ -475,7 +502,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-names-and-keywords
 
-    scanIdentifier() {
+    scanIdentifier(): RawToken {
         let type: Token;
         const start = this.index;
 
@@ -515,7 +542,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-punctuators
 
-    scanPunctuator() {
+    scanPunctuator(): RawToken {
         const start = this.index;
 
         // Check for most common single-character punctuators.
@@ -604,7 +631,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-literals-numeric-literals
 
-    scanHexLiteral(start: number) {
+    scanHexLiteral(start: number): RawToken {
         let num = '';
 
         while (!this.eof()) {
@@ -632,7 +659,7 @@ export class Scanner {
         };
     }
 
-    scanBinaryLiteral(start: number) {
+    scanBinaryLiteral(start: number): RawToken {
         let num = '';
         let ch;
 
@@ -667,7 +694,7 @@ export class Scanner {
         };
     }
 
-    scanOctalLiteral(prefix: string, start: number) {
+    scanOctalLiteral(prefix: string, start: number): RawToken {
         let num = '';
         let octal = false;
 
@@ -721,7 +748,7 @@ export class Scanner {
         return true;
     }
 
-    scanNumericLiteral() {
+    scanNumericLiteral(): RawToken {
         const start = this.index;
         let ch = this.source[start];
         assert(Character.isDecimalDigit(ch.charCodeAt(0)) || (ch === '.'),
@@ -802,7 +829,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-literals-string-literals
 
-    scanStringLiteral() {
+    scanStringLiteral(): RawToken {
         const start = this.index;
         let quote = this.source[start];
         assert((quote === '\'' || quote === '"'),
@@ -908,7 +935,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-template-literal-lexical-components
 
-    scanTemplate() {
+    scanTemplate(): RawToken {
         let cooked = '';
         let terminated = false;
         let start = this.index;
@@ -1023,10 +1050,8 @@ export class Scanner {
 
         return {
             type: Token.Template,
-            value: {
-                cooked: cooked,
-                raw: this.source.slice(start + 1, this.index - rawOffset)
-            },
+            value: this.source.slice(start + 1, this.index - rawOffset),
+            cooked: cooked,
             head: head,
             tail: tail,
             lineNumber: this.lineNumber,
@@ -1038,7 +1063,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-literals-regular-expression-literals
 
-    testRegExp(pattern: string, flags: string) {
+    testRegExp(pattern: string, flags: string): RegExp | null {
         // The BMP character to use as a replacement for astral symbols when
         // translating an ES6 "u"-flagged pattern to an ES5-compatible
         // approximation.
@@ -1092,7 +1117,7 @@ export class Scanner {
         }
     }
 
-    scanRegExpBody() {
+    scanRegExpBody(): string {
         let ch = this.source[this.index];
         assert(ch === '/', 'Regular expression literal must start with a slash');
 
@@ -1131,14 +1156,10 @@ export class Scanner {
         }
 
         // Exclude leading and trailing slash.
-        const body = str.substr(1, str.length - 2);
-        return {
-            value: body,
-            literal: str
-        };
+        return str.substr(1, str.length - 2);
     }
 
-    scanRegExpFlags() {
+    scanRegExpFlags(): string {
         let str = '';
         let flags = '';
         while (!this.eof()) {
@@ -1175,27 +1196,22 @@ export class Scanner {
             }
         }
 
-        return {
-            value: flags,
-            literal: str
-        };
+        return flags;
     }
 
-    scanRegExp() {
+    scanRegExp(): RawToken {
         const start = this.index;
 
-        const body = this.scanRegExpBody();
+        const pattern = this.scanRegExpBody();
         const flags = this.scanRegExpFlags();
-        const value = this.testRegExp(body.value, flags.value);
+        const value = this.testRegExp(pattern, flags);
 
         return {
             type: Token.RegularExpression,
-            value: value,
-            literal: body.literal + flags.literal,
-            regex: {
-                pattern: body.value,
-                flags: flags.value
-            },
+            value: '',
+            pattern: pattern,
+            flags: flags,
+            regex: value,
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,
@@ -1203,10 +1219,11 @@ export class Scanner {
         };
     }
 
-    lex() {
+    lex(): RawToken {
         if (this.eof()) {
             return {
                 type: Token.EOF,
+                value: '',
                 lineNumber: this.lineNumber,
                 lineStart: this.lineStart,
                 start: this.index,

@@ -618,14 +618,14 @@ export class Property {
 
 export class RegexLiteral {
     readonly type: string;
-    readonly value: string;
+    readonly value: RegExp;
     readonly raw: string;
-    readonly regex: any;
-    constructor(value: string, raw: string, regex) {
+    readonly regex: { pattern: string, flags: string };
+    constructor(value: RegExp, raw: string, pattern: string, flags: string) {
         this.type = Syntax.Literal;
         this.value = value;
         this.raw = raw;
-        this.regex = regex;
+        this.regex = { pattern, flags };
     }
 }
 

@@ -1,10 +1,11 @@
+import { SourceLocation } from './scanner';
 import { Syntax } from './syntax';
 
 interface Comment {
     type: string;
     value: string;
-    range?: any;
-    loc?: any;
+    range?: [number, number];
+    loc?: SourceLocation;
 }
 
 interface Entry {
