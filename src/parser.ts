@@ -912,7 +912,7 @@ export class Parser {
             }
         }
 
-        return this.finalize(node, new Node.Property(kind, <Node.PropertyKey>(key), computed, value, method, shorthand));
+        return this.finalize(node, new Node.Property(kind, key as Node.PropertyKey, computed, value, method, shorthand));
     }
 
     parseObjectInitializer(): Node.ObjectExpression {
@@ -1703,7 +1703,7 @@ export class Parser {
                     }
 
                     if (this.context.strict && expr.type === Syntax.Identifier) {
-                        const id = <Node.Identifier>(expr);
+                        const id = expr as Node.Identifier;
                         if (this.scanner.isRestrictedWord(id.name)) {
                             this.tolerateUnexpectedToken(token, Messages.StrictLHSAssignment);
                         }
@@ -1820,7 +1820,7 @@ export class Parser {
         const id = this.parsePattern(params, kind);
 
         if (this.context.strict && id.type === Syntax.Identifier) {
-            if (this.scanner.isRestrictedWord((<Node.Identifier>(id)).name)) {
+            if (this.scanner.isRestrictedWord((id as Node.Identifier).name)) {
                 this.tolerateError(Messages.StrictVarName);
             }
         }
@@ -1859,7 +1859,7 @@ export class Parser {
         const previousLineNumber = this.scanner.lineNumber;
         const previousLineStart = this.scanner.lineStart;
         this.collectComments();
-        const next = <any>this.scanner.lex();
+        const next = this.scanner.lex() as any;
         this.scanner.index = previousIndex;
         this.scanner.lineNumber = previousLineNumber;
         this.scanner.lineStart = previousLineStart;
@@ -2042,7 +2042,7 @@ export class Parser {
         const id = this.parsePattern(params, 'var');
 
         if (this.context.strict && id.type === Syntax.Identifier) {
-            if (this.scanner.isRestrictedWord((<Node.Identifier>(id)).name)) {
+            if (this.scanner.isRestrictedWord((id as Node.Identifier).name)) {
                 this.tolerateError(Messages.StrictVarName);
             }
         }
@@ -2497,7 +2497,7 @@ export class Parser {
         if ((expr.type === Syntax.Identifier) && this.match(':')) {
             this.nextToken();
 
-            const id = <Node.Identifier>(expr);
+            const id = expr as Node.Identifier;
             const key = '$' + id.name;
             if (Object.prototype.hasOwnProperty.call(this.context.labelSet, key)) {
                 this.throwError(Messages.Redeclaration, 'Label', id.name);
@@ -2571,7 +2571,7 @@ export class Parser {
         }
 
         if (this.context.strict && param.type === Syntax.Identifier) {
-            if (this.scanner.isRestrictedWord((<Node.Identifier>(param)).name)) {
+            if (this.scanner.isRestrictedWord((param as Node.Identifier).name)) {
                 this.tolerateError(Messages.StrictCatchVariable);
             }
         }
@@ -2832,7 +2832,7 @@ export class Parser {
             const previousLineNumber = this.scanner.lineNumber;
             const previousLineStart = this.scanner.lineStart;
             this.collectComments();
-            const next = <any>this.scanner.lex();
+            const next = this.scanner.lex() as any;
             this.scanner.index = previousIndex;
             this.scanner.lineNumber = previousLineNumber;
             this.scanner.lineStart = previousLineStart;
@@ -3007,7 +3007,7 @@ export class Parser {
 
             const statement = this.parseDirective();
             body.push(statement);
-            const directive = (<Node.Directive>statement).directive;
+            const directive = (statement as Node.Directive).directive;
             if (typeof directive !== 'string') {
                 break;
             }
@@ -3168,7 +3168,7 @@ export class Parser {
         } else {
             computed = this.match('[');
             key = this.parseObjectPropertyKey();
-            const id = <Node.Identifier>key;
+            const id = key as Node.Identifier;
             if (id.name === 'static' && (this.qualifiedPropertyName(this.lookahead) || this.match('*'))) {
                 token = this.lookahead;
                 isStatic = true;
