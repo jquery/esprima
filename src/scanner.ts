@@ -52,11 +52,12 @@ export class Scanner {
     readonly errorHandler: ErrorHandler;
     trackComment: boolean;
 
-    readonly length: number;
     index: number;
     lineNumber: number;
     lineStart: number;
     curlyStack: string[];
+
+    private readonly length: number;
 
     constructor(code: string, handler: ErrorHandler) {
         this.source = code;
