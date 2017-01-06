@@ -1068,7 +1068,7 @@ export class Parser {
 
                     this.context.isAssignmentTarget = false;
                     expressions.push(expr);
-                    while (this.startMarker.index < this.scanner.length) {
+                    while (this.lookahead.type !== Token.EOF) {
                         if (!this.match(',')) {
                             break;
                         }
@@ -1752,7 +1752,7 @@ export class Parser {
         if (this.match(',')) {
             const expressions: Node.Expression[] = [];
             expressions.push(expr);
-            while (this.startMarker.index < this.scanner.length) {
+            while (this.lookahead.type !== Token.EOF) {
                 if (!this.match(',')) {
                     break;
                 }
@@ -2730,7 +2730,7 @@ export class Parser {
         this.context.inSwitch = false;
         this.context.inFunctionBody = true;
 
-        while (this.startMarker.index < this.scanner.length) {
+        while (this.lookahead.type !== Token.EOF) {
             if (this.match('}')) {
                 break;
             }
@@ -2816,7 +2816,7 @@ export class Parser {
         this.expect('(');
         if (!this.match(')')) {
             options.paramSet = {};
-            while (this.startMarker.index < this.scanner.length) {
+            while (this.lookahead.type !== Token.EOF) {
                 this.parseFormalParameter(options);
                 if (this.match(')')) {
                     break;
@@ -3334,7 +3334,7 @@ export class Parser {
         this.context.isModule = true;
         const node = this.createNode();
         const body = this.parseDirectivePrologues();
-        while (this.startMarker.index < this.scanner.length) {
+        while (this.lookahead.type !== Token.EOF) {
             body.push(this.parseStatementListItem());
         }
         return this.finalize(node, new Node.Module(body));
@@ -3343,7 +3343,7 @@ export class Parser {
     parseScript(): Node.Script {
         const node = this.createNode();
         const body = this.parseDirectivePrologues();
-        while (this.startMarker.index < this.scanner.length) {
+        while (this.lookahead.type !== Token.EOF) {
             body.push(this.parseStatementListItem());
         }
         return this.finalize(node, new Node.Script(body));
