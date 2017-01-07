@@ -19,7 +19,7 @@ interface MetaJSXElement {
     children: JSXNode.JSXChild[];
 }
 
-enum JSXToken {
+const enum JSXToken {
     Identifier = 100,
     Text
 }

@@ -1,4 +1,4 @@
-export enum Token {
+export const enum Token {
     BooleanLiteral = 1,
     EOF,
     Identifier,
