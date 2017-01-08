@@ -331,15 +331,10 @@ export class JSXParser extends Parser {
     }
 
     peekJSXToken(): RawJSXToken {
-        const previousIndex = this.scanner.index;
-        const previousLineNumber = this.scanner.lineNumber;
-        const previousLineStart = this.scanner.lineStart;
-
+        const state = this.scanner.saveState();
         this.scanner.scanComments();
         const next = this.lexJSX();
-        this.scanner.index = previousIndex;
-        this.scanner.lineNumber = previousLineNumber;
-        this.scanner.lineStart = previousLineStart;
+        this.scanner.restoreState(state);
 
         return next;
     }

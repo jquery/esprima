@@ -46,6 +46,12 @@ export interface RawToken {
     end: number;
 }
 
+interface ScannerState {
+    index: number;
+    lineNumber: number;
+    lineStart: number;
+}
+
 export class Scanner {
 
     readonly source: string;
@@ -69,6 +75,20 @@ export class Scanner {
         this.lineNumber = (code.length > 0) ? 1 : 0;
         this.lineStart = 0;
         this.curlyStack = [];
+    }
+
+    saveState(): ScannerState {
+        return {
+            index: this.index,
+            lineNumber: this.lineNumber,
+            lineStart: this.lineStart
+        };
+    }
+
+    restoreState(state: ScannerState): void {
+        this.index = state.index;
+        this.lineNumber = state.lineNumber;
+        this.lineStart = state.lineStart;
     }
 
     eof(): boolean {
