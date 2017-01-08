@@ -1868,14 +1868,10 @@ export class Parser {
     }
 
     isLexicalDeclaration(): boolean {
-        const previousIndex = this.scanner.index;
-        const previousLineNumber = this.scanner.lineNumber;
-        const previousLineStart = this.scanner.lineStart;
-        this.collectComments();
+        const state = this.scanner.saveState();
+        this.scanner.scanComments();
         const next = this.scanner.lex();
-        this.scanner.index = previousIndex;
-        this.scanner.lineNumber = previousLineNumber;
-        this.scanner.lineStart = previousLineStart;
+        this.scanner.restoreState(state);
 
         return (next.type === Token.Identifier) ||
             (next.type === Token.Punctuator && next.value === '[') ||
@@ -2841,16 +2837,12 @@ export class Parser {
     matchAsyncFunction(): boolean {
         let match = this.matchContextualKeyword('async');
         if (match) {
-            const previousIndex = this.scanner.index;
-            const previousLineNumber = this.scanner.lineNumber;
-            const previousLineStart = this.scanner.lineStart;
-            this.collectComments();
+            const state = this.scanner.saveState();
+            this.scanner.scanComments();
             const next = this.scanner.lex();
-            this.scanner.index = previousIndex;
-            this.scanner.lineNumber = previousLineNumber;
-            this.scanner.lineStart = previousLineStart;
+            this.scanner.restoreState(state);
 
-            match = (previousLineNumber === next.lineNumber) && ((next.type === Token.Keyword) || (next.value === 'function'));
+            match = (state.lineNumber === next.lineNumber) && ((next.type === Token.Keyword) || (next.value === 'function'));
         }
 
         return match;
