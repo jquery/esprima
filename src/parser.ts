@@ -600,7 +600,7 @@ export class Parser {
         const node = this.createNode();
 
         let expr: Node.Expression;
-        let value, token, raw;
+        let token, raw;
 
         switch (this.lookahead.type) {
             case Token.Identifier:
@@ -626,18 +626,16 @@ export class Parser {
                 this.context.isAssignmentTarget = false;
                 this.context.isBindingElement = false;
                 token = this.nextToken();
-                token.value = (token.value === 'true');
                 raw = this.getTokenRaw(token);
-                expr = this.finalize(node, new Node.Literal(token.value, raw));
+                expr = this.finalize(node, new Node.Literal(token.value === 'true', raw));
                 break;
 
             case Token.NullLiteral:
                 this.context.isAssignmentTarget = false;
                 this.context.isBindingElement = false;
                 token = this.nextToken();
-                token.value = null;
                 raw = this.getTokenRaw(token);
-                expr = this.finalize(node, new Node.Literal(token.value, raw));
+                expr = this.finalize(node, new Node.Literal(null, raw));
                 break;
 
             case Token.Template:
@@ -645,8 +643,7 @@ export class Parser {
                 break;
 
             case Token.Punctuator:
-                value = this.lookahead.value;
-                switch (value) {
+                switch (this.lookahead.value) {
                     case '(':
                         this.context.isBindingElement = false;
                         expr = this.inheritCoverGrammar(this.parseGroupExpression);

@@ -520,9 +520,9 @@ export class LabeledStatement {
 
 export class Literal {
     readonly type: string;
-    readonly value: boolean | number | string;
+    readonly value: boolean | number | string | null;
     readonly raw: string;
-    constructor(value: boolean | number | string, raw: string) {
+    constructor(value: boolean | number | string | null, raw: string) {
         this.type = Syntax.Literal;
         this.value = value;
         this.raw = raw;
