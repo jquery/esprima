@@ -2,18 +2,12 @@ import { Character } from './character';
 import * as JSXNode from './jsx-nodes';
 import { JSXSyntax } from './jsx-syntax';
 import * as Node from './nodes';
-import { Parser } from './parser';
+import { Marker, Parser } from './parser';
 import { Token, TokenName } from './token';
 import { XHTMLEntities } from './xhtml-entities';
 
-interface MetaJSXNode {
-    index: number;
-    line: number;
-    column: number;
-}
-
 interface MetaJSXElement {
-    node: MetaJSXNode;
+    node: Marker;
     opening: JSXNode.JSXOpeningElement;
     closing: JSXNode.JSXClosingElement | null;
     children: JSXNode.JSXChild[];
@@ -76,8 +70,8 @@ export class JSXParser extends Parser {
     startJSX() {
         // Unwind the scanner before the lookahead token.
         this.scanner.index = this.startMarker.index;
-        this.scanner.lineNumber = this.startMarker.lineNumber;
-        this.scanner.lineStart = this.startMarker.lineStart;
+        this.scanner.lineNumber = this.startMarker.line;
+        this.scanner.lineStart = this.startMarker.index - this.startMarker.column;
     }
 
     finishJSX() {
@@ -95,7 +89,7 @@ export class JSXParser extends Parser {
         }
     }
 
-    createJSXNode(): MetaJSXNode {
+    createJSXNode(): Marker {
         this.collectComments();
         return {
             index: this.scanner.index,
@@ -104,7 +98,7 @@ export class JSXParser extends Parser {
         };
     }
 
-    createJSXChildNode(): MetaJSXNode {
+    createJSXChildNode(): Marker {
         return {
             index: this.scanner.index,
             line: this.scanner.lineNumber,
@@ -272,12 +266,12 @@ export class JSXParser extends Parser {
         this.collectComments();
 
         this.startMarker.index = this.scanner.index;
-        this.startMarker.lineNumber = this.scanner.lineNumber;
-        this.startMarker.lineStart = this.scanner.lineStart;
+        this.startMarker.line = this.scanner.lineNumber;
+        this.startMarker.column = this.scanner.index - this.scanner.lineStart;
         const token = this.lexJSX();
         this.lastMarker.index = this.scanner.index;
-        this.lastMarker.lineNumber = this.scanner.lineNumber;
-        this.lastMarker.lineStart = this.scanner.lineStart;
+        this.lastMarker.line = this.scanner.lineNumber;
+        this.lastMarker.column = this.scanner.index - this.scanner.lineStart;
 
         if (this.config.tokens) {
             this.tokens.push(this.convertToken(token as any));
@@ -288,8 +282,8 @@ export class JSXParser extends Parser {
 
     nextJSXText(): RawJSXToken {
         this.startMarker.index = this.scanner.index;
-        this.startMarker.lineNumber = this.scanner.lineNumber;
-        this.startMarker.lineStart = this.scanner.lineStart;
+        this.startMarker.line = this.scanner.lineNumber;
+        this.startMarker.column = this.scanner.index - this.scanner.lineStart;
 
         const start = this.scanner.index;
 
@@ -311,8 +305,8 @@ export class JSXParser extends Parser {
         }
 
         this.lastMarker.index = this.scanner.index;
-        this.lastMarker.lineNumber = this.scanner.lineNumber;
-        this.lastMarker.lineStart = this.scanner.lineStart;
+        this.lastMarker.line = this.scanner.lineNumber;
+        this.lastMarker.column = this.scanner.index - this.scanner.lineStart;
 
         const token = {
             type: JSXToken.Text,
@@ -510,8 +504,8 @@ export class JSXParser extends Parser {
         const node = this.createJSXChildNode();
         this.collectComments();
         this.lastMarker.index = this.scanner.index;
-        this.lastMarker.lineNumber = this.scanner.lineNumber;
-        this.lastMarker.lineStart = this.scanner.lineStart;
+        this.lastMarker.line = this.scanner.lineNumber;
+        this.lastMarker.column = this.scanner.index - this.scanner.lineStart;
         return this.finalize(node, new JSXNode.JSXEmptyExpression());
     }
 

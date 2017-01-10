@@ -31,13 +31,7 @@ interface Context {
     strict: boolean;
 }
 
-interface Marker {
-    index: number;
-    lineNumber: number;
-    lineStart: number;
-}
-
-interface MetaNode {
+export interface Marker {
     index: number;
     line: number;
     column: number;
@@ -159,19 +153,19 @@ export class Parser {
 
         this.startMarker = {
             index: 0,
-            lineNumber: this.scanner.lineNumber,
-            lineStart: 0
+            line: this.scanner.lineNumber,
+            column: 0
         };
         this.lastMarker = {
             index: 0,
-            lineNumber: this.scanner.lineNumber,
-            lineStart: 0
+            line: this.scanner.lineNumber,
+            column: 0
         };
         this.nextToken();
         this.lastMarker = {
             index: this.scanner.index,
-            lineNumber: this.scanner.lineNumber,
-            lineStart: this.scanner.lineStart
+            line: this.scanner.lineNumber,
+            column: this.scanner.index - this.scanner.lineStart
         };
     }
 
@@ -184,8 +178,8 @@ export class Parser {
         );
 
         const index = this.lastMarker.index;
-        const line = this.lastMarker.lineNumber;
-        const column = this.lastMarker.index - this.lastMarker.lineStart + 1;
+        const line = this.lastMarker.line;
+        const column = this.lastMarker.column + 1;
         throw this.errorHandler.createError(index, line, column, msg);
     }
 
@@ -199,7 +193,7 @@ export class Parser {
 
         const index = this.lastMarker.index;
         const line = this.scanner.lineNumber;
-        const column = this.lastMarker.index - this.lastMarker.lineStart + 1;
+        const column = this.lastMarker.column + 1;
         this.errorHandler.tolerateError(index, line, column, msg);
     }
 
@@ -236,12 +230,13 @@ export class Parser {
         if (token && typeof token.lineNumber === 'number') {
             const index = token.start;
             const line = token.lineNumber;
-            const column = token.start - this.lastMarker.lineStart + 1;
+            const lastMarkerLineStart = this.lastMarker.index - this.lastMarker.column;
+            const column = token.start - lastMarkerLineStart + 1;
             return this.errorHandler.createError(index, line, column, msg);
         } else {
             const index = this.lastMarker.index;
-            const line = this.lastMarker.lineNumber;
-            const column = index - this.lastMarker.lineStart + 1;
+            const line = this.lastMarker.line;
+            const column = this.lastMarker.column + 1;
             return this.errorHandler.createError(index, line, column, msg);
         }
     }
@@ -308,8 +303,8 @@ export class Parser {
         if (this.config.loc) {
             t.loc = {
                 start: {
-                    line: this.startMarker.lineNumber,
-                    column: this.startMarker.index - this.startMarker.lineStart
+                    line: this.startMarker.line,
+                    column: this.startMarker.column
                 },
                 end: {
                     line: this.scanner.lineNumber,
@@ -330,14 +325,16 @@ export class Parser {
         const token = this.lookahead;
 
         this.lastMarker.index = this.scanner.index;
-        this.lastMarker.lineNumber = this.scanner.lineNumber;
-        this.lastMarker.lineStart = this.scanner.lineStart;
+        this.lastMarker.line = this.scanner.lineNumber;
+        this.lastMarker.column = this.scanner.index - this.scanner.lineStart;
 
         this.collectComments();
 
-        this.startMarker.index = this.scanner.index;
-        this.startMarker.lineNumber = this.scanner.lineNumber;
-        this.startMarker.lineStart = this.scanner.lineStart;
+        if (this.scanner.index !== this.startMarker.index) {
+            this.startMarker.index = this.scanner.index;
+            this.startMarker.line = this.scanner.lineNumber;
+            this.startMarker.column = this.scanner.index - this.scanner.lineStart;
+        }
 
         const next = this.scanner.lex();
         this.hasLineTerminator = (token.lineNumber !== next.lineNumber);
@@ -375,15 +372,15 @@ export class Parser {
         return token;
     }
 
-    createNode(): MetaNode {
+    createNode(): Marker {
         return {
             index: this.startMarker.index,
-            line: this.startMarker.lineNumber,
-            column: this.startMarker.index - this.startMarker.lineStart
+            line: this.startMarker.line,
+            column: this.startMarker.column
         };
     }
 
-    startNode(token): MetaNode {
+    startNode(token): Marker {
         return {
             index: token.start,
             line: token.lineNumber,
@@ -391,20 +388,20 @@ export class Parser {
         };
     }
 
-    finalize(meta: MetaNode, node) {
+    finalize(marker: Marker, node) {
         if (this.config.range) {
-            node.range = [meta.index, this.lastMarker.index];
+            node.range = [marker.index, this.lastMarker.index];
         }
 
         if (this.config.loc) {
             node.loc = {
                 start: {
-                    line: meta.line,
-                    column: meta.column
+                    line: marker.line,
+                    column: marker.column,
                 },
                 end: {
-                    line: this.lastMarker.lineNumber,
-                    column: this.lastMarker.index - this.lastMarker.lineStart
+                    line: this.lastMarker.line,
+                    column: this.lastMarker.column
                 }
             };
             if (this.config.source) {
@@ -415,13 +412,13 @@ export class Parser {
         if (this.delegate) {
             const metadata = {
                 start: {
-                    line: meta.line,
-                    column: meta.column,
-                    offset: meta.index
+                    line: marker.line,
+                    column: marker.column,
+                    offset: marker.index
                 },
                 end: {
-                    line: this.lastMarker.lineNumber,
-                    column: this.lastMarker.index - this.lastMarker.lineStart,
+                    line: this.lastMarker.line,
+                    column: this.lastMarker.column,
                     offset: this.lastMarker.index
                 }
             };
@@ -589,8 +586,8 @@ export class Parser {
                 this.throwUnexpectedToken(this.lookahead);
             }
             this.lastMarker.index = this.startMarker.index;
-            this.lastMarker.lineNumber = this.startMarker.lineNumber;
-            this.lastMarker.lineStart = this.startMarker.lineStart;
+            this.lastMarker.line = this.startMarker.line;
+            this.lastMarker.column = this.startMarker.column;
         }
     }
 
