@@ -44,6 +44,7 @@ module.exports = function (config) {
             'karma-firefox-launcher',
             'karma-ie-launcher',
             'karma-safari-launcher',
+            'karma-safaritechpreview-launcher',
             'karma-detect-browsers'
         ]
 
