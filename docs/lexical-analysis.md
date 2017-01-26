@@ -18,8 +18,8 @@ The `input` argument is mandatory. Its type must be a string, otherwise the toke
 
 The description of various properties of `config` is summarized in the following table:
 
-<table>
-<tr><th>Name</th> <th>Type</th> <th>Default</th> <th>Description</th></tr>
+<table border="1" cellpadding="8" cellspacing="8">
+<tr><td>Name</td> <td>Type</td> <td>Default</td> <td>Description</td></tr>
 <tr><td>range</td> <td>Boolean</td> <td>false</td> <td>Annotate each token with its zero-based start and end location</td></tr>
 <tr><td>loc</td> <td>Boolean</td> <td>false</td> <td>Annotate each token with its column and row-based location</td></tr>
 <tr><td>comment</td> <td>Boolean</td> <td>false</td> <td>Include every line and block comment in the output</td></tr>
@@ -141,7 +141,7 @@ This is however different than what will be obtained using Esprima parser since 
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parseScript('x.if = 1').body[0].expression.left.property
+> esprima.parse('x.if = 1').body[0].expression.left.property
 Identifier { type: 'Identifier', name: 'if' }
 ```
 

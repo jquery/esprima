@@ -53,7 +53,7 @@ An expression can be one of the following:
 type Expression = ThisExpression | Identifier | Literal |
     ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | ClassExpression |
     TaggedTemplateExpression | MemberExpression | Super | MetaProperty |
-    NewExpression | CallExpression | UpdateExpression | AwaitExpression | UnaryExpression |
+    NewExpression | CallExpression | UpdateExpression | UnaryExpression |
     BinaryExpression | LogicalExpression | ConditionalExpression |
     YieldExpression | AssignmentExpression | SequenceExpression;
 ```
@@ -156,9 +156,9 @@ where
 ```js
 interface Property {
     type: 'Property';
-    key: Expression;
+    key: Identifier | Literal;
     computed: boolean;
-    value: Expression | null;
+    value: AssignmentPattern | Identifier | BindingPattern | FunctionExpression | null;
     kind: 'get' | 'set' | 'init';
     method: false;
     shorthand: boolean;
@@ -174,7 +174,6 @@ interface FunctionExpression {
     params: FunctionParameter[];
     body: BlockStatement;
     generator: boolean;
-    async: boolean;
     expression: boolean;
 }
 ```
@@ -190,13 +189,12 @@ The value of `generator` is true for a generator expression.
 ### Arrow Function Expression
 
 ```js
-interface ArrowFunctionExpression {
+interface FunctionExpression {
     type: 'ArrowFunctionExpression';
     id: Identifier | null;
     params: FunctionParameter[];
     body: BlockStatement | Expression;
     generator: boolean;
-    async: boolean;
     expression: false;
 }
 ```
@@ -209,7 +207,6 @@ interface ClassExpression {
     id: Identifier | null;
     superClass: Identifier | null;
     body: ClassBody;
-}
 ```
 
 with
@@ -290,7 +287,7 @@ interface MetaProperty {
 ```js
 interface CallExpression {
     type: 'CallExpression';
-    callee: Expression | Import;
+    callee: Expression;
     arguments: ArgumentListElement[];
 }
 
@@ -304,10 +301,6 @@ interface NewExpression {
 with
 
 ```js
-interface Import {
-    type: 'Import';
-}
-
 type ArgumentListElement = Expression | SpreadElement;
 
 interface SpreadElement {
@@ -324,15 +317,6 @@ interface UpdateExpression {
     operator: '++' | '--';
     argument: Expression;
     prefix: boolean;
-}
-```
-
-### Await Expression
-
-```js
-interface AwaitExpression {
-    type: 'AwaitExpression';
-    argument: Expression;
 }
 ```
 
@@ -377,8 +361,8 @@ interface LogicalExpression {
 interface ConditionalExpression {
     type: 'ConditionalExpression';
     test: Expression;
-    consequent: Expression;
-    alternate: Expression;
+    consequent: Statement;
+    alternate?: Statement;
 }
 ```
 
@@ -430,7 +414,7 @@ type Statement = BlockStatement | BreakStatement | ContinueStatement |
 A declaration can be one of the following:
 
 ```js
-type Declaration = ClassDeclaration | FunctionDeclaration |  VariableDeclaration;
+type Declaration = ClassDeclaration | FunctionDeclaration  VariableDeclaration;
 ```
 
 A statement list item is either a statement or a declaration:
@@ -522,7 +506,7 @@ When the expression statement represents a directive (such as `"use strict"`), t
 ```js
 interface ForStatement {
     type: 'ForStatement';
-    init: Expression | VariableDeclaration | null;
+    init: Expression | null;
     test: Expression | null;
     update: Expression | null;
     body: Statement;
@@ -561,7 +545,6 @@ interface FunctionDeclaration {
     params: FunctionParameter[];
     body: BlockStatement;
     generator: boolean;
-    async: boolean;
     expression: false;
 }
 ```
@@ -619,7 +602,7 @@ with
 ```js
 interface SwitchCase {
     type: 'SwitchCase';
-    test: Expression | null;
+    test: Expression;
     consequent: Statement[];
 }
 ```

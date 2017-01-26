@@ -8,8 +8,6 @@ To get the feeling of what Esprima can do, please try its [online parser demo](h
 
 The left panel is a code editor, it can accept any JavaScript source. If the source is a valid JavaScript program, the right panel shows the [syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) as the result of parsing that JavaScript program. The syntax tree can be displayed in its original form (JSON, but formatted) or in its visual form (hierarchical node view).
 
-**Important**: Esprima can only process JavaScript programs. It does not handle other variations of JavaScript such as [Flow](https://flow.org/), [TypeScript](http://www.typescriptlang.org/), etc.
-
 ## Supported environments
 
 Since Esprima is written in JavaScript, it can run on various JavaScript environments, including (but not limited to):
@@ -34,10 +32,10 @@ To verify that the module is available, use `npm ls`:
 ```
 $ npm ls
 /home/ariya/demo
-└── esprima@4.0.0
+└── esprima@3.1.3
 ```
 
-The number after the `@` symbol, `4.0.0`, indicates the version of [Esprima package](https://www.npmjs.com/package/esprima) downloaded and installed from the package registry. This may vary from time to time, depending on the latest stable version available for everyone.
+The number after the `@` symbol, `3.1.3`, indicates the version of [Esprima package](https://www.npmjs.com/package/esprima) downloaded and installed from the package registry. This may vary from time to time, depending on the latest stable version available for everyone.
 
 To play with Esprima within Node.js, first launch Node.js. Inside its [REPL](https://en.wikipedia.org/wiki/REPL) command prompt, load the module using `require` and then use it, as illustrated in the following session:
 
@@ -45,8 +43,8 @@ To play with Esprima within Node.js, first launch Node.js. Inside its [REPL](htt
 $ node
 > var esprima = require('esprima')
 undefined
-> esprima.parseScript('answer = 42')
-Script {
+> esprima.parse('answer = 42')
+Program {
   type: 'Program',
   body: [ ExpressionStatement { type: 'ExpressionStatement', expression: [Object] } ],
   sourceType: 'script' }
@@ -60,7 +58,7 @@ If the source given to Esprima parser is not a valid JavaScript program, an exce
 $ node
 > var esprima = require('esprima')
 undefined
-> esprima.parseScript('1+')
+> esprima.parse('1+')
 Error: Line 1: Unexpected end of input
 ```
 
@@ -71,7 +69,7 @@ To use Esprima in a library or an application designed to be used with Node.js, 
 To use Esprima in a browser environment, it needs to be loaded using the `script` element. For instance, to load Esprima from a CDN such as [unpkg](https://unpkg.com/), the HTML document needs to have the following line:
 
 ```html
-<script src="https://unpkg.com/esprima@~4.0/dist/esprima.js"></script>
+<script src="https://unpkg.com/esprima@~3.1/dist/esprima.js"></script>
 ```
 
 When  Esprima is loaded this way, it will be available as a global object named `esprima`.
@@ -101,7 +99,7 @@ The following session with Nashorn shell, [jrunscript](https://docs.oracle.com/j
 ```js
 $ jrunscript
 nashorn> load('esprima.js')
-nashorn> ast = esprima.parseScript('const answer = 42')
+nashorn> ast = esprima.parse('const answer = 42')
 [object Object]
 nashorn> print(JSON.stringify(ast, null, 2))
 {
