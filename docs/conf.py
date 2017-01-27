@@ -3,8 +3,8 @@ import os
 
 project = u'Esprima'
 author = u'Ariya Hidayat'
-version = 'master'
-release = 'master'
+version = '3.1'
+release = '3.1'
 
 master_doc = 'index'
 exclude_patterns = ['_build']
