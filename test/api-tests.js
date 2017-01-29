@@ -60,6 +60,7 @@ describe('esprima.Syntax', function () {
             FunctionExpression: 'FunctionExpression',
             Identifier: 'Identifier',
             IfStatement: 'IfStatement',
+            Import: 'Import',
             ImportDeclaration: 'ImportDeclaration',
             ImportDefaultSpecifier: 'ImportDefaultSpecifier',
             ImportNamespaceSpecifier: 'ImportNamespaceSpecifier',
