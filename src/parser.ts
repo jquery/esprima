@@ -680,6 +680,8 @@ export class Parser {
                         expr = this.finalize(node, new Node.ThisExpression());
                     } else if (this.matchKeyword('class')) {
                         expr = this.parseClassExpression();
+                    } else if (this.matchImportCall()) {
+                        expr = this.parseImportCall();
                     } else {
                         expr = this.throwUnexpectedToken(this.nextToken());
                     }
@@ -1216,6 +1218,8 @@ export class Parser {
             } else {
                 this.throwUnexpectedToken(this.lookahead);
             }
+        } else if (this.matchKeyword('import')) {
+            this.throwUnexpectedToken(this.lookahead);
         } else {
             const callee = this.isolateCoverGrammar(this.parseLeftHandSideExpression);
             const args = this.match('(') ? this.parseArguments() : [];
@@ -1255,6 +1259,25 @@ export class Parser {
         return args;
     }
 
+    matchImportCall(): boolean {
+        let match = this.matchKeyword('import');
+        if (match) {
+            const state = this.scanner.saveState();
+            this.scanner.scanComments();
+            const next = this.scanner.lex();
+            this.scanner.restoreState(state);
+            match = (next.type === Token.Punctuator) && (next.value === '(');
+        }
+
+        return match;
+    }
+
+    parseImportCall(): Node.Import {
+        const node = this.createNode();
+        this.expectKeyword('import');
+        return this.finalize(node, new Node.Import());
+    }
+
     parseLeftHandSideExpressionAllowCall(): Node.Expression {
         const startToken = this.lookahead;
         const maybeAsync = this.matchContextualKeyword('async');
@@ -1287,6 +1310,9 @@ export class Parser {
                 this.context.isBindingElement = false;
                 this.context.isAssignmentTarget = false;
                 const args = asyncArrow ? this.parseAsyncArguments() : this.parseArguments();
+                if (expr.type === Syntax.Import && args.length !== 1) {
+                    this.tolerateError(Messages.BadImportCallArity);
+                }
                 expr = this.finalize(this.startNode(startToken), new Node.CallExpression(expr, args));
                 if (asyncArrow && this.match('=>')) {
                     expr = {
@@ -1789,10 +1815,14 @@ export class Parser {
                     statement = this.parseExportDeclaration();
                     break;
                 case 'import':
-                    if (!this.context.isModule) {
-                        this.tolerateUnexpectedToken(this.lookahead, Messages.IllegalImportDeclaration);
+                    if (this.matchImportCall()) {
+                        statement = this.parseExpressionStatement();
+                    } else {
+                        if (!this.context.isModule) {
+                            this.tolerateUnexpectedToken(this.lookahead, Messages.IllegalImportDeclaration);
+                        }
+                        statement = this.parseImportDeclaration();
                     }
-                    statement = this.parseImportDeclaration();
                     break;
                 case 'const':
                     statement = this.parseLexicalDeclaration({ inFor: false });

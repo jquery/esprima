@@ -289,7 +289,7 @@ interface MetaProperty {
 ```js
 interface CallExpression {
     type: 'CallExpression';
-    callee: Expression;
+    callee: Expression | Import;
     arguments: ArgumentListElement[];
 }
 
@@ -303,6 +303,10 @@ interface NewExpression {
 with
 
 ```js
+interface Import {
+    type: 'Import';
+}
+
 type ArgumentListElement = Expression | SpreadElement;
 
 interface SpreadElement {

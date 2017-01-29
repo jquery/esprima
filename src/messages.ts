@@ -1,5 +1,6 @@
 // Error messages should be identical to V8.
 export const Messages = {
+    BadImportCallArity: 'Unexpected token',
     BadGetterArity: 'Getter must not have any formal parameters',
     BadSetterArity: 'Setter must have exactly one formal parameter',
     BadSetterRestParameter: 'Setter function argument must not be a rest parameter',

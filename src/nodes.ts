@@ -189,9 +189,9 @@ export class BreakStatement {
 
 export class CallExpression {
     readonly type: string;
-    readonly callee: Expression;
+    readonly callee: Expression | Import;
     readonly arguments: ArgumentListElement[];
-    constructor(callee, args) {
+    constructor(callee: Expression | Import, args: ArgumentListElement[]) {
         this.type = Syntax.CallExpression;
         this.callee = callee;
         this.arguments = args;
@@ -466,6 +466,13 @@ export class IfStatement {
         this.test = test;
         this.consequent = consequent;
         this.alternate = alternate;
+    }
+}
+
+export class Import {
+    readonly type: string;
+    constructor() {
+        this.type = Syntax.Import;
     }
 }
 
