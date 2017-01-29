@@ -46,7 +46,7 @@ An example of parsing a script:
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('answer = 42', { sourceType: 'string' });
+> esprima.parse('answer = 42', { sourceType: 'script' });
 Program {
   type: 'Program',
   body: [ ExpressionStatement { type: 'ExpressionStatement', expression: [Object] } ],
