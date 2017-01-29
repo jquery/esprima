@@ -73,10 +73,9 @@ pre.prettyprint {
               </ul>
             </li>
               <li class="has-dropdown">
-                  <a href="../doc/index.html">Documentation</a>
+                  <a href="https://esprima.readthedocs.io">Documentation</a>
                   <ul class="dropdown">
-                      <li><a href="../doc/index.html">Usage</a></li>
-                      <li><a href="../doc/compatibility.html">Compatibility</a></li>
+                      <li><a href="https://esprima.readthedocs.io">Usage</a></li>
                       <li><a href="../doc/videos.html">Videos</a></li>
                   </ul>
               </li>
@@ -97,185 +96,11 @@ pre.prettyprint {
   <div class="row">
     <div class="eight columns">
 
-<p>From version 2.0, Esprima starts to support new features in ECMAScript 6.</p>
-
-<h4 id="arrowfunction">Arrow Function</h4>
-
-<p><em>Since: version 2.0. Specification: <a href="https://people.mozilla.org/~jorendorff/es6-draft.html#sec-arrow-function-definitions">section 14.2</a>.</em></p>
-
-<p>Example code snippet:</p>
-
-<pre class="prettyprint lang-js">
-array.map(x => x * x)
-</pre>
-
-
-<p>The corresponding syntax tree:</p>
-
-<pre class="prettyprint lang-json">
-{
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "CallExpression",
-                "callee": {
-                    "type": "MemberExpression",
-                    "computed": false,
-                    "object": {
-                        "type": "Identifier",
-                        "name": "array"
-                    },
-                    "property": {
-                        "type": "Identifier",
-                        "name": "map"
-                    }
-                },
-                "arguments": [
-                    {
-                        "type": "ArrowFunctionExpression",
-                        "id": null,
-                        "params": [
-                            {
-                                "type": "Identifier",
-                                "name": "x"
-                            }
-                        ],
-                        "defaults": [],
-                        "body": {
-                            "type": "BinaryExpression",
-                            "operator": "*",
-                            "left": {
-                                "type": "Identifier",
-                                "name": "x"
-                            },
-                            "right": {
-                                "type": "Identifier",
-                                "name": "x"
-                            }
-                        },
-                        "rest": null,
-                        "generator": false,
-                        "expression": true
-                    }
-                ]
-            }
-        }
-    ]
-}
-</pre>
-
-<h4 id="defaultparameter">Default Parameter Value</h4>
-
-<p><em>Since: version 2.0. Specification: <a href="https://people.mozilla.org/~jorendorff/es6-draft.html#sec-function-definitions">section 14.1</a>.</em></p>
-
-<p>Example code snippet:</p>
-
-<pre class="prettyprint lang-js">
-function answer(x = 42) { say(x); }
-</pre>
-
-<p>The corresponding syntax tree:</p>
-
-<pre class="prettyprint lang-json">
-{
-    "type": "Program",
-    "body": [
-        {
-            "type": "FunctionDeclaration",
-            "id": {
-                "type": "Identifier",
-                "name": "answer"
-            },
-            "params": [
-                {
-                    "type": "Identifier",
-                    "name": "x"
-                }
-            ],
-            "defaults": [
-                {
-                    "type": "Literal",
-                    "value": 42,
-                    "raw": "42"
-                }
-            ],
-            "body": {
-                "type": "BlockStatement",
-                "body": [
-                    {
-                        "type": "ExpressionStatement",
-                        "expression": {
-                            "type": "CallExpression",
-                            "callee": {
-                                "type": "Identifier",
-                                "name": "say"
-                            },
-                            "arguments": [
-                                {
-                                    "type": "Identifier",
-                                    "name": "x"
-                                }
-                            ]
-                        }
-                    }
-                ]
-            },
-            "rest": null,
-            "generator": false,
-            "expression": false
-        }
-    ]
-}
-</pre>
-
-<h4 id="codepointescape">Unicode Code Point Escape Sequence</h4>
-<p><em>Since: version 2.0. Specification: <a href="https://people.mozilla.org/~jorendorff/es6-draft.html#sec-literals-string-literals">section 11.8.4</a>.</em></p>
-
-<p>Example code snippet:</p>
-
-<pre class="prettyprint lang-js">
-x = '\u{41}'
-</pre>
-
-<p>The corresponding syntax tree:</p>
-
-<pre class="prettyprint lang-js">
-{
-    "type": "Program",
-    "body": [
-        {
-            "type": "ExpressionStatement",
-            "expression": {
-                "type": "AssignmentExpression",
-                "operator": "=",
-                "left": {
-                    "type": "Identifier",
-                    "name": "x"
-                },
-                "right": {
-                    "type": "Literal",
-                    "value": "A",
-                    "raw": "'\\u{41}'"
-                }
-            }
-        }
-    ]
-}
-</pre>
+    <p>Please read the documentation on the <a href="https://esprima.readthedocs.io/en/latest/syntax-tree-format.html">Syntax Tree Format</a>.</p>
 
     </div>
 
     <div class="four columns">
-      <div class="panel">
-          <p><b>Contents</b></p>
-          <ol>
-              <li><a href="#arrowfunction">Arrow Function</a></li>
-              <li><a href="#defaultparameter">Default Parameter Value</a></li>
-              <li><a href="#codepointescape">Unicode Code Point Escapee</a></li>
-          </ol>
-      </div>
       <p><strong>Note</strong>: Partial ES6 support also exists in the experimental <em>harmony</em> branch.
       However, this branch has never been officially released and the features are not documented.</p>
 

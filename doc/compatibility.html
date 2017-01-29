@@ -6,6 +6,7 @@
   <meta charset="utf-8" />
   <title>Esprima: Compatibility</title>
   <meta name="viewport" content="width=device-width" />
+  <meta http-equiv="refresh" content="0; url=https://esprima.readthedocs.io/en/3.1/syntactic-analysis.html#browser-compatibility" />
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="../assets/foundation/foundation.min.css">
   <link rel="stylesheet" type="text/css" href="../assets/prettify/prettify.css"/>
@@ -73,10 +74,9 @@ pre.prettyprint {
               </ul>
             </li>
             <li class="has-dropdown">
-              <a href="../doc/index.html">Documentation</a>
+              <a href="https://esprima.readthedocs.io">Documentation</a>
               <ul class="dropdown">
-                <li><a href="../doc/index.html">Usage</a></li>
-                <li><a href="../doc/compatibility.html">Compatibility</a></li>
+                <li><a href="https://esprima.readthedocs.io">Usage</a></li>
                 <li><a href="../doc/videos.html">Videos</a></li>
               </ul>
             </li>
@@ -96,37 +96,7 @@ pre.prettyprint {
   <!-- Main content -->
   <div class="row">
     <div class="eight columns">
-
-      <h4>Browser Implementation Compatibility</h4>
-
-      <p>In a certain specific case, Esprima intentially does not throw an exception (indicating
-      a parsing error) although the input being parsed contains an invalid syntax.
-      This is to achieve implementation compatibility with major web browsers.
-      For further details, refer to the official
-      <a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm">ECMAScript 2015
-      Language Specification</a>, Section B.3.3 on <strong>Block-Level Function
-      Declarations Web Legacy Compatibility Semantics</strong>:</p>
-
-      <blockquote>
-      Prior to ECMAScript 2015, the ECMAScript specification did not define the occurrence of
-      a <em>FunctionDeclaration</em> as an element of a <em>Block</em> statement’s <em>StatementList</em>.
-      However, support for that form of <em>FunctionDeclaration</em> was an allowable extension and most
-      browser-hosted ECMAScript implementations permitted them.
-      </blockquote>
-
-      <p>This is illustrated in the following simple example:</p>
-
-<pre class="prettyprint lang-js">
-var syntax = esprima.parse('if (x) function y() {}');
-</pre>
-
-      <p>In the above example, Esprima returns a syntax tree for the code
-      (see <a href="http://esprima.org/demo/parse.html?code=if%20(x)%20function%20y()%20%7B%7D">the result</a>).</p>
-
-      <p>According to the specification, declaring a function inside the block
-      of an If statement is not possible. Yet, this is permitted in web browsers
-      such as Firefox, Chrome, and many others.</p>
-
+    <p>Please read the documentation on <a href="https://esprima.readthedocs.io/en/3.1/syntactic-analysis.html#browser-compatibility">Browser Compatibility.</p>
     </div>
     <div class="four columns">
     </div>
