@@ -53,7 +53,7 @@ An expression can be one of the following:
 type Expression = ThisExpression | Identifier | Literal |
     ArrayExpression | ObjectExpression | FunctionExpression | ArrowFunctionExpression | ClassExpression |
     TaggedTemplateExpression | MemberExpression | Super | MetaProperty |
-    NewExpression | CallExpression | UpdateExpression | UnaryExpression |
+    NewExpression | CallExpression | UpdateExpression | AwaitExpression | UnaryExpression |
     BinaryExpression | LogicalExpression | ConditionalExpression |
     YieldExpression | AssignmentExpression | SequenceExpression;
 ```
@@ -174,6 +174,7 @@ interface FunctionExpression {
     params: FunctionParameter[];
     body: BlockStatement;
     generator: boolean;
+    async: boolean;
     expression: boolean;
 }
 ```
@@ -195,6 +196,7 @@ interface FunctionExpression {
     params: FunctionParameter[];
     body: BlockStatement | Expression;
     generator: boolean;
+    async: boolean;
     expression: false;
 }
 ```
@@ -320,6 +322,15 @@ interface UpdateExpression {
 }
 ```
 
+### Await Expression
+
+```js
+interface AwaitExpression {
+    type: 'AwaitExpression';
+    argument: Expression;
+}
+```
+
 ### Unary Expression
 
 ```js
@@ -414,7 +425,7 @@ type Statement = BlockStatement | BreakStatement | ContinueStatement |
 A declaration can be one of the following:
 
 ```js
-type Declaration = ClassDeclaration | FunctionDeclaration  VariableDeclaration;
+type Declaration = ClassDeclaration | FunctionDeclaration |  VariableDeclaration;
 ```
 
 A statement list item is either a statement or a declaration:
@@ -545,6 +556,7 @@ interface FunctionDeclaration {
     params: FunctionParameter[];
     body: BlockStatement;
     generator: boolean;
+    async: boolean;
     expression: false;
 }
 ```
