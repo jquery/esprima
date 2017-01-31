@@ -2893,7 +2893,7 @@ export class Parser {
             const next = this.scanner.lex();
             this.scanner.restoreState(state);
 
-            match = (state.lineNumber === next.lineNumber) && ((next.type === Token.Keyword) || (next.value === 'function'));
+            match = (state.lineNumber === next.lineNumber) && (next.type === Token.Keyword) && (next.value === 'function');
         }
 
         return match;
