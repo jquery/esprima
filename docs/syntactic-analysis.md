@@ -417,3 +417,51 @@ ExpressionStatement { start: { line: 1, column: 0, offset: 0 },
 Program { start: { line: 1, column: 0, offset: 0 },
   end: { line: 1, column: 11, offset: 11 } }
 ```
+
+## Example: console Calls Removal
+
+The following Node.js script demonstrates the use of Esprima parser to remove every single expression that represents a `console` call. The script accepts the input from `stdin` and displays the result to `stdout`. The entire script comprises approximately 30 lines of code.
+
+```js
+const esprima = require('esprima');
+const readline = require('readline');
+
+// console.log(x) or console['error'](y)
+function isConsoleCall(node) {
+    return (node.type === 'CallExpression') &&
+        (node.callee.type === 'MemberExpression') &&
+        (node.callee.object.type === 'Identifier') &&
+        (node.callee.object.name === 'console');
+}
+
+function removeCalls(source) {
+    const entries = [];
+    esprima.parse(source, {}, function (node, meta) {
+        if (isConsoleCall(node)) {
+            entries.push({
+                start: meta.start.offset,
+                end: meta.end.offset
+            });
+        }
+    });
+    entries.sort((a, b) => { return b.end - a.end }).forEach(n => {
+        source = source.slice(0, n.start) + source.slice(n.end);
+    });
+    return source;
+}
+
+let source = '';
+readline.createInterface({ input: process.stdin, terminal: false })
+.on('line', line => { source += line + '\n' })
+.on('close', () => { console.log(removeCalls(source)) });
+```
+
+An example run is shown in the following screenshot (the script is called `unconsole.js`). Note that the single call to `console.log` is eliminated in the output.
+
+![Console removal](unconsole.png)
+
+The script uses the [readline module](https://nodejs.org/api/readline.html) to read the input line-by-line, collecting each line to a buffer. Once there is no more input, it uses Esprima parser and utilizes the syntax delegate feature with a callback function that looks for a particular type of syntax node, i.e. a call expression with `console` object as the callee. The logic inside the `isConsoleCall` function is intended to match such a node. As an illustration, using the [Esprima online demo](http://esprima.org/demo/parse.html) to parse `console.log("Hello")` will reveal the following syntax tree:
+
+![Call expression](callexpr.png)
+
+For each matched node, the node location is recorded. Once the parsing is completed, the list of the location of every matched call expression with `console` is used to modify the source, i.e. the portion of the source corresponding to the call expression is removed. When it is done repeatedly, the result is that every single `console` call will disappear. Note how this is done from the last one to the first one (reflected by the sorting in the reverse order) to maintain the correct offset throughout the process.
