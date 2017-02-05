@@ -850,7 +850,7 @@ export class Parser {
             this.nextToken();
             computed = this.match('[');
             isAsync = !this.hasLineTerminator && (id === 'async') &&
-                !this.match(':') && !this.match('(') && !this.match('*') && !this.match(',');
+                !this.match(':') && !this.match('(') && !this.match('*');
             key = isAsync ? this.parseObjectPropertyKey() : this.finalize(node, new Node.Identifier(id));
         } else if (this.match('*')) {
             this.nextToken();
