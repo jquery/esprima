@@ -9,16 +9,17 @@
                     {
                         "type": "Property",
                         "key": {
-                            "type": "Identifier",
-                            "name": 3,
+                            "type": "Literal",
+                            "value": 3,
+                            "raw": "3",
                             "range": [
-                                3,
+                                9,
                                 10
                             ],
                             "loc": {
                                 "start": {
                                     "line": 1,
-                                    "column": 3
+                                    "column": 9
                                 },
                                 "end": {
                                     "line": 1,

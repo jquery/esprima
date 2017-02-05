@@ -838,26 +838,12 @@ export class Parser {
         let isAsync = false;
 
         if (token.type === Token.Identifier) {
-            let id = token.value;
+            const id = token.value;
             this.nextToken();
-            if (id === 'async' && !this.hasLineTerminator) {
-                computed = this.match('[');
-                if (computed) {
-                    isAsync = true;
-                    key = this.parseObjectPropertyKey();
-                } else {
-                    const punctuator = this.lookahead.value;
-                    if (punctuator !== ':' && punctuator !== '(' && punctuator !== '*') {
-                        isAsync = true;
-                        token = this.lookahead;
-                        id = token.value;
-                        this.nextToken();
-                    }
-                    key = this.finalize(node, new Node.Identifier(id));
-                }
-            } else {
-                key = this.finalize(node, new Node.Identifier(id));
-            }
+            computed = this.match('[');
+            isAsync = !this.hasLineTerminator && (id === 'async') &&
+                !this.match(':') && !this.match('(') && !this.match('*');
+            key = isAsync ? this.parseObjectPropertyKey() : this.finalize(node, new Node.Identifier(id));
         } else if (this.match('*')) {
             this.nextToken();
         } else {
