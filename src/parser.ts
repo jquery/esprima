@@ -1301,6 +1301,9 @@ export class Parser {
                 }
                 expr = this.finalize(this.startNode(startToken), new Node.CallExpression(expr, args));
                 if (asyncArrow && this.match('=>')) {
+                    for (let i = 0; i < args.length; ++i) {
+                        this.reinterpretExpressionAsPattern(args[i]);
+                    }
                     expr = {
                         type: ArrowParameterPlaceHolder,
                         params: args,
@@ -1677,6 +1680,7 @@ export class Parser {
 
             if (token.type === Token.Identifier && (token.lineNumber === this.lookahead.lineNumber) && token.value === 'async' && (this.lookahead.type === Token.Identifier)) {
                 const arg = this.parsePrimaryExpression();
+                this.reinterpretExpressionAsPattern(arg);
                 expr = {
                     type: ArrowParameterPlaceHolder,
                     params: [arg],
