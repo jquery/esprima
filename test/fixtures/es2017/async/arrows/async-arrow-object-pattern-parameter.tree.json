@@ -8,7 +8,7 @@
                 "id": null,
                 "params": [
                     {
-                        "type": "ObjectExpression",
+                        "type": "ObjectPattern",
                         "properties": [
                             {
                                 "type": "Property",
@@ -32,8 +32,7 @@
                                 },
                                 "computed": false,
                                 "value": {
-                                    "type": "AssignmentExpression",
-                                    "operator": "=",
+                                    "type": "AssignmentPattern",
                                     "left": {
                                         "type": "Identifier",
                                         "name": "y",
