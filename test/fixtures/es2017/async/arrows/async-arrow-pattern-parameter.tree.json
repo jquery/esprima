@@ -8,7 +8,7 @@
                 "id": null,
                 "params": [
                     {
-                        "type": "ObjectExpression",
+                        "type": "ObjectPattern",
                         "properties": [
                             {
                                 "type": "Property",
