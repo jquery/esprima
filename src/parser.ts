@@ -1676,14 +1676,16 @@ export class Parser {
             let token = startToken;
             expr = this.parseConditionalExpression();
 
-            if (token.type === Token.Identifier && (token.lineNumber === this.lookahead.lineNumber) && token.value === 'async' && (this.lookahead.type === Token.Identifier)) {
-                const arg = this.parsePrimaryExpression();
-                this.reinterpretExpressionAsPattern(arg);
-                expr = {
-                    type: ArrowParameterPlaceHolder,
-                    params: [arg],
-                    async: true
-                };
+            if (token.type === Token.Identifier && (token.lineNumber === this.lookahead.lineNumber) && token.value === 'async') {
+                if (this.lookahead.type === Token.Identifier || this.matchKeyword('yield')) {
+                    const arg = this.parsePrimaryExpression();
+                    this.reinterpretExpressionAsPattern(arg);
+                    expr = {
+                        type: ArrowParameterPlaceHolder,
+                        params: [arg],
+                        async: true
+                    };
+                }
             }
 
             if (expr.type === ArrowParameterPlaceHolder || this.match('=>')) {
