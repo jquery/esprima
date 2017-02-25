@@ -910,7 +910,7 @@ export class Parser {
                     value = this.finalize(node, new Node.AssignmentPattern(id, init));
                 } else {
                     shorthand = true;
-                    value = this.finalize(node, new Node.Identifier(token.value));
+                    value = id;
                 }
             } else {
                 this.throwUnexpectedToken(this.nextToken());
@@ -1987,7 +1987,7 @@ export class Parser {
             } else if (!this.match(':')) {
                 params.push(keyToken);
                 shorthand = true;
-                value = this.finalize(node, new Node.Identifier(keyToken.value));
+                value = init;
             } else {
                 this.expect(':');
                 value = this.parsePatternWithDefault(params, kind);
