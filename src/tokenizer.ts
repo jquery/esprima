@@ -1,5 +1,5 @@
 import { ErrorHandler } from './error-handler';
-import { Comment, RawToken, Scanner, SourceLocation } from './scanner';
+import { Comment, Scanner, SourceLocation } from './scanner';
 import { Token, TokenName } from './token';
 
 type ReaderEntry = string | null;
@@ -160,12 +160,8 @@ export class Tokenizer {
                     };
                 }
 
-                let token: RawToken;
-                if (this.scanner.source[this.scanner.index] === '/') {
-                    token = this.reader.isRegexStart() ? this.scanner.scanRegExp() : this.scanner.scanPunctuator();
-                } else {
-                    token = this.scanner.lex();
-                }
+                const startRegex = (this.scanner.source[this.scanner.index] === '/') && this.reader.isRegexStart();
+                const token = startRegex ? this.scanner.scanRegExp() : this.scanner.lex();
                 this.reader.push(token);
 
                 let entry: BufferEntry = {
