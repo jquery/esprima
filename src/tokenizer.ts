@@ -51,8 +51,8 @@ class Reader {
                 break;
 
             case ')':
-                const check = this.values[this.paren - 1];
-                regex = (check === 'if' || check === 'while' || check === 'for' || check === 'with');
+                const keyword = this.values[this.paren - 1];
+                regex = (keyword === 'if' || keyword === 'while' || keyword === 'for' || keyword === 'with');
                 break;
 
             case '}':
