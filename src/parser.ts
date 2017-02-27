@@ -1119,10 +1119,10 @@ export class Parser {
                                 this.reinterpretExpressionAsPattern(expr);
                             }
 
-                            const params = (expr.type === Syntax.SequenceExpression ? expr.expressions : [expr]);
+                            const parameters = (expr.type === Syntax.SequenceExpression ? expr.expressions : [expr]);
                             expr = {
                                 type: ArrowParameterPlaceHolder,
-                                params: params,
+                                params: parameters,
                                 async: false
                             };
                         }
