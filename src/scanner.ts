@@ -61,7 +61,7 @@ export class Scanner {
     index: number;
     lineNumber: number;
     lineStart: number;
-    curlyStack: string[];
+    private curlyStack: string[];
 
     private readonly length: number;
 
@@ -77,7 +77,7 @@ export class Scanner {
         this.curlyStack = [];
     }
 
-    saveState(): ScannerState {
+    public saveState(): ScannerState {
         return {
             index: this.index,
             lineNumber: this.lineNumber,
@@ -85,29 +85,29 @@ export class Scanner {
         };
     }
 
-    restoreState(state: ScannerState): void {
+    public restoreState(state: ScannerState): void {
         this.index = state.index;
         this.lineNumber = state.lineNumber;
         this.lineStart = state.lineStart;
     }
 
-    eof(): boolean {
+    public eof(): boolean {
         return this.index >= this.length;
     }
 
-    throwUnexpectedToken(message = Messages.UnexpectedTokenIllegal): never {
+    public throwUnexpectedToken(message = Messages.UnexpectedTokenIllegal): never {
         return this.errorHandler.throwError(this.index, this.lineNumber,
             this.index - this.lineStart + 1, message);
     }
 
-    tolerateUnexpectedToken(message = Messages.UnexpectedTokenIllegal) {
+    private tolerateUnexpectedToken(message = Messages.UnexpectedTokenIllegal) {
         this.errorHandler.tolerateError(this.index, this.lineNumber,
             this.index - this.lineStart + 1, message);
     }
 
     // https://tc39.github.io/ecma262/#sec-comments
 
-    skipSingleLineComment(offset: number): Comment[] {
+    private skipSingleLineComment(offset: number): Comment[] {
         let comments: Comment[] = [];
         let start, loc;
 
@@ -166,7 +166,7 @@ export class Scanner {
         return comments;
     }
 
-    skipMultiLineComment(): Comment[] {
+    private skipMultiLineComment(): Comment[] {
         let comments: Comment[] = [];
         let start, loc;
 
@@ -235,7 +235,7 @@ export class Scanner {
         return comments;
     }
 
-    scanComments() {
+    public scanComments() {
         let comments;
         if (this.trackComment) {
             comments = [];
@@ -305,7 +305,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-future-reserved-words
 
-    isFutureReservedWord(id: string): boolean {
+    public isFutureReservedWord(id: string): boolean {
         switch (id) {
             case 'enum':
             case 'export':
@@ -317,7 +317,7 @@ export class Scanner {
         }
     }
 
-    isStrictModeReservedWord(id: string): boolean {
+    public isStrictModeReservedWord(id: string): boolean {
         switch (id) {
             case 'implements':
             case 'interface':
@@ -334,13 +334,13 @@ export class Scanner {
         }
     }
 
-    isRestrictedWord(id: string): boolean {
+    public isRestrictedWord(id: string): boolean {
         return id === 'eval' || id === 'arguments';
     }
 
     // https://tc39.github.io/ecma262/#sec-keywords
 
-    isKeyword(id: string): boolean {
+    private isKeyword(id: string): boolean {
         switch (id.length) {
             case 2:
                 return (id === 'if') || (id === 'in') || (id === 'do');
@@ -368,7 +368,7 @@ export class Scanner {
         }
     }
 
-    codePointAt(i: number): number {
+    private codePointAt(i: number): number {
         let cp = this.source.charCodeAt(i);
 
         if (cp >= 0xD800 && cp <= 0xDBFF) {
@@ -382,7 +382,7 @@ export class Scanner {
         return cp;
     }
 
-    scanHexEscape(prefix: string): string | null {
+    private scanHexEscape(prefix: string): string | null {
         const len = (prefix === 'u') ? 4 : 2;
         let code = 0;
 
@@ -396,7 +396,7 @@ export class Scanner {
         return String.fromCharCode(code);
     }
 
-    scanUnicodeCodePointEscape(): string {
+    private scanUnicodeCodePointEscape(): string {
         let ch = this.source[this.index];
         let code = 0;
 
@@ -420,7 +420,7 @@ export class Scanner {
         return Character.fromCodePoint(code);
     }
 
-    getIdentifier(): string {
+    private getIdentifier(): string {
         const start = this.index++;
         while (!this.eof()) {
             const ch = this.source.charCodeAt(this.index);
@@ -443,7 +443,7 @@ export class Scanner {
         return this.source.slice(start, this.index);
     }
 
-    getComplexIdentifier(): string {
+    private getComplexIdentifier(): string {
         let cp = this.codePointAt(this.index);
         let id = Character.fromCodePoint(cp);
         this.index += id.length;
@@ -499,7 +499,7 @@ export class Scanner {
         return id;
     }
 
-    octalToDecimal(ch: string) {
+    private octalToDecimal(ch: string) {
         // \0 is not octal escape sequence
         let octal = (ch !== '0');
         let code = octalValue(ch);
@@ -523,7 +523,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-names-and-keywords
 
-    scanIdentifier(): RawToken {
+    private scanIdentifier(): RawToken {
         let type: Token;
         const start = this.index;
 
@@ -563,7 +563,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-punctuators
 
-    scanPunctuator(): RawToken {
+    private scanPunctuator(): RawToken {
         const start = this.index;
 
         // Check for most common single-character punctuators.
@@ -652,7 +652,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-literals-numeric-literals
 
-    scanHexLiteral(start: number): RawToken {
+    private scanHexLiteral(start: number): RawToken {
         let num = '';
 
         while (!this.eof()) {
@@ -680,7 +680,7 @@ export class Scanner {
         };
     }
 
-    scanBinaryLiteral(start: number): RawToken {
+    private scanBinaryLiteral(start: number): RawToken {
         let num = '';
         let ch;
 
@@ -715,7 +715,7 @@ export class Scanner {
         };
     }
 
-    scanOctalLiteral(prefix: string, start: number): RawToken {
+    private scanOctalLiteral(prefix: string, start: number): RawToken {
         let num = '';
         let octal = false;
 
@@ -753,7 +753,7 @@ export class Scanner {
         };
     }
 
-    isImplicitOctalLiteral(): boolean {
+    private isImplicitOctalLiteral(): boolean {
         // Implicit octal, unless there is a non-octal digit.
         // (Annex B.1.1 on Numeric Literals)
         for (let i = this.index + 1; i < this.length; ++i) {
@@ -769,7 +769,7 @@ export class Scanner {
         return true;
     }
 
-    scanNumericLiteral(): RawToken {
+    private scanNumericLiteral(): RawToken {
         const start = this.index;
         let ch = this.source[start];
         assert(Character.isDecimalDigit(ch.charCodeAt(0)) || (ch === '.'),
@@ -850,7 +850,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-literals-string-literals
 
-    scanStringLiteral(): RawToken {
+    private scanStringLiteral(): RawToken {
         const start = this.index;
         let quote = this.source[start];
         assert((quote === '\'' || quote === '"'),
@@ -956,7 +956,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-template-literal-lexical-components
 
-    scanTemplate(): RawToken {
+    private scanTemplate(): RawToken {
         let cooked = '';
         let terminated = false;
         let start = this.index;
@@ -1084,7 +1084,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-literals-regular-expression-literals
 
-    testRegExp(pattern: string, flags: string): RegExp | null {
+    private testRegExp(pattern: string, flags: string): RegExp | null {
         // The BMP character to use as a replacement for astral symbols when
         // translating an ES6 "u"-flagged pattern to an ES5-compatible
         // approximation.
@@ -1138,7 +1138,7 @@ export class Scanner {
         }
     }
 
-    scanRegExpBody(): string {
+    private scanRegExpBody(): string {
         let ch = this.source[this.index];
         assert(ch === '/', 'Regular expression literal must start with a slash');
 
@@ -1180,7 +1180,7 @@ export class Scanner {
         return str.substr(1, str.length - 2);
     }
 
-    scanRegExpFlags(): string {
+    private scanRegExpFlags(): string {
         let str = '';
         let flags = '';
         while (!this.eof()) {
@@ -1220,7 +1220,7 @@ export class Scanner {
         return flags;
     }
 
-    scanRegExp(): RawToken {
+    public scanRegExp(): RawToken {
         const start = this.index;
 
         const pattern = this.scanRegExpBody();
@@ -1240,7 +1240,7 @@ export class Scanner {
         };
     }
 
-    lex(): RawToken {
+    public lex(): RawToken {
         if (this.eof()) {
             return {
                 type: Token.EOF,
