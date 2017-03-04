@@ -63,7 +63,7 @@ export class Scanner {
     index: number;
     lineNumber: number;
     lineStart: number;
-    curlyStack: string[];
+    private curlyStack: string[];
 
     private readonly length: number;
 
