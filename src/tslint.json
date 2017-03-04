@@ -5,6 +5,7 @@
     "interface-name": false,
     "max-line-length": false,
     "member-access": false,
+    "member-ordering": false,
     "no-use-before-declare": true,
     "object-literal-shorthand": false,
     "object-literal-sort-keys": false,
