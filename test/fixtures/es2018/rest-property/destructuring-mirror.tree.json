@@ -67,7 +67,7 @@
                             }
                         },
                         {
-                            "type": "RestProperty",
+                            "type": "RestElement",
                             "argument": {
                                 "type": "Identifier",
                                 "name": "y",
@@ -178,7 +178,7 @@
                             }
                         },
                         {
-                            "type": "SpreadProperty",
+                            "type": "SpreadElement",
                             "argument": {
                                 "type": "Identifier",
                                 "name": "y",
