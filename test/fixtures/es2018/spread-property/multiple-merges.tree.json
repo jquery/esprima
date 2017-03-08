@@ -86,7 +86,7 @@
                                 }
                             },
                             {
-                                "type": "SpreadProperty",
+                                "type": "SpreadElement",
                                 "argument": {
                                     "type": "Identifier",
                                     "name": "a",
@@ -179,7 +179,7 @@
                                 }
                             },
                             {
-                                "type": "SpreadProperty",
+                                "type": "SpreadElement",
                                 "argument": {
                                     "type": "Identifier",
                                     "name": "b",
@@ -214,7 +214,7 @@
                                 }
                             },
                             {
-                                "type": "SpreadProperty",
+                                "type": "SpreadElement",
                                 "argument": {
                                     "type": "Identifier",
                                     "name": "a",

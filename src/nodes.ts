@@ -16,8 +16,8 @@ export type Expression = ArrayExpression | ArrowFunctionExpression | AssignmentE
     ThisExpression | UnaryExpression | UpdateExpression | YieldExpression;
 export type FunctionParameter = AssignmentPattern | BindingIdentifier | BindingPattern;
 export type ImportDeclarationSpecifier = ImportDefaultSpecifier | ImportNamespaceSpecifier | ImportSpecifier;
-export type ObjectExpressionProperty = Property | SpreadProperty;
-export type ObjectPatternProperty = Property | RestProperty;
+export type ObjectExpressionProperty = Property | SpreadElement;
+export type ObjectPatternProperty = Property | RestElement;
 export type Statement = AsyncFunctionDeclaration | BreakStatement | ContinueStatement | DebuggerStatement | DoWhileStatement |
     EmptyStatement | ExpressionStatement | Directive | ForStatement | ForInStatement | ForOfStatement |
     FunctionDeclaration | IfStatement | ReturnStatement | SwitchStatement | ThrowStatement |
@@ -647,15 +647,6 @@ export class RestElement {
     }
 }
 
-export class RestProperty {
-    readonly type: string;
-    readonly argument: Expression;
-    constructor(argument: Expression) {
-        this.type = Syntax.RestProperty;
-        this.argument = argument;
-    }
-}
-
 export class ReturnStatement {
     readonly type: string;
     readonly argument: Expression | null;
@@ -690,15 +681,6 @@ export class SpreadElement {
     readonly argument: Expression;
     constructor(argument: Expression) {
         this.type = Syntax.SpreadElement;
-        this.argument = argument;
-    }
-}
-
-export class SpreadProperty {
-    readonly type: string;
-    readonly argument: Expression;
-    constructor(argument: Expression) {
-        this.type = Syntax.SpreadProperty;
         this.argument = argument;
     }
 }

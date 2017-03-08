@@ -124,7 +124,7 @@
                                 }
                             },
                             {
-                                "type": "RestProperty",
+                                "type": "RestElement",
                                 "argument": {
                                     "type": "Identifier",
                                     "name": "z",

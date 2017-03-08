@@ -914,13 +914,6 @@ export class Parser {
         return this.finalize(node, new Node.Property(kind, key as Node.PropertyKey, computed, value, method, shorthand));
     }
 
-    parseSpreadProperty(): Node.SpreadProperty {
-        const node = this.createNode();
-        this.expect('...');
-        const arg = this.inheritCoverGrammar(this.parseAssignmentExpression);
-        return this.finalize(node, new Node.SpreadProperty(arg));
-    }
-
     parseObjectInitializer(): Node.ObjectExpression {
         const node = this.createNode();
 
@@ -928,7 +921,7 @@ export class Parser {
         const properties: Node.ObjectExpressionProperty[] = [];
         let hasProto = { value: false };
         while (!this.match('}')) {
-            properties.push(this.match('...') ? this.parseSpreadProperty() : this.parseObjectProperty(hasProto));
+            properties.push(this.match('...') ? this.parseSpreadElement() : this.parseObjectProperty(hasProto));
             if (!this.match('}')) {
                 this.expectCommaSeparator();
             }
@@ -994,10 +987,6 @@ export class Parser {
                 expr.type = Syntax.RestElement;
                 this.reinterpretExpressionAsPattern(expr.argument);
                 break;
-            case Syntax.SpreadProperty:
-                expr.type = Syntax.RestProperty;
-                this.reinterpretExpressionAsPattern(expr.argument);
-                break;
             case Syntax.ArrayExpression:
                 expr.type = Syntax.ArrayPattern;
                 for (let i = 0; i < expr.elements.length; i++) {
@@ -1010,7 +999,7 @@ export class Parser {
                 expr.type = Syntax.ObjectPattern;
                 for (let i = 0; i < expr.properties.length; i++) {
                     const property = expr.properties[i];
-                    this.reinterpretExpressionAsPattern(property.type === Syntax.SpreadProperty ? property : property.value);
+                    this.reinterpretExpressionAsPattern(property.type === Syntax.SpreadElement ? property : property.value);
                 }
                 break;
             case Syntax.AssignmentExpression:
@@ -1580,7 +1569,6 @@ export class Parser {
                 this.validateParam(options, param, param.name);
                 break;
             case Syntax.RestElement:
-            case Syntax.RestProperty:
                 this.checkPatternParam(options, param.argument);
                 break;
             case Syntax.AssignmentPattern:
@@ -1596,7 +1584,7 @@ export class Parser {
             case Syntax.ObjectPattern:
                 for (let i = 0; i < param.properties.length; i++) {
                     const property = param.properties[i];
-                    this.checkPatternParam(options, (property.type === Syntax.RestProperty) ? property : property.value);
+                    this.checkPatternParam(options, (property.type === Syntax.RestElement) ? property : property.value);
                 }
                 break;
             default:
@@ -1997,7 +1985,7 @@ export class Parser {
         return this.finalize(node, new Node.Property('init', key, computed, value, method, shorthand));
     }
 
-    parseRestProperty(params, kind): Node.RestProperty {
+    parseRestProperty(params, kind): Node.RestElement {
         const node = this.createNode();
         this.expect('...');
         const arg = this.parsePattern(params);
@@ -2007,7 +1995,7 @@ export class Parser {
         if (!this.match('}')) {
             this.throwError(Messages.PropertyAfterRestProperty);
         }
-        return this.finalize(node, new Node.RestProperty(arg));
+        return this.finalize(node, new Node.RestElement(arg));
     }
 
     parseObjectPattern(params, kind?: string): Node.ObjectPattern {

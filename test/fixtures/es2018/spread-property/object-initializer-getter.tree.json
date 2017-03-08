@@ -28,7 +28,7 @@
                         "type": "ObjectExpression",
                         "properties": [
                             {
-                                "type": "SpreadProperty",
+                                "type": "SpreadElement",
                                 "argument": {
                                     "type": "Identifier",
                                     "name": "y",
