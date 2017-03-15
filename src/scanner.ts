@@ -635,7 +635,7 @@ export class Scanner {
                         if ('<>=!+-*%&|^/'.indexOf(str) >= 0) {
                             ++this.index;
                         }
-                }
+            }
         }
 
         if (this.index === start) {
