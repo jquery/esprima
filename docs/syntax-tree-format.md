@@ -521,7 +521,7 @@ When the expression statement represents a directive (such as `"use strict"`), t
 ```js
 interface ForStatement {
     type: 'ForStatement';
-    init: Expression | null;
+    init: Expression | VariableDeclaration | null;
     test: Expression | null;
     update: Expression | null;
     body: Statement;
