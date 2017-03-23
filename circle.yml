@@ -1,5 +1,6 @@
 machine:
   node:
+    version: 6.1.0
   environment:
     NO_WATCH_TESTS: 1
 
