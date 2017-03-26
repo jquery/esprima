@@ -1,0 +1,16 @@
+machine:
+  node:
+    version: 6.1.0
+  environment:
+    NO_WATCH_TESTS: 1
+
+dependencies:
+  pre:
+    - node --version
+    - npm --version
+    - npm install
+
+test:
+  override:
+    - npm run circleci:
+        timeout: 1200  # 20 minutes
