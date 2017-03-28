@@ -615,4 +615,8 @@ export class JSXParser extends Parser {
         return element;
     }
 
+    isStartOfExpression(): boolean {
+        return super.isStartOfExpression() || this.match('<');
+    }
+
 }
