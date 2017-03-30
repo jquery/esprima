@@ -1703,8 +1703,15 @@ export class Parser {
 
                     const node = this.startNode(startToken);
                     this.expect('=>');
-                    const body = this.match('{') ? this.parseFunctionSourceElements() :
-                        this.isolateCoverGrammar(this.parseAssignmentExpression);
+                    let body: Node.BlockStatement | Node.Expression;
+                    if (this.match('{')) {
+                        const previousAllowIn = this.context.allowIn;
+                        this.context.allowIn = true;
+                        body = this.parseFunctionSourceElements();
+                        this.context.allowIn = previousAllowIn;
+                    } else {
+                        body = this.isolateCoverGrammar(this.parseAssignmentExpression);
+                    }
                     const expression = body.type !== Syntax.BlockStatement;
 
                     if (this.context.strict && list.firstRestricted) {
