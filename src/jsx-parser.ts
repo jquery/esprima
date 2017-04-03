@@ -15,8 +15,7 @@ interface MetaJSXElement {
 
 const enum JSXToken {
     Identifier = 100,
-    Text,
-    Unknown
+    Text
 }
 
 interface RawJSXToken {
@@ -30,7 +29,6 @@ interface RawJSXToken {
 
 TokenName[JSXToken.Identifier] = 'JSXIdentifier';
 TokenName[JSXToken.Text] = 'JSXText';
-TokenName[JSXToken.Unknown] = 'JSXUnknown';
 
 // Fully qualified element name, e.g. <svg:path> returns "svg:path"
 function getQualifiedElementName(elementName: JSXNode.JSXElementName): string {
@@ -261,17 +259,7 @@ export class JSXParser extends Parser {
             };
         }
 
-        return {
-            type: JSXToken.Unknown,
-            value: '',
-            lineNumber: this.scanner.lineNumber,
-            lineStart: this.scanner.lineStart,
-            start: this.scanner.index,
-            end: this.scanner.index
-        };
-
-        // return this.scanner.lex() as RawJSXToken;
-        // return this.scanner.throwUnexpectedToken();
+        return this.scanner.lex() as RawJSXToken;
     }
 
     nextJSXToken(): RawJSXToken {
@@ -284,10 +272,6 @@ export class JSXParser extends Parser {
         this.lastMarker.index = this.scanner.index;
         this.lastMarker.line = this.scanner.lineNumber;
         this.lastMarker.column = this.scanner.index - this.scanner.lineStart;
-
-        if (token.type === JSXToken.Unknown) {
-            this.scanner.throwUnexpectedToken();
-        }
 
         if (this.config.tokens) {
             this.tokens.push(this.convertToken(token as any));
