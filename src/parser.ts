@@ -2583,12 +2583,26 @@ export class Parser {
     parseThrowStatement(): Node.ThrowStatement {
         const node = this.createNode();
         this.expectKeyword('throw');
+        const hasLineTerminator = this.hasLineTerminator;
 
-        if (this.hasLineTerminator) {
-            this.throwError(Messages.NewlineAfterThrow);
+        let argument;
+        try {
+            argument = this.parseExpression();
+        } catch (e) {
+            if (!hasLineTerminator) {
+                throw e;
+            }
         }
 
-        const argument = this.parseExpression();
+        if (hasLineTerminator) {
+            const shouldThrow = !argument ||
+                (argument && argument.type !== 'TemplateLiteral');
+
+            if (shouldThrow) {
+                this.throwError(Messages.NewlineAfterThrow);
+            }
+        }
+
         this.consumeSemicolon();
 
         return this.finalize(node, new Node.ThrowStatement(argument));
