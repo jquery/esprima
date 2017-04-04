@@ -80,13 +80,13 @@ export function parse(code: string, options, delegate) {
 }
 
 export function parseModule(code: string, options, delegate) {
-    let parsingOptions = options || {};
+    const parsingOptions = options || {};
     parsingOptions.sourceType = 'module';
     return parse(code, parsingOptions, delegate);
 }
 
 export function parseScript(code: string, options, delegate) {
-    let parsingOptions = options || {};
+    const parsingOptions = options || {};
     parsingOptions.sourceType = 'script';
     return parse(code, parsingOptions, delegate);
 }

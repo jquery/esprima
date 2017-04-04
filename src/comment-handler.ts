@@ -139,7 +139,7 @@ export class CommentHandler {
 
     visitComment(node, metadata) {
         const type = (node.type[0] === 'L') ? 'Line' : 'Block';
-        let comment: Comment = {
+        const comment: Comment = {
             type: type,
             value: node.value
         };
@@ -152,7 +152,7 @@ export class CommentHandler {
         this.comments.push(comment);
 
         if (this.attach) {
-            let entry: Entry = {
+            const entry: Entry = {
                 comment: {
                     type: type,
                     value: node.value,

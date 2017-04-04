@@ -9,7 +9,7 @@ export const enum Token {
     StringLiteral,
     RegularExpression,
     Template
-};
+}
 
 export let TokenName = {};
 TokenName[Token.BooleanLiteral] = 'Boolean';

@@ -293,7 +293,7 @@ export class Parser {
     }
 
     convertToken(token: RawToken): TokenEntry {
-        let t: TokenEntry = {
+        const t: TokenEntry = {
             type: TokenName[token.type],
             value: this.getTokenRaw(token)
         };
@@ -828,7 +828,7 @@ export class Parser {
 
     parseObjectProperty(hasProto): Node.Property {
         const node = this.createNode();
-        let token = this.lookahead;
+        const token = this.lookahead;
 
         let kind: string;
         let key: Node.PropertyKey | null = null;
@@ -919,7 +919,7 @@ export class Parser {
 
         this.expect('{');
         const properties: Node.ObjectExpressionProperty[] = [];
-        let hasProto = { value: false };
+        const hasProto = { value: false };
         while (!this.match('}')) {
             properties.push(this.match('...') ? this.parseSpreadElement() : this.parseObjectProperty(hasProto));
             if (!this.match('}')) {
@@ -1029,7 +1029,7 @@ export class Parser {
             };
         } else {
             const startToken = this.lookahead;
-            let params = [];
+            const params = [];
             if (this.match('...')) {
                 expr = this.parseRestElement(params);
                 this.expect(')');
@@ -1854,7 +1854,7 @@ export class Parser {
 
     parseLexicalBinding(kind: string, options): Node.VariableDeclarator {
         const node = this.createNode();
-        let params = [];
+        const params = [];
         const id = this.parsePattern(params, kind);
 
         if (this.context.strict && id.type === Syntax.Identifier) {
@@ -1882,7 +1882,7 @@ export class Parser {
     }
 
     parseBindingList(kind: string, options): Node.VariableDeclarator[] {
-        let list = [this.parseLexicalBinding(kind, options)];
+        const list = [this.parseLexicalBinding(kind, options)];
 
         while (this.match(',')) {
             this.nextToken();
@@ -2085,7 +2085,7 @@ export class Parser {
     parseVariableDeclaration(options: DeclarationOptions): Node.VariableDeclarator {
         const node = this.createNode();
 
-        let params = [];
+        const params = [];
         const id = this.parsePattern(params, 'var');
 
         if (this.context.strict && id.type === Syntax.Identifier) {
@@ -2252,7 +2252,7 @@ export class Parser {
 
                 const previousAllowIn = this.context.allowIn;
                 this.context.allowIn = false;
-                let declarations = this.parseVariableDeclarationList({ inFor: true });
+                const declarations = this.parseVariableDeclarationList({ inFor: true });
                 this.context.allowIn = previousAllowIn;
 
                 if (declarations.length === 1 && this.matchKeyword('in')) {
@@ -2340,7 +2340,7 @@ export class Parser {
                     forIn = false;
                 } else {
                     if (this.match(',')) {
-                        let initSeq = [init];
+                        const initSeq = [init];
                         while (this.match(',')) {
                             this.nextToken();
                             initSeq.push(this.isolateCoverGrammar(this.parseAssignmentExpression));
@@ -2606,9 +2606,9 @@ export class Parser {
             this.throwUnexpectedToken(this.lookahead);
         }
 
-        let params: any[] = [];
+        const params: any[] = [];
         const param = this.parsePattern(params);
-        let paramMap = {};
+        const paramMap = {};
         for (let i = 0; i < params.length; i++) {
             const key = '$' + params[i].value;
             if (Object.prototype.hasOwnProperty.call(paramMap, key)) {
@@ -2829,7 +2829,7 @@ export class Parser {
     }
 
     parseFormalParameter(options) {
-        let params: any[] = [];
+        const params: any[] = [];
         const param = this.match('...') ? this.parseRestElement(params) : this.parsePatternWithDefault(params);
         for (let i = 0; i < params.length; i++) {
             this.validateParam(options, params[i], params[i].value);
@@ -3196,7 +3196,7 @@ export class Parser {
 
     parseClassElement(hasConstructor): Node.Property {
         let token = this.lookahead;
-        let node = this.createNode();
+        const node = this.createNode();
 
         let kind: string = '';
         let key: Node.PropertyKey | null = null;
@@ -3297,7 +3297,7 @@ export class Parser {
 
     parseClassElementList(): Node.Property[] {
         const body: Node.Property[] = [];
-        let hasConstructor = { value: false };
+        const hasConstructor = { value: false };
 
         this.expect('{');
         while (!this.match('}')) {
