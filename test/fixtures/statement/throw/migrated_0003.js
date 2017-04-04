@@ -1,2 +1,3 @@
-throw `Error:
-Generic Error`;
+
+
+throw `Generic Error`;

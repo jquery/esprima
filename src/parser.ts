@@ -2584,6 +2584,7 @@ export class Parser {
         const node = this.createNode();
         this.expectKeyword('throw');
         const hasLineTerminator = this.hasLineTerminator;
+        const source = this.scanner.source;
 
         let argument;
         try {
@@ -2595,10 +2596,17 @@ export class Parser {
         }
 
         if (hasLineTerminator) {
-            const shouldThrow = !argument ||
-                (argument && argument.type !== 'TemplateLiteral');
+            const isTemplateLiteral =
+                argument && argument.type === 'TemplateLiteral';
+            const hasLineTerminatorBeforeTemplate =
+                isTemplateLiteral &&
+                source.trim().indexOf('\n') < source.trim().indexOf('`');
 
-            if (shouldThrow) {
+            if (
+                !argument ||
+                !isTemplateLiteral ||
+                hasLineTerminatorBeforeTemplate
+            ) {
                 this.throwError(Messages.NewlineAfterThrow);
             }
         }

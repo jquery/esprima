@@ -9,71 +9,71 @@
                     {
                         "type": "TemplateElement",
                         "value": {
-                            "raw": "Generic Error",
-                            "cooked": "Generic Error"
+                            "raw": "Error:\nGeneric Error",
+                            "cooked": "Error:\nGeneric Error"
                         },
                         "tail": true,
                         "range": [
-                            8,
-                            23
+                            6,
+                            28
                         ],
                         "loc": {
                             "start": {
-                                "line": 3,
+                                "line": 1,
                                 "column": 6
                             },
                             "end": {
-                                "line": 3,
-                                "column": 21
+                                "line": 2,
+                                "column": 14
                             }
                         }
                     }
                 ],
                 "expressions": [],
                 "range": [
-                    8,
-                    23
+                    6,
+                    28
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
+                        "line": 1,
                         "column": 6
                     },
                     "end": {
-                        "line": 3,
-                        "column": 21
+                        "line": 2,
+                        "column": 14
                     }
                 }
             },
             "range": [
-                2,
-                24
+                0,
+                29
             ],
             "loc": {
                 "start": {
-                    "line": 3,
+                    "line": 1,
                     "column": 0
                 },
                 "end": {
-                    "line": 3,
-                    "column": 22
+                    "line": 2,
+                    "column": 15
                 }
             }
         }
     ],
     "sourceType": "script",
     "range": [
-        2,
-        24
+        0,
+        29
     ],
     "loc": {
         "start": {
-            "line": 3,
+            "line": 1,
             "column": 0
         },
         "end": {
-            "line": 3,
-            "column": 22
+            "line": 2,
+            "column": 15
         }
     },
     "tokens": [
@@ -81,35 +81,35 @@
             "type": "Keyword",
             "value": "throw",
             "range": [
-                2,
-                7
+                0,
+                5
             ],
             "loc": {
                 "start": {
-                    "line": 3,
+                    "line": 1,
                     "column": 0
                 },
                 "end": {
-                    "line": 3,
+                    "line": 1,
                     "column": 5
                 }
             }
         },
         {
             "type": "Template",
-            "value": "`Generic Error`",
+            "value": "`Error:\nGeneric Error`",
             "range": [
-                8,
-                23
+                6,
+                28
             ],
             "loc": {
                 "start": {
-                    "line": 3,
+                    "line": 1,
                     "column": 6
                 },
                 "end": {
-                    "line": 3,
-                    "column": 21
+                    "line": 2,
+                    "column": 14
                 }
             }
         },
@@ -117,17 +117,17 @@
             "type": "Punctuator",
             "value": ";",
             "range": [
-                23,
-                24
+                28,
+                29
             ],
             "loc": {
                 "start": {
-                    "line": 3,
-                    "column": 21
+                    "line": 2,
+                    "column": 14
                 },
                 "end": {
-                    "line": 3,
-                    "column": 22
+                    "line": 2,
+                    "column": 15
                 }
             }
         }
