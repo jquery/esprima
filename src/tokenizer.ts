@@ -164,7 +164,6 @@ export class Tokenizer {
                 const token = startRegex ? this.scanner.scanRegExp() : this.scanner.lex();
                 this.reader.push(token);
 
-                this.reader.push(token);
                 const entry: BufferEntry = {
                     type: TokenName[token.type],
                     value: this.scanner.source.slice(token.start, token.end)

@@ -924,7 +924,7 @@ export class Parser {
         const node = this.createNode();
 
         this.expect('{');
-        const properties: Node.ObjectExpressionProperty[] = [];
+        const properties: Node.Property[] = [];
         const hasProto = { value: false };
         while (!this.match('}')) {
             properties.push(this.match('...') ? this.parseSpreadElement() : this.parseObjectProperty(hasProto));
