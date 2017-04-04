@@ -124,7 +124,7 @@ export class Scanner {
         }
 
         while (!this.eof()) {
-            let ch = this.source.charCodeAt(this.index);
+            const ch = this.source.charCodeAt(this.index);
             ++this.index;
             if (Character.isLineTerminator(ch)) {
                 if (this.trackComment) {
@@ -372,9 +372,9 @@ export class Scanner {
         let cp = this.source.charCodeAt(i);
 
         if (cp >= 0xD800 && cp <= 0xDBFF) {
-            let second = this.source.charCodeAt(i + 1);
+            const second = this.source.charCodeAt(i + 1);
             if (second >= 0xDC00 && second <= 0xDFFF) {
-                let first = cp;
+                const first = cp;
                 cp = (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
             }
         }
@@ -959,9 +959,9 @@ export class Scanner {
     private scanTemplate(): RawToken {
         let cooked = '';
         let terminated = false;
-        let start = this.index;
+        const start = this.index;
 
-        let head = (this.source[start] === '`');
+        const head = (this.source[start] === '`');
         let tail = false;
         let rawOffset = 2;
 
@@ -1093,7 +1093,7 @@ export class Scanner {
         // pattern that would not be detected by this substitution.
         const astralSubstitute = '\uFFFF';
         let tmp = pattern;
-        let self = this;
+        const self = this;
 
         if (flags.indexOf('u') >= 0) {
             tmp = tmp

@@ -132,8 +132,8 @@ export class Tokenizer {
             if (this.scanner.trackComment) {
                 for (let i = 0; i < comments.length; ++i) {
                     const e: Comment = comments[i];
-                    let value = this.scanner.source.slice(e.slice[0], e.slice[1]);
-                    let comment: BufferEntry = {
+                    const value = this.scanner.source.slice(e.slice[0], e.slice[1]);
+                    const comment: BufferEntry = {
                         type: e.multiLine ? 'BlockComment' : 'LineComment',
                         value: value
                     };
@@ -164,7 +164,7 @@ export class Tokenizer {
                 const token = startRegex ? this.scanner.scanRegExp() : this.scanner.lex();
                 this.reader.push(token);
 
-                let entry: BufferEntry = {
+                const entry: BufferEntry = {
                     type: TokenName[token.type],
                     value: this.scanner.source.slice(token.start, token.end)
                 };
