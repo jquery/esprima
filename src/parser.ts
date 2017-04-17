@@ -3170,6 +3170,33 @@ export class Parser {
         return start;
     }
 
+    isStartOfExpression(): boolean {
+        let start = true;
+
+        const value = this.lookahead.value;
+        switch (this.lookahead.type) {
+            case Token.Punctuator:
+                start = (value === '[') || (value === '(') || (value === '{') ||
+                    (value === '+') || (value === '-') ||
+                    (value === '!') || (value === '~') ||
+                    (value === '++') || (value === '--') ||
+                    (value === '/') || (value === '/=');  // regular expression literal
+                break;
+
+            case Token.Keyword:
+                start = (value === 'class') || (value === 'delete') ||
+                    (value === 'function') || (value === 'let') || (value === 'new') ||
+                    (value === 'super') || (value === 'this') || (value === 'typeof') ||
+                    (value === 'void') || (value === 'yield');
+                break;
+
+            default:
+                break;
+        }
+
+        return start;
+    }
+
     parseYieldExpression(): Node.YieldExpression {
         const node = this.createNode();
         this.expectKeyword('yield');
