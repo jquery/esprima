@@ -1260,17 +1260,8 @@ export class Parser {
         const previousAllowIn = this.context.allowIn;
         this.context.allowIn = true;
 
-        let expr;
-        if (this.matchKeyword('super') && this.context.inFunctionBody) {
-            expr = this.createNode();
-            this.nextToken();
-            expr = this.finalize(expr, new Node.Super());
-            if (!this.match('(') && !this.match('.') && !this.match('[')) {
-                this.throwUnexpectedToken(this.lookahead);
-            }
-        } else {
-            expr = this.inheritCoverGrammar(this.matchKeyword('new') ? this.parseNewExpression : this.parsePrimaryExpression);
-        }
+        let expr = (this.matchKeyword('super') && this.context.inFunctionBody) ? this.parseSuper(/* allowCall */ true) :
+            this.inheritCoverGrammar(this.matchKeyword('new') ? this.parseNewExpression : this.parsePrimaryExpression);
 
         while (true) {
             if (this.match('.')) {
@@ -1320,14 +1311,12 @@ export class Parser {
         return expr;
     }
 
-    parseSuper(): Node.Super {
+    parseSuper(allowCall = false): Node.Super {
         const node = this.createNode();
-
-        this.expectKeyword('super');
-        if (!this.match('[') && !this.match('.')) {
+        this.nextToken();
+        if (!this.match('[') && !this.match('.') && !(allowCall && this.match('('))) {
             this.throwUnexpectedToken(this.lookahead);
         }
-
         return this.finalize(node, new Node.Super());
     }
 
