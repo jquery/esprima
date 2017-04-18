@@ -108,5 +108,8 @@
     "droneio": "npm run compile && npm run all-tests && npm run saucelabs",
     "generate-regex": "node tools/generate-identifier-regex.js",
     "generate-xhtml-entities": "node tools/generate-xhtml-entities.js"
+  },
+  "jspm": {
+    "dependencies": {}
   }
 }
