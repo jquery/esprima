@@ -65,6 +65,8 @@ export class Scanner {
 
     private readonly length: number;
 
+    private readonly length: number;
+
     constructor(code: string, handler: ErrorHandler) {
         this.source = code;
         this.errorHandler = handler;
