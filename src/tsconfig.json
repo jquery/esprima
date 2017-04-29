@@ -2,10 +2,8 @@
 	"compilerOptions": {
 		"target": "ES5",
 		"module": "commonjs",
-		"noImplicitThis": true,
-		"noImplicitReturns": true,
-		"noUnusedLocals": true,
-		"strictNullChecks": true
+		"noImplicitAny": false,
+		"strict": true
 	},
 	"files": [
 		"assert.ts",
