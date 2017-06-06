@@ -1,0 +1,135 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "ThrowStatement",
+            "argument": {
+                "type": "TemplateLiteral",
+                "quasis": [
+                    {
+                        "type": "TemplateElement",
+                        "value": {
+                            "raw": "Error:\nGeneric Error",
+                            "cooked": "Error:\nGeneric Error"
+                        },
+                        "tail": true,
+                        "range": [
+                            6,
+                            28
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 6
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 14
+                            }
+                        }
+                    }
+                ],
+                "expressions": [],
+                "range": [
+                    6,
+                    28
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 6
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 14
+                    }
+                }
+            },
+            "range": [
+                0,
+                29
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 2,
+                    "column": 15
+                }
+            }
+        }
+    ],
+    "sourceType": "script",
+    "range": [
+        0,
+        29
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 2,
+            "column": 15
+        }
+    },
+    "tokens": [
+        {
+            "type": "Keyword",
+            "value": "throw",
+            "range": [
+                0,
+                5
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 5
+                }
+            }
+        },
+        {
+            "type": "Template",
+            "value": "`Error:\nGeneric Error`",
+            "range": [
+                6,
+                28
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 6
+                },
+                "end": {
+                    "line": 2,
+                    "column": 14
+                }
+            }
+        },
+        {
+            "type": "Punctuator",
+            "value": ";",
+            "range": [
+                28,
+                29
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 14
+                },
+                "end": {
+                    "line": 2,
+                    "column": 15
+                }
+            }
+        }
+    ]
+}

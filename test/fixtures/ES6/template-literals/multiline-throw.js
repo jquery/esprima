@@ -1,0 +1,2 @@
+throw `Error:
+Generic Error`;
