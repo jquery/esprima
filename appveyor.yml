@@ -1,7 +1,7 @@
 version: "{build}"
 
 environment:
-  nodejs_version: "6"
+  nodejs_version: "8"
 
 matrix:
   fast_finish: true
