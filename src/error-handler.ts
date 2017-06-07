@@ -19,11 +19,11 @@ export class ErrorHandler {
         this.tolerant = false;
     }
 
-    recordError(error: Error): void {
+    public recordError(error: Error): void {
         this.errors.push(error);
     }
 
-    tolerate(error): void {
+    public tolerate(error): void {
         if (this.tolerant) {
             this.recordError(error);
         } else {
@@ -31,7 +31,7 @@ export class ErrorHandler {
         }
     }
 
-    constructError(msg: string, column: number): Error {
+    public constructError(msg: string, column: number): Error {
         let error = new Error(msg);
         try {
             throw error;
@@ -46,7 +46,7 @@ export class ErrorHandler {
         return error;
     }
 
-    createError(index: number, line: number, col: number, description: string): Error {
+    public createError(index: number, line: number, col: number, description: string): Error {
         const msg = 'Line ' + line + ': ' + description;
         const error = this.constructError(msg, col);
         error.index = index;
@@ -55,11 +55,11 @@ export class ErrorHandler {
         return error;
     }
 
-    throwError(index: number, line: number, col: number, description: string): never {
+    public throwError(index: number, line: number, col: number, description: string): never {
         throw this.createError(index, line, col, description);
     }
 
-    tolerateError(index: number, line: number, col: number, description: string) {
+    public tolerateError(index: number, line: number, col: number, description: string) {
         const error = this.createError(index, line, col, description);
         if (this.tolerant) {
             this.recordError(error);
