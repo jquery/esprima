@@ -603,37 +603,39 @@ export class Scanner {
                 break;
 
             default:
-                // 4-character punctuator.
                 str = this.source.substr(this.index, 4);
-                if (str === '>>>=') {
-                    this.index += 4;
-                } else {
+                switch (str) {
+                    // 4-character punctuator.
+                    case '>>>=':
+                        this.index += 4;
+                        break;
 
                     // 3-character punctuators.
-                    str = str.substr(0, 3);
-                    if (str === '===' || str === '!==' || str === '>>>' ||
-                        str === '<<=' || str === '>>=' || str === '**=') {
+                    default:
+                        str = str.substr(0, 3);
+                    case '===': case '!==': case '>>>':
+                    case '<<=': case '>>=': case '**=':
                         this.index += 3;
-                    } else {
+                        break;
 
-                        // 2-character punctuators.
+                    // 2-character punctuators.
+                    default:
                         str = str.substr(0, 2);
-                        if (str === '&&' || str === '||' || str === '==' || str === '!=' ||
-                            str === '+=' || str === '-=' || str === '*=' || str === '/=' ||
-                            str === '++' || str === '--' || str === '<<' || str === '>>' ||
-                            str === '&=' || str === '|=' || str === '^=' || str === '%=' ||
-                            str === '<=' || str === '>=' || str === '=>' || str === '**') {
-                            this.index += 2;
-                        } else {
+                    case '&&': case '||': case '==': case '!=':
+                    case '+=': case '-=': case '*=': case '/=':
+                    case '++': case '--': case '<<': case '>>':
+                    case '&=': case '|=': case '^=': case '%=':
+                    case '<=': case '>=': case '=>': case '**':
+                        this.index += 2;
+                        break;
 
-                            // 1-character punctuators.
-                            str = this.source[this.index];
-                            if ('<>=!+-*%&|^/'.indexOf(str) >= 0) {
-                                ++this.index;
-                            }
+                    default:
+                        // 1-character punctuators.
+                        str = str[0];
+                        if ('<>=!+-*%&|^/'.indexOf(str) >= 0) {
+                            ++this.index;
                         }
-                    }
-                }
+            }
         }
 
         if (this.index === start) {
