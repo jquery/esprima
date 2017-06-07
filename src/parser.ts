@@ -904,7 +904,7 @@ export class Parser {
                     value = this.finalize(node, new Node.AssignmentPattern(id, init));
                 } else {
                     shorthand = true;
-                    value = id;
+                    value = this.finalize(node, new Node.Identifier(token.value));
                 }
             } else {
                 this.throwUnexpectedToken(this.nextToken());
@@ -1977,7 +1977,7 @@ export class Parser {
             } else if (!this.match(':')) {
                 params.push(keyToken);
                 shorthand = true;
-                value = init;
+                value = this.finalize(node, new Node.Identifier(keyToken.value));
             } else {
                 this.expect(':');
                 value = this.parsePatternWithDefault(params, kind);
