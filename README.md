@@ -43,4 +43,4 @@ A simple example on Node.js REPL:
   sourceType: 'script' }
 ```
 
-For more information, please read the [complete documentation](https://esprima.readthedocs.io).
+For more information, please read the [complete documentation](http://esprima.org/doc).
