@@ -12,7 +12,7 @@ with the help of [many contributors](https://github.com/jquery/esprima/contribut
 
 ### Features
 
-- Full support for ECMAScript 2016 ([ECMA-262 7th Edition](http://www.ecma-international.org/publications/standards/Ecma-262.htm))
+- Full support for ECMAScript 2017 ([ECMA-262 8th Edition](http://www.ecma-international.org/publications/standards/Ecma-262.htm))
 - Sensible [syntax tree format](https://github.com/estree/estree/blob/master/es5.md) as standardized by [ESTree project](https://github.com/estree/estree)
 - Experimental support for [JSX](https://facebook.github.io/jsx/), a syntax extension for [React](https://facebook.github.io/react/)
 - Optional tracking of syntax node location (index-based and line-column)
@@ -34,7 +34,7 @@ A simple example on Node.js REPL:
   { type: 'Punctuator', value: '=' },
   { type: 'Numeric', value: '42' } ]
   
-> esprima.parse(program);
+> esprima.parseScript(program);
 { type: 'Program',
   body:
    [ { type: 'VariableDeclaration',
@@ -43,4 +43,4 @@ A simple example on Node.js REPL:
   sourceType: 'script' }
 ```
 
-For more information, please read the [complete documentation](https://esprima.readthedocs.io).
+For more information, please read the [complete documentation](http://esprima.org/doc).
