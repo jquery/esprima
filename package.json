@@ -7,7 +7,7 @@
     "esparse": "./bin/esparse.js",
     "esvalidate": "./bin/esvalidate.js"
   },
-  "version": "4.0.0-dev",
+  "version": "4.0.0",
   "files": [
     "bin",
     "dist/esprima.js"
