@@ -141,7 +141,7 @@ This is however different than what will be obtained using Esprima parser since 
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('x.if = 1').body[0].expression.left.property
+> esprima.parseScript('x.if = 1').body[0].expression.left.property
 Identifier { type: 'Identifier', name: 'if' }
 ```
 

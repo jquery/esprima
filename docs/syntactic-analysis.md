@@ -4,10 +4,11 @@ The main use case of Esprima is to parse a JavaScript program. This is also know
 
 Esprima parser takes a string representing a valid JavaScript program and produces a [syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree), an ordered tree that describes the syntactic structure of the program. The resulting syntax tree is useful for various purposes, from [program transformation](https://en.wikipedia.org/wiki/Program_transformation) to [static program analysis](https://en.wikipedia.org/wiki/Static_program_analysis).
 
-The interface of the `parse` function is as follows:
+The interface of the `parseScript`/`parseModule` function is as follows:
 
 ```js
-esprima.parse(input, config, delegate)
+esprima.parseScript(input, config, delegate)
+esprima.parseModule(input, config, delegate)
 ```
 
 where
@@ -18,13 +19,12 @@ where
 
 The `input` argument is mandatory. Its type must be a string, otherwise the parsing behavior is not determined. The other two arguments, `config` and `delegate`, are optional.
 
-The object returned by the `parse` function is the [syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree), following the format described in details in [Appendix A. Syntax Tree Format](syntax-tree-format.html).
+The object returned by the `parseScript`/`parseModule` function is the [syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree), following the format described in details in [Appendix A. Syntax Tree Format](syntax-tree-format.html).
 
 The description of various parsing configuration is summarized in the following table:
 
 <table border="1" cellpadding="8" cellspacing="8">
 <tr><td>Name</td> <td>Type</td> <td>Default</td> <td>Description</td></tr>
-<tr><td>sourceType</td> <td>String</td> <td>"script"</td> <td>Define the program type: a script or a module</td></tr>
 <tr><td>jsx</td> <td>Boolean</td> <td>false</td> <td>Support JSX syntax</td></tr>
 <tr><td>range</td> <td>Boolean</td> <td>false</td> <td>Annotate each node with its index-based location</td></tr>
 <tr><td>loc</td> <td>Boolean</td> <td>false</td> <td>Annotate each node with its column and row-based location</td></tr>
@@ -39,15 +39,15 @@ The previous chapter, [Getting Started](getting-started.html), already demonstra
 
 ## Distinguishing a Script and a Module
 
-With ES2015 and later, a JavaScript program can be either [a script or a module](http://www.ecma-international.org/ecma-262/6.0/index.html#sec-ecmascript-language-scripts-and-modules). It is a very important distinction, a parser such as Esprima needs to know the type of the source to be able to analyze its syntax correctly. This is achieved by specifying the `sourceType` property in the configuration object. The default value is `"script"`, i.e. the program will be treated as a script and not a module. Another possible value is `"module"`, which instructs the parser to treat the program as a module.
+With ES2015 and later, a JavaScript program can be either [a script or a module](http://www.ecma-international.org/ecma-262/6.0/index.html#sec-ecmascript-language-scripts-and-modules). It is a very important distinction, a parser such as Esprima needs to know the type of the source to be able to analyze its syntax correctly. This is achieved by choosing `parseScript` function to parse a script and `parseModule` function to parse a module.
 
 An example of parsing a script:
 
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('answer = 42', { sourceType: 'script' });
-Program {
+> esprima.parseScript('answer = 42');
+Script {
   type: 'Program',
   body: [ ExpressionStatement { type: 'ExpressionStatement', expression: [Object] } ],
   sourceType: 'script' }
@@ -58,8 +58,8 @@ An example of parsing a module:
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('import { sqrt } from "math.js"', { sourceType: 'module' });
-Program {
+> esprima.parseModule('import { sqrt } from "math.js"');
+Module {
   type: 'Program',
   body:
    [ ImportDeclaration {
@@ -69,16 +69,19 @@ Program {
   sourceType: 'module' }
 ```
 
-Failing to specify the source type can lead to a _mistaken_ observation that Esprima does not support a certain syntax. Take a look at this example:
+Failing to choose the correct parsing function can lead to a _mistaken_ observation that Esprima does not support a certain syntax. Take a look at this example:
 
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('export const answer = 42');
+> esprima.parseScript('export const answer = 42');
 Error: Line 1: Unexpected token
 ```
 
-Instead of producing the syntax tree, the parser throws an exception. This is the correct behavior, an `export` statement can only be part of a module, not a script. Thus, the parser properly determines that such a source program (treated as a script since `sourceType` is not specified) is invalid.
+Instead of producing the syntax tree, the parser throws an exception. This is the correct behavior, an `export` statement can only be part of a module, not a script. Thus, the parser properly determines that such a source program is invalid.
+
+*Note*: In the previous versions (Esprima <= 3.1), there was a single parsing function, `parse`. To distinguish between parsing a script and a module, the `sourceType` property in the configuration object needs to be specified,  either as `"script"` (also the default value) or `"module"`. While this `parse` function is still supported in Esprima 4 for API backward compatibility, its usage is highly discouraged and the support for it may be removed in a future version.
+
 
 ## JSX Syntax Support
 
@@ -89,8 +92,8 @@ Esprima parser fully understands JSX syntax when `jsx` flag in the parsing confi
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('var el= <title>${product}</title>', { jsx: true });
-Program {
+> esprima.parseScript('var el= <title>${product}</title>', { jsx: true });
+Script {
   type: 'Program',
   body:
    [ VariableDeclaration {
@@ -110,8 +113,8 @@ This is illustrated in the following example:
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('if (x) function y() {}')
-Program {
+> esprima.parseScript('if (x) function y() {}')
+Script {
   type: 'Program',
   body:
    [ IfStatement {
@@ -133,7 +136,7 @@ Consider the following parsing session. The exception is expected, since a `with
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('"use strict"; with (x) {}')
+> esprima.parseScript('"use strict"; with (x) {}')
 Error: Line 1: Strict mode code may not include a with statement
 ```
 
@@ -142,8 +145,8 @@ If the tolerant mode is activated by setting the `tolerant` flag to true in the 
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('"use strict"; with (x) {}', { tolerant: true })
-Program {
+> esprima.parseScript('"use strict"; with (x) {}', { tolerant: true })
+Script {
   type: 'Program',
   body:
    [ Directive {
@@ -174,8 +177,8 @@ Setting the `range` flag to true adds a new property, `range`, to each node. It 
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('answer = 42', { range: true })
-Program {
+> esprima.parseScript('answer = 42', { range: true })
+Script {
   type: 'Program',
   body:
    [ ExpressionStatement {
@@ -193,7 +196,7 @@ A subsequent example to inspect the numeric literal 42 on the right side of the 
 ```js
 $ node
 > var esprima = require('esprima')
-> var program = esprima.parse('answer = 42', { range: true })
+> var program = esprima.parseScript('answer = 42', { range: true })
 > program.body[0].expression.right
 Literal { type: 'Literal', value: 42, raw: '42', range: [ 9, 11 ] }
 ```
@@ -205,8 +208,8 @@ Setting the `loc` flag to true adds a new property, `loc`, to each node. It is a
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('answer = 42', { loc: true })
-Program {
+> esprima.parseScript('answer = 42', { loc: true })
+Script {
   type: 'Program',
   body:
    [ ExpressionStatement {
@@ -236,7 +239,7 @@ If Esprima parser is being used to process the content of the above file, the pa
 $ node
 > var esprima = require('esprima')
 > var src = ['#!/usr/bin/env node', 'answer = 42'].join('\n')
-> esprima.parse(src)
+> esprima.parseScript(src)
 Error: Line 1: Unexpected token ILLEGAL
 ```
 
@@ -248,8 +251,8 @@ $ node
 > var src = ['#!/usr/bin/env node', 'answer = 42'].join('\n')
 > src = src.replace(/^#!(.*\n)/, '')
 'answer = 42'
-> esprima.parse(src)
-Program {
+> esprima.parseScript(src)
+Script {
   type: 'Program',
   body: [ ExpressionStatement { type: 'ExpressionStatement', expression: [Object] } ],
   sourceType: 'script' }
@@ -262,8 +265,8 @@ $ node
 > var esprima = require('esprima')
 > var src = ['#!/usr/bin/env node', 'answer = 42'].join('\n')
 > src = src.replace(/(^#!.*)/, function(m) { return Array(m.length + 1).join(' ') });
-> esprima.parse(src, { range: true })
-Program {
+> esprima.parseScript(src, { range: true })
+Script {
   type: 'Program',
   body:
    [ ExpressionStatement {
@@ -281,8 +284,8 @@ When Esprima parser is performing the syntactical analysis, first it needs to br
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('const answer = 42', { tokens: true })
-Program {
+> esprima.parseScript('const answer = 42', { tokens: true })
+Script {
   type: 'Program',
   body:
    [ VariableDeclaration {
@@ -303,7 +306,7 @@ The token also contains its location, if the parsing configuration has the flag 
 ```js
 $ node
 > var esprima = require('esprima')
-> var output = esprima.parse('const answer = 42', { tokens: true, range: true })
+> var output = esprima.parseScript('const answer = 42', { tokens: true, range: true })
 > output.tokens
 [ { type: 'Keyword', value: 'const', range: [ 0, 5 ] },
   { type: 'Identifier', value: 'answer', range: [ 6, 12 ] },
@@ -322,8 +325,8 @@ Consider the following example. The output of the parser has an additional prope
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('answer = 42 // TODO: why', { comment: true })
-Program {
+> esprima.parseScript('answer = 42 // TODO: why', { comment: true })
+Script {
   type: 'Program',
   body: [ ExpressionStatement { type: 'ExpressionStatement', expression: [Object] } ],
   sourceType: 'script',
@@ -334,8 +337,8 @@ The type of each comment can either be _Line_ for a single-line comment (`//` to
 ```js
 $ node
 > var esprima = require('esprima')
-> esprima.parse('/*everything*/ answer = 42', { comment: true })
-Program {
+> esprima.parseScript('/*everything*/ answer = 42', { comment: true })
+Script {
   type: 'Program',
   body: [ ExpressionStatement { type: 'ExpressionStatement', expression: [Object] } ],
   sourceType: 'script',
@@ -347,19 +350,19 @@ Each comment can also contain its location, if the parsing configuration has the
 ```js
 $ node
 > var esprima = require('esprima')
-> output = esprima.parse('answer = 42 // TODO: why', { comment: true, range: true });
+> output = esprima.parseScript('answer = 42 // TODO: why', { comment: true, range: true });
 > output.comments
 [ { type: 'Line', value: ' TODO: why', range: [ 12, 24 ] } ]
 ```
 
 ## Syntax Delegate
 
-The last argument in the `parse` function is a delegate, a callback function invoked for each syntax node (as the node is constructed) with two arguments, the node object itself and the node metadata. The metadata contains the start and end location of the node.
+The last argument in the `parseScript`/`parseModule` function is a delegate, a callback function invoked for each syntax node (as the node is constructed) with two arguments, the node object itself and the node metadata. The metadata contains the start and end location of the node.
 
 The shortest Node.js script that illustrates the delegate is the following:
 ```js
 var esprima = require('esprima');
-esprima.parse('answer = 42', {}, function (node) {
+esprima.parseScript('answer = 42', {}, function (node) {
     console.log(node.type);
 });
 ```
@@ -383,7 +386,7 @@ If each single-line and multi-line comment must be passed to the callback functi
 ```js
 $ cat delegate.js
 var esprima = require('esprima');
-esprima.parse('answer = 42 // FIXME', { comment: true }, function (node) {
+esprima.parseScript('answer = 42 // FIXME', { comment: true }, function (node) {
     console.log(node.type);
 });
 
@@ -401,7 +404,7 @@ The second argument passed to the callback function, the metadata, can be used t
 ```js
 $ cat delegate.js
 var esprima = require('esprima');
-esprima.parse('answer = 42', {}, function (node, metadata) {
+esprima.parseScript('answer = 42', {}, function (node, metadata) {
     console.log(node.type, metadata);
 });
 
@@ -436,7 +439,7 @@ function isConsoleCall(node) {
 
 function removeCalls(source) {
     const entries = [];
-    esprima.parse(source, {}, function (node, meta) {
+    esprima.parseScript(source, {}, function (node, meta) {
         if (isConsoleCall(node)) {
             entries.push({
                 start: meta.start.offset,
