@@ -43,8 +43,8 @@ To play with Esprima within Node.js, first launch Node.js. Inside its [REPL](htt
 $ node
 > var esprima = require('esprima')
 undefined
-> esprima.parse('answer = 42')
-Program {
+> esprima.parseScript('answer = 42')
+Script {
   type: 'Program',
   body: [ ExpressionStatement { type: 'ExpressionStatement', expression: [Object] } ],
   sourceType: 'script' }
@@ -58,7 +58,7 @@ If the source given to Esprima parser is not a valid JavaScript program, an exce
 $ node
 > var esprima = require('esprima')
 undefined
-> esprima.parse('1+')
+> esprima.parseScript('1+')
 Error: Line 1: Unexpected end of input
 ```
 
@@ -99,7 +99,7 @@ The following session with Nashorn shell, [jrunscript](https://docs.oracle.com/j
 ```js
 $ jrunscript
 nashorn> load('esprima.js')
-nashorn> ast = esprima.parse('const answer = 42')
+nashorn> ast = esprima.parseScript('const answer = 42')
 [object Object]
 nashorn> print(JSON.stringify(ast, null, 2))
 {
