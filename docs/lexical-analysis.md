@@ -18,8 +18,8 @@ The `input` argument is mandatory. Its type must be a string, otherwise the toke
 
 The description of various properties of `config` is summarized in the following table:
 
-<table border="1" cellpadding="8" cellspacing="8">
-<tr><td>Name</td> <td>Type</td> <td>Default</td> <td>Description</td></tr>
+<table>
+<tr><th>Name</th> <th>Type</th> <th>Default</th> <th>Description</th></tr>
 <tr><td>range</td> <td>Boolean</td> <td>false</td> <td>Annotate each token with its zero-based start and end location</td></tr>
 <tr><td>loc</td> <td>Boolean</td> <td>false</td> <td>Annotate each token with its column and row-based location</td></tr>
 <tr><td>comment</td> <td>Boolean</td> <td>false</td> <td>Include every line and block comment in the output</td></tr>
