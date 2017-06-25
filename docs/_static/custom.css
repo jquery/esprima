@@ -1,0 +1,16 @@
+div.section pre {
+    padding: 7px;
+}
+
+div.section table {
+    border-collapse: collapse;
+}
+
+div.section table, div.section th, div.section td {
+    border: 1px solid #bbb;
+    padding: 8px;
+}
+
+div.section table tr th {
+    background-color: #eee;
+}
