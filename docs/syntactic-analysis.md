@@ -22,8 +22,8 @@ The object returned by the `parse` function is the [syntax tree](https://en.wiki
 
 The description of various parsing configuration is summarized in the following table:
 
-<table border="1" cellpadding="8" cellspacing="8">
-<tr><td>Name</td> <td>Type</td> <td>Default</td> <td>Description</td></tr>
+<table>
+<tr><th>Name</th> <th>Type</th> <th>Default</th> <th>Description</th></tr>
 <tr><td>sourceType</td> <td>String</td> <td>"script"</td> <td>Define the program type: a script or a module</td></tr>
 <tr><td>jsx</td> <td>Boolean</td> <td>false</td> <td>Support JSX syntax</td></tr>
 <tr><td>range</td> <td>Boolean</td> <td>false</td> <td>Annotate each node with its index-based location</td></tr>
