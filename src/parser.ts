@@ -758,7 +758,7 @@ export class Parser {
         const node = this.createNode();
 
         const previousAllowYield = this.context.allowYield;
-        this.context.allowYield = false;
+        this.context.allowYield = true;
         const params = this.parseFormalParameters();
         const method = this.parsePropertyMethod(params);
         this.context.allowYield = previousAllowYield;
@@ -3052,7 +3052,7 @@ export class Parser {
 
         const isGenerator = false;
         const previousAllowYield = this.context.allowYield;
-        this.context.allowYield = false;
+        this.context.allowYield = !isGenerator;
         const formalParameters = this.parseFormalParameters();
         if (formalParameters.params.length > 0) {
             this.tolerateError(Messages.BadGetterArity);
@@ -3068,7 +3068,7 @@ export class Parser {
 
         const isGenerator = false;
         const previousAllowYield = this.context.allowYield;
-        this.context.allowYield = false;
+        this.context.allowYield = !isGenerator;
         const formalParameters = this.parseFormalParameters();
         if (formalParameters.params.length !== 1) {
             this.tolerateError(Messages.BadSetterArity);
