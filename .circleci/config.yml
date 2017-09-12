@@ -1,0 +1,20 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/working_directory
+    docker:
+      - image: node:6
+        environment:
+          NO_WATCH_TESTS: 1
+    steps:
+      - checkout
+      - run: node --version
+      - run: npm --version
+      - restore_cache:
+          key: v1-npm-dependencies-{{ .Branch }}-{{ checksum "package.json" }}
+      - run: npm install
+      - save_cache:
+          key: v1-npm-dependencies-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run: npm run circleci
