@@ -2452,7 +2452,8 @@ export class Parser {
         this.expectKeyword('return');
 
         const hasArgument = !this.match(';') && !this.match('}') &&
-            !this.hasLineTerminator && this.lookahead.type !== Token.EOF;
+            (!this.hasLineTerminator || this.match('`')) &&
+            this.lookahead.type !== Token.EOF;
         const argument = hasArgument ? this.parseExpression() : null;
         this.consumeSemicolon();
 

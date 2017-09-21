@@ -1,0 +1,43 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "FunctionDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "a"
+      },
+      "params": [],
+      "body": {
+        "type": "BlockStatement",
+        "body": [
+          {
+            "type": "ReturnStatement",
+            "argument": null
+          },
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "TemplateLiteral",
+              "quasis": [
+                {
+                  "type": "TemplateElement",
+                  "value": {
+                    "raw": "s\n    test\n  ",
+                    "cooked": "s\n    test\n  "
+                  },
+                  "tail": true
+                }
+              ],
+              "expressions": []
+            }
+          }
+        ]
+      },
+      "generator": false,
+      "expression": false,
+      "async": false
+    }
+  ],
+  "sourceType": "script"
+}
