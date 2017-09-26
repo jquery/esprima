@@ -31,6 +31,7 @@ var setupBenchmarks,
 parsers = [
 {
     name: 'Esprima',
+    src: new URL('../esprima.js', window.location).href,
     version: function () {
         return window.esprima.version;
     },
@@ -42,6 +43,7 @@ parsers = [
 {
     name: 'UglifyJS2',
     link: 'https://github.com/mishoo/UglifyJS2',
+    src: 'http://lisperator.net/s/js/uglifyjs/uglify.js',
     parse: function (code) {
         var syntax = window.UglifyJS.parse(code);
         return syntax.length;
@@ -50,6 +52,7 @@ parsers = [
 {
     name: 'Traceur',
     link: 'https://github.com/google/traceur-compiler',
+    src: 'http://google.github.io/traceur-compiler/bin/traceur.js',
     parse: function (code) {
         var file, pp, tree;
         file = new traceur.syntax.SourceFile('name', code);
@@ -61,6 +64,7 @@ parsers = [
 {
     name: 'Acorn',
     link: 'https://github.com/marijnh/acorn',
+    src: 'https://unpkg.com/acorn',
     version: function () {
         return window.acorn.version;
     },
@@ -72,8 +76,12 @@ parsers = [
 {
     name: 'Espree',
     link: 'https://github.com/eslint/espree',
+    src: 'http://eslint.org/js/app/eslint.js',
     version: function () {
         return window.espree.version;
+    },
+    setup: function () {
+        window.espree = require('espree');
     },
     parse: function (code) {
         var syntax = window.espree.parse(code, { range: true, loc: true });
@@ -83,6 +91,7 @@ parsers = [
 {
     name: 'Shift',
     link: 'https://github.com/shapesecurity/shift-parser-js',
+    src: 'http://shift-ast.org/js/shift-parser.js',
     parse: function (code) {
         var syntax = window.parser.parseScriptWithLocation(code);
         return syntax.tree.statements.length;
@@ -91,6 +100,7 @@ parsers = [
 {
     name: 'Shift (no early errors)',
     link: 'https://github.com/shapesecurity/shift-parser-js',
+    src: 'http://shift-ast.org/js/shift-parser.js',
     parse: function (code) {
         var syntax = window.parser.parseScriptWithLocation(code, { earlyErrors: false });
         return syntax.tree.statements.length;
@@ -259,13 +269,21 @@ if (typeof window !== 'undefined') {
             loadNextTest();
         }
 
-        function setupParser() {
-            var i, j;
+        function setupParsers() {
+            for (let i = 0; i < parsers.length; i += 1) {
+                let script = document.createElement('script');
+                script.src = parsers[i].src;
+                if(parsers[i].setup) {
+                    script.addEventListener('load', () => {
+                        parsers[i].setup();
+                    });
+                }
+                document.body.appendChild(script);
+            }
 
-            window.espree = require('espree');
             suite = [];
-            for (i = 0; i < fixtureList.length; i += 1) {
-                for (j = 0; j < parsers.length; j += 1) {
+            for (let i = 0; i < fixtureList.length; i += 1) {
+                for (let j = 0; j < parsers.length; j += 1) {
                     suite.push({
                         fixture: fixtureList[i],
                         parserInfo: parsers[j]
@@ -276,7 +294,7 @@ if (typeof window !== 'undefined') {
             createTable();
         }
 
-        function runBenchmarks() {
+        function runBenchmarks(inworkers) {
 
             var index = 0,
                 totalTime = {};
@@ -322,11 +340,42 @@ if (typeof window !== 'undefined') {
                 // Poor man's error reporter for Traceur.
                 console.reportError = console.error;
 
-                fn = function () {
-                    window.tree.push(pp.parse(source));
-                };
+                var worker;
+
+                if (inworkers) {
+                    fn = function (deferred) {
+                        worker = new Worker(URL.createObjectURL(new Blob([[
+                            'var window = self;',
+                            'importScripts("' + pp.src + '");',
+                            pp.setup ? '(' + pp.setup + ')();' : '',
+                            'addEventListener("message", function (event) {',
+                            '   var startTime = performance.now();',
+                            '   var result = (' + pp.parse + ')(event.data);',
+                            '   postMessage({',
+                            '       result: result,',
+                            '       elapsed: performance.now() - startTime,',
+                            '   });',
+                            '   close();',
+                            '});',
+                            'postMessage({message: "loaded"});'
+                        ].join('\n')], {type: 'text/javascript'})));
+                        worker.onmessage = function (event) {
+                            if (event.data.message === 'loaded') {
+                                worker.postMessage(source);
+                            } else {
+                                deferred.resolve();
+                                deferred.elapsed = event.data.elapsed / 1e3;
+                            }
+                        };
+                    };
+                } else {
+                    fn = function () {
+                        window.tree.push(pp.parse(source));
+                    };
+                }
 
                 benchmark = new window.Benchmark(test, fn, {
+                    defer: inworkers,
                     'onComplete': function () {
                         var str = '';
                         str += (1000 * this.stats.mean).toFixed(1) + ' \xb1';
@@ -338,13 +387,15 @@ if (typeof window !== 'undefined') {
                         }
                         totalTime[pp.name] += this.stats.mean;
                         setText(slug(pp.name) + '-total', (1000 * totalTime[pp.name]).toFixed(1) + ' ms');
+
+                        index += 1;
+                        if (inworkers) run();
+                        else window.setTimeout(run, 221);
                     }
                 });
 
                 window.setTimeout(function () {
                     benchmark.run();
-                    index += 1;
-                    window.setTimeout(run, 211);
                 }, 211);
             }
 
@@ -357,12 +408,12 @@ if (typeof window !== 'undefined') {
         }
 
         id('run').onclick = function () {
-            runBenchmarks();
+            runBenchmarks(id('inworkers').checked);
         };
 
         setText('benchmarkjs-version', ' version ' + window.Benchmark.version);
 
-        setupParser();
+        setupParsers();
         createTable();
 
         disableRunButtons();
