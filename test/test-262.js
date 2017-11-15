@@ -11,7 +11,7 @@ var TestStream = require('test262-stream');
 var Interpreter = require('results-interpreter');
 
 var stream = new TestStream(testDir);
-var { Transform } = require('stream');
+var Transform = require('stream').Transform;
 var results = new Transform({
     objectMode: true,
     transform(test, encoding, done) {
@@ -104,7 +104,10 @@ function report(summary) {
             tests: summary.unrecognized,
             label: 'non-existent programs specified in the whitelist file'
         }
-    ].forEach(function ({ tests, label }) {
+    ].forEach(function (entry) {
+        var tests = entry.tests;
+        var label = entry.label;
+
         if (!tests.length) {
             return;
         }
@@ -113,8 +116,9 @@ function report(summary) {
 
         badnews.push(desc);
         badnewsDetails.push(desc + ':');
-        badnewsDetails.push(
-            ...tests.map(function (test) {
+        badnewsDetails.push.apply(
+            badnewsDetails,
+            tests.map(function (test) {
                 return test.id || test;
             })
         );
