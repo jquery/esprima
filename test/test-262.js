@@ -9,6 +9,9 @@ var esprima = require('..');
 
 var TestStream = require('test262-stream');
 var Interpreter = require('results-interpreter');
+function normalizePath(str) {
+    return path.posix.format(path.parse(str));
+}
 
 var stream = new TestStream(testDir);
 var Transform = require('stream').Transform;
@@ -16,7 +19,7 @@ var results = new Transform({
     objectMode: true,
     transform(test, encoding, done) {
         var result = {
-            id: test.file + '(' + test.scenario + ')',
+            id: normalizePath(test.file) + '(' + test.scenario + ')',
             expected: test.attrs.negative && test.attrs.negative.phase === 'early'
                 ? 'fail' : 'pass'
         };
