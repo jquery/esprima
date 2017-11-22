@@ -57,6 +57,7 @@ export class Scanner {
     readonly source: string;
     readonly errorHandler: ErrorHandler;
     trackComment: boolean;
+    isModule: boolean;
 
     index: number;
     lineNumber: number;
@@ -69,6 +70,7 @@ export class Scanner {
         this.source = code;
         this.errorHandler = handler;
         this.trackComment = false;
+        this.isModule = false;
 
         this.length = code.length;
         this.index = 0;
@@ -285,7 +287,7 @@ export class Scanner {
                 } else {
                     break;
                 }
-            } else if (ch === 0x3C) { // U+003C is '<'
+            } else if (ch === 0x3C && !this.isModule) { // U+003C is '<'
                 if (this.source.slice(this.index + 1, this.index + 4) === '!--') {
                     this.index += 4; // `<!--`
                     const comment = this.skipSingleLineComment(4);

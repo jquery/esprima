@@ -3374,6 +3374,7 @@ export class Parser {
     parseModule(): Node.Module {
         this.context.strict = true;
         this.context.isModule = true;
+        this.scanner.isModule = true;
         const node = this.createNode();
         const body = this.parseDirectivePrologues();
         while (this.lookahead.type !== Token.EOF) {
