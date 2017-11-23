@@ -1,5 +1,5 @@
 import { ErrorHandler } from './error-handler';
-import { Comment, Scanner, SourceLocation } from './scanner';
+import { Comment, RawToken, Scanner, SourceLocation } from './scanner';
 import { Token, TokenName } from './token';
 
 type ReaderEntry = string | null;
@@ -58,7 +58,7 @@ class Reader {
             case '}':
                 // Dividing a function by anything makes little sense,
                 // but we have to check for that.
-                regex = false;
+                regex = true;
                 if (this.values[this.curly - 3] === 'function') {
                     // Anonymous function, e.g. function(){} /42
                     const check = this.values[this.curly - 4];
@@ -160,10 +160,21 @@ export class Tokenizer {
                     };
                 }
 
-                const startRegex = (this.scanner.source[this.scanner.index] === '/') && this.reader.isRegexStart();
-                const token = startRegex ? this.scanner.scanRegExp() : this.scanner.lex();
-                this.reader.push(token);
+                const maybeRegex = (this.scanner.source[this.scanner.index] === '/') && this.reader.isRegexStart();
+                let token: RawToken;
+                if (maybeRegex) {
+                    const state = this.scanner.saveState();
+                    try {
+                        token = this.scanner.scanRegExp();
+                    } catch (e) {
+                        this.scanner.restoreState(state);
+                        token = this.scanner.lex();
+                    }
+                } else {
+                    token = this.scanner.lex();
+                }
 
+                this.reader.push(token);
                 const entry: BufferEntry = {
                     type: TokenName[token.type],
                     value: this.scanner.source.slice(token.start, token.end)
