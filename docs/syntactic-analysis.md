@@ -166,6 +166,10 @@ In the above case, the parser does not throw an exception and it still returns a
 
 Note that the tolerant mode is intended to deal with very few types of syntax errors. It is unable to robustly handle every possible invalid program.
 
+## Regular Expression Literals
+
+Esprima does not implement logic to fully parse ECMAScript regular expressions. Instead, it delegates this responsibility to the JavaScript engine in which it executed (i.e. via the built-in `RegExp` function). This approach means that Esprima may respond to the same input differently depending on the JavaScript engine in use. It will exhibit the same bugs and features of the regular expression parser in the host environment.
+
 ## Node Location
 
 By default, Esprima parser produces an [abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree). For some uses cases, this abstract syntax tree is not sufficient. For instance, having the location information of each node is necessary in a few cases of static analysis, e.g. to give a meaningful feedback to the user.
