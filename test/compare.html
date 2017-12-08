@@ -96,6 +96,13 @@ window.onload = function () {
 <p>
 <input id="run" class="medium radius button" type="submit" value="Run speed comparison" disabled />
 </p>
+<p id="status">Please wait...</p>
+<p id="result"></p>
+
+        <p>Every parser produces the syntax tree with location marking in every syntax node.</p>
+
+        <p>Time measurement is carried out using <a href="http://benchmarkjs.com" target="_blank">Benchmark.js</a><span id="benchmarkjs-version"></span>.</p>
+
 <p>
 <label><input id="inworkers" type="checkbox" checked="" /> Run each parse in a separate Web Worker thread</label>
 </p>
@@ -103,13 +110,6 @@ window.onload = function () {
 <p class="explanation">When the checkbox above is checked, a new thread (Web Worker) is started for every benchmark cycle, to simulate parsing a single file for the first time.</p>
 <p class="explanation">When the checkbox above is not checked, all benchmark cycles are run in the same thread. This allows the JIT compiler to heavily optimize the parsers, simulating parsing the files many times.</p>
 <p class="explanation">In both cases, the reported times only include parsing the listed files, not loading and executing the parser's script file.</p>
-
-<p id="status">Please wait...</p>
-<p id="result"></p>
-
-        <p>Every parser produces the syntax tree with location marking in every syntax node.</p>
-
-        <p>Time measurement is carried out using <a href="http://benchmarkjs.com" target="_blank">Benchmark.js</a><span id="benchmarkjs-version"></span>.</p>
 
     </div>
 

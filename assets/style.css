@@ -60,3 +60,8 @@ div#info {
     border-radius: 4px;
 }
 
+.explanation {
+    font-size: smaller;
+    color: #555;
+    margin-bottom: 5px;
+}
