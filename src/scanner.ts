@@ -877,11 +877,11 @@ export class Scanner {
                                 ++this.index;
                                 str += this.scanUnicodeCodePointEscape();
                             } else {
-                                const unescaped = this.scanHexEscape(ch);
-                                if (unescaped === null) {
+                                const unescapedChar = this.scanHexEscape(ch);
+                                if (unescapedChar === null) {
                                     this.throwUnexpectedToken();
                                 }
-                                str += unescaped;
+                                str += unescapedChar;
                             }
                             break;
                         case 'x':
@@ -1003,9 +1003,9 @@ export class Scanner {
                                 cooked += this.scanUnicodeCodePointEscape();
                             } else {
                                 const restore = this.index;
-                                const unescaped = this.scanHexEscape(ch);
-                                if (unescaped !== null) {
-                                    cooked += unescaped;
+                                const unescapedChar = this.scanHexEscape(ch);
+                                if (unescapedChar !== null) {
+                                    cooked += unescapedChar;
                                 } else {
                                     this.index = restore;
                                     cooked += ch;
