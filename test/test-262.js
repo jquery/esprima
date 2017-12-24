@@ -82,26 +82,26 @@ function report(summary) {
         {
             tests: summary.disallowed.success,
             label:
-            'valid programs parsed without error' +
-            ' (in violation of the whitelist file)'
+                'valid programs parsed without error' +
+                ' (in violation of the whitelist file)'
         },
         {
             tests: summary.disallowed.failure,
             label:
-            'invalid programs produced a parsing error' +
-            ' (in violation of the whitelist file)'
+                'invalid programs produced a parsing error' +
+                ' (in violation of the whitelist file)'
         },
         {
             tests: summary.disallowed.falsePositive,
             label:
-            'invalid programs did not produce a parsing error' +
-            ' (without a corresponding entry in the whitelist file)'
+                'invalid programs did not produce a parsing error' +
+                ' (without a corresponding entry in the whitelist file)'
         },
         {
             tests: summary.disallowed.falseNegative,
             label:
-            'valid programs produced a parsing error' +
-            ' (without a corresponding entry in the whitelist file)'
+                'valid programs produced a parsing error' +
+                ' (without a corresponding entry in the whitelist file)'
         },
         {
             tests: summary.unrecognized,
