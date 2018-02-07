@@ -168,7 +168,7 @@ Note that the tolerant mode is intended to deal with very few types of syntax er
 
 ## Node Location
 
-By default, Esprima parser produces an [abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree). For some uses cases, this abstract syntax tree is not sufficient. For instance, having the location information of each node is necessary in a few cases of static analysis, e.g. to give a meaningful feedback to the user.
+By default, Esprima parser produces an [abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree). For some use cases, this abstract syntax tree is not sufficient. For instance, having the location information of each node is necessary in a few cases of static analysis, e.g. to give a meaningful feedback to the user.
 
 To have each node carries some additional properties indicating its location, the parser must be invoked by specifying the flags, `range` or `loc` or both of them, in the parsing configuration.
 
