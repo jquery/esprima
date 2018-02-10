@@ -707,7 +707,7 @@ export class Super {
 
 export class SwitchCase {
     readonly type: string;
-    readonly test: Expression;
+    readonly test: Expression | null;
     readonly consequent: Statement[];
     constructor(test: Expression, consequent: Statement[]) {
         this.type = Syntax.SwitchCase;
