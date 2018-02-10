@@ -614,7 +614,7 @@ with
 ```js
 interface SwitchCase {
     type: 'SwitchCase';
-    test: Expression;
+    test: Expression | null;
     consequent: Statement[];
 }
 ```
