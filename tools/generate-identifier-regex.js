@@ -3,20 +3,23 @@
 var regenerate = require('regenerate');
 
 // Which Unicode version should be used?
-var version = '8.0.0'; // note: also update `package.json` when this changes
+var pkg = require('../package.json');
+var dependencies = Object.keys(pkg.devDependencies);
+var unicodeDep = dependencies.find((name) => /^unicode-\d/.test(name));
+var version = unicodeDep.match(/[^\d]+(.+)$/)[1];
 
 // Shorthand function
 var get = function(what) {
-    return require('unicode-' + version + '/' + what + '/code-points');
+    return require(unicodeDep + '/' + what + '/code-points.js');
 };
 
-var generateES6Regex = function() { // ES 6
+var generateRegex = function() { // ES 6
     // https://mathiasbynens.be/notes/javascript-identifiers-es6
-    var identifierStart = regenerate(get('properties/ID_Start'))
+    var identifierStart = regenerate(get('Binary_Property/ID_Start'))
         .add('$', '_')
         .removeRange(0x0, 0x7F); // remove ASCII symbols (Esprima-specific)
-    var identifierPart = regenerate(get('properties/ID_Continue'))
-        .add(get('properties/Other_ID_Start'))
+    var identifierPart = regenerate(get('Binary_Property/ID_Continue'))
+        .add(get('Binary_Property/Other_ID_Start'))
         .add('\u200C', '\u200D')
         .add('$', '_')
         .removeRange(0x0, 0x7F); // remove ASCII symbols (Esprima-specific)
@@ -27,14 +30,14 @@ var generateES6Regex = function() { // ES 6
     };
 };
 
-var result = generateES6Regex();
+var result = generateRegex();
 console.log(
-    '// ECMAScript 6/Unicode v%s NonAsciiIdentifierStart:\n%s\n',
+    '// Unicode v%s NonAsciiIdentifierStart:\n%s\n',
     version,
     result.NonAsciiIdentifierStart
 );
 console.log(
-    '// ECMAScript 6/Unicode v%s NonAsciiIdentifierPart:\n%s',
+    '// Unicode v%s NonAsciiIdentifierPart:\n%s',
     version,
     result.NonAsciiIdentifierPart
 );
