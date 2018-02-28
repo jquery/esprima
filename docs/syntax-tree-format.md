@@ -209,6 +209,7 @@ interface ClassExpression {
     id: Identifier | null;
     superClass: Identifier | null;
     body: ClassBody;
+}
 ```
 
 with
