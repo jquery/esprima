@@ -190,7 +190,7 @@ The value of `generator` is true for a generator expression.
 ### Arrow Function Expression
 
 ```js
-interface FunctionExpression {
+interface ArrowFunctionExpression {
     type: 'ArrowFunctionExpression';
     id: Identifier | null;
     params: FunctionParameter[];
@@ -209,6 +209,7 @@ interface ClassExpression {
     id: Identifier | null;
     superClass: Identifier | null;
     body: ClassBody;
+}
 ```
 
 with
