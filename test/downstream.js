@@ -36,10 +36,12 @@ function copy_file(source, target) {
 }
 
 function workaroundRecastTest() {
-    var filename = 'test/es6tests.js', lines, i, line;
+    var filename, lines, i, line;
 
     console.log();
     console.log('Applying a workaround...');
+
+    filename = 'test/es6tests.js';
     lines = fs.readFileSync(filename, 'utf-8').split('\n');
     for (i = 0; i < lines.length; ++i) {
         line = lines[i];
@@ -50,6 +52,19 @@ function workaroundRecastTest() {
             break;
         }
     }
+
+    filename = 'test/run.js';
+    lines = fs.readFileSync(filename, 'utf-8').split('\n');
+    for (i = 0; i < lines.length; ++i) {
+        line = lines[i];
+        if (line.indexOf('require("./typescript.js")') >= 0) {
+            console.log('-- Patching', filename);
+            lines.splice(i, 1);
+            fs.writeFileSync(filename, lines.join('\n'));
+            break;
+        }
+    }
+
     execute('git diff');
 }
 
