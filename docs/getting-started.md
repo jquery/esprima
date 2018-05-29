@@ -8,6 +8,8 @@ To get the feeling of what Esprima can do, please try its [online parser demo](h
 
 The left panel is a code editor, it can accept any JavaScript source. If the source is a valid JavaScript program, the right panel shows the [syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) as the result of parsing that JavaScript program. The syntax tree can be displayed in its original form (JSON, but formatted) or in its visual form (hierarchical node view).
 
+**Important**: Esprima can only process JavaScript programs. It does not handle other variations of JavaScript such as [Flow](https://flow.org/), [TypeScript](http://www.typescriptlang.org/), etc.
+
 ## Supported environments
 
 Since Esprima is written in JavaScript, it can run on various JavaScript environments, including (but not limited to):
