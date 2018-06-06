@@ -156,9 +156,9 @@ where
 ```js
 interface Property {
     type: 'Property';
-    key: Identifier | Literal;
+    key: Expression;
     computed: boolean;
-    value: AssignmentPattern | Identifier | BindingPattern | FunctionExpression | null;
+    value: Expression | null;
     kind: 'get' | 'set' | 'init';
     method: false;
     shorthand: boolean;
@@ -377,8 +377,8 @@ interface LogicalExpression {
 interface ConditionalExpression {
     type: 'ConditionalExpression';
     test: Expression;
-    consequent: Statement;
-    alternate?: Statement;
+    consequent: Expression;
+    alternate: Expression;
 }
 ```
 
