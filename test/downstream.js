@@ -107,17 +107,27 @@ if (typeof child_process.execSync !== 'function') {
     process.exit(0);
 }
 
-test_downstream({
+var projects = {
     'envify': 'https://github.com/hughsk/envify.git',
-    // 'escope': 'https://github.com/estools/escope.git',
     'esmangle': 'https://github.com/estools/esmangle.git',
     'escomplex-js': 'https://github.com/philbooth/escomplex-js.git',
-    // 'js2coffee': 'https://github.com/js2coffee/js2coffee.git',
     'redeyed': 'https://github.com/thlorenz/redeyed.git',
     'jsfmt': 'https://github.com/rdio/jsfmt.git',
-    // 'assetgraph': 'https://github.com/assetgraph/assetgraph.git',
-    // 'recast': 'https://github.com/benjamn/recast.git',
     'rocambole': 'https://github.com/millermedeiros/rocambole.git'
-    // 'documentjs': 'https://github.com/bitovi/documentjs.git'
-    // 'istanbul': 'https://github.com/gotwarlost/istanbul.git'
-});
+};
+
+// disabled, due to various/spurious failures
+/*
+projects.escope = 'https://github.com/estools/escope.git';
+projects.js2coffee = 'https://github.com/js2coffee/js2coffee.git';
+projects.assetgraph = 'https://github.com/assetgraph/assetgraph.git';
+projects.recast = 'https://github.com/benjamn/recast.git';
+projects.documentjs = 'https://github.com/bitovi/documentjs.git';
+*/
+
+// tedious and long, only enable when running on GitLab CI
+if (process.env['GITLAB_CI'] === 'true') {
+    projects.istanbul = 'https://github.com/gotwarlost/istanbul.git';
+}
+
+test_downstream(projects);
