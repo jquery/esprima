@@ -3196,12 +3196,8 @@ export class Parser {
                     isAsync = true;
                     token = this.lookahead;
                     key = this.parseObjectPropertyKey();
-                    if (token.type === Token.Identifier) {
-                        if (token.value === 'get' || token.value === 'set') {
-                            this.tolerateUnexpectedToken(token);
-                        } else if (token.value === 'constructor') {
-                            this.tolerateUnexpectedToken(token, Messages.ConstructorIsAsync);
-                        }
+                    if (token.type === Token.Identifier && token.value === 'constructor') {
+                        this.tolerateUnexpectedToken(token, Messages.ConstructorIsAsync);
                     }
                 }
             }
