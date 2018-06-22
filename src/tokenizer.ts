@@ -1,8 +1,8 @@
 import { Comment, Scanner } from './scanner';
-import { ErrorHandler } from './error-handler';
+import { ErrorHandler, Error } from './error-handler';
 import { Token, TokenName } from './token';
 
-class Reader {
+export class Reader {
     values: string[];
     curly: number;
     paren: number;
@@ -96,7 +96,7 @@ export class Tokenizer {
         this.reader = new Reader();
     };
 
-    errors() {
+    errors(): Error[] {
         return this.errorHandler.errors;
     };
 

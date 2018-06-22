@@ -1,18 +1,18 @@
 import { Syntax } from './syntax';
 
-interface Comment {
+export interface Comment {
     type: string;
     value: string;
     range?: any;
     loc?: any;
 }
 
-interface Entry {
+export interface Entry {
     comment: Comment;
     start: number;
 }
 
-interface NodeInfo {
+export interface NodeInfo {
     node: any;
     start: number;
 }

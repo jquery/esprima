@@ -8,7 +8,7 @@ import { Comment, Scanner } from './scanner';
 import { Syntax } from './syntax';
 import * as Node from './nodes';
 
-interface Config {
+export interface Config {
     range: boolean;
     loc: boolean;
     source: string;
@@ -17,7 +17,7 @@ interface Config {
     tolerant: boolean;
 }
 
-interface Context {
+export interface Context {
     allowIn: boolean;
     allowYield: boolean;
     firstCoverInitializedNameError: any;
@@ -30,13 +30,13 @@ interface Context {
     strict: boolean;
 }
 
-interface Marker {
+export interface Marker {
     index: number;
     lineNumber: number;
     lineStart: number;
 }
 
-interface MetaNode {
+export interface MetaNode {
     index: number;
     line: number;
     column: number;
@@ -44,12 +44,12 @@ interface MetaNode {
 
 const ArrowParameterPlaceHolder = 'ArrowParameterPlaceHolder';
 
-interface ArrowParameterPlaceHolderNode {
+export interface ArrowParameterPlaceHolderNode {
     type: string;
     params: Node.Expression[];
 }
 
-interface DeclarationOptions {
+export interface DeclarationOptions {
     inFor: boolean;
 }
 

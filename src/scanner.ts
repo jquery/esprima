@@ -4,11 +4,11 @@ import { Character} from './character';
 import { Token } from './token';
 import { ErrorHandler } from './error-handler';
 
-function hexValue(ch: string): number {
+export function hexValue(ch: string): number {
     return '0123456789abcdef'.indexOf(ch.toLowerCase());
 }
 
-function octalValue(ch: string): number {
+export function octalValue(ch: string): number {
     return '01234567'.indexOf(ch);
 }
 

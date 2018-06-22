@@ -1,4 +1,4 @@
-declare class Error {
+export declare class Error {
     public name: string;
     public message: string;
     public index: number;

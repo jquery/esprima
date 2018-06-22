@@ -8,20 +8,20 @@ import { JSXSyntax } from './jsx-syntax';
 import * as Node from './nodes';
 import * as JSXNode from './jsx-nodes';
 
-interface MetaJSXNode {
+export interface MetaJSXNode {
     index: number;
     line: number;
     column: number;
 }
 
-interface MetaJSXElement {
+export interface MetaJSXElement {
     node: MetaJSXNode;
     opening: JSXNode.JSXOpeningElement;
     closing: JSXNode.JSXClosingElement;
     children: JSXNode.JSXChild[];
 }
 
-enum JSXToken {
+export enum JSXToken {
     Identifier = 100,
     Text
 }
