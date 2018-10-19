@@ -2611,8 +2611,14 @@ export class Parser {
 
     parseCatchClause(): Node.CatchClause {
         const node = this.createNode();
+        var body;
 
         this.expectKeyword('catch');
+
+        if (!this.match('(')) {
+            body = this.parseBlock();
+            return this.finalize(node, new Node.CatchClause(this.parsePattern([]), body));
+        }
 
         this.expect('(');
         if (this.match(')')) {
@@ -2637,7 +2643,7 @@ export class Parser {
         }
 
         this.expect(')');
-        const body = this.parseBlock();
+        body = this.parseBlock();
 
         return this.finalize(node, new Node.CatchClause(param, body));
     }
