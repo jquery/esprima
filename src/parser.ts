@@ -2617,7 +2617,7 @@ export class Parser {
 
         if (!this.match('(')) {
             body = this.parseBlock();
-            return this.finalize(node, new Node.CatchClause(this.parsePattern([]), body));
+            return this.finalize(node, new Node.CatchClause(null, body));
         }
 
         this.expect('(');
