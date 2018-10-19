@@ -2611,7 +2611,7 @@ export class Parser {
 
     parseCatchClause(): Node.CatchClause {
         const node = this.createNode();
-        var body;
+        let body;
 
         this.expectKeyword('catch');
 
