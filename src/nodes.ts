@@ -200,9 +200,9 @@ export class CallExpression {
 
 export class CatchClause {
     readonly type: string;
-    readonly param: BindingIdentifier | BindingPattern;
+    readonly param: BindingIdentifier | BindingPattern | null;
     readonly body: BlockStatement;
-    constructor(param: BindingIdentifier | BindingPattern, body: BlockStatement) {
+    constructor(param: BindingIdentifier | BindingPattern | null, body: BlockStatement) {
         this.type = Syntax.CatchClause;
         this.param = param;
         this.body = body;
