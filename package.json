@@ -59,9 +59,9 @@
     "temp": "~0.8.3",
     "test262": "git+https://git@github.com/tc39/test262.git#c4e3d12",
     "test262-stream": "~1.0.0",
-    "tslint": "~5.8.0",
-    "typescript": "~2.6.2",
-    "typescript-formatter": "~7.0.1",
+    "tslint": "~5.11.0",
+    "typescript": "~3.2.1",
+    "typescript-formatter": "~7.2.2",
     "unicode-11.0.0": "^0.7.7",
     "webpack": "~1.14.0"
   },
