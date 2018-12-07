@@ -107,8 +107,8 @@
     "codecov": "istanbul report cobertura && codecov < ./coverage/cobertura-coverage.xml",
     "downstream": "node test/downstream.js",
     "travis": "npm test",
-    "circleci": "npm test && npm run codecov && npm run test-262 && npm run downstream",
-    "appveyor": "npm run compile && npm run all-tests && npm run browser-tests",
+    "circleci": "npm test && npm run test-262 && npm run downstream",
+    "appveyor": "npm run compile && npm run all-tests && npm run analyze-coverage && npm run codecov && npm run browser-tests",
     "droneio": "npm run compile && npm run all-tests && npm run saucelabs",
     "generate-regex": "node tools/generate-identifier-regex.js",
     "generate-xhtml-entities": "node tools/generate-xhtml-entities.js"
