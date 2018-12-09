@@ -53,6 +53,19 @@ function workaroundRecastTest() {
     execute('git diff');
 }
 
+function workaroundIstanbulTest() {
+    var filename = 'test/browser/test-browser-instrumentation.js';
+
+    console.log('Applying a workaround...');
+    if (fs.existsSync(filename)) {
+        console.log();
+        console.log('-- Removing', filename);
+        fs.unlinkSync(filename);
+    } else {
+        console.log('-- Error: Can not locate', filename);
+    }
+}
+
 function test_project(project, repo) {
     console.log();
     console.log('==========', project);
@@ -68,6 +81,8 @@ function test_project(project, repo) {
 
     if (project === 'recast') {
         workaroundRecastTest();
+    } else if (project === 'istanbul') {
+        workaroundIstanbulTest();
     }
 
     console.log();
@@ -113,7 +128,8 @@ var projects = {
     'escomplex-js': 'https://github.com/philbooth/escomplex-js.git',
     'redeyed': 'https://github.com/thlorenz/redeyed.git',
     'jsfmt': 'https://github.com/rdio/jsfmt.git',
-    'rocambole': 'https://github.com/millermedeiros/rocambole.git'
+    'rocambole': 'https://github.com/millermedeiros/rocambole.git',
+    'istanbul': 'https://github.com/gotwarlost/istanbul.git'
 };
 
 // disabled, due to various/spurious failures
@@ -124,10 +140,5 @@ projects.assetgraph = 'https://github.com/assetgraph/assetgraph.git';
 projects.recast = 'https://github.com/benjamn/recast.git';
 projects.documentjs = 'https://github.com/bitovi/documentjs.git';
 */
-
-// tedious and long, only enable when running on GitLab CI
-if (process.env['GITLAB_CI'] === 'true') {
-    projects.istanbul = 'https://github.com/gotwarlost/istanbul.git';
-}
 
 test_downstream(projects);
