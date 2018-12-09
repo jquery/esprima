@@ -1,21 +1,24 @@
 version: "{build}"
 
 environment:
-  nodejs_version: "8"
+  nodejs_version: "10"
 
 matrix:
   fast_finish: true
 
 install:
-  - choco install firefox
-  - choco install chromium
   - ps: Install-Product node $env:nodejs_version
   - node --version
   - npm --version
   - npm install
+  - choco install firefox
+  - choco install chromium
 
 test_script:
   - set CHROME_BIN="C:\Program Files (x86)\Chromium\Application\chrome.exe"
-  - npm run appveyor
+  - npm run compile
+  - npm run all-tests
+  - npm run analyze-coverage && npm run codecov
+  - npm run browser-tests
 
 build: off
