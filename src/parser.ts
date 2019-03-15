@@ -3240,6 +3240,7 @@ export class Parser {
                 if (punctuator !== ':' && punctuator !== '(' && punctuator !== '*') {
                     isAsync = true;
                     token = this.lookahead;
+                    computed = this.match('[');
                     key = this.parseObjectPropertyKey();
                     if (token.type === Token.Identifier && token.value === 'constructor') {
                         this.tolerateUnexpectedToken(token, Messages.ConstructorIsAsync);
