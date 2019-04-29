@@ -34,7 +34,7 @@ A simple example on Node.js REPL:
   { type: 'Punctuator', value: '=' },
   { type: 'Numeric', value: '42' } ]
   
-> esprima.parseScript(program);
+> esprima.parse(program);
 { type: 'Program',
   body:
    [ { type: 'VariableDeclaration',
