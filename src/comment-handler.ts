@@ -1,19 +1,19 @@
 import { SourceLocation } from './scanner';
 import { Syntax } from './syntax';
 
-interface Comment {
+export interface Comment {
     type: string;
     value: string;
     range?: [number, number];
     loc?: SourceLocation;
 }
 
-interface Entry {
+export interface Entry {
     comment: Comment;
     start: number;
 }
 
-interface NodeInfo {
+export interface NodeInfo {
     node: any;
     start: number;
 }

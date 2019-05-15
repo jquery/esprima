@@ -1,5 +1,5 @@
 module.exports = {
-    entry:  __dirname + "/src/esprima.js",
+    entry:  __dirname + "/lib/esprima.js",
     output: {
         path:  __dirname + "/dist",
         filename: "esprima.js",

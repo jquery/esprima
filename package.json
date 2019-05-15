@@ -10,7 +10,9 @@
   "version": "4.0.1",
   "files": [
     "bin",
-    "dist/esprima.js"
+    "dist/esprima.js",
+    "lib",
+    "lib.es2015"
   ],
   "engines": {
     "node": ">=4"
@@ -93,9 +95,10 @@
     "analyze-coverage": "istanbul cover test/unit-tests.js",
     "check-coverage": "istanbul check-coverage --statement 100 --branch 100 --function 100",
     "dynamic-analysis": "npm run analyze-coverage && npm run check-coverage",
-    "compile": "tsc -p src/ && webpack && node tools/fixupbundle.js",
+    "compile": "tsc -p src/ --outDir lib && webpack && node tools/fixupbundle.js",
+    "compile.es2015": "tsc -p src/ --outDir lib.es2015 -t ES2015 -m ES2015 -d",
     "test": "npm run compile && npm run all-tests && npm run static-analysis && npm run dynamic-analysis",
-    "prepublish": "npm run compile",
+    "prepublish": "npm run compile && npm run compile.es2015",
     "profile": "node --prof test/profile.js && mv isolate*.log v8.log && node-tick-processor",
     "benchmark-parser": "node -expose_gc test/benchmark-parser.js",
     "benchmark-tokenizer": "node --expose_gc test/benchmark-tokenizer.js",
