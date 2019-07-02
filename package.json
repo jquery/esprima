@@ -62,7 +62,7 @@
     "tslint": "~5.11.0",
     "typescript": "~3.2.1",
     "typescript-formatter": "~7.2.2",
-    "unicode-11.0.0": "^0.7.7",
+    "unicode-12.1.0": "^0.8.0",
     "webpack": "~1.14.0"
   },
   "keywords": [
