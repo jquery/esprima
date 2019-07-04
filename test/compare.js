@@ -73,6 +73,9 @@ parsers = [
         return syntax.body.length;
     }
 },
+/*
+ * Temporarily disable until a browser-based Espree is readily available again.
+ *
 {
     name: 'Espree',
     link: 'https://github.com/eslint/espree',
@@ -88,6 +91,7 @@ parsers = [
         return syntax.body.length;
     }
 },
+*/
 {
     name: 'Shift',
     link: 'https://github.com/shapesecurity/shift-parser-js',
