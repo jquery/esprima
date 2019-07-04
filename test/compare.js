@@ -43,7 +43,7 @@ parsers = [
 {
     name: 'UglifyJS2',
     link: 'https://github.com/mishoo/UglifyJS2',
-    src: 'https://lisperator.net/s/js/uglifyjs/uglify.js',
+    src: 'https://esprima.org/assets/uglify.js',
     parse: function (code) {
         var syntax = window.UglifyJS.parse(code);
         return syntax.length;
