@@ -43,7 +43,7 @@ parsers = [
 {
     name: 'UglifyJS2',
     link: 'https://github.com/mishoo/UglifyJS2',
-    src: 'http://lisperator.net/s/js/uglifyjs/uglify.js',
+    src: 'https://lisperator.net/s/js/uglifyjs/uglify.js',
     parse: function (code) {
         var syntax = window.UglifyJS.parse(code);
         return syntax.length;
@@ -52,7 +52,7 @@ parsers = [
 {
     name: 'Traceur',
     link: 'https://github.com/google/traceur-compiler',
-    src: 'http://google.github.io/traceur-compiler/bin/traceur.js',
+    src: 'https://google.github.io/traceur-compiler/bin/traceur.js',
     parse: function (code) {
         var file, pp, tree;
         file = new traceur.syntax.SourceFile('name', code);
@@ -76,7 +76,7 @@ parsers = [
 {
     name: 'Espree',
     link: 'https://github.com/eslint/espree',
-    src: 'http://eslint.org/js/app/eslint.js',
+    src: 'https://eslint.org/js/app/eslint.js',
     version: function () {
         return window.espree.version;
     },
@@ -91,7 +91,7 @@ parsers = [
 {
     name: 'Shift',
     link: 'https://github.com/shapesecurity/shift-parser-js',
-    src: 'http://shift-ast.org/js/shift-parser.js',
+    src: 'https://shift-ast.org/js/shift-parser.js',
     parse: function (code) {
         var syntax = window.parser.parseScriptWithLocation(code);
         return syntax.tree.statements.length;
@@ -100,7 +100,7 @@ parsers = [
 {
     name: 'Shift (no early errors)',
     link: 'https://github.com/shapesecurity/shift-parser-js',
-    src: 'http://shift-ast.org/js/shift-parser.js',
+    src: 'https://shift-ast.org/js/shift-parser.js',
     parse: function (code) {
         var syntax = window.parser.parseScriptWithLocation(code, { earlyErrors: false });
         return syntax.tree.statements.length;
