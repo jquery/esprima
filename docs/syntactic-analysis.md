@@ -314,7 +314,7 @@ $ node
   { type: 'Numeric', value: '42', range: [ 15, 17 ] } ]
 ```
 
-To tokenize a program without parsing it at all, refer to [Chapter 3. Lexical Analysis (Tokenization)](syntactic-analysis.html).
+To tokenize a program without parsing it at all, refer to [Chapter 3. Lexical Analysis (Tokenization)](lexical-analysis.html).
 
 ## Comment Collection
 
