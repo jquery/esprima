@@ -50,6 +50,7 @@ interface ScannerState {
     index: number;
     lineNumber: number;
     lineStart: number;
+    curlyStack: string[];
 }
 
 export class Scanner {
@@ -62,7 +63,7 @@ export class Scanner {
     index: number;
     lineNumber: number;
     lineStart: number;
-    private curlyStack: string[];
+    curlyStack: string[];
 
     private readonly length: number;
 
@@ -83,7 +84,8 @@ export class Scanner {
         return {
             index: this.index,
             lineNumber: this.lineNumber,
-            lineStart: this.lineStart
+            lineStart: this.lineStart,
+            curlyStack: this.curlyStack.slice()
         };
     }
 
@@ -91,6 +93,7 @@ export class Scanner {
         this.index = state.index;
         this.lineNumber = state.lineNumber;
         this.lineStart = state.lineStart;
+        this.curlyStack = state.curlyStack;
     }
 
     public eof(): boolean {
