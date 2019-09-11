@@ -2322,6 +2322,10 @@ export class Parser {
                 }
             } else {
                 const initStartToken = this.lookahead;
+                const previousIsBindingElement = this.context.isBindingElement;
+                const previousIsAssignmentTarget = this.context.isAssignmentTarget;
+                const previousFirstCoverInitializedNameError = this.context.firstCoverInitializedNameError;
+
                 const previousAllowIn = this.context.allowIn;
                 this.context.allowIn = false;
                 init = this.inheritCoverGrammar(this.parseAssignmentExpression);
@@ -2349,6 +2353,11 @@ export class Parser {
                     init = null;
                     forIn = false;
                 } else {
+                    // The `init` node was not parsed isolated, but we would have wanted it to.
+                    this.context.isBindingElement = previousIsBindingElement;
+                    this.context.isAssignmentTarget = previousIsAssignmentTarget;
+                    this.context.firstCoverInitializedNameError = previousFirstCoverInitializedNameError;
+
                     if (this.match(',')) {
                         const initSeq = [init];
                         while (this.match(',')) {
@@ -2364,11 +2373,11 @@ export class Parser {
 
         if (typeof left === 'undefined') {
             if (!this.match(';')) {
-                test = this.parseExpression();
+                test = this.isolateCoverGrammar(this.parseExpression);
             }
             this.expect(';');
             if (!this.match(')')) {
-                update = this.parseExpression();
+                update = this.isolateCoverGrammar(this.parseExpression);
             }
         }
 
