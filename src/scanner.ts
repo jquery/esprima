@@ -28,6 +28,7 @@ export interface Comment {
     slice: number[];
     range: [number, number];
     loc: SourceLocation;
+    commentStyle?: string;
 }
 
 export interface RawToken {
@@ -112,7 +113,7 @@ export class Scanner {
 
     // https://tc39.github.io/ecma262/#sec-comments
 
-    private skipSingleLineComment(offset: number): Comment[] {
+    private skipSingleLineComment(offset: number, commentStyle: string): Comment[] {
         let comments: Comment[] = [];
         let start, loc;
 
@@ -141,7 +142,8 @@ export class Scanner {
                         multiLine: false,
                         slice: [start + offset, this.index - 1],
                         range: [start, this.index - 1],
-                        loc: loc
+                        loc: loc,
+                        commentStyle: commentStyle
                     };
                     comments.push(entry);
                 }
@@ -163,7 +165,8 @@ export class Scanner {
                 multiLine: false,
                 slice: [start + offset, this.index],
                 range: [start, this.index],
-                loc: loc
+                loc: loc,
+                commentStyle: commentStyle
             };
             comments.push(entry);
         }
@@ -264,7 +267,7 @@ export class Scanner {
                 ch = this.source.charCodeAt(this.index + 1);
                 if (ch === 0x2F) {
                     this.index += 2;
-                    const comment = this.skipSingleLineComment(2);
+                    const comment = this.skipSingleLineComment(2, '//');
                     if (this.trackComment) {
                         comments = comments.concat(comment);
                     }
@@ -283,7 +286,7 @@ export class Scanner {
                 if ((this.source.charCodeAt(this.index + 1) === 0x2D) && (this.source.charCodeAt(this.index + 2) === 0x3E)) {
                     // '-->' is a single-line comment
                     this.index += 3;
-                    const comment = this.skipSingleLineComment(3);
+                    const comment = this.skipSingleLineComment(3, '\n-->');
                     if (this.trackComment) {
                         comments = comments.concat(comment);
                     }
@@ -293,7 +296,7 @@ export class Scanner {
             } else if (ch === 0x3C && !this.isModule) { // U+003C is '<'
                 if (this.source.slice(this.index + 1, this.index + 4) === '!--') {
                     this.index += 4; // `<!--`
-                    const comment = this.skipSingleLineComment(4);
+                    const comment = this.skipSingleLineComment(4, '<!--');
                     if (this.trackComment) {
                         comments = comments.concat(comment);
                     }

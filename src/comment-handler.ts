@@ -6,6 +6,7 @@ interface Comment {
     value: string;
     range?: [number, number];
     loc?: SourceLocation;
+    style?: string;
 }
 
 interface Entry {
@@ -156,7 +157,8 @@ export class CommentHandler {
                 comment: {
                     type: type,
                     value: node.value,
-                    range: [metadata.start.offset, metadata.end.offset]
+                    range: [metadata.start.offset, metadata.end.offset],
+                    style: node.style
                 },
                 start: metadata.start.offset
             };
