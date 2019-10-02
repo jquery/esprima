@@ -19,8 +19,7 @@
                     "line": 1,
                     "column": 22
                 }
-            },
-            "style": "-->"
+            }
         },
         {
             "type": "Line",
@@ -38,7 +37,8 @@
                     "line": 1,
                     "column": 35
                 }
-            }
+            },
+            "style": "-->"
         }
     ],
     "tokens": [],

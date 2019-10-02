@@ -176,13 +176,13 @@ describe('esprima.parse', function () {
     it('should include the list of comments when specified', function () {
         var ast = esprima.parse('42 // answer', { comment: true });
         assert.deepEqual(ast.comments.length, 1);
-        assert.deepEqual(ast.comments[0], { type: 'Line', value: ' answer' });
+        assert.deepEqual(ast.comments[0], { type: 'Line', value: ' answer', style: '//' });
     });
 
     it('should include the list of comments with index-based location when specified', function () {
         var ast = esprima.parse('42 // answer', { comment: true, range: true });
         assert.deepEqual(ast.comments.length, 1);
-        assert.deepEqual(ast.comments[0], { type: 'Line', value: ' answer', range: [3, 12] });
+        assert.deepEqual(ast.comments[0], { type: 'Line', value: ' answer', range: [3, 12], style: '//' });
     });
 
     it('should include the list of comments with line and column-based location when specified', function () {
@@ -192,6 +192,7 @@ describe('esprima.parse', function () {
         assert.deepEqual(ast.comments[0].value, ' answer');
         assert.deepEqual(ast.comments[0].loc.start, { line: 1, column: 3 });
         assert.deepEqual(ast.comments[0].loc.end, { line: 1, column: 12 });
+        assert.deepEqual(ast.comments[0].style, '//');
         assert.ifError(ast.comments[0].range);
     });
 
@@ -352,13 +353,13 @@ describe('esprima.parseModule', function () {
     it('should include the list of comments when specified', function () {
         var ast = esprima.parseModule('42 // answer', { comment: true });
         assert.deepEqual(ast.comments.length, 1);
-        assert.deepEqual(ast.comments[0], { type: 'Line', value: ' answer' });
+        assert.deepEqual(ast.comments[0], { type: 'Line', value: ' answer', style: '//' });
     });
 
     it('should include the list of comments with index-based location when specified', function () {
         var ast = esprima.parseModule('42 // answer', { comment: true, range: true });
         assert.deepEqual(ast.comments.length, 1);
-        assert.deepEqual(ast.comments[0], { type: 'Line', value: ' answer', range: [3, 12] });
+        assert.deepEqual(ast.comments[0], { type: 'Line', value: ' answer', range: [3, 12], style: '//' });
     });
 
     it('should include the list of comments with line and column-based location when specified', function () {
@@ -368,6 +369,7 @@ describe('esprima.parseModule', function () {
         assert.deepEqual(ast.comments[0].value, ' answer');
         assert.deepEqual(ast.comments[0].loc.start, { line: 1, column: 3 });
         assert.deepEqual(ast.comments[0].loc.end, { line: 1, column: 12 });
+        assert.deepEqual(ast.comments[0].style, '//');
         assert.ifError(ast.comments[0].range);
     });
 
@@ -535,13 +537,13 @@ describe('esprima.parseScript', function () {
     it('should include the list of comments when specified', function () {
         var ast = esprima.parseScript('42 // answer', { comment: true });
         assert.deepEqual(ast.comments.length, 1);
-        assert.deepEqual(ast.comments[0], { type: 'Line', value: ' answer' });
+        assert.deepEqual(ast.comments[0], { type: 'Line', value: ' answer', style: '//' });
     });
 
     it('should include the list of comments with index-based location when specified', function () {
         var ast = esprima.parseScript('42 // answer', { comment: true, range: true });
         assert.deepEqual(ast.comments.length, 1);
-        assert.deepEqual(ast.comments[0], { type: 'Line', value: ' answer', range: [3, 12] });
+        assert.deepEqual(ast.comments[0], { type: 'Line', value: ' answer', range: [3, 12], style: '//' });
     });
 
     it('should include the list of comments with line and column-based location when specified', function () {
@@ -551,6 +553,7 @@ describe('esprima.parseScript', function () {
         assert.deepEqual(ast.comments[0].value, ' answer');
         assert.deepEqual(ast.comments[0].loc.start, { line: 1, column: 3 });
         assert.deepEqual(ast.comments[0].loc.end, { line: 1, column: 12 });
+        assert.deepEqual(ast.comments[0].style, '//');
         assert.ifError(ast.comments[0].range);
     });
 
@@ -659,7 +662,7 @@ describe('esprima.parse delegate', function () {
         assert.deepEqual(list.length, 7);
         assert.deepEqual(list[0], { type: 'BlockComment', value: ' prolog ' });
         assert.deepEqual(list[1], { type: 'Identifier', name: 'answer' });
-        assert.deepEqual(list[2], { type: 'LineComment', value: ' epilog' });
+        assert.deepEqual(list[2], { type: 'LineComment', value: ' epilog', style: '//' });
         assert.deepEqual(list[3], { type: 'Literal', value: 42, raw: '42' });
         assert.deepEqual(list[4].type, 'AssignmentExpression');
         assert.deepEqual(list[5].type, 'ExpressionStatement');
@@ -825,7 +828,7 @@ describe('esprima.parse delegate', function () {
         // Only the first one will have `annotation` since there is
         // a line comment in the same line.
         assert.deepEqual(tree.body.length, 2);
-        assert.deepEqual(tree.body[0].annotation, { type: 'LineComment', value: ' answer' });
+        assert.deepEqual(tree.body[0].annotation, { type: 'LineComment', value: ' answer', style: '//' });
         assert.deepEqual(tree.body[1].annotation, undefined);
     });
 
