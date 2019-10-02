@@ -40,7 +40,8 @@
                             "line": 1,
                             "column": 27
                         }
-                    }
+                    },
+                    "style": "//"
                 }
             ],
             "range": [
@@ -77,7 +78,8 @@
                     "line": 1,
                     "column": 9
                 }
-            }
+            },
+            "style": "//"
         },
         {
             "type": "Line",

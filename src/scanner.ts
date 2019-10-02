@@ -286,7 +286,7 @@ export class Scanner {
                 if ((this.source.charCodeAt(this.index + 1) === 0x2D) && (this.source.charCodeAt(this.index + 2) === 0x3E)) {
                     // '-->' is a single-line comment
                     this.index += 3;
-                    const comment = this.skipSingleLineComment(3, '\n-->');
+                    const comment = this.skipSingleLineComment(3, '-->');
                     if (this.trackComment) {
                         comments = comments.concat(comment);
                     }

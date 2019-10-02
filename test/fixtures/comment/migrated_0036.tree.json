@@ -5,7 +5,8 @@
     "comments": [
         {
             "type": "Line",
-            "value": " foo"
+            "value": " foo",
+            "style": "<!--"
         }
     ],
     "tokens": []
