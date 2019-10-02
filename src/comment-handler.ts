@@ -142,16 +142,14 @@ export class CommentHandler {
         const type = (node.type[0] === 'L') ? 'Line' : 'Block';
         const comment: Comment = {
             type: type,
-            value: node.value
+            value: node.value,
+            style: node.style
         };
         if (node.range) {
             comment.range = node.range;
         }
         if (node.loc) {
             comment.loc = node.loc;
-        }
-        if (node.style) {
-            comment.style = node.style;
         }
         this.comments.push(comment);
 
@@ -160,15 +158,13 @@ export class CommentHandler {
                 comment: {
                     type: type,
                     value: node.value,
-                    range: [metadata.start.offset, metadata.end.offset]
+                    range: [metadata.start.offset, metadata.end.offset],
+                    style: node.style
                 },
                 start: metadata.start.offset
             };
             if (node.loc) {
                 entry.comment.loc = node.loc;
-            }
-            if (node.style) {
-                entry.comment.style = node.style;
             }
             node.type = type;
             this.leading.push(entry);
