@@ -116,7 +116,7 @@ export class Scanner {
     private skipSingleLineComment(commentStyle: string): Comment[] {
         let comments: Comment[] = [];
         let start, loc;
-        let offset = commentStyle.length;
+        const offset = commentStyle.length;
 
         if (this.trackComment) {
             comments = [];
@@ -214,7 +214,7 @@ export class Scanner {
                             slice: [start + 2, this.index - 2],
                             range: [start, this.index],
                             loc: loc,
-                            style: "/*"
+                            style: '/*'
                         };
                         comments.push(entry);
                     }
@@ -237,7 +237,7 @@ export class Scanner {
                 slice: [start + 2, this.index],
                 range: [start, this.index],
                 loc: loc,
-                style: "/*"
+                style: '/*'
             };
             comments.push(entry);
         }
