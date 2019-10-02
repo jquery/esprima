@@ -19,7 +19,8 @@
                     "line": 1,
                     "column": 22
                 }
-            }
+            },
+            "style": "/*"
         },
         {
             "type": "Line",

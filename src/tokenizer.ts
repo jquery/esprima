@@ -13,6 +13,7 @@ interface BufferEntry {
     };
     range?: [number, number];
     loc?: SourceLocation;
+    style?: string;
 }
 
 class Reader {
@@ -135,6 +136,7 @@ export class Tokenizer {
                     const value = this.scanner.source.slice(e.slice[0], e.slice[1]);
                     const comment: BufferEntry = {
                         type: e.multiLine ? 'BlockComment' : 'LineComment',
+                        style: e.style,
                         value: value
                     };
                     if (this.trackRange) {

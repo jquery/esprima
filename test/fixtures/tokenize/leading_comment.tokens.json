@@ -1,6 +1,7 @@
 [
     {
         "type": "BlockComment",
+        "style": "/*",
         "value": " hello world ",
         "range": [
             0,

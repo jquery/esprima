@@ -260,7 +260,7 @@ export class Parser {
                     let node;
                     node = {
                         type: e.multiLine ? 'BlockComment' : 'LineComment',
-                        style: e.commentStyle,
+                        style: e.style,
                         value: this.scanner.source.slice(e.slice[0], e.slice[1])
                     };
                     if (this.config.range) {

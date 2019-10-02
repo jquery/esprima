@@ -19,7 +19,8 @@
                     "line": 1,
                     "column": 6
                 }
-            }
+            },
+            "style": "/*"
         }
     ],
     "comments": [
@@ -39,7 +40,8 @@
                     "line": 1,
                     "column": 6
                 }
-            }
+            },
+            "style": "/*"
         }
     ],
     "tokens": [],

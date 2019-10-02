@@ -81,7 +81,8 @@
                                         "line": 1,
                                         "column": 29
                                     }
-                                }
+                                },
+                                "style": "/*"
                             }
                         ],
                         "trailingComments": [
@@ -101,7 +102,8 @@
                                         "line": 1,
                                         "column": 56
                                     }
-                                }
+                                },
+                                "style": "/*"
                             }
                         ],
                         "range": [
@@ -177,7 +179,8 @@
                                         "line": 1,
                                         "column": 56
                                     }
-                                }
+                                },
+                                "style": "/*"
                             }
                         ],
                         "range": [
@@ -248,7 +251,8 @@
                     "line": 1,
                     "column": 29
                 }
-            }
+            },
+            "style": "/*"
         },
         {
             "type": "Block",
@@ -266,7 +270,8 @@
                     "line": 1,
                     "column": 56
                 }
-            }
+            },
+            "style": "/*"
         }
     ],
     "tokens": [

@@ -23,6 +23,7 @@
     },
     {
         "type": "BlockComment",
+        "style": "/*",
         "value": " answer ",
         "range": [
             5,

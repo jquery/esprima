@@ -56,7 +56,8 @@
                     "line": 1,
                     "column": 10
                 }
-            }
+            },
+            "style": "/*"
         },
         {
             "type": "Block",
@@ -74,7 +75,8 @@
                     "line": 1,
                     "column": 21
                 }
-            }
+            },
+            "style": "/*"
         }
     ],
     "tokens": [

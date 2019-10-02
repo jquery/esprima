@@ -56,7 +56,8 @@
                     "line": 2,
                     "column": 3
                 }
-            }
+            },
+            "style": "/*"
         }
     ],
     "tokens": [

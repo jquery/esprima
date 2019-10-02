@@ -84,7 +84,8 @@
                                                 "line": 1,
                                                 "column": 48
                                             }
-                                        }
+                                        },
+                                        "style": "/*"
                                     }
                                 ],
                                 "range": [
@@ -168,7 +169,8 @@
                     "line": 1,
                     "column": 48
                 }
-            }
+            },
+            "style": "/*"
         }
     ],
     "tokens": [

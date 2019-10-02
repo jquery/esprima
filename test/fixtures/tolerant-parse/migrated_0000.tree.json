@@ -19,7 +19,8 @@
                     "line": 1,
                     "column": 3
                 }
-            }
+            },
+            "style": "/*"
         }
     ],
     "tokens": [],

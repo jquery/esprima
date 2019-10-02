@@ -73,6 +73,7 @@
     },
     {
         "type": "LineComment",
+        "style": "//",
         "value": " the Ultimate",
         "range": [
             17,

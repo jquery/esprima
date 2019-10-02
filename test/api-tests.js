@@ -205,7 +205,7 @@ describe('esprima.parse', function () {
         comments = statement.leadingComments;
 
         assert.deepEqual(expression, { type: 'Literal', value: 42, raw: '42' });
-        assert.deepEqual(statement.leadingComments, [{ type: 'Block', value: ' universe ', range: [0, 14] }]);
+        assert.deepEqual(statement.leadingComments, [{ type: 'Block', value: ' universe ', range: [0, 14], style: '/*' }]);
     });
 
     it('should not implicity collect comments when comment attachment is specified', function () {
@@ -382,7 +382,7 @@ describe('esprima.parseModule', function () {
         comments = statement.leadingComments;
 
         assert.deepEqual(expression, { type: 'Literal', value: 42, raw: '42' });
-        assert.deepEqual(statement.leadingComments, [{ type: 'Block', value: ' universe ', range: [0, 14] }]);
+        assert.deepEqual(statement.leadingComments, [{ type: 'Block', value: ' universe ', range: [0, 14], style: '/*' }]);
     });
 
     it('should not implicity collect comments when comment attachment is specified', function () {
@@ -566,7 +566,7 @@ describe('esprima.parseScript', function () {
         comments = statement.leadingComments;
 
         assert.deepEqual(expression, { type: 'Literal', value: 42, raw: '42' });
-        assert.deepEqual(statement.leadingComments, [{ type: 'Block', value: ' universe ', range: [0, 14] }]);
+        assert.deepEqual(statement.leadingComments, [{ type: 'Block', value: ' universe ', range: [0, 14], style: '/*' }]);
     });
 
     it('should not implicity collect comments when comment attachment is specified', function () {
@@ -660,7 +660,7 @@ describe('esprima.parse delegate', function () {
         esprima.parse('/* prolog */ answer = 42 // epilog', { comment: true }, collect);
 
         assert.deepEqual(list.length, 7);
-        assert.deepEqual(list[0], { type: 'BlockComment', value: ' prolog ' });
+        assert.deepEqual(list[0], { type: 'BlockComment', value: ' prolog ', style: '/*' });
         assert.deepEqual(list[1], { type: 'Identifier', name: 'answer' });
         assert.deepEqual(list[2], { type: 'LineComment', value: ' epilog', style: '//' });
         assert.deepEqual(list[3], { type: 'Literal', value: 42, raw: '42' });
@@ -904,7 +904,7 @@ describe('esprima.tokenize', function () {
     it('should also include the comments when specified', function () {
         var tokens = esprima.tokenize('/*TODO*/ xyz', { comment: true });
         assert.deepEqual(tokens.length, 2);
-        assert.deepEqual(tokens[0], { type: 'BlockComment', value: 'TODO' });
+        assert.deepEqual(tokens[0], { type: 'BlockComment', value: 'TODO', style: '/*' });
         assert.ifError(tokens[0].loc);
         assert.ifError(tokens[0].range);
     });
