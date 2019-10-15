@@ -334,9 +334,9 @@ Script {
   type: 'Program',
   body: [ ExpressionStatement { type: 'ExpressionStatement', expression: [Object] } ],
   sourceType: 'script',
-  comments: [ { type: 'Line', value: ' TODO: why' } ] }
+  comments: [ { type: 'Line', value: ' TODO: why', style: '//' } ]
 ```
-The type of each comment can either be _Line_ for a single-line comment (`//` towards the end-of-line) or _Block_ for a multi-line comment (enclosed by `/*` and `*/`).
+The type of each comment can either be _Line_ for a single-line comment (`//`, `<!--` or `-->` towards the end-of-line) or _Block_ for a multi-line comment (enclosed by `/*` and `*/`). The comment prefix (`//`, `<!--`, `-->` or `/*`) will be reflected in _style_.
 
 ```js
 $ node
@@ -346,7 +346,7 @@ Script {
   type: 'Program',
   body: [ ExpressionStatement { type: 'ExpressionStatement', expression: [Object] } ],
   sourceType: 'script',
-  comments: [ { type: 'Block', value: 'everything' } ] }
+  comments: [ { type: 'Block', value: 'everything', style: '/*' } ] }
 ```
 
 Each comment can also contain its location, if the parsing configuration has the flag `range` or `loc` (or both), illustrated here:
@@ -356,7 +356,7 @@ $ node
 > var esprima = require('esprima')
 > output = esprima.parseScript('answer = 42 // TODO: why', { comment: true, range: true });
 > output.comments
-[ { type: 'Line', value: ' TODO: why', range: [ 12, 24 ] } ]
+[ { type: 'Line', value: ' TODO: why', style: '//', range: [ 12, 24 ] } ]
 ```
 
 ## Syntax Delegate
