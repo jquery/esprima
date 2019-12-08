@@ -795,13 +795,14 @@ export class Parser {
         let key: Node.PropertyKey;
         switch (token.type) {
             case Token.StringLiteral:
-            case Token.NumericLiteral:
+            case Token.NumericLiteral: {
                 if (this.context.strict && token.octal) {
                     this.tolerateUnexpectedToken(token, Messages.StrictOctalLiteral);
                 }
                 const raw = this.getTokenRaw(token);
                 key = this.finalize(node, new Node.Literal(token.value as string, raw));
                 break;
+            }
 
             case Token.Identifier:
             case Token.BooleanLiteral:
@@ -2691,7 +2692,7 @@ export class Parser {
                 statement = this.parseExpressionStatement();
                 break;
 
-            case Token.Punctuator:
+            case Token.Punctuator: {
                 const value = this.lookahead.value;
                 if (value === '{') {
                     statement = this.parseBlock();
@@ -2703,6 +2704,7 @@ export class Parser {
                     statement = this.parseExpressionStatement();
                 }
                 break;
+            }
 
             case Token.Identifier:
                 statement = this.matchAsyncFunction() ? this.parseFunctionDeclaration() : this.parseLabelledStatement();

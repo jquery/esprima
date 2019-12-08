@@ -50,10 +50,11 @@ class Reader {
                 regex = false;
                 break;
 
-            case ')':
+            case ')': {
                 const keyword = this.values[this.paren - 1];
                 regex = (keyword === 'if' || keyword === 'while' || keyword === 'for' || keyword === 'with');
                 break;
+            }
 
             case '}':
                 // Dividing a function by anything makes little sense,
