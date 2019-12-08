@@ -94,8 +94,7 @@ export function parseScript(code: string, options, delegate) {
 export function tokenize(code: string, options, delegate) {
     const tokenizer = new Tokenizer(code, options);
 
-    let tokens;
-    tokens = [];
+    const tokens = [];
 
     try {
         while (true) {
