@@ -60,6 +60,8 @@ interface TokenEntry {
     loc?: SourceLocation;
 }
 
+/* eslint-disable @typescript-eslint/unbound-method */
+
 export class Parser {
     readonly config: Config;
     readonly delegate: any;
