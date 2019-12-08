@@ -1152,7 +1152,7 @@ export class Parser {
         this.expect('(');
         const args: Node.ArgumentListElement[] = [];
         if (!this.match(')')) {
-            for (;;) {
+            for (; ;) {
                 const expr = this.match('...') ? this.parseSpreadElement() :
                     this.isolateCoverGrammar(this.parseAssignmentExpression);
                 args.push(expr);
@@ -1224,7 +1224,7 @@ export class Parser {
         this.expect('(');
         const args: Node.ArgumentListElement[] = [];
         if (!this.match(')')) {
-            for (;;) {
+            for (; ;) {
                 const expr = this.match('...') ? this.parseSpreadElement() :
                     this.isolateCoverGrammar(this.parseAsyncArgument);
                 args.push(expr);
@@ -1280,7 +1280,7 @@ export class Parser {
             expr = this.inheritCoverGrammar(this.matchKeyword('new') ? this.parseNewExpression : this.parsePrimaryExpression);
         }
 
-        for (;;) {
+        for (; ;) {
             if (this.match('.')) {
                 this.context.isBindingElement = false;
                 this.context.isAssignmentTarget = true;
@@ -1346,7 +1346,7 @@ export class Parser {
         let expr = (this.matchKeyword('super') && this.context.inFunctionBody) ? this.parseSuper() :
             this.inheritCoverGrammar(this.matchKeyword('new') ? this.parseNewExpression : this.parsePrimaryExpression);
 
-        for (;;) {
+        for (; ;) {
             if (this.match('[')) {
                 this.context.isBindingElement = false;
                 this.context.isAssignmentTarget = true;
@@ -1505,7 +1505,7 @@ export class Parser {
 
             const stack = [left, token.value, right];
             const precedences: number[] = [prec];
-            for (;;) {
+            for (; ;) {
                 prec = this.binaryPrecedence(this.lookahead);
                 if (prec <= 0) {
                     break;
@@ -1849,7 +1849,7 @@ export class Parser {
 
         this.expect('{');
         const block: Node.StatementListItem[] = [];
-        for (;;) {
+        for (; ;) {
             if (this.match('}')) {
                 break;
             }
@@ -2512,7 +2512,7 @@ export class Parser {
         this.expect(':');
 
         const consequent: Node.StatementListItem[] = [];
-        for (;;) {
+        for (; ;) {
             if (this.match('}') || this.matchKeyword('default') || this.matchKeyword('case')) {
                 break;
             }
@@ -2536,7 +2536,7 @@ export class Parser {
         const cases: Node.SwitchCase[] = [];
         let defaultFound = false;
         this.expect('{');
-        for (;;) {
+        for (; ;) {
             if (this.match('}')) {
                 break;
             }
@@ -3063,7 +3063,7 @@ export class Parser {
         let firstRestricted: RawToken | null = null;
 
         const body: Node.Statement[] = [];
-        for (;;) {
+        for (; ;) {
             const token = this.lookahead;
             if (token.type !== Token.StringLiteral) {
                 break;
