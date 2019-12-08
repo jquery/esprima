@@ -627,7 +627,7 @@ export class RegexLiteral {
     readonly type: string;
     readonly value: RegExp;
     readonly raw: string;
-    readonly regex: { pattern: string, flags: string };
+    readonly regex: { pattern: string; flags: string };
     constructor(value: RegExp, raw: string, pattern: string, flags: string) {
         this.type = Syntax.Literal;
         this.value = value;
