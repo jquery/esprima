@@ -3219,7 +3219,7 @@ export class Parser {
         let token = this.lookahead;
         const node = this.createNode();
 
-        let kind: string = '';
+        let kind = '';
         let key: Node.PropertyKey | null = null;
         let value: Node.FunctionExpression | null = null;
         let computed = false;
