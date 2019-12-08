@@ -259,7 +259,7 @@ export class Parser {
             if (comments.length > 0 && this.delegate) {
                 for (let i = 0; i < comments.length; ++i) {
                     const e: Comment = comments[i];
-                    const node = {
+                    const node: any = {
                         type: e.multiLine ? 'BlockComment' : 'LineComment',
                         value: this.scanner.source.slice(e.slice[0], e.slice[1])
                     };
@@ -1607,7 +1607,7 @@ export class Parser {
 
     reinterpretAsCoverFormalsList(expr) {
         let params = [expr];
-        const options = {
+        const options: any = {
             simple: true,
             paramSet: {}
         };
@@ -2862,7 +2862,7 @@ export class Parser {
     }
 
     parseFormalParameters(firstRestricted?) {
-        const options = {
+        const options: any = {
             simple: true,
             params: [],
             firstRestricted: firstRestricted
