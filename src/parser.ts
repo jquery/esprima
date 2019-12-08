@@ -170,7 +170,7 @@ export class Parser {
     }
 
     throwError(messageFormat: string, ...values): void {
-        const args = Array.prototype.slice.call(arguments, 1);
+        const args = values.slice();
         const msg = messageFormat.replace(/%(\d)/g, (whole, idx) => {
             assert(idx < args.length, 'Message reference must be in range');
             return args[idx];
@@ -184,7 +184,7 @@ export class Parser {
     }
 
     tolerateError(messageFormat, ...values) {
-        const args = Array.prototype.slice.call(arguments, 1);
+        const args = values.slice();
         const msg = messageFormat.replace(/%(\d)/g, (whole, idx) => {
             assert(idx < args.length, 'Message reference must be in range');
             return args[idx];
