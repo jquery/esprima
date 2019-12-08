@@ -92,8 +92,6 @@ class Reader {
 
 }
 
-/* tslint:disable:max-classes-per-file */
-
 interface Config {
     tolerant?: boolean;
     comment?: boolean;

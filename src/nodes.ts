@@ -26,8 +26,6 @@ export type PropertyKey = Identifier | Literal;
 export type PropertyValue = AssignmentPattern | AsyncFunctionExpression | BindingIdentifier | BindingPattern | FunctionExpression;
 export type StatementListItem = Declaration | Statement;
 
-/* tslint:disable:max-classes-per-file */
-
 export class ArrayExpression {
     readonly type: string;
     readonly elements: ArrayExpressionElement[];
