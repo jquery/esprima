@@ -13,7 +13,7 @@
     "dist/esprima.js"
   ],
   "engines": {
-    "node": ">=4"
+    "node": ">=8"
   },
   "author": {
     "name": "Ariya Hidayat",

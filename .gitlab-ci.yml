@@ -1,19 +1,19 @@
-image: node:6
+image: node:10
 
 basic_test:
   script:
    - npm --version
-   - npm install
+   - npm ci
    - npm test
 
 downstream:
   script:
-   - npm install
+   - npm ci
    - npm run compile
    - npm run downstream
 
 test_262:
   script:
-   - npm install
+   - npm ci
    - npm run compile
    - npm run test-262
