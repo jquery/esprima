@@ -67,5 +67,4 @@ export class ErrorHandler {
             throw error;
         }
     }
-
 }

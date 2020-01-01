@@ -11,6 +11,7 @@ export const enum Token {
     Template
 }
 
+// eslint-disable-next-line prefer-const
 export let TokenName = {};
 TokenName[Token.BooleanLiteral] = 'Boolean';
 TokenName[Token.EOF] = '<end>';

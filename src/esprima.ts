@@ -38,11 +38,11 @@ export function parse(code: string, options, delegate) {
         }
     };
 
-    let parserDelegate = (typeof delegate === 'function') ? proxyDelegate : null;
+    let parserDelegate = typeof delegate === 'function' ? proxyDelegate : null;
     let collectComment = false;
     if (options) {
-        collectComment = (typeof options.comment === 'boolean' && options.comment);
-        const attachComment = (typeof options.attachComment === 'boolean' && options.attachComment);
+        collectComment = typeof options.comment === 'boolean' && options.comment;
+        const attachComment = typeof options.attachComment === 'boolean' && options.attachComment;
         if (collectComment || attachComment) {
             commentHandler = new CommentHandler();
             commentHandler.attach = attachComment;
@@ -53,7 +53,7 @@ export function parse(code: string, options, delegate) {
 
     let isModule = false;
     if (options && typeof options.sourceType === 'string') {
-        isModule = (options.sourceType === 'module');
+        isModule = options.sourceType === 'module';
     }
 
     let parser: Parser;
@@ -95,6 +95,7 @@ export function tokenize(code: string, options, delegate) {
     const tokenizer = new Tokenizer(code, options);
 
     let tokens;
+    // eslint-disable-next-line prefer-const
     tokens = [];
 
     try {

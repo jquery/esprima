@@ -1,0 +1,10 @@
+{
+    // "eslint.autoFixOnSave": true, // has been deprecated, use editor.codeActionsOnSave instead
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "eslint.validate": [
+        "javascript",
+        { "language": "typescript", "autoFix": true },
+    ]
+}

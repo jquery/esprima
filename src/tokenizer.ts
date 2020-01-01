@@ -27,22 +27,73 @@ class Reader {
 
     // A function following one of those tokens is an expression.
     beforeFunctionExpression(t: string): boolean {
-        return ['(', '{', '[', 'in', 'typeof', 'instanceof', 'new',
-            'return', 'case', 'delete', 'throw', 'void',
-            // assignment operators
-            '=', '+=', '-=', '*=', '**=', '/=', '%=', '<<=', '>>=', '>>>=',
-            '&=', '|=', '^=', ',',
-            // binary/unary operators
-            '+', '-', '*', '**', '/', '%', '++', '--', '<<', '>>', '>>>', '&',
-            '|', '^', '!', '~', '&&', '||', '?', ':', '===', '==', '>=',
-            '<=', '<', '>', '!=', '!=='].indexOf(t) >= 0;
+        return (
+            [
+                '(',
+                '{',
+                '[',
+                'in',
+                'typeof',
+                'instanceof',
+                'new',
+                'return',
+                'case',
+                'delete',
+                'throw',
+                'void',
+                // assignment operators
+                '=',
+                '+=',
+                '-=',
+                '*=',
+                '**=',
+                '/=',
+                '%=',
+                '<<=',
+                '>>=',
+                '>>>=',
+                '&=',
+                '|=',
+                '^=',
+                ',',
+                // binary/unary operators
+                '+',
+                '-',
+                '*',
+                '**',
+                '/',
+                '%',
+                '++',
+                '--',
+                '<<',
+                '>>',
+                '>>>',
+                '&',
+                '|',
+                '^',
+                '!',
+                '~',
+                '&&',
+                '||',
+                '?',
+                ':',
+                '===',
+                '==',
+                '>=',
+                '<=',
+                '<',
+                '>',
+                '!=',
+                '!=='
+            ].indexOf(t) >= 0
+        );
     }
 
     // Determine if forward slash (/) is an operator or part of a regular expression
     // https://github.com/mozilla/sweet.js/wiki/design
     isRegexStart() {
         const previous = this.values[this.values.length - 1];
-        let regex = (previous !== null);
+        let regex = previous !== null;
 
         switch (previous) {
             case 'this':
@@ -52,7 +103,7 @@ class Reader {
 
             case ')':
                 const keyword = this.values[this.paren - 1];
-                regex = (keyword === 'if' || keyword === 'while' || keyword === 'for' || keyword === 'with');
+                regex = keyword === 'if' || keyword === 'while' || keyword === 'for' || keyword === 'with';
                 break;
 
             case '}':
@@ -88,7 +139,6 @@ class Reader {
             this.values.push(null);
         }
     }
-
 }
 
 /* tslint:disable:max-classes-per-file */
@@ -110,13 +160,13 @@ export class Tokenizer {
 
     constructor(code: string, config: Config) {
         this.errorHandler = new ErrorHandler();
-        this.errorHandler.tolerant = config ? (typeof config.tolerant === 'boolean' && config.tolerant) : false;
+        this.errorHandler.tolerant = config ? typeof config.tolerant === 'boolean' && config.tolerant : false;
 
         this.scanner = new Scanner(code, this.errorHandler);
-        this.scanner.trackComment = config ? (typeof config.comment === 'boolean' && config.comment) : false;
+        this.scanner.trackComment = config ? typeof config.comment === 'boolean' && config.comment : false;
 
-        this.trackRange = config ? (typeof config.range === 'boolean' && config.range) : false;
-        this.trackLoc = config ? (typeof config.loc === 'boolean' && config.loc) : false;
+        this.trackRange = config ? typeof config.range === 'boolean' && config.range : false;
+        this.trackLoc = config ? typeof config.loc === 'boolean' && config.loc : false;
         this.buffer = [];
         this.reader = new Reader();
     }
@@ -127,7 +177,6 @@ export class Tokenizer {
 
     getNextToken() {
         if (this.buffer.length === 0) {
-
             const comments: Comment[] = this.scanner.scanComments();
             if (this.scanner.trackComment) {
                 for (let i = 0; i < comments.length; ++i) {
@@ -160,7 +209,7 @@ export class Tokenizer {
                     };
                 }
 
-                const maybeRegex = (this.scanner.source[this.scanner.index] === '/') && this.reader.isRegexStart();
+                const maybeRegex = this.scanner.source[this.scanner.index] === '/' && this.reader.isRegexStart();
                 let token: RawToken;
                 if (maybeRegex) {
                     const state = this.scanner.saveState();
@@ -201,5 +250,4 @@ export class Tokenizer {
 
         return this.buffer.shift();
     }
-
 }

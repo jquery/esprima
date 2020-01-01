@@ -1,7 +1,7 @@
 {
   "name": "esprima",
   "description": "ECMAScript parsing infrastructure for multipurpose analysis",
-  "homepage": "http://esprima.org",
+  "homepage": "https://esprima.org",
   "main": "dist/esprima.js",
   "bin": {
     "esparse": "./bin/esparse.js",
@@ -23,7 +23,7 @@
     {
       "name": "Ariya Hidayat",
       "email": "ariya.hidayat@gmail.com",
-      "web": "http://ariya.ofilabs.com"
+      "web": "https://ariya.io"
     }
   ],
   "repository": {
@@ -35,8 +35,14 @@
   },
   "license": "BSD-2-Clause",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.14.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^2.14.0",
+    "@typescript-eslint/parser": "^2.14.0",
     "codecov.io": "~0.1.6",
     "escomplex-js": "1.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "everything.js": "~1.0.3",
     "glob": "~7.1.0",
     "istanbul": "~0.4.0",
@@ -54,12 +60,13 @@
     "lodash": "~3.10.1",
     "mocha": "~3.2.0",
     "node-tick-processor": "~0.0.2",
+    "prettier": "^1.19.1",
     "regenerate": "~1.3.2",
     "results-interpreter": "~1.0.0",
     "temp": "~0.8.3",
     "test262": "git+https://git@github.com/tc39/test262.git#2ee3864136747ee69401b2d266e234cdd0a95965",
     "test262-stream": "~1.3.0",
-    "tslint": "~5.11.0",
+    "tslint": "^5.20.1",
     "typescript": "~3.2.1",
     "typescript-formatter": "~7.2.2",
     "unicode-12.1.0": "^0.8.0",
@@ -75,11 +82,10 @@
   ],
   "scripts": {
     "check-version": "node test/check-version.js",
-    "tslint": "tslint src/*.ts",
-    "code-style": "tsfmt --verify src/*.ts && tsfmt --verify test/*.js",
-    "format-code": "tsfmt -r src/*.ts && tsfmt -r test/*.js",
+    "lint": "eslint -c src/.eslintrc.json --ext=ts ./src --fix",
+    "prettify": "prettier --write src/*.{js,ts} dist/*.js",
     "complexity": "node test/check-complexity.js",
-    "static-analysis": "npm run check-version && npm run tslint && npm run code-style && npm run complexity",
+    "static-analysis": "npm run prettify && npm run check-version && npm run lint && npm run complexity",
     "hostile-env-tests": "node test/hostile-environment-tests.js",
     "unit-tests": "node test/unit-tests.js",
     "api-tests": "mocha -R dot test/api-tests.js",

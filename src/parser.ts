@@ -77,12 +77,12 @@ export class Parser {
 
     constructor(code: string, options: any = {}, delegate) {
         this.config = {
-            range: (typeof options.range === 'boolean') && options.range,
-            loc: (typeof options.loc === 'boolean') && options.loc,
+            range: typeof options.range === 'boolean' && options.range,
+            loc: typeof options.loc === 'boolean' && options.loc,
             source: null,
-            tokens: (typeof options.tokens === 'boolean') && options.tokens,
-            comment: (typeof options.comment === 'boolean') && options.comment,
-            tolerant: (typeof options.tolerant === 'boolean') && options.tolerant
+            tokens: typeof options.tokens === 'boolean' && options.tokens,
+            comment: typeof options.comment === 'boolean' && options.comment,
+            tolerant: typeof options.tolerant === 'boolean' && options.tolerant
         };
         if (this.config.loc && options.source && options.source !== null) {
             this.config.source = String(options.source);
@@ -174,8 +174,7 @@ export class Parser {
         const msg = messageFormat.replace(/%(\d)/g, (whole, idx) => {
             assert(idx < args.length, 'Message reference must be in range');
             return args[idx];
-        }
-        );
+        });
 
         const index = this.lastMarker.index;
         const line = this.lastMarker.line;
@@ -188,8 +187,7 @@ export class Parser {
         const msg = messageFormat.replace(/%(\d)/g, (whole, idx) => {
             assert(idx < args.length, 'Message reference must be in range');
             return args[idx];
-        }
-        );
+        });
 
         const index = this.lastMarker.index;
         const line = this.scanner.lineNumber;
@@ -204,12 +202,18 @@ export class Parser {
         let value;
         if (token) {
             if (!message) {
-                msg = (token.type === Token.EOF) ? Messages.UnexpectedEOS :
-                    (token.type === Token.Identifier) ? Messages.UnexpectedIdentifier :
-                        (token.type === Token.NumericLiteral) ? Messages.UnexpectedNumber :
-                            (token.type === Token.StringLiteral) ? Messages.UnexpectedString :
-                                (token.type === Token.Template) ? Messages.UnexpectedTemplate :
-                                    Messages.UnexpectedToken;
+                msg =
+                    token.type === Token.EOF
+                        ? Messages.UnexpectedEOS
+                        : token.type === Token.Identifier
+                        ? Messages.UnexpectedIdentifier
+                        : token.type === Token.NumericLiteral
+                        ? Messages.UnexpectedNumber
+                        : token.type === Token.StringLiteral
+                        ? Messages.UnexpectedString
+                        : token.type === Token.Template
+                        ? Messages.UnexpectedTemplate
+                        : Messages.UnexpectedToken;
 
                 if (token.type === Token.Keyword) {
                     if (this.scanner.isFutureReservedWord(token.value)) {
@@ -337,7 +341,7 @@ export class Parser {
         }
 
         const next = this.scanner.lex();
-        this.hasLineTerminator = (token.lineNumber !== next.lineNumber);
+        this.hasLineTerminator = token.lineNumber !== next.lineNumber;
 
         if (next && this.context.strict && next.type === Token.Identifier) {
             if (this.scanner.isStrictModeReservedWord(next.value as string)) {
@@ -403,7 +407,7 @@ export class Parser {
             node.loc = {
                 start: {
                     line: marker.line,
-                    column: marker.column,
+                    column: marker.column
                 },
                 end: {
                     line: this.lastMarker.line,
@@ -498,7 +502,8 @@ export class Parser {
             return false;
         }
         const op = this.lookahead.value;
-        return op === '=' ||
+        return (
+            op === '=' ||
             op === '*=' ||
             op === '**=' ||
             op === '/=' ||
@@ -510,7 +515,8 @@ export class Parser {
             op === '>>>=' ||
             op === '&=' ||
             op === '^=' ||
-            op === '|=';
+            op === '|='
+        );
     }
 
     // Cover grammar support.
@@ -579,7 +585,8 @@ export class Parser {
 
         this.context.isBindingElement = this.context.isBindingElement && previousIsBindingElement;
         this.context.isAssignmentTarget = this.context.isAssignmentTarget && previousIsAssignmentTarget;
-        this.context.firstCoverInitializedNameError = previousFirstCoverInitializedNameError || this.context.firstCoverInitializedNameError;
+        this.context.firstCoverInitializedNameError =
+            previousFirstCoverInitializedNameError || this.context.firstCoverInitializedNameError;
 
         return result;
     }
@@ -610,7 +617,9 @@ export class Parser {
                 if ((this.context.isModule || this.context.await) && this.lookahead.value === 'await') {
                     this.tolerateUnexpectedToken(this.lookahead);
                 }
-                expr = this.matchAsyncFunction() ? this.parseFunctionExpression() : this.finalize(node, new Node.Identifier(this.nextToken().value));
+                expr = this.matchAsyncFunction()
+                    ? this.parseFunctionExpression()
+                    : this.finalize(node, new Node.Identifier(this.nextToken().value));
                 break;
 
             case Token.NumericLiteral:
@@ -664,7 +673,10 @@ export class Parser {
                         this.scanner.index = this.startMarker.index;
                         token = this.nextRegexToken();
                         raw = this.getTokenRaw(token);
-                        expr = this.finalize(node, new Node.RegexLiteral(token.regex as RegExp, raw, token.pattern, token.flags));
+                        expr = this.finalize(
+                            node,
+                            new Node.RegexLiteral(token.regex as RegExp, raw, token.pattern, token.flags)
+                        );
                         break;
                     default:
                         expr = this.throwUnexpectedToken(this.nextToken());
@@ -828,8 +840,10 @@ export class Parser {
     }
 
     isPropertyKey(key, value) {
-        return (key.type === Syntax.Identifier && key.name === value) ||
-            (key.type === Syntax.Literal && key.value === value);
+        return (
+            (key.type === Syntax.Identifier && key.name === value) ||
+            (key.type === Syntax.Literal && key.value === value)
+        );
     }
 
     parseObjectProperty(hasProto): Node.Property {
@@ -849,8 +863,13 @@ export class Parser {
             const id = token.value;
             this.nextToken();
             computed = this.match('[');
-            isAsync = !this.hasLineTerminator && (id === 'async') &&
-                !this.match(':') && !this.match('(') && !this.match('*') && !this.match(',');
+            isAsync =
+                !this.hasLineTerminator &&
+                id === 'async' &&
+                !this.match(':') &&
+                !this.match('(') &&
+                !this.match('*') &&
+                !this.match(',');
             key = isAsync ? this.parseObjectPropertyKey() : this.finalize(node, new Node.Identifier(id));
         } else if (this.match('*')) {
             this.nextToken();
@@ -866,20 +885,17 @@ export class Parser {
             key = this.parseObjectPropertyKey();
             this.context.allowYield = false;
             value = this.parseGetterMethod();
-
         } else if (token.type === Token.Identifier && !isAsync && token.value === 'set' && lookaheadPropertyKey) {
             kind = 'set';
             computed = this.match('[');
             key = this.parseObjectPropertyKey();
             value = this.parseSetterMethod();
-
         } else if (token.type === Token.Punctuator && token.value === '*' && lookaheadPropertyKey) {
             kind = 'init';
             computed = this.match('[');
             key = this.parseObjectPropertyKey();
             value = this.parseGeneratorMethod();
             method = true;
-
         } else {
             if (!key) {
                 this.throwUnexpectedToken(this.lookahead);
@@ -895,11 +911,9 @@ export class Parser {
                 }
                 this.nextToken();
                 value = this.inheritCoverGrammar(this.parseAssignmentExpression);
-
             } else if (this.match('(')) {
                 value = isAsync ? this.parsePropertyMethodAsyncFunction() : this.parsePropertyMethodFunction();
                 method = true;
-
             } else if (token.type === Token.Identifier) {
                 const id = this.finalize(node, new Node.Identifier(token.value));
                 if (this.match('=')) {
@@ -917,7 +931,10 @@ export class Parser {
             }
         }
 
-        return this.finalize(node, new Node.Property(kind, key as Node.PropertyKey, computed, value, method, shorthand));
+        return this.finalize(
+            node,
+            new Node.Property(kind, key as Node.PropertyKey, computed, value, method, shorthand)
+        );
     }
 
     parseObjectInitializer(): Node.ObjectExpression {
@@ -1005,7 +1022,9 @@ export class Parser {
                 expr.type = Syntax.ObjectPattern;
                 for (let i = 0; i < expr.properties.length; i++) {
                     const property = expr.properties[i];
-                    this.reinterpretExpressionAsPattern(property.type === Syntax.SpreadElement ? property : property.value);
+                    this.reinterpretExpressionAsPattern(
+                        property.type === Syntax.SpreadElement ? property : property.value
+                    );
                 }
                 break;
             case Syntax.AssignmentExpression:
@@ -1128,7 +1147,7 @@ export class Parser {
                                 this.reinterpretExpressionAsPattern(expr);
                             }
 
-                            const parameters = (expr.type === Syntax.SequenceExpression ? expr.expressions : [expr]);
+                            const parameters = expr.type === Syntax.SequenceExpression ? expr.expressions : [expr];
                             expr = {
                                 type: ArrowParameterPlaceHolder,
                                 params: parameters,
@@ -1151,8 +1170,9 @@ export class Parser {
         const args: Node.ArgumentListElement[] = [];
         if (!this.match(')')) {
             while (true) {
-                const expr = this.match('...') ? this.parseSpreadElement() :
-                    this.isolateCoverGrammar(this.parseAssignmentExpression);
+                const expr = this.match('...')
+                    ? this.parseSpreadElement()
+                    : this.isolateCoverGrammar(this.parseAssignmentExpression);
                 args.push(expr);
                 if (this.match(')')) {
                     break;
@@ -1169,10 +1189,12 @@ export class Parser {
     }
 
     isIdentifierName(token): boolean {
-        return token.type === Token.Identifier ||
+        return (
+            token.type === Token.Identifier ||
             token.type === Token.Keyword ||
             token.type === Token.BooleanLiteral ||
-            token.type === Token.NullLiteral;
+            token.type === Token.NullLiteral
+        );
     }
 
     parseIdentifierName(): Node.Identifier {
@@ -1193,7 +1215,11 @@ export class Parser {
         let expr;
         if (this.match('.')) {
             this.nextToken();
-            if (this.lookahead.type === Token.Identifier && this.context.inFunctionBody && this.lookahead.value === 'target') {
+            if (
+                this.lookahead.type === Token.Identifier &&
+                this.context.inFunctionBody &&
+                this.lookahead.value === 'target'
+            ) {
                 const property = this.parseIdentifierName();
                 expr = new Node.MetaProperty(id, property);
             } else {
@@ -1223,8 +1249,9 @@ export class Parser {
         const args: Node.ArgumentListElement[] = [];
         if (!this.match(')')) {
             while (true) {
-                const expr = this.match('...') ? this.parseSpreadElement() :
-                    this.isolateCoverGrammar(this.parseAsyncArgument);
+                const expr = this.match('...')
+                    ? this.parseSpreadElement()
+                    : this.isolateCoverGrammar(this.parseAsyncArgument);
                 args.push(expr);
                 if (this.match(')')) {
                     break;
@@ -1247,7 +1274,7 @@ export class Parser {
             this.scanner.scanComments();
             const next = this.scanner.lex();
             this.scanner.restoreState(state);
-            match = (next.type === Token.Punctuator) && (next.value === '(');
+            match = next.type === Token.Punctuator && next.value === '(';
         }
 
         return match;
@@ -1275,7 +1302,9 @@ export class Parser {
                 this.throwUnexpectedToken(this.lookahead);
             }
         } else {
-            expr = this.inheritCoverGrammar(this.matchKeyword('new') ? this.parseNewExpression : this.parsePrimaryExpression);
+            expr = this.inheritCoverGrammar(
+                this.matchKeyword('new') ? this.parseNewExpression : this.parsePrimaryExpression
+            );
         }
 
         while (true) {
@@ -1285,9 +1314,8 @@ export class Parser {
                 this.expect('.');
                 const property = this.parseIdentifierName();
                 expr = this.finalize(this.startNode(startToken), new Node.StaticMemberExpression(expr, property));
-
             } else if (this.match('(')) {
-                const asyncArrow = maybeAsync && (startToken.lineNumber === this.lookahead.lineNumber);
+                const asyncArrow = maybeAsync && startToken.lineNumber === this.lookahead.lineNumber;
                 this.context.isBindingElement = false;
                 this.context.isAssignmentTarget = false;
                 const args = asyncArrow ? this.parseAsyncArguments() : this.parseArguments();
@@ -1312,11 +1340,9 @@ export class Parser {
                 const property = this.isolateCoverGrammar(this.parseExpression);
                 this.expect(']');
                 expr = this.finalize(this.startNode(startToken), new Node.ComputedMemberExpression(expr, property));
-
             } else if (this.lookahead.type === Token.Template && this.lookahead.head) {
                 const quasi = this.parseTemplateLiteral();
                 expr = this.finalize(this.startNode(startToken), new Node.TaggedTemplateExpression(expr, quasi));
-
             } else {
                 break;
             }
@@ -1341,8 +1367,12 @@ export class Parser {
         assert(this.context.allowIn, 'callee of new expression always allow in keyword.');
 
         const node = this.startNode(this.lookahead);
-        let expr = (this.matchKeyword('super') && this.context.inFunctionBody) ? this.parseSuper() :
-            this.inheritCoverGrammar(this.matchKeyword('new') ? this.parseNewExpression : this.parsePrimaryExpression);
+        let expr =
+            this.matchKeyword('super') && this.context.inFunctionBody
+                ? this.parseSuper()
+                : this.inheritCoverGrammar(
+                      this.matchKeyword('new') ? this.parseNewExpression : this.parsePrimaryExpression
+                  );
 
         while (true) {
             if (this.match('[')) {
@@ -1352,18 +1382,15 @@ export class Parser {
                 const property = this.isolateCoverGrammar(this.parseExpression);
                 this.expect(']');
                 expr = this.finalize(node, new Node.ComputedMemberExpression(expr, property));
-
             } else if (this.match('.')) {
                 this.context.isBindingElement = false;
                 this.context.isAssignmentTarget = true;
                 this.expect('.');
                 const property = this.parseIdentifierName();
                 expr = this.finalize(node, new Node.StaticMemberExpression(expr, property));
-
             } else if (this.lookahead.type === Token.Template && this.lookahead.head) {
                 const quasi = this.parseTemplateLiteral();
                 expr = this.finalize(node, new Node.TaggedTemplateExpression(expr, quasi));
-
             } else {
                 break;
             }
@@ -1396,7 +1423,11 @@ export class Parser {
             expr = this.inheritCoverGrammar(this.parseLeftHandSideExpressionAllowCall);
             if (!this.hasLineTerminator && this.lookahead.type === Token.Punctuator) {
                 if (this.match('++') || this.match('--')) {
-                    if (this.context.strict && expr.type === Syntax.Identifier && this.scanner.isRestrictedWord(expr.name)) {
+                    if (
+                        this.context.strict &&
+                        expr.type === Syntax.Identifier &&
+                        this.scanner.isRestrictedWord(expr.name)
+                    ) {
                         this.tolerateError(Messages.StrictLHSPostfix);
                     }
                     if (!this.context.isAssignmentTarget) {
@@ -1426,8 +1457,15 @@ export class Parser {
     parseUnaryExpression(): Node.Expression {
         let expr;
 
-        if (this.match('+') || this.match('-') || this.match('~') || this.match('!') ||
-            this.matchKeyword('delete') || this.matchKeyword('void') || this.matchKeyword('typeof')) {
+        if (
+            this.match('+') ||
+            this.match('-') ||
+            this.match('~') ||
+            this.match('!') ||
+            this.matchKeyword('delete') ||
+            this.matchKeyword('void') ||
+            this.matchKeyword('typeof')
+        ) {
             const node = this.startNode(this.lookahead);
             const token = this.nextToken();
             expr = this.inheritCoverGrammar(this.parseUnaryExpression);
@@ -1477,7 +1515,7 @@ export class Parser {
         if (token.type === Token.Punctuator) {
             precedence = this.operatorPrecedence[op] || 0;
         } else if (token.type === Token.Keyword) {
-            precedence = (op === 'instanceof' || (this.context.allowIn && op === 'in')) ? 7 : 0;
+            precedence = op === 'instanceof' || (this.context.allowIn && op === 'in') ? 7 : 0;
         } else {
             precedence = 0;
         }
@@ -1510,7 +1548,7 @@ export class Parser {
                 }
 
                 // Reduce: make a binary expression from the three topmost entries.
-                while ((stack.length > 2) && (prec <= precedences[precedences.length - 1])) {
+                while (stack.length > 2 && prec <= precedences[precedences.length - 1]) {
                     right = stack.pop();
                     const operator = stack.pop();
                     precedences.pop();
@@ -1563,7 +1601,10 @@ export class Parser {
             this.expect(':');
             const alternate = this.isolateCoverGrammar(this.parseAssignmentExpression);
 
-            expr = this.finalize(this.startNode(startToken), new Node.ConditionalExpression(expr, consequent, alternate));
+            expr = this.finalize(
+                this.startNode(startToken),
+                new Node.ConditionalExpression(expr, consequent, alternate)
+            );
             this.context.isAssignmentTarget = false;
             this.context.isBindingElement = false;
         }
@@ -1594,13 +1635,13 @@ export class Parser {
             case Syntax.ObjectPattern:
                 for (let i = 0; i < param.properties.length; i++) {
                     const property = param.properties[i];
-                    this.checkPatternParam(options, (property.type === Syntax.RestElement) ? property : property.value);
+                    this.checkPatternParam(options, property.type === Syntax.RestElement ? property : property.value);
                 }
                 break;
             default:
                 break;
         }
-        options.simple = options.simple && (param instanceof Node.Identifier);
+        options.simple = options.simple && param instanceof Node.Identifier;
     }
 
     reinterpretAsCoverFormalsList(expr) {
@@ -1676,7 +1717,11 @@ export class Parser {
             let token = startToken;
             expr = this.parseConditionalExpression();
 
-            if (token.type === Token.Identifier && (token.lineNumber === this.lookahead.lineNumber) && token.value === 'async') {
+            if (
+                token.type === Token.Identifier &&
+                token.lineNumber === this.lookahead.lineNumber &&
+                token.value === 'async'
+            ) {
                 if (this.lookahead.type === Token.Identifier || this.matchKeyword('yield')) {
                     const arg = this.parsePrimaryExpression();
                     this.reinterpretExpressionAsPattern(arg);
@@ -1689,7 +1734,6 @@ export class Parser {
             }
 
             if (expr.type === ArrowParameterPlaceHolder || this.match('=>')) {
-
                 // https://tc39.github.io/ecma262/#sec-arrow-function-definitions
                 this.context.isAssignmentTarget = false;
                 this.context.isBindingElement = false;
@@ -1730,8 +1774,9 @@ export class Parser {
                     if (this.context.strict && list.stricted) {
                         this.tolerateUnexpectedToken(list.stricted, list.message);
                     }
-                    expr = isAsync ? this.finalize(node, new Node.AsyncArrowFunctionExpression(list.params, body, expression)) :
-                        this.finalize(node, new Node.ArrowFunctionExpression(list.params, body, expression));
+                    expr = isAsync
+                        ? this.finalize(node, new Node.AsyncArrowFunctionExpression(list.params, body, expression))
+                        : this.finalize(node, new Node.ArrowFunctionExpression(list.params, body, expression));
 
                     this.context.strict = previousStrict;
                     this.context.allowStrictDirective = previousAllowStrictDirective;
@@ -1739,7 +1784,6 @@ export class Parser {
                     this.context.await = previousAwait;
                 }
             } else {
-
                 if (this.matchAssign()) {
                     if (!this.context.isAssignmentTarget) {
                         this.tolerateError(Messages.InvalidLHSInAssignment);
@@ -1765,7 +1809,10 @@ export class Parser {
                     token = this.nextToken();
                     const operator = token.value as string;
                     const right = this.isolateCoverGrammar(this.parseAssignmentExpression);
-                    expr = this.finalize(this.startNode(startToken), new Node.AssignmentExpression(operator, expr, right));
+                    expr = this.finalize(
+                        this.startNode(startToken),
+                        new Node.AssignmentExpression(operator, expr, right)
+                    );
                     this.context.firstCoverInitializedNameError = null;
                 }
             }
@@ -1831,7 +1878,9 @@ export class Parser {
                     statement = this.parseClassDeclaration();
                     break;
                 case 'let':
-                    statement = this.isLexicalDeclaration() ? this.parseLexicalDeclaration({ inFor: false }) : this.parseStatement();
+                    statement = this.isLexicalDeclaration()
+                        ? this.parseLexicalDeclaration({ inFor: false })
+                        : this.parseStatement();
                     break;
                 default:
                     statement = this.parseStatement();
@@ -1908,11 +1957,13 @@ export class Parser {
         const next = this.scanner.lex();
         this.scanner.restoreState(state);
 
-        return (next.type === Token.Identifier) ||
+        return (
+            next.type === Token.Identifier ||
             (next.type === Token.Punctuator && next.value === '[') ||
             (next.type === Token.Punctuator && next.value === '{') ||
             (next.type === Token.Keyword && next.value === 'let') ||
-            (next.type === Token.Keyword && next.value === 'yield');
+            (next.type === Token.Keyword && next.value === 'yield')
+        );
     }
 
     parseLexicalDeclaration(options): Node.VariableDeclaration {
@@ -1957,7 +2008,6 @@ export class Parser {
                     this.expect(',');
                 }
             }
-
         }
         this.expect(']');
 
@@ -2002,7 +2052,7 @@ export class Parser {
         return this.finalize(node, new Node.Property('init', key, computed, value, method, shorthand));
     }
 
-    parseRestProperty(params, kind): Node.RestElement {
+    parseRestProperty(params, _kind): Node.RestElement {
         const node = this.createNode();
         this.expect('...');
         const arg = this.parsePattern(params);
@@ -2021,7 +2071,9 @@ export class Parser {
 
         this.expect('{');
         while (!this.match('}')) {
-            properties.push(this.match('...') ? this.parseRestProperty(params, kind) : this.parsePropertyPattern(params, kind));
+            properties.push(
+                this.match('...') ? this.parseRestProperty(params, kind) : this.parsePropertyPattern(params, kind)
+            );
             if (!this.match('}')) {
                 this.expect(',');
             }
@@ -2049,7 +2101,10 @@ export class Parser {
         return pattern;
     }
 
-    parsePatternWithDefault(params, kind?: string): Node.AssignmentPattern | Node.BindingIdentifier | Node.BindingPattern {
+    parsePatternWithDefault(
+        params,
+        kind?: string
+    ): Node.AssignmentPattern | Node.BindingIdentifier | Node.BindingPattern {
         const startToken = this.lookahead;
 
         let pattern = this.parsePattern(params, kind);
@@ -2078,14 +2133,22 @@ export class Parser {
                 this.throwUnexpectedToken(token);
             }
         } else if (token.type !== Token.Identifier) {
-            if (this.context.strict && token.type === Token.Keyword && this.scanner.isStrictModeReservedWord(token.value as string)) {
+            if (
+                this.context.strict &&
+                token.type === Token.Keyword &&
+                this.scanner.isStrictModeReservedWord(token.value as string)
+            ) {
                 this.tolerateUnexpectedToken(token, Messages.StrictReservedWord);
             } else {
                 if (this.context.strict || token.value !== 'let' || kind !== 'var') {
                     this.throwUnexpectedToken(token);
                 }
             }
-        } else if ((this.context.isModule || this.context.await) && token.type === Token.Identifier && token.value === 'await') {
+        } else if (
+            (this.context.isModule || this.context.await) &&
+            token.type === Token.Identifier &&
+            token.value === 'await'
+        ) {
             this.tolerateUnexpectedToken(token);
         }
 
@@ -2267,7 +2330,12 @@ export class Parser {
 
                 if (declarations.length === 1 && this.matchKeyword('in')) {
                     const decl = declarations[0];
-                    if (decl.init && (decl.id.type === Syntax.ArrayPattern || decl.id.type === Syntax.ObjectPattern || this.context.strict)) {
+                    if (
+                        decl.init &&
+                        (decl.id.type === Syntax.ArrayPattern ||
+                            decl.id.type === Syntax.ObjectPattern ||
+                            this.context.strict)
+                    ) {
                         this.tolerateError(Messages.ForInOfLoopInitializer, 'for-in');
                     }
                     init = this.finalize(init, new Node.VariableDeclaration(declarations, 'var'));
@@ -2275,7 +2343,11 @@ export class Parser {
                     left = init;
                     right = this.parseExpression();
                     init = null;
-                } else if (declarations.length === 1 && declarations[0].init === null && this.matchContextualKeyword('of')) {
+                } else if (
+                    declarations.length === 1 &&
+                    declarations[0].init === null &&
+                    this.matchContextualKeyword('of')
+                ) {
                     init = this.finalize(init, new Node.VariableDeclaration(declarations, 'var'));
                     this.nextToken();
                     left = init;
@@ -2308,7 +2380,11 @@ export class Parser {
                         left = init;
                         right = this.parseExpression();
                         init = null;
-                    } else if (declarations.length === 1 && declarations[0].init === null && this.matchContextualKeyword('of')) {
+                    } else if (
+                        declarations.length === 1 &&
+                        declarations[0].init === null &&
+                        this.matchContextualKeyword('of')
+                    ) {
                         init = this.finalize(init, new Node.VariableDeclaration(declarations, kind));
                         this.nextToken();
                         left = init;
@@ -2394,10 +2470,11 @@ export class Parser {
             this.context.inIteration = previousInIteration;
         }
 
-        return (typeof left === 'undefined') ?
-            this.finalize(node, new Node.ForStatement(init, test, update, body)) :
-            forIn ? this.finalize(node, new Node.ForInStatement(left, right, body)) :
-                this.finalize(node, new Node.ForOfStatement(left, right, body));
+        return typeof left === 'undefined'
+            ? this.finalize(node, new Node.ForStatement(init, test, update, body))
+            : forIn
+            ? this.finalize(node, new Node.ForInStatement(left, right, body))
+            : this.finalize(node, new Node.ForOfStatement(left, right, body));
     }
 
     // https://tc39.github.io/ecma262/#sec-continue-statement
@@ -2460,8 +2537,8 @@ export class Parser {
         const node = this.createNode();
         this.expectKeyword('return');
 
-        const hasArgument = (!this.match(';') && !this.match('}') &&
-            !this.hasLineTerminator && this.lookahead.type !== Token.EOF) ||
+        const hasArgument =
+            (!this.match(';') && !this.match('}') && !this.hasLineTerminator && this.lookahead.type !== Token.EOF) ||
             this.lookahead.type === Token.StringLiteral ||
             this.lookahead.type === Token.Template;
 
@@ -2563,7 +2640,7 @@ export class Parser {
         const expr = this.parseExpression();
 
         let statement: Node.ExpressionStatement | Node.LabeledStatement;
-        if ((expr.type === Syntax.Identifier) && this.match(':')) {
+        if (expr.type === Syntax.Identifier && this.match(':')) {
             this.nextToken();
 
             const id = expr as Node.Identifier;
@@ -2829,7 +2906,12 @@ export class Parser {
 
         /* istanbul ignore next */
         if (typeof Object.defineProperty === 'function') {
-            Object.defineProperty(options.paramSet, key, { value: true, enumerable: true, writable: true, configurable: true });
+            Object.defineProperty(options.paramSet, key, {
+                value: true,
+                enumerable: true,
+                writable: true,
+                configurable: true
+            });
         } else {
             options.paramSet[key] = true;
         }
@@ -2856,13 +2938,14 @@ export class Parser {
         for (let i = 0; i < params.length; i++) {
             this.validateParam(options, params[i], params[i].value);
         }
-        options.simple = options.simple && (param instanceof Node.Identifier);
+        options.simple = options.simple && param instanceof Node.Identifier;
         options.params.push(param);
     }
 
     parseFormalParameters(firstRestricted?) {
         let options;
 
+        // eslint-disable-next-line prefer-const
         options = {
             simple: true,
             params: [],
@@ -2902,7 +2985,7 @@ export class Parser {
             const next = this.scanner.lex();
             this.scanner.restoreState(state);
 
-            match = (state.lineNumber === next.lineNumber) && (next.type === Token.Keyword) && (next.value === 'function');
+            match = state.lineNumber === next.lineNumber && next.type === Token.Keyword && next.value === 'function';
         }
 
         return match;
@@ -2974,8 +3057,9 @@ export class Parser {
         this.context.await = previousAllowAwait;
         this.context.allowYield = previousAllowYield;
 
-        return isAsync ? this.finalize(node, new Node.AsyncFunctionDeclaration(id, params, body)) :
-            this.finalize(node, new Node.FunctionDeclaration(id, params, body, isGenerator));
+        return isAsync
+            ? this.finalize(node, new Node.AsyncFunctionDeclaration(id, params, body))
+            : this.finalize(node, new Node.FunctionDeclaration(id, params, body, isGenerator));
     }
 
     parseFunctionExpression(): Node.AsyncFunctionExpression | Node.FunctionExpression {
@@ -3004,7 +3088,10 @@ export class Parser {
 
         if (!this.match('(')) {
             const token = this.lookahead;
-            id = (!this.context.strict && !isGenerator && this.matchKeyword('yield')) ? this.parseIdentifierName() : this.parseVariableIdentifier();
+            id =
+                !this.context.strict && !isGenerator && this.matchKeyword('yield')
+                    ? this.parseIdentifierName()
+                    : this.parseVariableIdentifier();
             if (this.context.strict) {
                 if (this.scanner.isRestrictedWord(token.value as string)) {
                     this.tolerateUnexpectedToken(token, Messages.StrictFunctionName);
@@ -3043,8 +3130,9 @@ export class Parser {
         this.context.await = previousAllowAwait;
         this.context.allowYield = previousAllowYield;
 
-        return isAsync ? this.finalize(node, new Node.AsyncFunctionExpression(id, params, body)) :
-            this.finalize(node, new Node.FunctionExpression(id, params, body, isGenerator));
+        return isAsync
+            ? this.finalize(node, new Node.AsyncFunctionExpression(id, params, body))
+            : this.finalize(node, new Node.FunctionExpression(id, params, body, isGenerator));
     }
 
     // https://tc39.github.io/ecma262/#sec-directive-prologues-and-the-use-strict-directive
@@ -3054,10 +3142,13 @@ export class Parser {
 
         const node = this.createNode();
         const expr = this.parseExpression();
-        const directive = (expr.type === Syntax.Literal) ? this.getTokenRaw(token).slice(1, -1) : null;
+        const directive = expr.type === Syntax.Literal ? this.getTokenRaw(token).slice(1, -1) : null;
         this.consumeSemicolon();
 
-        return this.finalize(node, directive ? new Node.Directive(expr, directive) : new Node.ExpressionStatement(expr));
+        return this.finalize(
+            node,
+            directive ? new Node.Directive(expr, directive) : new Node.ExpressionStatement(expr)
+        );
     }
 
     parseDirectivePrologues(): Node.Statement[] {
@@ -3171,18 +3262,32 @@ export class Parser {
         const value = this.lookahead.value;
         switch (this.lookahead.type) {
             case Token.Punctuator:
-                start = (value === '[') || (value === '(') || (value === '{') ||
-                    (value === '+') || (value === '-') ||
-                    (value === '!') || (value === '~') ||
-                    (value === '++') || (value === '--') ||
-                    (value === '/') || (value === '/=');  // regular expression literal
+                start =
+                    value === '[' ||
+                    value === '(' ||
+                    value === '{' ||
+                    value === '+' ||
+                    value === '-' ||
+                    value === '!' ||
+                    value === '~' ||
+                    value === '++' ||
+                    value === '--' ||
+                    value === '/' ||
+                    value === '/='; // regular expression literal
                 break;
 
             case Token.Keyword:
-                start = (value === 'class') || (value === 'delete') ||
-                    (value === 'function') || (value === 'let') || (value === 'new') ||
-                    (value === 'super') || (value === 'this') || (value === 'typeof') ||
-                    (value === 'void') || (value === 'yield');
+                start =
+                    value === 'class' ||
+                    value === 'delete' ||
+                    value === 'function' ||
+                    value === 'let' ||
+                    value === 'new' ||
+                    value === 'super' ||
+                    value === 'this' ||
+                    value === 'typeof' ||
+                    value === 'void' ||
+                    value === 'yield';
                 break;
 
             default:
@@ -3244,7 +3349,7 @@ export class Parser {
                     key = this.parseObjectPropertyKey();
                 }
             }
-            if ((token.type === Token.Identifier) && !this.hasLineTerminator && (token.value === 'async')) {
+            if (token.type === Token.Identifier && !this.hasLineTerminator && token.value === 'async') {
                 const punctuator = this.lookahead.value;
                 if (punctuator !== ':' && punctuator !== '(' && punctuator !== '*') {
                     isAsync = true;
@@ -3344,7 +3449,8 @@ export class Parser {
         this.context.strict = true;
         this.expectKeyword('class');
 
-        const id = (identifierIsOptional && (this.lookahead.type !== Token.Identifier)) ? null : this.parseVariableIdentifier();
+        const id =
+            identifierIsOptional && this.lookahead.type !== Token.Identifier ? null : this.parseVariableIdentifier();
         let superClass: Node.Identifier | null = null;
         if (this.matchKeyword('extends')) {
             this.nextToken();
@@ -3362,7 +3468,7 @@ export class Parser {
         const previousStrict = this.context.strict;
         this.context.strict = true;
         this.expectKeyword('class');
-        const id = (this.lookahead.type === Token.Identifier) ? this.parseVariableIdentifier() : null;
+        const id = this.lookahead.type === Token.Identifier ? this.parseVariableIdentifier() : null;
         let superClass: Node.Identifier | null = null;
         if (this.matchKeyword('extends')) {
             this.nextToken();
@@ -3566,7 +3672,9 @@ export class Parser {
                 // export default async function f () {}
                 // export default async function () {}
                 // export default async x => x
-                const declaration = this.matchAsyncFunction() ? this.parseFunctionDeclaration(true) : this.parseAssignmentExpression();
+                const declaration = this.matchAsyncFunction()
+                    ? this.parseFunctionDeclaration(true)
+                    : this.parseAssignmentExpression();
                 exportDeclaration = this.finalize(node, new Node.ExportDefaultDeclaration(declaration));
             } else {
                 if (this.matchContextualKeyword('from')) {
@@ -3575,12 +3683,14 @@ export class Parser {
                 // export default {};
                 // export default [];
                 // export default (1 + 2);
-                const declaration = this.match('{') ? this.parseObjectInitializer() :
-                    this.match('[') ? this.parseArrayInitializer() : this.parseAssignmentExpression();
+                const declaration = this.match('{')
+                    ? this.parseObjectInitializer()
+                    : this.match('[')
+                    ? this.parseArrayInitializer()
+                    : this.parseAssignmentExpression();
                 this.consumeSemicolon();
                 exportDeclaration = this.finalize(node, new Node.ExportDefaultDeclaration(declaration));
             }
-
         } else if (this.match('*')) {
             // export * from 'foo';
             this.nextToken();
@@ -3592,7 +3702,6 @@ export class Parser {
             const src = this.parseModuleSpecifier();
             this.consumeSemicolon();
             exportDeclaration = this.finalize(node, new Node.ExportAllDeclaration(src));
-
         } else if (this.lookahead.type === Token.Keyword) {
             // export var f = 1;
             let declaration;
@@ -3610,11 +3719,9 @@ export class Parser {
                     this.throwUnexpectedToken(this.lookahead);
             }
             exportDeclaration = this.finalize(node, new Node.ExportNamedDeclaration(declaration, [], null));
-
         } else if (this.matchAsyncFunction()) {
             const declaration = this.parseFunctionDeclaration();
             exportDeclaration = this.finalize(node, new Node.ExportNamedDeclaration(declaration, [], null));
-
         } else {
             const specifiers: Node.ExportSpecifier[] = [];
             let source: Node.Literal | null = null;
@@ -3649,5 +3756,4 @@ export class Parser {
 
         return exportDeclaration;
     }
-
 }

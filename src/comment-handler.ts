@@ -138,7 +138,7 @@ export class CommentHandler {
     }
 
     visitComment(node, metadata) {
-        const type = (node.type[0] === 'L') ? 'Line' : 'Block';
+        const type = node.type[0] === 'L' ? 'Line' : 'Block';
         const comment: Comment = {
             type: type,
             value: node.value
@@ -178,5 +178,4 @@ export class CommentHandler {
             this.visitNode(node, metadata);
         }
     }
-
 }

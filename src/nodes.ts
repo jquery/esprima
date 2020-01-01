@@ -5,25 +5,84 @@ export type ArrayExpressionElement = Expression | SpreadElement | null;
 export type ArrayPatternElement = AssignmentPattern | BindingIdentifier | BindingPattern | RestElement | null;
 export type BindingPattern = ArrayPattern | ObjectPattern;
 export type BindingIdentifier = Identifier;
-export type Declaration = AsyncFunctionDeclaration | ClassDeclaration | ExportDeclaration | FunctionDeclaration | ImportDeclaration | VariableDeclaration;
-export type ExportableDefaultDeclaration = BindingIdentifier | BindingPattern | ClassDeclaration | Expression | FunctionDeclaration;
-export type ExportableNamedDeclaration = AsyncFunctionDeclaration | ClassDeclaration | FunctionDeclaration | VariableDeclaration;
+export type Declaration =
+    | AsyncFunctionDeclaration
+    | ClassDeclaration
+    | ExportDeclaration
+    | FunctionDeclaration
+    | ImportDeclaration
+    | VariableDeclaration;
+export type ExportableDefaultDeclaration =
+    | BindingIdentifier
+    | BindingPattern
+    | ClassDeclaration
+    | Expression
+    | FunctionDeclaration;
+export type ExportableNamedDeclaration =
+    | AsyncFunctionDeclaration
+    | ClassDeclaration
+    | FunctionDeclaration
+    | VariableDeclaration;
 export type ExportDeclaration = ExportAllDeclaration | ExportDefaultDeclaration | ExportNamedDeclaration;
-export type Expression = ArrayExpression | ArrowFunctionExpression | AssignmentExpression | AsyncArrowFunctionExpression | AsyncFunctionExpression |
-    AwaitExpression | BinaryExpression | CallExpression | ClassExpression | ComputedMemberExpression |
-    ConditionalExpression | Identifier | FunctionExpression | Literal | NewExpression | ObjectExpression |
-    RegexLiteral | SequenceExpression | StaticMemberExpression | TaggedTemplateExpression |
-    ThisExpression | UnaryExpression | UpdateExpression | YieldExpression;
+export type Expression =
+    | ArrayExpression
+    | ArrowFunctionExpression
+    | AssignmentExpression
+    | AsyncArrowFunctionExpression
+    | AsyncFunctionExpression
+    | AwaitExpression
+    | BinaryExpression
+    | CallExpression
+    | ClassExpression
+    | ComputedMemberExpression
+    | ConditionalExpression
+    | Identifier
+    | FunctionExpression
+    | Literal
+    | NewExpression
+    | ObjectExpression
+    | RegexLiteral
+    | SequenceExpression
+    | StaticMemberExpression
+    | TaggedTemplateExpression
+    | ThisExpression
+    | UnaryExpression
+    | UpdateExpression
+    | YieldExpression;
+
 export type FunctionParameter = AssignmentPattern | BindingIdentifier | BindingPattern;
 export type ImportDeclarationSpecifier = ImportDefaultSpecifier | ImportNamespaceSpecifier | ImportSpecifier;
 export type ObjectExpressionProperty = Property | SpreadElement;
 export type ObjectPatternProperty = Property | RestElement;
-export type Statement = AsyncFunctionDeclaration | BreakStatement | ContinueStatement | DebuggerStatement | DoWhileStatement |
-    EmptyStatement | ExpressionStatement | Directive | ForStatement | ForInStatement | ForOfStatement |
-    FunctionDeclaration | IfStatement | ReturnStatement | SwitchStatement | ThrowStatement |
-    TryStatement | VariableDeclaration | WhileStatement | WithStatement;
+export type Statement =
+    | AsyncFunctionDeclaration
+    | BreakStatement
+    | ContinueStatement
+    | DebuggerStatement
+    | DoWhileStatement
+    | EmptyStatement
+    | ExpressionStatement
+    | Directive
+    | ForStatement
+    | ForInStatement
+    | ForOfStatement
+    | FunctionDeclaration
+    | IfStatement
+    | ReturnStatement
+    | SwitchStatement
+    | ThrowStatement
+    | TryStatement
+    | VariableDeclaration
+    | WhileStatement
+    | WithStatement;
+
 export type PropertyKey = Identifier | Literal;
-export type PropertyValue = AssignmentPattern | AsyncFunctionExpression | BindingIdentifier | BindingPattern | FunctionExpression;
+export type PropertyValue =
+    | AssignmentPattern
+    | AsyncFunctionExpression
+    | BindingIdentifier
+    | BindingPattern
+    | FunctionExpression;
 export type StatementListItem = Declaration | Statement;
 
 /* tslint:disable:max-classes-per-file */
@@ -161,7 +220,7 @@ export class BinaryExpression {
     readonly left: Expression;
     readonly right: Expression;
     constructor(operator: string, left: Expression, right: Expression) {
-        const logical = (operator === '||' || operator === '&&');
+        const logical = operator === '||' || operator === '&&';
         this.type = logical ? Syntax.LogicalExpression : Syntax.BinaryExpression;
         this.operator = operator;
         this.left = left;
@@ -556,7 +615,13 @@ export class MethodDefinition {
     readonly value: AsyncFunctionExpression | FunctionExpression | null;
     readonly kind: string;
     readonly static: boolean;
-    constructor(key: Expression | null, computed: boolean, value: AsyncFunctionExpression | FunctionExpression | null, kind: string, isStatic: boolean) {
+    constructor(
+        key: Expression | null,
+        computed: boolean,
+        value: AsyncFunctionExpression | FunctionExpression | null,
+        kind: string,
+        isStatic: boolean
+    ) {
         this.type = Syntax.MethodDefinition;
         this.key = key;
         this.computed = computed;
@@ -614,7 +679,14 @@ export class Property {
     readonly kind: string;
     readonly method: boolean;
     readonly shorthand: boolean;
-    constructor(kind: string, key: PropertyKey, computed: boolean, value: PropertyValue | null, method: boolean, shorthand: boolean) {
+    constructor(
+        kind: string,
+        key: PropertyKey,
+        computed: boolean,
+        value: PropertyValue | null,
+        method: boolean,
+        shorthand: boolean
+    ) {
         this.type = Syntax.Property;
         this.key = key;
         this.computed = computed;
@@ -629,7 +701,11 @@ export class RegexLiteral {
     readonly type: string;
     readonly value: RegExp;
     readonly raw: string;
-    readonly regex: { pattern: string, flags: string };
+    readonly regex: {
+        pattern: string;
+        flags: string;
+    };
+
     constructor(value: RegExp, raw: string, pattern: string, flags: string) {
         this.type = Syntax.Literal;
         this.value = value;

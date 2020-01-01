@@ -41,13 +41,11 @@ function getQualifiedElementName(elementName: JSXNode.JSXElementName): string {
             break;
         case JSXSyntax.JSXNamespacedName:
             const ns = elementName as JSXNode.JSXNamespacedName;
-            qualifiedName = getQualifiedElementName(ns.namespace) + ':' +
-                getQualifiedElementName(ns.name);
+            qualifiedName = getQualifiedElementName(ns.namespace) + ':' + getQualifiedElementName(ns.name);
             break;
         case JSXSyntax.JSXMemberExpression:
             const expr = elementName as JSXNode.JSXMemberExpression;
-            qualifiedName = getQualifiedElementName(expr.object) + '.' +
-                getQualifiedElementName(expr.property);
+            qualifiedName = getQualifiedElementName(expr.object) + '.' + getQualifiedElementName(expr.property);
             break;
         /* istanbul ignore next */
         default:
@@ -58,7 +56,6 @@ function getQualifiedElementName(elementName: JSXNode.JSXElementName): string {
 }
 
 export class JSXParser extends Parser {
-
     constructor(code: string, options, delegate) {
         super(code, options, delegate);
     }
@@ -119,19 +116,19 @@ export class JSXParser extends Parser {
             if (ch === quote) {
                 break;
             }
-            terminated = (ch === ';');
+            terminated = ch === ';';
             result += ch;
             ++this.scanner.index;
             if (!terminated) {
                 switch (result.length) {
                     case 2:
                         // e.g. '&#123;'
-                        numeric = (ch === '#');
+                        numeric = ch === '#';
                         break;
                     case 3:
                         if (numeric) {
                             // e.g. '&#x41;'
-                            hex = (ch === 'x');
+                            hex = ch === 'x';
                             valid = hex || Character.isDecimalDigit(ch.charCodeAt(0));
                             numeric = numeric && !hex;
                         }
@@ -207,7 +204,7 @@ export class JSXParser extends Parser {
         if (cp === 46) {
             const n1 = this.scanner.source.charCodeAt(this.scanner.index + 1);
             const n2 = this.scanner.source.charCodeAt(this.scanner.index + 2);
-            const value = (n1 === 46 && n2 === 46) ? '...' : '.';
+            const value = n1 === 46 && n2 === 46 ? '...' : '.';
             const start = this.scanner.index;
             this.scanner.index += value.length;
             return {
@@ -234,12 +231,12 @@ export class JSXParser extends Parser {
         }
 
         // Identifer can not contain backslash (char code 92).
-        if (Character.isIdentifierStart(cp) && (cp !== 92)) {
+        if (Character.isIdentifierStart(cp) && cp !== 92) {
             const start = this.scanner.index;
             ++this.scanner.index;
             while (!this.scanner.eof()) {
                 const ch = this.scanner.source.charCodeAt(this.scanner.index);
-                if (Character.isIdentifierPart(ch) && (ch !== 92)) {
+                if (Character.isIdentifierPart(ch) && ch !== 92) {
                     ++this.scanner.index;
                 } else if (ch === 45) {
                     // Hyphen (char code 45) can be part of an identifier.
@@ -317,7 +314,7 @@ export class JSXParser extends Parser {
             end: this.scanner.index
         };
 
-        if ((text.length > 0) && this.config.tokens) {
+        if (text.length > 0 && this.config.tokens) {
             this.tokens.push(this.convertToken(token as any));
         }
 
@@ -424,8 +421,11 @@ export class JSXParser extends Parser {
     }
 
     parseJSXAttributeValue(): JSXNode.JSXAttributeValue {
-        return this.matchJSX('{') ? this.parseJSXExpressionAttribute() :
-            this.matchJSX('<') ? this.parseJSXElement() : this.parseJSXStringLiteralAttribute();
+        return this.matchJSX('{')
+            ? this.parseJSXExpressionAttribute()
+            : this.matchJSX('<')
+            ? this.parseJSXElement()
+            : this.parseJSXStringLiteralAttribute();
     }
 
     parseJSXNameValueAttribute(): JSXNode.JSXAttribute {
@@ -455,8 +455,7 @@ export class JSXParser extends Parser {
         const attributes: JSXNode.JSXElementAttribute[] = [];
 
         while (!this.matchJSX('/') && !this.matchJSX('>')) {
-            const attribute = this.matchJSX('{') ? this.parseJSXSpreadAttribute() :
-                this.parseJSXNameValueAttribute();
+            const attribute = this.matchJSX('{') ? this.parseJSXSpreadAttribute() : this.parseJSXNameValueAttribute();
             attributes.push(attribute);
         }
 
@@ -594,7 +593,12 @@ export class JSXParser extends Parser {
         let closing: JSXNode.JSXClosingElement | null = null;
 
         if (!opening.selfClosing) {
-            const el = this.parseComplexJSXElement({ node, opening, closing, children });
+            const el = this.parseComplexJSXElement({
+                node,
+                opening,
+                closing,
+                children
+            });
             children = el.children;
             closing = el.closing;
         }
@@ -618,5 +622,4 @@ export class JSXParser extends Parser {
     isStartOfExpression(): boolean {
         return super.isStartOfExpression() || this.match('<');
     }
-
 }

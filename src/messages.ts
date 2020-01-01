@@ -18,7 +18,7 @@ export const Messages = {
     IllegalContinue: 'Illegal continue statement',
     IllegalExportDeclaration: 'Unexpected token',
     IllegalImportDeclaration: 'Unexpected token',
-    IllegalLanguageModeDirective: 'Illegal \'use strict\' directive in function with non-simple parameter list',
+    IllegalLanguageModeDirective: "Illegal 'use strict' directive in function with non-simple parameter list",
     IllegalReturn: 'Illegal return statement',
     InvalidEscapedReservedWord: 'Keyword must not contain escaped characters',
     InvalidHexEscapeSequence: 'Invalid hexadecimal escape sequence',
@@ -35,7 +35,7 @@ export const Messages = {
     NoCatchOrFinally: 'Missing catch or finally after try',
     ParameterAfterRestParameter: 'Rest parameter must be last formal parameter',
     PropertyAfterRestProperty: 'Unexpected token',
-    Redeclaration: '%0 \'%1\' has already been declared',
+    Redeclaration: "%0 '%1' has already been declared",
     StaticPrototype: 'Classes may not have static property named prototype',
     StrictCatchVariable: 'Catch variable may not be eval or arguments in strict mode',
     StrictDelete: 'Delete of an unqualified identifier in strict mode.',
@@ -59,6 +59,6 @@ export const Messages = {
     UnexpectedTemplate: 'Unexpected quasi %0',
     UnexpectedToken: 'Unexpected token %0',
     UnexpectedTokenIllegal: 'Unexpected token ILLEGAL',
-    UnknownLabel: 'Undefined label \'%0\'',
+    UnknownLabel: "Undefined label '%0'",
     UnterminatedRegExp: 'Invalid regular expression: missing /'
 };
