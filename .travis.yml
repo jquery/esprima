@@ -2,7 +2,6 @@ sudo: false
 language: node_js
 script: "npm run travis"
 node_js:
-  - "8"
   - "10"
   - "12"
   - "node"

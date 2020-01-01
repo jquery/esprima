@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/working_directory
     docker:
-      - image: node:8
+      - image: node:12
         environment:
           NO_WATCH_TESTS: 1
     steps:
@@ -12,7 +12,7 @@ jobs:
       - run: npm --version
       - restore_cache:
           key: v1-npm-dependencies-{{ .Branch }}-{{ checksum "package.json" }}
-      - run: npm install
+      - run: npm ci
       - save_cache:
           key: v1-npm-dependencies-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
