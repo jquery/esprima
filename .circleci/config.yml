@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/working_directory
     docker:
-      - image: node:6
+      - image: node:8
         environment:
           NO_WATCH_TESTS: 1
     steps:
