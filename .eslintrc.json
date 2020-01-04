@@ -12,6 +12,9 @@
     "parserOptions": {
         "sourceType": "script"
     },
+    "rules": {
+        "no-constant-condition": ["error", { "checkLoops": false }]
+    },
     "overrides": [
         {
             "files": ["*.ts", "src/**"],
