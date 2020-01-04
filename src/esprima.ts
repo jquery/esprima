@@ -97,7 +97,7 @@ export function tokenize(code: string, options, delegate) {
     const tokens: any = [];
 
     try {
-        for (; ;) {
+        while (true) {
             let token = tokenizer.getNextToken();
             if (!token) {
                 break;
