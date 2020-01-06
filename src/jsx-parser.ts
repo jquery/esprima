@@ -35,23 +35,20 @@ function getQualifiedElementName(elementName: JSXNode.JSXElementName): string {
     let qualifiedName;
 
     switch (elementName.type) {
-        case JSXSyntax.JSXIdentifier: {
+        case JSXSyntax.JSXIdentifier:
             const id = elementName as JSXNode.JSXIdentifier;
             qualifiedName = id.name;
             break;
-        }
-        case JSXSyntax.JSXNamespacedName: {
+        case JSXSyntax.JSXNamespacedName:
             const ns = elementName as JSXNode.JSXNamespacedName;
             qualifiedName = getQualifiedElementName(ns.namespace) + ':' +
                 getQualifiedElementName(ns.name);
             break;
-        }
-        case JSXSyntax.JSXMemberExpression: {
+        case JSXSyntax.JSXMemberExpression:
             const expr = elementName as JSXNode.JSXMemberExpression;
             qualifiedName = getQualifiedElementName(expr.object) + '.' +
                 getQualifiedElementName(expr.property);
             break;
-        }
         /* istanbul ignore next */
         default:
             break;

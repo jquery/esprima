@@ -887,14 +887,13 @@ export class Scanner {
                                 str += unescapedChar;
                             }
                             break;
-                        case 'x': {
+                        case 'x':
                             const unescaped = this.scanHexEscape(ch);
                             if (unescaped === null) {
                                 this.throwUnexpectedToken(Messages.InvalidHexEscapeSequence);
                             }
                             str += unescaped;
                             break;
-                        }
                         case 'n':
                             str += '\n';
                             break;
@@ -1016,14 +1015,13 @@ export class Scanner {
                                 }
                             }
                             break;
-                        case 'x': {
+                        case 'x':
                             const unescaped = this.scanHexEscape(ch);
                             if (unescaped === null) {
                                 this.throwUnexpectedToken(Messages.InvalidHexEscapeSequence);
                             }
                             cooked += unescaped;
                             break;
-                        }
                         case 'b':
                             cooked += '\b';
                             break;
