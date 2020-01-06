@@ -13,6 +13,7 @@
         "sourceType": "script"
     },
     "rules": {
+        "no-case-declarations": "off",
         "no-constant-condition": ["error", { "checkLoops": false }]
     },
     "overrides": [
