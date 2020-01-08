@@ -60,6 +60,8 @@ interface TokenEntry {
     loc?: SourceLocation;
 }
 
+/* eslint-disable @typescript-eslint/unbound-method */
+
 export class Parser {
     readonly config: Config;
     readonly delegate: any;
@@ -170,7 +172,7 @@ export class Parser {
     }
 
     throwError(messageFormat: string, ...values): void {
-        const args = Array.prototype.slice.call(arguments, 1);
+        const args = values.slice();
         const msg = messageFormat.replace(/%(\d)/g, (whole, idx) => {
             assert(idx < args.length, 'Message reference must be in range');
             return args[idx];
@@ -184,7 +186,7 @@ export class Parser {
     }
 
     tolerateError(messageFormat, ...values) {
-        const args = Array.prototype.slice.call(arguments, 1);
+        const args = values.slice();
         const msg = messageFormat.replace(/%(\d)/g, (whole, idx) => {
             assert(idx < args.length, 'Message reference must be in range');
             return args[idx];
@@ -257,8 +259,7 @@ export class Parser {
             if (comments.length > 0 && this.delegate) {
                 for (let i = 0; i < comments.length; ++i) {
                     const e: Comment = comments[i];
-                    let node;
-                    node = {
+                    const node: any = {
                         type: e.multiLine ? 'BlockComment' : 'LineComment',
                         value: this.scanner.source.slice(e.slice[0], e.slice[1])
                     };
@@ -1605,7 +1606,10 @@ export class Parser {
 
     reinterpretAsCoverFormalsList(expr) {
         let params = [expr];
-        let options;
+        const options: any = {
+            simple: true,
+            paramSet: {}
+        };
 
         let asyncArrow = false;
         switch (expr.type) {
@@ -1618,11 +1622,6 @@ export class Parser {
             default:
                 return null;
         }
-
-        options = {
-            simple: true,
-            paramSet: {}
-        };
 
         for (let i = 0; i < params.length; ++i) {
             const param = params[i];
@@ -2861,9 +2860,7 @@ export class Parser {
     }
 
     parseFormalParameters(firstRestricted?) {
-        let options;
-
-        options = {
+        const options: any = {
             simple: true,
             params: [],
             firstRestricted: firstRestricted
@@ -3220,7 +3217,7 @@ export class Parser {
         let token = this.lookahead;
         const node = this.createNode();
 
-        let kind: string = '';
+        let kind = '';
         let key: Node.PropertyKey | null = null;
         let value: Node.FunctionExpression | null = null;
         let computed = false;

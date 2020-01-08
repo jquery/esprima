@@ -7,8 +7,6 @@ export type JSXChild = JSXElement | JSXExpressionContainer | JSXText;
 export type JSXElementAttribute = JSXAttribute | JSXSpreadAttribute;
 export type JSXElementName = JSXIdentifier | JSXNamespacedName | JSXMemberExpression;
 
-/* tslint:disable:max-classes-per-file */
-
 export class JSXClosingElement {
     readonly type: string;
     readonly name: JSXElementName;

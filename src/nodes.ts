@@ -26,8 +26,6 @@ export type PropertyKey = Identifier | Literal;
 export type PropertyValue = AssignmentPattern | AsyncFunctionExpression | BindingIdentifier | BindingPattern | FunctionExpression;
 export type StatementListItem = Declaration | Statement;
 
-/* tslint:disable:max-classes-per-file */
-
 export class ArrayExpression {
     readonly type: string;
     readonly elements: ArrayExpressionElement[];
@@ -629,7 +627,7 @@ export class RegexLiteral {
     readonly type: string;
     readonly value: RegExp;
     readonly raw: string;
-    readonly regex: { pattern: string, flags: string };
+    readonly regex: { pattern: string; flags: string };
     constructor(value: RegExp, raw: string, pattern: string, flags: string) {
         this.type = Syntax.Literal;
         this.value = value;

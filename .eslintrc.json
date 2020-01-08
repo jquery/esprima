@@ -1,0 +1,37 @@
+{
+    "root": true,
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "extends": ["eslint:recommended"],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "sourceType": "script"
+    },
+    "rules": {
+        "no-case-declarations": "off",
+        "no-constant-condition": ["error", { "checkLoops": false }]
+    },
+    "overrides": [
+        {
+            "files": ["*.ts", "src/**"],
+            "env": {
+                "node": false
+            },
+            "extends": [
+                "plugin:@typescript-eslint/eslint-recommended",
+                "plugin:@typescript-eslint/recommended",
+                "plugin:@typescript-eslint/recommended-requiring-type-checking"
+            ],
+            "parser": "@typescript-eslint/parser",
+            "parserOptions": {
+                "sourceType": "module",
+                "project": "src/tsconfig.json"
+            }
+        }
+    ]
+}

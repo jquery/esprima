@@ -1098,7 +1098,6 @@ export class Scanner {
         // pattern that would not be detected by this substitution.
         const astralSubstitute = '\uFFFF';
         let tmp = pattern;
-        const self = this;
 
         if (flags.indexOf('u') >= 0) {
             tmp = tmp
@@ -1109,7 +1108,7 @@ export class Scanner {
                 .replace(/\\u\{([0-9a-fA-F]+)\}|\\u([a-fA-F0-9]{4})/g, ($0, $1, $2) => {
                     const codePoint = parseInt($1 || $2, 16);
                     if (codePoint > 0x10FFFF) {
-                        self.throwUnexpectedToken(Messages.InvalidRegExp);
+                        this.throwUnexpectedToken(Messages.InvalidRegExp);
                     }
                     if (codePoint <= 0xFFFF) {
                         return String.fromCharCode(codePoint);
