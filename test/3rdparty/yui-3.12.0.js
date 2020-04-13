@@ -368,7 +368,7 @@ proto = {
                 //    can't match "foyui" or "i_heart_simpleyui". This can be anywhere in the string.
                 // 2. After #1 must come a forward slash followed by the string matched in #1, so
                 //    "yui-base/yui-base" or "simpleyui/simpleyui" or "yui-pants/yui-pants".
-                // 3. The second occurence of the #1 token can optionally be followed by "-debug" or "-min",
+                // 3. The second occurrence of the #1 token can optionally be followed by "-debug" or "-min",
                 //    so "yui/yui-min", "yui/yui-debug", "yui-base/yui-base-debug". NOT "yui/yui-tshirt".
                 // 4. This is followed by ".js", so "yui/yui.js", "simpleyui/simpleyui-min.js"
                 // 0. Going back to the beginning, now. If all that stuff in 1-4 comes after a "?" in the string,
