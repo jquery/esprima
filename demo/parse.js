@@ -1,4 +1,5 @@
 /*
+  Copyright (C) 2020 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
   Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -25,137 +26,13 @@
 */
 
 /*jslint sloppy:true browser:true */
-/*global esprima:true, YUI:true, require:true */
+/*global esprima:true, require:true */
 
-var parseId, tree;
+var parseId;
 
 function id(i) {
     return document.getElementById(i);
 }
-
-function escapeHTML(str) {
-    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/\//g, "&#x2F;");
-}
-
-YUI({ gallery: 'gallery-2013.01.09-23-24' }).use('gallery-sm-treeview', function (Y) {
-
-    window.updateTree = function (syntax) {
-
-        if (typeof syntax === 'undefined') {
-            return;
-        }
-
-        if (id('tab_tree').className !== 'active') {
-            return;
-        }
-
-        if (typeof tree === 'undefined') {
-            tree = new Y.TreeView({
-                lazyRender: false,
-                container: '#treeview'
-            });
-            tree.render();
-        }
-
-        function collapseAll() {
-            Y.all('.yui3-treeview-can-have-children').each(function () {
-                tree.getNodeById(this.get('id')).close();
-            });
-        }
-
-        function expandAll() {
-            Y.all('.yui3-treeview-can-have-children').each(function () {
-                tree.getNodeById(this.get('id')).open();
-            });
-        }
-
-        id('collapse').onclick = collapseAll;
-        id('expand').onclick = expandAll;
-
-        function isArray(o) {
-            return (typeof Array.isArray === 'function') ? Array.isArray(o) :
-                Object.prototype.toString.apply(o) === '[object Array]';
-        }
-
-        function convert(name, node) {
-            var i, key, item, subitem;
-
-            item = tree.createNode();
-
-            switch (typeof node) {
-
-            case 'string':
-            case 'number':
-            case 'boolean':
-                item.label = escapeHTML(name + ': ' + node.toString());
-                break;
-
-            case 'object':
-                if (!node) {
-                    item.label = escapeHTML(name + ': null');
-                    return item;
-                }
-                if (node instanceof RegExp) {
-                    item.label = escapeHTML(name + ': ' + node.toString());
-                    return item;
-                }
-                item.label = escapeHTML(name);
-                if (isArray(node)) {
-                    if (node.length === 2 && name === 'range') {
-                        item.label = escapeHTML(name + ': [' + node[0] + ', ' + node[1] + ']');
-                    } else {
-                        item.label = escapeHTML(item.label + ' [' + node.length + ']');
-                        for (i = 0; i < node.length; i += 1) {
-                            subitem = convert(String(i), node[i]);
-                            if (subitem.children.length === 1) {
-                                item.append(subitem.children[0]);
-                            } else {
-                                item.append(subitem);
-                            }
-                        }
-                    }
-
-                } else {
-                    if (typeof node.type !== 'undefined') {
-                        item.label = escapeHTML(name);
-                        subitem = tree.createNode();
-                        subitem.label = escapeHTML(node.type);
-                        item.append(subitem);
-                        for (key in node) {
-                            if (Object.prototype.hasOwnProperty.call(node, key)) {
-                                if (key !== 'type') {
-                                    subitem.append(convert(key, node[key]));
-                                }
-                            }
-                        }
-                    } else {
-                        for (key in node) {
-                            if (Object.prototype.hasOwnProperty.call(node, key)) {
-                                item.append(convert(key, node[key]));
-                            }
-                        }
-                    }
-                }
-                break;
-
-            default:
-                item.label = '[Unknown]';
-                break;
-            }
-
-            return item;
-        }
-
-
-        tree.clear();
-        document.getElementById('treeview').innerHTML = '';
-        tree.rootNode.append(convert('Program body', syntax.body));
-        tree.render();
-
-        expandAll();
-    };
-
-});
 
 function deduceSourceType(code) {
     var type = 'module';
@@ -228,6 +105,70 @@ function parse(delay) {
 }
 
 window.onload = function () {
+
+    $('#syntaxtree').tree({
+        autoOpen: true,
+        dragAndDrop: false,
+        openedIcon: '-',
+        closedIcon: '+'
+    });
+
+    window.updateTree = function (syntax) {
+
+        if (typeof syntax === 'undefined') {
+            return;
+        }
+
+        if (id('tab_tree').className !== 'active') {
+            return;
+        }
+
+        function isArray(o) {
+            return (typeof Array.isArray === 'function') ? Array.isArray(o) :
+                Object.prototype.toString.apply(o) === '[object Array]';
+        }
+
+        function convert(node) {
+            var data = [], value;
+            if (isArray(node)) {
+                for (var i = 0; i < node.length; ++i) {
+                    value = node[i];
+                    data.push({
+                        name: '#' + (i + 1),
+                        children: convert(value)
+                    });
+                }
+            } else {
+                for (var key in node) {
+                    if (Object.prototype.hasOwnProperty.call(node, key)) {
+                        value = node[key];
+                        switch (typeof value) {
+                            case 'string':
+                            case 'number':
+                            case 'boolean':
+                                data.push({ name: key + ': ' + value.toString() });
+                                break;
+                            case 'object':
+                                if (node instanceof RegExp) {
+                                    data.push({ name: key + ': ' + value.toString() });
+                                } else if (key === 'range' && isArray(value) && value.length === 2) {
+                                    data.push({ name: key + ': [' + value[0] + ', ' + value[1] + ']' });
+                                } else {
+                                    data.push({ name: key, children: convert(value) });
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+            return data;
+        }
+
+        $('#syntaxtree').tree('loadData', convert(syntax));
+    };
+
     function quickParse() { parse(1); }
 
     document.getElementById('comment').onchange = quickParse;

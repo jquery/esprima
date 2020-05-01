@@ -9,7 +9,9 @@
   <link rel="stylesheet" type="text/css" href="../assets/orion/built-editor.css"/>
   <link rel="stylesheet" type="text/css" href="../assets/style.css"/>
   <link rel="stylesheet" href="../assets/foundation/foundation.min.css">
-  <script src="../assets/yui-min.js"></script>
+  <script src="../assets/jquery-3.5.0.min.js"></script>
+  <script src="../assets/tree.jquery.js"></script>
+  <link href="../assets/jqtree.css" rel="stylesheet" type="text/css">
 <style>
 textarea {
     white-space: pre;
@@ -18,8 +20,13 @@ textarea {
     font-family: 'Droid Sans Mono', Menlo, Consolas, 'Courier New', Courier, monospace, sans-serif;
 }
 
-.yui3-treeview-icon {
-    display: none;
+ul.jqtree-tree .jqtree-toggler {
+    color: #777;
+    width: 16px;
+}
+
+ul.jqtree-tree .jqtree-toggler:hover {
+    color: #555;
 }
 </style>
 </head>
@@ -121,9 +128,7 @@ var answer = 6 * 7;
       <ul class="tabs-content">
         <li class="active" id="tab_syntax"><textarea wrap="off" id="syntax" rows="30" readonly></textarea><li>
         <li id="tab_tree" style="display:none">
-          <input class="small radius button secondary right" type="button" value="Collapse All" id="collapse">&nbsp;
-          <input class="small radius button secondary right" type="button" value="Expand All" id="expand">
-          <div class="yui3-skin-sam"><div id="treeview"></div>
+          <div><div id="syntaxtree"></div>
         </li>
         <li id="tab_tokens" style="display:none"><textarea id="tokens" rows="30" readonly></textarea><li>
       </ul>
