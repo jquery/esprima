@@ -16,22 +16,15 @@ div.row.copyright {
     border-top: 1px solid #ddd;
 }
 
+.editor {
+    border: 1px solid #ccc;
+    height: 350px;
+}
+
 .code {
     border-left: 3px solid #ddd;
     margin: 5px 3px 8px 15px;
     padding: 0 0 0 8px;
-}
-
-.textviewContainer {
-    background-color: white;
-}
-
-.textviewContainer, .contentassist {
-    font-family: 'Droid Sans Mono', Menlo, Consolas, 'Courier New', Courier, monospace, sans-serif;
-    font-size: 10pt;
-}
-.contentassist {
-    width: 400px;
 }
 
 pre#editor {
@@ -42,26 +35,116 @@ div#info {
     margin-top: 22px;
 }
 
-.textviewTooltip {
-    color: black;
-    background-color: #ffffcc;
-    border-color: #aaa;
-}
-
-.annotationRange.readOccurrence {
-    background-color: #ffffcc;
-    border: none;
-}
-
-.annotationRange.writeOccurrence {
-    background-color: #ffffcc;
-    border: 1px solid #ffcc99;
-    margin: -1px;
-    border-radius: 4px;
-}
-
 .explanation {
     font-size: smaller;
     color: #555;
     margin-bottom: 5px;
+}
+
+.highlight-decoration {
+    background-color: lightyellow;
+}
+
+.declaration-decoration {
+    background-color: lightyellow;
+    border: 1px solid #ffcc99;
+    border-radius: 4px;
+}
+
+.reference-decoration {
+    background-color: lightyellow;
+}
+
+.tabs textarea {
+    padding: 7px 0px 7px 7px;
+}
+
+#url {
+    font-family: Inconsolata, Monaco, Consolas, "Lucida Console", monospace;
+    font-size: 13px;
+    color: #555;
+    width: 80%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #aaa;
+    overflow: auto;
+    display: block;
+}
+
+.tabs {
+    position: relative;
+    display: block;
+    height: 1px;
+}
+
+.tabs ul, .tabs li {
+    list-style-type: none;
+    margin: 0;
+    line-height: 0px;
+}
+
+.tabs h3 {
+    float: left;
+    position: relative;
+    margin: 0 6px 0 0;
+    border: 1px solid #bbb;
+    background-color: #eee;
+    border-bottom: none;
+    cursor: pointer;
+    z-index: 0;
+    -moz-border-radius-topleft: 6px;
+    -webkit-border-top-left-radius: 6px;
+    -ms-border-top-left-radius: 6px;
+    -o-border-top-left-radius: 6px;
+    border-top-left-radius: 6px;
+    -moz-border-radius-topright: 6px;
+    -webkit-border-top-right-radius: 6px;
+    -ms-border-top-right-radius: 6px;
+    -o-border-top-right-radius: 6px;
+    border-top-right-radius: 6px
+}
+
+.tabs .active h3 {
+    background-color: #fff;
+    border-bottom-color: #fff;
+    z-index: 2
+}
+
+.tabs h3 a {
+    padding: 0 10px;
+    line-height: 29px;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.tabs a {
+    color: black;
+    text-decoration: none;
+}
+
+.tabs a:visited {
+    color: black;
+}
+
+.tabs .tab {
+    position: absolute;
+    display: none;
+    left: 0;
+    top: 29px;
+    right: 0;
+    border-top: 1px solid #bbb;
+    z-index: 1;
+    padding: 25px 60px 50px 5px;
+}
+
+.pages div {
+    display: none;
+}
+
+.pages div.active {
+    display: block;
+}
+
+.tabs .active .tab {
+    display: block;
 }

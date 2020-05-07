@@ -6,7 +6,6 @@
   <meta charset="utf-8" />
   <title>Esprima: Syntax Validator</title>
   <meta name="viewport" content="width=device-width" />
-  <link rel="stylesheet" href="../assets/orion/built-editor.css">
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="../assets/foundation/foundation.min.css">
 </head>
@@ -83,23 +82,18 @@
   <!-- Main content -->
   <div class="row">
     <div class="eight columns">
+      <div class="editor" id="editor"></div>
 
-<pre id="editor" spellcheck="false" style="height: 350px">
+<pre id="init" spellcheck="false" style="display: none">
 
-return 42; // Return statement not inside a function
+return 42; // should be inside a function
 
 function f() {
   'use strict';
 
-  // No more octal
   var x = 042;
 
-  // Duplicate property
-  var y = { x: 1, x: 2 };
-
-  // With statement can't be used
   with (z) {}
-
 }
 </pre>
 
@@ -109,11 +103,8 @@ function f() {
     <div class="four columns">
       <div class="panel">
         <p>Unlike a typical code linter, this syntax validator does <strong>not</strong> care about coding styles and formatting.</p>
-        <p>If there is a syntax error, the sign <img src="data:image/gif;base64,R0lGODlhEAAQANUAAP7bc//egf/ij/7ijv/jl/7kl//mnv7lnv/uwf7CTP7DTf7DT/7IW//Na/7Na//NbP7QdP/dmbltAIJNAF03AMSAJMSCLKqASa2DS6uBSquCSrGHTq6ETbCHT7WKUrKIUcCVXL+UXMOYX8GWXsSZYMiib6+ETbOIUcOXX86uhd3Muf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAACsALAAAAAAQABAAAAZowJVwSCwaj0ihikRSJYcoBEL0XKlGkcjImQQhJBREKFnyICoThKeE/AAW6AXgdPyUAgrLJBEo0YsbAQyDhAEdRRwDDw8OaA4NDQImRBgFEJdglxAEGEQZKQcHBqOkKRpFF6mqq1WtrUEAOw=="> will be shown in the left-side gutter. Placing the mouse cursor over that sign will reveal the complete error description.</p>
+        <p>If there is a syntax error, place the mouse cursor over the <strong>squiggly <span style="color:red">red</span> line</strong> to reveal the detailed error description.</p>
       </div>
-      <p>For a command-line usage, check <tt>esvalidate</tt> from <a href="https://npmjs.org/package/esprima">Esprima package</a> (for Node.js).
-      There is also a plugin for <a href="http://gruntjs.com/">Grunt</a> called <a href="https://github.com/ariya/grunt-jsvalidate">grunt-jsvalidate</a>.
-      Ant users can take a look at an exemplary <a href="https://github.com/ariya/ant-javascript-validate">Ant task</a> for syntax validation.</p>
     </div>
   </div>
 
@@ -130,8 +121,8 @@ function f() {
   </div>
 
 <script src="../esprima.js"></script>
-<script src="../assets/orion/built-editor.min.js"></script>
-<script src="../assets/orion/customeditor.js"></script>
-<script src="validate.js"></script>
+<script src="../assets/monaco/min/vs/loader.js"></script>
+<script src="components.js"></script>
+<script>Demo.validator();</script>
 </body>
 </html>

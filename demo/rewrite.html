@@ -6,7 +6,6 @@
   <meta charset="utf-8" />
   <title>Esprima: Source Rewrite</title>
   <meta name="viewport" content="width=device-width" />
-  <link rel="stylesheet" type="text/css" href="../assets/orion/built-editor.css"/>
   <link rel="stylesheet" type="text/css" href="../assets/style.css"/>
   <link rel="stylesheet" href="../assets/foundation/foundation.min.css">
 </head>
@@ -83,8 +82,10 @@
   <!-- Main content -->
   <div class="row">
     <div class="eight columns">
-<pre id="editor" spellcheck="false" style="height: 350px">
-    // Messy code with confusing and inconsistent indentations
+      <div class="editor" id="editor"></div>
+
+<pre id="init" spellcheck="false" style="display: none">
+        // Messy code with confusing and inconsistent indentations
 
 function bubbleSort    (list) {
 var items = list.slice(0), swapped =false,
@@ -151,8 +152,8 @@ var items = list.slice(0), swapped =false,
 
 <script src="../esprima.js"></script>
 <script src="../test/3rdparty/escodegen.browser.js"></script>
-<script src="../assets/orion/built-editor.min.js"></script>
-<script src="../assets/orion/customeditor.js"></script>
-<script src="rewrite.js"></script>
+<script src="../assets/monaco/min/vs/loader.js"></script>
+<script src="components.js"></script>
+<script>Demo.rewriter();</script>
 </body>
 </html>

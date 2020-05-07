@@ -6,7 +6,6 @@
   <meta charset="utf-8" />
   <title>Esprima: Function Instrumentation</title>
   <meta name="viewport" content="width=device-width" />
-  <link rel="stylesheet" href="../assets/orion/built-editor.css">
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="../assets/foundation/foundation.min.css">
 </head>
@@ -83,29 +82,27 @@
   <!-- Main content -->
   <div class="row">
     <div class="eight columns">
+      <div class="editor" id="editor"></div>
 
-<pre id="editor" spellcheck="false" style="height: 350px">
+<pre id="init" spellcheck="false" style="display: none">
 Array.prototype.swap = function (i, j) {
     var k = this[i]; this[i] = this[j]; this[j] = k;
 }
-
 function bubbleSort(list) {
-    var items = list.slice(0), swapped = false, p, q;
-    for (p = 1; p &lt; items.length; ++p) {
-        for (q = 0; q &lt; items.length - p; ++q) {
-            if (items[q + 1] &lt; items[q]) {
+    var items = list.slice(0), swapped = false;
+    for (var p = 1; p < items.length; ++p) {
+        for (var q = 0; q < items.length - p; ++q)
+            if (items[q + 1] < items[q]) {
                 items.swap(q, q + 1);
-                swapped =true;
+                swapped = true;
             }
-        }
         if (!swapped) break;
     }
     return items;
 }
 
-var N = 100, data = []; while (N &gt; 0) data.push(N--);
-bubbleSort(data);
-</pre>
+var N = 100, data = []; while (N > 0) data.push(N--);
+bubbleSort(data);</pre>
 
       <div id="info" class="alert-box secondary">Ready.</div>
 
@@ -143,8 +140,8 @@ bubbleSort(data);
 
 <script src="../esprima.js"></script>
 <script src="../test/3rdparty/esmorph.js"></script>
-<script src="../assets/orion/built-editor.min.js"></script>
-<script src="../assets/orion/customeditor.js"></script>
-<script src="functiontrace.js"></script>
+<script src="../assets/monaco/min/vs/loader.js"></script>
+<script src="components.js"></script>
+<script>Demo.functionTracer();</script>
 </body>
 </html>
