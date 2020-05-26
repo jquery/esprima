@@ -27,14 +27,13 @@
 (function (root, factory) {
     if (typeof module === 'object' && module.exports) {
         module.exports = factory(
-            require('lodash'),
             require('../dist/fixtures_js'),
             require('../dist/fixtures_json')
         );
     } else {
-        root.createTestCases = factory(_, window.fixtures_js, window.fixtures_json);
+        root.createTestCases = factory(window.fixtures_js, window.fixtures_json);
     }
-}(this, function (_, jsFixtures, jsonFixtures) {
+}(this, function (jsFixtures, jsonFixtures) {
 
     var cases;
 
@@ -51,7 +50,7 @@
          * Determines which type of test it is based on the filepath
          */
         function getType() {
-            return _(['tree', 'tokens', 'failure']).find(function (type) {
+            return ['tree', 'tokens', 'failure'].find(function (type) {
                 var suffix = '.' + type;
                 return (filePath.slice(-suffix.length) === suffix);
             });
@@ -117,8 +116,15 @@
      */
     return function () {
         cases = {};
-        _.each(jsFixtures, addJSFixture);
-        _.each(jsonFixtures, addJsonFixture);
+
+        Object.keys(jsFixtures).forEach(function (key) {
+            addJSFixture(jsFixtures[key], key);
+        });
+
+        Object.keys(jsonFixtures).forEach(function (key) {
+            addJsonFixture(jsonFixtures[key], key);
+        });
+
         return cases;
     }
 }));
