@@ -1,0 +1,70 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x, 14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - run: npm ci
+    - run: npm test
+
+  macos:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x, 14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - run: npm ci
+    - run: npm test
+
+  windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x, 14.x]
+
+    steps:
+    - run: git config --global core.autocrlf false
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - run: npm ci
+    - run: npm run compile && npm run all-tests
+
+  legacy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [6.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - run: npm install
+    - run: npm run compile
+    - run: npm run all-tests

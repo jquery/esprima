@@ -1,5 +1,4 @@
 .git
-.travis.yml
 /node_modules/
 /assets/
 /coverage/
