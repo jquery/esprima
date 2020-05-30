@@ -1,4 +1,6 @@
 coverage
+lib
+lib.es2015
 node_modules
 test/dist
 src/*.js

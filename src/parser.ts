@@ -6,7 +6,7 @@ import { Comment, RawToken, Scanner, SourceLocation } from './scanner';
 import { Syntax } from './syntax';
 import { Token, TokenName } from './token';
 
-interface Config {
+export interface Config {
     range: boolean;
     loc: boolean;
     source: string | null;
@@ -15,7 +15,7 @@ interface Config {
     tolerant: boolean;
 }
 
-interface Context {
+export interface Context {
     isModule: boolean;
     allowIn: boolean;
     allowStrictDirective: boolean;
@@ -37,19 +37,19 @@ export interface Marker {
     column: number;
 }
 
-const ArrowParameterPlaceHolder = 'ArrowParameterPlaceHolder';
+export const ArrowParameterPlaceHolder = 'ArrowParameterPlaceHolder';
 
-interface ArrowParameterPlaceHolderNode {
+export interface ArrowParameterPlaceHolderNode {
     type: string;
     params: Node.Expression[];
     async: boolean;
 }
 
-interface DeclarationOptions {
+export interface DeclarationOptions {
     inFor: boolean;
 }
 
-interface TokenEntry {
+export interface TokenEntry {
     type: string;
     value: string;
     regex?: {

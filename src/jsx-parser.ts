@@ -6,19 +6,19 @@ import { Marker, Parser } from './parser';
 import { Token, TokenName } from './token';
 import { XHTMLEntities } from './xhtml-entities';
 
-interface MetaJSXElement {
+export interface MetaJSXElement {
     node: Marker;
     opening: JSXNode.JSXOpeningElement;
     closing: JSXNode.JSXClosingElement | null;
     children: JSXNode.JSXChild[];
 }
 
-const enum JSXToken {
+export const enum JSXToken {
     Identifier = 100,
     Text
 }
 
-interface RawJSXToken {
+export interface RawJSXToken {
     type: Token | JSXToken;
     value: string;
     lineNumber: number;

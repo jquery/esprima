@@ -1,10 +1,10 @@
-import { ErrorHandler } from './error-handler';
+import { Error, ErrorHandler } from './error-handler';
 import { Comment, Scanner, SourceLocation } from './scanner';
 import { Token, TokenName } from './token';
 
-type ReaderEntry = string | null;
+export type ReaderEntry = string | null;
 
-interface BufferEntry {
+export interface BufferEntry {
     type: string;
     value: string;
     regex?: {
@@ -15,7 +15,7 @@ interface BufferEntry {
     loc?: SourceLocation;
 }
 
-class Reader {
+export class Reader {
     readonly values: ReaderEntry[];
     curly: number;
     paren: number;
@@ -93,7 +93,7 @@ class Reader {
 
 /* tslint:disable:max-classes-per-file */
 
-interface Config {
+export interface Config {
     tolerant?: boolean;
     comment?: boolean;
     range?: boolean;
@@ -121,7 +121,7 @@ export class Tokenizer {
         this.reader = new Reader();
     }
 
-    errors() {
+    errors(): Error[] {
         return this.errorHandler.errors;
     }
 

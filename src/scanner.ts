@@ -46,7 +46,7 @@ export interface RawToken {
     end: number;
 }
 
-interface ScannerState {
+export interface ScannerState {
     index: number;
     lineNumber: number;
     lineStart: number;
