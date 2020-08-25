@@ -381,11 +381,13 @@ export class ForInStatement {
 
 export class ForOfStatement {
     readonly type: string;
+    readonly await: boolean;
     readonly left: Expression;
     readonly right: Expression;
     readonly body: Statement;
-    constructor(left: Expression, right: Expression, body: Statement) {
+    constructor(left: Expression, right: Expression, body: Statement, _await: boolean) {
         this.type = Syntax.ForOfStatement;
+        this.await = _await;
         this.left = left;
         this.right = right;
         this.body = body;
