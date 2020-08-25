@@ -17,6 +17,7 @@
                 }
             },
             "type": "ForOfStatement",
+            "await": false,
             "left": {
                 "range": [
                     5,

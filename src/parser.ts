@@ -2248,9 +2248,18 @@ export class Parser {
         let update: Node.Expression | null = null;
         let forIn = true;
         let left, right;
+        let _await = false;
 
         const node = this.createNode();
         this.expectKeyword('for');
+        if (this.matchContextualKeyword('await')) {
+            if (!this.context.await) {
+                this.tolerateUnexpectedToken(this.lookahead);
+            }
+            _await = true;
+            this.nextToken();
+        }
+
         this.expect('(');
 
         if (this.match(';')) {
@@ -2265,7 +2274,7 @@ export class Parser {
                 const declarations = this.parseVariableDeclarationList({ inFor: true });
                 this.context.allowIn = previousAllowIn;
 
-                if (declarations.length === 1 && this.matchKeyword('in')) {
+                if (!_await && declarations.length === 1 && this.matchKeyword('in')) {
                     const decl = declarations[0];
                     if (decl.init && (decl.id.type === Syntax.ArrayPattern || decl.id.type === Syntax.ObjectPattern || this.context.strict)) {
                         this.tolerateError(Messages.ForInOfLoopInitializer, 'for-in');
@@ -2397,7 +2406,7 @@ export class Parser {
         return (typeof left === 'undefined') ?
             this.finalize(node, new Node.ForStatement(init, test, update, body)) :
             forIn ? this.finalize(node, new Node.ForInStatement(left, right, body)) :
-                this.finalize(node, new Node.ForOfStatement(left, right, body));
+                this.finalize(node, new Node.ForOfStatement(left, right, body, _await));
     }
 
     // https://tc39.github.io/ecma262/#sec-continue-statement
