@@ -546,6 +546,7 @@ interface ForInStatement {
 ```js
 interface ForOfStatement {
     type: 'ForOfStatement';
+    await: boolean;
     left: Expression | VariableDeclaration;
     right: Expression;
     body: Statement;
