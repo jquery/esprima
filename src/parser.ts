@@ -1517,7 +1517,8 @@ export class Parser {
                     precedences.pop();
                     left = stack.pop();
                     markers.pop();
-                    const node = this.startNode(markers[markers.length - 1]);
+                    const marker = markers[markers.length - 1];
+                    const node = this.startNode(marker, marker.lineStart);
                     stack.push(this.finalize(node, new Node.BinaryExpression(operator, left, right)));
                 }
 
