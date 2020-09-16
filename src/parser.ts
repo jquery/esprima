@@ -687,9 +687,9 @@ export class Parser {
                         expr = this.finalize(node, new Node.ThisExpression());
                     } else if (this.matchKeyword('class')) {
                         expr = this.parseClassExpression();
-                        
+
                     } else if (this.matchKeyword('new')) {
-                          expr = this.parseNewExpression();
+                        expr = this.parseNewExpression();
                     } else if (this.matchImportCall()) {
                         expr = this.parseImportCall();
                     } else {
@@ -1181,7 +1181,7 @@ export class Parser {
 
     parseIdentifierName(isPrivateField: boolean = false): Node.Identifier {
         let node = this.createNode();
-	let token = this.nextToken();
+        let token = this.nextToken();
         if (token.value === '#') {
             token = this.nextToken();
             if (isPrivateField) {
@@ -1941,7 +1941,7 @@ export class Parser {
      * publicProp = 123;
      * @returns {Boolean}
      */
-    isInitializedProperty(): any {
+    isInitializedProperty(): boolean {
         let state = this.scanner.saveState();
         this.scanner.scanComments();
         let next = this.scanner.lex();
@@ -1949,14 +1949,14 @@ export class Parser {
         return this.lookahead.type === 3 && next.value === '=';
     }
 
-    
+
     /**
      * This function checks to see if a property is declared in a Class
      * e.g.
      * publicProp;
      * @returns {Boolean}
      */
-    isDeclaredProperty(): any {
+    isDeclaredProperty(): boolean {
         let state = this.scanner.saveState();
         this.scanner.scanComments();
         let next = this.scanner.lex();
@@ -3285,11 +3285,11 @@ export class Parser {
                     return this.parseClassPrivateProperty(true);
             }
             // e.g. foo = 'bar';
-            if(this.isInitializedProperty()) {
+            if (this.isInitializedProperty()) {
                 return this.parseClassProperty();
             }
             // e.g. foo; or foo
-            if(this.isDeclaredProperty()) {
+            if (this.isDeclaredProperty()) {
                 return this.parseClassProperty(true);
             }
             computed = this.match('[');
@@ -3440,7 +3440,6 @@ export class Parser {
      * This function generates a public ClassProperty node
      *
      * @param {Boolean} isDeclared e.g. foo or foo; will set isDeclared to true
-     * @returns {Node.ClassProperty}
      */
     parseClassProperty(isDeclared: boolean = false): any {
         let node = this.createNode();
@@ -3449,9 +3448,9 @@ export class Parser {
         let isStatic = false;
         let key = this.parseIdentifierName();
 
-        if(isDeclared) {
+        if (isDeclared) {
             // If the line doesn't end with a semicolon
-            if(!this.hasLineTerminator)
+            if (!this.hasLineTerminator)
                 this.consumeSemicolon();
             return this.finalize(node, new Node.ClassProperty(key, computed, undefined, kind, isStatic));
         }
@@ -3467,7 +3466,6 @@ export class Parser {
      * This function generates a private ClassProperty node
      *
      * @param {Boolean} isDeclared e.g. #foo or #foo; will set isDeclared to true
-     * @returns {Node.ClassProperty}
      */
     parseClassPrivateProperty(isDeclared: boolean = false): any {
         let node = this.createNode();
@@ -3476,9 +3474,9 @@ export class Parser {
         let isStatic = false;
         let key = this.parseIdentifierName();
 
-        if(isDeclared) {
+        if (isDeclared) {
             // If the line doesn't end with a semicolon
-            if(!this.hasLineTerminator)
+            if (!this.hasLineTerminator)
                 this.consumeSemicolon();
             return this.finalize(node, new Node.ClassPrivateProperty(key, computed, undefined, kind, isStatic));
         }
@@ -3486,7 +3484,7 @@ export class Parser {
         this.nextToken();
 
         let value = this.parsePrimaryExpression();
-	return this.finalize(node, new Node.ClassPrivateProperty(key, computed, value, kind, isStatic));
+        return this.finalize(node, new Node.ClassPrivateProperty(key, computed, value, kind, isStatic));
     };
 
     // https://tc39.github.io/ecma262/#sec-scripts

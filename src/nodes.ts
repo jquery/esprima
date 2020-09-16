@@ -249,12 +249,12 @@ export class ClassProperty {
     readonly kind: any;
     readonly isStatic: any;
     constructor(key: any, computed: any, value: any, kind: any, isStatic: any) {
-	this.type = Syntax.ClassProperty;
-	this.key = key;
-	this.computed = computed;
-	this.value = value;
-	this.kind = kind;
-	this.isStatic = isStatic;
+        this.type = Syntax.ClassProperty;
+        this.key = key;
+        this.computed = computed;
+        this.value = value;
+        this.kind = kind;
+        this.isStatic = isStatic;
     }
 }
 
@@ -266,12 +266,12 @@ export class ClassPrivateProperty {
     readonly kind: any;
     readonly isStatic: any;
     constructor(key: any, computed: any, value: any, kind: any, isStatic: any) {
-	this.type = Syntax.ClassPrivateProperty;
-	this.key = key;
-	this.computed = computed;
-	this.value = value;
-	this.kind = kind;
-	this.isStatic = isStatic;
+        this.type = Syntax.ClassPrivateProperty;
+        this.key = key;
+        this.computed = computed;
+        this.value = value;
+        this.kind = kind;
+        this.isStatic = isStatic;
     }
 }
 
