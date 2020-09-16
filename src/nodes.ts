@@ -243,6 +243,39 @@ export class ClassExpression {
         this.body = body;
     }
 }
+export class ClassProperty {
+    readonly type: any;
+    readonly key: any;
+    readonly computed: any;
+    readonly value: any;
+    readonly kind: any;
+    readonly isStatic: any;
+    constructor(key: any, computed: any, value: any, kind: any, isStatic: any) {
+	this.type = Syntax.ClassProperty;
+	this.key = key;
+	this.computed = computed;
+	this.value = value;
+	this.kind = kind;
+	this.isStatic = isStatic;
+    }
+}
+
+export class ClassPrivateProperty {
+    readonly type: any;
+    readonly key: any;
+    readonly computed: any;
+    readonly value: any;
+    readonly kind: any;
+    readonly isStatic: any;
+    constructor(key: any, computed: any, value: any, kind: any, isStatic: any) {
+	this.type = Syntax.ClassPrivateProperty;
+	this.key = key;
+	this.computed = computed;
+	this.value = value;
+	this.kind = kind;
+	this.isStatic = isStatic;
+    }
+}
 
 export class ComputedMemberExpression {
     readonly type: string;
