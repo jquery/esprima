@@ -11,7 +11,7 @@ export const enum Token {
     Template
 }
 
-export let TokenName = {};
+export const TokenName = {};
 TokenName[Token.BooleanLiteral] = 'Boolean';
 TokenName[Token.EOF] = '<end>';
 TokenName[Token.Identifier] = 'Identifier';

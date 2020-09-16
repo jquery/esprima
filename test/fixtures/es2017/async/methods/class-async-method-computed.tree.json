@@ -46,7 +46,7 @@
                                 }
                             }
                         },
-                        "computed": false,
+                        "computed": true,
                         "value": {
                             "type": "FunctionExpression",
                             "id": null,

@@ -534,7 +534,7 @@ interface ForStatement {
 ```js
 interface ForInStatement {
     type: 'ForInStatement';
-    left: Expression;
+    left: Expression | VariableDeclaration;
     right: Expression;
     body: Statement;
     each: false;
@@ -546,7 +546,7 @@ interface ForInStatement {
 ```js
 interface ForOfStatement {
     type: 'ForOfStatement';
-    left: Expression;
+    left: Expression | VariableDeclaration;
     right: Expression;
     body: Statement;
 }

@@ -60,6 +60,8 @@ interface TokenEntry {
     loc?: SourceLocation;
 }
 
+/* eslint-disable @typescript-eslint/unbound-method */
+
 export class Parser {
     readonly config: Config;
     readonly delegate: any;
@@ -170,7 +172,7 @@ export class Parser {
     }
 
     throwError(messageFormat: string, ...values): void {
-        const args = Array.prototype.slice.call(arguments, 1);
+        const args = values.slice();
         const msg = messageFormat.replace(/%(\d)/g, (whole, idx) => {
             assert(idx < args.length, 'Message reference must be in range');
             return args[idx];
@@ -184,7 +186,7 @@ export class Parser {
     }
 
     tolerateError(messageFormat, ...values) {
-        const args = Array.prototype.slice.call(arguments, 1);
+        const args = values.slice();
         const msg = messageFormat.replace(/%(\d)/g, (whole, idx) => {
             assert(idx < args.length, 'Message reference must be in range');
             return args[idx];
@@ -257,8 +259,7 @@ export class Parser {
             if (comments.length > 0 && this.delegate) {
                 for (let i = 0; i < comments.length; ++i) {
                     const e: Comment = comments[i];
-                    let node;
-                    node = {
+                    const node: any = {
                         type: e.multiLine ? 'BlockComment' : 'LineComment',
                         value: this.scanner.source.slice(e.slice[0], e.slice[1])
                     };
@@ -1525,7 +1526,8 @@ export class Parser {
                     precedences.pop();
                     left = stack.pop();
                     markers.pop();
-                    const node = this.startNode(markers[markers.length - 1]);
+                    const marker = markers[markers.length - 1];
+                    const node = this.startNode(marker, marker.lineStart);
                     stack.push(this.finalize(node, new Node.BinaryExpression(operator, left, right)));
                 }
 
@@ -1614,7 +1616,10 @@ export class Parser {
 
     reinterpretAsCoverFormalsList(expr) {
         let params = [expr];
-        let options;
+        const options: any = {
+            simple: true,
+            paramSet: {}
+        };
 
         let asyncArrow = false;
         switch (expr.type) {
@@ -1627,11 +1632,6 @@ export class Parser {
             default:
                 return null;
         }
-
-        options = {
-            simple: true,
-            paramSet: {}
-        };
 
         for (let i = 0; i < params.length; ++i) {
             const param = params[i];
@@ -2360,6 +2360,10 @@ export class Parser {
                 }
             } else {
                 const initStartToken = this.lookahead;
+                const previousIsBindingElement = this.context.isBindingElement;
+                const previousIsAssignmentTarget = this.context.isAssignmentTarget;
+                const previousFirstCoverInitializedNameError = this.context.firstCoverInitializedNameError;
+
                 const previousAllowIn = this.context.allowIn;
                 this.context.allowIn = false;
                 init = this.inheritCoverGrammar(this.parseAssignmentExpression);
@@ -2387,6 +2391,11 @@ export class Parser {
                     init = null;
                     forIn = false;
                 } else {
+                    // The `init` node was not parsed isolated, but we would have wanted it to.
+                    this.context.isBindingElement = previousIsBindingElement;
+                    this.context.isAssignmentTarget = previousIsAssignmentTarget;
+                    this.context.firstCoverInitializedNameError = previousFirstCoverInitializedNameError;
+
                     if (this.match(',')) {
                         const initSeq = [init];
                         while (this.match(',')) {
@@ -2402,11 +2411,11 @@ export class Parser {
 
         if (typeof left === 'undefined') {
             if (!this.match(';')) {
-                test = this.parseExpression();
+                test = this.isolateCoverGrammar(this.parseExpression);
             }
             this.expect(';');
             if (!this.match(')')) {
-                update = this.parseExpression();
+                update = this.isolateCoverGrammar(this.parseExpression);
             }
         }
 
@@ -2896,9 +2905,7 @@ export class Parser {
     }
 
     parseFormalParameters(firstRestricted?) {
-        let options;
-
-        options = {
+        const options: any = {
             simple: true,
             params: [],
             firstRestricted: firstRestricted
@@ -3255,7 +3262,7 @@ export class Parser {
         let token = this.lookahead;
         const node = this.createNode();
 
-        let kind: string = '';
+        let kind = '';
         let key: Node.PropertyKey | null = null;
         let value: Node.FunctionExpression | null = null;
         let computed = false;
@@ -3303,6 +3310,7 @@ export class Parser {
                 if (punctuator !== ':' && punctuator !== '(' && punctuator !== '*') {
                     isAsync = true;
                     token = this.lookahead;
+                    computed = this.match('[');
                     key = this.parseObjectPropertyKey();
                     if (token.type === Token.Identifier && token.value === 'constructor') {
                         this.tolerateUnexpectedToken(token, Messages.ConstructorIsAsync);

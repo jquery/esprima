@@ -1,5 +1,3 @@
-/* tslint:disable:max-classes-per-file */
-
 declare class Error {
     public name: string;
     public message: string;

@@ -20,7 +20,7 @@ var results = new Transform({
     transform(test, encoding, done) {
         var result = {
             id: normalizePath(test.file) + '(' + test.scenario + ')',
-            expected: test.attrs.negative && test.attrs.negative.phase === 'early'
+            expected: test.attrs.negative && (test.attrs.negative.phase === 'early' || test.attrs.negative.phase === 'parse')
                 ? 'fail' : 'pass'
         };
         var parse = test.attrs.flags.module ?

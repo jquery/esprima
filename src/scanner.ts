@@ -50,6 +50,7 @@ interface ScannerState {
     index: number;
     lineNumber: number;
     lineStart: number;
+    curlyStack: string[];
 }
 
 export class Scanner {
@@ -62,7 +63,7 @@ export class Scanner {
     index: number;
     lineNumber: number;
     lineStart: number;
-    private curlyStack: string[];
+    curlyStack: string[];
 
     private readonly length: number;
 
@@ -83,7 +84,8 @@ export class Scanner {
         return {
             index: this.index,
             lineNumber: this.lineNumber,
-            lineStart: this.lineStart
+            lineStart: this.lineStart,
+            curlyStack: this.curlyStack.slice()
         };
     }
 
@@ -91,6 +93,7 @@ export class Scanner {
         this.index = state.index;
         this.lineNumber = state.lineNumber;
         this.lineStart = state.lineStart;
+        this.curlyStack = state.curlyStack;
     }
 
     public eof(): boolean {
@@ -1096,7 +1099,6 @@ export class Scanner {
         // pattern that would not be detected by this substitution.
         const astralSubstitute = '\uFFFF';
         let tmp = pattern;
-        const self = this;
 
         if (flags.indexOf('u') >= 0) {
             tmp = tmp
@@ -1107,7 +1109,7 @@ export class Scanner {
                 .replace(/\\u\{([0-9a-fA-F]+)\}|\\u([a-fA-F0-9]{4})/g, ($0, $1, $2) => {
                     const codePoint = parseInt($1 || $2, 16);
                     if (codePoint > 0x10FFFF) {
-                        self.throwUnexpectedToken(Messages.InvalidRegExp);
+                        this.throwUnexpectedToken(Messages.InvalidRegExp);
                     }
                     if (codePoint <= 0xFFFF) {
                         return String.fromCharCode(codePoint);
@@ -1118,8 +1120,8 @@ export class Scanner {
                 // avoid throwing on regular expressions that are only valid in
                 // combination with the "u" flag.
                 .replace(
-                /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
-                astralSubstitute
+                    /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
+                    astralSubstitute
                 );
         }
 
