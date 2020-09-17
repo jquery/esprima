@@ -596,6 +596,7 @@ export class Scanner {
                 ++this.index;
                 this.curlyStack.pop();
                 break;
+            case '#':
             case ')':
             case ';':
             case ',':

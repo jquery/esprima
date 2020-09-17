@@ -198,9 +198,9 @@ export class CallExpression {
 
 export class CatchClause {
     readonly type: string;
-    readonly param: BindingIdentifier | BindingPattern;
+    readonly param: BindingIdentifier | BindingPattern | null;
     readonly body: BlockStatement;
-    constructor(param: BindingIdentifier | BindingPattern, body: BlockStatement) {
+    constructor(param: BindingIdentifier | BindingPattern | null, body: BlockStatement) {
         this.type = Syntax.CatchClause;
         this.param = param;
         this.body = body;
@@ -239,6 +239,39 @@ export class ClassExpression {
         this.id = id;
         this.superClass = superClass;
         this.body = body;
+    }
+}
+export class ClassProperty {
+    readonly type: any;
+    readonly key: any;
+    readonly computed: any;
+    readonly value: any;
+    readonly kind: any;
+    readonly isStatic: any;
+    constructor(key: any, computed: any, value: any, kind: any, isStatic: any) {
+        this.type = Syntax.ClassProperty;
+        this.key = key;
+        this.computed = computed;
+        this.value = value;
+        this.kind = kind;
+        this.isStatic = isStatic;
+    }
+}
+
+export class ClassPrivateProperty {
+    readonly type: any;
+    readonly key: any;
+    readonly computed: any;
+    readonly value: any;
+    readonly kind: any;
+    readonly isStatic: any;
+    constructor(key: any, computed: any, value: any, kind: any, isStatic: any) {
+        this.type = Syntax.ClassPrivateProperty;
+        this.key = key;
+        this.computed = computed;
+        this.value = value;
+        this.kind = kind;
+        this.isStatic = isStatic;
     }
 }
 

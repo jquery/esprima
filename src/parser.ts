@@ -687,6 +687,9 @@ export class Parser {
                         expr = this.finalize(node, new Node.ThisExpression());
                     } else if (this.matchKeyword('class')) {
                         expr = this.parseClassExpression();
+
+                    } else if (this.matchKeyword('new')) {
+                        expr = this.parseNewExpression();
                     } else if (this.matchImportCall()) {
                         expr = this.parseImportCall();
                     } else {
@@ -1176,9 +1179,15 @@ export class Parser {
             token.type === Token.NullLiteral;
     }
 
-    parseIdentifierName(): Node.Identifier {
-        const node = this.createNode();
-        const token = this.nextToken();
+    parseIdentifierName(isPrivateField: boolean = false): Node.Identifier {
+        let node = this.createNode();
+        let token = this.nextToken();
+        if (token.value === '#') {
+            token = this.nextToken();
+            if (isPrivateField) {
+                token.value = '#' + token.value;
+            }
+        }
         if (!this.isIdentifierName(token)) {
             this.throwUnexpectedToken(token);
         }
@@ -1284,7 +1293,7 @@ export class Parser {
                 this.context.isBindingElement = false;
                 this.context.isAssignmentTarget = true;
                 this.expect('.');
-                const property = this.parseIdentifierName();
+                const property = this.parseIdentifierName(true);
                 expr = this.finalize(this.startNode(startToken), new Node.StaticMemberExpression(expr, property));
 
             } else if (this.match('(')) {
@@ -1926,8 +1935,37 @@ export class Parser {
         return this.finalize(node, new Node.VariableDeclaration(declarations, kind));
     }
 
-    // https://tc39.github.io/ecma262/#sec-destructuring-binding-patterns
+    /**
+     * This function checks to see if a property is initialized in a Class
+     * e.g.
+     * publicProp = 123;
+     * @returns {Boolean}
+     */
+    isInitializedProperty(): boolean {
+        let state = this.scanner.saveState();
+        this.scanner.scanComments();
+        let next = this.scanner.lex();
+        this.scanner.restoreState(state);
+        return this.lookahead.type === 3 && next.value === '=';
+    }
 
+
+    /**
+     * This function checks to see if a property is declared in a Class
+     * e.g.
+     * publicProp;
+     * @returns {Boolean}
+     */
+    isDeclaredProperty(): boolean {
+        let state = this.scanner.saveState();
+        this.scanner.scanComments();
+        let next = this.scanner.lex();
+        this.scanner.restoreState(state);
+        return this.lookahead.type === 3 && next.value === ';'
+            || this.lookahead.type === 3 && next.lineNumber !== this.startMarker.line;
+    }
+
+    // https://tc39.github.io/ecma262/#sec-destructuring-binding-patterns
     parseBindingRestElement(params, kind?: string): Node.RestElement {
         const node = this.createNode();
 
@@ -2620,8 +2658,14 @@ export class Parser {
 
     parseCatchClause(): Node.CatchClause {
         const node = this.createNode();
+        let body;
 
         this.expectKeyword('catch');
+
+        if (!this.match('(')) {
+            body = this.parseBlock();
+            return this.finalize(node, new Node.CatchClause(null, body));
+        }
 
         this.expect('(');
         if (this.match(')')) {
@@ -2646,7 +2690,7 @@ export class Parser {
         }
 
         this.expect(')');
-        const body = this.parseBlock();
+        body = this.parseBlock();
 
         return this.finalize(node, new Node.CatchClause(param, body));
     }
@@ -3229,6 +3273,25 @@ export class Parser {
         if (this.match('*')) {
             this.nextToken();
         } else {
+            // If a private class field is encountered parse it
+            if (this.match('#')) {
+                // When nextToken is called we move iterate past #
+                // e.g. #privateProperty <- at privateProperty now
+                this.nextToken();
+                if (this.isInitializedProperty()) {
+                    return this.parseClassPrivateProperty();
+                }
+                else if (this.isDeclaredProperty())
+                    return this.parseClassPrivateProperty(true);
+            }
+            // e.g. foo = 'bar';
+            if (this.isInitializedProperty()) {
+                return this.parseClassProperty();
+            }
+            // e.g. foo; or foo
+            if (this.isDeclaredProperty()) {
+                return this.parseClassProperty(true);
+            }
             computed = this.match('[');
             key = this.parseObjectPropertyKey();
             const id = key as Node.Identifier;
@@ -3372,6 +3435,57 @@ export class Parser {
 
         return this.finalize(node, new Node.ClassExpression(id, superClass, classBody));
     }
+
+    /**
+     * This function generates a public ClassProperty node
+     *
+     * @param {Boolean} isDeclared e.g. foo or foo; will set isDeclared to true
+     */
+    parseClassProperty(isDeclared: boolean = false): any {
+        let node = this.createNode();
+        let kind = 'prop';
+        let computed = false;
+        let isStatic = false;
+        let key = this.parseIdentifierName();
+
+        if (isDeclared) {
+            // If the line doesn't end with a semicolon
+            if (!this.hasLineTerminator)
+                this.consumeSemicolon();
+            return this.finalize(node, new Node.ClassProperty(key, computed, undefined, kind, isStatic));
+        }
+
+        this.nextToken();
+
+        let value = this.parsePrimaryExpression();
+
+        return this.finalize(node, new Node.ClassProperty(key, computed, value, kind, isStatic));
+    };
+
+    /**
+     * This function generates a private ClassProperty node
+     *
+     * @param {Boolean} isDeclared e.g. #foo or #foo; will set isDeclared to true
+     */
+    parseClassPrivateProperty(isDeclared: boolean = false): any {
+        let node = this.createNode();
+        let kind = 'prop';
+        let computed = false;
+        let isStatic = false;
+        let key = this.parseIdentifierName();
+
+        if (isDeclared) {
+            // If the line doesn't end with a semicolon
+            if (!this.hasLineTerminator)
+                this.consumeSemicolon();
+            return this.finalize(node, new Node.ClassPrivateProperty(key, computed, undefined, kind, isStatic));
+        }
+
+        this.nextToken();
+
+        let value = this.parsePrimaryExpression();
+        return this.finalize(node, new Node.ClassPrivateProperty(key, computed, value, kind, isStatic));
+    };
 
     // https://tc39.github.io/ecma262/#sec-scripts
     // https://tc39.github.io/ecma262/#sec-modules
