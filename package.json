@@ -1,5 +1,5 @@
 {
-  "name": "esprima",
+  "name": "@contrast/esprima",
   "description": "ECMAScript parsing infrastructure for multipurpose analysis",
   "homepage": "http://esprima.org",
   "main": "dist/esprima.js",
@@ -28,10 +28,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/jquery/esprima.git"
+    "url": "https://github.com/contrast-security-inc/esprima.git"
   },
   "bugs": {
-    "url": "https://github.com/jquery/esprima/issues"
+    "url": "https://github.com/contrast-security-inc/esprima/issues"
   },
   "license": "BSD-2-Clause",
   "devDependencies": {
