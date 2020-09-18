@@ -2251,7 +2251,7 @@ export class Parser {
 
         const node = this.createNode();
         this.expectKeyword('for');
-        if (this.context.await && this.matchContextualKeyword('await')) {
+        if (this.matchContextualKeyword('await')) {
             if (!this.context.await) {
                 this.tolerateUnexpectedToken(this.lookahead);
             }
