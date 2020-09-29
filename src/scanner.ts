@@ -613,7 +613,7 @@ export class Scanner {
                     this.index += 1;
                     str = '?.';
                 }
-		break;
+                break;
             default:
                 // 4-character punctuator.
                 str = this.source.substr(this.index, 4);
