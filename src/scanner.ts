@@ -613,6 +613,11 @@ export class Scanner {
                     this.index += 1;
                     str = '?.';
                 }
+                if (this.source[this.index] === '?') {
+                    //nullish coalescing
+                    this.index += 1;
+                    str = '??'
+                }
                 break;
             default:
                 // 4-character punctuator.

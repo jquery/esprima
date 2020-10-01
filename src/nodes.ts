@@ -305,6 +305,19 @@ export class ConditionalExpression {
     }
 }
 
+export class NullishConditionalExpression {
+    readonly type: string;
+    readonly test: Expression;
+    readonly alternate: Expression;
+    readonly nullish: boolean;
+    constructor(test: Expression, alternate: Expression) {
+        this.type = Syntax.ConditionalExpression;
+        this.test = test;
+        this.alternate = alternate;
+	this.nullish = true;
+    }
+}
+
 export class ContinueStatement {
     readonly type: string;
     readonly label: Identifier | null;

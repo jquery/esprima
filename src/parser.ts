@@ -1613,6 +1613,18 @@ export class Parser {
             expr = this.finalize(this.startNode(startToken), new Node.ConditionalExpression(expr, consequent, alternate));
             this.context.isAssignmentTarget = false;
             this.context.isBindingElement = false;
+        } else if (this.match('??')) {
+            this.nextToken();
+
+            const previousAllowIn = this.context.allowIn;
+            this.context.allowIn = true;
+            const alternate = this.isolateCoverGrammar(this.parseAssignmentExpression);
+            this.context.allowIn = previousAllowIn;
+
+
+            expr = this.finalize(this.startNode(startToken), new Node.NullishConditionalExpression(expr, alternate));
+            this.context.isAssignmentTarget = false;
+            this.context.isBindingElement = false;
         }
 
         return expr;
