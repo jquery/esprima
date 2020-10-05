@@ -189,10 +189,12 @@ export class CallExpression {
     readonly type: string;
     readonly callee: Expression | Import;
     readonly arguments: ArgumentListElement[];
-    constructor(callee: Expression | Import, args: ArgumentListElement[]) {
+    readonly optional: boolean
+    constructor(callee: Expression | Import, args: ArgumentListElement[], optional?: boolean) {
         this.type = Syntax.CallExpression;
         this.callee = callee;
         this.arguments = args;
+        this.optional = optional || false;
     }
 }
 
@@ -280,11 +282,13 @@ export class ComputedMemberExpression {
     readonly computed: boolean;
     readonly object: Expression;
     readonly property: Expression;
-    constructor(object: Expression, property: Expression) {
+    readonly optional: boolean
+    constructor(object: Expression, property: Expression, optional?: boolean) {
         this.type = Syntax.MemberExpression;
         this.computed = true;
         this.object = object;
         this.property = property;
+        this.optional = optional || false;
     }
 }
 
@@ -298,6 +302,19 @@ export class ConditionalExpression {
         this.test = test;
         this.consequent = consequent;
         this.alternate = alternate;
+    }
+}
+
+export class NullishConditionalExpression {
+    readonly type: string;
+    readonly test: Expression;
+    readonly alternate: Expression;
+    readonly nullish: boolean;
+    constructor(test: Expression, alternate: Expression) {
+        this.type = Syntax.ConditionalExpression;
+        this.test = test;
+        this.alternate = alternate;
+        this.nullish = true;
     }
 }
 
@@ -721,11 +738,13 @@ export class StaticMemberExpression {
     readonly computed: boolean;
     readonly object: Expression;
     readonly property: Expression;
-    constructor(object: Expression, property: Expression) {
+    readonly optional: boolean;
+    constructor(object: Expression, property: Expression, optional?: boolean) {
         this.type = Syntax.MemberExpression;
         this.computed = false;
         this.object = object;
         this.property = property;
+        this.optional = optional || false;
     }
 }
 

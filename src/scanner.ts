@@ -603,11 +603,22 @@ export class Scanner {
             case '[':
             case ']':
             case ':':
-            case '?':
             case '~':
                 ++this.index;
                 break;
-
+            case '?':
+                ++this.index;
+                if (this.source[this.index] === '.') {
+                    // optional chaining
+                    this.index += 1;
+                    str = '?.';
+                }
+                if (this.source[this.index] === '?') {
+                    //nullish coalescing
+                    this.index += 1;
+                    str = '??'
+                }
+                break;
             default:
                 // 4-character punctuator.
                 str = this.source.substr(this.index, 4);

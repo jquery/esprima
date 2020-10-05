@@ -1326,7 +1326,43 @@ export class Parser {
             } else if (this.lookahead.type === Token.Template && this.lookahead.head) {
                 const quasi = this.parseTemplateLiteral();
                 expr = this.finalize(this.startNode(startToken), new Node.TaggedTemplateExpression(expr, quasi));
-
+            } else if (this.match('?.')) {
+                this.nextToken();
+                if (this.match('(')) {
+                    var asyncArrow = maybeAsync && (startToken.lineNumber === this.lookahead.lineNumber);
+                    this.context.isBindingElement = false;
+                    this.context.isAssignmentTarget = false;
+                    var args = asyncArrow ? this.parseAsyncArguments() : this.parseArguments();
+                    if (expr.type === Syntax.Import && args.length !== 1) {
+                        this.tolerateError(Messages.BadImportCallArity);
+                    }
+                    expr = this.finalize(this.startNode(startToken), new Node.CallExpression(expr, args, true));
+                    if (asyncArrow && this.match('=>')) {
+                        for (var i = 0; i < args.length; ++i) {
+                            this.reinterpretExpressionAsPattern(args[i]);
+                        }
+                        expr = {
+                            type: ArrowParameterPlaceHolder,
+                            params: args,
+                            async: true
+                        };
+                    }
+                } else if (this.match('[')) {
+                    this.context.isBindingElement = false;
+                    this.context.isAssignmentTarget = true;
+                    this.expect('[');
+                    var property = this.isolateCoverGrammar(this.parseExpression);
+                    this.expect(']');
+                    expr = this.finalize(this.startNode(startToken), new Node.ComputedMemberExpression(expr, property, true));
+                } else {
+                    var node = this.createNode();
+                    var token = this.nextToken();
+                    if (!this.isIdentifierName(token)) {
+                        this.throwUnexpectedToken(token);
+                    }
+                    var property = this.finalize(node, new Node.Identifier(token.value));
+                    expr = this.finalize(this.startNode(startToken), new Node.StaticMemberExpression(expr, property, true));
+                }
             } else {
                 break;
             }
@@ -1575,6 +1611,18 @@ export class Parser {
             const alternate = this.isolateCoverGrammar(this.parseAssignmentExpression);
 
             expr = this.finalize(this.startNode(startToken), new Node.ConditionalExpression(expr, consequent, alternate));
+            this.context.isAssignmentTarget = false;
+            this.context.isBindingElement = false;
+        } else if (this.match('??')) {
+            this.nextToken();
+
+            const previousAllowIn = this.context.allowIn;
+            this.context.allowIn = true;
+            const alternate = this.isolateCoverGrammar(this.parseAssignmentExpression);
+            this.context.allowIn = previousAllowIn;
+
+
+            expr = this.finalize(this.startNode(startToken), new Node.NullishConditionalExpression(expr, alternate));
             this.context.isAssignmentTarget = false;
             this.context.isBindingElement = false;
         }
