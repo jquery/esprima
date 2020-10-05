@@ -314,7 +314,7 @@ export class NullishConditionalExpression {
         this.type = Syntax.ConditionalExpression;
         this.test = test;
         this.alternate = alternate;
-	this.nullish = true;
+        this.nullish = true;
     }
 }
 
