@@ -1326,7 +1326,8 @@ export class Parser {
             } else if (this.lookahead.type === Token.Template && this.lookahead.head) {
                 const quasi = this.parseTemplateLiteral();
                 expr = this.finalize(this.startNode(startToken), new Node.TaggedTemplateExpression(expr, quasi));
-            } else if (this.match('?.') && this.nextToken() && /[\d]/.test(`${this.lookahead.value}`) ) {
+            } // see https://github.com/tc39/proposal-optional-chaining#notes for why we have to check 2 lookaheads
+            else if (this.match('?.') && this.nextToken() && !/[\d]/.test(`${this.lookahead.value}`) ) {
                 if (this.match('(')) {
                     var asyncArrow = maybeAsync && (startToken.lineNumber === this.lookahead.lineNumber);
                     this.context.isBindingElement = false;
