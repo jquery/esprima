@@ -1327,7 +1327,7 @@ export class Parser {
                 const quasi = this.parseTemplateLiteral();
                 expr = this.finalize(this.startNode(startToken), new Node.TaggedTemplateExpression(expr, quasi));
             } else if (this.match('?.')) {
-              this.nextToken();
+                this.nextToken();
                 if (this.match('(')) {
                     var asyncArrow = maybeAsync && (startToken.lineNumber === this.lookahead.lineNumber);
                     this.context.isBindingElement = false;
