@@ -608,7 +608,8 @@ export class Scanner {
                 break;
             case '?':
                 ++this.index;
-                if (this.source[this.index] === '.') {
+                // see https://github.com/tc39/proposal-optional-chaining#notes for why we have to check 2 lookaheads
+                if (this.source[this.index] === '.' && isNaN(Number(this.source[this.index +1]))) {
                     // optional chaining
                     this.index += 1;
                     str = '?.';
