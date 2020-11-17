@@ -159,7 +159,7 @@ export class BinaryExpression {
     readonly left: Expression;
     readonly right: Expression;
     constructor(operator: string, left: Expression, right: Expression) {
-        const logical = (operator === '||' || operator === '&&');
+        const logical = (operator === '||' || operator === '&&' || operator === '??');
         this.type = logical ? Syntax.LogicalExpression : Syntax.BinaryExpression;
         this.operator = operator;
         this.left = left;

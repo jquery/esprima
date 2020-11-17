@@ -103,27 +103,28 @@ export class Parser {
             ',': 0,
             '=': 0,
             ']': 0,
-            '||': 1,
-            '&&': 2,
-            '|': 3,
-            '^': 4,
-            '&': 5,
-            '==': 6,
-            '!=': 6,
-            '===': 6,
-            '!==': 6,
-            '<': 7,
-            '>': 7,
-            '<=': 7,
-            '>=': 7,
-            '<<': 8,
-            '>>': 8,
-            '>>>': 8,
-            '+': 9,
-            '-': 9,
-            '*': 11,
-            '/': 11,
-            '%': 11
+            '??': 5,
+            '||': 6,
+            '&&': 7,
+            '|': 8,
+            '^': 9,
+            '&': 10,
+            '==': 11,
+            '!=': 11,
+            '===': 11,
+            '!==': 11,
+            '<': 12,
+            '>': 12,
+            '<=': 12,
+            '>=': 12,
+            '<<': 13,
+            '>>': 13,
+            '>>>': 13,
+            '+': 14,
+            '-': 14,
+            '*': 15,
+            '/': 15,
+            '%': 15
         };
 
         this.lookahead = {
@@ -1478,7 +1479,7 @@ export class Parser {
         if (token.type === Token.Punctuator) {
             precedence = this.operatorPrecedence[op] || 0;
         } else if (token.type === Token.Keyword) {
-            precedence = (op === 'instanceof' || (this.context.allowIn && op === 'in')) ? 7 : 0;
+            precedence = (op === 'instanceof' || (this.context.allowIn && op === 'in')) ? 12 : 0;
         } else {
             precedence = 0;
         }
@@ -1490,9 +1491,21 @@ export class Parser {
 
         let expr = this.inheritCoverGrammar(this.parseExponentiationExpression);
 
+        let allowAndOr = true;
+        let allowNullishCoalescing = true;
+        const updateNullishCoalescingRestrictions = (token): void => {
+            if (token.value === '&&' || token.value === '||') {
+                allowNullishCoalescing = false;
+            }
+            if (token.value === '??') {
+                allowAndOr = false;
+            }
+        };
+
         const token = this.lookahead;
         let prec = this.binaryPrecedence(token);
         if (prec > 0) {
+            updateNullishCoalescingRestrictions(token);
             this.nextToken();
 
             this.context.isAssignmentTarget = false;
@@ -1509,6 +1522,11 @@ export class Parser {
                 if (prec <= 0) {
                     break;
                 }
+                if ((!allowAndOr && (this.lookahead.value === '&&' || this.lookahead.value === '||')) ||
+                    (!allowNullishCoalescing && this.lookahead.value === '??')) {
+                    this.throwUnexpectedToken(this.lookahead);
+                }
+                updateNullishCoalescingRestrictions(this.lookahead);
 
                 // Reduce: make a binary expression from the three topmost entries.
                 while ((stack.length > 2) && (prec <= precedences[precedences.length - 1])) {
