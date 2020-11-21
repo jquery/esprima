@@ -75,7 +75,7 @@
     "api-tests": "mocha -R dot test/api-tests.js",
     "grammar-tests": "node test/grammar-tests.js",
     "regression-tests": "node test/regression-tests.js",
-    "test-262": "npm install git+https://git@github.com/tc39/test262.git#2ee38641 && node test/test-262.js",
+    "test-262": "npm install git+https://git@github.com/tc39/test262.git#36d2d2d && node test/test-262.js",
     "all-tests": "npm run verify-line-ending && npm run generate-fixtures && npm run unit-tests && npm run api-tests && npm run grammar-tests && npm run regression-tests && npm run hostile-env-tests",
     "verify-line-ending": "node test/verify-line-ending.js",
     "generate-fixtures": "node tools/generate-fixtures.js",
