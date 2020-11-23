@@ -8,8 +8,8 @@ import { XHTMLEntities } from './xhtml-entities';
 
 interface MetaJSXElement {
     node: Marker;
-    opening: JSXNode.JSXOpeningElement;
-    closing: JSXNode.JSXClosingElement | null;
+    opening: JSXNode.JSXOpeningElement | JSXNode.JSXOpeningFragment;
+    closing: JSXNode.JSXClosingElement | JSXNode.JSXClosingFragment | null;
     children: JSXNode.JSXChild[];
 }
 
@@ -463,10 +463,19 @@ export class JSXParser extends Parser {
         return attributes;
     }
 
-    parseJSXOpeningElement(): JSXNode.JSXOpeningElement {
+    parseJSXOpeningElement(): JSXNode.JSXOpeningElement | JSXNode.JSXOpeningFragment {
         const node = this.createJSXNode();
 
         this.expectJSX('<');
+        if (this.matchJSX('>')) {
+            this.expectJSX('>');
+            const selfClosing = this.matchJSX('/');
+            if (selfClosing) {
+                this.expectJSX('/');
+            }
+            return this.finalize(node, new JSXNode.JSXOpeningFragment(selfClosing));
+        }
+
         const name = this.parseJSXElementName();
         const attributes = this.parseJSXAttributes();
         const selfClosing = this.matchJSX('/');
@@ -478,12 +487,16 @@ export class JSXParser extends Parser {
         return this.finalize(node, new JSXNode.JSXOpeningElement(name, selfClosing, attributes));
     }
 
-    parseJSXBoundaryElement(): JSXNode.JSXOpeningElement | JSXNode.JSXClosingElement {
+    parseJSXBoundaryElement(): JSXNode.JSXOpeningElement | JSXNode.JSXClosingElement | JSXNode.JSXOpeningFragment | JSXNode.JSXClosingFragment {
         const node = this.createJSXNode();
 
         this.expectJSX('<');
         if (this.matchJSX('/')) {
             this.expectJSX('/');
+            if (this.matchJSX('>')) {
+                this.expectJSX('>');
+                return this.finalize(node, new JSXNode.JSXClosingFragment());
+            }
             const elementName = this.parseJSXElementName();
             this.expectJSX('>');
             return this.finalize(node, new JSXNode.JSXClosingElement(elementName));
@@ -567,8 +580,8 @@ export class JSXParser extends Parser {
             }
             if (element.type === JSXSyntax.JSXClosingElement) {
                 el.closing = element as JSXNode.JSXClosingElement;
-                const open = getQualifiedElementName(el.opening.name);
-                const close = getQualifiedElementName(el.closing.name);
+                const open = getQualifiedElementName((el.opening as JSXNode.JSXOpeningElement).name);
+                const close = getQualifiedElementName((el.closing as JSXNode.JSXClosingElement).name);
                 if (open !== close) {
                     this.tolerateError('Expected corresponding JSX closing tag for %0', open);
                 }
@@ -577,6 +590,14 @@ export class JSXParser extends Parser {
                     el = stack[stack.length - 1];
                     el.children.push(child);
                     stack.pop();
+                } else {
+                    break;
+                }
+            }
+            if (element.type === JSXSyntax.JSXClosingFragment) {
+                el.closing = element as JSXNode.JSXClosingFragment;
+                if (el.opening.type !== JSXSyntax.JSXOpeningFragment) {
+                    this.tolerateError('Expected corresponding JSX closing tag for jsx fragment');
                 } else {
                     break;
                 }
@@ -591,7 +612,7 @@ export class JSXParser extends Parser {
 
         const opening = this.parseJSXOpeningElement();
         let children: JSXNode.JSXChild[] = [];
-        let closing: JSXNode.JSXClosingElement | null = null;
+        let closing: JSXNode.JSXClosingElement | JSXNode.JSXClosingFragment | null = null;
 
         if (!opening.selfClosing) {
             const el = this.parseComplexJSXElement({ node, opening, closing, children });
