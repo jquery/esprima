@@ -277,7 +277,7 @@ describe('esprima.parse', function () {
         assert.deepEqual(expression.closingElement.type, 'JSXClosingFragment');
     });
 
-    it.only('should understand JSX fragment syntax', function () {
+    it('should understand JSX fragment syntax', function () {
         var ast = esprima.parse('<></>', { jsx: true });
         var statement = ast.body[0];
         var expression = statement.expression;
