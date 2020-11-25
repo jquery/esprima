@@ -275,7 +275,6 @@ describe('esprima.parse', function () {
         });
     });
 
-
     it('should understand JSX fragment syntax', function () {
         var ast = esprima.parse('<></>', { jsx: true });
         var statement = ast.body[0];

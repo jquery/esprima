@@ -67,19 +67,19 @@ export class JSXParser extends Parser {
         return this.match('<') ? this.parseJSXRoot() : super.parsePrimaryExpression();
     }
 
-    startJSX() {
+    startJSX(): void {
         // Unwind the scanner before the lookahead token.
         this.scanner.index = this.startMarker.index;
         this.scanner.lineNumber = this.startMarker.line;
         this.scanner.lineStart = this.startMarker.index - this.startMarker.column;
     }
 
-    finishJSX() {
+    finishJSX(): void {
         // Prime the next lookahead.
         this.nextToken();
     }
 
-    reenterJSX() {
+    reenterJSX(): void {
         this.startJSX();
         this.expectJSX('}');
 
@@ -336,7 +336,7 @@ export class JSXParser extends Parser {
     // Expect the next JSX token to match the specified punctuator.
     // If not, an exception will be thrown.
 
-    expectJSX(value) {
+    expectJSX(value): void {
         const token = this.nextJSXToken();
         if (token.type !== Token.Punctuator || token.value !== value) {
             this.throwUnexpectedToken(token);
@@ -345,7 +345,7 @@ export class JSXParser extends Parser {
 
     // Return true if the next JSX token matches the specified punctuator.
 
-    matchJSX(value) {
+    matchJSX(value): boolean {
         const next = this.peekJSXToken();
         return next.type === Token.Punctuator && next.value === value;
     }
@@ -469,11 +469,7 @@ export class JSXParser extends Parser {
         this.expectJSX('<');
         if (this.matchJSX('>')) {
             this.expectJSX('>');
-            const selfClosing = this.matchJSX('/');
-            if (selfClosing) {
-                this.expectJSX('/');
-            }
-            return this.finalize(node, new JSXNode.JSXOpeningFragment(selfClosing));
+            return this.finalize(node, new JSXNode.JSXOpeningFragment(false));
         }
 
         const name = this.parseJSXElementName();
