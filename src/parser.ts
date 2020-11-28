@@ -19,11 +19,13 @@ interface Context {
     isModule: boolean;
     allowIn: boolean;
     allowStrictDirective: boolean;
+    allowSuper: boolean;
     allowYield: boolean;
     await: boolean;
     firstCoverInitializedNameError: RawToken | null;
     isAssignmentTarget: boolean;
     isBindingElement: boolean;
+    inConstructor: boolean;
     inFunctionBody: boolean;
     inIteration: boolean;
     inSwitch: boolean;
@@ -141,10 +143,12 @@ export class Parser {
             await: false,
             allowIn: true,
             allowStrictDirective: true,
+            allowSuper: false,
             allowYield: true,
             firstCoverInitializedNameError: null,
             isAssignmentTarget: false,
             isBindingElement: false,
+            inConstructor: false,
             inFunctionBody: false,
             inIteration: false,
             inSwitch: false,
@@ -1269,6 +1273,9 @@ export class Parser {
 
         let expr;
         if (this.matchKeyword('super') && this.context.inFunctionBody) {
+            if (!this.context.allowSuper && this.context.inConstructor) {
+                this.tolerateError(Messages.SuperOutsideCall);
+            }
             expr = this.createNode();
             this.nextToken();
             expr = this.finalize(expr, new Node.Super());
@@ -3226,6 +3233,7 @@ export class Parser {
     parseClassElement(hasConstructor): Node.Property {
         let token = this.lookahead;
         const node = this.createNode();
+        const previousInConstructor = this.context.inConstructor;
 
         let kind = '';
         let key: Node.PropertyKey | null = null;
@@ -3241,6 +3249,7 @@ export class Parser {
             computed = this.match('[');
             key = this.parseObjectPropertyKey();
             const id = key as Node.Identifier;
+            this.context.inConstructor = token.type === Token.Identifier && token.value === 'constructor';
             if (id.name === 'static' && (this.qualifiedPropertyName(this.lookahead) || this.match('*'))) {
                 token = this.lookahead;
                 isStatic = true;
@@ -3317,6 +3326,7 @@ export class Parser {
                 kind = 'constructor';
             }
         }
+        this.context.inConstructor = previousInConstructor;
 
         return this.finalize(node, new Node.MethodDefinition(key, computed, value, kind, isStatic));
     }
@@ -3349,6 +3359,7 @@ export class Parser {
         const node = this.createNode();
 
         const previousStrict = this.context.strict;
+        const previousAllowSuper = this.context.allowSuper;
         this.context.strict = true;
         this.expectKeyword('class');
 
@@ -3357,8 +3368,10 @@ export class Parser {
         if (this.matchKeyword('extends')) {
             this.nextToken();
             superClass = this.isolateCoverGrammar(this.parseLeftHandSideExpressionAllowCall);
+            this.context.allowSuper = true;
         }
         const classBody = this.parseClassBody();
+        this.context.allowSuper = previousAllowSuper;
         this.context.strict = previousStrict;
 
         return this.finalize(node, new Node.ClassDeclaration(id, superClass, classBody));
