@@ -602,7 +602,6 @@ export class Scanner {
             case '[':
             case ']':
             case ':':
-            case '?':
             case '~':
                 ++this.index;
                 break;
@@ -623,17 +622,20 @@ export class Scanner {
 
                         // 2-character punctuators.
                         str = str.substr(0, 2);
-                        if (str === '&&' || str === '||' || str === '==' || str === '!=' ||
+                        if (str === '&&' || str === '||' || str === '??' ||
+                            str === '==' || str === '!=' ||
                             str === '+=' || str === '-=' || str === '*=' || str === '/=' ||
-                            str === '++' || str === '--' || str === '<<' || str === '>>' ||
+                            str === '++' || str === '--' ||
+                            str === '<<' || str === '>>' ||
                             str === '&=' || str === '|=' || str === '^=' || str === '%=' ||
-                            str === '<=' || str === '>=' || str === '=>' || str === '**') {
+                            str === '<=' || str === '>=' || str === '=>' ||
+                            str === '**') {
                             this.index += 2;
                         } else {
 
                             // 1-character punctuators.
                             str = this.source[this.index];
-                            if ('<>=!+-*%&|^/'.indexOf(str) >= 0) {
+                            if ('<>=!+-*%&|?^/'.indexOf(str) >= 0) {
                                 ++this.index;
                             }
                         }
