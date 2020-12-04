@@ -136,6 +136,7 @@
                     }
                 },
                 "arguments": [],
+                "optional": false,
                 "range": [
                     1,
                     42

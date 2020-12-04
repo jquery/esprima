@@ -85,6 +85,7 @@
                                 }
                             },
                             "arguments": [],
+                            "optional": false,
                             "range": [
                                 23,
                                 30

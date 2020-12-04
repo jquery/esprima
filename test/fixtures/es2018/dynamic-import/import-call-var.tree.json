@@ -121,6 +121,7 @@
                                 }
                             }
                         ],
+                        "optional": false,
                         "range": [
                             24,
                             33
@@ -154,6 +155,7 @@
                             }
                         }
                     },
+                    "optional": false,
                     "range": [
                         24,
                         38
@@ -211,6 +213,7 @@
                         }
                     }
                 ],
+                "optional": false,
                 "range": [
                     24,
                     48

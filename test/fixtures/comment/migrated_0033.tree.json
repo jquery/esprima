@@ -141,6 +141,7 @@
                             }
                         }
                     },
+                    "optional": false,
                     "range": [
                         13,
                         50
@@ -175,6 +176,7 @@
                         }
                     }
                 ],
+                "optional": false,
                 "range": [
                     13,
                     56

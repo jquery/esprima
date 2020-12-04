@@ -137,6 +137,7 @@
                             }
                         }
                     ],
+                    "optional": false,
                     "range": [
                         25,
                         35

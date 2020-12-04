@@ -152,7 +152,8 @@
                                     "name": "target"
                                 }
                             },
-                            "arguments": []
+                            "arguments": [],
+                            "optional": false
                         }
                     }
                 ]

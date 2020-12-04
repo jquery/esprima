@@ -122,6 +122,7 @@
                                     }
                                 }
                             ],
+                            "optional": false,
                             "range": [
                                 26,
                                 44

@@ -88,7 +88,8 @@
                             "raw": ".5"
                         }
                     }
-                ]
+                ],
+                "optional": false
             }
         }
     ],

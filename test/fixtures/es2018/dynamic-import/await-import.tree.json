@@ -87,6 +87,7 @@
                                         }
                                     }
                                 ],
+                                "optional": false,
                                 "range": [
                                     28,
                                     37

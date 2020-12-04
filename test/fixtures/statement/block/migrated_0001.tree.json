@@ -27,6 +27,7 @@
                             }
                         },
                         "arguments": [],
+                        "optional": false,
                         "range": [
                             2,
                             10
@@ -80,6 +81,7 @@
                             }
                         },
                         "arguments": [],
+                        "optional": false,
                         "range": [
                             12,
                             20

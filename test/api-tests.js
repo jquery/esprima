@@ -40,6 +40,7 @@ describe('esprima.Syntax', function () {
             BreakStatement: 'BreakStatement',
             CallExpression: 'CallExpression',
             CatchClause: 'CatchClause',
+            ChainExpression: 'ChainExpression',
             ClassBody: 'ClassBody',
             ClassDeclaration: 'ClassDeclaration',
             ClassExpression: 'ClassExpression',

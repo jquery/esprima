@@ -1304,15 +1304,16 @@ export class Parser {
             expr = this.inheritCoverGrammar(this.matchKeyword('new') ? this.parseNewExpression : this.parsePrimaryExpression);
         }
 
+        let hasOptional = false;
         while (true) {
-            if (this.match('.')) {
-                this.context.isBindingElement = false;
-                this.context.isAssignmentTarget = true;
-                this.expect('.');
-                const property = this.parseIdentifierName();
-                expr = this.finalize(this.startNode(startToken), new Node.StaticMemberExpression(expr, property));
+            let optional = false;
+            if (this.match('?.')) {
+                optional = true;
+                hasOptional = true;
+                this.expect('?.');
+            }
 
-            } else if (this.match('(')) {
+            if (this.match('(')) {
                 const asyncArrow = maybeAsync && (startToken.lineNumber === this.lookahead.lineNumber);
                 this.context.isBindingElement = false;
                 this.context.isAssignmentTarget = false;
@@ -1320,7 +1321,7 @@ export class Parser {
                 if (expr.type === Syntax.Import && args.length !== 1) {
                     this.tolerateError(Messages.BadImportCallArity);
                 }
-                expr = this.finalize(this.startNode(startToken), new Node.CallExpression(expr, args));
+                expr = this.finalize(this.startNode(startToken), new Node.CallExpression(expr, args, optional));
                 if (asyncArrow && this.match('=>')) {
                     for (let i = 0; i < args.length; ++i) {
                         this.reinterpretExpressionAsPattern(args[i]);
@@ -1333,21 +1334,41 @@ export class Parser {
                 }
             } else if (this.match('[')) {
                 this.context.isBindingElement = false;
-                this.context.isAssignmentTarget = true;
+                this.context.isAssignmentTarget = !optional;
                 this.expect('[');
                 const property = this.isolateCoverGrammar(this.parseExpression);
                 this.expect(']');
-                expr = this.finalize(this.startNode(startToken), new Node.ComputedMemberExpression(expr, property));
+                expr = this.finalize(this.startNode(startToken), new Node.ComputedMemberExpression(expr, property, optional));
 
             } else if (this.lookahead.type === Token.Template && this.lookahead.head) {
+                // Optional template literal is not included in the spec.
+                // https://github.com/tc39/proposal-optional-chaining/issues/54
+                if (optional) {
+                    this.throwUnexpectedToken(this.lookahead);
+                }
+                if (hasOptional) {
+                    this.throwError(Messages.InvalidTaggedTemplateOnOptionalChain);
+                }
                 const quasi = this.parseTemplateLiteral({ isTagged: true });
                 expr = this.finalize(this.startNode(startToken), new Node.TaggedTemplateExpression(expr, quasi));
+
+            } else if (this.match('.') || optional) {
+                this.context.isBindingElement = false;
+                this.context.isAssignmentTarget = !optional;
+                if (!optional) {
+                    this.expect('.');
+                }
+                const property = this.parseIdentifierName();
+                expr = this.finalize(this.startNode(startToken), new Node.StaticMemberExpression(expr, property, optional));
 
             } else {
                 break;
             }
         }
         this.context.allowIn = previousAllowIn;
+        if (hasOptional) {
+            return new Node.ChainExpression(expr);
+        }
 
         return expr;
     }
@@ -1370,29 +1391,49 @@ export class Parser {
         let expr = (this.matchKeyword('super') && this.context.inFunctionBody) ? this.parseSuper() :
             this.inheritCoverGrammar(this.matchKeyword('new') ? this.parseNewExpression : this.parsePrimaryExpression);
 
+        let hasOptional = false;
         while (true) {
+            let optional = false;
+            if (this.match('?.')) {
+                optional = true;
+                hasOptional = true;
+                this.expect('?.');
+            }
             if (this.match('[')) {
                 this.context.isBindingElement = false;
-                this.context.isAssignmentTarget = true;
+                this.context.isAssignmentTarget = !optional;
                 this.expect('[');
                 const property = this.isolateCoverGrammar(this.parseExpression);
                 this.expect(']');
-                expr = this.finalize(node, new Node.ComputedMemberExpression(expr, property));
-
-            } else if (this.match('.')) {
-                this.context.isBindingElement = false;
-                this.context.isAssignmentTarget = true;
-                this.expect('.');
-                const property = this.parseIdentifierName();
-                expr = this.finalize(node, new Node.StaticMemberExpression(expr, property));
+                expr = this.finalize(node, new Node.ComputedMemberExpression(expr, property, optional));
 
             } else if (this.lookahead.type === Token.Template && this.lookahead.head) {
+                // Optional template literal is not included in the spec.
+                // https://github.com/tc39/proposal-optional-chaining/issues/54
+                if (optional) {
+                    this.throwUnexpectedToken(this.lookahead);
+                }
+                if (hasOptional) {
+                    this.throwError(Messages.InvalidTaggedTemplateOnOptionalChain);
+                }
                 const quasi = this.parseTemplateLiteral({ isTagged: true });
                 expr = this.finalize(node, new Node.TaggedTemplateExpression(expr, quasi));
+
+            } else if (this.match('.') || optional) {
+                this.context.isBindingElement = false;
+                this.context.isAssignmentTarget = !optional;
+                if (!optional) {
+                    this.expect('.');
+                }
+                const property = this.parseIdentifierName();
+                expr = this.finalize(node, new Node.StaticMemberExpression(expr, property, optional));
 
             } else {
                 break;
             }
+        }
+        if (hasOptional) {
+            return new Node.ChainExpression(expr);
         }
 
         return expr;

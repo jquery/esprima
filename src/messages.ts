@@ -27,6 +27,7 @@ export const Messages = {
     InvalidLHSInForLoop: 'Invalid left-hand side in for-loop',
     InvalidModuleSpecifier: 'Unexpected token',
     InvalidRegExp: 'Invalid regular expression',
+    InvalidTaggedTemplateOnOptionalChain: 'Invalid tagged template on optional chain',
     InvalidUnicodeEscapeSequence: 'Invalid Unicode escape sequence',
     LetInLexicalBinding: 'let is disallowed as a lexically bound name',
     MissingFromClause: 'Unexpected token',

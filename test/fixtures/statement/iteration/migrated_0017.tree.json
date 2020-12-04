@@ -81,6 +81,7 @@
                             }
                         }
                     ],
+                    "optional": false,
                     "range": [
                         15,
                         25

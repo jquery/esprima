@@ -53,6 +53,8 @@
                 },
                 "arguments": [
                     {
+                        "type": "Identifier",
+                        "name": "g",
                         "range": [
                             2,
                             3
@@ -66,9 +68,7 @@
                                 "line": 1,
                                 "column": 3
                             }
-                        },
-                        "type": "Identifier",
-                        "name": "g"
+                        }
                     },
                     {
                         "range": [
@@ -141,7 +141,8 @@
                             }
                         }
                     }
-                ]
+                ],
+                "optional": false
             }
         }
     ],

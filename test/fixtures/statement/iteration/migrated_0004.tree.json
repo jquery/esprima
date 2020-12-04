@@ -26,6 +26,7 @@
                         }
                     },
                     "arguments": [],
+                    "optional": false,
                     "range": [
                         3,
                         9

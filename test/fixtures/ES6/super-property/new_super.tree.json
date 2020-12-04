@@ -223,7 +223,8 @@
                                                     },
                                                     "type": "Identifier",
                                                     "name": "bar"
-                                                }
+                                                },
+                                                "optional": false
                                             },
                                             "arguments": []
                                         }

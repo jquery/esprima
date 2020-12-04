@@ -47,6 +47,7 @@
                                 }
                             },
                             "arguments": [],
+                            "optional": false,
                             "range": [
                                 9,
                                 17

@@ -207,7 +207,8 @@
                                                 },
                                                 "type": "Identifier",
                                                 "name": "yield"
-                                            }
+                                            },
+                                            "optional": false
                                         }
                                     }
                                 ]

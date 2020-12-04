@@ -100,7 +100,8 @@
                         },
                         "type": "Identifier",
                         "name": "foo"
-                    }
+                    },
+                    "optional": false
                 },
                 "right": {
                     "range": [

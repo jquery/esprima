@@ -62,6 +62,7 @@
                             }
                         }
                     },
+                    "optional": false,
                     "range": [
                         0,
                         14
@@ -78,6 +79,7 @@
                     }
                 },
                 "arguments": [],
+                "optional": false,
                 "range": [
                     0,
                     16

@@ -207,7 +207,8 @@
                                                 },
                                                 "type": "Identifier",
                                                 "name": "y"
-                                            }
+                                            },
+                                            "optional": false
                                         }
                                     }
                                 ]

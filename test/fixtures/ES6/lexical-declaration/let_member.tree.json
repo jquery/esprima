@@ -100,7 +100,8 @@
                         },
                         "type": "Identifier",
                         "name": "let"
-                    }
+                    },
+                    "optional": false
                 },
                 "right": {
                     "range": [
