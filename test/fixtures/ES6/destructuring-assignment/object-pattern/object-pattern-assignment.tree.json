@@ -458,7 +458,8 @@
                                         "type": "Identifier",
                                         "name": "some_call"
                                     },
-                                    "arguments": []
+                                    "arguments": [],
+                                    "optional": false
                                 },
                                 "property": {
                                     "range": [
@@ -477,7 +478,8 @@
                                     },
                                     "type": "Identifier",
                                     "name": "a"
-                                }
+                                },
+                                "optional": false
                             },
                             "kind": "init",
                             "method": false,
@@ -569,7 +571,8 @@
                                     },
                                     "type": "Identifier",
                                     "name": "a"
-                                }
+                                },
+                                "optional": false
                             },
                             "kind": "init",
                             "method": false,

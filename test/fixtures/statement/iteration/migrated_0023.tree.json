@@ -231,6 +231,7 @@
                             }
                         }
                     ],
+                    "optional": false,
                     "range": [
                         53,
                         63

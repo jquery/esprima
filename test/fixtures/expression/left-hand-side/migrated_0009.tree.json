@@ -24,6 +24,7 @@
                     }
                 },
                 "arguments": [],
+                "optional": false,
                 "range": [
                     0,
                     13

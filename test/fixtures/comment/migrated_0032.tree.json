@@ -67,6 +67,7 @@
                                     }
                                 },
                                 "arguments": [],
+                                "optional": false,
                                 "trailingComments": [
                                     {
                                         "type": "Block",

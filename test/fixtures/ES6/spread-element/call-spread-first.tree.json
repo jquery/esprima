@@ -123,7 +123,8 @@
                         "type": "Identifier",
                         "name": "z"
                     }
-                ]
+                ],
+                "optional": false
             }
         }
     ],

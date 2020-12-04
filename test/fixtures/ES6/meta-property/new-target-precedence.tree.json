@@ -170,7 +170,8 @@
                                 },
                                 "arguments": []
                             },
-                            "arguments": []
+                            "arguments": [],
+                            "optional": false
                         }
                     }
                 ]

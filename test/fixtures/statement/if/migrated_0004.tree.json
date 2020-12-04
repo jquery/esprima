@@ -44,6 +44,7 @@
                         }
                     },
                     "arguments": [],
+                    "optional": false,
                     "range": [
                         13,
                         26
@@ -97,6 +98,7 @@
                         }
                     },
                     "arguments": [],
+                    "optional": false,
                     "range": [
                         33,
                         42

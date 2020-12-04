@@ -87,7 +87,8 @@
                             "name": "g"
                         }
                     }
-                ]
+                ],
+                "optional": false
             }
         }
     ],

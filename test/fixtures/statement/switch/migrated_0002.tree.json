@@ -67,6 +67,7 @@
                                     }
                                 },
                                 "arguments": [],
+                                "optional": false,
                                 "range": [
                                     27,
                                     31

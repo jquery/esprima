@@ -157,7 +157,8 @@
                             "name": "z"
                         }
                     }
-                ]
+                ],
+                "optional": false
             }
         }
     ],

@@ -137,7 +137,8 @@
                                     },
                                     "type": "Identifier",
                                     "name": "yield"
-                                }
+                                },
+                                "optional": false
                             },
                             "delegate": false
                         }

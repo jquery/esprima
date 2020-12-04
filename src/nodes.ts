@@ -5,12 +5,13 @@ export type ArrayExpressionElement = Expression | SpreadElement | null;
 export type ArrayPatternElement = AssignmentPattern | BindingIdentifier | BindingPattern | RestElement | null;
 export type BindingPattern = ArrayPattern | ObjectPattern;
 export type BindingIdentifier = Identifier;
+export type ChainElement = CallExpression | ComputedMemberExpression | StaticMemberExpression;
 export type Declaration = AsyncFunctionDeclaration | ClassDeclaration | ExportDeclaration | FunctionDeclaration | ImportDeclaration | VariableDeclaration;
 export type ExportableDefaultDeclaration = BindingIdentifier | BindingPattern | ClassDeclaration | Expression | FunctionDeclaration;
 export type ExportableNamedDeclaration = AsyncFunctionDeclaration | ClassDeclaration | FunctionDeclaration | VariableDeclaration;
 export type ExportDeclaration = ExportAllDeclaration | ExportDefaultDeclaration | ExportNamedDeclaration;
 export type Expression = ArrayExpression | ArrowFunctionExpression | AssignmentExpression | AsyncArrowFunctionExpression | AsyncFunctionExpression |
-    AwaitExpression | BinaryExpression | CallExpression | ClassExpression | ComputedMemberExpression |
+    AwaitExpression | BinaryExpression | CallExpression | ChainExpression | ClassExpression | ComputedMemberExpression |
     ConditionalExpression | Identifier | FunctionExpression | Literal | NewExpression | ObjectExpression |
     RegexLiteral | SequenceExpression | StaticMemberExpression | TaggedTemplateExpression |
     ThisExpression | UnaryExpression | UpdateExpression | YieldExpression;
@@ -189,10 +190,12 @@ export class CallExpression {
     readonly type: string;
     readonly callee: Expression | Import;
     readonly arguments: ArgumentListElement[];
-    constructor(callee: Expression | Import, args: ArgumentListElement[]) {
+    readonly optional: boolean;
+    constructor(callee: Expression | Import, args: ArgumentListElement[], optional: boolean) {
         this.type = Syntax.CallExpression;
         this.callee = callee;
         this.arguments = args;
+        this.optional = optional;
     }
 }
 
@@ -204,6 +207,15 @@ export class CatchClause {
         this.type = Syntax.CatchClause;
         this.param = param;
         this.body = body;
+    }
+}
+
+export class ChainExpression {
+    readonly type: string;
+    readonly expression: ChainElement;
+    constructor(expression: ChainElement) {
+        this.type = Syntax.ChainExpression;
+        this.expression = expression;
     }
 }
 
@@ -247,11 +259,13 @@ export class ComputedMemberExpression {
     readonly computed: boolean;
     readonly object: Expression;
     readonly property: Expression;
-    constructor(object: Expression, property: Expression) {
+    readonly optional: boolean;
+    constructor(object: Expression, property: Expression, optional: boolean) {
         this.type = Syntax.MemberExpression;
         this.computed = true;
         this.object = object;
         this.property = property;
+        this.optional = optional;
     }
 }
 
@@ -690,11 +704,13 @@ export class StaticMemberExpression {
     readonly computed: boolean;
     readonly object: Expression;
     readonly property: Expression;
-    constructor(object: Expression, property: Expression) {
+    readonly optional: boolean;
+    constructor(object: Expression, property: Expression, optional: boolean) {
         this.type = Syntax.MemberExpression;
         this.computed = false;
         this.object = object;
         this.property = property;
+        this.optional = optional;
     }
 }
 

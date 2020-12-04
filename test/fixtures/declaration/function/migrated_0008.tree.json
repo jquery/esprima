@@ -54,6 +54,7 @@
                                             }
                                         },
                                         "arguments": [],
+                                        "optional": false,
                                         "range": [
                                             22,
                                             29

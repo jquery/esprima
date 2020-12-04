@@ -189,7 +189,8 @@
                                                 },
                                                 "type": "Super"
                                             },
-                                            "arguments": []
+                                            "arguments": [],
+                                            "optional": false
                                         }
                                     }
                                 ]

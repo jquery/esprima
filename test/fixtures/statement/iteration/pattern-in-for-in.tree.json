@@ -104,7 +104,8 @@
                             },
                             "type": "Identifier",
                             "name": "a"
-                        }
+                        },
+                        "optional": false
                     },
                     {
                         "range": [
@@ -393,7 +394,8 @@
                                                     "type": "Identifier",
                                                     "name": "h"
                                                 },
-                                                "arguments": []
+                                                "arguments": [],
+                                                "optional": false
                                             },
                                             "property": {
                                                 "range": [
@@ -412,7 +414,8 @@
                                                 },
                                                 "type": "Identifier",
                                                 "name": "a"
-                                            }
+                                            },
+                                            "optional": false
                                         },
                                         {
                                             "range": [
@@ -467,7 +470,8 @@
                                                 },
                                                 "type": "Identifier",
                                                 "name": "k"
-                                            }
+                                            },
+                                            "optional": false
                                         },
                                         {
                                             "range": [
@@ -538,7 +542,8 @@
                                                     "type": "Literal",
                                                     "value": 0,
                                                     "raw": "0"
-                                                }
+                                                },
+                                                "optional": false
                                             }
                                         }
                                     ]

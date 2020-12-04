@@ -137,9 +137,11 @@
                                     },
                                     "type": "Identifier",
                                     "name": "yield"
-                                }
+                                },
+                                "optional": false
                             },
-                            "arguments": []
+                            "arguments": [],
+                            "optional": false
                         }
                     }
                 ]

@@ -608,6 +608,20 @@ export class Scanner {
                 ++this.index;
                 this.curlyStack.pop();
                 break;
+
+            case '?':
+                ++this.index;
+                if (this.source[this.index] === '?') {
+                    ++this.index;
+                    str = '??';
+                } if (this.source[this.index] === '.' && !/^\d$/.test(this.source[this.index + 1])) {
+                    // "?." in "foo?.3:0" should not be treated as optional chaining.
+                    // See https://github.com/tc39/proposal-optional-chaining#notes
+                    ++this.index;
+                    str = '?.';
+                }
+                break;
+
             case ')':
             case ';':
             case ',':
@@ -647,7 +661,7 @@ export class Scanner {
 
                             // 1-character punctuators.
                             str = this.source[this.index];
-                            if ('<>=!+-*%&|?^/'.indexOf(str) >= 0) {
+                            if ('<>=!+-*%&|^/'.indexOf(str) >= 0) {
                                 ++this.index;
                             }
                         }
