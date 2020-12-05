@@ -55,7 +55,7 @@ export const Character = {
     },
 
     isDecimalDigitChar(ch: string): ch is '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' {
-        return Character.isDecimalDigit(ch.charCodeAt(0));
+        return ch.length === 1 && Character.isDecimalDigit(ch.charCodeAt(0));
     },
 
     isHexDigit(cp: number): boolean {
