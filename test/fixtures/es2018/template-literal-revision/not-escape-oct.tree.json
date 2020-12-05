@@ -1,0 +1,99 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "ExpressionStatement",
+            "expression": {
+                "type": "TemplateLiteral",
+                "quasis": [
+                    {
+                        "type": "TemplateElement",
+                        "value": {
+                            "raw": "\\0YY",
+                            "cooked": "\u0000YY"
+                        },
+                        "tail": true,
+                        "range": [
+                            0,
+                            6
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 0
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 6
+                            }
+                        }
+                    }
+                ],
+                "expressions": [],
+                "range": [
+                    0,
+                    6
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 6
+                    }
+                }
+            },
+            "range": [
+                0,
+                6
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 6
+                }
+            }
+        }
+    ],
+    "sourceType": "script",
+    "range": [
+        0,
+        6
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 6
+        }
+    },
+    "tokens": [
+        {
+            "type": "Template",
+            "value": "`\\0YY`",
+            "range": [
+                0,
+                6
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 6
+                }
+            }
+        }
+    ]
+}
