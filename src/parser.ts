@@ -60,6 +60,10 @@ interface TokenEntry {
     loc?: SourceLocation;
 }
 
+interface ParseTemplateLiteralOptions {
+    isTagged: boolean;
+}
+
 /* eslint-disable @typescript-eslint/unbound-method */
 
 export class Parser {
@@ -644,7 +648,7 @@ export class Parser {
                 break;
 
             case Token.Template:
-                expr = this.parseTemplateLiteral();
+                expr = this.parseTemplateLiteral({ isTagged: false });
                 break;
 
             case Token.Punctuator:
@@ -939,43 +943,63 @@ export class Parser {
         return this.finalize(node, new Node.ObjectExpression(properties));
     }
 
+    // https://tc39.es/proposal-template-literal-revision/#sec-static-semantics-template-early-errors
+    throwTemplateLiteralEarlyErrors(token: RawToken): never {
+        switch (token.notEscapeSequenceHead) {
+            case 'u':
+                return this.throwUnexpectedToken(token, Messages.InvalidUnicodeEscapeSequence);
+            case 'x':
+                return this.throwUnexpectedToken(token, Messages.InvalidHexEscapeSequence);
+            case '8':
+            case '9':
+                return this.throwUnexpectedToken(token, Messages.TemplateEscape89);
+            default: // For 0-7
+                return this.throwUnexpectedToken(token, Messages.TemplateOctalLiteral);
+        }
+    }
     // https://tc39.github.io/ecma262/#sec-template-literals
 
-    parseTemplateHead(): Node.TemplateElement {
+    parseTemplateHead(options: ParseTemplateLiteralOptions): Node.TemplateElement {
         assert(this.lookahead.head as boolean, 'Template literal must start with a template head');
 
         const node = this.createNode();
         const token = this.nextToken();
+        if (!options.isTagged && token.notEscapeSequenceHead !== null) {
+            this.throwTemplateLiteralEarlyErrors(token);
+        }
         const raw = token.value as string;
         const cooked = token.cooked as string;
 
         return this.finalize(node, new Node.TemplateElement({ raw, cooked }, token.tail as boolean));
     }
 
-    parseTemplateElement(): Node.TemplateElement {
+    parseTemplateElement(options: ParseTemplateLiteralOptions): Node.TemplateElement {
         if (this.lookahead.type !== Token.Template) {
             this.throwUnexpectedToken();
         }
 
         const node = this.createNode();
         const token = this.nextToken();
+        if (!options.isTagged && token.notEscapeSequenceHead !== null) {
+            this.throwTemplateLiteralEarlyErrors(token);
+        }
         const raw = token.value as string;
         const cooked = token.cooked as string;
 
         return this.finalize(node, new Node.TemplateElement({ raw, cooked }, token.tail as boolean));
     }
 
-    parseTemplateLiteral(): Node.TemplateLiteral {
+    parseTemplateLiteral(options: ParseTemplateLiteralOptions): Node.TemplateLiteral {
         const node = this.createNode();
 
         const expressions: Node.Expression[] = [];
         const quasis: Node.TemplateElement[] = [];
 
-        let quasi = this.parseTemplateHead();
+        let quasi = this.parseTemplateHead(options);
         quasis.push(quasi);
         while (!quasi.tail) {
             expressions.push(this.parseExpression());
-            quasi = this.parseTemplateElement();
+            quasi = this.parseTemplateElement(options);
             quasis.push(quasi);
         }
 
@@ -1316,7 +1340,7 @@ export class Parser {
                 expr = this.finalize(this.startNode(startToken), new Node.ComputedMemberExpression(expr, property));
 
             } else if (this.lookahead.type === Token.Template && this.lookahead.head) {
-                const quasi = this.parseTemplateLiteral();
+                const quasi = this.parseTemplateLiteral({ isTagged: true });
                 expr = this.finalize(this.startNode(startToken), new Node.TaggedTemplateExpression(expr, quasi));
 
             } else {
@@ -1363,7 +1387,7 @@ export class Parser {
                 expr = this.finalize(node, new Node.StaticMemberExpression(expr, property));
 
             } else if (this.lookahead.type === Token.Template && this.lookahead.head) {
-                const quasi = this.parseTemplateLiteral();
+                const quasi = this.parseTemplateLiteral({ isTagged: true });
                 expr = this.finalize(node, new Node.TaggedTemplateExpression(expr, quasi));
 
             } else {
