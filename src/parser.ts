@@ -2650,29 +2650,32 @@ export class Parser {
 
         this.expectKeyword('catch');
 
-        this.expect('(');
-        if (this.match(')')) {
-            this.throwUnexpectedToken(this.lookahead);
-        }
-
-        const params: any[] = [];
-        const param = this.parsePattern(params);
-        const paramMap = {};
-        for (let i = 0; i < params.length; i++) {
-            const key = '$' + params[i].value;
-            if (Object.prototype.hasOwnProperty.call(paramMap, key)) {
-                this.tolerateError(Messages.DuplicateBinding, params[i].value);
+        let param: Node.BindingIdentifier | Node.BindingPattern | null = null;
+        if (this.match('(')) {
+            this.expect('(');
+            if (this.match(')')) {
+                this.throwUnexpectedToken(this.lookahead);
             }
-            paramMap[key] = true;
-        }
 
-        if (this.context.strict && param.type === Syntax.Identifier) {
-            if (this.scanner.isRestrictedWord((param as Node.Identifier).name)) {
-                this.tolerateError(Messages.StrictCatchVariable);
+            const params: any[] = [];
+            param = this.parsePattern(params);
+            const paramMap = {};
+            for (let i = 0; i < params.length; i++) {
+                const key = '$' + params[i].value;
+                if (Object.prototype.hasOwnProperty.call(paramMap, key)) {
+                    this.tolerateError(Messages.DuplicateBinding, params[i].value);
+                }
+                paramMap[key] = true;
             }
-        }
 
-        this.expect(')');
+            if (this.context.strict && param.type === Syntax.Identifier) {
+                if (this.scanner.isRestrictedWord((param as Node.Identifier).name)) {
+                    this.tolerateError(Messages.StrictCatchVariable);
+                }
+            }
+
+            this.expect(')');
+        }
         const body = this.parseBlock();
 
         return this.finalize(node, new Node.CatchClause(param, body));
