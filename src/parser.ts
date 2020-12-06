@@ -694,6 +694,11 @@ export class Parser {
                         expr = this.parseClassExpression();
                     } else if (this.matchImportCall()) {
                         expr = this.parseImportCall();
+                    } else if (this.matchImportMeta()) {
+                        if (!this.context.isModule) {
+                            this.tolerateUnexpectedToken(this.lookahead, Messages.CannotUseImportMetaOutsideAModule);
+                        }
+                        expr = this.parseImportMeta();
                     } else {
                         expr = this.throwUnexpectedToken(this.nextToken());
                     }
@@ -1283,6 +1288,39 @@ export class Parser {
         const node = this.createNode();
         this.expectKeyword('import');
         return this.finalize(node, new Node.Import());
+    }
+
+    matchImportMeta(): boolean {
+        let match = this.matchKeyword('import');
+        if (match) {
+            const state = this.scanner.saveState();
+            this.scanner.scanComments();
+            const dot = this.scanner.lex();
+            if ((dot.type === Token.Punctuator) && (dot.value === '.')) {
+                this.scanner.scanComments();
+                const meta = this.scanner.lex();
+                match = (meta.type === Token.Identifier) && (meta.value === 'meta');
+                if (match) {
+                    if (meta.end - meta.start !== 'meta'.length) {
+                        this.tolerateUnexpectedToken(meta, Messages.InvalidEscapedReservedWord);
+                    }
+                }
+            } else {
+                match = false;
+            }
+            this.scanner.restoreState(state);
+        }
+
+        return match;
+    }
+
+    parseImportMeta(): Node.MetaProperty {
+        const node = this.createNode();
+        const id = this.parseIdentifierName(); // 'import', already ensured by matchImportMeta
+        this.expect('.');
+        const property = this.parseIdentifierName(); // 'meta', already ensured by matchImportMeta
+        this.context.isAssignmentTarget = false;
+        return this.finalize(node, new Node.MetaProperty(id, property));
     }
 
     parseLeftHandSideExpressionAllowCall(): Node.Expression {
@@ -1897,6 +1935,8 @@ export class Parser {
                 case 'import':
                     if (this.matchImportCall()) {
                         statement = this.parseExpressionStatement();
+                    } else if (this.matchImportMeta()) {
+                        statement = this.parseStatement();
                     } else {
                         if (!this.context.isModule) {
                             this.tolerateUnexpectedToken(this.lookahead, Messages.IllegalImportDeclaration);

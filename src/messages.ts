@@ -4,6 +4,7 @@ export const Messages = {
     BadGetterArity: 'Getter must not have any formal parameters',
     BadSetterArity: 'Setter must have exactly one formal parameter',
     BadSetterRestParameter: 'Setter function argument must not be a rest parameter',
+    CannotUseImportMetaOutsideAModule: 'Cannot use \'import.meta\' outside a module',
     ConstructorIsAsync: 'Class constructor may not be an async method',
     ConstructorSpecialMethod: 'Class constructor may not be an accessor',
     DeclarationMissingInitializer: 'Missing initializer in %0 declaration',
