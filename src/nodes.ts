@@ -330,9 +330,11 @@ export class EmptyStatement {
 export class ExportAllDeclaration {
     readonly type: string;
     readonly source: Literal;
-    constructor(source: Literal) {
+    readonly exported: Identifier | null;
+    constructor(source: Literal, exported: Identifier | null) {
         this.type = Syntax.ExportAllDeclaration;
         this.source = source;
+        this.exported = exported;
     }
 }
 

@@ -3678,6 +3678,11 @@ export class Parser {
         } else if (this.match('*')) {
             // export * from 'foo';
             this.nextToken();
+            let exported: Node.Identifier | null = null;
+            if (this.matchContextualKeyword('as')) {
+                this.nextToken();
+                exported = this.parseIdentifierName();
+            }
             if (!this.matchContextualKeyword('from')) {
                 const message = this.lookahead.value ? Messages.UnexpectedToken : Messages.MissingFromClause;
                 this.throwError(message, this.lookahead.value);
@@ -3685,7 +3690,7 @@ export class Parser {
             this.nextToken();
             const src = this.parseModuleSpecifier();
             this.consumeSemicolon();
-            exportDeclaration = this.finalize(node, new Node.ExportAllDeclaration(src));
+            exportDeclaration = this.finalize(node, new Node.ExportAllDeclaration(src, exported));
 
         } else if (this.lookahead.type === Token.Keyword) {
             // export var f = 1;
