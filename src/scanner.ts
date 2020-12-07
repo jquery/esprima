@@ -527,7 +527,7 @@ export class Scanner {
 
             // 3 digits are only allowed when string starts
             // with 0, 1, 2, 3
-            if ('0123'.indexOf(ch) >= 0 && !this.eof() && Character.isOctalDigit(this.source.charCodeAt(this.index))) {
+            if ('0123'.includes(ch) && !this.eof() && Character.isOctalDigit(this.source.charCodeAt(this.index))) {
                 code = code * 8 + octalValue(this.source[this.index++]);
             }
         }
@@ -661,7 +661,7 @@ export class Scanner {
 
                             // 1-character punctuators.
                             str = this.source[this.index];
-                            if ('<>=!+-*%&|^/'.indexOf(str) >= 0) {
+                            if ('<>=!+-*%&|^/'.includes(str)) {
                                 ++this.index;
                             }
                         }
@@ -1136,7 +1136,7 @@ export class Scanner {
         const astralSubstitute = '\uFFFF';
         let tmp = pattern;
 
-        if (flags.indexOf('u') >= 0) {
+        if (flags.includes('u')) {
             tmp = tmp
                 // Replace every Unicode escape sequence with the equivalent
                 // BMP character or a constant ASCII code point in the case of

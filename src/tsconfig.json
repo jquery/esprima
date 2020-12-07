@@ -1,9 +1,10 @@
 {
 	"compilerOptions": {
-		"target": "ES5",
+		"target": "ES6",
 		"module": "commonjs",
 		"noImplicitAny": false,
-		"strict": true
+		"strict": true,
+		"lib": ["ES2015"]
 	},
 	"files": [
 		"assert.ts",
