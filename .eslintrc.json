@@ -12,7 +12,9 @@
     "parserOptions": {
         "sourceType": "script"
     },
+    "plugins": ["esprima-internal"],
     "rules": {
+        "esprima-internal/esprima-complexity": "error",
         "no-case-declarations": "off",
         "no-constant-condition": ["error", { "checkLoops": false }]
     },
