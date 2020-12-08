@@ -1,0 +1,5 @@
+{
+  "name": "eslint-plugin-esprima-internal",
+  "version": "0.0.1",
+  "main": "index.js"
+}
