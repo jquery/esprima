@@ -4,7 +4,7 @@
         {
             "range": [
                 0,
-                29
+                26
             ],
             "loc": {
                 "start": {
@@ -13,14 +13,14 @@
                 },
                 "end": {
                     "line": 1,
-                    "column": 29
+                    "column": 26
                 }
             },
             "type": "ExpressionStatement",
             "expression": {
                 "range": [
                     0,
-                    29
+                    26
                 ],
                 "loc": {
                     "start": {
@@ -29,7 +29,7 @@
                     },
                     "end": {
                         "line": 1,
-                        "column": 29
+                        "column": 26
                     }
                 },
                 "type": "TemplateLiteral",
@@ -37,7 +37,7 @@
                     {
                         "range": [
                             0,
-                            29
+                            26
                         ],
                         "loc": {
                             "start": {
@@ -46,13 +46,13 @@
                             },
                             "end": {
                                 "line": 1,
-                                "column": 29
+                                "column": 26
                             }
                         },
                         "type": "TemplateElement",
                         "value": {
-                            "raw": "\\u{000042}\\u0042\\x42\\u0\\A\\0",
-                            "cooked": "BBBu0A\u0000"
+                            "raw": "\\u{000042}\\u0042\\x42\\A\\0",
+                            "cooked": "BBBA\u0000"
                         },
                         "tail": true
                     }
@@ -65,10 +65,10 @@
     "tokens": [
         {
             "type": "Template",
-            "value": "`\\u{000042}\\u0042\\x42\\u0\\A\\0`",
+            "value": "`\\u{000042}\\u0042\\x42\\A\\0`",
             "range": [
                 0,
-                29
+                26
             ],
             "loc": {
                 "start": {
@@ -77,14 +77,14 @@
                 },
                 "end": {
                     "line": 1,
-                    "column": 29
+                    "column": 26
                 }
             }
         }
     ],
     "range": [
         0,
-        29
+        26
     ],
     "loc": {
         "start": {
@@ -93,7 +93,7 @@
         },
         "end": {
             "line": 1,
-            "column": 29
+            "column": 26
         }
     }
 }

@@ -30,6 +30,9 @@ export interface Comment {
     loc: SourceLocation;
 }
 
+// See: https://tc39.es/ecma262/#prod-NotEscapeSequence
+type NotEscapeSequenceHead = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'x' | 'u';
+
 export interface RawToken {
     type: Token;
     value: string | number;
@@ -37,7 +40,8 @@ export interface RawToken {
     flags?: string;
     regex?: RegExp | null;
     octal?: boolean;
-    cooked?: string;
+    cooked?: string | null;
+    notEscapeSequenceHead?: NotEscapeSequenceHead | null;
     head?: boolean;
     tail?: boolean;
     lineNumber: number;
@@ -401,13 +405,13 @@ export class Scanner {
         return String.fromCharCode(code);
     }
 
-    private scanUnicodeCodePointEscape(): string {
+    private tryToScanUnicodeCodePointEscape(): string | null {
         let ch = this.source[this.index];
         let code = 0;
 
         // At least, one hex digit is required.
         if (ch === '}') {
-            this.throwUnexpectedToken();
+            return null;
         }
 
         while (!this.eof()) {
@@ -419,10 +423,18 @@ export class Scanner {
         }
 
         if (code > 0x10FFFF || ch !== '}') {
-            this.throwUnexpectedToken();
+            return null;
         }
 
         return Character.fromCodePoint(code);
+    }
+
+    private scanUnicodeCodePointEscape(): string {
+        const result = this.tryToScanUnicodeCodePointEscape();
+        if (result === null) {
+            return this.throwUnexpectedToken();
+        }
+        return result;
     }
 
     private getIdentifier(): string {
@@ -970,6 +982,7 @@ export class Scanner {
 
         const head = (this.source[start] === '`');
         let tail = false;
+        let notEscapeSequenceHead: NotEscapeSequenceHead | null = null;
         let rawOffset = 2;
 
         ++this.index;
@@ -989,6 +1002,8 @@ export class Scanner {
                     break;
                 }
                 cooked += ch;
+            } else if (notEscapeSequenceHead !== null) {
+                continue;
             } else if (ch === '\\') {
                 ch = this.source[this.index++];
                 if (!Character.isLineTerminator(ch.charCodeAt(0))) {
@@ -1005,24 +1020,28 @@ export class Scanner {
                         case 'u':
                             if (this.source[this.index] === '{') {
                                 ++this.index;
-                                cooked += this.scanUnicodeCodePointEscape();
-                            } else {
-                                const restore = this.index;
-                                const unescapedChar = this.scanHexEscape(ch);
-                                if (unescapedChar !== null) {
-                                    cooked += unescapedChar;
+                                const unicodeCodePointEscape = this.tryToScanUnicodeCodePointEscape();
+                                if (unicodeCodePointEscape === null) {
+                                    notEscapeSequenceHead = 'u';
                                 } else {
-                                    this.index = restore;
-                                    cooked += ch;
+                                    cooked += unicodeCodePointEscape;
+                                }
+                            } else {
+                                const unescapedChar = this.scanHexEscape(ch);
+                                if (unescapedChar === null) {
+                                    notEscapeSequenceHead = 'u';
+                                } else {
+                                    cooked += unescapedChar;
                                 }
                             }
                             break;
                         case 'x':
                             const unescaped = this.scanHexEscape(ch);
                             if (unescaped === null) {
-                                this.throwUnexpectedToken(Messages.InvalidHexEscapeSequence);
+                                notEscapeSequenceHead = 'x';
+                            } else {
+                                cooked += unescaped;
                             }
-                            cooked += unescaped;
                             break;
                         case 'b':
                             cooked += '\b';
@@ -1037,13 +1056,14 @@ export class Scanner {
                         default:
                             if (ch === '0') {
                                 if (Character.isDecimalDigit(this.source.charCodeAt(this.index))) {
-                                    // Illegal: \01 \02 and so on
-                                    this.throwUnexpectedToken(Messages.TemplateOctalLiteral);
+                                    // NotEscapeSequence: \01 \02 and so on
+                                    notEscapeSequenceHead = '0';
+                                } else {
+                                    cooked += '\0';
                                 }
-                                cooked += '\0';
-                            } else if (Character.isOctalDigit(ch.charCodeAt(0))) {
-                                // Illegal: \1 \2
-                                this.throwUnexpectedToken(Messages.TemplateOctalLiteral);
+                            } else if (Character.isDecimalDigitChar(ch)) {
+                                // NotEscapeSequence: \1 \2
+                                notEscapeSequenceHead = ch;
                             } else {
                                 cooked += ch;
                             }
@@ -1079,9 +1099,10 @@ export class Scanner {
         return {
             type: Token.Template,
             value: this.source.slice(start + 1, this.index - rawOffset),
-            cooked: cooked,
+            cooked: notEscapeSequenceHead === null ? cooked : null,
             head: head,
             tail: tail,
+            notEscapeSequenceHead: notEscapeSequenceHead,
             lineNumber: this.lineNumber,
             lineStart: this.lineStart,
             start: start,

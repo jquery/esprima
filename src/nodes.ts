@@ -739,7 +739,7 @@ export class TaggedTemplateExpression {
 }
 
 interface TemplateElementValue {
-    cooked: string;
+    cooked: string | null;
     raw: string;
 }
 
