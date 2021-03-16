@@ -51,6 +51,7 @@ export const Messages = {
     StrictParamName: 'Parameter name eval or arguments is not allowed in strict mode',
     StrictReservedWord: 'Use of future reserved word in strict mode',
     StrictVarName: 'Variable name may not be eval or arguments in strict mode',
+    SuperOutsideCall: 'super() call outside constructor of a subclass',
     TemplateOctalLiteral: 'Octal literals are not allowed in template strings.',
     TemplateEscape89: '\\8 and \\9 are not allowed in template strings.',
     UnexpectedEOS: 'Unexpected end of input',
