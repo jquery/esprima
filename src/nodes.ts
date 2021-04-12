@@ -485,8 +485,10 @@ export class IfStatement {
 
 export class Import {
     readonly type: string;
-    constructor() {
+    readonly source: Literal;
+    constructor(source) {
         this.type = Syntax.Import;
+        this.source = source;
     }
 }
 
