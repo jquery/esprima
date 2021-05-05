@@ -31,6 +31,10 @@
             "parserOptions": {
                 "sourceType": "module",
                 "project": "src/tsconfig.json"
+            },
+            "rules": {
+                "@typescript-eslint/no-explicit-any": ["off"],
+                "@typescript-eslint/explicit-function-return-type": ["off"]
             }
         }
     ]
