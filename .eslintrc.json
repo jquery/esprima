@@ -32,7 +32,9 @@
             "parser": "@typescript-eslint/parser",
             "parserOptions": {
                 "sourceType": "module",
-                "project": "src/tsconfig.json"
+                // error  Use 'includes()' method instead  @typescript-eslint/prefer-includes
+                // "project": "src/es.tsconfig.json"
+                "project": "src/cjs.tsconfig.json"
             },
             "rules": {
                 "@typescript-eslint/no-explicit-any": ["off"],
