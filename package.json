@@ -2,6 +2,7 @@
   "name": "esprima",
   "description": "ECMAScript parsing infrastructure for multipurpose analysis",
   "homepage": "http://esprima.org",
+  "sideEffects": false,
   "main": "dist/esprima.js",
   "bin": {
     "esparse": "./bin/esparse.js",
