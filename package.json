@@ -74,6 +74,7 @@
     "syntax"
   ],
   "scripts": {
+    "prepare": "test -f esprima/dist/esprima.js || npm run test",
     "check-version": "node test/check-version.js",
     "lint-code": "eslint src/*.ts",
     "code-style": "tsfmt --verify src/*.ts && tsfmt --verify test/*.js",
