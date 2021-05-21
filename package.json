@@ -20,7 +20,8 @@
   "files": [
     "bin",
     "dist/esprima.js",
-    "dist/esprima.mjs"
+    "dist/esprima.mjs",
+    "dist/tsc/es/esprima.d.ts"
   ],
   "engines": {
     "node": ">=8"
