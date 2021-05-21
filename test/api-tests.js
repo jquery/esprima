@@ -262,6 +262,32 @@ describe('esprima.parse', function () {
         assert.deepEqual(expression.closingElement, null);
     });
 
+    it('should understand JSX fragment', function () {
+        assert.doesNotThrow(function () {
+            esprima.parse('<></>', { jsx: true });
+        });
+    });
+
+    it('should understand JSX fragment syntax', function () {
+        var ast = esprima.parse('<></>', { jsx: true });
+        var statement = ast.body[0];
+        var expression = statement.expression;
+
+        assert.deepEqual(expression.type, 'JSXElement');
+        assert.deepEqual(expression.openingElement.type, 'JSXOpeningFragment');
+        assert.deepEqual(expression.closingElement.type, 'JSXClosingFragment');
+    });
+
+    it('should understand JSX fragment syntax', function () {
+        var ast = esprima.parse('<></>', { jsx: true });
+        var statement = ast.body[0];
+        var expression = statement.expression;
+
+        assert.deepEqual(expression.type, 'JSXElement');
+        assert.deepEqual(expression.openingElement.type, 'JSXOpeningFragment');
+        assert.deepEqual(expression.closingElement.type, 'JSXClosingFragment');
+    });
+
     it('should never produce shallow copied nodes', function () {
         var ast, pattern, expr;
         ast = esprima.parse('let {a, b} = {x, y, z}');
