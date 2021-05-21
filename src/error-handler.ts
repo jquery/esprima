@@ -1,15 +1,15 @@
-declare class Error {
-    public name: string;
-    public message: string;
-    public index: number;
-    public lineNumber: number;
-    public column: number;
-    public description: string;
-    constructor(message: string);
+export interface EsprimaError extends Error {
+    name: string;
+    message: string;
+    index: number;
+    lineNumber: number;
+    column: number;
+    description: string;
+    // constructor(message: string);
 }
 
 export class ErrorHandler {
-    readonly errors: Error[];
+    readonly errors: EsprimaError[];
     tolerant: boolean;
 
     constructor() {
@@ -17,11 +17,11 @@ export class ErrorHandler {
         this.tolerant = false;
     }
 
-    recordError(error: Error): void {
+    recordError(error: EsprimaError): void {
         this.errors.push(error);
     }
 
-    tolerate(error): void {
+    tolerate(error: EsprimaError): void {
         if (this.tolerant) {
             this.recordError(error);
         } else {
@@ -44,12 +44,13 @@ export class ErrorHandler {
         return error;
     }
 
-    createError(index: number, line: number, col: number, description: string): Error {
+    createError(index: number, line: number, col: number, description: string): EsprimaError {
         const msg = 'Line ' + line + ': ' + description;
-        const error = this.constructError(msg, col);
-        error.index = index;
-        error.lineNumber = line;
-        error.description = description;
+        const _error = this.constructError(msg, col) as any;
+        _error.index = index;
+        _error.lineNumber = line;
+        _error.description = description;
+        const error: EsprimaError = _error
         return error;
     }
 

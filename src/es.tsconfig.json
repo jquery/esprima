@@ -5,7 +5,8 @@
 		"module": "esnext",
 		"noImplicitAny": false,
 		"strict": true,
-		"preserveConstEnums": false
+		"preserveConstEnums": false,
+		"declaration": true
 	},
 	"files": [
 		"assert.ts",

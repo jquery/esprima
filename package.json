@@ -4,6 +4,7 @@
   "homepage": "http://esprima.org",
   "main": "./dist/esprima.js",
   "module": "./dist/esprima.mjs",
+  "types": "./dist/tsc/es/esprima.d.ts",
   "exports": {
     ".": {
       "require": "./dist/esprima.js",
