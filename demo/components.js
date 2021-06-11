@@ -304,6 +304,7 @@ Demo = (function () {
                 language: language,
                 folding: false,
                 lineNumbersMinChars: 3,
+                fontSize: 14,
                 minimap: {
                     enabled: false
                 },
