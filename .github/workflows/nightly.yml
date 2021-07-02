@@ -1,0 +1,53 @@
+name: Publish nightly to npm
+
+on:
+  schedule:
+    - cron: "30 6 * * *"
+
+jobs:
+  check_date:
+    runs-on: ubuntu-latest
+    name: Check latest commit
+    outputs:
+      should_run: ${{ steps.should_run.outputs.should_run }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: print latest_commit
+        run: echo ${{ github.sha }}
+
+      - id: should_run
+        continue-on-error: true
+        name: check latest commit is less than a day
+        if: ${{ github.event_name == 'schedule' }}
+        run: test -z $(git rev-list  --after=24hours  ${{ github.sha }}) && echo "::set-output name=should_run::false"
+
+  publish:
+    needs: check_date
+    if: ${{ needs.check_date.outputs.should_run != 'false' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm test
+
+      - run: sudo apt install -y moreutils
+      - run: jq '.name="nightly-esprima"' package.json | sponge package.json
+        name: Edit package name
+      - run: |
+          jq --arg ver $(date +"%Y.%m.%d") '.version=$ver' package.json | sponge package.json
+          sed -i '/export const version/d' src/esprima.ts
+          echo "export const version = '$(date +'%Y.%m.%d')';" >> src/esprima.ts
+        name: Edit package version
+      - run: |
+          sed -i '1,4d' README.md
+          sed -i "s/require('esprima')/require('nightly-esprima')/" README.md
+        name: Tweak README
+      - run: git diff
+
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
