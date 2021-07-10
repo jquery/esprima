@@ -1,5 +1,5 @@
 import { assert } from './assert';
-import { ErrorHandler } from './error-handler';
+import { ErrorHandler, EsprimaError } from './error-handler';
 import { Messages } from './messages';
 import * as Node from './nodes';
 import { Comment, RawToken, Scanner, SourceLocation } from './scanner';
@@ -205,7 +205,7 @@ export class Parser {
     }
 
     // Throw an exception because of the token.
-    unexpectedTokenError(token?: any, message?: string): Error {
+    unexpectedTokenError(token?: any, message?: string): EsprimaError {
         let msg = message || Messages.UnexpectedToken;
 
         let value;

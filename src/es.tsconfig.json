@@ -1,9 +1,12 @@
 {
 	"compilerOptions": {
-		"target": "ES5",
-		"module": "commonjs",
+		"outDir": "../dist/tsc/es",
+		"target": "esnext",
+		"module": "esnext",
 		"noImplicitAny": false,
-		"strict": true
+		"strict": true,
+		"preserveConstEnums": false,
+		"declaration": true
 	},
 	"files": [
 		"assert.ts",
