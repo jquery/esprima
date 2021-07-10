@@ -5,27 +5,44 @@
             "type": "ExportAllDeclaration",
             "source": {
                 "type": "Literal",
-                "value": "foo",
-                "raw": "\"foo\"",
+                "value": "someModule",
+                "raw": "\"someModule\"",
                 "range": [
-                    14,
-                    19
+                    32,
+                    44
                 ],
                 "loc": {
                     "start": {
                         "line": 1,
-                        "column": 14
+                        "column": 32
                     },
                     "end": {
                         "line": 1,
-                        "column": 19
+                        "column": 44
                     }
                 }
             },
-            "exported": null,
+            "exported": {
+                "type": "Identifier",
+                "name": "someIdentifier",
+                "range": [
+                    12,
+                    26
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 26
+                    }
+                }
+            },
             "range": [
                 0,
-                20
+                44
             ],
             "loc": {
                 "start": {
@@ -34,12 +51,26 @@
                 },
                 "end": {
                     "line": 1,
-                    "column": 20
+                    "column": 44
                 }
             }
         }
     ],
     "sourceType": "module",
+    "range": [
+        0,
+        44
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 44
+        }
+    },
     "tokens": [
         {
             "type": "Keyword",
@@ -79,10 +110,10 @@
         },
         {
             "type": "Identifier",
-            "value": "from",
+            "value": "as",
             "range": [
                 9,
-                13
+                11
             ],
             "loc": {
                 "start": {
@@ -91,59 +122,63 @@
                 },
                 "end": {
                     "line": 1,
-                    "column": 13
+                    "column": 11
+                }
+            }
+        },
+        {
+            "type": "Identifier",
+            "value": "someIdentifier",
+            "range": [
+                12,
+                26
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 12
+                },
+                "end": {
+                    "line": 1,
+                    "column": 26
+                }
+            }
+        },
+        {
+            "type": "Identifier",
+            "value": "from",
+            "range": [
+                27,
+                31
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 27
+                },
+                "end": {
+                    "line": 1,
+                    "column": 31
                 }
             }
         },
         {
             "type": "String",
-            "value": "\"foo\"",
+            "value": "\"someModule\"",
             "range": [
-                14,
-                19
+                32,
+                44
             ],
             "loc": {
                 "start": {
                     "line": 1,
-                    "column": 14
+                    "column": 32
                 },
                 "end": {
                     "line": 1,
-                    "column": 19
-                }
-            }
-        },
-        {
-            "type": "Punctuator",
-            "value": ";",
-            "range": [
-                19,
-                20
-            ],
-            "loc": {
-                "start": {
-                    "line": 1,
-                    "column": 19
-                },
-                "end": {
-                    "line": 1,
-                    "column": 20
+                    "column": 44
                 }
             }
         }
-    ],
-    "range": [
-        0,
-        20
-    ],
-    "loc": {
-        "start": {
-            "line": 1,
-            "column": 0
-        },
-        "end": {
-            "line": 1,
-            "column": 20
-        }
-    }
+    ]
 }
