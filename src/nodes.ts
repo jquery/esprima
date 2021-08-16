@@ -115,12 +115,12 @@ export class AsyncFunctionDeclaration {
     readonly generator: boolean;
     readonly expression: boolean;
     readonly async: boolean;
-    constructor(id: Identifier | null, params: FunctionParameter[], body: BlockStatement) {
+    constructor(id: Identifier | null, params: FunctionParameter[], body: BlockStatement, generator: boolean) {
         this.type = Syntax.FunctionDeclaration;
         this.id = id;
         this.params = params;
         this.body = body;
-        this.generator = false;
+        this.generator = generator;
         this.expression = false;
         this.async = true;
     }
@@ -134,12 +134,12 @@ export class AsyncFunctionExpression {
     readonly generator: boolean;
     readonly expression: boolean;
     readonly async: boolean;
-    constructor(id: Identifier | null, params: FunctionParameter[], body: BlockStatement) {
+    constructor(id: Identifier | null, params: FunctionParameter[], body: BlockStatement, generator: boolean) {
         this.type = Syntax.FunctionExpression;
         this.id = id;
         this.params = params;
         this.body = body;
-        this.generator = false;
+        this.generator = generator;
         this.expression = false;
         this.async = true;
     }

@@ -1,5 +1,6 @@
 // Error messages should be identical to V8.
 export const Messages = {
+    AsyncFunctionInSingleStatementContext: 'Async functions can only be declared at the top level or inside a block.',
     BadImportCallArity: 'Unexpected token',
     BadGetterArity: 'Getter must not have any formal parameters',
     BadSetterArity: 'Setter must have exactly one formal parameter',
@@ -12,6 +13,7 @@ export const Messages = {
     DefaultRestProperty: 'Unexpected token =',
     DuplicateBinding: 'Duplicate binding %0',
     DuplicateConstructor: 'A class may only have one constructor',
+    DuplicateParameter: 'Duplicate parameter name not allowed in this context',
     DuplicateProtoProperty: 'Duplicate __proto__ fields are not allowed in object literals',
     ForInOfLoopInitializer: '%0 loop variable declaration may not have an initializer',
     GeneratorInLegacyContext: 'Generator declarations are not allowed in legacy contexts',
@@ -60,6 +62,7 @@ export const Messages = {
     UnexpectedNumber: 'Unexpected number',
     UnexpectedReserved: 'Unexpected reserved word',
     UnexpectedString: 'Unexpected string',
+    UnexpectedSuper: '\'super\' keyword unexpected here',
     UnexpectedTemplate: 'Unexpected quasi %0',
     UnexpectedToken: 'Unexpected token %0',
     UnexpectedTokenIllegal: 'Unexpected token ILLEGAL',
