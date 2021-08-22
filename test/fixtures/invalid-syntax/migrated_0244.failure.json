@@ -1,6 +1,1 @@
-{
-    "index": 15,
-    "lineNumber": 1,
-    "column": 16,
-    "message": "Error: Line 1: Strict mode function may not have duplicate parameter names"
-}
+{"index":15,"lineNumber":1,"column":16,"message":"Error: Line 1: Unexpected identifier","description":"Unexpected identifier"}

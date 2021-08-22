@@ -20,7 +20,7 @@ interface Context {
     allowIn: boolean;
     allowStrictDirective: boolean;
     allowYield: boolean;
-    await: boolean;
+    isAsync: boolean;
     firstCoverInitializedNameError: RawToken | null;
     isAssignmentTarget: boolean;
     isBindingElement: boolean;
@@ -144,7 +144,7 @@ export class Parser {
 
         this.context = {
             isModule: false,
-            await: false,
+            isAsync: false,
             allowIn: true,
             allowStrictDirective: true,
             allowYield: true,
@@ -621,7 +621,7 @@ export class Parser {
 
         switch (this.lookahead.type) {
             case Token.Identifier:
-                if ((this.context.isModule || this.context.await) && this.lookahead.value === 'await') {
+                if ((this.context.isModule || this.context.isAsync) && this.lookahead.value === 'await') {
                     this.tolerateUnexpectedToken(this.lookahead);
                 }
                 expr = this.matchAsyncFunction() ? this.parseFunctionExpression() : this.finalize(node, new Node.Identifier(this.nextToken().value));
@@ -796,18 +796,14 @@ export class Parser {
         const node = this.createNode();
 
         const previousAllowYield = this.context.allowYield;
-        const previousAwait = this.context.await;
+        const previousIsAsync = this.context.isAsync;
         this.context.allowYield = false;
-        this.context.await = true;
+        this.context.isAsync = true;
 
         const params = this.parseFormalParameters();
-        if (params.message === Messages.StrictParamDupe) {
-            this.throwError(Messages.DuplicateParameter);
-        }
-
         const method = this.parsePropertyMethod(params);
         this.context.allowYield = previousAllowYield;
-        this.context.await = previousAwait;
+        this.context.isAsync = previousIsAsync;
 
         return this.finalize(node, new Node.AsyncFunctionExpression(null, params.params, method, isGenerator));
     }
@@ -1567,7 +1563,7 @@ export class Parser {
             }
             this.context.isAssignmentTarget = false;
             this.context.isBindingElement = false;
-        } else if (this.context.await && this.matchContextualKeyword('await')) {
+        } else if (this.context.isAsync && this.matchContextualKeyword('await')) {
             expr = this.parseAwaitExpression();
         } else {
             expr = this.parseUpdateExpression();
@@ -1798,9 +1794,9 @@ export class Parser {
             }
         }
 
-        if (options.message === Messages.StrictParamDupe) {
+        if (options.hasDuplicateParameterNames) {
             const token = this.context.strict ? options.stricted : options.firstRestricted;
-            this.throwUnexpectedToken(token, options.message);
+            this.throwUnexpectedToken(token, Messages.DuplicateParameter);
         }
 
         return {
@@ -1853,9 +1849,9 @@ export class Parser {
                     this.context.allowStrictDirective = list.simple;
 
                     const previousAllowYield = this.context.allowYield;
-                    const previousAwait = this.context.await;
+                    const previousIsAsync = this.context.isAsync;
                     this.context.allowYield = true;
-                    this.context.await = isAsync;
+                    this.context.isAsync = isAsync;
 
                     const node = this.startNode(startToken);
                     this.expect('=>');
@@ -1882,7 +1878,7 @@ export class Parser {
                     this.context.strict = previousStrict;
                     this.context.allowStrictDirective = previousAllowStrictDirective;
                     this.context.allowYield = previousAllowYield;
-                    this.context.await = previousAwait;
+                    this.context.isAsync = previousIsAsync;
                 }
             } else {
 
@@ -2233,7 +2229,7 @@ export class Parser {
                     this.throwUnexpectedToken(token);
                 }
             }
-        } else if ((this.context.isModule || this.context.await) && token.type === Token.Identifier && token.value === 'await') {
+        } else if ((this.context.isModule || this.context.isAsync) && token.type === Token.Identifier && token.value === 'await') {
             this.tolerateUnexpectedToken(token);
         }
 
@@ -2403,7 +2399,7 @@ export class Parser {
         const node = this.createNode();
         this.expectKeyword('for');
         if (this.matchContextualKeyword('await')) {
-            if (!this.context.await) {
+            if (!this.context.isAsync) {
                 this.tolerateUnexpectedToken(this.lookahead);
             }
             _await = true;
@@ -2975,7 +2971,7 @@ export class Parser {
             }
             if (Object.prototype.hasOwnProperty.call(options.paramSet, key)) {
                 options.stricted = param;
-                options.message = Messages.StrictParamDupe;
+                options.hasDuplicateParameterNames = true;
             }
         } else if (!options.firstRestricted) {
             if (this.scanner.isRestrictedWord(name)) {
@@ -2986,7 +2982,7 @@ export class Parser {
                 options.message = Messages.StrictReservedWord;
             } else if (Object.prototype.hasOwnProperty.call(options.paramSet, key)) {
                 options.stricted = param;
-                options.message = Messages.StrictParamDupe;
+                options.hasDuplicateParameterNames = true;
             }
         }
 
@@ -3026,6 +3022,7 @@ export class Parser {
     parseFormalParameters(firstRestricted?) {
         const options: any = {
             simple: true,
+            hasDuplicateParameterNames: false,
             params: [],
             firstRestricted: firstRestricted
         };
@@ -3045,6 +3042,12 @@ export class Parser {
             }
         }
         this.expect(')');
+
+        if (options.hasDuplicateParameterNames) {
+            if (this.context.strict || this.context.isAsync || !options.simple) {
+                this.throwError(Messages.DuplicateParameter);
+            }
+        }
 
         return {
             simple: options.simple,
@@ -3109,16 +3112,12 @@ export class Parser {
             }
         }
 
-        const previousAllowAwait = this.context.await;
+        const previousIsAsync = this.context.isAsync;
         const previousAllowYield = this.context.allowYield;
-        this.context.await = isAsync;
+        this.context.isAsync = isAsync;
         this.context.allowYield = !isGenerator;
 
         const formalParameters = this.parseFormalParameters(firstRestricted);
-        if (isGenerator && formalParameters.message === Messages.StrictParamDupe) {
-            this.throwError(Messages.DuplicateParameter);
-        }
-
         const params = formalParameters.params;
         const stricted = formalParameters.stricted;
         firstRestricted = formalParameters.firstRestricted;
@@ -3139,7 +3138,7 @@ export class Parser {
 
         this.context.strict = previousStrict;
         this.context.allowStrictDirective = previousAllowStrictDirective;
-        this.context.await = previousAllowAwait;
+        this.context.isAsync = previousIsAsync;
         this.context.allowYield = previousAllowYield;
 
         return isAsync
@@ -3166,9 +3165,9 @@ export class Parser {
         let id: Node.Identifier | null = null;
         let firstRestricted;
 
-        const previousAllowAwait = this.context.await;
+        const previousIsAsync = this.context.isAsync;
         const previousAllowYield = this.context.allowYield;
-        this.context.await = isAsync;
+        this.context.isAsync = isAsync;
         this.context.allowYield = !isGenerator;
 
         if (!this.match('(')) {
@@ -3190,12 +3189,6 @@ export class Parser {
         }
 
         const formalParameters = this.parseFormalParameters(firstRestricted);
-        if (formalParameters.message === Messages.StrictParamDupe) {
-            if (isGenerator || isAsync) {
-                this.throwError(Messages.DuplicateParameter);
-            }
-        }
-
         const params = formalParameters.params;
         const stricted = formalParameters.stricted;
         firstRestricted = formalParameters.firstRestricted;
@@ -3215,7 +3208,7 @@ export class Parser {
         }
         this.context.strict = previousStrict;
         this.context.allowStrictDirective = previousAllowStrictDirective;
-        this.context.await = previousAllowAwait;
+        this.context.isAsync = previousIsAsync;
         this.context.allowYield = previousAllowYield;
 
         return isAsync
