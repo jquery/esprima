@@ -51,7 +51,6 @@ export const Messages = {
     StrictLHSPrefix: 'Prefix increment/decrement may not have eval or arguments operand in strict mode',
     StrictModeWith: 'Strict mode code may not include a with statement',
     StrictOctalLiteral: 'Octal literals are not allowed in strict mode.',
-    StrictParamDupe: 'Strict mode function may not have duplicate parameter names',
     StrictParamName: 'Parameter name eval or arguments is not allowed in strict mode',
     StrictReservedWord: 'Use of future reserved word in strict mode',
     StrictVarName: 'Variable name may not be eval or arguments in strict mode',
