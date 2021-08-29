@@ -102,6 +102,14 @@ describe('esprima.Syntax', function () {
 
 });
 
+describe('esprima.Nodes', function () {
+    it('should enumerate all nodes', function () {
+        Object.keys(esprima.Nodes).forEach(node => {
+            assert.deepEqual(typeof esprima.Nodes[node], 'function');
+        });
+    });
+});
+
 describe('esprima.parse', function () {
 
     it('should not accept zero parameter', function () {

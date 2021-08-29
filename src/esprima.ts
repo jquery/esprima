@@ -26,6 +26,7 @@ import { CommentHandler } from './comment-handler';
 import { JSXParser } from './jsx-parser';
 import { Parser } from './parser';
 import { Tokenizer } from './tokenizer';
+import * as Nodes from './nodes';
 
 export function parse(code: string, options, delegate) {
     let commentHandler: CommentHandler | null = null;
@@ -117,6 +118,8 @@ export function tokenize(code: string, options, delegate) {
 
     return tokens;
 }
+
+export { Nodes };
 
 export { Syntax } from './syntax';
 
