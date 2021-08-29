@@ -1575,8 +1575,16 @@ export class Parser {
     parseExponentiationExpression(): Node.Expression {
         const startToken = this.lookahead;
 
+        // -1 ** 2 is not accepted, but (-1) ** 2
+        // However, the AST for both cases is identical
+        // We distinguish the two cases by explicitly checking for a parenthesis.
+
+        const isLeftParenthesized = this.match('(');
         let expr = this.inheritCoverGrammar(this.parseUnaryExpression);
-        if (expr.type !== Syntax.UnaryExpression && this.match('**')) {
+
+        const exponentAllowed = expr.type !== Syntax.UnaryExpression || isLeftParenthesized;
+
+        if (exponentAllowed && this.match('**')) {
             this.nextToken();
             this.context.isAssignmentTarget = false;
             this.context.isBindingElement = false;
