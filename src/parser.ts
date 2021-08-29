@@ -1300,7 +1300,18 @@ export class Parser {
     parseImportCall(): Node.Import {
         const node = this.createNode();
         this.expectKeyword('import');
-        return this.finalize(node, new Node.Import());
+        this.expect("(");
+
+        const source = this.parseAssignmentExpression();
+        if (!this.match(")") && this.config.tolerant) {
+            this.tolerateUnexpectedToken(this.nextToken());
+        } else {
+            this.expect(")");
+            if (this.match(";")) {
+                this.nextToken();
+            }
+        }
+        return this.finalize(node, new Node.Import(source));
     }
 
     matchImportMeta(): boolean {
