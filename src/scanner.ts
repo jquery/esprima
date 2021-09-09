@@ -613,7 +613,12 @@ export class Scanner {
                 ++this.index;
                 if (this.source[this.index] === '?') {
                     ++this.index;
-                    str = '??';
+                    if (this.source[this.index] === '=') {
+                        ++this.index;
+                        str = '??=';
+                    } else {
+                        str = '??';
+                    }
                 } if (this.source[this.index] === '.' && !/^\d$/.test(this.source[this.index + 1])) {
                     // "?." in "foo?.3:0" should not be treated as optional chaining.
                     // See https://github.com/tc39/proposal-optional-chaining#notes
@@ -642,13 +647,14 @@ export class Scanner {
                     // 3-character punctuators.
                     str = str.substr(0, 3);
                     if (str === '===' || str === '!==' || str === '>>>' ||
-                        str === '<<=' || str === '>>=' || str === '**=') {
+                        str === '<<=' || str === '>>=' || str === '**=' ||
+                        str === '&&=' || str === '||=') {
                         this.index += 3;
                     } else {
 
                         // 2-character punctuators.
                         str = str.substr(0, 2);
-                        if (str === '&&' || str === '||' || str === '??' ||
+                        if (str === '&&' || str === '||' ||
                             str === '==' || str === '!=' ||
                             str === '+=' || str === '-=' || str === '*=' || str === '/=' ||
                             str === '++' || str === '--' ||
