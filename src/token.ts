@@ -8,7 +8,8 @@ export const enum Token {
     Punctuator,
     StringLiteral,
     RegularExpression,
-    Template
+    Template,
+    BigIntLiteral
 }
 
 export const TokenName = {};
@@ -22,3 +23,4 @@ TokenName[Token.Punctuator] = 'Punctuator';
 TokenName[Token.StringLiteral] = 'String';
 TokenName[Token.RegularExpression] = 'RegularExpression';
 TokenName[Token.Template] = 'Template';
+TokenName[Token.BigIntLiteral] = 'BigIntLiteral';

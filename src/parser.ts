@@ -609,7 +609,7 @@ export class Parser {
         const node = this.createNode();
 
         let expr: Node.Expression;
-        let token, raw;
+        let token: RawToken, raw;
 
         switch (this.lookahead.type) {
             case Token.Identifier:
@@ -620,6 +620,7 @@ export class Parser {
                 break;
 
             case Token.NumericLiteral:
+            case Token.BigIntLiteral:
             case Token.StringLiteral:
                 if (this.context.strict && this.lookahead.octal) {
                     this.tolerateUnexpectedToken(this.lookahead, Messages.StrictOctalLiteral);
@@ -628,7 +629,10 @@ export class Parser {
                 this.context.isBindingElement = false;
                 token = this.nextToken();
                 raw = this.getTokenRaw(token);
-                expr = this.finalize(node, new Node.Literal(token.value, raw));
+                if (token.type == Token.BigIntLiteral)
+                    expr = this.finalize(node, new Node.BigIntLiteral(token.value as string, raw, token.value.toString()));
+                else
+                    expr = this.finalize(node, new Node.Literal(token.value as string, raw));
                 break;
 
             case Token.BooleanLiteral:
@@ -670,7 +674,7 @@ export class Parser {
                         this.scanner.index = this.startMarker.index;
                         token = this.nextRegexToken();
                         raw = this.getTokenRaw(token);
-                        expr = this.finalize(node, new Node.RegexLiteral(token.regex as RegExp, raw, token.pattern, token.flags));
+                        expr = this.finalize(node, new Node.RegexLiteral(token.regex as RegExp, raw, token.pattern as string, token.flags as string));
                         break;
                     default:
                         expr = this.throwUnexpectedToken(this.nextToken());
@@ -803,11 +807,16 @@ export class Parser {
         switch (token.type) {
             case Token.StringLiteral:
             case Token.NumericLiteral:
+            case Token.BigIntLiteral:
                 if (this.context.strict && token.octal) {
                     this.tolerateUnexpectedToken(token, Messages.StrictOctalLiteral);
                 }
                 const raw = this.getTokenRaw(token);
-                key = this.finalize(node, new Node.Literal(token.value as string, raw));
+                if (token.type === Token.BigIntLiteral)
+                    key = this.finalize(node, new Node.BigIntLiteral(token.value as string, raw, token.value.toString()));
+                else
+                    key = this.finalize(node, new Node.Literal(token.value as string, raw));
+
                 break;
 
             case Token.Identifier:

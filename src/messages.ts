@@ -35,6 +35,8 @@ export const Messages = {
     NewlineAfterThrow: 'Illegal newline after throw',
     NoAsAfterImportNamespace: 'Unexpected token',
     NoCatchOrFinally: 'Missing catch or finally after try',
+    NumericSeperatorOneUnderscore: 'Numeric separator must be exactly one underscore',
+    NumericSeperatorNotAllowedHere: 'Numeric separator is not allowed here',
     ParameterAfterRestParameter: 'Rest parameter must be last formal parameter',
     PropertyAfterRestProperty: 'Unexpected token',
     Redeclaration: '%0 \'%1\' has already been declared',
