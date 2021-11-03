@@ -154,6 +154,19 @@ export class AwaitExpression {
     }
 }
 
+export class BigIntLiteral {
+    readonly type: string;
+    readonly value: null | string; //should be bigint
+    readonly raw: string;
+    readonly bigint: string;
+    constructor(value: null | string /*should be bigint*/, raw: string, bigint: string) {
+        this.type = Syntax.Literal;
+        this.value = value;
+        this.raw = raw;
+        this.bigint = bigint;
+    }
+}
+
 export class BinaryExpression {
     readonly type: string;
     readonly operator: string;
@@ -485,8 +498,10 @@ export class IfStatement {
 
 export class Import {
     readonly type: string;
-    constructor() {
+    readonly source: Literal;
+    constructor(source) {
         this.type = Syntax.Import;
+        this.source = source;
     }
 }
 

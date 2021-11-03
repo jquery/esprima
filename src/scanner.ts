@@ -35,7 +35,7 @@ type NotEscapeSequenceHead = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8'
 
 export interface RawToken {
     type: Token;
-    value: string | number;
+    value: string | number; //add bigint
     pattern?: string;
     flags?: string;
     regex?: RegExp | null;
@@ -686,14 +686,7 @@ export class Scanner {
     // https://tc39.github.io/ecma262/#sec-literals-numeric-literals
 
     private scanHexLiteral(start: number): RawToken {
-        let num = '';
-
-        while (!this.eof()) {
-            if (!Character.isHexDigit(this.source.charCodeAt(this.index))) {
-                break;
-            }
-            num += this.source[this.index++];
-        }
+        let num = this.scanLiteralPart(Character.isHexDigitChar);
 
         if (num.length === 0) {
             this.throwUnexpectedToken();
@@ -714,16 +707,9 @@ export class Scanner {
     }
 
     private scanBinaryLiteral(start: number): RawToken {
-        let num = '';
         let ch;
 
-        while (!this.eof()) {
-            ch = this.source[this.index];
-            if (ch !== '0' && ch !== '1') {
-                break;
-            }
-            num += this.source[this.index++];
-        }
+        let num = this.scanLiteralPart(c => c === '0' || c === '1');
 
         if (num.length === 0) {
             // only 0b or 0B
@@ -759,12 +745,7 @@ export class Scanner {
             ++this.index;
         }
 
-        while (!this.eof()) {
-            if (!Character.isOctalDigit(this.source.charCodeAt(this.index))) {
-                break;
-            }
-            num += this.source[this.index++];
-        }
+        num += this.scanLiteralPart(Character.isOctalDigitChar);
 
         if (!octal && num.length === 0) {
             // only 0o or 0O
@@ -802,6 +783,26 @@ export class Scanner {
         return true;
     }
 
+    private scanLiteralPart(check: (str: string) => boolean) {
+        let num = '';
+
+        if (this.source[this.index] === '_')
+            this.throwUnexpectedToken(Messages.NumericSeperatorNotAllowedHere);
+
+        while (this.source[this.index] && (check(this.source[this.index]) || this.source[this.index] === '_')) {
+            if (this.source[this.index] !== '_')
+                num += this.source[this.index];
+            this.index++;
+            if (this.source[this.index - 1] === '_' && this.source[this.index] === '_')
+                this.throwUnexpectedToken(Messages.NumericSeperatorOneUnderscore);
+        }
+
+        if (this.source[this.index - 1] === '_')
+            this.throwUnexpectedToken(Messages.NumericSeperatorNotAllowedHere);
+
+        return num;
+    }
+
     private scanNumericLiteral(): RawToken {
         const start = this.index;
         let ch = this.source[start];
@@ -837,17 +838,14 @@ export class Scanner {
                 }
             }
 
-            while (Character.isDecimalDigit(this.source.charCodeAt(this.index))) {
-                num += this.source[this.index++];
-            }
+            this.index--;
+            num = this.scanLiteralPart(Character.isDecimalDigitChar);
             ch = this.source[this.index];
         }
 
         if (ch === '.') {
             num += this.source[this.index++];
-            while (Character.isDecimalDigit(this.source.charCodeAt(this.index))) {
-                num += this.source[this.index++];
-            }
+            num += this.scanLiteralPart(Character.isDecimalDigitChar);
             ch = this.source[this.index];
         }
 
@@ -859,12 +857,20 @@ export class Scanner {
                 num += this.source[this.index++];
             }
             if (Character.isDecimalDigit(this.source.charCodeAt(this.index))) {
-                while (Character.isDecimalDigit(this.source.charCodeAt(this.index))) {
-                    num += this.source[this.index++];
-                }
+                num += this.scanLiteralPart(Character.isDecimalDigitChar);
             } else {
                 this.throwUnexpectedToken();
             }
+        } else if (ch === 'n') {
+            this.index++;
+            return {
+                type: Token.BigIntLiteral,
+                value: num, // should be BigInt(num),
+                lineNumber: this.lineNumber,
+                lineStart: this.lineStart,
+                start: start,
+                end: this.index
+            };
         }
 
         if (Character.isIdentifierStart(this.source.charCodeAt(this.index))) {
