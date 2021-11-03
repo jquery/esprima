@@ -106,7 +106,7 @@ export class Tokenizer {
     readonly buffer: BufferEntry[];
     readonly reader: Reader;
 
-    constructor(code: string, config: Config) {
+    constructor(code: string, config?: Config) {
         this.errorHandler = new ErrorHandler();
         this.errorHandler.tolerant = config ? (typeof config.tolerant === 'boolean' && config.tolerant) : false;
 
