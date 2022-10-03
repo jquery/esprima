@@ -1,6 +1,6 @@
 # Appendix A. Syntax Tree Format
 
-Esprima syntax tree format is derived from the original version of [Mozilla Parser API](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API), which is then formalized and expanded as the [ESTree specification](https://github.com/estree/estree).
+Esprima syntax tree format is derived from the original version of [Mozilla Parser API](https://web.archive.org/web/20210314002546/https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API), which is then formalized and expanded as the [ESTree specification](https://github.com/estree/estree).
 
 **Note**: In the following sections, interfaces are described using the syntax of [TypeScript interface](https://www.typescriptlang.org/docs/handbook/interfaces.html).
 
