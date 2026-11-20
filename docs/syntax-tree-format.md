@@ -354,7 +354,7 @@ interface BinaryExpression {
     type: 'BinaryExpression';
     operator: 'instanceof' | 'in' | '+' | '-' | '*' | '/' | '%' | '**' |
         '|' | '^' | '&' | '==' | '!=' | '===' | '!==' |
-        '<' | '>' | '<=' | '<<' | '>>' | '>>>';
+        '<' | '>' | '<=' | '>=' | '<<' | '>>' | '>>>';
     left: Expression;
     right: Expression;
 }
