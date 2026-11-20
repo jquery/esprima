@@ -1185,6 +1185,9 @@ export class Parser {
             }
         }
 
+        this.context.isAssignmentTarget = this.context.isAssignmentTarget &&
+            expr.type !== Syntax.ArrayExpression && expr.type !== Syntax.ObjectExpression;
+
         return expr;
     }
 
