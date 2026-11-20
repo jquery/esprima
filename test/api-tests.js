@@ -25,6 +25,37 @@
 var assert = require('assert'),
     esprima = require('../');
 
+describe('Parenthesized destructuring targets', function () {
+    [
+        '({ src: ([dest]) } = obj)',
+        '({ src: ({dest}) } = obj)',
+        '[([dest])] = obj',
+        '[({dest})] = obj',
+        '([dest]) = obj',
+        '({dest}) = obj'
+    ].forEach(function (source) {
+        it('rejects a parenthesized pattern: ' + source, function () {
+            assert.throws(function () {
+                esprima.parseScript(source);
+            }, /Invalid left-hand side in assignment/);
+        });
+    });
+
+    [
+        '({ src: (dest) } = obj)',
+        '({ src: (dest.value) } = obj)',
+        '({ src: dest = ([value]) } = obj)',
+        '({src: [dest]}) => dest',
+        '([dest]).value = obj'
+    ].forEach(function (source) {
+        it('preserves valid parentheses: ' + source, function () {
+            assert.doesNotThrow(function () {
+                esprima.parseScript(source);
+            });
+        });
+    });
+});
+
 describe('esprima.Syntax', function () {
 
     it('should enumerate all syntax node types', function () {
