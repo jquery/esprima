@@ -25,6 +25,22 @@
 var assert = require('assert'),
     esprima = require('../');
 
+describe('Default export expressions', function () {
+    [
+        '[].concat(foo)',
+        '[1, 2][0]',
+        '{}.value',
+        '[] || fallback',
+        '{} ? yes : no'
+    ].forEach(function (source) {
+        it('parses the whole expression: ' + source, function () {
+            var expected = esprima.parseModule('(' + source + ');').body[0].expression;
+            var actual = esprima.parseModule('export default ' + source + ';').body[0].declaration;
+            assert.deepEqual(actual, expected);
+        });
+    });
+});
+
 describe('esprima.Syntax', function () {
 
     it('should enumerate all syntax node types', function () {

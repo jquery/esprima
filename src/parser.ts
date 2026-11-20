@@ -3753,8 +3753,7 @@ export class Parser {
                 // export default {};
                 // export default [];
                 // export default (1 + 2);
-                const declaration = this.match('{') ? this.parseObjectInitializer() :
-                    this.match('[') ? this.parseArrayInitializer() : this.parseAssignmentExpression();
+                const declaration = this.parseAssignmentExpression();
                 this.consumeSemicolon();
                 exportDeclaration = this.finalize(node, new Node.ExportDefaultDeclaration(declaration));
             }
