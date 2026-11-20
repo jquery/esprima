@@ -3323,9 +3323,8 @@ export class Parser {
         const isGenerator = true;
         const previousAllowYield = this.context.allowYield;
 
-        this.context.allowYield = true;
-        const params = this.parseFormalParameters();
         this.context.allowYield = false;
+        const params = this.parseFormalParameters();
         const method = this.parsePropertyMethod(params);
         this.context.allowYield = previousAllowYield;
 
