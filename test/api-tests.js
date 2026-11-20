@@ -25,6 +25,29 @@
 var assert = require('assert'),
     esprima = require('../');
 
+describe('Generator method parameters', function () {
+    [
+        'var obj = { *g(yield) {} };',
+        'var obj = { *g([yield]) {} };',
+        'var obj = { *g({a: yield}) {} };',
+        'var obj = { *g(...yield) {} };'
+    ].forEach(function (source) {
+        it('rejects yield bindings in sloppy mode: ' + source, function () {
+            assert.throws(function () {
+                esprima.parseScript(source);
+            }, /Unexpected token yield/);
+        });
+    });
+
+    it('preserves property names, generator bodies and the outer context', function () {
+        var ast = esprima.parseScript('var obj = { *g({yield: value}) { yield value; } }; yield = 1;');
+        var method = ast.body[0].declarations[0].init.properties[0].value;
+        assert.strictEqual(method.params[0].properties[0].key.name, 'yield');
+        assert.strictEqual(method.body.body[0].expression.type, 'YieldExpression');
+        assert.strictEqual(ast.body[1].expression.left.name, 'yield');
+    });
+});
+
 describe('esprima.Syntax', function () {
 
     it('should enumerate all syntax node types', function () {
