@@ -25,6 +25,24 @@
 var assert = require('assert'),
     esprima = require('../');
 
+describe('Getter yield context', function () {
+    it('preserves yield identifiers after an object getter', function () {
+        var program = esprima.parseScript('({ get value() {} }); yield;');
+        assert.deepEqual(program.body[1].expression, { type: 'Identifier', name: 'yield' });
+    });
+
+    it('preserves yield expressions inside a generator after an object getter', function () {
+        var program = esprima.parseScript('function* f() { ({ get value() {} }); yield 1; }');
+        assert.equal(program.body[0].body.body[1].expression.type, 'YieldExpression');
+    });
+
+    it('allows yield identifiers in a getter without changing its enclosing context', function () {
+        var program = esprima.parseScript('({ get value() { return yield; } }); yield;');
+        assert.equal(program.body[0].expression.properties[0].value.body.body[0].argument.type, 'Identifier');
+        assert.equal(program.body[1].expression.type, 'Identifier');
+    });
+});
+
 describe('esprima.Syntax', function () {
 
     it('should enumerate all syntax node types', function () {

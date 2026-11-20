@@ -888,7 +888,6 @@ export class Parser {
             kind = 'get';
             computed = this.match('[');
             key = this.parseObjectPropertyKey();
-            this.context.allowYield = false;
             value = this.parseGetterMethod();
 
         } else if (token.type === Token.Identifier && !isAsync && token.value === 'set' && lookaheadPropertyKey) {
