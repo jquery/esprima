@@ -517,8 +517,8 @@ export class Scanner {
     }
 
     private octalToDecimal(ch: string) {
-        // \0 is not octal escape sequence
-        let octal = (ch !== '0');
+        // \0 is only allowed in strict mode when not followed by a digit.
+        let octal = (ch !== '0') || Character.isDecimalDigit(this.source.charCodeAt(this.index));
         let code = octalValue(ch);
 
         if (!this.eof() && Character.isOctalDigit(this.source.charCodeAt(this.index))) {
