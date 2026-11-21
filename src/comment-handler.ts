@@ -40,10 +40,10 @@ export class CommentHandler {
             const innerComments: Comment[] = [];
             for (let i = this.leading.length - 1; i >= 0; --i) {
                 const entry = this.leading[i];
-                if (metadata.end.offset >= entry.start) {
+                if (metadata.start.offset <= entry.start && entry.start <= metadata.end.offset) {
                     innerComments.unshift(entry.comment);
                     this.leading.splice(i, 1);
-                    this.trailing.splice(i, 1);
+                    this.trailing.splice(this.trailing.indexOf(entry), 1);
                 }
             }
             if (innerComments.length) {

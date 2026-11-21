@@ -102,6 +102,45 @@ describe('esprima.Syntax', function () {
 
 });
 
+describe('empty block comment attachment', function () {
+
+    function values(comments) {
+        return (comments || []).map(function (comment) { return comment.value.trim(); });
+    }
+
+    it('keeps comments from earlier statements outside the empty block', function () {
+        var ast = esprima.parseScript('function a() { var b = 5; /* first */ } /* second */ { /* inner */ } /* after */', { attachComment: true });
+        assert.deepEqual(values(ast.body[0].body.body[0].trailingComments), ['first']);
+        assert.deepEqual(values(ast.body[0].trailingComments), ['second']);
+        assert.deepEqual(values(ast.body[1].innerComments), ['inner']);
+        assert.deepEqual(values(ast.body[1].trailingComments), ['after']);
+    });
+
+    it('distinguishes leading, inner and trailing comments', function () {
+        var block = esprima.parseScript('/* before */ { /* one */ /* two */ } /* after */', { attachComment: true }).body[0];
+        assert.deepEqual(values(block.leadingComments), ['before']);
+        assert.deepEqual(values(block.innerComments), ['one', 'two']);
+        assert.deepEqual(values(block.trailingComments), ['after']);
+    });
+
+    it('does not create inner comments when all comments are outside the block', function () {
+        var block = esprima.parseScript('/* before */ {} /* after */', { attachComment: true }).body[0];
+        assert.deepEqual(values(block.leadingComments), ['before']);
+        assert.strictEqual(block.innerComments, undefined);
+        assert.deepEqual(values(block.trailingComments), ['after']);
+    });
+
+    it('attaches inner comments to their own nested block', function () {
+        var outer = esprima.parseScript('/* outer */ { /* before */ { /* inner */ } /* after */ }', { attachComment: true }).body[0];
+        assert.deepEqual(values(outer.leadingComments), ['outer']);
+        assert.strictEqual(outer.innerComments, undefined);
+        assert.deepEqual(values(outer.body[0].leadingComments), ['before']);
+        assert.deepEqual(values(outer.body[0].innerComments), ['inner']);
+        assert.deepEqual(values(outer.body[0].trailingComments), ['after']);
+    });
+
+});
+
 describe('esprima.parse', function () {
 
     it('should not accept zero parameter', function () {
