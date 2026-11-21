@@ -1511,7 +1511,8 @@ export class Parser {
             if (this.context.strict && expr.type === Syntax.Identifier && this.scanner.isRestrictedWord(expr.name)) {
                 this.tolerateError(Messages.StrictLHSPrefix);
             }
-            if (!this.context.isAssignmentTarget) {
+            if (!this.context.isAssignmentTarget ||
+                (expr.type !== Syntax.Identifier && expr.type !== Syntax.MemberExpression)) {
                 this.tolerateError(Messages.InvalidLHSInAssignment);
             }
             const prefix = true;
@@ -1525,7 +1526,8 @@ export class Parser {
                     if (this.context.strict && expr.type === Syntax.Identifier && this.scanner.isRestrictedWord(expr.name)) {
                         this.tolerateError(Messages.StrictLHSPostfix);
                     }
-                    if (!this.context.isAssignmentTarget) {
+                    if (!this.context.isAssignmentTarget ||
+                        (expr.type !== Syntax.Identifier && expr.type !== Syntax.MemberExpression)) {
                         this.tolerateError(Messages.InvalidLHSInAssignment);
                     }
                     this.context.isAssignmentTarget = false;
