@@ -988,3 +988,34 @@ describe('esprima.tokenize delegate', function () {
     });
 
 });
+
+describe("yield in arrow parameters", function () {
+    [
+        "function *a() { ({b = yield}) => {} }",
+        "function *a() { ([b = yield]) => {} }",
+        "function *a() { (b = yield) => {} }",
+        "function *a() { (b = yield 1) => {} }",
+        "function *a() { ({a: {b = yield 1}}) => {} }",
+        "function *a() { (b = f(yield)) => {} }",
+        "function *a() { (b = [yield]) => {} }",
+        "function *a() { ({[yield]: b}) => {} }",
+        "function *a() { (b = class extends (yield) {}) => {} }",
+        "function *a() { (b = { [yield]: 1 }) => {} }"
+    ].forEach(function (source) {
+        it("rejects " + source, function () { assert.throws(function () { esprima.parseScript(source); }); });
+    });
+    [
+        "({b = yield}) => {}",
+        "(b = yield) => {}",
+        "function *a() { (b = function* () { yield 1; }) => {} }",
+        "function *a() { (b = { *m() { yield 1; } }) => {} }",
+        "function *a() { (b = class { *m() { yield 1; } }) => {} }",
+        "function *a() { (b = function () { return yield; }) => {} }",
+        "function *a() { (b = () => yield) => {} }",
+        "function *a() { (b = [,,1]) => {} }",
+        "function *a() { (b = {yield: 1}) => {} }",
+        "function *a() { ({b = obj.yield}) => {} }"
+    ].forEach(function (source) {
+        it("accepts " + source, function () { assert.doesNotThrow(function () { esprima.parseScript(source); }); });
+    });
+});

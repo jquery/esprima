@@ -1747,6 +1747,27 @@ export class Parser {
         options.simple = options.simple && (param instanceof Node.Identifier);
     }
 
+    checkYieldInParameter(param) {
+        if (param.type === Syntax.YieldExpression) {
+            this.throwUnexpectedToken(this.lookahead);
+        }
+        // Nested functions establish their own yield context.
+        if (param.type === Syntax.FunctionExpression || param.type === Syntax.ArrowFunctionExpression) {
+            return;
+        }
+        const keys = Object.keys(param);
+        for (let i = 0; i < keys.length; i++) {
+            const value = param[keys[i]];
+            const children = Array.isArray(value) ? value : [value];
+            for (let j = 0; j < children.length; j++) {
+                const child = children[j];
+                if (child && typeof child.type === 'string') {
+                    this.checkYieldInParameter(child);
+                }
+            }
+        }
+    }
+
     reinterpretAsCoverFormalsList(expr) {
         let params = [expr];
         const options: any = {
@@ -1768,30 +1789,12 @@ export class Parser {
 
         for (let i = 0; i < params.length; ++i) {
             const param = params[i];
-            if (param.type === Syntax.AssignmentPattern) {
-                if (param.right.type === Syntax.YieldExpression) {
-                    if (param.right.argument) {
-                        this.throwUnexpectedToken(this.lookahead);
-                    }
-                    param.right.type = Syntax.Identifier;
-                    param.right.name = 'yield';
-                    delete param.right.argument;
-                    delete param.right.delegate;
-                }
-            } else if (asyncArrow && param.type === Syntax.Identifier && param.name === 'await') {
+            if (asyncArrow && param.type === Syntax.Identifier && param.name === 'await') {
                 this.throwUnexpectedToken(this.lookahead);
             }
             this.checkPatternParam(options, param);
+            this.checkYieldInParameter(param);
             params[i] = param;
-        }
-
-        if (this.context.strict || !this.context.allowYield) {
-            for (let i = 0; i < params.length; ++i) {
-                const param = params[i];
-                if (param.type === Syntax.YieldExpression) {
-                    this.throwUnexpectedToken(this.lookahead);
-                }
-            }
         }
 
         if (options.hasDuplicateParameterNames) {
