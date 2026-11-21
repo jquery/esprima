@@ -502,7 +502,7 @@ export class Parser {
     // (where an identifier is sometimes a keyword depending on the context)
 
     matchContextualKeyword(keyword) {
-        return this.lookahead.type === Token.Identifier && this.lookahead.value === keyword;
+        return this.lookahead.type === Token.Identifier && this.getTokenRaw(this.lookahead) === keyword;
     }
 
     // Return true if the next token is an assignment operator
@@ -869,7 +869,7 @@ export class Parser {
             const id = token.value;
             this.nextToken();
             computed = this.match('[');
-            isAsync = !this.hasLineTerminator && (id === 'async') &&
+            isAsync = !this.hasLineTerminator && (this.getTokenRaw(token) === 'async') &&
                 !this.match(':') && !this.match('(') && !this.match(',');
             isGenerator = this.match('*');
             if (isGenerator) {
@@ -884,14 +884,14 @@ export class Parser {
         }
 
         const lookaheadPropertyKey = this.qualifiedPropertyName(this.lookahead);
-        if (token.type === Token.Identifier && !isAsync && token.value === 'get' && lookaheadPropertyKey) {
+        if (token.type === Token.Identifier && !isAsync && this.getTokenRaw(token) === 'get' && lookaheadPropertyKey) {
             kind = 'get';
             computed = this.match('[');
             key = this.parseObjectPropertyKey();
             this.context.allowYield = false;
             value = this.parseGetterMethod();
 
-        } else if (token.type === Token.Identifier && !isAsync && token.value === 'set' && lookaheadPropertyKey) {
+        } else if (token.type === Token.Identifier && !isAsync && this.getTokenRaw(token) === 'set' && lookaheadPropertyKey) {
             kind = 'set';
             computed = this.match('[');
             key = this.parseObjectPropertyKey();
@@ -1818,7 +1818,7 @@ export class Parser {
             let token = startToken;
             expr = this.parseConditionalExpression();
 
-            if (token.type === Token.Identifier && (token.lineNumber === this.lookahead.lineNumber) && token.value === 'async') {
+            if (token.type === Token.Identifier && (token.lineNumber === this.lookahead.lineNumber) && this.getTokenRaw(token) === 'async') {
                 if (this.lookahead.type === Token.Identifier || this.matchKeyword('yield')) {
                     const arg = this.parsePrimaryExpression();
                     this.reinterpretExpressionAsPattern(arg);
@@ -3403,8 +3403,7 @@ export class Parser {
         } else {
             computed = this.match('[');
             key = this.parseObjectPropertyKey();
-            const id = key as Node.Identifier;
-            if (id.name === 'static' && (this.qualifiedPropertyName(this.lookahead) || this.match('*'))) {
+            if (this.getTokenRaw(token) === 'static' && (this.qualifiedPropertyName(this.lookahead) || this.match('*'))) {
                 token = this.lookahead;
                 isStatic = true;
                 computed = this.match('[');
@@ -3414,7 +3413,7 @@ export class Parser {
                     key = this.parseObjectPropertyKey();
                 }
             }
-            if ((token.type === Token.Identifier) && !this.hasLineTerminator && (token.value === 'async')) {
+            if ((token.type === Token.Identifier) && !this.hasLineTerminator && (this.getTokenRaw(token) === 'async')) {
                 const punctuator = this.lookahead.value;
                 if (punctuator !== ':' && punctuator !== '(') {
                     isAsync = true;
@@ -3434,13 +3433,13 @@ export class Parser {
 
         const lookaheadPropertyKey = this.qualifiedPropertyName(this.lookahead);
         if (token.type === Token.Identifier) {
-            if (token.value === 'get' && lookaheadPropertyKey) {
+            if (this.getTokenRaw(token) === 'get' && lookaheadPropertyKey) {
                 kind = 'get';
                 computed = this.match('[');
                 key = this.parseObjectPropertyKey();
                 this.context.allowYield = false;
                 value = this.parseGetterMethod();
-            } else if (token.value === 'set' && lookaheadPropertyKey) {
+            } else if (this.getTokenRaw(token) === 'set' && lookaheadPropertyKey) {
                 kind = 'set';
                 computed = this.match('[');
                 key = this.parseObjectPropertyKey();

@@ -935,6 +935,52 @@ describe('esprima.tokenize', function () {
 
 });
 
+describe('unescaped contextual keywords', function () {
+    [
+        'export {a \\u0061s b} from "m";',
+        'export {} fr\\u006fm "m";',
+        'export * fr\\u006fm "m";',
+        'import {a \\u0061s b} from "m";',
+        'import * \\u0061s ns from "m";',
+        'import a fr\\u006fm "m";',
+        'for (a o\\u0066 b);',
+        '({ g\\u0065t x(){} });',
+        '({ s\\u{65}t x(v){} });',
+        'class A { g\\u0065t x(){} }',
+        'class A { s\\u0065t x(v){} }',
+        'class A { st\\u0061tic m(){} }',
+        'class A { st\\u0061tic *m(){} }',
+        '\\u0061sync function f(){}',
+        '(\\u0061sync function(){})',
+        '\\u0061sync x => x',
+        '\\u0061sync (x) => x',
+        '({ \\u0061sync m(){} });',
+        'class A { \\u0061sync m(){} }',
+        'async function f(){ \\u0061wait 0; }'
+    ].forEach(function (code) {
+        it('should reject escaped keyword in ' + code, function () {
+            assert.throws(function () {
+                esprima.parseModule(code);
+            });
+        });
+    });
+
+    [
+        'var \\u0061sync = 1;',
+        'var \\u0061s = 1, fr\\u006fm = 2, o\\u0066 = 3;',
+        '({ g\\u0065t: 1, s\\u0065t(v){}, \\u0061sync(){} });',
+        'class A { st\\u0061tic(){} g\\u0065t(){} \\u0061sync(){} }',
+        'import { \\u0061s as value } from "m";',
+        'export { value as \\u0061s } from "m";'
+    ].forEach(function (code) {
+        it('should allow escaped ordinary identifier in ' + code, function () {
+            assert.doesNotThrow(function () {
+                esprima.parseModule(code);
+            });
+        });
+    });
+});
+
 describe('esprima.tokenize delegate', function () {
 
     it('should receive all the tokens', function () {
