@@ -935,6 +935,31 @@ describe('esprima.tokenize', function () {
 
 });
 
+describe('tokenizer nested delimiters', function () {
+
+    [
+        'if (isValid(x)) /abc/.test(x);',
+        'while (ready(test(x))) /abc/.test(x);',
+        'for (var i = 0; i < limit(x); i++) /abc/.test(x);',
+        'with (getObject(x)) /abc/.test(x);',
+        'if ((x)) /abc/.test(x);',
+        'fn((x)) / 2 / g;',
+        '(function () { if (x) {} }) / 2 / g;',
+        'var fn = function () { if (x) {} } / 2 / g;',
+        'var fn = function named() { return {}; } / 2 / g;',
+        'function fn() { if (x) {} } /abc/.test(x);',
+        'var fn = function () { `a${1}b${2}`; } / 2 / g;',
+        'var fn = function () { `a${{x: 1}}b${{y: 2}}`; } / 2 / g;',
+        'var fn = function () { `a${`b${{x: 1}}`}`; } / 2 / g;'
+    ].forEach(function (source) {
+        it('matches parser tokens for ' + source, function () {
+            var expected = esprima.parseScript(source, { tokens: true, range: true, loc: true }).tokens;
+            assert.deepEqual(esprima.tokenize(source, { range: true, loc: true }), expected);
+        });
+    });
+
+});
+
 describe('esprima.tokenize delegate', function () {
 
     it('should receive all the tokens', function () {

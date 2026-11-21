@@ -17,11 +17,15 @@ interface BufferEntry {
 
 class Reader {
     readonly values: ReaderEntry[];
+    readonly curlyStack: number[];
+    readonly parenStack: number[];
     curly: number;
     paren: number;
 
     constructor() {
         this.values = [];
+        this.curlyStack = [];
+        this.parenStack = [];
         this.curly = this.paren = -1;
     }
 
@@ -79,9 +83,15 @@ class Reader {
     push(token): void {
         if (token.type === Token.Punctuator || token.type === Token.Keyword) {
             if (token.value === '{') {
-                this.curly = this.values.length;
+                this.curlyStack.push(this.values.length);
             } else if (token.value === '(') {
-                this.paren = this.values.length;
+                this.parenStack.push(this.values.length);
+            } else if (token.value === '}') {
+                const index = this.curlyStack.pop();
+                this.curly = (index === undefined) ? -1 : index;
+            } else if (token.value === ')') {
+                const index = this.parenStack.pop();
+                this.paren = (index === undefined) ? -1 : index;
             }
             this.values.push(token.value);
         } else {
