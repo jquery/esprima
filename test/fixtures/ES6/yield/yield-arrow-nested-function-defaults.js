@@ -1,0 +1,1 @@
+function *g() { (x = [,, function* () { yield; }], y = () => yield) => {} }
