@@ -1,0 +1,228 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "BlockStatement",
+            "body": [],
+            "range": [
+                13,
+                36
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 13
+                },
+                "end": {
+                    "line": 1,
+                    "column": 36
+                }
+            },
+            "innerComments": [
+                {
+                    "type": "Block",
+                    "value": " one ",
+                    "range": [
+                        15,
+                        24
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 15
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 24
+                        }
+                    }
+                },
+                {
+                    "type": "Block",
+                    "value": " two ",
+                    "range": [
+                        25,
+                        34
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 25
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 34
+                        }
+                    }
+                }
+            ],
+            "leadingComments": [
+                {
+                    "type": "Block",
+                    "value": " before ",
+                    "range": [
+                        0,
+                        12
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 12
+                        }
+                    }
+                }
+            ],
+            "trailingComments": [
+                {
+                    "type": "Block",
+                    "value": " after ",
+                    "range": [
+                        37,
+                        48
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 37
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 48
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "sourceType": "script",
+    "range": [
+        13,
+        36
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 13
+        },
+        "end": {
+            "line": 1,
+            "column": 36
+        }
+    },
+    "comments": [
+        {
+            "type": "Block",
+            "value": " before ",
+            "range": [
+                0,
+                12
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 12
+                }
+            }
+        },
+        {
+            "type": "Block",
+            "value": " one ",
+            "range": [
+                15,
+                24
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 15
+                },
+                "end": {
+                    "line": 1,
+                    "column": 24
+                }
+            }
+        },
+        {
+            "type": "Block",
+            "value": " two ",
+            "range": [
+                25,
+                34
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 25
+                },
+                "end": {
+                    "line": 1,
+                    "column": 34
+                }
+            }
+        },
+        {
+            "type": "Block",
+            "value": " after ",
+            "range": [
+                37,
+                48
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 37
+                },
+                "end": {
+                    "line": 1,
+                    "column": 48
+                }
+            }
+        }
+    ],
+    "tokens": [
+        {
+            "type": "Punctuator",
+            "value": "{",
+            "range": [
+                13,
+                14
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 13
+                },
+                "end": {
+                    "line": 1,
+                    "column": 14
+                }
+            }
+        },
+        {
+            "type": "Punctuator",
+            "value": "}",
+            "range": [
+                35,
+                36
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 35
+                },
+                "end": {
+                    "line": 1,
+                    "column": 36
+                }
+            }
+        }
+    ]
+}
