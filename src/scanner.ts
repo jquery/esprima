@@ -377,11 +377,11 @@ export class Scanner {
         }
     }
 
-    private codePointAt(i: number): number {
-        let cp = this.source.charCodeAt(i);
+    private codePointAt(i: number, source: string = this.source): number {
+        let cp = source.charCodeAt(i);
 
         if (cp >= 0xD800 && cp <= 0xDBFF) {
-            const second = this.source.charCodeAt(i + 1);
+            const second = source.charCodeAt(i + 1);
             if (second >= 0xDC00 && second <= 0xDFFF) {
                 const first = cp;
                 cp = (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
@@ -477,9 +477,9 @@ export class Scanner {
                 ch = this.scanUnicodeCodePointEscape();
             } else {
                 ch = this.scanHexEscape('u');
-                if (ch === null || ch === '\\' || !Character.isIdentifierStart(ch.charCodeAt(0))) {
-                    this.throwUnexpectedToken();
-                }
+            }
+            if (ch === null || ch === '\\' || !Character.isIdentifierStart(this.codePointAt(0, ch))) {
+                this.throwUnexpectedToken();
             }
             id = ch;
         }
@@ -505,9 +505,9 @@ export class Scanner {
                     ch = this.scanUnicodeCodePointEscape();
                 } else {
                     ch = this.scanHexEscape('u');
-                    if (ch === null || ch === '\\' || !Character.isIdentifierPart(ch.charCodeAt(0))) {
-                        this.throwUnexpectedToken();
-                    }
+                }
+                if (ch === null || ch === '\\' || !Character.isIdentifierPart(this.codePointAt(0, ch))) {
+                    this.throwUnexpectedToken();
                 }
                 id += ch;
             }
